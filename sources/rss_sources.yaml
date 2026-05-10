@@ -1,0 +1,15 @@
+global:
+  - name: reuters_africa
+    url: https://www.reutersagency.com/feed/?best-topics=africa
+
+ghana:
+  - name: ghanaweb_business
+    url: https://www.ghanaweb.com/GhanaHomePage/business/rss
+
+south_africa:
+  - name: news24_business
+    url: https://feeds.24.com/articles/news24/Business/rss
+
+nigeria:
+  - name: punch_business
+    url: https://punchng.com/topics/business/feed/
