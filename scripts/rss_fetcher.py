@@ -25,7 +25,7 @@ TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 CHAT_ID = "@TheWiseFrontier"
 
 RSS_FILE = "sources/rss_sources.txt"
-STATE_FILE = "state.json"
+STATE_FILE = "data/state.json"
 
 DAILY_LIMIT = 25
 MIN_SCORE = 3
@@ -218,6 +218,7 @@ def send_telegram(title_ko, title_en, link, source_name, category, region):
 # =========================
 
 def save_state():
+    os.makedirs("data", exist_ok=True)
     with open(STATE_FILE, "w", encoding="utf-8") as f:
         json.dump(state, f, ensure_ascii=False, indent=2)
 
