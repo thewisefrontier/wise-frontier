@@ -9,7 +9,18 @@
     "625c085d4832d919c85f84cf806d6229": true,
     "e1eb2bd0b4caa47b6f049889140a4b7e": true,
     "5da1a00400ebd3b96c091a623c92b4d1": true,
-    "8b221f4560d7e1e86e4082b70167c9b9": true
+    "8b221f4560d7e1e86e4082b70167c9b9": true,
+    "c8d2fc90931971b71f7895777dcef19c": true,
+    "908d869f889963bcd5555b4185ba8092": true,
+    "a63bbdc3937dcc8f93ea6b5d9c25dbd1": true,
+    "934df80fa930835ae1b1248a035aad1a": true,
+    "d628569ffc0d645b6382cf6215fc6081": true,
+    "0b8428cb1e75652e45121d8d467dbed4": true,
+    "917308e6f7350e4648c1c6b95e3e4fb7": true,
+    "f52b787f9af95c72168dc774662ac013": true,
+    "30dbfd65e976bb2c996981d407927fd4": true,
+    "d8f9eeeefcfc20e5a409465cbde6cbc9": true,
+    "6da950641a0e0eb8fd4e4fe574a45207": true
   },
   "rss_health": {
     "BBC Africa": {
@@ -19,22 +30,22 @@
     },
     "Reuters Africa": {
       "ok": 0,
-      "fail": 1,
+      "fail": 2,
       "status": "active"
     },
     "CNBC Africa": {
       "ok": 0,
-      "fail": 1,
+      "fail": 2,
       "status": "active"
     },
     "IMF": {
       "ok": 0,
-      "fail": 1,
+      "fail": 2,
       "status": "active"
     },
     "World Bank": {
       "ok": 0,
-      "fail": 1,
+      "fail": 2,
       "status": "active"
     },
     "African Development Bank": {
@@ -79,22 +90,22 @@
     },
     "Daily Maverick": {
       "ok": 0,
-      "fail": 1,
+      "fail": 2,
       "status": "active"
     },
     "MyBroadband": {
       "ok": 0,
-      "fail": 1,
+      "fail": 2,
       "status": "active"
     },
     "Business Insider South Africa": {
       "ok": 0,
-      "fail": 1,
+      "fail": 2,
       "status": "active"
     },
     "GhanaWeb Business": {
       "ok": 0,
-      "fail": 1,
+      "fail": 2,
       "status": "active"
     },
     "Ghana Business News": {
@@ -109,15 +120,150 @@
     },
     "The Exchange Africa": {
       "ok": 0,
-      "fail": 1,
+      "fail": 2,
       "status": "active"
     },
     "Ventures Africa": {
+      "ok": 0,
+      "fail": 2,
+      "status": "active"
+    },
+    "The East African": {
+      "ok": 0,
+      "fail": 1,
+      "status": "active"
+    },
+    "Quartz Africa": {
+      "ok": 0,
+      "fail": 1,
+      "status": "active"
+    },
+    "Emerging Africa": {
+      "ok": 0,
+      "fail": 0,
+      "status": "active"
+    },
+    "Nikkei Asia": {
+      "ok": 1,
+      "fail": 0,
+      "status": "active"
+    },
+    "Channel NewsAsia": {
+      "ok": 1,
+      "fail": 0,
+      "status": "active"
+    },
+    "Bangkok Post Business": {
+      "ok": 1,
+      "fail": 0,
+      "status": "active"
+    },
+    "Vietnam Investment Review": {
+      "ok": 0,
+      "fail": 1,
+      "status": "active"
+    },
+    "Jakarta Post Business": {
+      "ok": 0,
+      "fail": 1,
+      "status": "active"
+    },
+    "Philippine Star Business": {
+      "ok": 1,
+      "fail": 0,
+      "status": "active"
+    },
+    "Deal Street Asia": {
+      "ok": 0,
+      "fail": 1,
+      "status": "active"
+    },
+    "KrASIA": {
+      "ok": 0,
+      "fail": 1,
+      "status": "active"
+    },
+    "Tech in Asia": {
+      "ok": 0,
+      "fail": 1,
+      "status": "active"
+    },
+    "Frontier Myanmar": {
+      "ok": 0,
+      "fail": 1,
+      "status": "active"
+    },
+    "Khmer Times": {
+      "ok": 1,
+      "fail": 0,
+      "status": "active"
+    },
+    "Malaysia Business Insider": {
+      "ok": 0,
+      "fail": 1,
+      "status": "active"
+    },
+    "Emerging Europe": {
+      "ok": 1,
+      "fail": 0,
+      "status": "active"
+    },
+    "bne IntelliNews": {
+      "ok": 0,
+      "fail": 1,
+      "status": "active"
+    },
+    "Kyiv Post": {
+      "ok": 0,
+      "fail": 1,
+      "status": "active"
+    },
+    "Warsaw Business Journal": {
+      "ok": 0,
+      "fail": 1,
+      "status": "active"
+    },
+    "Romania Insider": {
+      "ok": 1,
+      "fail": 0,
+      "status": "active"
+    },
+    "Prague Morning": {
+      "ok": 1,
+      "fail": 0,
+      "status": "active"
+    },
+    "Caucasus Business Week": {
+      "ok": 0,
+      "fail": 1,
+      "status": "active"
+    },
+    "Trend Azerbaijan": {
+      "ok": 1,
+      "fail": 0,
+      "status": "active"
+    },
+    "FT Emerging Markets": {
+      "ok": 1,
+      "fail": 0,
+      "status": "active"
+    },
+    "Bloomberg EM": {
+      "ok": 1,
+      "fail": 0,
+      "status": "active"
+    },
+    "Reuters EM": {
+      "ok": 0,
+      "fail": 1,
+      "status": "active"
+    },
+    "The Economist EM": {
       "ok": 0,
       "fail": 1,
       "status": "active"
     }
   },
-  "daily_count": 10,
+  "daily_count": 21,
   "last_reset": "2026-05-15"
 }

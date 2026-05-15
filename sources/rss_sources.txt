@@ -1,5 +1,5 @@
 # =========================
-# AFRICA
+# AFRICA - PAN-AFRICAN
 # =========================
 BBC Africa|macro|https://feeds.bbci.co.uk/news/world/africa/rss.xml
 Reuters Africa|macro|https://feeds.reuters.com/reuters/AfricaNews
@@ -9,22 +9,96 @@ World Bank|macro|https://www.worldbank.org/en/news/rss
 African Development Bank|macro|https://www.afdb.org/en/news-and-events/rss
 Africanews|macro|https://www.africanews.com/feed/rss
 AllAfrica Business|macro|https://allafrica.com/tools/headlines/rdf/business/headlines.rdf
+AllAfrica Politics|politics|https://allafrica.com/tools/headlines/rdf/politics/headlines.rdf
+AllAfrica Economy|macro|https://allafrica.com/tools/headlines/rdf/economy/headlines.rdf
 African Business|investment|https://african.business/feed/
+The Exchange Africa|investment|https://theexchange.africa/feed/
+Ventures Africa|investment|https://venturesafrica.com/feed/
+Quartz Africa|macro|https://qz.com/africa/rss
+The East African|macro|https://www.theeastafrican.co.ke/tea/rss
+African Arguments|politics|https://africanarguments.org/feed/
+Africa Report|macro|https://www.theafricareport.com/feed/
+Africa Confidential|politics|https://www.africa-confidential.com/rss
+Devex Africa|macro|https://www.devex.com/news/rss.xml
+Africa Is A Country|politics|https://africasacountry.com/feed/
+The Continent|macro|https://thecontinent.org/feed/
+Africa Renewal|macro|https://www.un.org/africarenewal/rss.xml
+Mining.com|resource|https://www.mining.com/feed/
+
+# =========================
+# WEST AFRICA
+# =========================
 Nairametrics|finance|https://nairametrics.com/feed/
 Punch Business|finance|https://punchng.com/topics/business/feed/
 BusinessDay Nigeria|finance|https://businessday.ng/feed/
-BusinessTech|finance|https://businesstech.co.za/news/feed/
-Daily Maverick|society|https://www.dailymaverick.co.za/feed/
-MyBroadband|tech|https://mybroadband.co.za/feed/
-Business Insider South Africa|finance|https://www.businessinsider.co.za/feed/
+The Guardian Nigeria|macro|https://guardian.ng/feed/
+Premium Times Nigeria|politics|https://www.premiumtimesng.com/feed/
+Vanguard Nigeria|finance|https://www.vanguardngr.com/feed/
+Leadership Nigeria|macro|https://leadership.ng/feed/
 GhanaWeb Business|finance|https://www.ghanaweb.com/GhanaHomePage/business/rss
 Ghana Business News|finance|https://www.ghanabusinessnews.com/feed/
-Mining.com|resource|https://www.mining.com/feed/
-The Exchange Africa|investment|https://theexchange.africa/feed/
-Ventures Africa|investment|https://venturesafrica.com/feed/
-The East African|macro|https://www.theeastafrican.co.ke/tea/rss
-Quartz Africa|macro|https://qz.com/africa/rss
-Emerging Africa|investment|https://emergingafricafund.com/feed/
+Graphic Online Ghana|macro|https://www.graphic.com.gh/rss/all
+Joy Business Ghana|finance|https://www.myjoyonline.com/category/business/feed/
+APA News West Africa|macro|https://apanews.net/rss/
+Nigeria Natural Resource Charter|resource|https://resourcegovernance.org/rss.xml
+
+# =========================
+# EAST AFRICA
+# =========================
+Business Daily Africa Kenya|finance|https://www.businessdailyafrica.com/feed/
+Nation Africa|macro|https://nation.africa/rss
+Standard Media Kenya|macro|https://www.standardmedia.co.ke/rss/news.php
+Monitor Uganda|macro|https://www.monitor.co.ug/rss/
+New Vision Uganda|politics|https://www.newvision.co.ug/rss/
+The Citizen Tanzania|macro|https://www.thecitizen.co.tz/tanzania/rss/
+Addis Fortune Ethiopia|finance|https://addisfortune.news/rss/
+The Reporter Ethiopia|macro|https://www.thereporterethiopia.com/rss/
+East African Business Week|finance|https://www.busiweek.com/feed/
+Rwanda New Times|macro|https://www.newtimes.co.rw/rss
+Kenyan Wall Street|finance|https://kenyanwallstreet.com/feed/
+
+# =========================
+# SOUTHERN AFRICA
+# =========================
+BusinessTech South Africa|finance|https://businesstech.co.za/news/feed/
+Daily Maverick|macro|https://www.dailymaverick.co.za/feed/
+Business Insider South Africa|finance|https://www.businessinsider.co.za/feed/
+MyBroadband|tech|https://mybroadband.co.za/feed/
+Fin24|finance|https://www.news24.com/fin24/rss
+News24 South Africa|macro|https://feeds.24.com/articles/news24/TopStories/rss
+Mining Weekly|resource|https://www.miningweekly.com/rss/latest-mining-news
+Engineering News South Africa|resource|https://www.engineeringnews.co.za/rss/latestnews
+Zimbabwe Independent|finance|https://theindependent.co.zw/feed/
+The Herald Zimbabwe|macro|https://www.herald.co.zw/feed/
+Zambia Daily Mail|macro|https://www.daily-mail.co.zm/feed/
+Malawi Nation|macro|https://mwnation.com/feed/
+
+# =========================
+# NORTH AFRICA
+# =========================
+Egypt Independent|macro|https://egyptindependent.com/feed/
+Daily News Egypt|finance|https://dailynewsegypt.com/feed/
+Morocco World News|macro|https://www.moroccoworldnews.com/feed/
+Maghreb Emergent|finance|https://maghrebemergent.info/feed/
+Tunisia Live|macro|https://www.tunisia-live.net/feed/
+Libya Herald|macro|https://libyaherald.com/feed/
+
+# =========================
+# AFRICA TECH & STARTUP
+# =========================
+TechCabal|tech|https://techcabal.com/feed/
+Disrupt Africa|tech|https://disrupt-africa.com/feed/
+WeeTracker|tech|https://weetracker.com/feed/
+Technext Nigeria|tech|https://technext.ng/feed/
+IT Web Africa|tech|https://itweb.africa/rss/itweb_africa_rss.xml
+Digest Africa|tech|https://digestafrica.com/feed/
+
+# =========================
+# AFRICA RESOURCE & ENERGY
+# =========================
+African Energy|resource|https://www.africa-energy.com/rss.xml
+Oil Review Africa|resource|https://www.oilreviewafrica.com/rss/latest-news
+African Mining Brief|resource|https://africanminingbrief.com/feed/
 
 # =========================
 # SOUTHEAST ASIA
