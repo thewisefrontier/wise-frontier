@@ -9,6 +9,7 @@ import sys
 from urllib.parse import urlparse, urlunparse
 from deep_translator import GoogleTranslator
 from dotenv import load_dotenv
+from rapidfuzz import fuzz
 
 # UTF-8 출력 설정 (Windows 인코딩 오류 방지)
 sys.stdout.reconfigure(encoding='utf-8')
@@ -126,9 +127,15 @@ def fingerprint(title, source):
         f"{title.lower().strip()}|{source}".encode()
     ).hexdigest()
 
-def cluster_key(title):
-    clean = re.sub(r'[^a-zA-Z0-9가-힣 ]', '', title.lower())
-    return " ".join(clean.split()[:5])
+SIMILARITY_THRESHOLD = 75  # 75% 이상 유사하면 중복으로 판단
+
+def is_duplicate(title, seen_titles):
+    """rapidfuzz로 기존 제목들과 유사도 비교"""
+    for seen in seen_titles:
+        score = fuzz.token_sort_ratio(title.lower(), seen.lower())
+        if score >= SIMILARITY_THRESHOLD:
+            return True
+    return False
 
 def clean_text(text):
     """특수 따옴표 등 깨지는 문자 정리"""
@@ -219,7 +226,7 @@ def save_state():
 # =========================
 
 sources = load_rss()
-cluster_memory = set()
+seen_titles = []  # 유사도 비교용 제목 목록
 
 for s in sources:
     name     = s["name"]
@@ -250,10 +257,10 @@ for s in sources:
     if fp in sent_db:
         continue
 
-    ck = cluster_key(title)
-    if ck in cluster_memory:
+    if is_duplicate(title, seen_titles):
+        print(f"[SKIP] 유사 기사 중복 — {title[:50]}")
         continue
-    cluster_memory.add(ck)
+    seen_titles.append(title)
 
     score = score_news(title, category)
     if score < MIN_SCORE:
