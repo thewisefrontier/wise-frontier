@@ -182,7 +182,7 @@ def score_news(title, category):
         if k in t:
             score += v
 
-    noise = ["football", "celebrity", "music", "wedding", "entertainment"]
+    noise = ["football", "celebrity", "music", "wedding", "entertainment", "e-edition", "edition"]
     for n in noise:
         if n in t:
             score -= 10

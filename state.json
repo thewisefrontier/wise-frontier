@@ -1,0 +1,123 @@
+{
+  "sent": {
+    "4e5fc112adf427a3829ebad25afd42f7": true,
+    "4417c3d6507b1c07e353070251e686e8": true,
+    "bdcb669b3657f45b0eaf0be947706b98": true,
+    "b8426211ac2d83e8ce0f004c98ea5d58": true,
+    "a5d9f6782afe207ba4019fb41865f563": true,
+    "c3c43c31b00701572e10c2e96bd8ec0f": true,
+    "625c085d4832d919c85f84cf806d6229": true,
+    "e1eb2bd0b4caa47b6f049889140a4b7e": true,
+    "5da1a00400ebd3b96c091a623c92b4d1": true,
+    "8b221f4560d7e1e86e4082b70167c9b9": true
+  },
+  "rss_health": {
+    "BBC Africa": {
+      "ok": 1,
+      "fail": 0,
+      "status": "active"
+    },
+    "Reuters Africa": {
+      "ok": 0,
+      "fail": 1,
+      "status": "active"
+    },
+    "CNBC Africa": {
+      "ok": 0,
+      "fail": 1,
+      "status": "active"
+    },
+    "IMF": {
+      "ok": 0,
+      "fail": 1,
+      "status": "active"
+    },
+    "World Bank": {
+      "ok": 0,
+      "fail": 1,
+      "status": "active"
+    },
+    "African Development Bank": {
+      "ok": 1,
+      "fail": 0,
+      "status": "active"
+    },
+    "Africanews": {
+      "ok": 1,
+      "fail": 0,
+      "status": "active"
+    },
+    "AllAfrica Business": {
+      "ok": 1,
+      "fail": 0,
+      "status": "active"
+    },
+    "African Business": {
+      "ok": 0,
+      "fail": 0,
+      "status": "active"
+    },
+    "Nairametrics": {
+      "ok": 1,
+      "fail": 0,
+      "status": "active"
+    },
+    "Punch Business": {
+      "ok": 1,
+      "fail": 0,
+      "status": "active"
+    },
+    "BusinessDay Nigeria": {
+      "ok": 1,
+      "fail": 0,
+      "status": "active"
+    },
+    "BusinessTech": {
+      "ok": 1,
+      "fail": 0,
+      "status": "active"
+    },
+    "Daily Maverick": {
+      "ok": 0,
+      "fail": 1,
+      "status": "active"
+    },
+    "MyBroadband": {
+      "ok": 0,
+      "fail": 1,
+      "status": "active"
+    },
+    "Business Insider South Africa": {
+      "ok": 0,
+      "fail": 1,
+      "status": "active"
+    },
+    "GhanaWeb Business": {
+      "ok": 0,
+      "fail": 1,
+      "status": "active"
+    },
+    "Ghana Business News": {
+      "ok": 1,
+      "fail": 0,
+      "status": "active"
+    },
+    "Mining.com": {
+      "ok": 1,
+      "fail": 0,
+      "status": "active"
+    },
+    "The Exchange Africa": {
+      "ok": 0,
+      "fail": 1,
+      "status": "active"
+    },
+    "Ventures Africa": {
+      "ok": 0,
+      "fail": 1,
+      "status": "active"
+    }
+  },
+  "daily_count": 10,
+  "last_reset": "2026-05-15"
+}
