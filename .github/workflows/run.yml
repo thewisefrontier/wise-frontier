@@ -2,8 +2,8 @@ name: The Wise Frontier - Daily Run
 
 on:
   schedule:
-    - cron: '0 22 * * *'  # UTC 22:00 = KST 07:00 매일 자동 실행
-  workflow_dispatch:        # GitHub에서 수동 실행도 가능
+    - cron: '0 * * * *'  # 매 시간 정각 실행
+  workflow_dispatch:
 
 jobs:
   run:
