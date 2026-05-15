@@ -1,0 +1,107 @@
+{
+  "Reuters Africa": {
+    "ok": 10,
+    "fail": 3,
+    "status": "blocked"
+  },
+  "BBC Africa": {
+    "ok": 1,
+    "fail": 0,
+    "status": "active"
+  },
+  "CNBC Africa": {
+    "ok": 0,
+    "fail": 1,
+    "status": "suspect"
+  },
+  "IMF": {
+    "ok": 0,
+    "fail": 1,
+    "status": "suspect"
+  },
+  "World Bank": {
+    "ok": 0,
+    "fail": 1,
+    "status": "suspect"
+  },
+  "African Development Bank": {
+    "ok": 1,
+    "fail": 0,
+    "status": "active"
+  },
+  "Africanews": {
+    "ok": 1,
+    "fail": 0,
+    "status": "active"
+  },
+  "AllAfrica Business": {
+    "ok": 1,
+    "fail": 0,
+    "status": "active"
+  },
+  "African Business": {
+    "ok": 1,
+    "fail": 0,
+    "status": "active"
+  },
+  "Nairametrics": {
+    "ok": 1,
+    "fail": 0,
+    "status": "active"
+  },
+  "Punch Business": {
+    "ok": 1,
+    "fail": 0,
+    "status": "active"
+  },
+  "BusinessDay Nigeria": {
+    "ok": 1,
+    "fail": 0,
+    "status": "active"
+  },
+  "BusinessTech": {
+    "ok": 1,
+    "fail": 0,
+    "status": "active"
+  },
+  "Daily Maverick": {
+    "ok": 0,
+    "fail": 1,
+    "status": "suspect"
+  },
+  "MyBroadband": {
+    "ok": 0,
+    "fail": 1,
+    "status": "suspect"
+  },
+  "Business Insider South Africa": {
+    "ok": 0,
+    "fail": 1,
+    "status": "suspect"
+  },
+  "GhanaWeb Business": {
+    "ok": 0,
+    "fail": 1,
+    "status": "suspect"
+  },
+  "Ghana Business News": {
+    "ok": 1,
+    "fail": 0,
+    "status": "active"
+  },
+  "Mining.com": {
+    "ok": 1,
+    "fail": 0,
+    "status": "active"
+  },
+  "The Exchange Africa": {
+    "ok": 0,
+    "fail": 1,
+    "status": "suspect"
+  },
+  "Ventures Africa": {
+    "ok": 0,
+    "fail": 1,
+    "status": "suspect"
+  }
+}
