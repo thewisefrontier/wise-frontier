@@ -2,7 +2,7 @@ name: The Wise Frontier - Daily Run
 
 on:
   schedule:
-    - cron: '0 * * * *'  # 매 시간 정각 실행
+    - cron: '0 * * * *'
   workflow_dispatch:
 
 jobs:
