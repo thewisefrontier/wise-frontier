@@ -27,7 +27,6 @@ CHAT_ID = "@TheWiseFrontier"
 RSS_FILE = "sources/rss_sources.txt"
 STATE_FILE = "data/state.json"
 
-DAILY_LIMIT = 25
 MIN_SCORE = 3
 
 # =========================
@@ -267,10 +266,6 @@ for s in sources:
     if score < MIN_SCORE:
         continue
 
-    if state["daily_count"] >= DAILY_LIMIT:
-        print("[LIMIT] 오늘 발송 한도 도달")
-        break
-
     # 한국어 번역
     try:
         title_ko = GoogleTranslator(source="auto", target="ko").translate(title)
@@ -291,4 +286,4 @@ for s in sources:
         rss_health[name]["fail"] += 1
 
 save_state()
-print(f"\n✅ 완료 — 오늘 총 {state['daily_count']}건 발송")
+print(f"\n✅ 완료")
