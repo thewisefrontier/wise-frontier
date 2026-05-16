@@ -68,7 +68,14 @@
     "e1af2b2a49c05fc72a7a85c090a1aec4": true,
     "ba92a46a23b8d31d892ddaab7f6f5329": true,
     "2c2ede67d67352aad86b636a1d2a9af7": true,
-    "563b5f5a4c37180449ef5a6417c05519": true
+    "563b5f5a4c37180449ef5a6417c05519": true,
+    "93d67c7f5e9e295384ff61190b0fdb27": true,
+    "ba68a21ced11438a0472d44d46a6baa9": true,
+    "1d92d958c06b0355d87587077004fc21": true,
+    "bb9775b7bcefed6f4baaa48cd42fd963": true,
+    "3d8876de993f20ab9337961bdc3e6eef": true,
+    "05fa89e6017c86b8284f232dad855f0a": true,
+    "d550c058f5d4c228b53303e4cbb1318e": true
   },
   "rss_health": {
     "BBC Africa": {
@@ -78,27 +85,27 @@
     },
     "Reuters Africa": {
       "ok": 0,
-      "fail": 14,
+      "fail": 15,
       "status": "active"
     },
     "CNBC Africa": {
       "ok": 0,
-      "fail": 14,
+      "fail": 15,
       "status": "active"
     },
     "IMF": {
       "ok": 0,
-      "fail": 14,
+      "fail": 15,
       "status": "active"
     },
     "World Bank": {
       "ok": 0,
-      "fail": 14,
+      "fail": 15,
       "status": "active"
     },
     "African Development Bank": {
       "ok": 0,
-      "fail": 10,
+      "fail": 11,
       "status": "active"
     },
     "Africanews": {
@@ -113,12 +120,12 @@
     },
     "AllAfrica Politics": {
       "ok": 0,
-      "fail": 10,
+      "fail": 11,
       "status": "active"
     },
     "AllAfrica Economy": {
       "ok": 0,
-      "fail": 10,
+      "fail": 11,
       "status": "active"
     },
     "African Business": {
@@ -128,22 +135,22 @@
     },
     "The Exchange Africa": {
       "ok": 0,
-      "fail": 10,
+      "fail": 11,
       "status": "active"
     },
     "Ventures Africa": {
       "ok": 0,
-      "fail": 10,
+      "fail": 11,
       "status": "active"
     },
     "Quartz Africa": {
       "ok": 0,
-      "fail": 10,
+      "fail": 11,
       "status": "active"
     },
     "The East African": {
       "ok": 0,
-      "fail": 10,
+      "fail": 11,
       "status": "active"
     },
     "African Arguments": {
@@ -158,12 +165,12 @@
     },
     "Africa Confidential": {
       "ok": 0,
-      "fail": 10,
+      "fail": 11,
       "status": "active"
     },
     "Devex Africa": {
       "ok": 0,
-      "fail": 10,
+      "fail": 11,
       "status": "active"
     },
     "Africa Is A Country": {
@@ -173,37 +180,37 @@
     },
     "The Continent": {
       "ok": 0,
-      "fail": 10,
+      "fail": 11,
       "status": "active"
     },
     "Africa Renewal": {
       "ok": 0,
-      "fail": 10,
+      "fail": 11,
       "status": "active"
     },
     "Mining.com": {
       "ok": 1,
-      "fail": 8,
+      "fail": 9,
       "status": "active"
     },
     "Nairametrics": {
-      "ok": 2,
+      "ok": 3,
       "fail": 0,
       "status": "active"
     },
     "Punch Business": {
-      "ok": 5,
+      "ok": 6,
       "fail": 0,
       "status": "active"
     },
     "BusinessDay Nigeria": {
-      "ok": 6,
+      "ok": 7,
       "fail": 0,
       "status": "active"
     },
     "The Guardian Nigeria": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "Premium Times Nigeria": {
@@ -212,18 +219,18 @@
       "status": "active"
     },
     "Vanguard Nigeria": {
-      "ok": 3,
+      "ok": 4,
       "fail": 0,
       "status": "active"
     },
     "Leadership Nigeria": {
-      "ok": 5,
+      "ok": 6,
       "fail": 0,
       "status": "active"
     },
     "GhanaWeb Business": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "Ghana Business News": {
@@ -233,7 +240,7 @@
     },
     "Graphic Online Ghana": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "Joy Business Ghana": {
@@ -243,7 +250,7 @@
     },
     "APA News West Africa": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "Nigeria Natural Resource Charter": {
@@ -253,32 +260,32 @@
     },
     "Business Daily Africa Kenya": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "Nation Africa": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "Standard Media Kenya": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "Monitor Uganda": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "New Vision Uganda": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "The Citizen Tanzania": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "Addis Fortune Ethiopia": {
@@ -288,47 +295,47 @@
     },
     "The Reporter Ethiopia": {
       "ok": 1,
-      "fail": 3,
+      "fail": 4,
       "status": "active"
     },
     "East African Business Week": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "Rwanda New Times": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "Kenyan Wall Street": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "BusinessTech South Africa": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "Daily Maverick": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "Business Insider South Africa": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "MyBroadband": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "Fin24": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "News24 South Africa": {
@@ -338,22 +345,22 @@
     },
     "Mining Weekly": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "Engineering News South Africa": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "Zimbabwe Independent": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "The Herald Zimbabwe": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "Zambia Daily Mail": {
@@ -362,7 +369,7 @@
       "status": "active"
     },
     "Malawi Nation": {
-      "ok": 3,
+      "ok": 4,
       "fail": 0,
       "status": "active"
     },
@@ -378,17 +385,17 @@
     },
     "Morocco World News": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "Maghreb Emergent": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "Tunisia Live": {
       "ok": 1,
-      "fail": 0,
+      "fail": 1,
       "status": "active"
     },
     "Libya Herald": {
@@ -413,32 +420,32 @@
     },
     "Technext Nigeria": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "IT Web Africa": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "Digest Africa": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "African Energy": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "Oil Review Africa": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "African Mining Brief": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "Nikkei Asia": {
@@ -458,12 +465,12 @@
     },
     "Vietnam Investment Review": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "Jakarta Post Business": {
       "ok": 0,
-      "fail": 7,
+      "fail": 8,
       "status": "active"
     },
     "Philippine Star Business": {
@@ -473,32 +480,32 @@
     },
     "Deal Street Asia": {
       "ok": 0,
-      "fail": 6,
+      "fail": 7,
       "status": "active"
     },
     "KrASIA": {
       "ok": 0,
-      "fail": 6,
+      "fail": 7,
       "status": "active"
     },
     "Tech in Asia": {
       "ok": 0,
-      "fail": 6,
+      "fail": 7,
       "status": "active"
     },
     "Frontier Myanmar": {
       "ok": 0,
-      "fail": 6,
+      "fail": 7,
       "status": "active"
     },
     "Khmer Times": {
       "ok": 0,
-      "fail": 6,
+      "fail": 7,
       "status": "active"
     },
     "Malaysia Business Insider": {
       "ok": 0,
-      "fail": 6,
+      "fail": 7,
       "status": "active"
     },
     "Emerging Europe": {
@@ -508,17 +515,17 @@
     },
     "bne IntelliNews": {
       "ok": 0,
-      "fail": 6,
+      "fail": 7,
       "status": "active"
     },
     "Kyiv Post": {
       "ok": 0,
-      "fail": 6,
+      "fail": 7,
       "status": "active"
     },
     "Warsaw Business Journal": {
       "ok": 0,
-      "fail": 6,
+      "fail": 7,
       "status": "active"
     },
     "Romania Insider": {
@@ -533,11 +540,11 @@
     },
     "Caucasus Business Week": {
       "ok": 0,
-      "fail": 6,
+      "fail": 7,
       "status": "active"
     },
     "Trend Azerbaijan": {
-      "ok": 5,
+      "ok": 6,
       "fail": 0,
       "status": "active"
     },
@@ -553,15 +560,15 @@
     },
     "Reuters EM": {
       "ok": 0,
-      "fail": 6,
+      "fail": 7,
       "status": "active"
     },
     "The Economist EM": {
       "ok": 0,
-      "fail": 6,
+      "fail": 7,
       "status": "active"
     }
   },
-  "daily_count": 69,
+  "daily_count": 76,
   "last_reset": "2026-05-16"
 }
