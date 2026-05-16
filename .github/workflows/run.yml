@@ -2,6 +2,9 @@ name: The Wise Frontier - Auto Run
 
 on:
   workflow_dispatch:
+  
+permissions:
+  contents: write
 
 jobs:
   run:
