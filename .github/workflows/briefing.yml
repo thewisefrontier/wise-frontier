@@ -24,6 +24,13 @@ jobs:
       - name: 패키지 설치
         run: pip install -r requirements.txt
 
+      - name: DB 캐시 복원
+        uses: actions/cache@v4
+        with:
+          path: data/articles.db
+          key: articles-db
+          restore-keys: articles-db
+
       - name: 일일 브리핑 발송
         run: python scripts/briefing.py
         env:
