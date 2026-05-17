@@ -47,19 +47,6 @@ CATEGORY_EMOJI = {
     "investment": "📈"
 }
 
-REGION_EMOJI = {
-    "africa":         "🌍",
-    "southeast_asia": "🌏",
-    "eastern_europe": "🌐",
-    "central_asia":   "🏔️",
-    "middle_east":    "🌙",
-    "south_asia":     "🌏",
-    "caribbean":      "🌴",
-    "latin_america":  "🌎",
-    "global":         "🗺️"
-}
-
-# 소스 이름으로 리전 자동 분류
 REGION_KEYWORDS = {
     "africa": ["africa", "nigeria", "kenya", "ghana", "ethiopia", "egypt", "south africa", "allafrica", "maverick", "naira", "punch", "businessday", "businesstech", "guardian nigeria", "vanguard", "ghanaweb", "mining weekly", "engineering news"],
     "southeast_asia": ["asia", "krasia", "dealstreet", "techinasia", "vietnam", "indonesia", "thailand", "myanmar", "khmer", "malaysia", "philippine", "bangkok", "jakarta", "loop png", "pacific", "fiji", "solomon", "png"],
@@ -167,6 +154,29 @@ COUNTRY_INFO = {
     "el salvador": ("🇸🇻", "엘살바도르"),
     "guatemala": ("🇬🇹", "과테말라"),
     "honduras": ("🇭🇳", "온두라스"),
+    # 오세아니아
+    "australia": ("🇦🇺", "호주"), "australian": ("🇦🇺", "호주"),
+    "new zealand": ("🇳🇿", "뉴질랜드"),
+    "timor": ("🇹🇱", "동티모르"),
+    # 아프리카 추가
+    "burkina faso": ("🇧🇫", "부르키나파소"),
+    "niger": ("🇳🇪", "니제르"),
+    "chad": ("🇹🇩", "차드"),
+    "guinea": ("🇬🇳", "기니"),
+    "sierra leone": ("🇸🇱", "시에라리온"),
+    "liberia": ("🇱🇷", "라이베리아"),
+    "togo": ("🇹🇬", "토고"),
+    "benin": ("🇧🇯", "베냉"),
+    "gabon": ("🇬🇦", "가봉"),
+    "botswana": ("🇧🇼", "보츠와나"),
+    "namibia": ("🇳🇦", "나미비아"),
+    "eswatini": ("🇸🇿", "에스와티니"),
+    "lesotho": ("🇱🇸", "레소토"),
+    "eritrea": ("🇪🇷", "에리트레아"),
+    "djibouti": ("🇩🇯", "지부티"),
+    "mauritius": ("🇲🇺", "모리셔스"),
+    "madagascar": ("🇲🇬", "마다가스카르"),
+    "seychelles": ("🇸🇨", "세이셸"),
 }
 
 def detect_country(text: str):
@@ -319,7 +329,8 @@ def score_news(title, category):
         "film", "actor", "actress", "singer", "concert", "album",
         # 기타 노이즈
         "e-edition", "edition", "travel", "tourism", "leisure", "sumo",
-        "festival", "horoscope", "obituary", "recipe", "weather forecast"
+        "festival", "horoscope", "obituary", "recipe", "weather forecast",
+        "eurovision", "beauty pageant", "miss world", "miss universe"
     ]
     for n in noise:
         if n in t:
@@ -332,14 +343,13 @@ def score_news(title, category):
 # =========================
 
 def send_telegram(title_ko, summary_ko, link, source_name, category, region, country_flag, country_name):
-    cat_emoji    = CATEGORY_EMOJI.get(category, "📌")
-    region_emoji = REGION_EMOJI.get(region, "🗺️")
-    cat_tag      = f"#{category.upper()}"
-    country_str  = f" {country_flag} {country_name}" if country_flag else ""
-    summary_str  = f"\n\n_{summary_ko}_" if summary_ko else ""
+    cat_emoji   = CATEGORY_EMOJI.get(category, "📌")
+    cat_tag     = f"#{category.upper()}"
+    country_str = f"[{country_name}] " if country_name else ""
+    summary_str = f"\n\n_{summary_ko}_" if summary_ko else ""
 
     msg = (
-        f"{region_emoji}{country_str} {cat_emoji} {cat_tag}\n\n"
+        f"{country_str}{cat_emoji} {cat_tag}\n\n"
         f"*{title_ko}*"
         f"{summary_str}\n\n"
         f"📎 {source_name}\n"
@@ -461,7 +471,7 @@ for s in sources:
         if article_id > 0:
             mark_sent_telegram(article_id)
 
-        print(f"[SENT] [{region}|{category}] {country_flag} {title_ko}")
+        print(f"[SENT] [{region}|{category}] [{country_name}] {title_ko}")
     else:
         print(f"[FAIL] {res}")
         rss_health[name]["fail"] += 1
