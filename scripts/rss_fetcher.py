@@ -65,58 +65,59 @@ def detect_region(source_name: str) -> str:
                 return region
     return "global"
 
-# 국가 감지
-COUNTRY_FLAGS = {
-    "nigeria": "🇳🇬", "nigerian": "🇳🇬",
-    "south africa": "🇿🇦", "south african": "🇿🇦",
-    "kenya": "🇰🇪", "kenyan": "🇰🇪",
-    "ghana": "🇬🇭", "ghanaian": "🇬🇭",
-    "ethiopia": "🇪🇹", "ethiopian": "🇪🇹",
-    "egypt": "🇪🇬", "egyptian": "🇪🇬",
-    "tanzania": "🇹🇿", "tanzanian": "🇹🇿",
-    "uganda": "🇺🇬", "ugandan": "🇺🇬",
-    "rwanda": "🇷🇼", "rwandan": "🇷🇼",
-    "senegal": "🇸🇳", "senegalese": "🇸🇳",
-    "ivory coast": "🇨🇮", "cote d'ivoire": "🇨🇮",
-    "morocco": "🇲🇦", "moroccan": "🇲🇦",
-    "angola": "🇦🇴", "angolan": "🇦🇴",
-    "mozambique": "🇲🇿",
-    "zambia": "🇿🇲", "zambian": "🇿🇲",
-    "zimbabwe": "🇿🇼", "zimbabwean": "🇿🇼",
-    "congo": "🇨🇩", "drc": "🇨🇩",
-    "cameroon": "🇨🇲",
-    "sudan": "🇸🇩", "sudanese": "🇸🇩",
-    "libya": "🇱🇾", "libyan": "🇱🇾",
-    "tunisia": "🇹🇳", "tunisian": "🇹🇳",
-    "mali": "🇲🇱",
-    "somalia": "🇸🇴", "somali": "🇸🇴",
-    "malawi": "🇲🇼",
-    "vietnam": "🇻🇳", "vietnamese": "🇻🇳",
-    "indonesia": "🇮🇩", "indonesian": "🇮🇩",
-    "thailand": "🇹🇭", "thai": "🇹🇭",
-    "philippines": "🇵🇭", "philippine": "🇵🇭",
-    "malaysia": "🇲🇾", "malaysian": "🇲🇾",
-    "myanmar": "🇲🇲", "burmese": "🇲🇲",
-    "cambodia": "🇰🇭", "cambodian": "🇰🇭",
-    "singapore": "🇸🇬", "singaporean": "🇸🇬",
-    "laos": "🇱🇦",
-    "ukraine": "🇺🇦", "ukrainian": "🇺🇦",
-    "poland": "🇵🇱", "polish": "🇵🇱",
-    "romania": "🇷🇴", "romanian": "🇷🇴",
-    "czechia": "🇨🇿", "czech": "🇨🇿",
-    "hungary": "🇭🇺", "hungarian": "🇭🇺",
-    "georgia": "🇬🇪", "georgian": "🇬🇪",
-    "azerbaijan": "🇦🇿",
-    "kazakhstan": "🇰🇿",
-    "uzbekistan": "🇺🇿",
+# 국가 감지 — (국기, 한국어 국가명)
+COUNTRY_INFO = {
+    "nigeria": ("🇳🇬", "나이지리아"), "nigerian": ("🇳🇬", "나이지리아"),
+    "south africa": ("🇿🇦", "남아공"), "south african": ("🇿🇦", "남아공"),
+    "kenya": ("🇰🇪", "케냐"), "kenyan": ("🇰🇪", "케냐"),
+    "ghana": ("🇬🇭", "가나"), "ghanaian": ("🇬🇭", "가나"),
+    "ethiopia": ("🇪🇹", "에티오피아"), "ethiopian": ("🇪🇹", "에티오피아"),
+    "egypt": ("🇪🇬", "이집트"), "egyptian": ("🇪🇬", "이집트"),
+    "tanzania": ("🇹🇿", "탄자니아"), "tanzanian": ("🇹🇿", "탄자니아"),
+    "uganda": ("🇺🇬", "우간다"), "ugandan": ("🇺🇬", "우간다"),
+    "rwanda": ("🇷🇼", "르완다"), "rwandan": ("🇷🇼", "르완다"),
+    "senegal": ("🇸🇳", "세네갈"), "senegalese": ("🇸🇳", "세네갈"),
+    "ivory coast": ("🇨🇮", "코트디부아르"), "cote d'ivoire": ("🇨🇮", "코트디부아르"),
+    "morocco": ("🇲🇦", "모로코"), "moroccan": ("🇲🇦", "모로코"),
+    "angola": ("🇦🇴", "앙골라"), "angolan": ("🇦🇴", "앙골라"),
+    "mozambique": ("🇲🇿", "모잠비크"),
+    "zambia": ("🇿🇲", "잠비아"), "zambian": ("🇿🇲", "잠비아"),
+    "zimbabwe": ("🇿🇼", "짐바브웨"), "zimbabwean": ("🇿🇼", "짐바브웨"),
+    "congo": ("🇨🇩", "콩고"), "drc": ("🇨🇩", "콩고민주공화국"),
+    "cameroon": ("🇨🇲", "카메룬"),
+    "sudan": ("🇸🇩", "수단"), "sudanese": ("🇸🇩", "수단"),
+    "libya": ("🇱🇾", "리비아"), "libyan": ("🇱🇾", "리비아"),
+    "tunisia": ("🇹🇳", "튀니지"), "tunisian": ("🇹🇳", "튀니지"),
+    "mali": ("🇲🇱", "말리"),
+    "somalia": ("🇸🇴", "소말리아"), "somali": ("🇸🇴", "소말리아"),
+    "malawi": ("🇲🇼", "말라위"),
+    "vietnam": ("🇻🇳", "베트남"), "vietnamese": ("🇻🇳", "베트남"),
+    "indonesia": ("🇮🇩", "인도네시아"), "indonesian": ("🇮🇩", "인도네시아"),
+    "thailand": ("🇹🇭", "태국"), "thai": ("🇹🇭", "태국"),
+    "philippines": ("🇵🇭", "필리핀"), "philippine": ("🇵🇭", "필리핀"),
+    "malaysia": ("🇲🇾", "말레이시아"), "malaysian": ("🇲🇾", "말레이시아"),
+    "myanmar": ("🇲🇲", "미얀마"), "burmese": ("🇲🇲", "미얀마"),
+    "cambodia": ("🇰🇭", "캄보디아"), "cambodian": ("🇰🇭", "캄보디아"),
+    "singapore": ("🇸🇬", "싱가포르"), "singaporean": ("🇸🇬", "싱가포르"),
+    "laos": ("🇱🇦", "라오스"),
+    "ukraine": ("🇺🇦", "우크라이나"), "ukrainian": ("🇺🇦", "우크라이나"),
+    "poland": ("🇵🇱", "폴란드"), "polish": ("🇵🇱", "폴란드"),
+    "romania": ("🇷🇴", "루마니아"), "romanian": ("🇷🇴", "루마니아"),
+    "czechia": ("🇨🇿", "체코"), "czech": ("🇨🇿", "체코"),
+    "hungary": ("🇭🇺", "헝가리"), "hungarian": ("🇭🇺", "헝가리"),
+    "georgia": ("🇬🇪", "조지아"), "georgian": ("🇬🇪", "조지아"),
+    "azerbaijan": ("🇦🇿", "아제르바이잔"),
+    "kazakhstan": ("🇰🇿", "카자흐스탄"),
+    "uzbekistan": ("🇺🇿", "우즈베키스탄"),
 }
 
-def detect_country(text: str) -> str:
+def detect_country(text: str):
+    """제목/요약에서 국가 정보 반환 (국기, 국가명)"""
     text_lower = text.lower()
-    for country, flag in COUNTRY_FLAGS.items():
-        if country in text_lower:
-            return flag
-    return ""
+    for keyword, (flag, name) in COUNTRY_INFO.items():
+        if keyword in text_lower:
+            return flag, name
+    return "", ""
 
 # =========================
 # STATE
@@ -257,11 +258,11 @@ def score_news(title, category):
 # TELEGRAM
 # =========================
 
-def send_telegram(title_ko, summary_ko, link, source_name, category, region, country_flag):
+def send_telegram(title_ko, summary_ko, link, source_name, category, region, country_flag, country_name):
     cat_emoji    = CATEGORY_EMOJI.get(category, "📌")
     region_emoji = REGION_EMOJI.get(region, "🗺️")
     cat_tag      = f"#{category.upper()}"
-    country_str  = f" {country_flag}" if country_flag else ""
+    country_str  = f" {country_flag} {country_name}" if country_flag else ""
     summary_str  = f"\n\n_{summary_ko}_" if summary_ko else ""
 
     msg = (
@@ -339,7 +340,7 @@ for s in sources:
     summary_en = extract_summary(latest)
 
     # 국가 감지
-    country_flag = detect_country(title + " " + summary_en)
+    country_flag, country_name = detect_country(title + " " + summary_en)
 
     # 한국어 번역
     try:
@@ -358,7 +359,7 @@ for s in sources:
             summary_ko = summary_en
 
     # 텔레그램 발송
-    res = send_telegram(title_ko, summary_ko, link, name, category, region, country_flag)
+    res = send_telegram(title_ko, summary_ko, link, name, category, region, country_flag, country_name)
 
     if res.get("ok"):
         state["daily_count"] += 1
