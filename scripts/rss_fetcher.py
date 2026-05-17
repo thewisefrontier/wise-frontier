@@ -47,14 +47,24 @@ REGION_EMOJI = {
     "africa":         "🌍",
     "southeast_asia": "🌏",
     "eastern_europe": "🌐",
+    "central_asia":   "🏔️",
+    "middle_east":    "🌙",
+    "south_asia":     "🌏",
+    "caribbean":      "🌴",
+    "latin_america":  "🌎",
     "global":         "🗺️"
 }
 
 # 소스 이름으로 리전 자동 분류
 REGION_KEYWORDS = {
     "africa": ["africa", "nigeria", "kenya", "ghana", "ethiopia", "egypt", "south africa", "allafrica", "maverick", "naira", "punch", "businessday", "businesstech", "guardian nigeria", "vanguard", "ghanaweb", "mining weekly", "engineering news"],
-    "southeast_asia": ["asia", "nikkei", "krasia", "dealstreet", "techinasia", "vietnam", "indonesia", "thailand", "myanmar", "khmer", "malaysia", "philippine", "bangkok", "jakarta"],
-    "eastern_europe": ["emerging europe", "intellinews", "poland", "ukraine", "romania", "czechia", "kyiv", "warsaw", "caucasus", "azerbaijan"]
+    "southeast_asia": ["asia", "krasia", "dealstreet", "techinasia", "vietnam", "indonesia", "thailand", "myanmar", "khmer", "malaysia", "philippine", "bangkok", "jakarta", "loop png", "pacific", "fiji", "solomon", "png"],
+    "eastern_europe": ["emerging europe", "intellinews", "poland", "ukraine", "romania", "czechia", "kyiv", "warsaw", "caucasus", "azerbaijan"],
+    "central_asia": ["kazakhstan", "uzbekistan", "kyrgyz", "tajik", "turkmen", "mongolia", "eurasianet", "caravanserai", "astana", "kun.uz", "kabar", "akipress"],
+    "middle_east": ["iraq", "iran", "yemen", "syria", "jordan", "lebanon", "saudi", "qatar", "kuwait", "oman", "bahrain", "uae", "emirates", "al monitor", "middle east eye"],
+    "south_asia": ["pakistan", "bangladesh", "nepal", "sri lanka", "dawn", "himalayan", "daily star"],
+    "caribbean": ["haiti", "jamaica", "trinidad", "dominican", "caribbean", "haitian times", "loop caribbean"],
+    "latin_america": ["venezuela", "bolivia", "ecuador", "paraguay", "nicaragua", "salvador", "guatemala", "honduras", "news americas"]
 }
 
 def detect_region(source_name: str) -> str:
@@ -110,6 +120,49 @@ COUNTRY_INFO = {
     "trend az": ("🇦🇿", "아제르바이잔"),
     "kazakhstan": ("🇰🇿", "카자흐스탄"),
     "uzbekistan": ("🇺🇿", "우즈베키스탄"),
+    # 남아시아
+    "pakistan": ("🇵🇰", "파키스탄"), "pakistani": ("🇵🇰", "파키스탄"),
+    "dawn pakistan": ("🇵🇰", "파키스탄"),
+    "bangladesh": ("🇧🇩", "방글라데시"), "bangladeshi": ("🇧🇩", "방글라데시"),
+    "nepal": ("🇳🇵", "네팔"), "nepali": ("🇳🇵", "네팔"),
+    "sri lanka": ("🇱🇰", "스리랑카"), "sri lankan": ("🇱🇰", "스리랑카"),
+    "india": ("🇮🇳", "인도"), "indian": ("🇮🇳", "인도"),
+    # 중동
+    "uae": ("🇦🇪", "UAE"), "emirates": ("🇦🇪", "UAE"),
+    "saudi arabia": ("🇸🇦", "사우디"), "saudi": ("🇸🇦", "사우디"),
+    "qatar": ("🇶🇦", "카타르"), "qatari": ("🇶🇦", "카타르"),
+    "kuwait": ("🇰🇼", "쿠웨이트"), "kuwaiti": ("🇰🇼", "쿠웨이트"),
+    "oman": ("🇴🇲", "오만"), "omani": ("🇴🇲", "오만"),
+    "bahrain": ("🇧🇭", "바레인"), "bahraini": ("🇧🇭", "바레인"),
+    "iraq": ("🇮🇶", "이라크"), "iraqi": ("🇮🇶", "이라크"),
+    "iran": ("🇮🇷", "이란"), "iranian": ("🇮🇷", "이란"),
+    "yemen": ("🇾🇪", "예멘"), "yemeni": ("🇾🇪", "예멘"),
+    "syria": ("🇸🇾", "시리아"), "syrian": ("🇸🇾", "시리아"),
+    "jordan": ("🇯🇴", "요르단"), "jordanian": ("🇯🇴", "요르단"),
+    "lebanon": ("🇱🇧", "레바논"), "lebanese": ("🇱🇧", "레바논"),
+    # 카리브해
+    "haiti": ("🇭🇹", "아이티"), "haitian": ("🇭🇹", "아이티"),
+    "jamaica": ("🇯🇲", "자메이카"), "jamaican": ("🇯🇲", "자메이카"),
+    "trinidad": ("🇹🇹", "트리니다드"), "dominican": ("🇩🇴", "도미니카"),
+    # 태평양
+    "papua new guinea": ("🇵🇬", "파푸아뉴기니"), "png": ("🇵🇬", "파푸아뉴기니"),
+    "fiji": ("🇫🇯", "피지"), "fijian": ("🇫🇯", "피지"),
+    "solomon": ("🇸🇧", "솔로몬제도"),
+    "vanuatu": ("🇻🇺", "바누아투"),
+    # 중앙아시아
+    "kyrgyzstan": ("🇰🇬", "키르기스스탄"), "kyrgyz": ("🇰🇬", "키르기스스탄"),
+    "tajikistan": ("🇹🇯", "타지키스탄"), "tajik": ("🇹🇯", "타지키스탄"),
+    "turkmenistan": ("🇹🇲", "투르크메니스탄"),
+    "mongolia": ("🇲🇳", "몽골"), "mongolian": ("🇲🇳", "몽골"),
+    # 라틴아메리카
+    "venezuela": ("🇻🇪", "베네수엘라"), "venezuelan": ("🇻🇪", "베네수엘라"),
+    "bolivia": ("🇧🇴", "볼리비아"), "bolivian": ("🇧🇴", "볼리비아"),
+    "ecuador": ("🇪🇨", "에콰도르"), "ecuadorian": ("🇪🇨", "에콰도르"),
+    "paraguay": ("🇵🇾", "파라과이"),
+    "nicaragua": ("🇳🇮", "니카라과"),
+    "el salvador": ("🇸🇻", "엘살바도르"),
+    "guatemala": ("🇬🇹", "과테말라"),
+    "honduras": ("🇭🇳", "온두라스"),
 }
 
 def detect_country(text: str):
@@ -251,7 +304,19 @@ def score_news(title, category):
         if k in t:
             score += v
 
-    noise = ["football", "celebrity", "music", "wedding", "entertainment", "e-edition", "edition"]
+    noise = [
+        # 스포츠
+        "football", "soccer", "cricket", "basketball", "rugby", "tennis",
+        "golf", "athletics", "olympics", "match", "league", "tournament",
+        "coach", "player", "transfer", "goal", "squad", "fixture", "champion",
+        "premier league", "champions league", "world cup", "cup final",
+        # 연예/문화
+        "celebrity", "music", "wedding", "entertainment", "fashion", "movie",
+        "film", "actor", "actress", "singer", "concert", "album",
+        # 기타 노이즈
+        "e-edition", "edition", "travel", "tourism", "leisure", "sumo",
+        "festival", "horoscope", "obituary", "recipe", "weather forecast"
+    ]
     for n in noise:
         if n in t:
             score -= 10
