@@ -359,6 +359,17 @@ def score_news(title, category, subcategory=""):
         if n in t:
             score -= 10
 
+    # 선진국 키워드 감점 (프론티어 마켓과 무관)
+    developed = [
+        "germany", "german", "france", "french", "japan", "japanese",
+        "g7", "united kingdom", "canada", "australia", "australian",
+        "european union", " eu ", "federal reserve", " fed ", "wall street",
+        "silicon valley", "new york", "london", "paris", "tokyo", "berlin"
+    ]
+    for d in developed:
+        if d in t:
+            score -= 5
+
     return score
 
 # =========================
