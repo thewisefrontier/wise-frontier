@@ -106,7 +106,8 @@ COUNTRY_INFO = {
     "czechia": ("🇨🇿", "체코"), "czech": ("🇨🇿", "체코"),
     "hungary": ("🇭🇺", "헝가리"), "hungarian": ("🇭🇺", "헝가리"),
     "georgia": ("🇬🇪", "조지아"), "georgian": ("🇬🇪", "조지아"),
-    "azerbaijan": ("🇦🇿", "아제르바이잔"),
+    "azerbaija": ("🇦🇿", "아제르바이잔"), "azerbaijan": ("🇦🇿", "아제르바이잔"),
+    "trend az": ("🇦🇿", "아제르바이잔"),
     "kazakhstan": ("🇰🇿", "카자흐스탄"),
     "uzbekistan": ("🇺🇿", "우즈베키스탄"),
 }
@@ -208,6 +209,9 @@ def extract_summary(entry):
         return ""
     summary = re.sub(r'<[^>]+>', '', summary)
     summary = re.sub(r'\s+', ' ', summary).strip()
+    # 오류 페이지 감지
+    if any(x in summary.lower() for x in ["error 500", "error 404", "server error", "that's an error", "please try again"]):
+        return ""
     if len(summary) > 150:
         summary = summary[:150].rsplit(' ', 1)[0] + "..."
     return clean_text(summary)
@@ -339,8 +343,8 @@ for s in sources:
     # 요약 추출
     summary_en = extract_summary(latest)
 
-    # 국가 감지
-    country_flag, country_name = detect_country(title + " " + summary_en)
+    # 국가 감지 (제목 + 요약 + 소스 이름)
+    country_flag, country_name = detect_country(title + " " + summary_en + " " + name)
 
     # 한국어 번역
     try:
