@@ -10,12 +10,16 @@ from urllib.parse import urlparse, urlunparse
 from deep_translator import GoogleTranslator
 from dotenv import load_dotenv
 from rapidfuzz import fuzz
+from db import init_db, is_url_exists, insert_article, mark_sent_telegram
 
 # UTF-8 출력 설정 (Windows 인코딩 오류 방지)
 sys.stdout.reconfigure(encoding='utf-8')
 
 # .env 파일에서 환경변수 로드
 load_dotenv()
+
+# DB 초기화
+init_db()
 
 # =========================
 # CONFIG
@@ -395,6 +399,11 @@ for s in sources:
     if fp in sent_db:
         continue
 
+    # DB 중복 체크 (URL 기반)
+    if is_url_exists(link):
+        sent_db[fp] = True
+        continue
+
     if is_duplicate(title, seen_titles):
         print(f"[SKIP] 유사 기사 중복 — {title[:50]}")
         continue
@@ -434,6 +443,24 @@ for s in sources:
         state["daily_count"] += 1
         sent_db[fp] = True
         rss_health[name]["ok"] += 1
+
+        # DB 저장
+        article_id = insert_article(
+            title_en=title,
+            title_ko=title_ko,
+            summary_en=summary_en,
+            summary_ko=summary_ko,
+            url=link,
+            source=name,
+            category=category,
+            region=region,
+            country=country_name,
+            country_flag=country_flag,
+            score=score
+        )
+        if article_id > 0:
+            mark_sent_telegram(article_id)
+
         print(f"[SENT] [{region}|{category}] {country_flag} {title_ko}")
     else:
         print(f"[FAIL] {res}")
