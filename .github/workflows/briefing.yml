@@ -1,0 +1,30 @@
+name: The Wise Frontier - Daily Briefing
+
+on:
+  schedule:
+    - cron: '0 9 * * *'  # UTC 09:00 = KST 18:00 매일 저녁 6시
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  briefing:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Python 설정
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 패키지 설치
+        run: pip install -r requirements.txt
+
+      - name: 일일 브리핑 발송
+        run: python scripts/briefing.py
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
