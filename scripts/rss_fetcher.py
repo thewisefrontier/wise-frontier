@@ -38,13 +38,12 @@ MIN_SCORE = 3
 # =========================
 
 CATEGORY_EMOJI = {
-    "macro":      "📊",
-    "finance":    "💰",
-    "resource":   "⛏️",
-    "politics":   "🏛️",
-    "tech":       "💡",
-    "society":    "🏘️",
-    "investment": "📈"
+    "경제":    "💰",
+    "정치":    "🏛️",
+    "세계":    "🌐",
+    "IT·과학": "💡",
+    "사회":    "🏘️",
+    "생활/문화": "🎭"
 }
 
 REGION_KEYWORDS = {
@@ -225,13 +224,20 @@ def load_rss():
             if not line or line.startswith("#") or "|" not in line:
                 continue
             parts = line.split("|")
-            if len(parts) != 3:
-                continue
-            sources.append({
-                "name":     parts[0],
-                "category": parts[1],
-                "url":      parts[2]
-            })
+            if len(parts) == 4:
+                sources.append({
+                    "name":        parts[0],
+                    "category":    parts[1],
+                    "subcategory": parts[2],
+                    "url":         parts[3]
+                })
+            elif len(parts) == 3:
+                sources.append({
+                    "name":        parts[0],
+                    "category":    parts[1],
+                    "subcategory": parts[1],
+                    "url":         parts[2]
+                })
     return sources
 
 # =========================
@@ -287,20 +293,32 @@ def extract_summary(entry):
 # SCORE
 # =========================
 
-def score_news(title, category):
+def score_news(title, category, subcategory=""):
     t = title.lower()
     score = 0
 
+    # 대분류 기본 점수
     weights = {
-        "macro":      5,
-        "finance":    4,
-        "resource":   4,
-        "politics":   3,
-        "tech":       2,
-        "society":    2,
-        "investment": 4
+        "경제":   5,
+        "정치":   4,
+        "세계":   4,
+        "IT·과학": 3,
+        "사회":   2,
+        "생활/문화": 1,
     }
-    score += weights.get(category, 1)
+    score += weights.get(category, 2)
+
+    # 소분류 추가 점수
+    sub_weights = {
+        "금융/증권":   2,
+        "자원/에너지": 2,
+        "무역/통상":   2,
+        "산업/기업":   1,
+        "글로벌경제":  2,
+        "외교":        2,
+        "핀테크":      2,
+    }
+    score += sub_weights.get(subcategory, 0)
 
     important = {
         "imf":          4,
@@ -312,7 +330,12 @@ def score_news(title, category):
         "gdp":          3,
         "ipo":          3,
         "merger":       3,
-        "acquisition":  3
+        "acquisition":  3,
+        "sanction":     3,
+        "coup":         4,
+        "election":     3,
+        "debt":         3,
+        "currency":     3,
     }
     for k, v in important.items():
         if k in t:
@@ -342,14 +365,13 @@ def score_news(title, category):
 # TELEGRAM
 # =========================
 
-def send_telegram(title_ko, summary_ko, link, source_name, category, region, country_flag, country_name):
-    cat_emoji   = CATEGORY_EMOJI.get(category, "📌")
-    cat_tag     = f"#{category.upper()}"
+def send_telegram(title_ko, summary_ko, link, source_name, category, subcategory, country_name):
+    cat_tag     = f"#{category} #{subcategory}" if subcategory and subcategory != category else f"#{category}"
     country_str = f"[{country_name}] " if country_name else ""
     summary_str = f"\n\n_{summary_ko}_" if summary_ko else ""
 
     msg = (
-        f"{country_str}{cat_emoji} {cat_tag}\n\n"
+        f"{country_str}{cat_tag}\n\n"
         f"*{title_ko}*"
         f"{summary_str}\n\n"
         f"📎 {source_name}\n"
@@ -381,9 +403,10 @@ sources = load_rss()
 seen_titles = []
 
 for s in sources:
-    name     = s["name"]
-    category = s["category"]
-    region   = detect_region(name)
+    name        = s["name"]
+    category    = s["category"]
+    subcategory = s["subcategory"]
+    region      = detect_region(name)
 
     if name not in rss_health:
         rss_health[name] = {"ok": 0, "fail": 0, "status": "active"}
@@ -419,7 +442,7 @@ for s in sources:
         continue
     seen_titles.append(title)
 
-    score = score_news(title, category)
+    score = score_news(title, category, subcategory)
     if score < MIN_SCORE:
         print(f"[SKIP] 낮은 점수({score}) — {title[:50]}")
         continue
@@ -447,7 +470,7 @@ for s in sources:
             summary_ko = summary_en
 
     # 텔레그램 발송
-    res = send_telegram(title_ko, summary_ko, link, name, category, region, country_flag, country_name)
+    res = send_telegram(title_ko, summary_ko, link, name, category, subcategory, country_name)
 
     if res.get("ok"):
         state["daily_count"] += 1
@@ -463,6 +486,7 @@ for s in sources:
             url=link,
             source=name,
             category=category,
+            subcategory=subcategory,
             region=region,
             country=country_name,
             country_flag=country_flag,
@@ -471,7 +495,7 @@ for s in sources:
         if article_id > 0:
             mark_sent_telegram(article_id)
 
-        print(f"[SENT] [{region}|{category}] [{country_name}] {title_ko}")
+        print(f"[SENT] [{category}>{subcategory}] [{country_name}] {title_ko}")
     else:
         print(f"[FAIL] {res}")
         rss_health[name]["fail"] += 1

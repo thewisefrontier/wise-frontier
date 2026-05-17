@@ -23,6 +23,7 @@ def init_db():
             url           TEXT UNIQUE NOT NULL,
             source        TEXT,
             category      TEXT,
+            subcategory   TEXT,
             region        TEXT,
             country       TEXT,
             country_flag  TEXT,
@@ -32,6 +33,11 @@ def init_db():
             posted_blog   INTEGER DEFAULT 0
         )
     """)
+    # 기존 DB에 subcategory 컬럼 없으면 추가
+    try:
+        c.execute("ALTER TABLE articles ADD COLUMN subcategory TEXT")
+    except:
+        pass
     conn.commit()
     conn.close()
 
@@ -45,7 +51,7 @@ def is_url_exists(url: str) -> bool:
 
 def insert_article(
     title_en, title_ko, summary_en, summary_ko,
-    url, source, category, region, country, country_flag, score
+    url, source, category, subcategory, region, country, country_flag, score
 ) -> int:
     conn = get_conn()
     c = conn.cursor()
@@ -53,11 +59,11 @@ def insert_article(
         c.execute("""
             INSERT INTO articles (
                 title_en, title_ko, summary_en, summary_ko,
-                url, source, category, region, country, country_flag, score
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                url, source, category, subcategory, region, country, country_flag, score
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             title_en, title_ko, summary_en, summary_ko,
-            url, source, category, region, country, country_flag, score
+            url, source, category, subcategory, region, country, country_flag, score
         ))
         conn.commit()
         return c.lastrowid
