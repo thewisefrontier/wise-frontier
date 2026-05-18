@@ -7,6 +7,7 @@ import time
 import re
 import sys
 from urllib.parse import urlparse, urlunparse
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from deep_translator import GoogleTranslator
 from dotenv import load_dotenv
 from rapidfuzz import fuzz
@@ -411,40 +412,64 @@ def save_state():
 # MAIN
 # =========================
 
-sources = load_rss()
+# =========================
+# RSS 수집 함수 (병렬 처리용)
+# =========================
+
+def fetch_source(s):
+    """단일 소스에서 최신 기사 수집"""
+    name = s["name"]
+    try:
+        feed = feedparser.parse(s["url"], request_headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
+        if not feed.entries:
+            return None, name, "no_entries"
+        latest = feed.entries[0]
+        title = clean_text(latest.get("title", ""))
+        link  = normalize_url(latest.get("link", ""))
+        if not title or not link:
+            return None, name, "no_title_link"
+        return {"title": title, "link": link, "entry": latest, "source": s}, name, "ok"
+    except Exception as e:
+        return None, name, f"error: {e}"
+
+# =========================
+# MAIN
+# =========================
+
+sources    = load_rss()
 seen_titles = []
 
-for s in sources:
+# 병렬로 RSS 수집
+print(f"[수집] {len(sources)}개 소스 병렬 수집 시작...")
+results = []
+with ThreadPoolExecutor(max_workers=20) as executor:
+    futures = {executor.submit(fetch_source, s): s for s in sources}
+    for future in as_completed(futures):
+        data, name, status = future.result()
+        if name not in rss_health:
+            rss_health[name] = {"ok": 0, "fail": 0, "status": "active"}
+        if status == "ok" and data:
+            results.append(data)
+        else:
+            rss_health[name]["fail"] += 1
+
+print(f"[수집] {len(results)}개 기사 수집 완료")
+
+# 수집된 기사 처리 및 발송
+for data in results:
+    s           = data["source"]
     name        = s["name"]
     category    = s["category"]
     subcategory = s["subcategory"]
     region      = detect_region(name)
-
-    if name not in rss_health:
-        rss_health[name] = {"ok": 0, "fail": 0, "status": "active"}
-
-    try:
-        feed = feedparser.parse(s["url"], request_headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
-    except:
-        rss_health[name]["fail"] += 1
-        continue
-
-    if not feed.entries:
-        rss_health[name]["fail"] += 1
-        continue
-
-    latest = feed.entries[0]
-    title  = clean_text(latest.get("title", ""))
-    link   = normalize_url(latest.get("link", ""))
-
-    if not title or not link:
-        continue
+    title       = data["title"]
+    link        = data["link"]
+    latest      = data["entry"]
 
     fp = fingerprint(title, name)
     if fp in sent_db:
         continue
 
-    # DB 중복 체크 (URL 기반)
     if is_url_exists(link):
         sent_db[fp] = True
         continue
@@ -462,13 +487,12 @@ for s in sources:
     # 요약 추출
     summary_en = extract_summary(latest)
 
-    # 국가 감지 (제목 + 요약 + 소스 이름)
+    # 국가 감지
     country_flag, country_name = detect_country(title + " " + summary_en + " " + name)
 
     # 한국어 번역
     try:
-        translator = GoogleTranslator(source="auto", target="ko")
-        title_ko = translator.translate(title[:500])
+        title_ko = GoogleTranslator(source="auto", target="ko").translate(title[:500])
         title_ko = clean_text(title_ko)
     except Exception:
         title_ko = title
