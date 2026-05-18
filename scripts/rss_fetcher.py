@@ -418,9 +418,13 @@ def save_state():
 
 def fetch_source(s):
     """단일 소스에서 최신 기사 수집"""
+    import socket
     name = s["name"]
     try:
-        feed = feedparser.parse(s["url"], request_headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
+        old_timeout = socket.getdefaulttimeout()
+        socket.setdefaulttimeout(10)
+        feed = feedparser.parse(s["url"], request_headers={"User-Agent": "Mozilla/5.0"})
+        socket.setdefaulttimeout(old_timeout)
         if not feed.entries:
             return None, name, "no_entries"
         latest = feed.entries[0]
