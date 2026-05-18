@@ -285,6 +285,8 @@ def escape_markdown(text: str) -> str:
     for c in chars:
         text = text.replace(c, f'\\{c}')
     return text
+
+def extract_summary(entry):
     summary = entry.get("summary", "") or entry.get("description", "")
     if not summary:
         return ""
