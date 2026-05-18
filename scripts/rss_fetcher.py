@@ -376,13 +376,14 @@ def score_news(title, category, subcategory=""):
 # TELEGRAM
 # =========================
 
-def send_telegram(title_ko, summary_ko, link, source_name, category, subcategory, country_name):
+def send_telegram(title_ko, summary_ko, link, source_name, category, subcategory, region, country_name):
     cat_tag     = f"#{category} #{subcategory}" if subcategory and subcategory != category else f"#{category}"
-    country_str = f"[{country_name}] " if country_name else ""
+    region_tag  = f" #{region}" if region else ""
+    country_tag = f" #{country_name}" if country_name else ""
     summary_str = f"\n\n_{summary_ko}_" if summary_ko else ""
 
     msg = (
-        f"{country_str}{cat_tag}\n\n"
+        f"{cat_tag}{region_tag}{country_tag}\n\n"
         f"*{title_ko}*"
         f"{summary_str}\n\n"
         f"📎 {source_name}\n"
@@ -481,7 +482,7 @@ for s in sources:
             summary_ko = summary_en
 
     # 텔레그램 발송
-    res = send_telegram(title_ko, summary_ko, link, name, category, subcategory, country_name)
+    res = send_telegram(title_ko, summary_ko, link, name, category, subcategory, region, country_name)
 
     if res.get("ok"):
         state["daily_count"] += 1
