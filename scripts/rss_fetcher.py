@@ -277,7 +277,14 @@ def clean_text(text):
         text = text.replace(orig, rep)
     return text.strip()
 
-def extract_summary(entry):
+def escape_markdown(text: str) -> str:
+    """텔레그램 Markdown 특수문자 이스케이프"""
+    if not text:
+        return ""
+    chars = ['*', '_', '[', ']', '(', ')', '`', '#']
+    for c in chars:
+        text = text.replace(c, f'\\{c}')
+    return text
     summary = entry.get("summary", "") or entry.get("description", "")
     if not summary:
         return ""
@@ -354,7 +361,10 @@ def score_news(title, category, subcategory=""):
         # 기타 노이즈
         "e-edition", "edition", "travel", "tourism", "leisure", "sumo",
         "festival", "horoscope", "obituary", "recipe", "weather forecast",
-        "eurovision", "beauty pageant", "miss world", "miss universe"
+        "eurovision", "beauty pageant", "miss world", "miss universe",
+        "lottery", "powerball", "lotto", "flag day", "national day",
+        "palace", "museum", "zapping", "podcast", "5 ways", "how to celebrate",
+        "royal", "heritage site", "archaeological"
     ]
     for n in noise:
         if n in t:
@@ -381,11 +391,14 @@ def send_telegram(title_ko, summary_ko, link, source_name, category, subcategory
     cat_tag     = f"#{category} #{subcategory}" if subcategory and subcategory != category else f"#{category}"
     region_tag  = f" #{region}" if region else ""
     country_tag = f" #{country_name}" if country_name else ""
-    summary_str = f"\n\n_{summary_ko}_" if summary_ko else ""
+    
+    title_safe   = escape_markdown(title_ko)
+    summary_safe = escape_markdown(summary_ko)
+    summary_str  = f"\n\n_{summary_safe}_" if summary_safe else ""
 
     msg = (
         f"{cat_tag}{region_tag}{country_tag}\n\n"
-        f"*{title_ko}*"
+        f"*{title_safe}*"
         f"{summary_str}\n\n"
         f"📎 {source_name}\n"
         f"🔗 {link}"
