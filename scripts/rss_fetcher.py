@@ -32,8 +32,6 @@ CHAT_ID = "@TheWiseFrontier"
 RSS_FILE = "sources/rss_sources.txt"
 STATE_FILE = "data/state.json"
 
-MIN_SCORE = 3
-
 # =========================
 # EMOJI MAP
 # =========================
@@ -300,91 +298,31 @@ def extract_summary(entry):
     return clean_text(summary)
 
 # =========================
-# SCORE
+# 노이즈 필터
 # =========================
 
-def score_news(title, category, subcategory=""):
+NOISE_KEYWORDS = [
+    # 스포츠
+    "football", "soccer", "cricket", "basketball", "rugby", "tennis",
+    "golf", "athletics", "olympics", "match", "league", "tournament",
+    "coach", "player", "transfer", "goal", "squad", "fixture", "champion",
+    "premier league", "champions league", "world cup", "cup final",
+    # 연예/문화
+    "celebrity", "music", "wedding", "entertainment", "fashion", "movie",
+    "film", "actor", "actress", "singer", "concert", "album",
+    # 기타 노이즈
+    "e-edition", "edition", "travel", "tourism", "leisure", "sumo",
+    "festival", "horoscope", "obituary", "recipe", "weather forecast",
+    "eurovision", "beauty pageant", "miss world", "miss universe",
+    "lottery", "powerball", "lotto", "flag day", "national anthem",
+    "palace", "museum", "zapping", "podcast", "5 ways", "how to celebrate",
+    "royal", "heritage site", "archaeological", "co-owner", "ownership stake",
+    "church", "pastor", "bishop", "prayer", "sermon", "national sound"
+]
+
+def is_noise(title: str) -> bool:
     t = title.lower()
-    score = 0
-
-    # 대분류 기본 점수
-    weights = {
-        "경제":   5,
-        "정치":   4,
-        "세계":   4,
-        "IT·과학": 3,
-        "사회":   2,
-        "생활/문화": 1,
-    }
-    score += weights.get(category, 2)
-
-    # 소분류 추가 점수
-    sub_weights = {
-        "금융/증권":   2,
-        "자원/에너지": 2,
-        "무역/통상":   2,
-        "산업/기업":   1,
-        "글로벌경제":  2,
-        "외교":        2,
-        "핀테크":      2,
-    }
-    score += sub_weights.get(subcategory, 0)
-
-    important = {
-        "imf":          4,
-        "central bank": 4,
-        "inflation":    3,
-        "oil":          3,
-        "mining":       3,
-        "investment":   2,
-        "gdp":          3,
-        "ipo":          3,
-        "merger":       3,
-        "acquisition":  3,
-        "sanction":     3,
-        "coup":         4,
-        "election":     3,
-        "debt":         3,
-        "currency":     3,
-    }
-    for k, v in important.items():
-        if k in t:
-            score += v
-
-    noise = [
-        # 스포츠
-        "football", "soccer", "cricket", "basketball", "rugby", "tennis",
-        "golf", "athletics", "olympics", "match", "league", "tournament",
-        "coach", "player", "transfer", "goal", "squad", "fixture", "champion",
-        "premier league", "champions league", "world cup", "cup final",
-        # 연예/문화
-        "celebrity", "music", "wedding", "entertainment", "fashion", "movie",
-        "film", "actor", "actress", "singer", "concert", "album",
-        # 기타 노이즈
-        "e-edition", "edition", "travel", "tourism", "leisure", "sumo",
-        "festival", "horoscope", "obituary", "recipe", "weather forecast",
-        "eurovision", "beauty pageant", "miss world", "miss universe",
-        "lottery", "powerball", "lotto", "flag day", "national anthem",
-        "palace", "museum", "zapping", "podcast", "5 ways", "how to celebrate",
-        "royal", "heritage site", "archaeological", "co-owner", "ownership stake",
-        "church", "pastor", "bishop", "prayer", "sermon", "national sound"
-    ]
-    for n in noise:
-        if n in t:
-            score -= 10
-
-    # 선진국 키워드 감점 (프론티어 마켓과 무관)
-    developed = [
-        "germany", "german", "france", "french", "japan", "japanese",
-        "g7", "united kingdom", "canada", "australia", "australian",
-        "european union", " eu ", "federal reserve", " fed ", "wall street",
-        "silicon valley", "new york", "london", "paris", "tokyo", "berlin"
-    ]
-    for d in developed:
-        if d in t:
-            score -= 5
-
-    return score
+    return any(n in t for n in NOISE_KEYWORDS)
 
 # =========================
 # TELEGRAM
@@ -500,9 +438,8 @@ for data in results:
         continue
     seen_titles.append(title)
 
-    score = score_news(title, category, subcategory)
-    if score < MIN_SCORE:
-        print(f"[SKIP] 낮은 점수({score}) — {title[:50]}")
+    if is_noise(title):
+        print(f"[SKIP] 노이즈 — {title[:50]}")
         continue
 
     # 요약 추출
@@ -548,7 +485,7 @@ for data in results:
             region=region,
             country=country_name,
             country_flag=country_flag,
-            score=score
+            score=0
         )
         if article_id > 0:
             mark_sent_telegram(article_id)
