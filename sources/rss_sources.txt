@@ -7,7 +7,7 @@ CNBC Africa|경제|글로벌경제|https://www.cnbcafrica.com/feed/
 IMF|경제|글로벌경제|https://www.imf.org/en/News/RSS
 World Bank|경제|글로벌경제|https://www.worldbank.org/en/news/rss
 African Development Bank|경제|글로벌경제|https://www.afdb.org/en/news-and-events/rss
-Africanews|세계|아프리카|https://www.africanews.com/feed/rss
+Africanews Business|경제|경제일반|https://www.africanews.com/feed/rss?theme=business
 AllAfrica Business|경제|글로벌경제|https://allafrica.com/tools/headlines/rdf/business/headlines.rdf
 AllAfrica Politics|정치|외교|https://allafrica.com/tools/headlines/rdf/politics/headlines.rdf
 AllAfrica Economy|경제|글로벌경제|https://allafrica.com/tools/headlines/rdf/economy/headlines.rdf
@@ -15,71 +15,68 @@ African Business|경제|글로벌경제|https://african.business/feed/
 The Exchange Africa|경제|금융/증권|https://theexchange.africa/feed/
 Ventures Africa|경제|산업/기업|https://venturesafrica.com/feed/
 Quartz Africa|세계|아프리카|https://qz.com/africa/rss
-The East African|세계|아프리카|https://www.theeastafrican.co.ke/tea/rss
+The East African Business|경제|경제일반|https://www.theeastafrican.co.ke/tea/business/rss
 African Arguments|정치|외교|https://africanarguments.org/feed/
 Africa Report|세계|아프리카|https://www.theafricareport.com/feed/
 Africa Confidential|정치|외교|https://www.africa-confidential.com/rss
-Africa Is A Country|정치|정치일반|https://africasacountry.com/feed/
-The Continent|세계|아프리카|https://thecontinent.org/feed/
-Africa Renewal|세계|아프리카|https://www.un.org/africarenewal/rss.xml
 Mining.com|경제|자원/에너지|https://www.mining.com/feed/
 
 # =========================
-# 세계 > 아프리카 (서아프리카)
+# 세계 > 아프리카 (서아프리카 - 나이지리아)
 # =========================
 Nairametrics|경제|금융/증권|https://nairametrics.com/feed/
-Punch Business|경제|산업/기업|https://punchng.com/topics/business/feed/
 BusinessDay Nigeria|경제|금융/증권|https://businessday.ng/feed/
-The Guardian Nigeria|세계|아프리카|https://guardian.ng/feed/
-Premium Times Nigeria|정치|정치일반|https://www.premiumtimesng.com/feed/
-Vanguard Nigeria|경제|경제일반|https://www.vanguardngr.com/feed/
+Punch Business|경제|산업/기업|https://punchng.com/topics/business/feed/
+Vanguard Business|경제|경제일반|https://www.vanguardngr.com/category/business/feed/
+Vanguard Energy|경제|자원/에너지|https://www.vanguardngr.com/category/sweet-crude/feed/
+Premium Times Business|경제|경제일반|https://www.premiumtimesng.com/category/business/feed/
+Guardian Nigeria Business|경제|경제일반|https://guardian.ng/category/business/feed/
+Guardian Nigeria Economy|경제|경제일반|https://guardian.ng/category/economy/feed/
+Guardian Nigeria Politics|정치|정치일반|https://guardian.ng/category/politics/feed/
+
+# =========================
+# 세계 > 아프리카 (서아프리카 - 가나)
+# =========================
 GhanaWeb Business|경제|경제일반|https://www.ghanaweb.com/GhanaHomePage/business/rss
 Ghana Business News|경제|경제일반|https://www.ghanabusinessnews.com/feed/
 Joy Business Ghana|경제|경제일반|https://www.myjoyonline.com/category/business/feed/
-APA News West Africa|세계|아프리카|https://apanews.net/rss/
 
 # =========================
 # 세계 > 아프리카 (동아프리카)
 # =========================
 Business Daily Africa Kenya|경제|금융/증권|https://www.businessdailyafrica.com/feed/
-Nation Africa|세계|아프리카|https://nation.africa/rss
-Standard Media Kenya|세계|아프리카|https://www.standardmedia.co.ke/rss/news.php
-Monitor Uganda|세계|아프리카|https://www.monitor.co.ug/rss/
-New Vision Uganda|정치|정치일반|https://www.newvision.co.ug/rss/
-The Citizen Tanzania|세계|아프리카|https://www.thecitizen.co.tz/tanzania/rss/
+Nation Africa Business|경제|경제일반|https://nation.africa/kenya/business/rss
+Standard Media Kenya Business|경제|경제일반|https://www.standardmedia.co.ke/rss/business.php
+The East African|세계|아프리카|https://www.theeastafrican.co.ke/tea/rss
+Monitor Uganda Business|경제|경제일반|https://www.monitor.co.ug/business/rss
 Addis Fortune Ethiopia|경제|경제일반|https://addisfortune.news/rss/
 The Reporter Ethiopia|세계|아프리카|https://www.thereporterethiopia.com/rss/
 East African Business Week|경제|경제일반|https://www.busiweek.com/feed/
-Rwanda New Times|세계|아프리카|https://www.newtimes.co.rw/rss
+Rwanda New Times Business|경제|경제일반|https://www.newtimes.co.rw/business/rss
 Kenyan Wall Street|경제|금융/증권|https://kenyanwallstreet.com/feed/
 
 # =========================
 # 세계 > 아프리카 (남아프리카)
 # =========================
 BusinessTech South Africa|경제|산업/기업|https://businesstech.co.za/news/feed/
-Daily Maverick|세계|아프리카|https://www.dailymaverick.co.za/feed/
+Daily Maverick Business|경제|경제일반|https://www.dailymaverick.co.za/opinionista/rss/
 Business Insider South Africa|경제|경제일반|https://www.businessinsider.co.za/feed/
-MyBroadband|IT·과학|IT일반|https://mybroadband.co.za/feed/
 Fin24|경제|금융/증권|https://www.news24.com/fin24/rss
-News24 South Africa|세계|아프리카|https://feeds.24.com/articles/news24/TopStories/rss
 Mining Weekly|경제|자원/에너지|https://www.miningweekly.com/rss/latest-mining-news
 Engineering News South Africa|경제|산업/기업|https://www.engineeringnews.co.za/rss/latestnews
 Zimbabwe Independent|경제|경제일반|https://theindependent.co.zw/feed/
-The Herald Zimbabwe|세계|아프리카|https://www.herald.co.zw/feed/
-Zambia Daily Mail|세계|아프리카|https://www.daily-mail.co.zm/feed/
-Malawi Nation|세계|아프리카|https://mwnation.com/feed/
+Zambia Daily Mail Business|경제|경제일반|https://www.daily-mail.co.zm/category/business/feed/
 
 # =========================
 # 세계 > 아프리카 (북아프리카)
 # =========================
 Egypt Independent|세계|아프리카|https://egyptindependent.com/feed/
-Daily News Egypt|경제|경제일반|https://dailynewsegypt.com/feed/
-Morocco World News|세계|아프리카|https://www.moroccoworldnews.com/feed/
-Tunisia Live|세계|아프리카|https://www.tunisia-live.net/feed/
+Daily News Egypt Business|경제|경제일반|https://dailynewsegypt.com/category/business/feed/
+Morocco World News Business|경제|경제일반|https://www.moroccoworldnews.com/category/business/feed/
 Libya Herald|정치|정치일반|https://libyaherald.com/feed/
 
 # =========================
-# 세계 > 아프리카 (테크/스타트업)
+# 세계 > 아프리카 (테크/핀테크)
 # =========================
 TechCabal|IT·과학|IT일반|https://techcabal.com/feed/
 Disrupt Africa|IT·과학|IT일반|https://disrupt-africa.com/feed/
@@ -96,9 +93,16 @@ Oil Review Africa|경제|자원/에너지|https://www.oilreviewafrica.com/rss/la
 African Mining Brief|경제|자원/에너지|https://africanminingbrief.com/feed/
 
 # =========================
+# 세계 > 아프리카 (증권시장)
+# =========================
+African Capital Markets News|경제|금융/증권|https://africancapitalmarketsnews.com/feed/
+Finance in Africa|경제|금융/증권|https://financeinafrica.com/feed/
+Daba Finance|경제|금융/증권|https://dabafinance.com/en/feed/
+
+# =========================
 # 세계 > 동남아시아
 # =========================
-Channel NewsAsia|세계|동남아시아|https://www.channelnewsasia.com/rssfeeds/8395744
+Channel NewsAsia Business|경제|경제일반|https://www.channelnewsasia.com/rssfeeds/8395748
 Bangkok Post Business|경제|경제일반|https://www.bangkokpost.com/rss/data/business.xml
 Vietnam Investment Review|경제|금융/증권|https://vir.com.vn/rss
 Jakarta Post Business|경제|경제일반|https://www.thejakartapost.com/feed/rss2/business.xml
@@ -107,8 +111,20 @@ Deal Street Asia|경제|금융/증권|https://www.dealstreetasia.com/feed/
 KrASIA|IT·과학|IT일반|https://kr-asia.com/feed
 Tech in Asia|IT·과학|IT일반|https://www.techinasia.com/feed
 Frontier Myanmar|세계|동남아시아|https://www.frontiermyanmar.net/en/rss.xml
-Khmer Times|세계|동남아시아|https://www.khmertimeskh.com/feed/
+Khmer Times Business|경제|경제일반|https://www.khmertimeskh.com/category/business/feed/
 Malaysia Business Insider|경제|경제일반|https://www.businessinsider.my/feed/
+
+# =========================
+# 세계 > 동남아시아 (증권시장)
+# =========================
+Vietnam Stock News|경제|금융/증권|https://en.vietstock.vn/rss/news.rss
+
+# =========================
+# 세계 > 인도 (증권시장)
+# =========================
+Economic Times Markets|경제|금융/증권|https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms
+Moneycontrol India|경제|금융/증권|https://www.moneycontrol.com/rss/latestnews.xml
+Business Standard Markets|경제|금융/증권|https://www.business-standard.com/rss/markets-106.rss
 
 # =========================
 # 세계 > 동유럽
@@ -117,8 +133,7 @@ Emerging Europe|세계|동유럽|https://emerging-europe.com/feed/
 bne IntelliNews|세계|동유럽|https://intellinews.com/rss/
 Kyiv Post|정치|외교|https://kyivpost.com/rss
 Warsaw Business Journal|경제|경제일반|https://wbj.pl/feed/
-Romania Insider|경제|경제일반|https://www.romania-insider.com/feed/
-Prague Morning|세계|동유럽|https://www.praguemorning.cz/feed/
+Romania Insider Business|경제|경제일반|https://www.romania-insider.com/category/business/feed/
 
 # =========================
 # 세계 > 중앙아시아
@@ -126,80 +141,65 @@ Prague Morning|세계|동유럽|https://www.praguemorning.cz/feed/
 Eurasianet|세계|중앙아시아|https://eurasianet.org/rss.xml
 The Diplomat Central Asia|정치|외교|https://thediplomat.com/regions/central-asia/feed/
 Astana Times Kazakhstan|세계|중앙아시아|https://astanatimes.com/feed/
-Kun.uz Uzbekistan|세계|중앙아시아|https://kun.uz/en/rss/
 Akipress|세계|중앙아시아|https://akipress.com/rss/news.rss
 
 # =========================
 # 세계 > 중동
 # =========================
 Iraq Oil Report|경제|자원/에너지|https://www.iraqoilreport.com/feed/
-Yemen Monitor|정치|외교|https://www.yemenmonitor.com/feed/
-Libya Observer|정치|정치일반|https://www.libyaobserver.ly/feed/
-Middle East Eye|세계|중동|https://www.middleeasteye.net/rss
+Middle East Eye Economy|경제|경제일반|https://www.middleeasteye.net/rss/economy
+Middle East Eye Politics|정치|외교|https://www.middleeasteye.net/rss/politics
 
 # =========================
 # 세계 > 남아시아
 # =========================
-Daily Star Bangladesh|경제|경제일반|https://www.thedailystar.net/feed/rss.xml
+Daily Star Bangladesh Business|경제|경제일반|https://www.thedailystar.net/business/rss.xml
 Financial Express Bangladesh|경제|금융/증권|https://thefinancialexpress.com.bd/feed/rss
-The News Pakistan|세계|남아시아|https://www.thenews.com.pk/rss/1/1
-Dawn Pakistan|세계|남아시아|https://www.dawn.com/feed
-The Himalayan Nepal|세계|남아시아|https://thehimalayantimes.com/feed/
+Dawn Pakistan Business|경제|경제일반|https://www.dawn.com/business/feed
+The Himalayan Nepal Business|경제|경제일반|https://thehimalayantimes.com/category/business/feed/
 
 # =========================
 # 세계 > 카리브해
 # =========================
-Haiti Libre|정치|정치일반|https://www.haitilibre.com/rss-flash-en.php
 Haitian Times|세계|카리브해|https://haitiantimes.com/feed/
-Dominican Today|세계|카리브해|https://dominicantoday.com/feed/
+Dominican Today Business|경제|경제일반|https://dominicantoday.com/dr/economy/feed/
 Caribbean Business|경제|경제일반|https://caribbeanbusiness.com/feed/
 Jamaica Observer Business|경제|경제일반|https://www.jamaicaobserver.com/feed/
 
 # =========================
-# 세계 > 라틴아메리카
-# =========================
-News Americas Now|세계|라틴아메리카|https://newsamericasnow.com/feed/
-
-# =========================
 # 세계 > 오세아니아
 # =========================
-Loop PNG|세계|오세아니아|https://www.looppng.com/section/all/domain/all/feed
 RNZ Pacific|세계|오세아니아|https://www.rnz.co.nz/rss/pacific.rss
 Islands Business|경제|경제일반|https://islandsbusiness.com/feed/
 
 # =========================
-# 경제 > 글로벌경제
+# 경제 > 글로벌경제 (아프리카 특화만 유지)
 # =========================
-Reuters EM|경제|글로벌경제|https://feeds.reuters.com/reuters/emergingMarketsNews
-The Economist EM|경제|글로벌경제|https://www.economist.com/emerging-economies/rss.xml
-Devex Africa|경제|글로벌경제|https://www.devex.com/news/rss.xml
+Reuters Africa|세계|아프리카|https://feeds.reuters.com/reuters/AfricaNews
 Resource Governance|경제|자원/에너지|https://resourcegovernance.org/rss.xml
 
 # =========================
-# 경제 > 금융/증권 (아프리카 증권시장)
+# AllAfrica 국가별 피드 (현지 소식 강화)
 # =========================
-African Capital Markets News|경제|금융/증권|https://africancapitalmarketsnews.com/feed/
-African Markets|경제|금융/증권|https://www.african-markets.com/en/rss/news
-Finance in Africa|경제|금융/증권|https://financeinafrica.com/feed/
-Daba Finance|경제|금융/증권|https://dabafinance.com/en/feed/
-Nairobi Securities Exchange|경제|금융/증권|https://afx.kwayisi.org/nse/rss/
-NGX Nigerian Exchange|경제|금융/증권|https://afx.kwayisi.org/ngse/rss/
-JSE South Africa|경제|금융/증권|https://afx.kwayisi.org/jse/rss/
-Ghana Stock Exchange|경제|금융/증권|https://afx.kwayisi.org/gse/rss/
-
-# =========================
-# 경제 > 금융/증권 (인도 증권시장)
-# =========================
-Economic Times Markets|경제|금융/증권|https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms
-Moneycontrol India|경제|금융/증권|https://www.moneycontrol.com/rss/latestnews.xml
-Business Standard Markets|경제|금융/증권|https://www.business-standard.com/rss/markets-106.rss
-Livemint Markets|경제|금융/증권|https://www.livemint.com/rss/markets
-
-# =========================
-# 경제 > 금융/증권 (동남아 증권시장)
-# =========================
-SET Thailand Stock Exchange|경제|금융/증권|https://www.set.or.th/en/news/rss/setnews.xml
-IDX Indonesia Stock Exchange|경제|금융/증권|https://www.idx.co.id/en/rss/
-Philippine Stock Exchange|경제|금융/증권|https://www.pse.com.ph/rss/news.xml
-Bursa Malaysia|경제|금융/증권|https://www.bursamalaysia.com/market/rss/market_news.xml
-Vietnam Stock News|경제|금융/증권|https://en.vietstock.vn/rss/news.rss
+AllAfrica Nigeria|세계|아프리카|https://allafrica.com/tools/headlines/rdf/nigeria/headlines.rdf
+AllAfrica Kenya|세계|아프리카|https://allafrica.com/tools/headlines/rdf/kenya/headlines.rdf
+AllAfrica Ghana|세계|아프리카|https://allafrica.com/tools/headlines/rdf/ghana/headlines.rdf
+AllAfrica Ethiopia|세계|아프리카|https://allafrica.com/tools/headlines/rdf/ethiopia/headlines.rdf
+AllAfrica Tanzania|세계|아프리카|https://allafrica.com/tools/headlines/rdf/tanzania/headlines.rdf
+AllAfrica Uganda|세계|아프리카|https://allafrica.com/tools/headlines/rdf/uganda/headlines.rdf
+AllAfrica Rwanda|세계|아프리카|https://allafrica.com/tools/headlines/rdf/rwanda/headlines.rdf
+AllAfrica South Africa|세계|아프리카|https://allafrica.com/tools/headlines/rdf/southafrica/headlines.rdf
+AllAfrica Zimbabwe|세계|아프리카|https://allafrica.com/tools/headlines/rdf/zimbabwe/headlines.rdf
+AllAfrica Zambia|세계|아프리카|https://allafrica.com/tools/headlines/rdf/zambia/headlines.rdf
+AllAfrica Mozambique|세계|아프리카|https://allafrica.com/tools/headlines/rdf/mozambique/headlines.rdf
+AllAfrica Angola|세계|아프리카|https://allafrica.com/tools/headlines/rdf/angola/headlines.rdf
+AllAfrica Senegal|세계|아프리카|https://allafrica.com/tools/headlines/rdf/senegal/headlines.rdf
+AllAfrica Cameroon|세계|아프리카|https://allafrica.com/tools/headlines/rdf/cameroon/headlines.rdf
+AllAfrica DRC|세계|아프리카|https://allafrica.com/tools/headlines/rdf/drc/headlines.rdf
+AllAfrica Sudan|세계|아프리카|https://allafrica.com/tools/headlines/rdf/sudan/headlines.rdf
+AllAfrica Somalia|세계|아프리카|https://allafrica.com/tools/headlines/rdf/somalia/headlines.rdf
+AllAfrica Libya|세계|아프리카|https://allafrica.com/tools/headlines/rdf/libya/headlines.rdf
+AllAfrica Egypt|세계|아프리카|https://allafrica.com/tools/headlines/rdf/egypt/headlines.rdf
+AllAfrica Morocco|세계|아프리카|https://allafrica.com/tools/headlines/rdf/morocco/headlines.rdf
+AllAfrica East Africa Business|경제|경제일반|https://allafrica.com/tools/headlines/rdf/eastafricabusiness/headlines.rdf
+AllAfrica West Africa Business|경제|경제일반|https://allafrica.com/tools/headlines/rdf/westafricabusiness/headlines.rdf

@@ -364,9 +364,10 @@ def score_news(title, category, subcategory=""):
         "e-edition", "edition", "travel", "tourism", "leisure", "sumo",
         "festival", "horoscope", "obituary", "recipe", "weather forecast",
         "eurovision", "beauty pageant", "miss world", "miss universe",
-        "lottery", "powerball", "lotto", "flag day", "national day",
+        "lottery", "powerball", "lotto", "flag day", "national anthem",
         "palace", "museum", "zapping", "podcast", "5 ways", "how to celebrate",
-        "royal", "heritage site", "archaeological"
+        "royal", "heritage site", "archaeological", "co-owner", "ownership stake",
+        "church", "pastor", "bishop", "prayer", "sermon", "national sound"
     ]
     for n in noise:
         if n in t:
@@ -393,14 +394,15 @@ def send_telegram(title_ko, summary_ko, link, source_name, category, subcategory
     cat_tag     = f"#{category} #{subcategory}" if subcategory and subcategory != category else f"#{category}"
     region_tag  = f" #{region}" if region else ""
     country_tag = f" #{country_name}" if country_name else ""
-    
-    title_safe   = escape_markdown(title_ko)
-    summary_safe = escape_markdown(summary_ko)
-    summary_str  = f"\n\n_{summary_safe}_" if summary_safe else ""
+
+    import html
+    title_safe   = html.escape(title_ko or "")
+    summary_safe = html.escape(summary_ko or "")
+    summary_str  = f"\n\n<i>{summary_safe}</i>" if summary_safe else ""
 
     msg = (
         f"{cat_tag}{region_tag}{country_tag}\n\n"
-        f"*{title_safe}*"
+        f"<b>{title_safe}</b>"
         f"{summary_str}\n\n"
         f"📎 {source_name}\n"
         f"🔗 {link}"
@@ -410,7 +412,7 @@ def send_telegram(title_ko, summary_ko, link, source_name, category, subcategory
     res = requests.post(url, data={
         "chat_id":    CHAT_ID,
         "text":       msg,
-        "parse_mode": "Markdown"
+        "parse_mode": "HTML"
     })
     return res.json()
 
