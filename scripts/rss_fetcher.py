@@ -424,7 +424,7 @@ for s in sources:
         rss_health[name] = {"ok": 0, "fail": 0, "status": "active"}
 
     try:
-        feed = feedparser.parse(s["url"])
+        feed = feedparser.parse(s["url"], request_headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
     except:
         rss_health[name]["fail"] += 1
         continue
@@ -467,19 +467,20 @@ for s in sources:
 
     # 한국어 번역
     try:
-        title_ko = GoogleTranslator(source="auto", target="ko").translate(title)
+        translator = GoogleTranslator(source="auto", target="ko")
+        title_ko = translator.translate(title[:500])
         title_ko = clean_text(title_ko)
-    except:
+    except Exception:
         title_ko = title
 
     # 요약 번역
     summary_ko = ""
     if summary_en:
         try:
-            summary_ko = GoogleTranslator(source="auto", target="ko").translate(summary_en)
+            summary_ko = GoogleTranslator(source="auto", target="ko").translate(summary_en[:300])
             summary_ko = clean_text(summary_ko)
-        except:
-            summary_ko = summary_en
+        except Exception:
+            summary_ko = ""
 
     # 텔레그램 발송
     res = send_telegram(title_ko, summary_ko, link, name, category, subcategory, region, country_name)
