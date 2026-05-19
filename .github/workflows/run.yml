@@ -22,13 +22,6 @@ jobs:
       - name: 패키지 설치
         run: pip install -r requirements.txt
 
-      - name: DB 캐시 복원
-        uses: actions/cache@v4
-        with:
-          path: data/articles.db
-          key: articles-db
-          restore-keys: articles-db
-
       - name: RSS 수집 및 발송
         run: python scripts/rss_fetcher.py
         env:
@@ -38,8 +31,8 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add data/state.json
-          git diff --staged --quiet || git commit -m "Update state"
+          git add data/state.json data/articles.db
+          git diff --staged --quiet || git commit -m "Update state and DB"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
