@@ -8,16 +8,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #0a0a0a;
-      --bg2: #111111;
-      --bg3: #1a1a1a;
-      --border: #2a2a2a;
-      --text: #e8e4dc;
-      --muted: #666;
-      --accent: #c8a96e;
-      --accent2: #4a9eff;
-      --red: #e05252;
-      --green: #52c078;
+      --bg: #f8f6f1;
+      --bg2: #ffffff;
+      --bg3: #f0ede6;
+      --border: #ddd9d0;
+      --text: #1a1a1a;
+      --muted: #888;
+      --accent: #8b5e2a;
+      --accent2: #1a5fa8;
+      --red: #c0392b;
+      --green: #1a7a3c;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -32,6 +32,7 @@
 
     /* HEADER */
     header {
+      background: var(--bg2);
       border-bottom: 1px solid var(--border);
       padding: 0 24px;
     }
@@ -40,22 +41,25 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 0;
+      padding: 8px 0;
       border-bottom: 1px solid var(--border);
       font-family: 'IBM Plex Mono', monospace;
       font-size: 11px;
       color: var(--muted);
+      background: var(--bg3);
+      margin: 0 -24px;
+      padding: 8px 24px;
     }
 
     .ticker-strip {
       display: flex;
-      gap: 24px;
+      gap: 20px;
       overflow: hidden;
     }
 
     .ticker-item { display: flex; gap: 6px; align-items: center; }
     .ticker-label { color: var(--muted); }
-    .ticker-val { color: var(--text); }
+    .ticker-val { color: var(--text); font-weight: 500; }
     .up { color: var(--green); }
     .down { color: var(--red); }
 
@@ -64,13 +68,14 @@
       align-items: center;
       justify-content: space-between;
       padding: 20px 0;
+      border-bottom: 3px solid var(--text);
     }
 
     .logo {
       font-family: 'Playfair Display', serif;
-      font-size: 28px;
+      font-size: 32px;
       font-weight: 900;
-      letter-spacing: -0.5px;
+      letter-spacing: -1px;
       color: var(--text);
       text-decoration: none;
     }
@@ -87,7 +92,6 @@
     nav {
       display: flex;
       gap: 0;
-      border-top: 1px solid var(--border);
       overflow-x: auto;
     }
 
@@ -102,9 +106,11 @@
       transition: color 0.2s, background 0.2s;
     }
 
+    nav a:first-child { border-left: 1px solid var(--border); }
+
     nav a:hover, nav a.active {
       color: var(--accent);
-      background: var(--bg2);
+      background: var(--bg3);
     }
 
     /* LAYOUT */
@@ -113,7 +119,7 @@
       margin: 0 auto;
       padding: 24px;
       display: grid;
-      grid-template-columns: 1fr 320px;
+      grid-template-columns: 1fr 300px;
       gap: 24px;
     }
 
@@ -123,8 +129,8 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 16px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--text);
     }
 
     .feed-title {
@@ -141,102 +147,78 @@
       color: var(--muted);
     }
 
-    .region-tabs {
+    /* ARTICLE CARD */
+    .article-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-left: 3px solid transparent;
+      margin-bottom: 10px;
+      padding: 16px;
+      cursor: pointer;
+      transition: border-left-color 0.2s, box-shadow 0.2s;
+    }
+
+    .article-card:hover {
+      border-left-color: var(--accent);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .article-header {
       display: flex;
-      gap: 8px;
-      margin-bottom: 20px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .article-tags {
+      display: flex;
+      gap: 6px;
       flex-wrap: wrap;
     }
 
-    .region-tab {
-      padding: 4px 12px;
-      font-size: 11px;
+    .tag {
       font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      padding: 2px 8px;
       border: 1px solid var(--border);
       color: var(--muted);
-      cursor: pointer;
-      transition: all 0.2s;
-      background: none;
+      background: var(--bg3);
     }
 
-    .region-tab:hover, .region-tab.active {
+    .tag.country {
       border-color: var(--accent);
       color: var(--accent);
     }
 
-    /* ARTICLE CARD */
-    .article-card {
-      display: grid;
-      grid-template-columns: 80px 1fr;
-      gap: 0;
-      border: 1px solid var(--border);
-      margin-bottom: 12px;
-      background: var(--bg2);
-      transition: border-color 0.2s;
-      cursor: pointer;
-    }
-
-    .article-card:hover { border-color: var(--accent); }
-
-    .article-meta-col {
-      padding: 16px 12px;
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      align-items: center;
-      text-align: center;
-    }
-
-    .article-cat {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 9px;
-      color: var(--accent);
-      letter-spacing: 0.5px;
-      writing-mode: vertical-rl;
-      text-orientation: mixed;
-      transform: rotate(180deg);
-    }
-
-    .article-country {
-      font-size: 10px;
-      color: var(--muted);
-      font-family: 'IBM Plex Mono', monospace;
-    }
-
-    .article-body {
-      padding: 16px;
-    }
-
-    .article-source {
+    .article-time {
       font-family: 'IBM Plex Mono', monospace;
       font-size: 10px;
       color: var(--muted);
-      margin-bottom: 6px;
     }
 
     .article-title {
       font-size: 15px;
-      font-weight: 500;
+      font-weight: 700;
       color: var(--text);
       line-height: 1.4;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
+      font-family: 'Noto Sans KR', sans-serif;
     }
 
     .article-summary {
       font-size: 12px;
       color: var(--muted);
-      line-height: 1.5;
+      line-height: 1.6;
+      margin-bottom: 8px;
     }
 
     .article-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 10px;
     }
 
-    .article-time {
+    .article-source {
       font-family: 'IBM Plex Mono', monospace;
       font-size: 10px;
       color: var(--muted);
@@ -252,32 +234,33 @@
     .article-link:hover { text-decoration: underline; }
 
     /* SIDEBAR */
-    .sidebar { display: flex; flex-direction: column; gap: 20px; }
+    .sidebar { display: flex; flex-direction: column; gap: 16px; }
 
     .widget {
-      border: 1px solid var(--border);
       background: var(--bg2);
+      border: 1px solid var(--border);
     }
 
     .widget-header {
-      padding: 10px 16px;
-      border-bottom: 1px solid var(--border);
+      padding: 10px 14px;
+      border-bottom: 2px solid var(--text);
       font-family: 'IBM Plex Mono', monospace;
       font-size: 10px;
-      color: var(--accent);
+      color: var(--text);
       letter-spacing: 1px;
       text-transform: uppercase;
       display: flex;
       justify-content: space-between;
+      font-weight: 500;
     }
 
     /* WIRE */
     .wire-item {
-      padding: 10px 16px;
+      padding: 10px 14px;
       border-bottom: 1px solid var(--border);
       display: grid;
       grid-template-columns: 8px 1fr;
-      gap: 10px;
+      gap: 8px;
       align-items: start;
       transition: background 0.2s;
     }
@@ -289,7 +272,7 @@
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: var(--accent);
+      background: var(--muted);
       margin-top: 5px;
     }
 
@@ -315,7 +298,7 @@
 
     /* BRIEFING */
     .briefing-item {
-      padding: 12px 16px;
+      padding: 10px 14px;
       border-bottom: 1px solid var(--border);
     }
 
@@ -325,14 +308,16 @@
       font-family: 'IBM Plex Mono', monospace;
       font-size: 10px;
       color: var(--accent);
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       letter-spacing: 0.5px;
+      font-weight: 500;
     }
 
     .briefing-title {
       font-size: 12px;
       color: var(--text);
-      line-height: 1.4;
+      line-height: 1.5;
+      margin-bottom: 2px;
     }
 
     .briefing-title a {
@@ -367,16 +352,17 @@
     @keyframes spin { to { transform: rotate(360deg); } }
 
     .empty {
-      padding: 40px;
+      padding: 30px;
       text-align: center;
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 12px;
+      font-size: 11px;
       color: var(--muted);
     }
 
     /* FOOTER */
     footer {
-      border-top: 1px solid var(--border);
+      border-top: 2px solid var(--text);
+      background: var(--bg2);
       padding: 20px 24px;
       display: flex;
       justify-content: space-between;
@@ -455,15 +441,15 @@
   </div>
 
   <nav>
-    <a href="#" class="active" onclick="filterRegion('all', this)">전체</a>
-    <a href="#" onclick="filterRegion('아프리카', this)">🌍 아프리카</a>
-    <a href="#" onclick="filterRegion('동남아시아', this)">🌏 동남아시아</a>
-    <a href="#" onclick="filterRegion('동유럽', this)">🌐 동유럽</a>
-    <a href="#" onclick="filterRegion('중동', this)">중동</a>
-    <a href="#" onclick="filterRegion('중앙아시아', this)">중앙아시아</a>
-    <a href="#" onclick="filterRegion('남아시아', this)">남아시아</a>
-    <a href="#" onclick="filterRegion('경제', this)">💰 경제</a>
-    <a href="#" onclick="filterRegion('정치', this)">🏛️ 정치</a>
+    <a href="#" class="active" onclick="filterRegion('all', this); return false;">전체</a>
+    <a href="#" onclick="filterRegion('아프리카', this); return false;">아프리카</a>
+    <a href="#" onclick="filterRegion('동남아시아', this); return false;">동남아시아</a>
+    <a href="#" onclick="filterRegion('동유럽', this); return false;">동유럽</a>
+    <a href="#" onclick="filterRegion('중동', this); return false;">중동</a>
+    <a href="#" onclick="filterRegion('중앙아시아', this); return false;">중앙아시아</a>
+    <a href="#" onclick="filterRegion('남아시아', this); return false;">남아시아</a>
+    <a href="#" onclick="filterRegion('경제', this); return false;">경제</a>
+    <a href="#" onclick="filterRegion('정치', this); return false;">정치</a>
   </nav>
 </header>
 
@@ -471,15 +457,14 @@
   <main>
     <div class="feed-header">
       <span class="feed-title">● LIVE FEED</span>
-      <span class="feed-count" id="article-count">기사 로딩 중...</span>
+      <span class="feed-count" id="article-count">로딩 중...</span>
     </div>
     <div id="articles-container">
-      <div class="loading">데이터 로딩 중</div>
+      <div class="loading">기사 데이터 로딩 중</div>
     </div>
   </main>
 
   <aside class="sidebar">
-    <!-- WIRE -->
     <div class="widget">
       <div class="widget-header">
         <span>● WIRE</span>
@@ -490,14 +475,13 @@
       </div>
     </div>
 
-    <!-- DAILY BRIEFING -->
     <div class="widget">
       <div class="widget-header">
         <span>오늘의 브리핑</span>
         <span id="briefing-date"></span>
       </div>
       <div id="briefing-container">
-        <div class="empty">브리핑 준비 중</div>
+        <div class="empty">데이터 준비 중</div>
       </div>
     </div>
   </aside>
@@ -515,7 +499,6 @@
 </footer>
 
 <script>
-  // 날짜/시간
   function updateTime() {
     const now = new Date();
     const opts = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Seoul' };
@@ -525,12 +508,9 @@
   updateTime();
   setInterval(updateTime, 60000);
 
-  // 브리핑 날짜
   document.getElementById('briefing-date').textContent = new Date().toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' });
 
-  // 기사 데이터 (DB에서 가져오는 구조 — 현재는 JSON 파일)
   let allArticles = [];
-  let currentRegion = 'all';
 
   async function loadArticles() {
     try {
@@ -541,39 +521,35 @@
       renderWire(allArticles.slice(0, 8));
       renderBriefing(allArticles);
     } catch (e) {
-      document.getElementById('articles-container').innerHTML = `
-        <div class="empty">
-          아직 기사 데이터가 없습니다.<br>
-          곧 업데이트됩니다.
-        </div>
-      `;
+      document.getElementById('articles-container').innerHTML = `<div class="empty">아직 기사 데이터가 없습니다.<br>곧 업데이트됩니다.</div>`;
       document.getElementById('wire-container').innerHTML = '<div class="empty">준비 중</div>';
     }
   }
 
   function renderArticles(articles) {
     const container = document.getElementById('articles-container');
-    document.getElementById('article-count').textContent = `${articles.length}건`;
+    document.getElementById('article-count').textContent = `총 ${articles.length}건`;
 
     if (!articles.length) {
-      container.innerHTML = '<div class="empty">해당 지역 기사가 없습니다.</div>';
+      container.innerHTML = '<div class="empty">해당 기사가 없습니다.</div>';
       return;
     }
 
     container.innerHTML = articles.map(a => `
       <div class="article-card" onclick="window.open('${a.url}', '_blank')">
-        <div class="article-meta-col">
-          <span class="article-cat">${a.subcategory || a.category}</span>
-          <span class="article-country">${a.country || ''}</span>
-        </div>
-        <div class="article-body">
-          <div class="article-source">${a.source}</div>
-          <div class="article-title">${a.title_ko || a.title_en}</div>
-          ${a.summary_ko ? `<div class="article-summary">${a.summary_ko}</div>` : ''}
-          <div class="article-footer">
-            <span class="article-time">${formatTime(a.created_at)}</span>
-            <a class="article-link" href="${a.url}" target="_blank" onclick="event.stopPropagation()">원문 보기 →</a>
+        <div class="article-header">
+          <div class="article-tags">
+            <span class="tag">${a.category || ''}</span>
+            ${a.subcategory && a.subcategory !== a.category ? `<span class="tag">${a.subcategory}</span>` : ''}
+            ${a.country ? `<span class="tag country">${a.country}</span>` : ''}
           </div>
+          <span class="article-time">${formatTime(a.created_at)}</span>
+        </div>
+        <div class="article-title">${a.title_ko || a.title_en}</div>
+        ${a.summary_ko ? `<div class="article-summary">${a.summary_ko}</div>` : ''}
+        <div class="article-footer">
+          <span class="article-source">📎 ${a.source}</span>
+          <a class="article-link" href="${a.url}" target="_blank" onclick="event.stopPropagation()">원문 보기 →</a>
         </div>
       </div>
     `).join('');
@@ -581,18 +557,13 @@
 
   function renderWire(articles) {
     const container = document.getElementById('wire-container');
-    if (!articles.length) {
-      container.innerHTML = '<div class="empty">준비 중</div>';
-      return;
-    }
+    if (!articles.length) { container.innerHTML = '<div class="empty">준비 중</div>'; return; }
     container.innerHTML = articles.map((a, i) => `
       <div class="wire-item">
         <div class="wire-dot ${i < 2 ? 'new' : ''}"></div>
         <div>
           <div class="wire-text">
-            <a href="${a.url}" target="_blank" style="color:inherit;text-decoration:none;">
-              ${a.title_ko || a.title_en}
-            </a>
+            <a href="${a.url}" target="_blank" style="color:inherit;text-decoration:none;">${a.title_ko || a.title_en}</a>
           </div>
           <div class="wire-meta">${a.source} · ${formatTime(a.created_at)}</div>
         </div>
@@ -608,35 +579,25 @@
       if (!regions[r]) regions[r] = [];
       if (regions[r].length < 3) regions[r].push(a);
     });
-
     const html = Object.entries(regions).slice(0, 5).map(([region, items]) => `
       <div class="briefing-item">
         <div class="briefing-region">${region.toUpperCase()}</div>
         ${items.map(a => `
-          <div class="briefing-title">
-            <a href="${a.url}" target="_blank">· ${a.title_ko || a.title_en}</a>
-          </div>
+          <div class="briefing-title"><a href="${a.url}" target="_blank">· ${a.title_ko || a.title_en}</a></div>
         `).join('')}
       </div>
     `).join('');
-
     container.innerHTML = html || '<div class="empty">브리핑 준비 중</div>';
   }
 
   function filterRegion(region, el) {
     document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
     el.classList.add('active');
-    currentRegion = region;
-
     if (region === 'all') {
       renderArticles(allArticles);
     } else {
-      const filtered = allArticles.filter(a =>
-        a.subcategory === region || a.category === region || a.region === region
-      );
-      renderArticles(filtered);
+      renderArticles(allArticles.filter(a => a.subcategory === region || a.category === region || a.region === region));
     }
-    event.preventDefault();
   }
 
   function formatTime(dateStr) {
