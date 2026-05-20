@@ -2,7 +2,7 @@ name: The Wise Frontier - Daily Briefing
 
 on:
   schedule:
-    - cron: '0 9 * * *'  # UTC 09:00 = KST 18:00 매일 저녁 6시
+    - cron: '0 9 * * *'    # UTC 09:00 = KST 18:00 저녁 1회
   workflow_dispatch:
 
 permissions:
@@ -35,3 +35,16 @@ jobs:
         run: python scripts/briefing.py
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+
+      - name: 웹사이트 데이터 내보내기
+        run: python scripts/export_articles.py
+
+      - name: 웹사이트 배포
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add docs/data/articles.json
+          git diff --staged --quiet || git commit -m "Update website data"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
