@@ -8,7 +8,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 DB_FILE = "data/articles.db"
 OUTPUT_FILE = "docs/data/articles.json"
 
-def export_articles(limit=200):
+def export_articles(limit=50):
     if not os.path.exists(DB_FILE):
         print("[EXPORT] DB 파일 없음")
         return
