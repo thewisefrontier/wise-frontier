@@ -28,7 +28,7 @@ def init_db():
             country       TEXT,
             country_flag  TEXT,
             score         INTEGER DEFAULT 0,
-            created_at    TEXT DEFAULT (strftime('%Y-%m-%d %H:%M', 'now', 'localtime')),
+            created_at    TEXT DEFAULT (strftime('%Y-%m-%d %H:%M', 'now')),
             sent_telegram INTEGER DEFAULT 0,
             posted_blog   INTEGER DEFAULT 0
         )
