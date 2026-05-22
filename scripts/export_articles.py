@@ -11,7 +11,7 @@ DB_FILE = "data/articles.db"
 OUTPUT_FILE = "docs/data/articles.json"
 MARKET_FILE = "docs/data/market_data.json"
 
-def export_articles(limit=50):
+def export_articles(limit=9999):
     if not os.path.exists(DB_FILE):
         print("[EXPORT] DB 파일 없음")
         return
