@@ -21,7 +21,7 @@ DB_FILE = "data/articles.db"
 # Gemini 2.5 Flash-Lite — 무료 한도: 분당 15회, 하루 1,000회
 GEMINI_URL = (
     "https://generativelanguage.googleapis.com/v1beta/models/"
-    "gemini-2.5-flash-lite-preview-06-17:generateContent"
+    "gemini-2.5-flash-lite:generateContent"
     f"?key={GEMINI_API_KEY}"
 )
 
