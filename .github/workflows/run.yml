@@ -31,6 +31,8 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
       - name: Gemini 요약 고도화
+        timeout-minutes: 3
+        continue-on-error: true
         run: python scripts/gemini_summarizer.py
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -39,6 +41,8 @@ jobs:
         run: sleep 60
 
       - name: Gemini 자체 기사 생성 (하루 1회 오전 9시 KST = UTC 0시)
+        timeout-minutes: 3
+        continue-on-error: true
         if: ${{ github.event_name == 'schedule' && startsWith(github.event.schedule, '0 0') || github.event_name == 'workflow_dispatch' }}
         run: python scripts/gemini_writer.py
         env:
