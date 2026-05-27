@@ -197,7 +197,7 @@ def call_gemini(prompt: str, retry: int = 3) -> str | None:
 
     for attempt in range(retry):
         try:
-            res = requests.post(GEMINI_URL, json=payload, timeout=30)
+            res = requests.post(GEMINI_URL, json=payload, timeout=(10, 30))
             if res.status_code == 200:
                 data = res.json()
                 return data["candidates"][0]["content"]["parts"][0]["text"].strip()
