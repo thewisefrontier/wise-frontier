@@ -1,6 +1,8 @@
 name: The Wise Frontier - Auto Run
 
 on:
+  schedule:
+    - cron: '0,30 * * * *'   # 30분마다 (RSS 수집 + 요약)
   workflow_dispatch:
 
 permissions:
@@ -26,6 +28,18 @@ jobs:
         run: python scripts/rss_fetcher.py
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+      - name: Gemini 요약 고도화
+        run: python scripts/gemini_summarizer.py
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+      - name: Gemini 자체 기사 생성 (하루 1회 오전 9시 KST = UTC 0시)
+        if: ${{ github.event_name == 'schedule' && startsWith(github.event.schedule, '0 0') || github.event_name == 'workflow_dispatch' }}
+        run: python scripts/gemini_writer.py
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
       - name: 웹사이트 데이터 내보내기
         run: python scripts/export_articles.py
