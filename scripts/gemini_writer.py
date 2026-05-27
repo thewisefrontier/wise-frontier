@@ -1,18 +1,18 @@
 """
 gemini_writer.py
 ----------------
-1. 당일 기사들을 rapidfuzz로 클러스터링
-2. 클러스터별 자체 종합 기사 생성 (최대 5개)
-3. 일별 브리핑 기사 생성 (전체/지역별)
+1. 오늘 기사를 키워드+유사도 기반으로 클러스터링
+2. 클러스터별 이슈 기사 생성 (신규) 또는 업데이트 (추가 기사 있을 때)
+3. 브리핑은 제거 — 클러스터 이슈 기사에 집중
 
 실행: python scripts/gemini_writer.py
-하루 1회 실행 권장
 """
 
 import os
-import sys
+import re
 import time
 import sqlite3
+import hashlib
 import requests
 from dotenv import load_dotenv
 from rapidfuzz import fuzz
@@ -20,42 +20,23 @@ from db import init_db
 
 load_dotenv()
 
-GEMINI_MODEL  = "gemini-3.1-flash-lite"
-DB_FILE       = "data/articles.db"
-CALL_INTERVAL = 5
+GEMINI_MODEL       = "gemini-3.1-flash-lite"
+DB_FILE            = "data/articles.db"
+CALL_INTERVAL      = 5
 
 # 클러스터링 설정
-CLUSTER_SIMILARITY = 60   # 제목 유사도 기준 (%)
+SIMILARITY_HIGH    = 70   # 제목 유사도 기준 (%)
+SIMILARITY_SAME_COUNTRY = 55  # 같은 국가일 때 완화
 CLUSTER_MIN_SIZE   = 2    # 최소 기사 수
-MAX_CLUSTERS       = 5    # 하루 최대 클러스터 기사 생성 수
+MAX_CLUSTERS       = 8    # 하루 최대 처리 클러스터 수
 
-# 브리핑 유형
-BRIEFING_TYPES = [
-    {
-        "type":    "daily_briefing",
-        "title":   "오늘의 프론티어 마켓 브리핑",
-        "category":"브리핑",
-        "region":  "global",
-        "regions": None,
-        "max_src": 15,
-    },
-    {
-        "type":    "africa_briefing",
-        "title":   "아프리카 경제 동향",
-        "category":"브리핑",
-        "region":  "africa",
-        "regions": ["africa"],
-        "max_src": 8,
-    },
-    {
-        "type":    "asia_briefing",
-        "title":   "동남아·중앙아시아 동향",
-        "category":"브리핑",
-        "region":  "southeast_asia",
-        "regions": ["southeast_asia", "central_asia", "south_asia"],
-        "max_src": 8,
-    },
-]
+# 키워드 추출용 불용어
+STOPWORDS = {
+    "the","a","an","in","on","at","to","of","for","and","or","is","are",
+    "was","were","has","have","been","will","with","by","from","this","that",
+    "as","its","it","be","not","but","also","over","after","amid","says",
+    "say","said","new","amid","following","기자","특파원","뉴스","오늘","이번",
+}
 
 
 # ── DB 헬퍼 ──────────────────────────────────────────────
@@ -66,53 +47,45 @@ def get_conn():
     return conn
 
 
-def get_today_articles(regions=None, limit=50):
+def get_today_articles(limit=150):
     conn = get_conn()
     c = conn.cursor()
     today = time.strftime("%Y-%m-%d")
-    if regions:
-        ph = ",".join("?" * len(regions))
-        c.execute(f"""
-            SELECT id, title_ko, title_en, summary_ko, summary_en,
-                   source, category, subcategory, country, region, url
-            FROM articles
-            WHERE created_at LIKE ? AND sent_telegram = 1
-              AND source != 'The Wise Frontier'
-              AND region IN ({ph})
-            ORDER BY score DESC, created_at DESC LIMIT ?
-        """, [f"{today}%"] + regions + [limit])
-    else:
-        c.execute("""
-            SELECT id, title_ko, title_en, summary_ko, summary_en,
-                   source, category, subcategory, country, region, url
-            FROM articles
-            WHERE created_at LIKE ? AND sent_telegram = 1
-              AND source != 'The Wise Frontier'
-            ORDER BY score DESC, created_at DESC LIMIT ?
-        """, (f"{today}%", limit))
+    c.execute("""
+        SELECT id, title_ko, title_en, summary_ko, summary_en,
+               source, category, subcategory, country, region, url, created_at
+        FROM articles
+        WHERE created_at LIKE ? AND sent_telegram = 1
+          AND source != 'The Wise Frontier'
+        ORDER BY score DESC, created_at DESC LIMIT ?
+    """, (f"{today}%", limit))
     rows = c.fetchall()
     conn.close()
     return [dict(r) for r in rows]
 
 
-def already_generated_today(article_type):
+def get_existing_cluster(cluster_key):
+    """오늘 생성된 같은 클러스터 기사 조회"""
     conn = get_conn()
     c = conn.cursor()
     today = time.strftime("%Y-%m-%d")
     c.execute("""
-        SELECT id FROM articles
-        WHERE source = 'The Wise Frontier' AND subcategory = ?
-          AND created_at LIKE ? LIMIT 1
-    """, (article_type, f"{today}%"))
+        SELECT id, title_ko, summary_ko, subcategory
+        FROM articles
+        WHERE source = 'The Wise Frontier'
+          AND subcategory = ?
+          AND created_at LIKE ?
+        LIMIT 1
+    """, (cluster_key, f"{today}%"))
     row = c.fetchone()
     conn.close()
-    return row is not None
+    return dict(row) if row else None
 
 
-def save_article(title_ko, summary_ko, article_type, category, region, country=""):
+def save_article(title_ko, summary_ko, cluster_key, category, region, country=""):
     conn = get_conn()
     c = conn.cursor()
-    url = f"internal://{article_type}/{time.strftime('%Y%m%d%H%M%S')}"
+    url = f"internal://{cluster_key}"
     try:
         c.execute("""
             INSERT INTO articles (
@@ -122,7 +95,7 @@ def save_article(title_ko, summary_ko, article_type, category, region, country="
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             title_ko, title_ko, "", summary_ko,
-            url, "The Wise Frontier", category, article_type,
+            url, "The Wise Frontier", category, cluster_key,
             region, country, "", 100, 1, 0,
         ))
         conn.commit()
@@ -133,13 +106,82 @@ def save_article(title_ko, summary_ko, article_type, category, region, country="
         conn.close()
 
 
+def update_article(article_id, title_ko, summary_ko):
+    """기존 클러스터 기사 업데이트"""
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute("""
+        UPDATE articles SET title_ko = ?, title_en = ?, summary_ko = ?,
+               created_at = strftime('%Y-%m-%d %H:%M', 'now')
+        WHERE id = ?
+    """, (title_ko, title_ko, summary_ko, article_id))
+    conn.commit()
+    conn.close()
+
+
 # ── 클러스터링 ────────────────────────────────────────────
 
+def extract_keywords(text):
+    """텍스트에서 의미 있는 키워드 추출"""
+    if not text:
+        return set()
+    # 소문자, 특수문자 제거
+    text = text.lower()
+    text = re.sub(r'[^\w\s가-힣]', ' ', text)
+    words = text.split()
+    # 불용어 제거, 3자 이상만
+    return {w for w in words if w not in STOPWORDS and len(w) >= 3}
+
+
+def keyword_overlap(a, b):
+    """두 기사 키워드 겹침 비율 (0~1)"""
+    title_a = (a.get("title_ko") or a.get("title_en") or "")
+    title_b = (b.get("title_ko") or b.get("title_en") or "")
+    summ_a  = (a.get("summary_ko") or a.get("summary_en") or "")
+    summ_b  = (b.get("summary_ko") or b.get("summary_en") or "")
+
+    kw_a = extract_keywords(title_a) | extract_keywords(summ_a)
+    kw_b = extract_keywords(title_b) | extract_keywords(summ_b)
+
+    if not kw_a or not kw_b:
+        return 0.0
+
+    intersection = kw_a & kw_b
+    union = kw_a | kw_b
+    return len(intersection) / len(union)
+
+
+def articles_are_related(a, b):
+    """
+    두 기사가 같은 이슈인지 판단
+    제목 유사도 + 키워드 겹침 + 국가/카테고리 보정
+    """
+    title_a = (a.get("title_ko") or a.get("title_en") or "").lower()
+    title_b = (b.get("title_ko") or b.get("title_en") or "").lower()
+
+    # 1. 제목 유사도
+    title_sim = fuzz.token_sort_ratio(title_a, title_b)
+
+    # 2. 키워드 겹침
+    kw_sim = keyword_overlap(a, b) * 100  # 0~100 스케일
+
+    # 3. 국가/카테고리 보정
+    same_country  = bool(a.get("country") and a.get("country") == b.get("country"))
+    same_category = a.get("category") == b.get("category")
+
+    # 종합 점수
+    score = title_sim * 0.5 + kw_sim * 0.5
+    if same_country:
+        score += 8
+    if same_category:
+        score += 5
+
+    threshold = SIMILARITY_SAME_COUNTRY if same_country else SIMILARITY_HIGH
+    return score >= threshold
+
+
 def cluster_articles(articles):
-    """
-    rapidfuzz 유사도 + 국가/카테고리 조건으로 기사 클러스터링
-    같은 사건/토픽 기사들을 묶어 반환
-    """
+    """기사를 이슈별로 클러스터링"""
     clusters = []
     used = set()
 
@@ -148,38 +190,28 @@ def cluster_articles(articles):
             continue
         cluster = [a]
         used.add(i)
-        title_a = (a.get("title_ko") or a.get("title_en") or "").lower()
 
         for j, b in enumerate(articles):
             if j in used or j == i:
                 continue
-            title_b = (b.get("title_ko") or b.get("title_en") or "").lower()
-
-            # 제목 유사도
-            sim = fuzz.token_sort_ratio(title_a, title_b)
-
-            # 같은 국가이면 유사도 기준 낮춤
-            same_country = (
-                a.get("country") and b.get("country") and
-                a.get("country") == b.get("country")
-            )
-            threshold = CLUSTER_SIMILARITY - 10 if same_country else CLUSTER_SIMILARITY
-
-            # 같은 카테고리이면 추가 완화
-            same_cat = a.get("category") == b.get("category")
-            if same_cat:
-                threshold -= 5
-
-            if sim >= threshold:
+            if articles_are_related(a, b):
                 cluster.append(b)
                 used.add(j)
 
         if len(cluster) >= CLUSTER_MIN_SIZE:
             clusters.append(cluster)
 
-    # 큰 클러스터 우선 정렬
+    # 큰 클러스터 우선
     clusters.sort(key=lambda c: len(c), reverse=True)
     return clusters[:MAX_CLUSTERS]
+
+
+def make_cluster_key(cluster):
+    """클러스터 고유 키 생성 — 대표 기사 제목 기반 해시"""
+    rep = (cluster[0].get("title_ko") or cluster[0].get("title_en") or "")[:50]
+    today = time.strftime("%Y%m%d")
+    h = hashlib.md5(f"{today}:{rep}".encode()).hexdigest()[:8]
+    return f"cluster_{today}_{h}"
 
 
 # ── Gemini 호출 ───────────────────────────────────────────
@@ -222,8 +254,7 @@ def call_gemini(prompt, max_tokens=1000, retry=3):
 
 # ── 프롬프트 빌더 ─────────────────────────────────────────
 
-def build_cluster_prompt(cluster):
-    """클러스터 기사 → 종합 분석 기사 프롬프트"""
+def build_issue_prompt(cluster, existing_summary=None):
     article_list = ""
     for i, a in enumerate(cluster, 1):
         t = a.get("title_ko") or a.get("title_en") or ""
@@ -232,12 +263,33 @@ def build_cluster_prompt(cluster):
         if s:
             article_list += f"   {s}\n"
 
-    country = cluster[0].get("country") or ""
-    category = cluster[0].get("category") or ""
     today_str = time.strftime("%Y년 %m월 %d일")
+    country  = cluster[0].get("country") or ""
+    category = cluster[0].get("category") or ""
 
-    return f"""당신은 프론티어 마켓 전문 미디어 The Wise Frontier의 수석 에디터입니다.
-아래는 같은 사건/토픽을 다룬 {len(cluster)}개의 기사입니다.({today_str})
+    if existing_summary:
+        # 기존 기사 있으면 업데이트 모드
+        return f"""당신은 프론티어 마켓 전문 미디어 The Wise Frontier의 수석 에디터입니다.
+아래는 기존에 작성된 이슈 기사와 새로 추가된 관련 기사들입니다.({today_str})
+
+[기존 기사]
+{existing_summary}
+
+[추가된 관련 기사]
+{article_list}
+
+[작성 규칙]
+1. 기존 내용을 유지하면서 새 기사의 내용을 통합해 업데이트
+2. 500~700자 분량
+3. 사실 나열이 아닌 의미와 맥락 중심으로 서술
+4. 프론티어 마켓 투자자/분석가 시각에서 중요한 포인트 강조
+5. 한국어로만 작성
+6. 기사 본문만 출력 (제목 제외)
+
+업데이트된 기사 본문:"""
+    else:
+        return f"""당신은 프론티어 마켓 전문 미디어 The Wise Frontier의 수석 에디터입니다.
+아래는 같은 이슈를 다룬 {len(cluster)}개의 기사입니다.({today_str})
 
 [관련 기사]
 {article_list}
@@ -253,34 +305,6 @@ def build_cluster_prompt(cluster):
 기사 본문:"""
 
 
-def build_briefing_prompt(articles, title):
-    article_list = ""
-    for i, a in enumerate(articles, 1):
-        t = a.get("title_ko") or a.get("title_en") or ""
-        s = a.get("summary_ko") or a.get("summary_en") or ""
-        article_list += f"{i}. [{a.get('category','')}] {a.get('country','')} — {t}\n"
-        if s:
-            article_list += f"   {s}\n"
-
-    today_str = time.strftime("%Y년 %m월 %d일")
-    return f"""당신은 프론티어 마켓 전문 미디어 The Wise Frontier의 수석 에디터입니다.
-오늘({today_str}) 수집된 기사들을 바탕으로 "{title}" 기사를 작성하세요.
-
-[오늘의 수집 기사]
-{article_list}
-
-[작성 규칙]
-1. 500~700자 분량의 분석적 브리핑 기사
-2. 오늘의 핵심 이슈 2~3개를 중심으로 구성
-3. 단순 나열이 아닌 트렌드와 맥락을 연결해서 서술
-4. 프론티어 마켓 투자자/분석가가 주목해야 할 포인트 강조
-5. 한국어로만 작성
-6. 기사 본문만 출력 (제목 제외)
-7. 문단 구분은 빈 줄로
-
-기사 본문:"""
-
-
 # ── 메인 실행 ─────────────────────────────────────────────
 
 def run():
@@ -289,103 +313,76 @@ def run():
         return
 
     init_db()
-    generated = 0
 
-    # 1. 클러스터 기사 생성
     print("\n[클러스터링] 오늘 기사 분석 중...")
-    all_articles = get_today_articles(limit=100)
+    all_articles = get_today_articles(limit=150)
     clusters = cluster_articles(all_articles)
-    print(f"  → {len(all_articles)}건 중 {len(clusters)}개 클러스터 발견")
+    print(f"  → {len(all_articles)}건 중 {len(clusters)}개 클러스터 발견\n")
+
+    generated = 0
+    updated   = 0
 
     for i, cluster in enumerate(clusters):
-        titles = [a.get("title_ko") or a.get("title_en") or "" for a in cluster]
-        country = cluster[0].get("country") or ""
+        country  = cluster[0].get("country") or ""
         category = cluster[0].get("category") or ""
-        cluster_id = f"cluster_{time.strftime('%Y%m%d')}_{i}"
+        titles   = [a.get("title_ko") or a.get("title_en") or "" for a in cluster]
+        cluster_key = make_cluster_key(cluster)
 
-        if already_generated_today(cluster_id):
-            print(f"  [SKIP] 클러스터 {i+1} — 오늘 이미 생성됨")
-            continue
-
-        print(f"\n  [클러스터 {i+1}/{len(clusters)}] {country} / {category} — {len(cluster)}건")
+        print(f"[클러스터 {i+1}/{len(clusters)}] {country} / {category} — {len(cluster)}건")
         for t in titles:
-            print(f"    - {t[:50]}")
+            print(f"  - {t[:60]}")
 
-        prompt = build_cluster_prompt(cluster)
-        content = call_gemini(prompt, max_tokens=800)
+        # 기존 기사 확인
+        existing = get_existing_cluster(cluster_key)
 
-        if not content:
-            print(f"  ❌ 생성 실패")
-            continue
+        if existing:
+            # 기존 기사보다 새 기사가 더 많으면 업데이트
+            existing_count = existing["summary_ko"].count("\n\n") + 1
+            if len(cluster) <= existing_count:
+                print(f"  [SKIP] 변경 없음 ({len(cluster)}건 동일)\n")
+                continue
 
-        # 제목: 대표 기사 제목 기반
-        rep_title = titles[0][:40]
-        today_label = time.strftime("%Y.%m.%d")
-        full_title = f"[종합] {rep_title} 외 {len(cluster)-1}건 — {today_label}"
+            print(f"  → 기존 기사 업데이트 ({existing_count}건 → {len(cluster)}건)")
+            prompt  = build_issue_prompt(cluster, existing["summary_ko"])
+            content = call_gemini(prompt, max_tokens=900)
 
-        article_id = save_article(
-            title_ko=full_title,
-            summary_ko=content,
-            article_type=cluster_id,
-            category=category or "종합",
-            region=cluster[0].get("region") or "global",
-            country=country,
-        )
+            if content:
+                today_label = time.strftime("%Y.%m.%d")
+                new_title   = f"[이슈] {titles[0][:40]} 외 {len(cluster)-1}건 — {today_label}"
+                update_article(existing["id"], new_title, content)
+                print(f"  ✅ 업데이트 완료: {new_title}\n")
+                updated += 1
+            else:
+                print(f"  ❌ 업데이트 실패\n")
 
-        if article_id > 0:
-            print(f"  ✅ 저장 완료 (id={article_id}): {full_title}")
-            generated += 1
         else:
-            print(f"  ⚠️ 저장 실패")
+            # 신규 기사 생성
+            print(f"  → 신규 이슈 기사 생성")
+            prompt  = build_issue_prompt(cluster)
+            content = call_gemini(prompt, max_tokens=900)
+
+            if content:
+                today_label = time.strftime("%Y.%m.%d")
+                full_title  = f"[이슈] {titles[0][:40]} 외 {len(cluster)-1}건 — {today_label}"
+                article_id  = save_article(
+                    title_ko    = full_title,
+                    summary_ko  = content,
+                    cluster_key = cluster_key,
+                    category    = category or "종합",
+                    region      = cluster[0].get("region") or "global",
+                    country     = country,
+                )
+                if article_id > 0:
+                    print(f"  ✅ 저장 완료 (id={article_id}): {full_title}\n")
+                    generated += 1
+                else:
+                    print(f"  ⚠️ 저장 실패\n")
+            else:
+                print(f"  ❌ 생성 실패\n")
 
         time.sleep(CALL_INTERVAL)
 
-    # 2. 브리핑 기사 생성
-    print("\n[브리핑] 일별 브리핑 생성 중...")
-    for art_type in BRIEFING_TYPES:
-        print(f"\n  [{art_type['title']}] 시작...")
-
-        if already_generated_today(art_type["type"]):
-            print(f"  [SKIP] 오늘 이미 생성됨")
-            continue
-
-        articles = get_today_articles(
-            regions=art_type["regions"],
-            limit=art_type["max_src"]
-        )
-
-        if len(articles) < 3:
-            print(f"  [SKIP] 기사 부족 ({len(articles)}건)")
-            continue
-
-        print(f"  → 참고 기사 {len(articles)}건으로 생성 중...")
-        prompt = build_briefing_prompt(articles, art_type["title"])
-        content = call_gemini(prompt, max_tokens=1000)
-
-        if not content:
-            print(f"  ❌ 생성 실패")
-            continue
-
-        today_label = time.strftime("%Y.%m.%d")
-        full_title = f"{art_type['title']} — {today_label}"
-
-        article_id = save_article(
-            title_ko=full_title,
-            summary_ko=content,
-            article_type=art_type["type"],
-            category=art_type["category"],
-            region=art_type["region"],
-        )
-
-        if article_id > 0:
-            print(f"  ✅ 저장 완료 (id={article_id}): {full_title}")
-            generated += 1
-        else:
-            print(f"  ⚠️ 저장 실패")
-
-        time.sleep(CALL_INTERVAL)
-
-    print(f"\n✅ 자체 기사 생성 완료: {generated}건 (클러스터 + 브리핑)")
+    print(f"✅ 완료 — 신규 {generated}건 생성 / {updated}건 업데이트")
 
 
 if __name__ == "__main__":
