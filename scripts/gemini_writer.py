@@ -20,13 +20,8 @@ from db import get_conn as db_get_conn, init_db
 load_dotenv()
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+GEMINI_MODEL = "gemini-3.1-flash-lite"
 DB_FILE = "data/articles.db"
-
-GEMINI_URL = (
-    "https://generativelanguage.googleapis.com/v1beta/models/"
-    "gemini-3.1-flash-lite:generateContent"
-    f"?key={GEMINI_API_KEY}"
-)
 
 # 생성할 기사 유형
 ARTICLE_TYPES = [
@@ -187,6 +182,15 @@ def call_gemini(prompt: str, retry: int = 3) -> str | None:
         print("[ERROR] GEMINI_API_KEY가 설정되지 않았습니다.")
         return None
 
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        print("[ERROR] GEMINI_API_KEY가 설정되지 않았습니다.")
+        return None
+
+    url = (
+        f"https://generativelanguage.googleapis.com/v1beta/models/"
+        f"{GEMINI_MODEL}:generateContent?key={api_key}"
+    )
     payload = {
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {
@@ -197,7 +201,7 @@ def call_gemini(prompt: str, retry: int = 3) -> str | None:
 
     for attempt in range(retry):
         try:
-            res = requests.post(GEMINI_URL, json=payload, timeout=(10, 30))
+            res = requests.post(url, json=payload, timeout=(10, 30))
             if res.status_code == 200:
                 data = res.json()
                 return data["candidates"][0]["content"]["parts"][0]["text"].strip()
@@ -208,6 +212,9 @@ def call_gemini(prompt: str, retry: int = 3) -> str | None:
             else:
                 print(f"[ERROR] Gemini API {res.status_code}: {res.text[:200]}")
                 return None
+        except requests.exceptions.Timeout:
+            print(f"  [TIMEOUT] {attempt+1}/{retry}회 시도 — 넘어갑니다.")
+            return None
         except Exception as e:
             print(f"[ERROR] Gemini 호출 실패: {e}")
             return None
