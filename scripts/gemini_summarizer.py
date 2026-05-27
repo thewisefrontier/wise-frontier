@@ -19,9 +19,10 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 DB_FILE = "data/articles.db"
 
 # Gemini 2.5 Flash-Lite — 무료 한도: 분당 15회, 하루 1,000회
+# Gemini 3.1 Flash Lite — 무료 한도: 분당 15회, 하루 500회
 GEMINI_URL = (
     "https://generativelanguage.googleapis.com/v1beta/models/"
-    "gemini-2.5-flash-lite:generateContent"
+    "gemini-3.1-flash-lite:generateContent"
     f"?key={GEMINI_API_KEY}"
 )
 
@@ -106,7 +107,7 @@ def build_prompt(article: dict) -> str:
 요약문:"""
 
 
-def call_gemini(prompt: str) -> str | None:
+def call_gemini(prompt: str, retry: int = 3) -> str | None:
     if not GEMINI_API_KEY:
         print("[ERROR] GEMINI_API_KEY가 설정되지 않았습니다.")
         return None
@@ -119,17 +120,23 @@ def call_gemini(prompt: str) -> str | None:
         }
     }
 
-    try:
-        res = requests.post(GEMINI_URL, json=payload, timeout=20)
-        if res.status_code != 200:
-            print(f"[ERROR] Gemini API {res.status_code}: {res.text[:200]}")
+    for attempt in range(retry):
+        try:
+            res = requests.post(GEMINI_URL, json=payload, timeout=20)
+            if res.status_code == 200:
+                data = res.json()
+                return data["candidates"][0]["content"]["parts"][0]["text"].strip()
+            elif res.status_code == 429:
+                wait = 60 * (attempt + 1)  # 60초, 120초, 180초
+                print(f"  [429] 한도 초과 — {wait}초 대기 후 재시도 ({attempt+1}/{retry})")
+                time.sleep(wait)
+            else:
+                print(f"[ERROR] Gemini API {res.status_code}: {res.text[:200]}")
+                return None
+        except Exception as e:
+            print(f"[ERROR] Gemini 호출 실패: {e}")
             return None
-        data = res.json()
-        text = data["candidates"][0]["content"]["parts"][0]["text"].strip()
-        return text
-    except Exception as e:
-        print(f"[ERROR] Gemini 호출 실패: {e}")
-        return None
+    return None
 
 
 def run():
