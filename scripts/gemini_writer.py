@@ -24,7 +24,7 @@ DB_FILE = "data/articles.db"
 
 GEMINI_URL = (
     "https://generativelanguage.googleapis.com/v1beta/models/"
-    "gemini-2.0-flash:generateContent"
+    "gemini-2.5-flash-lite-preview-06-17:generateContent"
     f"?key={GEMINI_API_KEY}"
 )
 

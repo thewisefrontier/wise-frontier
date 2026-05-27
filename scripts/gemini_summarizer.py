@@ -18,14 +18,14 @@ load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 DB_FILE = "data/articles.db"
 
-# Gemini 2.0 Flash — 무료 한도: 분당 15회, 하루 1,500회
+# Gemini 2.5 Flash-Lite — 무료 한도: 분당 15회, 하루 1,000회
 GEMINI_URL = (
     "https://generativelanguage.googleapis.com/v1beta/models/"
-    "gemini-2.0-flash:generateContent"
+    "gemini-2.5-flash-lite-preview-06-17:generateContent"
     f"?key={GEMINI_API_KEY}"
 )
 
-# 한 번 실행당 최대 처리 기사 수 (API 한도 고려)
+# 한 번 실행당 최대 처리 기사 수
 MAX_ARTICLES = 30
 # API 호출 간격 (초) — 분당 15회 한도 준수
 CALL_INTERVAL = 4
