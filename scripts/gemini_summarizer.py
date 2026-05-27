@@ -19,10 +19,10 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 DB_FILE = "data/articles.db"
 
 # Gemini 2.5 Flash-Lite — 무료 한도: 분당 15회, 하루 1,000회
-# Gemini 3.1 Flash Lite — 무료 한도: 분당 15회, 하루 500회
+# Gemma 4 31B — 무료 한도: 분당 15회, 하루 1,500회
 GEMINI_URL = (
     "https://generativelanguage.googleapis.com/v1beta/models/"
-    "gemini-3.1-flash-lite:generateContent"
+    "gemma-4-31b-it:generateContent"
     f"?key={GEMINI_API_KEY}"
 )
 
