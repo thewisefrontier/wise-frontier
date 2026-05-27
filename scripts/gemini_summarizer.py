@@ -27,8 +27,8 @@ GEMINI_URL = (
 
 # 한 번 실행당 최대 처리 기사 수
 MAX_ARTICLES = 30
-# API 호출 간격 (초) — 분당 15회 한도 준수
-CALL_INTERVAL = 4
+# API 호출 간격 (초) — 분당 15회 한도 준수 (5초 간격 = 분당 12회)
+CALL_INTERVAL = 5
 
 
 def get_conn():
