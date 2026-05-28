@@ -25,7 +25,9 @@ def export_articles(limit=9999):
     c.execute("""
         SELECT * FROM articles
         WHERE sent_telegram = 1
-        ORDER BY created_at DESC
+        ORDER BY
+            CASE WHEN source = 'The Wise Frontier' THEN 0 ELSE 1 END ASC,
+            created_at DESC
         LIMIT ?
     """, (limit,))
 
