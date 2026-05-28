@@ -65,24 +65,37 @@ def get_today_articles(limit=150):
 
 
 def get_existing_cluster(cluster_key):
-    """오늘 생성된 같은 클러스터 기사 조회"""
+    """기존 클러스터 기사 조회 (날짜 무관)"""
     conn = get_conn()
     c = conn.cursor()
-    today = time.strftime("%Y-%m-%d")
     c.execute("""
-        SELECT id, title_ko, summary_ko, subcategory
+        SELECT id, title_ko, summary_ko, subcategory, score
         FROM articles
         WHERE source = 'The Wise Frontier'
           AND subcategory = ?
-          AND created_at LIKE ?
+        ORDER BY created_at DESC
         LIMIT 1
-    """, (cluster_key, f"{today}%"))
+    """, (cluster_key,))
     row = c.fetchone()
     conn.close()
     return dict(row) if row else None
 
 
-def save_article(title_ko, summary_ko, cluster_key, category, region, country=""):
+def get_cluster_article_count(cluster_key):
+    """클러스터 기사가 마지막으로 생성됐을 때의 기사 수 (score 컬럼 활용)"""
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute("""
+        SELECT score FROM articles
+        WHERE source = 'The Wise Frontier' AND subcategory = ?
+        ORDER BY created_at DESC LIMIT 1
+    """, (cluster_key,))
+    row = c.fetchone()
+    conn.close()
+    return row["score"] if row else 0
+
+
+def save_article(title_ko, summary_ko, cluster_key, category, region, country="", article_count=0):
     conn = get_conn()
     c = conn.cursor()
     url = f"internal://{cluster_key}"
@@ -96,7 +109,7 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
         """, (
             title_ko, title_ko, "", summary_ko,
             url, "The Wise Frontier", category, cluster_key,
-            region, country, "", 100, 1, 0,
+            region, country, "", article_count, 1, 0,
         ))
         conn.commit()
         return c.lastrowid
@@ -104,6 +117,15 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
         return -1
     finally:
         conn.close()
+
+
+def update_article_count(article_id, new_count):
+    """클러스터 기사 수 업데이트"""
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute("UPDATE articles SET score = ? WHERE id = ?", (new_count, article_id))
+    conn.commit()
+    conn.close()
 
 
 def update_article(article_id, title_ko, summary_ko):
@@ -207,11 +229,10 @@ def cluster_articles(articles):
 
 
 def make_cluster_key(cluster):
-    """클러스터 고유 키 생성 — 대표 기사 제목 기반 해시"""
+    """클러스터 고유 키 생성 — 대표 기사 제목 기반 해시 (날짜 무관)"""
     rep = (cluster[0].get("title_ko") or cluster[0].get("title_en") or "")[:50]
-    today = time.strftime("%Y%m%d")
-    h = hashlib.md5(f"{today}:{rep}".encode()).hexdigest()[:8]
-    return f"cluster_{today}_{h}"
+    h = hashlib.md5(rep.encode()).hexdigest()[:8]
+    return f"cluster_{h}"
 
 
 # ── Gemini 호출 ───────────────────────────────────────────
@@ -354,54 +375,59 @@ def run():
     updated   = 0
 
     for i, cluster in enumerate(clusters):
-        country  = cluster[0].get("country") or ""
-        category = cluster[0].get("category") or ""
-        titles   = [a.get("title_ko") or a.get("title_en") or "" for a in cluster]
+        country     = cluster[0].get("country") or ""
+        category    = cluster[0].get("category") or ""
+        titles      = [a.get("title_ko") or a.get("title_en") or "" for a in cluster]
         cluster_key = make_cluster_key(cluster)
+        cur_count   = len(cluster)
 
-        print(f"[클러스터 {i+1}/{len(clusters)}] {country} / {category} — {len(cluster)}건")
+        print(f"[클러스터 {i+1}/{len(clusters)}] {country} / {category} — {cur_count}건")
         for t in titles:
             print(f"  - {t[:60]}")
 
-        # 기존 기사 확인
-        existing = get_existing_cluster(cluster_key)
+        existing      = get_existing_cluster(cluster_key)
+        prev_count    = get_cluster_article_count(cluster_key)
 
         if existing:
-            # 기존 기사보다 새 기사가 더 많으면 업데이트
-            existing_count = existing["summary_ko"].count("\n\n") + 1
-            if len(cluster) <= existing_count:
-                print(f"  [SKIP] 변경 없음 ({len(cluster)}건 동일)\n")
+            if cur_count <= prev_count:
+                print(f"  [SKIP] 새 기사 없음 ({cur_count}건 동일)\n")
                 continue
 
-            print(f"  → 기존 기사 업데이트 ({existing_count}건 → {len(cluster)}건)")
+            print(f"  → 기존 기사 업데이트 ({prev_count}건 → {cur_count}건)")
             prompt  = build_issue_prompt(cluster, existing["summary_ko"])
             content = call_gemini(prompt, max_tokens=900)
 
             if content:
                 today_label = time.strftime("%Y.%m.%d")
-                new_title   = f"[이슈] {titles[0][:40]} 외 {len(cluster)-1}건 — {today_label}"
+                new_title   = f"[이슈] {titles[0][:40]} 외 {cur_count-1}건 — {today_label}"
                 update_article(existing["id"], new_title, content)
+                update_article_count(existing["id"], cur_count)
                 print(f"  ✅ 업데이트 완료: {new_title}\n")
                 updated += 1
             else:
                 print(f"  ❌ 업데이트 실패\n")
 
         else:
-            # 신규 기사 생성
+            # 최소 2건 이상일 때만 신규 생성
+            if cur_count < CLUSTER_MIN_SIZE:
+                print(f"  [SKIP] 기사 부족 ({cur_count}건)\n")
+                continue
+
             print(f"  → 신규 이슈 기사 생성")
             prompt  = build_issue_prompt(cluster)
             content = call_gemini(prompt, max_tokens=900)
 
             if content:
                 today_label = time.strftime("%Y.%m.%d")
-                full_title  = f"[이슈] {titles[0][:40]} 외 {len(cluster)-1}건 — {today_label}"
+                full_title  = f"[이슈] {titles[0][:40]} 외 {cur_count-1}건 — {today_label}"
                 article_id  = save_article(
-                    title_ko    = full_title,
-                    summary_ko  = content,
-                    cluster_key = cluster_key,
-                    category    = category or "종합",
-                    region      = cluster[0].get("region") or "global",
-                    country     = country,
+                    title_ko      = full_title,
+                    summary_ko    = content,
+                    cluster_key   = cluster_key,
+                    category      = category or "종합",
+                    region        = cluster[0].get("region") or "global",
+                    country       = country,
+                    article_count = cur_count,
                 )
                 if article_id > 0:
                     print(f"  ✅ 저장 완료 (id={article_id}): {full_title}\n")
