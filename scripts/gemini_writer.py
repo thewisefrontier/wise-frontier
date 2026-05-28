@@ -290,7 +290,31 @@ def build_issue_prompt(cluster, existing_summary=None):
 
 업데이트된 기사 본문:"""
     else:
-        return f"""당신은 프론티어 마켓 전문 미디어 The Wise Frontier의 수석 에디터입니다.
+        # 같은 사건 여부 판단 (출처가 다르고 유사도 높으면 동일 사건 다각도 보도)
+        sources = list({a.get("source","") for a in cluster})
+        same_event = len(sources) >= 2 and len(cluster) <= 4
+
+        if same_event:
+            return f"""당신은 프론티어 마켓 전문 미디어 The Wise Frontier의 수석 에디터입니다.
+아래는 같은 사건을 여러 매체가 다각도로 보도한 {len(cluster)}개의 기사입니다.({today_str})
+국가: {country} | 분야: {category}
+
+[관련 기사]
+{article_list}
+
+[작성 규칙]
+1. 400~600자 분량의 단일 완성 기사
+2. 여러 보도를 종합해 하나의 완성된 기사로 작성 (중복 내용 제거, 누락 정보 보완)
+3. 다음 구조로 작성:
+   - 핵심 사실: 무슨 일이 일어났는가 (2~3문장, 육하원칙 중심)
+   - 배경과 맥락: 이 사건의 배경과 의미 (1~2문장)
+   - 프론티어 마켓 시사점: 투자자/기업 관점의 리스크 또는 기회 (1~2문장)
+4. 한국어로만 작성
+5. 기사 본문만 출력 (제목 제외)
+
+기사 본문:"""
+        else:
+            return f"""당신은 프론티어 마켓 전문 미디어 The Wise Frontier의 수석 에디터입니다.
 아래는 같은 이슈/패턴을 보여주는 {len(cluster)}개의 기사입니다.({today_str})
 국가: {country} | 분야: {category}
 
@@ -304,7 +328,7 @@ def build_issue_prompt(cluster, existing_summary=None):
    - 현재 상황: 어떤 사건들이 일어나고 있는가 (1~2문장)
    - 패턴 분석: 이 사건들이 공통적으로 시사하는 것 (2~3문장)
    - 투자/비즈니스 시사점: 프론티어 마켓 투자자/기업이 주목해야 할 리스크 또는 기회 (1~2문장)
-4. "나이지리아 치안 불안 확산", "인도네시아 금융 규제 강화 추세" 같은 
+4. "나이지리아 치안 불안 확산", "인도네시아 금융 규제 강화 추세" 같은
    거시적 트렌드 관점으로 서술
 5. 한국어로만 작성
 6. 기사 본문만 출력 (제목 제외)
