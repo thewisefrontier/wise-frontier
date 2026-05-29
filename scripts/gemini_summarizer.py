@@ -19,9 +19,16 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 GEMINI_MODEL = "gemini-3.1-flash-lite"
 DB_FILE = "data/articles.db"
 
+# API 키 폴백 체인 — 한도 소진 시 다음 키로 자동 전환
+GEMINI_API_KEYS = [k for k in [
+    os.getenv("GEMINI_API_KEY"),
+    os.getenv("GEMINI_API_KEY_2"),
+    os.getenv("GEMINI_API_KEY_3"),
+] if k]
+
 # 한 번 실행당 최대 처리 기사 수
 MAX_ARTICLES = 30
-# API 호출 간격 (초) — 분당 15회 한도 준수
+# API 호출 간격 (초)
 CALL_INTERVAL = 5
 
 
@@ -100,20 +107,11 @@ def build_prompt(article: dict) -> str:
 요약문:"""
 
 
-def call_gemini(prompt: str, retry: int = 3) -> str | None:
-    if not GEMINI_API_KEY:
-        print("[ERROR] GEMINI_API_KEY가 설정되지 않았습니다.")
+def call_gemini(prompt: str, retry: int = 2) -> str | None:
+    if not GEMINI_API_KEYS:
+        print("[ERROR] GEMINI_API_KEY 없음")
         return None
 
-    api_key = os.getenv("GEMINI_API_KEY")
-    if not api_key:
-        print("[ERROR] GEMINI_API_KEY가 설정되지 않았습니다.")
-        return None
-
-    url = (
-        f"https://generativelanguage.googleapis.com/v1beta/models/"
-        f"{GEMINI_MODEL}:generateContent?key={api_key}"
-    )
     payload = {
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {
@@ -122,36 +120,44 @@ def call_gemini(prompt: str, retry: int = 3) -> str | None:
         }
     }
 
-    for attempt in range(retry):
-        try:
-            res = requests.post(url, json=payload, timeout=(10, 30))
-            if res.status_code == 200:
-                data = res.json()
-                return data["candidates"][0]["content"]["parts"][0]["text"].strip()
-            elif res.status_code == 429:
-                wait = 60 * (attempt + 1)
-                print(f"  [429] 한도 초과 — {wait}초 대기 후 재시도 ({attempt+1}/{retry})")
-                time.sleep(wait)
-            else:
-                print(f"[ERROR] Gemini API {res.status_code}: {res.text[:200]}")
+    for key_idx, api_key in enumerate(GEMINI_API_KEYS):
+        url = (
+            f"https://generativelanguage.googleapis.com/v1beta/models/"
+            f"{GEMINI_MODEL}:generateContent?key={api_key}"
+        )
+        for attempt in range(retry):
+            try:
+                res = requests.post(url, json=payload, timeout=(10, 30))
+                if res.status_code == 200:
+                    return res.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
+                elif res.status_code == 429:
+                    if key_idx < len(GEMINI_API_KEYS) - 1:
+                        print(f"  [429] 키 {key_idx+1} 한도 초과 → 키 {key_idx+2}로 전환")
+                        break  # 다음 키로
+                    else:
+                        wait = 60 * (attempt + 1)
+                        print(f"  [429] 모든 키 소진 — {wait}초 대기")
+                        time.sleep(wait)
+                else:
+                    print(f"[ERROR] Gemini {res.status_code}: {res.text[:200]}")
+                    return None
+            except requests.exceptions.Timeout:
+                print(f"  [TIMEOUT] 키 {key_idx+1} — 넘어갑니다.")
                 return None
-        except requests.exceptions.Timeout:
-            print(f"  [TIMEOUT] {attempt+1}/{retry}회 시도 — 넘어갑니다.")
-            return None
-        except Exception as e:
-            print(f"[ERROR] Gemini 호출 실패: {e}")
-            return None
+            except Exception as e:
+                print(f"[ERROR] {e}")
+                return None
+
     return None
 
 
 def run():
-    api_key = os.getenv("GEMINI_API_KEY")
-    if not api_key:
+    if not GEMINI_API_KEYS:
         print("[SKIP] GEMINI_API_KEY 없음 — gemini_summarizer 건너뜀")
         return
 
-    # 모델 유효성 빠르게 확인 (1회 핑 테스트)
-    print("[체크] Gemini API 연결 테스트...")
+    # API 연결 테스트
+    print(f"[체크] Gemini API 연결 테스트... (키 {len(GEMINI_API_KEYS)}개)")
     test = call_gemini("ping", retry=1)
     if test is None:
         print("[SKIP] Gemini API 응답 없음 — 건너뜀")

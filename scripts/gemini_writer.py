@@ -24,6 +24,13 @@ GEMINI_MODEL       = "gemini-3.1-flash-lite"
 DB_FILE            = "data/articles.db"
 CALL_INTERVAL      = 5
 
+# API 키 폴백 체인
+GEMINI_API_KEYS = [k for k in [
+    os.getenv("GEMINI_API_KEY"),
+    os.getenv("GEMINI_API_KEY_2"),
+    os.getenv("GEMINI_API_KEY_3"),
+] if k]
+
 # 클러스터링 설정
 SIMILARITY_HIGH    = 70   # 제목 유사도 기준 (%)
 SIMILARITY_SAME_COUNTRY = 55  # 같은 국가일 때 완화
@@ -357,10 +364,52 @@ def build_issue_prompt(cluster, existing_summary=None):
 기사 본문:"""
 
 
+# ── Gemini 호출 ───────────────────────────────────────────
+
+def call_gemini(prompt, max_tokens=1000, retry=2):
+    if not GEMINI_API_KEYS:
+        print("[ERROR] GEMINI_API_KEY 없음")
+        return None
+
+    payload = {
+        "contents": [{"parts": [{"text": prompt}]}],
+        "generationConfig": {"temperature": 0.6, "maxOutputTokens": max_tokens},
+    }
+
+    for key_idx, api_key in enumerate(GEMINI_API_KEYS):
+        url = (
+            f"https://generativelanguage.googleapis.com/v1beta/models/"
+            f"{GEMINI_MODEL}:generateContent?key={api_key}"
+        )
+        for attempt in range(retry):
+            try:
+                res = requests.post(url, json=payload, timeout=(10, 30))
+                if res.status_code == 200:
+                    return res.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
+                elif res.status_code == 429:
+                    if key_idx < len(GEMINI_API_KEYS) - 1:
+                        print(f"  [429] 키 {key_idx+1} 한도 초과 → 키 {key_idx+2}로 전환")
+                        break
+                    else:
+                        wait = 60 * (attempt + 1)
+                        print(f"  [429] 모든 키 소진 — {wait}초 대기")
+                        time.sleep(wait)
+                else:
+                    print(f"[ERROR] Gemini {res.status_code}: {res.text[:200]}")
+                    return None
+            except requests.exceptions.Timeout:
+                print(f"  [TIMEOUT] 키 {key_idx+1} — 넘어갑니다.")
+                return None
+            except Exception as e:
+                print(f"[ERROR] {e}")
+                return None
+    return None
+
+
 # ── 메인 실행 ─────────────────────────────────────────────
 
 def run():
-    if not os.getenv("GEMINI_API_KEY"):
+    if not GEMINI_API_KEYS:
         print("[SKIP] GEMINI_API_KEY 없음")
         return
 
