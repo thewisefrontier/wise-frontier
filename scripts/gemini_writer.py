@@ -31,6 +31,8 @@ GEMINI_API_KEYS = [k for k in [
     os.getenv("GEMINI_API_KEY_3"),
 ] if k]
 
+_current_key_idx = 0  # 현재 사용 중인 키 인덱스 (전역)
+
 # 클러스터링 설정
 SIMILARITY_HIGH    = 70   # 제목 유사도 기준 (%)
 SIMILARITY_SAME_COUNTRY = 55  # 같은 국가일 때 완화
@@ -367,6 +369,7 @@ def build_issue_prompt(cluster, existing_summary=None):
 # ── Gemini 호출 ───────────────────────────────────────────
 
 def call_gemini(prompt, max_tokens=1000, retry=2):
+    global _current_key_idx
     if not GEMINI_API_KEYS:
         print("[ERROR] GEMINI_API_KEY 없음")
         return None
@@ -376,33 +379,30 @@ def call_gemini(prompt, max_tokens=1000, retry=2):
         "generationConfig": {"temperature": 0.6, "maxOutputTokens": max_tokens},
     }
 
-    for key_idx, api_key in enumerate(GEMINI_API_KEYS):
+    while _current_key_idx < len(GEMINI_API_KEYS):
+        api_key = GEMINI_API_KEYS[_current_key_idx]
         url = (
             f"https://generativelanguage.googleapis.com/v1beta/models/"
             f"{GEMINI_MODEL}:generateContent?key={api_key}"
         )
-        for attempt in range(retry):
-            try:
-                res = requests.post(url, json=payload, timeout=(10, 30))
-                if res.status_code == 200:
-                    return res.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
-                elif res.status_code == 429:
-                    if key_idx < len(GEMINI_API_KEYS) - 1:
-                        print(f"  [429] 키 {key_idx+1} 한도 초과 → 키 {key_idx+2}로 전환")
-                        break
-                    else:
-                        wait = 60 * (attempt + 1)
-                        print(f"  [429] 모든 키 소진 — {wait}초 대기")
-                        time.sleep(wait)
-                else:
-                    print(f"[ERROR] Gemini {res.status_code}: {res.text[:200]}")
-                    return None
-            except requests.exceptions.Timeout:
-                print(f"  [TIMEOUT] 키 {key_idx+1} — 넘어갑니다.")
+        try:
+            res = requests.post(url, json=payload, timeout=(10, 30))
+            if res.status_code == 200:
+                return res.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
+            elif res.status_code == 429:
+                print(f"  [429] 키 {_current_key_idx+1} 한도 초과 → 키 {_current_key_idx+2}로 전환")
+                _current_key_idx += 1
+            else:
+                print(f"[ERROR] Gemini {res.status_code}: {res.text[:200]}")
                 return None
-            except Exception as e:
-                print(f"[ERROR] {e}")
-                return None
+        except requests.exceptions.Timeout:
+            print(f"  [TIMEOUT] 키 {_current_key_idx+1} — 넘어갑니다.")
+            return None
+        except Exception as e:
+            print(f"[ERROR] {e}")
+            return None
+
+    print("[ERROR] 모든 키 소진")
     return None
 
 
