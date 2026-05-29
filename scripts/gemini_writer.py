@@ -34,8 +34,8 @@ GEMINI_API_KEYS = [k for k in [
 _current_key_idx = 0  # 현재 사용 중인 키 인덱스 (전역)
 
 # 클러스터링 설정
-SIMILARITY_HIGH    = 70   # 제목 유사도 기준 (%)
-SIMILARITY_SAME_COUNTRY = 55  # 같은 국가일 때 완화
+SIMILARITY_HIGH    = 55   # 제목 유사도 기준 (%)
+SIMILARITY_SAME_COUNTRY = 40  # 같은 국가일 때 완화
 CLUSTER_MIN_SIZE   = 2    # 최소 기사 수
 MAX_CLUSTERS       = 8    # 하루 최대 처리 클러스터 수
 
@@ -59,15 +59,16 @@ def get_conn():
 def get_today_articles(limit=150):
     conn = get_conn()
     c = conn.cursor()
-    today = time.strftime("%Y-%m-%d")
+    # 최근 48시간 기사 포함 — 클러스터링 재료 확보
+    since = time.strftime("%Y-%m-%d %H:%M", time.gmtime(time.time() - 48 * 3600))
     c.execute("""
         SELECT id, title_ko, title_en, summary_ko, summary_en,
                source, category, subcategory, country, region, url, created_at
         FROM articles
-        WHERE created_at LIKE ? AND sent_telegram = 1
+        WHERE created_at >= ? AND sent_telegram = 1
           AND source != 'The Wise Frontier'
         ORDER BY score DESC, created_at DESC LIMIT ?
-    """, (f"{today}%", limit))
+    """, (since, limit))
     rows = c.fetchall()
     conn.close()
     return [dict(r) for r in rows]
@@ -186,7 +187,7 @@ def keyword_overlap(a, b):
 def articles_are_related(a, b):
     """
     두 기사가 같은 이슈인지 판단
-    제목 유사도 + 키워드 겹침 + 국가/카테고리 보정
+    제목 유사도 + 키워드 겹침 + 국가/지역/카테고리 보정
     """
     title_a = (a.get("title_ko") or a.get("title_en") or "").lower()
     title_b = (b.get("title_ko") or b.get("title_en") or "").lower()
@@ -195,18 +196,29 @@ def articles_are_related(a, b):
     title_sim = fuzz.token_sort_ratio(title_a, title_b)
 
     # 2. 키워드 겹침
-    kw_sim = keyword_overlap(a, b) * 100  # 0~100 스케일
+    kw_sim = keyword_overlap(a, b) * 100
 
-    # 3. 국가/카테고리 보정
+    # 3. 국가/지역/카테고리 보정
     same_country  = bool(a.get("country") and a.get("country") == b.get("country"))
+    same_region   = bool(a.get("region") and a.get("region") == b.get("region"))
     same_category = a.get("category") == b.get("category")
 
+    # 핵심 키워드 단독 매칭 — 중요한 단어 하나만 겹쳐도 보정
+    kw_a = extract_keywords(title_a) | extract_keywords(a.get("summary_ko") or "")
+    kw_b = extract_keywords(title_b) | extract_keywords(b.get("summary_ko") or "")
+    common_kw = kw_a & kw_b
+    has_strong_overlap = len(common_kw) >= 2  # 공통 키워드 2개 이상
+
     # 종합 점수
-    score = title_sim * 0.5 + kw_sim * 0.5
+    score = title_sim * 0.4 + kw_sim * 0.6
     if same_country:
-        score += 8
+        score += 10
+    if same_region:
+        score += 6
     if same_category:
         score += 5
+    if has_strong_overlap:
+        score += 8
 
     threshold = SIMILARITY_SAME_COUNTRY if same_country else SIMILARITY_HIGH
     return score >= threshold
@@ -418,7 +430,7 @@ def run():
     init_db()
 
     print("\n[클러스터링] 오늘 기사 분석 중...")
-    all_articles = get_today_articles(limit=150)
+    all_articles = get_today_articles(limit=300)
     clusters = cluster_articles(all_articles)
     print(f"  → {len(all_articles)}건 중 {len(clusters)}개 클러스터 발견\n")
 

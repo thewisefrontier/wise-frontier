@@ -26,7 +26,12 @@ def export_articles(limit=9999):
         SELECT * FROM articles
         WHERE sent_telegram = 1
         ORDER BY
-            CASE WHEN source = 'The Wise Frontier' THEN 0 ELSE 1 END ASC,
+            CASE
+                WHEN source = 'The Wise Frontier'
+                     AND DATE(created_at) = DATE('now') THEN 0
+                WHEN source != 'The Wise Frontier' THEN 1
+                ELSE 2
+            END ASC,
             created_at DESC
         LIMIT ?
     """, (limit,))
