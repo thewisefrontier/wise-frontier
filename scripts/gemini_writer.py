@@ -74,17 +74,18 @@ def get_today_articles(limit=150):
 
 
 def get_existing_cluster(cluster_key):
-    """기존 클러스터 기사 조회 (날짜 무관)"""
+    """오늘 생성된 클러스터 기사 조회"""
     conn = get_conn()
     c = conn.cursor()
+    today = time.strftime("%Y-%m-%d")
     c.execute("""
         SELECT id, title_ko, summary_ko, subcategory, score
         FROM articles
         WHERE source = 'The Wise Frontier'
           AND subcategory = ?
-        ORDER BY created_at DESC
-        LIMIT 1
-    """, (cluster_key,))
+          AND created_at LIKE ?
+        ORDER BY created_at DESC LIMIT 1
+    """, (cluster_key, f"{today}%"))
     row = c.fetchone()
     conn.close()
     return dict(row) if row else None
@@ -238,10 +239,11 @@ def cluster_articles(articles):
 
 
 def make_cluster_key(cluster):
-    """클러스터 고유 키 생성 — 대표 기사 제목 기반 해시 (날짜 무관)"""
+    """클러스터 고유 키 생성 — 날짜 + 대표 기사 제목 해시"""
     rep = (cluster[0].get("title_ko") or cluster[0].get("title_en") or "")[:50]
-    h = hashlib.md5(rep.encode()).hexdigest()[:8]
-    return f"cluster_{h}"
+    today = time.strftime("%Y%m%d")
+    h = hashlib.md5(f"{today}:{rep}".encode()).hexdigest()[:8]
+    return f"cluster_{today}_{h}"
 
 
 # ── Gemini 호출 ───────────────────────────────────────────
