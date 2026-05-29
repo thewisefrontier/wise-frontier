@@ -145,9 +145,18 @@ def call_gemini(prompt: str, retry: int = 3) -> str | None:
 
 
 def run():
-    if not GEMINI_API_KEY:
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
         print("[SKIP] GEMINI_API_KEY 없음 — gemini_summarizer 건너뜀")
         return
+
+    # 모델 유효성 빠르게 확인 (1회 핑 테스트)
+    print("[체크] Gemini API 연결 테스트...")
+    test = call_gemini("ping", retry=1)
+    if test is None:
+        print("[SKIP] Gemini API 응답 없음 — 건너뜀")
+        return
+    print("[체크] ✅ API 연결 확인")
 
     articles = get_articles_to_summarize(MAX_ARTICLES)
     print(f"[요약 고도화] 대상 기사 {len(articles)}건")
