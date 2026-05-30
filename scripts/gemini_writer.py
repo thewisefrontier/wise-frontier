@@ -330,6 +330,77 @@ def build_issue_prompt(cluster, existing_summary=None):
    - 패턴 분석: 개별 사건들의 공통점과 의미
    - 투자/비즈니스 시사점: 프론티어 마켓 관점에서의 리스크 또는 기회
 5. 한국어로만 작성
+6. 반드시 아래 형식으로 출력:
+   제목: (20자 이내의 핵심 제목)
+   본문: (기사 본문)
+
+업데이트된 기사:"""
+
+    else:
+        sources = list({a.get("source","") for a in cluster})
+        same_event = len(sources) >= 2 and len(cluster) <= 4
+
+        if same_event:
+            return f"""당신은 프론티어 마켓 전문 미디어 The Wise Frontier의 수석 에디터입니다.
+아래는 같은 사건을 여러 매체가 다각도로 보도한 {len(cluster)}개의 기사입니다.({today_str})
+국가: {country} | 분야: {category}
+
+[관련 기사]
+{article_list}
+
+[작성 규칙]
+1. 400~600자 분량의 단일 완성 기사
+2. 여러 보도를 종합해 하나의 완성된 기사로 작성 (중복 내용 제거, 누락 정보 보완)
+3. 다음 구조로 작성:
+   - 핵심 사실: 무슨 일이 일어났는가 (2~3문장, 육하원칙 중심)
+   - 배경과 맥락: 이 사건의 배경과 의미 (1~2문장)
+   - 프론티어 마켓 시사점: 투자자/기업 관점의 리스크 또는 기회 (1~2문장)
+4. 한국어로만 작성
+5. 반드시 아래 형식으로 출력:
+   제목: (20자 이내의 핵심 제목)
+   본문: (기사 본문)
+
+기사:"""
+        else:
+            return f"""당신은 프론티어 마켓 전문 미디어 The Wise Frontier의 수석 에디터입니다.
+아래는 같은 이슈/패턴을 보여주는 {len(cluster)}개의 기사입니다.({today_str})
+국가: {country} | 분야: {category}
+
+[관련 기사]
+{article_list}
+
+[작성 규칙]
+1. 400~600자 분량의 트렌드 분석 기사
+2. 개별 사건을 단순 나열하지 말고, 공통 패턴과 그 의미를 분석
+3. 다음 구조로 작성:
+   - 현재 상황: 어떤 사건들이 일어나고 있는가 (1~2문장)
+   - 패턴 분석: 이 사건들이 공통적으로 시사하는 것 (2~3문장)
+   - 투자/비즈니스 시사점: 프론티어 마켓 투자자/기업이 주목해야 할 리스크 또는 기회 (1~2문장)
+4. 거시적 트렌드 관점으로 서술
+5. 한국어로만 작성
+6. 반드시 아래 형식으로 출력:
+   제목: (20자 이내의 핵심 제목)
+   본문: (기사 본문)
+
+기사:"""
+        return f"""당신은 프론티어 마켓 전문 미디어 The Wise Frontier의 수석 에디터입니다.
+아래는 기존에 작성된 이슈 분석 기사와 새로 추가된 관련 기사들입니다.({today_str})
+
+[기존 기사]
+{existing_summary}
+
+[추가된 관련 기사]
+{article_list}
+
+[작성 규칙]
+1. 기존 분석을 바탕으로 새 기사의 내용을 통합해 업데이트
+2. 개별 사건들이 보여주는 공통 패턴과 트렌드를 중심으로 서술
+3. 500~700자 분량
+4. 다음 구조로 작성:
+   - 현재 상황: 어떤 사건들이 일어나고 있는가
+   - 패턴 분석: 개별 사건들의 공통점과 의미
+   - 투자/비즈니스 시사점: 프론티어 마켓 관점에서의 리스크 또는 기회
+5. 한국어로만 작성
 6. 기사 본문만 출력 (제목 제외)
 
 업데이트된 기사 본문:"""
@@ -420,6 +491,21 @@ def call_gemini(prompt, max_tokens=1000, retry=2):
     return None
 
 
+def parse_title_and_body(text):
+    """Gemini 응답에서 제목과 본문 분리"""
+    title = ""
+    body = text
+    lines = text.strip().split("\n")
+    for i, line in enumerate(lines):
+        if line.startswith("제목:"):
+            title = line.replace("제목:", "").strip()
+            body = "\n".join(lines[i+1:]).strip()
+            if body.startswith("본문:"):
+                body = body[3:].strip()
+            break
+    return title, body
+
+
 # ── 메인 실행 ─────────────────────────────────────────────
 
 def run():
@@ -462,8 +548,9 @@ def run():
 
             if content:
                 today_label = time.strftime("%Y.%m.%d")
-                new_title   = f"{titles[0][:50]} 외 {cur_count-1}건 — {today_label}"
-                update_article(existing["id"], new_title, content)
+                gen_title, gen_body = parse_title_and_body(content)
+                new_title = gen_title if gen_title else titles[0][:50]
+                update_article(existing["id"], new_title, gen_body or content)
                 update_article_count(existing["id"], cur_count)
                 print(f"  ✅ 업데이트 완료: {new_title}\n")
                 updated += 1
@@ -482,10 +569,11 @@ def run():
 
             if content:
                 today_label = time.strftime("%Y.%m.%d")
-                full_title  = f"{titles[0][:50]} 외 {cur_count-1}건 — {today_label}"
-                article_id  = save_article(
+                gen_title, gen_body = parse_title_and_body(content)
+                full_title = gen_title if gen_title else titles[0][:50]
+                article_id = save_article(
                     title_ko      = full_title,
-                    summary_ko    = content,
+                    summary_ko    = gen_body or content,
                     cluster_key   = cluster_key,
                     category      = category or "종합",
                     region        = cluster[0].get("region") or "global",
