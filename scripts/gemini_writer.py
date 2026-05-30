@@ -20,6 +20,7 @@ load_dotenv()
 
 GEMINI_MODEL       = "gemini-3.1-flash-lite"
 CALL_INTERVAL      = 5
+MAX_CLUSTERS_PER_RUN = 10  # 한 번 실행당 최대 처리 클러스터 수
 
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
@@ -490,8 +491,13 @@ def run():
 
     generated = 0
     updated   = 0
+    processed = 0
 
     for i, cluster in enumerate(clusters):
+        if processed >= MAX_CLUSTERS_PER_RUN:
+            print(f"[STOP] 이번 실행 최대 처리 수 도달 ({MAX_CLUSTERS_PER_RUN}개) — 다음 실행에 계속")
+            break
+
         country     = cluster[0].get("country") or ""
         category    = cluster[0].get("category") or ""
         titles      = [a.get("title_ko") or a.get("title_en") or "" for a in cluster]
@@ -557,6 +563,7 @@ def run():
                 print(f"  ❌ 생성 실패\n")
 
         time.sleep(CALL_INTERVAL)
+        processed += 1
 
     print(f"✅ 완료 — 신규 {generated}건 생성 / {updated}건 업데이트")
 

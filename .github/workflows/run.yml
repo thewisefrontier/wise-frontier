@@ -51,7 +51,7 @@ jobs:
         run: sleep 60
 
       - name: Gemini 자체 기사 생성 (30분마다 클러스터 감지)
-        timeout-minutes: 5
+        timeout-minutes: 10
         continue-on-error: true
         run: python scripts/gemini_writer.py
         env:
