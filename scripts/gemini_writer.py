@@ -37,7 +37,7 @@ _current_key_idx = 0  # 현재 사용 중인 키 인덱스 (전역)
 SIMILARITY_HIGH    = 55   # 제목 유사도 기준 (%)
 SIMILARITY_SAME_COUNTRY = 40  # 같은 국가일 때 완화
 CLUSTER_MIN_SIZE   = 2    # 최소 기사 수
-MAX_CLUSTERS       = 8    # 하루 최대 처리 클러스터 수
+MAX_CLUSTERS       = 20   # 하루 최대 처리 클러스터 수
 
 # 키워드 추출용 불용어
 STOPWORDS = {
@@ -462,7 +462,7 @@ def run():
 
             if content:
                 today_label = time.strftime("%Y.%m.%d")
-                new_title   = f"[이슈] {titles[0][:40]} 외 {cur_count-1}건 — {today_label}"
+                new_title   = f"{titles[0][:50]} 외 {cur_count-1}건 — {today_label}"
                 update_article(existing["id"], new_title, content)
                 update_article_count(existing["id"], cur_count)
                 print(f"  ✅ 업데이트 완료: {new_title}\n")
@@ -482,7 +482,7 @@ def run():
 
             if content:
                 today_label = time.strftime("%Y.%m.%d")
-                full_title  = f"[이슈] {titles[0][:40]} 외 {cur_count-1}건 — {today_label}"
+                full_title  = f"{titles[0][:50]} 외 {cur_count-1}건 — {today_label}"
                 article_id  = save_article(
                     title_ko      = full_title,
                     summary_ko    = content,
