@@ -358,13 +358,13 @@ def build_issue_prompt(cluster, existing_summary=None):
 [작성 규칙]
 1. 기존 분석을 바탕으로 새 기사의 내용을 통합해 업데이트
 2. 개별 사건들이 보여주는 공통 패턴과 트렌드를 중심으로 서술
-3. 700~900자 분량
+3. 900~1200자 분량
 4. 다음 구조로 작성:
    - 현재 상황: 어떤 사건들이 일어나고 있는가
    - 패턴 분석: 개별 사건들의 공통점과 의미
    - 투자/비즈니스 시사점: 프론티어 마켓 관점에서의 리스크 또는 기회
 5. 한국어로만 작성
-6. 문단은 빈 줄로 구분 (2~3문단)
+6. 반드시 2~3개 문단으로 나누고, 각 문단 사이에 빈 줄을 넣을 것
 7. 반드시 아래 형식으로 출력:
    제목: (20자 이내의 핵심 제목)
    본문: (기사 본문)
@@ -384,14 +384,14 @@ def build_issue_prompt(cluster, existing_summary=None):
 {article_list}
 
 [작성 규칙]
-1. 600~800자 분량의 단일 완성 기사
+1. 800~1200자 분량의 단일 완성 기사
 2. 여러 보도를 종합해 하나의 완성된 기사로 작성 (중복 내용 제거, 누락 정보 보완)
 3. 다음 구조로 작성:
    - 핵심 사실: 무슨 일이 일어났는가 (2~3문장, 육하원칙 중심)
    - 배경과 맥락: 이 사건의 배경과 의미 (1~2문장)
    - 프론티어 마켓 시사점: 투자자/기업 관점의 리스크 또는 기회 (1~2문장)
 4. 한국어로만 작성
-5. 문단은 빈 줄로 구분 (2~3문단)
+5. 반드시 2~3개 문단으로 나누고, 각 문단 사이에 빈 줄을 넣을 것
 6. 반드시 아래 형식으로 출력:
    제목: (20자 이내의 핵심 제목)
    본문: (기사 본문)
@@ -406,7 +406,7 @@ def build_issue_prompt(cluster, existing_summary=None):
 {article_list}
 
 [작성 규칙]
-1. 600~800자 분량의 트렌드 분석 기사
+1. 800~1200자 분량의 트렌드 분석 기사
 2. 개별 사건을 단순 나열하지 말고, 공통 패턴과 그 의미를 분석
 3. 다음 구조로 작성:
    - 현재 상황: 어떤 사건들이 일어나고 있는가 (1~2문장)
@@ -414,7 +414,7 @@ def build_issue_prompt(cluster, existing_summary=None):
    - 투자/비즈니스 시사점: 프론티어 마켓 투자자/기업이 주목해야 할 리스크 또는 기회 (1~2문장)
 4. 거시적 트렌드 관점으로 서술
 5. 한국어로만 작성
-6. 문단은 빈 줄로 구분 (2~3문단)
+6. 반드시 2~3개 문단으로 나누고, 각 문단 사이에 빈 줄을 넣을 것
 7. 반드시 아래 형식으로 출력:
    제목: (20자 이내의 핵심 제목)
    본문: (기사 본문)
@@ -518,7 +518,7 @@ def run():
 
             print(f"  → 기존 기사 업데이트 ({prev_count}건 → {cur_count}건)")
             prompt  = build_issue_prompt(cluster, existing["summary_ko"])
-            content = call_gemini(prompt, max_tokens=900)
+            content = call_gemini(prompt, max_tokens=1500)
 
             if content:
                 today_label = time.strftime("%Y.%m.%d")
@@ -539,7 +539,7 @@ def run():
 
             print(f"  → 신규 이슈 기사 생성")
             prompt  = build_issue_prompt(cluster)
-            content = call_gemini(prompt, max_tokens=900)
+            content = call_gemini(prompt, max_tokens=1500)
 
             if content:
                 today_label = time.strftime("%Y.%m.%d")
