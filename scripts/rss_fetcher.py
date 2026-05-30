@@ -197,9 +197,15 @@ def load_state():
         "last_reset": time.strftime("%Y-%m-%d")
     }
     if os.path.exists(STATE_FILE):
-        with open(STATE_FILE, "r", encoding="utf-8") as f:
-            saved = json.load(f)
-            default.update(saved)
+        try:
+            with open(STATE_FILE, "r", encoding="utf-8") as f:
+                saved = json.load(f)
+                default.update(saved)
+        except (json.JSONDecodeError, Exception) as e:
+            print(f"[WARNING] state.json 손상 — 초기화합니다: {e}")
+            # 손상된 파일 백업 후 초기화
+            import shutil
+            shutil.copy(STATE_FILE, STATE_FILE + ".bak")
     return default
 
 state = load_state()
@@ -360,6 +366,10 @@ def send_telegram(title_ko, summary_ko, link, source_name, category, subcategory
 
 def save_state():
     os.makedirs("data", exist_ok=True)
+    # sent 딕셔너리가 너무 커지지 않도록 최근 500개만 유지
+    if len(state["sent"]) > 500:
+        keys = list(state["sent"].keys())
+        state["sent"] = {k: state["sent"][k] for k in keys[-500:]}
     with open(STATE_FILE, "w", encoding="utf-8") as f:
         json.dump(state, f, ensure_ascii=False, indent=2)
 
