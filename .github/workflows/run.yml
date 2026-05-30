@@ -82,3 +82,6 @@ jobs:
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+- name: 기사 제목 정리 (1회용)
+  run: python scripts/fix_titles.py
