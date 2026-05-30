@@ -34,7 +34,7 @@ def export_articles(limit=9999):
             params={
                 "select": "*",
                 "sent_telegram": "eq.1",
-                "order": "source.eq.The Wise Frontier.desc,created_at.desc",
+                "order": "created_at.desc",
             },
             timeout=30
         )
