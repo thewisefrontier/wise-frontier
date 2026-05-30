@@ -23,7 +23,7 @@ def _get_db_url():
     parsed = urlparse(SUPABASE_URL)
     project_ref = parsed.hostname.split(".")[0]
     db_password = os.getenv("SUPABASE_DB_PASSWORD", "")
-    return f"postgresql://postgres.{project_ref}:{db_password}@aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres"
+    return f"postgresql://postgres.{project_ref}:{db_password}@aws-0-ap-northeast-2.pooler.supabase.com:5432/postgres"
 
 def get_conn():
     """PostgreSQL 연결 반환"""

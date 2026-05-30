@@ -29,7 +29,7 @@ def get_sqlite_conn():
 def get_pg_conn():
     parsed = urlparse(SUPABASE_URL)
     project_ref = parsed.hostname.split(".")[0]
-    db_url = f"postgresql://postgres.{project_ref}:{SUPABASE_DB_PASSWORD}@aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres"
+    db_url = f"postgresql://postgres.{project_ref}:{SUPABASE_DB_PASSWORD}@aws-0-ap-northeast-2.pooler.supabase.com:5432/postgres"
     conn = psycopg2.connect(db_url, cursor_factory=psycopg2.extras.RealDictCursor)
     return conn
 
