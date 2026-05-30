@@ -27,11 +27,28 @@ def get_sqlite_conn():
 
 
 def get_pg_conn():
-    parsed = urlparse(SUPABASE_URL)
-    project_ref = parsed.hostname.split(".")[0]
-    db_url = f"postgresql://postgres.{project_ref}:{SUPABASE_DB_PASSWORD}@aws-0-ap-northeast-2.pooler.supabase.com:5432/postgres"
-    conn = psycopg2.connect(db_url, cursor_factory=psycopg2.extras.RealDictCursor)
-    return conn
+    project_ref = "fotdngseksqaghvtcvqh"
+    password = SUPABASE_DB_PASSWORD
+
+    # 연결 시도 순서
+    candidates = [
+        f"postgresql://postgres.{project_ref}:{password}@aws-0-ap-northeast-2.pooler.supabase.com:5432/postgres",
+        f"postgresql://postgres.{project_ref}:{password}@aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres",
+        f"postgresql://postgres:{password}@db.{project_ref}.supabase.co:5432/postgres",
+    ]
+
+    for url in candidates:
+        try:
+            host = url.split("@")[1].split(":")[0]
+            print(f"  연결 시도: {host}")
+            conn = psycopg2.connect(url, cursor_factory=psycopg2.extras.RealDictCursor, connect_timeout=10)
+            print(f"  ✅ 연결 성공: {host}")
+            return conn
+        except Exception as e:
+            print(f"  ❌ 실패: {e}")
+            continue
+
+    raise Exception("모든 연결 방식 실패")
 
 
 def init_pg_table(pg_conn):
