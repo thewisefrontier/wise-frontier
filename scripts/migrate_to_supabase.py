@@ -1,81 +1,77 @@
 """
 migrate_to_supabase.py
 ----------------------
-기존 SQLite(articles.db)의 데이터를 Supabase PostgreSQL로 마이그레이션
-
-실행: python scripts/migrate_to_supabase.py
+기존 SQLite(articles.db)의 데이터를 Supabase REST API로 마이그레이션
+psycopg2 직접 연결 대신 HTTP API 사용 (IPv6 문제 우회)
 """
 
 import os
 import sqlite3
-import psycopg2
-import psycopg2.extras
-from urllib.parse import urlparse
+import requests
+import time
+import sys
 from dotenv import load_dotenv
 
 load_dotenv()
 
 SQLITE_FILE = "data/articles.db"
-SUPABASE_URL = os.getenv("SUPABASE_URL", "")
-SUPABASE_DB_PASSWORD = os.getenv("SUPABASE_DB_PASSWORD", "")
+SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
+SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
+
+HEADERS = {
+    "apikey": SUPABASE_SERVICE_KEY,
+    "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
+    "Content-Type": "application/json",
+}
+
+BATCH_SIZE = 50
 
 
-def get_sqlite_conn():
+def get_sqlite_articles():
     conn = sqlite3.connect(SQLITE_FILE)
     conn.row_factory = sqlite3.Row
-    return conn
+    c = conn.cursor()
+    c.execute("SELECT * FROM articles ORDER BY id ASC")
+    rows = c.fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
 
 
-def get_pg_conn():
-    project_ref = "fotdngseksqaghvtcvqh"
-    password = SUPABASE_DB_PASSWORD
-
-    # 연결 시도 순서
-    candidates = [
-        f"postgresql://postgres.{project_ref}:{password}@aws-0-ap-northeast-2.pooler.supabase.com:5432/postgres",
-        f"postgresql://postgres.{project_ref}:{password}@aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres",
-        f"postgresql://postgres:{password}@db.{project_ref}.supabase.co:5432/postgres",
-    ]
-
-    for url in candidates:
-        try:
-            host = url.split("@")[1].split(":")[0]
-            print(f"  연결 시도: {host}")
-            conn = psycopg2.connect(url, cursor_factory=psycopg2.extras.RealDictCursor, connect_timeout=10)
-            print(f"  ✅ 연결 성공: {host}")
-            return conn
-        except Exception as e:
-            print(f"  ❌ 실패: {e}")
-            continue
-
-    raise Exception("모든 연결 방식 실패")
-
-
-def init_pg_table(pg_conn):
-    """Supabase에 테이블 생성"""
-    c = pg_conn.cursor()
-    c.execute("""
-        CREATE TABLE IF NOT EXISTS articles (
-            id            SERIAL PRIMARY KEY,
-            title_en      TEXT NOT NULL,
-            title_ko      TEXT,
-            summary_en    TEXT,
-            summary_ko    TEXT,
-            url           TEXT UNIQUE NOT NULL,
-            source        TEXT,
-            category      TEXT,
-            subcategory   TEXT,
-            region        TEXT,
-            country       TEXT,
-            country_flag  TEXT,
-            score         INTEGER DEFAULT 0,
-            created_at    TEXT,
-            sent_telegram INTEGER DEFAULT 0,
-            posted_blog   INTEGER DEFAULT 0
+def get_existing_urls():
+    existing = set()
+    offset = 0
+    while True:
+        res = requests.get(
+            f"{SUPABASE_URL}/rest/v1/articles",
+            headers={**HEADERS, "Range": f"{offset}-{offset+999}"},
+            params={"select": "url"},
+            timeout=30
         )
-    """)
-    pg_conn.commit()
-    print("✅ Supabase 테이블 생성 완료")
+        if res.status_code not in (200, 206):
+            print(f"  [경고] URL 조회 실패: {res.status_code} {res.text[:100]}")
+            break
+        data = res.json()
+        if not data:
+            break
+        for row in data:
+            existing.add(row["url"])
+        if len(data) < 1000:
+            break
+        offset += 1000
+    return existing
+
+
+def insert_batch(batch):
+    res = requests.post(
+        f"{SUPABASE_URL}/rest/v1/articles",
+        headers={**HEADERS, "Prefer": "resolution=ignore-duplicates,return=minimal"},
+        json=batch,
+        timeout=30
+    )
+    if res.status_code not in (200, 201, 204):
+        print(f"  [ERROR] {res.status_code}: {res.text[:200]}")
+        return False
+    return True
 
 
 def migrate():
@@ -83,80 +79,80 @@ def migrate():
         print(f"[ERROR] SQLite 파일 없음: {SQLITE_FILE}")
         return
 
-    if not SUPABASE_URL or not SUPABASE_DB_PASSWORD:
-        print("[ERROR] SUPABASE_URL 또는 SUPABASE_DB_PASSWORD 환경변수 없음")
+    if not SUPABASE_URL or not SUPABASE_SERVICE_KEY:
+        print("[ERROR] SUPABASE_URL 또는 SUPABASE_SERVICE_KEY 환경변수 없음")
         return
 
-    # SQLite 연결
-    sqlite_conn = get_sqlite_conn()
-    sqlite_c = sqlite_conn.cursor()
+    print(f"[Supabase] URL: {SUPABASE_URL}")
 
-    # 전체 기사 조회
-    sqlite_c.execute("SELECT * FROM articles ORDER BY id ASC")
-    rows = sqlite_c.fetchall()
+    # 연결 테스트
+    test = requests.get(
+        f"{SUPABASE_URL}/rest/v1/articles",
+        headers={**HEADERS, "Range": "0-0"},
+        params={"select": "id"},
+        timeout=10
+    )
+    if test.status_code == 404:
+        print("""
+[ERROR] articles 테이블이 없습니다!
+Supabase 대시보드 → SQL Editor → New query → 아래 SQL 실행 후 다시 실행하세요:
+
+CREATE TABLE IF NOT EXISTS articles (
+    id            BIGSERIAL PRIMARY KEY,
+    title_en      TEXT NOT NULL DEFAULT '',
+    title_ko      TEXT,
+    summary_en    TEXT,
+    summary_ko    TEXT,
+    url           TEXT UNIQUE NOT NULL,
+    source        TEXT,
+    category      TEXT,
+    subcategory   TEXT,
+    region        TEXT,
+    country       TEXT,
+    country_flag  TEXT,
+    score         INTEGER DEFAULT 0,
+    created_at    TEXT,
+    sent_telegram INTEGER DEFAULT 0,
+    posted_blog   INTEGER DEFAULT 0
+);
+        """)
+        return
+    elif test.status_code not in (200, 206):
+        print(f"[ERROR] Supabase 연결 실패: {test.status_code} {test.text[:200]}")
+        return
+
+    print("✅ Supabase 연결 확인")
+
+    rows = get_sqlite_articles()
     print(f"[SQLite] 총 {len(rows)}건 기사 발견")
 
-    # PostgreSQL 연결
-    pg_conn = get_pg_conn()
-    init_pg_table(pg_conn)
-    pg_c = pg_conn.cursor()
-
-    # 현재 Supabase에 있는 URL 목록
-    pg_c.execute("SELECT url FROM articles")
-    existing_urls = {r["url"] for r in pg_c.fetchall()}
+    existing_urls = get_existing_urls()
     print(f"[Supabase] 기존 {len(existing_urls)}건 존재")
 
+    new_rows = [r for r in rows if r.get("url") not in existing_urls]
+    print(f"[마이그레이션] 신규 {len(new_rows)}건 삽입 예정")
+
+    if not new_rows:
+        print("✅ 이미 모두 마이그레이션됨")
+        return
+
     success = 0
-    skip = 0
     error = 0
 
-    for i, row in enumerate(rows):
-        row = dict(row)
-        url = row.get("url", "")
+    for i in range(0, len(new_rows), BATCH_SIZE):
+        batch = new_rows[i:i + BATCH_SIZE]
+        batch_clean = [{k: v for k, v in r.items() if k != "id"} for r in batch]
 
-        # 이미 있으면 스킵
-        if url in existing_urls:
-            skip += 1
-            continue
+        ok = insert_batch(batch_clean)
+        if ok:
+            success += len(batch)
+            print(f"  → {success}/{len(new_rows)}건 완료...")
+        else:
+            error += len(batch)
 
-        try:
-            pg_c.execute("""
-                INSERT INTO articles (
-                    title_en, title_ko, summary_en, summary_ko,
-                    url, source, category, subcategory, region,
-                    country, country_flag, score, created_at,
-                    sent_telegram, posted_blog
-                ) VALUES (
-                    %s, %s, %s, %s, %s, %s, %s, %s, %s,
-                    %s, %s, %s, %s, %s, %s
-                )
-            """, (
-                row.get("title_en"), row.get("title_ko"),
-                row.get("summary_en"), row.get("summary_ko"),
-                url, row.get("source"), row.get("category"),
-                row.get("subcategory"), row.get("region"),
-                row.get("country"), row.get("country_flag"),
-                row.get("score", 0), row.get("created_at"),
-                row.get("sent_telegram", 0), row.get("posted_blog", 0)
-            ))
-            success += 1
+        time.sleep(0.3)
 
-            # 100건마다 커밋
-            if success % 100 == 0:
-                pg_conn.commit()
-                print(f"  → {success}건 마이그레이션 완료...")
-
-        except Exception as e:
-            error += 1
-            print(f"  [ERROR] id={row.get('id')}: {e}")
-            pg_conn.rollback()
-
-    pg_conn.commit()
-    sqlite_conn.close()
-    pg_conn.close()
-
-    print(f"\n✅ 마이그레이션 완료")
-    print(f"  성공: {success}건 / 스킵: {skip}건 / 오류: {error}건")
+    print(f"\n✅ 마이그레이션 완료 — 성공: {success}건 / 오류: {error}건")
 
 
 if __name__ == "__main__":
