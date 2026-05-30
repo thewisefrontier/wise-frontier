@@ -24,13 +24,31 @@ jobs:
       - name: 기사 제목 정리
         run: python scripts/fix_titles.py
 
-      - name: 상태 저장
+      - name: 웹사이트 데이터 내보내기
+        run: python scripts/export_articles.py
+
+      - name: wise-frontier-web에 articles.json 푸시
+        run: |
+          git clone https://x-access-token:${{ secrets.WEB_PUSH_TOKEN }}@github.com/thewisefrontier/wise-frontier-web.git web_repo
+          mkdir -p web_repo/data
+          cp docs/data/articles.json web_repo/data/articles.json
+          cd web_repo
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add data/articles.json
+          git diff --staged --quiet || git commit -m "Fix article titles"
+          git pull --rebase origin main
+          git push
+
+      - name: DB 저장
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add data/articles.db
-          git diff --staged --quiet || git commit -m "Fix article titles"
+          git stash
           git pull --rebase origin main
+          git stash pop || true
+          git add data/articles.db
+          git diff --staged --quiet || git commit -m "Fix article titles in DB"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
