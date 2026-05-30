@@ -1,173 +1,178 @@
 """
-db.py — Supabase PostgreSQL 버전
-기존 SQLite 인터페이스를 그대로 유지하면서 내부를 Supabase로 교체
+db.py — Supabase REST API 버전
+기존 SQLite 인터페이스를 그대로 유지하면서 내부를 Supabase REST API로 교체
+IPv6 문제 없이 HTTP로 동작
 """
 
 import os
 import time
-import psycopg2
-import psycopg2.extras
-from urllib.parse import urlparse
+import requests
+from dotenv import load_dotenv
 
-# Supabase DB 연결 정보
-# Supabase 프로젝트 URL에서 PostgreSQL 연결 문자열 구성
-SUPABASE_URL = os.getenv("SUPABASE_URL", "")
+load_dotenv()
+
+SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 
-def _get_db_url():
-    """Supabase URL에서 PostgreSQL 연결 문자열 생성"""
-    if not SUPABASE_URL:
-        raise ValueError("SUPABASE_URL 환경변수가 설정되지 않았습니다.")
-    # Supabase PostgreSQL 직접 연결
-    # URL: https://xxxx.supabase.co → host: db.xxxx.supabase.co
-    parsed = urlparse(SUPABASE_URL)
-    project_ref = parsed.hostname.split(".")[0]
-    db_password = os.getenv("SUPABASE_DB_PASSWORD", "")
-    return f"postgresql://postgres.{project_ref}:{db_password}@aws-0-ap-northeast-2.pooler.supabase.com:5432/postgres"
+def _headers():
+    return {
+        "apikey": SUPABASE_SERVICE_KEY,
+        "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
+        "Content-Type": "application/json",
+        "Prefer": "return=representation",
+    }
 
-def get_conn():
-    """PostgreSQL 연결 반환"""
-    db_url = _get_db_url()
-    conn = psycopg2.connect(db_url, cursor_factory=psycopg2.extras.RealDictCursor)
-    return conn
+def _url(table="articles"):
+    return f"{SUPABASE_URL}/rest/v1/{table}"
+
 
 def init_db():
-    """테이블 초기화"""
-    conn = get_conn()
-    c = conn.cursor()
-    c.execute("""
-        CREATE TABLE IF NOT EXISTS articles (
-            id            SERIAL PRIMARY KEY,
-            title_en      TEXT NOT NULL,
-            title_ko      TEXT,
-            summary_en    TEXT,
-            summary_ko    TEXT,
-            url           TEXT UNIQUE NOT NULL,
-            source        TEXT,
-            category      TEXT,
-            subcategory   TEXT,
-            region        TEXT,
-            country       TEXT,
-            country_flag  TEXT,
-            score         INTEGER DEFAULT 0,
-            created_at    TEXT DEFAULT to_char(NOW() AT TIME ZONE 'Asia/Seoul', 'YYYY-MM-DD HH24:MI'),
-            sent_telegram INTEGER DEFAULT 0,
-            posted_blog   INTEGER DEFAULT 0
-        )
-    """)
-    conn.commit()
-    conn.close()
-    print("✅ DB 초기화 완료 (Supabase PostgreSQL)")
+    """Supabase는 대시보드에서 테이블 생성 — 여기서는 연결 확인만"""
+    if not SUPABASE_URL or not SUPABASE_SERVICE_KEY:
+        print("[WARNING] SUPABASE_URL 또는 SUPABASE_SERVICE_KEY 없음 — SQLite 폴백")
+        return
+    res = requests.get(_url(), headers=_headers(), params={"select": "id", "limit": "1"}, timeout=10)
+    if res.status_code in (200, 206):
+        print("✅ Supabase DB 연결 확인")
+    else:
+        print(f"[WARNING] Supabase 연결 실패: {res.status_code}")
+
 
 def is_url_exists(url: str) -> bool:
-    conn = get_conn()
-    c = conn.cursor()
-    c.execute("SELECT id FROM articles WHERE url = %s", (url,))
-    row = c.fetchone()
-    conn.close()
-    return row is not None
+    res = requests.get(
+        _url(),
+        headers=_headers(),
+        params={"select": "id", "url": f"eq.{url}", "limit": "1"},
+        timeout=10
+    )
+    if res.status_code in (200, 206):
+        return len(res.json()) > 0
+    return False
+
 
 def insert_article(
     title_en, title_ko, summary_en, summary_ko,
     url, source, category, subcategory, region, country, country_flag, score
 ) -> int:
-    conn = get_conn()
-    c = conn.cursor()
-    try:
-        c.execute("""
-            INSERT INTO articles (
-                title_en, title_ko, summary_en, summary_ko,
-                url, source, category, subcategory, region, country, country_flag, score
-            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-            RETURNING id
-        """, (
-            title_en, title_ko, summary_en, summary_ko,
-            url, source, category, subcategory, region, country, country_flag, score
-        ))
-        row = c.fetchone()
-        conn.commit()
-        return row["id"]
-    except psycopg2.errors.UniqueViolation:
-        conn.rollback()
-        return -1
-    finally:
-        conn.close()
+    payload = {
+        "title_en": title_en or "",
+        "title_ko": title_ko,
+        "summary_en": summary_en,
+        "summary_ko": summary_ko,
+        "url": url,
+        "source": source,
+        "category": category,
+        "subcategory": subcategory,
+        "region": region,
+        "country": country,
+        "country_flag": country_flag,
+        "score": score,
+        "created_at": time.strftime("%Y-%m-%d %H:%M"),
+        "sent_telegram": 0,
+        "posted_blog": 0,
+    }
+    headers = {**_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
+    res = requests.post(_url(), headers=headers, json=payload, timeout=15)
+    if res.status_code in (200, 201):
+        data = res.json()
+        if data:
+            return data[0].get("id", -1)
+    elif res.status_code == 409:
+        return -1  # 중복
+    return -1
+
 
 def mark_sent_telegram(article_id: int):
-    conn = get_conn()
-    c = conn.cursor()
-    c.execute("UPDATE articles SET sent_telegram = 1 WHERE id = %s", (article_id,))
-    conn.commit()
-    conn.close()
+    res = requests.patch(
+        f"{_url()}?id=eq.{article_id}",
+        headers=_headers(),
+        json={"sent_telegram": 1},
+        timeout=10
+    )
+    return res.status_code in (200, 204)
+
 
 def mark_posted_blog(article_id: int):
-    conn = get_conn()
-    c = conn.cursor()
-    c.execute("UPDATE articles SET posted_blog = 1 WHERE id = %s", (article_id,))
-    conn.commit()
-    conn.close()
+    res = requests.patch(
+        f"{_url()}?id=eq.{article_id}",
+        headers=_headers(),
+        json={"posted_blog": 1},
+        timeout=10
+    )
+    return res.status_code in (200, 204)
+
 
 def get_top_articles(date: str = None, limit: int = 10, region: str = None) -> list:
-    conn = get_conn()
-    c = conn.cursor()
-
     if date is None:
         date = time.strftime("%Y-%m-%d")
-
-    query = """
-        SELECT * FROM articles
-        WHERE sent_telegram = 1
-        AND created_at LIKE %s
-    """
-    params = [f"{date}%"]
-
+    params = {
+        "select": "*",
+        "sent_telegram": "eq.1",
+        "created_at": f"like.{date}%",
+        "order": "score.desc",
+        "limit": str(limit),
+    }
     if region:
-        query += " AND region = %s"
-        params.append(region)
+        params["region"] = f"eq.{region}"
+    res = requests.get(_url(), headers=_headers(), params=params, timeout=15)
+    if res.status_code in (200, 206):
+        return res.json()
+    return []
 
-    query += " ORDER BY score DESC LIMIT %s"
-    params.append(limit)
-
-    c.execute(query, params)
-    rows = c.fetchall()
-    conn.close()
-    return [dict(row) for row in rows]
 
 def get_articles_by_country(country: str, limit: int = 5) -> list:
-    conn = get_conn()
-    c = conn.cursor()
-    c.execute("""
-        SELECT * FROM articles
-        WHERE country = %s AND sent_telegram = 1
-        ORDER BY created_at DESC LIMIT %s
-    """, (country, limit))
-    rows = c.fetchall()
-    conn.close()
-    return [dict(row) for row in rows]
+    res = requests.get(
+        _url(),
+        headers=_headers(),
+        params={
+            "select": "*",
+            "country": f"eq.{country}",
+            "sent_telegram": "eq.1",
+            "order": "created_at.desc",
+            "limit": str(limit),
+        },
+        timeout=15
+    )
+    if res.status_code in (200, 206):
+        return res.json()
+    return []
+
 
 def get_articles_by_region(region: str, limit: int = 10) -> list:
-    conn = get_conn()
-    c = conn.cursor()
-    c.execute("""
-        SELECT * FROM articles
-        WHERE region = %s AND sent_telegram = 1
-        ORDER BY created_at DESC LIMIT %s
-    """, (region, limit))
-    rows = c.fetchall()
-    conn.close()
-    return [dict(row) for row in rows]
+    res = requests.get(
+        _url(),
+        headers=_headers(),
+        params={
+            "select": "*",
+            "region": f"eq.{region}",
+            "sent_telegram": "eq.1",
+            "order": "created_at.desc",
+            "limit": str(limit),
+        },
+        timeout=15
+    )
+    if res.status_code in (200, 206):
+        return res.json()
+    return []
+
 
 def get_unposted_articles(limit: int = 10) -> list:
-    conn = get_conn()
-    c = conn.cursor()
-    c.execute("""
-        SELECT * FROM articles
-        WHERE sent_telegram = 1 AND posted_blog = 0
-        ORDER BY score DESC LIMIT %s
-    """, (limit,))
-    rows = c.fetchall()
-    conn.close()
-    return [dict(row) for row in rows]
+    res = requests.get(
+        _url(),
+        headers=_headers(),
+        params={
+            "select": "*",
+            "sent_telegram": "eq.1",
+            "posted_blog": "eq.0",
+            "order": "score.desc",
+            "limit": str(limit),
+        },
+        timeout=15
+    )
+    if res.status_code in (200, 206):
+        return res.json()
+    return []
+
 
 if __name__ == "__main__":
     init_db()

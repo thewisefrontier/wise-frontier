@@ -11,18 +11,29 @@ gemini_writer.py
 import os
 import re
 import time
-import sqlite3
 import hashlib
 import requests
 from dotenv import load_dotenv
 from rapidfuzz import fuzz
-from db import init_db
 
 load_dotenv()
 
 GEMINI_MODEL       = "gemini-3.1-flash-lite"
-DB_FILE            = "data/articles.db"
 CALL_INTERVAL      = 5
+
+SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
+SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
+
+def _sb_headers():
+    return {
+        "apikey": SUPABASE_SERVICE_KEY,
+        "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
+        "Content-Type": "application/json",
+        "Prefer": "return=representation",
+    }
+
+def _sb_url():
+    return f"{SUPABASE_URL}/rest/v1/articles"
 
 # API 키 폴백 체인
 GEMINI_API_KEYS = [k for k in [
@@ -31,14 +42,13 @@ GEMINI_API_KEYS = [k for k in [
     os.getenv("GEMINI_API_KEY_3"),
 ] if k]
 
-_current_key_idx = 0  # 현재 사용 중인 키 인덱스 (전역)
+_current_key_idx = 0
 
 # 클러스터링 설정
-SIMILARITY_HIGH    = 55   # 제목 유사도 기준 (%)
-SIMILARITY_SAME_COUNTRY = 40  # 같은 국가일 때 완화
-CLUSTER_MIN_SIZE   = 2    # 최소 기사 수
+SIMILARITY_HIGH         = 55
+SIMILARITY_SAME_COUNTRY = 40
+CLUSTER_MIN_SIZE        = 2
 
-# 키워드 추출용 불용어
 STOPWORDS = {
     "the","a","an","in","on","at","to","of","for","and","or","is","are",
     "was","were","has","have","been","will","with","by","from","this","that",
@@ -47,108 +57,132 @@ STOPWORDS = {
 }
 
 
-# ── DB 헬퍼 ──────────────────────────────────────────────
+# ── DB 헬퍼 (Supabase REST API) ───────────────────────────
 
-def get_conn():
-    conn = sqlite3.connect(DB_FILE)
-    conn.row_factory = sqlite3.Row
-    return conn
-
-
-def get_today_articles(limit=150):
-    conn = get_conn()
-    c = conn.cursor()
-    # 최근 48시간 기사 포함 — 클러스터링 재료 확보
+def get_today_articles(limit=300):
     since = time.strftime("%Y-%m-%d %H:%M", time.gmtime(time.time() - 48 * 3600))
-    c.execute("""
-        SELECT id, title_ko, title_en, summary_ko, summary_en,
-               source, category, subcategory, country, region, url, created_at
-        FROM articles
-        WHERE created_at >= ? AND sent_telegram = 1
-          AND source != 'The Wise Frontier'
-        ORDER BY score DESC, created_at DESC LIMIT ?
-    """, (since, limit))
-    rows = c.fetchall()
-    conn.close()
-    return [dict(r) for r in rows]
+    articles = []
+    offset = 0
+    batch = 500
+    while len(articles) < limit:
+        res = requests.get(
+            _sb_url(),
+            headers={**_sb_headers(), "Range": f"{offset}-{offset+batch-1}"},
+            params={
+                "select": "id,title_ko,title_en,summary_ko,summary_en,source,category,subcategory,country,region,url,created_at,score",
+                "sent_telegram": "eq.1",
+                "source": "neq.The Wise Frontier",
+                "created_at": f"gte.{since}",
+                "order": "score.desc,created_at.desc",
+            },
+            timeout=30
+        )
+        if res.status_code not in (200, 206):
+            break
+        data = res.json()
+        if not data:
+            break
+        articles.extend(data)
+        if len(data) < batch:
+            break
+        offset += batch
+    return articles[:limit]
 
 
 def get_existing_cluster(cluster_key):
-    """오늘 생성된 클러스터 기사 조회"""
-    conn = get_conn()
-    c = conn.cursor()
     today = time.strftime("%Y-%m-%d")
-    c.execute("""
-        SELECT id, title_ko, summary_ko, subcategory, score
-        FROM articles
-        WHERE source = 'The Wise Frontier'
-          AND subcategory = ?
-          AND created_at LIKE ?
-        ORDER BY created_at DESC LIMIT 1
-    """, (cluster_key, f"{today}%"))
-    row = c.fetchone()
-    conn.close()
-    return dict(row) if row else None
+    res = requests.get(
+        _sb_url(),
+        headers=_sb_headers(),
+        params={
+            "select": "id,title_ko,summary_ko,subcategory,score",
+            "source": "eq.The Wise Frontier",
+            "subcategory": f"eq.{cluster_key}",
+            "created_at": f"like.{today}%",
+            "order": "created_at.desc",
+            "limit": "1",
+        },
+        timeout=15
+    )
+    if res.status_code in (200, 206):
+        data = res.json()
+        return data[0] if data else None
+    return None
 
 
 def get_cluster_article_count(cluster_key):
-    """클러스터 기사가 마지막으로 생성됐을 때의 기사 수 (score 컬럼 활용)"""
-    conn = get_conn()
-    c = conn.cursor()
-    c.execute("""
-        SELECT score FROM articles
-        WHERE source = 'The Wise Frontier' AND subcategory = ?
-        ORDER BY created_at DESC LIMIT 1
-    """, (cluster_key,))
-    row = c.fetchone()
-    conn.close()
-    return row["score"] if row else 0
+    res = requests.get(
+        _sb_url(),
+        headers=_sb_headers(),
+        params={
+            "select": "score",
+            "source": "eq.The Wise Frontier",
+            "subcategory": f"eq.{cluster_key}",
+            "order": "created_at.desc",
+            "limit": "1",
+        },
+        timeout=15
+    )
+    if res.status_code in (200, 206):
+        data = res.json()
+        return data[0].get("score", 0) if data else 0
+    return 0
 
 
 def save_article(title_ko, summary_ko, cluster_key, category, region, country="", article_count=0):
-    conn = get_conn()
-    c = conn.cursor()
     url = f"internal://{cluster_key}"
-    try:
-        c.execute("""
-            INSERT INTO articles (
-                title_en, title_ko, summary_en, summary_ko,
-                url, source, category, subcategory, region,
-                country, country_flag, score, sent_telegram, posted_blog
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (
-            title_ko, title_ko, "", summary_ko,
-            url, "The Wise Frontier", category, cluster_key,
-            region, country, "", article_count, 1, 0,
-        ))
-        conn.commit()
-        return c.lastrowid
-    except sqlite3.IntegrityError:
-        return -1
-    finally:
-        conn.close()
-
-
-def update_article_count(article_id, new_count):
-    """클러스터 기사 수 업데이트"""
-    conn = get_conn()
-    c = conn.cursor()
-    c.execute("UPDATE articles SET score = ? WHERE id = ?", (new_count, article_id))
-    conn.commit()
-    conn.close()
+    payload = {
+        "title_en": title_ko,
+        "title_ko": title_ko,
+        "summary_en": "",
+        "summary_ko": summary_ko,
+        "url": url,
+        "source": "The Wise Frontier",
+        "category": category,
+        "subcategory": cluster_key,
+        "region": region,
+        "country": country,
+        "country_flag": "",
+        "score": article_count,
+        "created_at": time.strftime("%Y-%m-%d %H:%M"),
+        "sent_telegram": 1,
+        "posted_blog": 0,
+    }
+    headers = {**_sb_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
+    res = requests.post(_sb_url(), headers=headers, json=payload, timeout=15)
+    if res.status_code in (200, 201):
+        data = res.json()
+        return data[0].get("id", -1) if data else -1
+    return -1
 
 
 def update_article(article_id, title_ko, summary_ko):
-    """기존 클러스터 기사 업데이트"""
-    conn = get_conn()
-    c = conn.cursor()
-    c.execute("""
-        UPDATE articles SET title_ko = ?, title_en = ?, summary_ko = ?,
-               created_at = strftime('%Y-%m-%d %H:%M', 'now')
-        WHERE id = ?
-    """, (title_ko, title_ko, summary_ko, article_id))
-    conn.commit()
-    conn.close()
+    res = requests.patch(
+        f"{_sb_url()}?id=eq.{article_id}",
+        headers=_sb_headers(),
+        json={
+            "title_ko": title_ko,
+            "title_en": title_ko,
+            "summary_ko": summary_ko,
+            "created_at": time.strftime("%Y-%m-%d %H:%M"),
+        },
+        timeout=15
+    )
+    return res.status_code in (200, 204)
+
+
+def update_article_count(article_id, new_count):
+    res = requests.patch(
+        f"{_sb_url()}?id=eq.{article_id}",
+        headers=_sb_headers(),
+        json={"score": new_count},
+        timeout=15
+    )
+    return res.status_code in (200, 204)
+
+
+def init_db():
+    pass  # Supabase는 대시보드에서 테이블 관리
 
 
 # ── 클러스터링 ────────────────────────────────────────────

@@ -9,75 +9,87 @@ Gemini Flash로 고품질 한국어 요약을 재생성합니다.
 
 import os
 import time
-import sqlite3
 import requests
 from dotenv import load_dotenv
 
 load_dotenv()
 
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 GEMINI_MODEL = "gemini-3.1-flash-lite"
-DB_FILE = "data/articles.db"
+SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
+SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 
-# API 키 폴백 체인 — 한도 소진 시 다음 키로 자동 전환
 GEMINI_API_KEYS = [k for k in [
     os.getenv("GEMINI_API_KEY"),
     os.getenv("GEMINI_API_KEY_2"),
     os.getenv("GEMINI_API_KEY_3"),
 ] if k]
 
-_current_key_idx = 0  # 현재 사용 중인 키 인덱스 (전역)
+_current_key_idx = 0
 
-# 한 번 실행당 최대 처리 기사 수
 MAX_ARTICLES = 30
-# API 호출 간격 (초)
 CALL_INTERVAL = 5
 
 
-def get_conn():
-    conn = sqlite3.connect(DB_FILE)
-    conn.row_factory = sqlite3.Row
-    return conn
+def _sb_headers():
+    return {
+        "apikey": SUPABASE_SERVICE_KEY,
+        "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
+        "Content-Type": "application/json",
+        "Prefer": "return=representation",
+    }
+
+def _sb_url():
+    return f"{SUPABASE_URL}/rest/v1/articles"
 
 
 def get_articles_to_summarize(limit: int) -> list:
-    """
-    요약 고도화 대상 기사:
-    - summary_ko가 없거나 100자 미만 (단순 번역 수준)
-    - 최근 24시간 이내
-    """
-    conn = get_conn()
-    c = conn.cursor()
     since = time.strftime("%Y-%m-%d %H:%M", time.gmtime(time.time() - 86400))
-    c.execute("""
-        SELECT id, title_en, title_ko, summary_en, summary_ko,
-               source, category, subcategory, region, country
-        FROM articles
-        WHERE created_at >= ?
-          AND (summary_ko IS NULL OR LENGTH(summary_ko) < 100)
-        ORDER BY created_at DESC
-        LIMIT ?
-    """, (since, limit))
-    rows = c.fetchall()
-    conn.close()
-    return [dict(r) for r in rows]
+    res = requests.get(
+        _sb_url(),
+        headers=_sb_headers(),
+        params={
+            "select": "id,title_en,title_ko,summary_en,summary_ko,source,category,subcategory,region,country",
+            "created_at": f"gte.{since}",
+            "summary_ko": "is.null",
+            "order": "created_at.desc",
+            "limit": str(limit),
+        },
+        timeout=30
+    )
+    short_res = requests.get(
+        _sb_url(),
+        headers=_sb_headers(),
+        params={
+            "select": "id,title_en,title_ko,summary_en,summary_ko,source,category,subcategory,region,country",
+            "created_at": f"gte.{since}",
+            "summary_ko": f"lt.{'x'*100}",
+            "order": "created_at.desc",
+            "limit": str(limit),
+        },
+        timeout=30
+    )
+    articles = []
+    if res.status_code in (200, 206):
+        articles.extend(res.json())
+    # 100자 미만 필터는 클라이언트에서 처리
+    if short_res.status_code in (200, 206):
+        for a in short_res.json():
+            sk = a.get("summary_ko") or ""
+            if len(sk) < 100 and a not in articles:
+                articles.append(a)
+    return articles[:limit]
 
 
 def update_summary(article_id: int, summary_ko: str, summary_en: str = None):
-    conn = get_conn()
-    c = conn.cursor()
+    payload = {"summary_ko": summary_ko}
     if summary_en:
-        c.execute(
-            "UPDATE articles SET summary_ko = ?, summary_en = ? WHERE id = ?",
-            (summary_ko, summary_en, article_id)
-        )
-    else:
-        c.execute(
-            "UPDATE articles SET summary_ko = ? WHERE id = ?",
-            (summary_ko, article_id)
-        )
-    conn.commit()
-    conn.close()
+        payload["summary_en"] = summary_en
+    requests.patch(
+        f"{_sb_url()}?id=eq.{article_id}",
+        headers=_sb_headers(),
+        json=payload,
+        timeout=15
+    )
 
 
 def build_prompt(article: dict) -> str:
