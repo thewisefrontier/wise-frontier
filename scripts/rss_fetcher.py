@@ -177,12 +177,45 @@ COUNTRY_INFO = {
     "seychelles": ("🇸🇨", "세이셸"),
 }
 
-def detect_country(text: str):
-    """제목/요약에서 국가 정보 반환 (국기, 국가명)"""
-    text_lower = text.lower()
-    for keyword, (flag, name) in COUNTRY_INFO.items():
-        if keyword in text_lower:
-            return flag, name
+def detect_country(text: str, source: str = ""):
+    """제목/요약에서 국가 정보 반환 (국기, 국가명)
+    - 제목/요약 우선 검색
+    - 출처명은 마지막 폴백으로만 사용
+    - 단어 경계 체크로 오탐 방지
+    """
+    import re
+
+    def find_in_text(t):
+        t_lower = t.lower()
+        # 긴 키워드 우선 매칭 (south africa가 africa보다 먼저)
+        sorted_keys = sorted(COUNTRY_INFO.keys(), key=len, reverse=True)
+        for keyword in sorted_keys:
+            # 단어 경계로 매칭 (niger가 nigeria에 매칭되지 않도록)
+            pattern = r'\b' + re.escape(keyword) + r'\b'
+            if re.search(pattern, t_lower):
+                return COUNTRY_INFO[keyword]
+        return None
+
+    # 1. 제목/요약에서 먼저 찾기
+    result = find_in_text(text)
+    if result:
+        return result
+
+    # 2. 출처명에서 폴백 (source-specific 키워드만)
+    if source:
+        source_lower = source.lower()
+        source_specific = {
+            "trend az": ("🇦🇿", "아제르바이잔"),
+            "dawn pakistan": ("🇵🇰", "파키스탄"),
+            "akipress": ("🇰🇬", "키르기스스탄"),
+            "kabar": ("🇰🇬", "키르기스스탄"),
+            "kun.uz": ("🇺🇿", "우즈베키스탄"),
+            "astanatimes": ("🇰🇿", "카자흐스탄"),
+        }
+        for keyword, val in source_specific.items():
+            if keyword in source_lower:
+                return val
+
     return "", ""
 
 # =========================
@@ -197,15 +230,9 @@ def load_state():
         "last_reset": time.strftime("%Y-%m-%d")
     }
     if os.path.exists(STATE_FILE):
-        try:
-            with open(STATE_FILE, "r", encoding="utf-8") as f:
-                saved = json.load(f)
-                default.update(saved)
-        except (json.JSONDecodeError, Exception) as e:
-            print(f"[WARNING] state.json 손상 — 초기화합니다: {e}")
-            # 손상된 파일 백업 후 초기화
-            import shutil
-            shutil.copy(STATE_FILE, STATE_FILE + ".bak")
+        with open(STATE_FILE, "r", encoding="utf-8") as f:
+            saved = json.load(f)
+            default.update(saved)
     return default
 
 state = load_state()
@@ -366,10 +393,6 @@ def send_telegram(title_ko, summary_ko, link, source_name, category, subcategory
 
 def save_state():
     os.makedirs("data", exist_ok=True)
-    # sent 딕셔너리가 너무 커지지 않도록 최근 500개만 유지
-    if len(state["sent"]) > 500:
-        keys = list(state["sent"].keys())
-        state["sent"] = {k: state["sent"][k] for k in keys[-500:]}
     with open(STATE_FILE, "w", encoding="utf-8") as f:
         json.dump(state, f, ensure_ascii=False, indent=2)
 
@@ -456,7 +479,7 @@ for data in results:
     summary_en = extract_summary(latest)
 
     # 국가 감지
-    country_flag, country_name = detect_country(title + " " + summary_en + " " + name)
+    country_flag, country_name = detect_country(title + " " + summary_en + " " + name, source=name)
 
     # 한국어 번역
     try:
