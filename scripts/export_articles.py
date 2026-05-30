@@ -16,12 +16,40 @@ def _headers():
         "Content-Type": "application/json",
     }
 
-def export_articles(limit=9999):
-    if not SUPABASE_URL or not SUPABASE_SERVICE_KEY:
-        print("[EXPORT] Supabase 환경변수 없음")
+def _export_from_sqlite(limit=9999):
+    """SQLite에서 직접 내보내기 (폴백)"""
+    import sqlite3
+    DB_FILE = "data/articles.db"
+    if not os.path.exists(DB_FILE):
+        print("[EXPORT] SQLite 파일도 없음")
         return
+    conn = sqlite3.connect(DB_FILE)
+    conn.row_factory = sqlite3.Row
+    c = conn.cursor()
+    today = time.strftime("%Y-%m-%d")
+    c.execute("""
+        SELECT * FROM articles WHERE sent_telegram = 1
+        ORDER BY
+            CASE WHEN source = 'The Wise Frontier' AND DATE(created_at) = DATE('now') THEN 0
+                 WHEN source != 'The Wise Frontier' THEN 1
+                 ELSE 2 END ASC,
+            created_at DESC
+        LIMIT ?
+    """, (limit,))
+    rows = [dict(r) for r in c.fetchall()]
+    conn.close()
+    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+        json.dump(rows, f, ensure_ascii=False, indent=2)
+    print(f"[EXPORT] SQLite 폴백: {len(rows)}개 기사 → {OUTPUT_FILE}")
 
+
+def export_articles(limit=9999):
     os.makedirs("docs/data", exist_ok=True)
+
+    if not SUPABASE_URL or not SUPABASE_SERVICE_KEY:
+        print("[EXPORT] Supabase 환경변수 없음 — SQLite 폴백")
+        _export_from_sqlite(limit)
+        return
 
     all_articles = []
     offset = 0
@@ -39,8 +67,10 @@ def export_articles(limit=9999):
             timeout=30
         )
         if res.status_code not in (200, 206):
-            print(f"[EXPORT] 오류: {res.status_code}")
-            break
+            print(f"[EXPORT] 오류: {res.status_code} — {res.text[:300]}")
+            print("[EXPORT] SQLite 폴백 시도...")
+            _export_from_sqlite(limit)
+            return
 
         data = res.json()
         if not data:
