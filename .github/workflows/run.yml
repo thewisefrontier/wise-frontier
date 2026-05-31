@@ -2,7 +2,7 @@ name: The Wise Frontier - Auto Run
 
 on:
   schedule:
-    - cron: '0,30 * * * *'   # 30분마다 (RSS 수집 + 요약)
+    - cron: '0 */2 * * *'   # 2시간마다
   workflow_dispatch:
 
 permissions:
