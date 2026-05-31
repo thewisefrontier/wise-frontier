@@ -28,12 +28,9 @@ def _export_from_sqlite(limit=9999):
     c = conn.cursor()
     today = time.strftime("%Y-%m-%d")
     c.execute("""
-        SELECT * FROM articles WHERE sent_telegram = 1
-        ORDER BY
-            CASE WHEN source = 'The Wise Frontier' AND DATE(created_at) = DATE('now') THEN 0
-                 WHEN source != 'The Wise Frontier' THEN 1
-                 ELSE 2 END ASC,
-            created_at DESC
+        SELECT * FROM articles
+        WHERE sent_telegram = 1 AND source = 'The Wise Frontier'
+        ORDER BY created_at DESC
         LIMIT ?
     """, (limit,))
     rows = [dict(r) for r in c.fetchall()]
@@ -62,6 +59,7 @@ def export_articles(limit=9999):
             params={
                 "select": "*",
                 "sent_telegram": "eq.1",
+                "source": "eq.The Wise Frontier",
                 "order": "created_at.desc",
             },
             timeout=30
@@ -81,29 +79,9 @@ def export_articles(limit=9999):
             break
         offset += batch
 
-    # 정렬: 오늘 자체기사 → 일반기사 → 이전 자체기사
-    today = time.strftime("%Y-%m-%d")
-    def sort_key(a):
-        is_own = a.get("source") == "The Wise Frontier"
-        is_today = (a.get("created_at") or "").startswith(today)
-        if is_own and is_today:
-            return (0, a.get("created_at", ""))
-        elif not is_own:
-            return (1, a.get("created_at", ""))
-        else:
-            return (2, a.get("created_at", ""))
-
-    all_articles.sort(key=sort_key, reverse=False)
-    # created_at 내림차순 유지 (같은 그룹 내)
-    own_today = [a for a in all_articles if a.get("source") == "The Wise Frontier" and (a.get("created_at") or "").startswith(today)]
-    normal = [a for a in all_articles if a.get("source") != "The Wise Frontier"]
-    own_old = [a for a in all_articles if a.get("source") == "The Wise Frontier" and not (a.get("created_at") or "").startswith(today)]
-
-    own_today.sort(key=lambda a: a.get("created_at", ""), reverse=True)
-    normal.sort(key=lambda a: a.get("created_at", ""), reverse=True)
-    own_old.sort(key=lambda a: a.get("created_at", ""), reverse=True)
-
-    final = own_today + normal + own_old
+    # 최신순 정렬
+    all_articles.sort(key=lambda a: a.get("created_at", ""), reverse=True)
+    final = all_articles
 
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         json.dump(final[:limit], f, ensure_ascii=False, indent=2)
