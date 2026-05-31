@@ -175,6 +175,7 @@ Islands Business|경제|경제일반|https://islandsbusiness.com/feed/
 # =========================
 # 경제 > 글로벌경제 (아프리카 특화만 유지)
 # =========================
+Reuters Africa|세계|아프리카|https://feeds.reuters.com/reuters/AfricaNews
 Resource Governance|경제|자원/에너지|https://resourcegovernance.org/rss.xml
 
 # =========================
@@ -202,85 +203,66 @@ AllAfrica Egypt|세계|아프리카|https://allafrica.com/tools/headlines/rdf/eg
 AllAfrica Morocco|세계|아프리카|https://allafrica.com/tools/headlines/rdf/morocco/headlines.rdf
 AllAfrica East Africa Business|경제|경제일반|https://allafrica.com/tools/headlines/rdf/eastafricabusiness/headlines.rdf
 AllAfrica West Africa Business|경제|경제일반|https://allafrica.com/tools/headlines/rdf/westafricabusiness/headlines.rdf
-# =========================
-# 세계 > 중동 (확장)
-# =========================
-Al-Monitor Economy|경제|경제일반|https://www.al-monitor.com/rss/economy
-The National UAE Business|경제|경제일반|https://www.thenationalnews.com/rss/business
-Arab News Economy|경제|경제일반|https://www.arabnews.com/cat/3/rss.xml
-Gulf News Business|경제|경제일반|https://gulfnews.com/rss/business
-Zawya Economy|경제|경제일반|https://www.zawya.com/rss/economy
-Jordan Times Business|경제|경제일반|https://www.jordantimes.com/rss/business
-Daily Sabah Economy|경제|경제일반|https://www.dailysabah.com/rss/economy
-Oil Price|경제|자원/에너지|https://oilprice.com/rss/main
-MEES Oil Energy|경제|자원/에너지|https://www.mees.com/rss
 
 # =========================
-# 세계 > 동유럽 (확장)
+# 공식/공공 소스 — APO Group (Africa Newsroom) ★저작권 없음★
 # =========================
-Balkan Insight|세계|동유럽|https://balkaninsight.com/feed/
-Prague Morning Business|경제|경제일반|https://www.praguemorn.com/feed/
-Budapest Business Journal|경제|경제일반|https://bbj.hu/rss/all
-Sofia Globe Business|경제|경제일반|https://sofiaglobe.com/feed/
-Total Croatia News Business|경제|경제일반|https://www.total-croatia-news.com/feed/
-Serbia Business|경제|경제일반|https://www.serbia.com/feed/
-Intellinews Poland|경제|경제일반|https://www.intellinews.com/rss/?country=poland
-Intellinews Romania|경제|경제일반|https://www.intellinews.com/rss/?country=romania
-Intellinews Ukraine|경제|경제일반|https://www.intellinews.com/rss/?country=ukraine
-Intellinews Kazakhstan|경제|경제일반|https://www.intellinews.com/rss/?country=kazakhstan
+APO Economy Africa|경제|글로벌경제|https://www.africa-newsroom.com/feed/rss?lang=en&subject=Economy&country=Africa
+APO Investment Africa|경제|금융/증권|https://www.africa-newsroom.com/feed/rss?lang=en&subject=Investment&country=Africa
+APO Banking Finance Africa|경제|금융/증권|https://www.africa-newsroom.com/feed/rss?lang=en&subject=Banking%2FFinance&country=Africa
+APO Oil Gas Africa|경제|자원/에너지|https://www.africa-newsroom.com/feed/rss?lang=en&subject=Oil+and+Gas&country=Africa
+APO Mining Africa|경제|자원/에너지|https://www.africa-newsroom.com/feed/rss?lang=en&subject=Mining&country=Africa
+APO Energy Africa|경제|자원/에너지|https://www.africa-newsroom.com/feed/rss?lang=en&subject=Energy&country=Africa
+APO Renewable Energy Africa|경제|자원/에너지|https://www.africa-newsroom.com/feed/rss?lang=en&subject=Renewable+Energy&country=Africa
+APO Infrastructure Africa|경제|산업/기업|https://www.africa-newsroom.com/feed/rss?lang=en&subject=Infrastructure&country=Africa
+APO Technology Africa|IT·과학|IT일반|https://www.africa-newsroom.com/feed/rss?lang=en&subject=Technology&country=Africa
+APO Trade Africa|경제|경제일반|https://www.africa-newsroom.com/feed/rss?lang=en&subject=Trade&country=Africa
+APO Nigeria|세계|아프리카|https://www.africa-newsroom.com/feed/rss?lang=en&country=Nigeria
+APO Kenya|세계|아프리카|https://www.africa-newsroom.com/feed/rss?lang=en&country=Kenya
+APO Ghana|세계|아프리카|https://www.africa-newsroom.com/feed/rss?lang=en&country=Ghana
+APO Ethiopia|세계|아프리카|https://www.africa-newsroom.com/feed/rss?lang=en&country=Ethiopia
+APO South Africa|세계|아프리카|https://www.africa-newsroom.com/feed/rss?lang=en&country=South+Africa
+APO Rwanda|세계|아프리카|https://www.africa-newsroom.com/feed/rss?lang=en&country=Rwanda
+APO Tanzania|세계|아프리카|https://www.africa-newsroom.com/feed/rss?lang=en&country=Tanzania
+APO Senegal|세계|아프리카|https://www.africa-newsroom.com/feed/rss?lang=en&country=Senegal
+APO Egypt|세계|아프리카|https://www.africa-newsroom.com/feed/rss?lang=en&country=Egypt
+APO Morocco|세계|아프리카|https://www.africa-newsroom.com/feed/rss?lang=en&country=Morocco
+APO Angola|세계|아프리카|https://www.africa-newsroom.com/feed/rss?lang=en&country=Angola
+APO DRC|세계|아프리카|https://www.africa-newsroom.com/feed/rss?lang=en&country=Democratic+Republic+of+the+Congo
+APO Mozambique|세계|아프리카|https://www.africa-newsroom.com/feed/rss?lang=en&country=Mozambique
+APO Zambia|세계|아프리카|https://www.africa-newsroom.com/feed/rss?lang=en&country=Zambia
+APO Zimbabwe|세계|아프리카|https://www.africa-newsroom.com/feed/rss?lang=en&country=Zimbabwe
 
 # =========================
-# 세계 > 중앙아시아 (확장)
+# 공식/공공 소스 — 국제기구
 # =========================
-Kun.uz Uzbekistan|세계|중앙아시아|https://kun.uz/en/rss
-Kabar Kyrgyzstan|세계|중앙아시아|https://kabar.kg/eng/rss/
-Trend Azerbaijan|세계|중앙아시아|https://en.trend.az/rss
-Times of Central Asia|세계|중앙아시아|https://www.timesca.com/feed/
-Caravanserai|세계|중앙아시아|https://central.asia-news.com/rss.xml
-Silk Road Briefing|경제|경제일반|https://www.silkroadbriefing.com/news/feed/
+AfDB News|경제|글로벌경제|https://www.afdb.org/en/news-and-events/rss
+WHO Africa Press Releases|사회|사회일반|https://www.afro.who.int/rss/press-releases
+WHO Africa Outbreaks|사회|사회일반|https://www.afro.who.int/rss/emergencies-outbreaks
+ASEAN News|세계|동남아시아|https://asean.org/category/news/feed/
+ADB News|경제|글로벌경제|https://www.adb.org/news/rss.xml
+IMF News|경제|글로벌경제|https://www.imf.org/en/News/RSS
+World Bank News|경제|글로벌경제|https://www.worldbank.org/en/news/rss
+African Union News|세계|아프리카|https://au.int/en/newsevents/rss
+UNCTAD News|경제|글로벌경제|https://unctad.org/rss.xml
+IFC News|경제|금융/증권|https://www.ifc.org/en/pressroom/rss
 
 # =========================
-# 세계 > 동남아시아 (확장)
+# 공식/공공 소스 — 동남아시아 정부/기관
 # =========================
-Vietnam News Business|경제|경제일반|https://vietnamnews.vn/rss/economy.rss
-VnExpress Business|경제|금융/증권|https://vnexpress.net/rss/business.rss
-Nikkei Asia|경제|경제일반|https://asia.nikkei.com/rss/feed/nar
-Indonesia Business Today|경제|경제일반|https://indonesiabusinesstoday.com/feed/
-Coconuts Business|세계|동남아시아|https://coconuts.co/feed/
-Frontier Cambodia|세계|동남아시아|https://www.frontiercambodia.com/feed/
-Myanmar Business Today|경제|경제일반|https://www.mmbiztoday.com/feed/
-Laotian Times Business|경제|경제일반|https://laotiantimes.com/feed/
-Borneo Post Business|경제|경제일반|https://www.theborneopost.com/category/business/feed/
-Rappler Business Philippines|경제|경제일반|https://www.rappler.com/business/feed/
+Vietnam Government News|세계|동남아시아|https://en.baochinhphu.vn/rss/home.rss
+VietnamPlus Economy|경제|경제일반|https://en.vietnamplus.vn/rss/economy.rss
+VietnamPlus Business|경제|산업/기업|https://en.vietnamplus.vn/rss/business.rss
+Indonesia Setkab|세계|동남아시아|https://setkab.go.id/en/feed/
+Bangkok Post Economics|경제|경제일반|https://www.bangkokpost.com/rss/data/economics.xml
+Philippine Information Agency|세계|동남아시아|https://pia.gov.ph/feed
 
 # =========================
-# 세계 > 라틴아메리카 (확장)
+# 공식/공공 소스 — 중앙아시아/중동 정부/기관
 # =========================
-News Americas Now|세계|라틴아메리카|https://www.newsamericasnow.com/feed/
-BNAmericas|경제|경제일반|https://www.bnamericas.com/en/rss/news
-MercoPress|세계|라틴아메리카|https://en.mercopress.com/rss
-The Rio Times Business|경제|경제일반|https://riotimesonline.com/category/business/feed/
-Havana Times|세계|라틴아메리카|https://havanatimes.org/feed/
-Venezuela Analysis|정치|외교|https://venezuelanalysis.com/feed
-Bolivia Bella|세계|라틴아메리카|https://www.boliviabella.com/feed/
-Ecuador Times|세계|라틴아메리카|https://www.ecuadortimes.net/feed/
-
-# =========================
-# 세계 > 오세아니아 (확장)
-# =========================
-PNG Post-Courier Business|경제|경제일반|https://postcourier.com.pg/category/business/feed/
-Fiji Times Business|경제|경제일반|https://www.fijitimes.com/category/business/feed/
-Solomon Star Business|경제|경제일반|https://www.solomonstarnews.com/business/feed/
-Vanuatu Daily Post|세계|오세아니아|https://dailypost.vu/feed/
-Samoa Observer|세계|오세아니아|https://www.samoaobserver.ws/feed/
-
-# =========================
-# 세계 > 남아시아 (확장)
-# =========================
-The Wire India Business|경제|경제일반|https://thewire.in/economy/feed
-Business Standard India|경제|금융/증권|https://www.business-standard.com/rss/economy-policy-106.rss
-Sri Lanka Daily Mirror Business|경제|경제일반|https://www.dailymirror.lk/business/rss
-Daily FT Sri Lanka|경제|금융/증권|https://www.ft.lk/rss/
-Dhaka Tribune Business|경제|경제일반|https://www.dhakatribune.com/business/rss
-The Business Standard Bangladesh|경제|금융/증권|https://www.tbsnews.net/feed/rss
-My Republic Nepal|경제|경제일반|https://myrepublica.nagariknetwork.com/category/business/feed/
+Kazakhstan Inform|세계|중앙아시아|https://inform.kz/en/rss
+Uzbekistan President|세계|중앙아시아|https://president.uz/en/lists/rss
+Kazinform Economy|경제|경제일반|https://www.inform.kz/en/economy/rss
+Saudi Press Agency|세계|중동|https://www.spa.gov.sa/rss/en/rss.xml
+Qatar News Agency|세계|중동|https://www.qna.org.qa/en/rss/qna-latest-news
+Kuwait News Agency|세계|중동|https://www.kuna.net.kw/RSSFeeds.aspx?lang=en
