@@ -92,6 +92,31 @@ def update_summary(article_id: int, summary_ko: str, summary_en: str = None):
     )
 
 
+# 공식/공공 소스 목록 — 번역 중심 프롬프트 적용
+OFFICIAL_SOURCES = {
+    "APO", "AfDB", "WHO", "ASEAN", "ADB", "IMF", "World Bank",
+    "African Union", "UNCTAD", "IFC",
+    "Vietnam Government", "VietnamPlus", "Indonesia Setkab",
+    "Kazakhstan Inform", "Kazinform", "Uzbekistan President",
+    "Saudi Press Agency", "Qatar News Agency", "Kuwait News Agency",
+    "Philippine Information Agency", "Bangkok Post Economics",
+}
+
+def is_official_source(source: str) -> bool:
+    """공식/공공 소스 여부 판단"""
+    if not source:
+        return False
+    source_lower = source.lower()
+    # APO Group 계열
+    if source_lower.startswith("apo ") or "africa-newsroom" in source_lower:
+        return True
+    # 기타 공식 소스
+    for official in OFFICIAL_SOURCES:
+        if official.lower() in source_lower:
+            return True
+    return False
+
+
 def build_prompt(article: dict) -> str:
     title = article.get("title_en") or article.get("title_ko") or ""
     summary = article.get("summary_en") or ""
@@ -100,7 +125,31 @@ def build_prompt(article: dict) -> str:
     country = article.get("country") or ""
     region = article.get("region") or ""
 
-    return f"""당신은 프론티어 마켓(아프리카, 동남아시아, 동유럽, 중동, 중앙아시아 등 신흥·개척 시장) 전문 미디어 The Wise Frontier의 에디터입니다.
+    if is_official_source(source):
+        # 공식 소스: 번역 + 간단한 맥락
+        return f"""당신은 프론티어 마켓 전문 미디어 The Wise Frontier의 에디터입니다.
+
+아래는 공식 기관/정부의 공식 발표 자료입니다. 원문의 내용을 정확하게 한국어로 번역하되, 마지막에 한 줄의 맥락 설명을 추가하세요.
+
+[기사 정보]
+- 제목(영문): {title}
+- 출처: {source}
+- 분야: {category}
+- 국가/지역: {country} ({region})
+- 원문 내용(영문): {summary}
+
+[작성 규칙]
+1. 원문 내용을 충실하게 한국어로 번역 (2~3문장)
+2. 마지막에 "→ " 로 시작하는 프론티어 마켓 관점의 맥락/의의 한 줄 추가
+3. 총 150~200자 분량
+4. 한국어로만 작성
+5. 번역문만 출력 (제목, 설명 등 다른 텍스트 없이)
+
+번역문:"""
+
+    else:
+        # 일반 언론사: 분석 중심 요약
+        return f"""당신은 프론티어 마켓(아프리카, 동남아시아, 동유럽, 중동, 중앙아시아 등 신흥·개척 시장) 전문 미디어 The Wise Frontier의 에디터입니다.
 
 아래 기사를 바탕으로 한국어 요약문을 작성하세요.
 
