@@ -298,6 +298,16 @@ def is_duplicate(title, seen_titles):
     return False
 
 def clean_text(text):
+    if not text:
+        return ""
+    # HTML 태그 제거
+    text = re.sub(r'<[^>]+>', '', text)
+    # HTML 엔티티 디코딩
+    text = text.replace('&amp;', '&').replace('&lt;', '<').replace('&gt;', '>') \
+               .replace('&quot;', '"').replace('&#39;', "'").replace('&nbsp;', ' ')
+    text = re.sub(r'&#x[0-9a-fA-F]+;', '', text)
+    text = re.sub(r'&#\d+;', '', text)
+    # 특수문자 정리
     replacements = {
         '\u2019': "'", '\u2018': "'",
         '\u201c': '"', '\u201d': '"',
@@ -306,6 +316,8 @@ def clean_text(text):
     }
     for orig, rep in replacements.items():
         text = text.replace(orig, rep)
+    # 연속 공백 정리
+    text = re.sub(r'\s+', ' ', text)
     return text.strip()
 
 def escape_markdown(text: str) -> str:
