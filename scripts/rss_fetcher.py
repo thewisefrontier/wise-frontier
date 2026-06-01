@@ -224,7 +224,6 @@ def detect_country(text: str, source: str = ""):
 
 def load_state():
     default = {
-        "sent": {},
         "rss_health": {},
         "daily_count": 0,
         "last_reset": time.strftime("%Y-%m-%d")
@@ -233,15 +232,14 @@ def load_state():
         try:
             with open(STATE_FILE, "r", encoding="utf-8") as f:
                 saved = json.load(f)
+                # sent 키는 무시 (DB로 이전)
+                saved.pop("sent", None)
                 default.update(saved)
         except (json.JSONDecodeError, Exception) as e:
             print(f"[WARNING] state.json 손상 — 초기화: {e}")
-            import shutil
-            shutil.copy(STATE_FILE, STATE_FILE + ".bak")
     return default
 
 state = load_state()
-sent_db = state["sent"]
 rss_health = state["rss_health"]
 
 today = time.strftime("%Y-%m-%d")
@@ -470,12 +468,10 @@ def send_telegram(title_ko, summary_ko, link, source_name, category, subcategory
 
 def save_state():
     os.makedirs("data", exist_ok=True)
-    # sent 500개 초과 시 오래된 것 제거
-    if len(state["sent"]) > 500:
-        keys = list(state["sent"].keys())
-        state["sent"] = {k: state["sent"][k] for k in keys[-500:]}
+    # sent는 저장하지 않음 (DB로 이전)
+    save_data = {k: v for k, v in state.items() if k != "sent"}
     with open(STATE_FILE, "w", encoding="utf-8") as f:
-        json.dump(state, f, ensure_ascii=False, indent=2)
+        json.dump(save_data, f, ensure_ascii=False, indent=2)
 
 # =========================
 # MAIN
@@ -540,11 +536,8 @@ for data in results:
     latest      = data["entry"]
 
     fp = fingerprint(title, name)
-    if fp in sent_db:
-        continue
 
     if is_url_exists(link):
-        sent_db[fp] = True
         continue
 
     if is_duplicate(title, seen_titles):
@@ -588,7 +581,6 @@ for data in results:
 
     if res.get("ok"):
         state["daily_count"] += 1
-        sent_db[fp] = True
         rss_health[name]["ok"] += 1
 
         # DB 저장
