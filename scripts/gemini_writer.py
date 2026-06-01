@@ -72,7 +72,7 @@ def get_today_articles(limit=300):
             params={
                 "select": "id,title_ko,title_en,summary_ko,summary_en,source,category,subcategory,country,region,url,created_at,score",
                 "sent_telegram": "eq.1",
-                "source": "neq.The Wise Frontier",
+                "source": "neq.NewsFinal",
                 "created_at": f"gte.{since}",
                 "order": "score.desc,created_at.desc",
             },
@@ -97,7 +97,7 @@ def get_existing_cluster(cluster_key):
         headers=_sb_headers(),
         params={
             "select": "id,title_ko,summary_ko,subcategory,score",
-            "source": "eq.The Wise Frontier",
+            "source": "eq.NewsFinal",
             "subcategory": f"eq.{cluster_key}",
             "created_at": f"like.{today}%",
             "order": "created_at.desc",
@@ -117,7 +117,7 @@ def get_cluster_article_count(cluster_key):
         headers=_sb_headers(),
         params={
             "select": "score",
-            "source": "eq.The Wise Frontier",
+            "source": "eq.NewsFinal",
             "subcategory": f"eq.{cluster_key}",
             "order": "created_at.desc",
             "limit": "1",
@@ -138,7 +138,7 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
         "summary_en": "",
         "summary_ko": summary_ko,
         "url": url,
-        "source": "The Wise Frontier",
+        "source": "NewsFinal",
         "category": category,
         "subcategory": cluster_key,
         "region": region,
@@ -346,7 +346,7 @@ def build_issue_prompt(cluster, existing_summary=None):
     category = cluster[0].get("category") or ""
 
     if existing_summary:
-        return f"""당신은 프론티어 마켓 전문 미디어 The Wise Frontier의 수석 에디터입니다.
+        return f"""당신은 프론티어 마켓 전문 미디어 NewsFinal의 수석 에디터입니다.
 아래는 기존에 작성된 이슈 분석 기사와 새로 추가된 관련 기사들입니다.({today_str})
 
 [기존 기사]
@@ -376,7 +376,7 @@ def build_issue_prompt(cluster, existing_summary=None):
         same_event = len(sources) >= 2 and len(cluster) <= 4
 
         if same_event:
-            return f"""당신은 프론티어 마켓 전문 미디어 The Wise Frontier의 수석 에디터입니다.
+            return f"""당신은 프론티어 마켓 전문 미디어 NewsFinal의 수석 에디터입니다.
 아래는 같은 사건을 여러 매체가 다각도로 보도한 {len(cluster)}개의 기사입니다.({today_str})
 국가: {country} | 분야: {category}
 
@@ -398,7 +398,7 @@ def build_issue_prompt(cluster, existing_summary=None):
 
 기사:"""
         else:
-            return f"""당신은 프론티어 마켓 전문 미디어 The Wise Frontier의 수석 에디터입니다.
+            return f"""당신은 프론티어 마켓 전문 미디어 NewsFinal의 수석 에디터입니다.
 아래는 같은 이슈/패턴을 보여주는 {len(cluster)}개의 기사입니다.({today_str})
 국가: {country} | 분야: {category}
 

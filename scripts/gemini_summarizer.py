@@ -127,7 +127,7 @@ def build_prompt(article: dict) -> str:
 
     if is_official_source(source):
         # 공식 소스: 번역 + 간단한 맥락
-        return f"""당신은 프론티어 마켓 전문 미디어 The Wise Frontier의 에디터입니다.
+        return f"""당신은 프론티어 마켓 전문 미디어 NewsFinal의 에디터입니다.
 
 아래는 공식 기관/정부의 공식 발표 자료입니다. 원문의 내용을 정확하게 한국어로 번역하되, 마지막에 한 줄의 맥락 설명을 추가하세요.
 
@@ -149,7 +149,7 @@ def build_prompt(article: dict) -> str:
 
     else:
         # 일반 언론사: 분석 중심 요약
-        return f"""당신은 프론티어 마켓(아프리카, 동남아시아, 동유럽, 중동, 중앙아시아 등 신흥·개척 시장) 전문 미디어 The Wise Frontier의 에디터입니다.
+        return f"""당신은 프론티어 마켓(아프리카, 동남아시아, 동유럽, 중동, 중앙아시아 등 신흥·개척 시장) 전문 미디어 NewsFinal의 에디터입니다.
 
 아래 기사를 바탕으로 한국어 요약문을 작성하세요.
 
