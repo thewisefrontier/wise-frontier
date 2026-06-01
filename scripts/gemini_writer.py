@@ -70,7 +70,7 @@ def get_today_articles(limit=300):
             _sb_url(),
             headers={**_sb_headers(), "Range": f"{offset}-{offset+batch-1}"},
             params={
-                "select": "id,title_ko,title_en,summary_ko,summary_en,source,category,subcategory,country,region,url,created_at,score",
+                "select": "id,title_ko,title_en,summary_ko,summary_en,source,category,subcategory,country,region,url,created_at,score,full_text",
                 "sent_telegram": "eq.1",
                 "source": "neq.NewsFinal",
                 "created_at": f"gte.{since}",
@@ -336,18 +336,25 @@ def build_issue_prompt(cluster, existing_summary=None):
     article_list = ""
     for i, a in enumerate(cluster, 1):
         t = a.get("title_ko") or a.get("title_en") or ""
-        s = a.get("summary_ko") or a.get("summary_en") or ""
+        # full_text 있으면 우선 사용, 없으면 summary 사용
+        full_text = a.get("full_text") or ""
+        s = full_text[:800] if full_text else (a.get("summary_ko") or a.get("summary_en") or "")
         article_list += f"{i}. [{a.get('source','')}] {t}\n"
         if s:
-            article_list += f"   {s}\n"
+            article_list += f"   {s}\n\n"
+
+    # 원문 있는 기사 수
+    full_text_count = sum(1 for a in cluster if a.get("full_text"))
+    has_full = full_text_count > 0
 
     today_str = time.strftime("%Y년 %m월 %d일")
     country  = cluster[0].get("country") or ""
     category = cluster[0].get("category") or ""
 
     if existing_summary:
-        return f"""당신은 프론티어 마켓 전문 미디어 NewsFinal의 수석 에디터입니다.
+        return f"""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다.
 아래는 기존에 작성된 이슈 분석 기사와 새로 추가된 관련 기사들입니다.({today_str})
+{'원문 전문이 포함된 기사가 있습니다. 원문의 구체적인 수치, 인명, 사실을 최대한 활용하세요.' if has_full else ''}
 
 [기존 기사]
 {existing_summary}
@@ -358,7 +365,7 @@ def build_issue_prompt(cluster, existing_summary=None):
 [작성 규칙]
 1. 기존 분석을 바탕으로 새 기사의 내용을 통합해 업데이트
 2. 개별 사건들이 보여주는 공통 패턴과 트렌드를 중심으로 서술
-3. 900~1200자 분량
+3. {'1000~1500자' if has_full else '900~1200자'} 분량
 4. 다음 구조로 작성:
    - 현재 상황: 어떤 사건들이 일어나고 있는가
    - 패턴 분석: 개별 사건들의 공통점과 의미
@@ -366,7 +373,7 @@ def build_issue_prompt(cluster, existing_summary=None):
 5. 한국어로만 작성
 6. 반드시 2~3개 문단으로 나누고, 각 문단 사이에 빈 줄을 넣을 것
 7. 반드시 아래 형식으로 출력:
-   제목: (20자 이내의 핵심 제목)
+   제목: (25자 이내의 핵심 제목)
    본문: (기사 본문)
 
 업데이트된 기사:"""
@@ -376,15 +383,16 @@ def build_issue_prompt(cluster, existing_summary=None):
         same_event = len(sources) >= 2 and len(cluster) <= 4
 
         if same_event:
-            return f"""당신은 프론티어 마켓 전문 미디어 NewsFinal의 수석 에디터입니다.
+            return f"""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다.
 아래는 같은 사건을 여러 매체가 다각도로 보도한 {len(cluster)}개의 기사입니다.({today_str})
 국가: {country} | 분야: {category}
+{'원문 전문이 포함된 기사가 있습니다. 원문의 구체적인 수치, 인명, 사실을 최대한 활용하세요.' if has_full else ''}
 
 [관련 기사]
 {article_list}
 
 [작성 규칙]
-1. 800~1200자 분량의 단일 완성 기사
+1. {'1000~1500자' if has_full else '800~1200자'} 분량의 단일 완성 기사
 2. 여러 보도를 종합해 하나의 완성된 기사로 작성 (중복 내용 제거, 누락 정보 보완)
 3. 다음 구조로 작성:
    - 핵심 사실: 무슨 일이 일어났는가 (2~3문장, 육하원칙 중심)
@@ -393,20 +401,21 @@ def build_issue_prompt(cluster, existing_summary=None):
 4. 한국어로만 작성
 5. 반드시 2~3개 문단으로 나누고, 각 문단 사이에 빈 줄을 넣을 것
 6. 반드시 아래 형식으로 출력:
-   제목: (20자 이내의 핵심 제목)
+   제목: (25자 이내의 핵심 제목)
    본문: (기사 본문)
 
 기사:"""
         else:
-            return f"""당신은 프론티어 마켓 전문 미디어 NewsFinal의 수석 에디터입니다.
+            return f"""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다.
 아래는 같은 이슈/패턴을 보여주는 {len(cluster)}개의 기사입니다.({today_str})
 국가: {country} | 분야: {category}
+{'원문 전문이 포함된 기사가 있습니다. 원문의 구체적인 수치, 인명, 사실을 최대한 활용하세요.' if has_full else ''}
 
 [관련 기사]
 {article_list}
 
 [작성 규칙]
-1. 800~1200자 분량의 트렌드 분석 기사
+1. {'1000~1500자' if has_full else '800~1200자'} 분량의 트렌드 분석 기사
 2. 개별 사건을 단순 나열하지 말고, 공통 패턴과 그 의미를 분석
 3. 다음 구조로 작성:
    - 현재 상황: 어떤 사건들이 일어나고 있는가 (1~2문장)
@@ -416,7 +425,7 @@ def build_issue_prompt(cluster, existing_summary=None):
 5. 한국어로만 작성
 6. 반드시 2~3개 문단으로 나누고, 각 문단 사이에 빈 줄을 넣을 것
 7. 반드시 아래 형식으로 출력:
-   제목: (20자 이내의 핵심 제목)
+   제목: (25자 이내의 핵심 제목)
    본문: (기사 본문)
 
 기사:"""
@@ -518,7 +527,8 @@ def run():
 
             print(f"  → 기존 기사 업데이트 ({prev_count}건 → {cur_count}건)")
             prompt  = build_issue_prompt(cluster, existing["summary_ko"])
-            content = call_gemini(prompt, max_tokens=1500)
+            has_full = any(a.get("full_text") for a in cluster)
+            content = call_gemini(prompt, max_tokens=2000 if has_full else 1500)
 
             if content:
                 today_label = time.strftime("%Y.%m.%d")
@@ -539,7 +549,8 @@ def run():
 
             print(f"  → 신규 이슈 기사 생성")
             prompt  = build_issue_prompt(cluster)
-            content = call_gemini(prompt, max_tokens=1500)
+            has_full = any(a.get("full_text") for a in cluster)
+            content = call_gemini(prompt, max_tokens=2000 if has_full else 1500)
 
             if content:
                 today_label = time.strftime("%Y.%m.%d")
