@@ -330,6 +330,66 @@ def extract_summary(entry):
         summary = summary[:150].rsplit(' ', 1)[0] + "..."
     return clean_text(summary)
 
+
+# 원문 크롤링 불필요 사이트 (이미 RSS에 전문 제공)
+SKIP_CRAWL_DOMAINS = {
+    "allafrica.com", "africa-newsroom.com", "afdb.org",
+    "imf.org", "worldbank.org", "afro.who.int", "au.int",
+    "unctad.org", "ifc.org", "asean.org",
+}
+
+def crawl_full_text(url: str, timeout: int = 10) -> str:
+    """원문 URL에서 본문 텍스트 추출"""
+    try:
+        domain = urlparse(url).netloc.replace("www.", "")
+        if domain in SKIP_CRAWL_DOMAINS:
+            return ""
+
+        headers = {
+            "User-Agent": "Mozilla/5.0 (compatible; NewsFinalBot/1.0)",
+            "Accept": "text/html,application/xhtml+xml",
+            "Accept-Language": "en-US,en;q=0.9",
+        }
+        res = requests.get(url, headers=headers, timeout=timeout)
+        if res.status_code != 200:
+            return ""
+
+        html = res.text
+
+        # BeautifulSoup 없이 간단 파싱 — <article>, <main>, <p> 태그 추출
+        # 스크립트/스타일 제거
+        html = re.sub(r'<script[^>]*>.*?</script>', '', html, flags=re.DOTALL|re.IGNORECASE)
+        html = re.sub(r'<style[^>]*>.*?</style>', '', html, flags=re.DOTALL|re.IGNORECASE)
+
+        # article 태그 우선
+        article_match = re.search(r'<article[^>]*>(.*?)</article>', html, re.DOTALL|re.IGNORECASE)
+        if article_match:
+            text_html = article_match.group(1)
+        else:
+            # main 태그
+            main_match = re.search(r'<main[^>]*>(.*?)</main>', html, re.DOTALL|re.IGNORECASE)
+            text_html = main_match.group(1) if main_match else html
+
+        # p 태그 내용 추출
+        paragraphs = re.findall(r'<p[^>]*>(.*?)</p>', text_html, re.DOTALL|re.IGNORECASE)
+        texts = []
+        for p in paragraphs:
+            t = re.sub(r'<[^>]+>', '', p).strip()
+            t = re.sub(r'\s+', ' ', t)
+            if len(t) > 50:  # 너무 짧은 문장 제외
+                texts.append(t)
+
+        full_text = ' '.join(texts)
+
+        # 최대 3000자로 제한 (Gemini 토큰 절약)
+        if len(full_text) > 3000:
+            full_text = full_text[:3000]
+
+        return clean_text(full_text) if len(full_text) > 100 else ""
+
+    except Exception:
+        return ""
+
 # =========================
 # 노이즈 필터
 # =========================
@@ -478,6 +538,11 @@ for data in results:
     # 요약 추출
     summary_en = extract_summary(latest)
 
+    # 원문 크롤링 (타임아웃 8초, 실패해도 계속)
+    full_text = crawl_full_text(link, timeout=8)
+    if full_text:
+        print(f"  [크롤링] {len(full_text)}자 추출")
+
     # 국가 감지
     country_flag, country_name = detect_country(title + " " + summary_en + " " + name, source=name)
 
@@ -518,7 +583,8 @@ for data in results:
             region=region,
             country=country_name,
             country_flag=country_flag,
-            score=0
+            score=0,
+            full_text=full_text,
         )
         if article_id > 0:
             mark_sent_telegram(article_id)

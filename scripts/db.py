@@ -52,7 +52,8 @@ def is_url_exists(url: str) -> bool:
 
 def insert_article(
     title_en, title_ko, summary_en, summary_ko,
-    url, source, category, subcategory, region, country, country_flag, score
+    url, source, category, subcategory, region, country, country_flag, score,
+    full_text=""
 ) -> int:
     payload = {
         "title_en": title_en or "",
@@ -67,6 +68,7 @@ def insert_article(
         "country": country,
         "country_flag": country_flag,
         "score": score,
+        "full_text": full_text or None,
         "created_at": time.strftime("%Y-%m-%d %H:%M"),
         "sent_telegram": 0,
         "posted_blog": 0,

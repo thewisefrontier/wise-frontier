@@ -48,7 +48,7 @@ def get_articles_to_summarize(limit: int) -> list:
         _sb_url(),
         headers=_sb_headers(),
         params={
-            "select": "id,title_en,title_ko,summary_en,summary_ko,source,category,subcategory,region,country",
+            "select": "id,title_en,title_ko,summary_en,summary_ko,source,category,subcategory,region,country,full_text",
             "created_at": f"gte.{since}",
             "summary_ko": "is.null",
             "order": "created_at.desc",
@@ -60,9 +60,8 @@ def get_articles_to_summarize(limit: int) -> list:
         _sb_url(),
         headers=_sb_headers(),
         params={
-            "select": "id,title_en,title_ko,summary_en,summary_ko,source,category,subcategory,region,country",
+            "select": "id,title_en,title_ko,summary_en,summary_ko,source,category,subcategory,region,country,full_text",
             "created_at": f"gte.{since}",
-            "summary_ko": f"lt.{'x'*100}",
             "order": "created_at.desc",
             "limit": str(limit),
         },
@@ -71,7 +70,6 @@ def get_articles_to_summarize(limit: int) -> list:
     articles = []
     if res.status_code in (200, 206):
         articles.extend(res.json())
-    # 100자 미만 필터는 클라이언트에서 처리
     if short_res.status_code in (200, 206):
         for a in short_res.json():
             sk = a.get("summary_ko") or ""
@@ -120,14 +118,18 @@ def is_official_source(source: str) -> bool:
 def build_prompt(article: dict) -> str:
     title = article.get("title_en") or article.get("title_ko") or ""
     summary = article.get("summary_en") or ""
+    full_text = article.get("full_text") or ""
     source = article.get("source") or ""
     category = article.get("category") or ""
     country = article.get("country") or ""
     region = article.get("region") or ""
 
+    # 원문이 있으면 원문 기반 프롬프트
+    content = full_text if full_text else summary
+    has_full_text = bool(full_text)
+
     if is_official_source(source):
-        # 공식 소스: 번역 + 간단한 맥락
-        return f"""당신은 프론티어 마켓 전문 미디어 NewsFinal의 에디터입니다.
+        return f"""당신은 프론티어 미디어 NewsFinal의 에디터입니다.
 
 아래는 공식 기관/정부의 공식 발표 자료입니다. 원문의 내용을 정확하게 한국어로 번역하되, 마지막에 한 줄의 맥락 설명을 추가하세요.
 
@@ -136,20 +138,39 @@ def build_prompt(article: dict) -> str:
 - 출처: {source}
 - 분야: {category}
 - 국가/지역: {country} ({region})
-- 원문 내용(영문): {summary}
+- 원문 내용: {content[:2000]}
 
 [작성 규칙]
 1. 원문 내용을 충실하게 한국어로 번역 (2~3문장)
 2. 마지막에 "→ " 로 시작하는 프론티어 마켓 관점의 맥락/의의 한 줄 추가
-3. 총 150~200자 분량
+3. 총 150~250자 분량
 4. 한국어로만 작성
-5. 번역문만 출력 (제목, 설명 등 다른 텍스트 없이)
+5. 번역문만 출력
 
 번역문:"""
 
+    elif has_full_text:
+        return f"""당신은 프론티어 미디어 NewsFinal의 에디터입니다.
+
+아래는 {source}의 원문 기사입니다. 팩트를 중심으로 핵심 내용을 한국어로 재작성하세요.
+
+[기사 정보]
+- 제목: {title}
+- 분야: {category}
+- 국가/지역: {country} ({region})
+- 원문: {content[:2000]}
+
+[작성 규칙]
+1. 4~5문장, 200~300자 분량
+2. 원문의 팩트(수치, 인명, 날짜 등)를 정확히 포함
+3. 프론티어 마켓 투자자/분석가 관점에서 중요한 포인트 강조
+4. 한국어로만 작성
+5. 요약문만 출력
+
+요약문:"""
+
     else:
-        # 일반 언론사: 분석 중심 요약
-        return f"""당신은 프론티어 마켓(아프리카, 동남아시아, 동유럽, 중동, 중앙아시아 등 신흥·개척 시장) 전문 미디어 NewsFinal의 에디터입니다.
+        return f"""당신은 프론티어 미디어 NewsFinal의 에디터입니다.
 
 아래 기사를 바탕으로 한국어 요약문을 작성하세요.
 
@@ -162,13 +183,12 @@ def build_prompt(article: dict) -> str:
 
 [요약 작성 규칙]
 1. 3~4문장, 150~200자 분량
-2. 단순 번역이 아닌 핵심 의미와 맥락을 담아 작성
+2. 핵심 의미와 맥락을 담아 작성
 3. 프론티어 마켓 투자자/분석가 관점에서 중요한 포인트 강조
-4. 한국어로만 작성 (영어 단어는 꼭 필요한 경우만 사용)
-5. 요약문만 출력 (제목, 설명 등 다른 텍스트 없이)
+4. 한국어로만 작성
+5. 요약문만 출력
 
 요약문:"""
-
 
 def call_gemini(prompt: str, retry: int = 2) -> str | None:
     global _current_key_idx
@@ -180,7 +200,7 @@ def call_gemini(prompt: str, retry: int = 2) -> str | None:
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {
             "temperature": 0.4,
-            "maxOutputTokens": 300,
+            "maxOutputTokens": 500,
         }
     }
 
@@ -230,11 +250,13 @@ def run():
     success = 0
     for i, article in enumerate(articles):
         prompt = build_prompt(article)
+        has_full = bool(article.get("full_text"))
         summary_ko = call_gemini(prompt)
 
         if summary_ko:
             update_summary(article["id"], summary_ko)
-            print(f"[{i+1}/{len(articles)}] ✅ {article['title_ko'] or article['title_en'][:50]}")
+            src = "원문" if has_full else "RSS요약"
+            print(f"[{i+1}/{len(articles)}] ✅ [{src}] {article['title_ko'] or article['title_en'][:50]}")
             success += 1
         else:
             print(f"[{i+1}/{len(articles)}] ❌ 실패 — {article['title_en'][:50]}")
