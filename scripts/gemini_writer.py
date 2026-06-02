@@ -342,7 +342,7 @@ def build_issue_prompt(cluster, existing_summary=None):
     for i, a in enumerate(main_articles, 1):
         t = a.get("title_ko") or a.get("title_en") or ""
         full_text = a.get("full_text") or ""
-        s = full_text[:1500] if full_text else (a.get("summary_ko") or a.get("summary_en") or "")
+        s = full_text if full_text else (a.get("summary_ko") or a.get("summary_en") or "")
         article_list += f"{i}. [{a.get('source','')}] {t}\n"
         if s:
             article_list += f"   {s}\n\n"

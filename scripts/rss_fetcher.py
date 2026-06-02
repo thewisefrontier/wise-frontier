@@ -395,11 +395,6 @@ def crawl_full_text(url: str, timeout: int = 10) -> str:
                 texts.append(t)
 
         full_text = ' '.join(texts)
-
-        # 최대 3000자로 제한 (Gemini 토큰 절약)
-        if len(full_text) > 3000:
-            full_text = full_text[:3000]
-
         return clean_text(full_text) if len(full_text) > 100 else ""
 
     except Exception:

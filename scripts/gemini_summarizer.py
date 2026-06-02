@@ -138,7 +138,7 @@ def build_prompt(article: dict) -> str:
 - 출처: {source}
 - 분야: {category}
 - 국가/지역: {country} ({region})
-- 원문 내용: {content[:2000]}
+- 원문 내용: {content}
 
 [작성 규칙]
 1. 원문 내용을 충실하게 한국어로 번역 (2~3문장)
@@ -158,7 +158,7 @@ def build_prompt(article: dict) -> str:
 - 제목: {title}
 - 분야: {category}
 - 국가/지역: {country} ({region})
-- 원문: {content[:2000]}
+- 원문: {content}
 
 [작성 규칙]
 1. 4~5문장, 200~300자 분량
