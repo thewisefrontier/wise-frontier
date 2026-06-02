@@ -221,7 +221,7 @@ def keyword_overlap(a, b):
 def articles_are_related(a, b):
     """
     두 기사가 같은 이슈인지 판단
-    제목 유사도 + 키워드 겹침 + 국가/지역/카테고리 보정
+    제목 유사도 + 키워드 겹침 기반 — 국가만 같다고 묶지 않음
     """
     title_a = (a.get("title_ko") or a.get("title_en") or "").lower()
     title_b = (b.get("title_ko") or b.get("title_en") or "").lower()
@@ -232,30 +232,24 @@ def articles_are_related(a, b):
     # 2. 키워드 겹침
     kw_sim = keyword_overlap(a, b) * 100
 
-    # 3. 국가/지역/카테고리 보정
-    same_country  = bool(a.get("country") and a.get("country") == b.get("country"))
-    same_region   = bool(a.get("region") and a.get("region") == b.get("region"))
-    same_category = a.get("category") == b.get("category")
-
-    # 핵심 키워드 단독 매칭 — 중요한 단어 하나만 겹쳐도 보정
+    # 3. 공통 키워드 — 제목+요약 기준
     kw_a = extract_keywords(title_a) | extract_keywords(a.get("summary_ko") or "")
     kw_b = extract_keywords(title_b) | extract_keywords(b.get("summary_ko") or "")
     common_kw = kw_a & kw_b
-    has_strong_overlap = len(common_kw) >= 2  # 공통 키워드 2개 이상
 
-    # 종합 점수
+    # 같은 카테고리 여부 (약한 보정만)
+    same_category = a.get("category") == b.get("category")
+
+    # 종합 점수 — 토픽 유사도 중심
     score = title_sim * 0.4 + kw_sim * 0.6
-    if same_country:
-        score += 10
-    if same_region:
-        score += 6
     if same_category:
-        score += 5
-    if has_strong_overlap:
-        score += 8
+        score += 3  # 카테고리 보정 약하게
+    if len(common_kw) >= 3:
+        score += 5  # 공통 키워드 3개 이상일 때만 보정
 
-    threshold = SIMILARITY_SAME_COUNTRY if same_country else SIMILARITY_HIGH
-    return score >= threshold
+    # 국가 보정 제거 — 국가만 같아서 묶이지 않도록
+    # 대신 임계값 통일
+    return score >= SIMILARITY_HIGH
 
 
 def cluster_articles(articles):
@@ -586,7 +580,72 @@ def run():
         time.sleep(CALL_INTERVAL)
         processed += 1
 
-    print(f"✅ 완료 — 신규 {generated}건 생성 / {updated}건 업데이트")
+    # ── 단독 기사화 — 클러스터에 묶이지 않은 원문 충분한 기사 ──
+    clustered_ids = {a.get("id") for c in clusters for a in c}
+    solo_candidates = [
+        a for a in all_articles
+        if a.get("id") not in clustered_ids
+        and len(a.get("full_text") or "") >= 1000
+    ]
+    print(f"\n[단독 기사] 원문 충분한 미클러스터 기사 {len(solo_candidates)}건")
+
+    solo_generated = 0
+    for a in solo_candidates[:5]:  # 실행당 최대 5건
+        if processed >= MAX_CLUSTERS_PER_RUN + 5:
+            break
+
+        title = a.get("title_ko") or a.get("title_en") or ""
+        url = f"solo_{a.get('id')}"
+        cluster_key = f"solo_{time.strftime('%Y%m%d')}_{hashlib.md5(title.encode()).hexdigest()[:8]}"
+
+        # 이미 생성된 단독 기사면 스킵
+        existing = get_existing_cluster(cluster_key)
+        if existing:
+            continue
+
+        print(f"  → 단독 기사 생성: {title[:60]}")
+
+        prompt = f"""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다.
+아래는 {a.get('source','')}의 원문 기사입니다. ({time.strftime('%Y년 %m월 %d일')})
+국가: {a.get('country','')} | 분야: {a.get('category','')}
+
+[원문]
+{a.get('full_text','')}
+
+[작성 규칙]
+1. 1500~2000자 분량의 완성된 기사
+2. 원문의 팩트(수치, 인명, 날짜, 기관명)를 정확히 포함
+3. 다음 구조로 작성:
+   - 핵심 사실: 무슨 일이 일어났는가 (2~3문장)
+   - 배경과 맥락: 이 사건의 배경과 의미 (2~3문장)
+   - 프론티어 마켓 시사점: 투자자/기업 관점의 리스크 또는 기회 (2문장)
+4. 한국어로만 작성
+5. 반드시 2~3개 문단으로 나누고 빈 줄로 구분
+6. 반드시 아래 형식으로 출력:
+   제목: (25자 이내)
+   본문: (기사 본문)
+
+기사:"""
+
+        content = call_gemini(prompt, max_tokens=2000)
+        if content:
+            gen_title, gen_body = parse_title_and_body(content)
+            full_title = gen_title if gen_title else title[:50]
+            article_id = save_article(
+                title_ko=full_title,
+                summary_ko=gen_body or content,
+                cluster_key=cluster_key,
+                category=a.get("category") or "종합",
+                region=a.get("region") or "global",
+                country=a.get("country") or "",
+                article_count=1,
+            )
+            if article_id > 0:
+                print(f"  ✅ 단독 저장 (id={article_id}): {full_title}\n")
+                solo_generated += 1
+        time.sleep(CALL_INTERVAL)
+
+    print(f"✅ 완료 — 클러스터 {generated}건 생성 / {updated}건 업데이트 / 단독 {solo_generated}건 생성")
 
 
 if __name__ == "__main__":
