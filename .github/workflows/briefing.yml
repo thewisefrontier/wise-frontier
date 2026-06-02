@@ -1,8 +1,8 @@
-name: The Wise Frontier - Daily Briefing
+name: NewsFinal - Daily Briefing
 
 on:
   schedule:
-    - cron: '0 9 * * *'    # UTC 09:00 = KST 18:00 저녁 1회
+    - cron: '0 8 * * *'    # UTC 08:00 = KST 17:00 오후 5시
   workflow_dispatch:
 
 permissions:
@@ -24,27 +24,28 @@ jobs:
       - name: 패키지 설치
         run: pip install -r requirements.txt
 
-      - name: DB 캐시 복원
-        uses: actions/cache@v4
-        with:
-          path: data/articles.db
-          key: articles-db
-          restore-keys: articles-db
-
       - name: 일일 브리핑 발송
         run: python scripts/briefing.py
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
 
       - name: 웹사이트 데이터 내보내기
         run: python scripts/export_articles.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
 
-      - name: 웹사이트 배포
+      - name: wise-frontier-web에 articles.json 푸시
         run: |
+          git clone https://x-access-token:${{ secrets.WEB_PUSH_TOKEN }}@github.com/thewisefrontier/wise-frontier-web.git web_repo
+          mkdir -p web_repo/data
+          cp docs/data/articles.json web_repo/data/articles.json
+          cd web_repo
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add docs/data/articles.json
-          git diff --staged --quiet || git commit -m "Update website data"
+          git add data/articles.json
+          git diff --staged --quiet || git commit -m "Update briefing"
+          git pull --rebase origin main
           git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
