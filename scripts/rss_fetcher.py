@@ -405,9 +405,66 @@ def crawl_full_text(url: str, timeout: int = 10) -> str:
     except Exception:
         return ""
 
-# =========================
-# 노이즈 필터
-# =========================
+# 소스명 → 기본 국가 매핑
+SOURCE_COUNTRY_MAP = {
+    # 나이지리아
+    "nairametrics": ("🇳🇬", "나이지리아"), "businessday nigeria": ("🇳🇬", "나이지리아"),
+    "punch": ("🇳🇬", "나이지리아"), "vanguard": ("🇳🇬", "나이지리아"),
+    "premium times": ("🇳🇬", "나이지리아"), "guardian nigeria": ("🇳🇬", "나이지리아"),
+    "allafrica nigeria": ("🇳🇬", "나이지리아"),
+    # 가나
+    "ghanaweb": ("🇬🇭", "가나"), "ghana business": ("🇬🇭", "가나"),
+    "joy business": ("🇬🇭", "가나"), "allafrica ghana": ("🇬🇭", "가나"),
+    # 케냐
+    "business daily africa": ("🇰🇪", "케냐"), "nation africa": ("🇰🇪", "케냐"),
+    "standard media kenya": ("🇰🇪", "케냐"), "kenyan wall street": ("🇰🇪", "케냐"),
+    "allafrica kenya": ("🇰🇪", "케냐"),
+    # 남아공
+    "businesstech": ("🇿🇦", "남아공"), "daily maverick": ("🇿🇦", "남아공"),
+    "fin24": ("🇿🇦", "남아공"), "business insider south africa": ("🇿🇦", "남아공"),
+    "mining weekly": ("🇿🇦", "남아공"),
+    # 에티오피아
+    "addis fortune": ("🇪🇹", "에티오피아"), "the reporter ethiopia": ("🇪🇹", "에티오피아"),
+    "allafrica ethiopia": ("🇪🇹", "에티오피아"),
+    # 르완다
+    "rwanda new times": ("🇷🇼", "르완다"), "allafrica rwanda": ("🇷🇼", "르완다"),
+    # 베트남
+    "vietnam investment review": ("🇻🇳", "베트남"), "vietnam news": ("🇻🇳", "베트남"),
+    "vnexpress": ("🇻🇳", "베트남"), "vietnamplus": ("🇻🇳", "베트남"),
+    # 인도네시아
+    "jakarta post": ("🇮🇩", "인도네시아"), "indonesia setkab": ("🇮🇩", "인도네시아"),
+    # 태국
+    "bangkok post": ("🇹🇭", "태국"),
+    # 필리핀
+    "philippine star": ("🇵🇭", "필리핀"), "rappler": ("🇵🇭", "필리핀"),
+    "philippine information agency": ("🇵🇭", "필리핀"),
+    # 카자흐스탄
+    "astana times": ("🇰🇿", "카자흐스탄"), "kazinform": ("🇰🇿", "카자흐스탄"),
+    "kazakhstan inform": ("🇰🇿", "카자흐스탄"),
+    # 우즈베키스탄
+    "kun.uz": ("🇺🇿", "우즈베키스탄"), "uzbekistan president": ("🇺🇿", "우즈베키스탄"),
+    # 키르기스스탄
+    "akipress": ("🇰🇬", "키르기스스탄"), "kabar": ("🇰🇬", "키르기스스탄"),
+    # 아제르바이잔
+    "trend az": ("🇦🇿", "아제르바이잔"), "trend azerbaijan": ("🇦🇿", "아제르바이잔"),
+    # 방글라데시
+    "daily star bangladesh": ("🇧🇩", "방글라데시"), "dhaka tribune": ("🇧🇩", "방글라데시"),
+    "the business standard bangladesh": ("🇧🇩", "방글라데시"),
+    # 파키스탄
+    "dawn pakistan": ("🇵🇰", "파키스탄"),
+    # 사우디
+    "saudi press agency": ("🇸🇦", "사우디아라비아"),
+    # 카타르
+    "qatar news agency": ("🇶🇦", "카타르"),
+}
+
+def get_source_country(source_name: str):
+    """소스명으로 기본 국가 반환"""
+    s = source_name.lower()
+    for key, val in SOURCE_COUNTRY_MAP.items():
+        if key in s:
+            return val
+    return None, None
 
 NOISE_KEYWORDS = [
     # 스포츠
@@ -428,9 +485,22 @@ NOISE_KEYWORDS = [
     "church", "pastor", "bishop", "prayer", "sermon", "national sound"
 ]
 
+# 소프트 노이즈 — 수집은 하되 텔레그램/홈페이지 발송 안 함
+SOFT_NOISE_KEYWORDS = [
+    "anthropic", "openai", "nvidia", "apple inc", "microsoft corp",
+    "meta platforms", "amazon.com", "tesla inc", "spacex", "chatgpt",
+    "nasdaq", "s&p 500", "dow jones", "wall street", "new york stock",
+    "federal reserve", "us federal", "fed rate",
+]
+
 def is_noise(title: str) -> bool:
     t = title.lower()
     return any(n in t for n in NOISE_KEYWORDS)
+
+def is_soft_noise(title: str) -> bool:
+    """수집은 하되 텔레그램/홈페이지 발송 안 할 기사"""
+    t = title.lower()
+    return any(n in t for n in SOFT_NOISE_KEYWORDS)
 
 # =========================
 # TELEGRAM
@@ -549,6 +619,9 @@ for data in results:
         print(f"[SKIP] 노이즈 — {title[:50]}")
         continue
 
+    # 소프트 노이즈 — DB에만 저장, 텔레그램/홈페이지 발송 안 함
+    soft_noise = is_soft_noise(title)
+
     # 요약 추출
     summary_en = extract_summary(latest)
 
@@ -557,8 +630,17 @@ for data in results:
     if full_text:
         print(f"  [크롤링] {len(full_text)}자 추출")
 
-    # 국가 감지
-    country_flag, country_name = detect_country(title + " " + summary_en + " " + name, source=name)
+    # 국가 감지 — 소스 기본값 우선, 기사 내용으로 보완
+    source_flag, source_country = get_source_country(name)
+    content_flag, content_country = detect_country(title + " " + summary_en, source=name)
+
+    # 기사 내용에서 명확한 국가가 감지되면 사용, 아니면 소스 기본값
+    if content_country and content_country != source_country:
+        country_flag, country_name = content_flag, content_country
+    elif source_country:
+        country_flag, country_name = source_flag, source_country
+    else:
+        country_flag, country_name = content_flag or "", content_country or ""
 
     # 한국어 번역
     try:
@@ -576,7 +658,20 @@ for data in results:
         except Exception:
             summary_ko = ""
 
-    # 텔레그램 발송
+    # 텔레그램 발송 (소프트 노이즈는 스킵)
+    if soft_noise:
+        # DB에만 저장 (sent_telegram = 0 유지)
+        article_id = insert_article(
+            title_en=title, title_ko=title_ko,
+            summary_en=summary_en, summary_ko=summary_ko,
+            url=link, source=name, category=category,
+            subcategory=subcategory, region=region,
+            country=country_name, country_flag=country_flag,
+            score=0, full_text=full_text,
+        )
+        print(f"[SOFT] [{category}] [{country_name}] {title_ko[:50]}")
+        continue
+
     res = send_telegram(title_ko, summary_ko, link, name, category, subcategory, region, country_name)
 
     if res.get("ok"):
@@ -585,19 +680,12 @@ for data in results:
 
         # DB 저장
         article_id = insert_article(
-            title_en=title,
-            title_ko=title_ko,
-            summary_en=summary_en,
-            summary_ko=summary_ko,
-            url=link,
-            source=name,
-            category=category,
-            subcategory=subcategory,
-            region=region,
-            country=country_name,
-            country_flag=country_flag,
-            score=0,
-            full_text=full_text,
+            title_en=title, title_ko=title_ko,
+            summary_en=summary_en, summary_ko=summary_ko,
+            url=link, source=name, category=category,
+            subcategory=subcategory, region=region,
+            country=country_name, country_flag=country_flag,
+            score=0, full_text=full_text,
         )
         if article_id > 0:
             mark_sent_telegram(article_id)
