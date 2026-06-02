@@ -357,8 +357,7 @@ def build_issue_prompt(cluster, existing_summary=None):
 
     if existing_summary:
         return f"""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다.
-아래는 기존에 작성된 이슈 분석 기사와 새로 추가된 관련 기사들입니다.({today_str})
-{'원문 전문이 포함된 기사가 있습니다. 원문의 구체적인 수치, 인명, 사실을 최대한 활용하세요.' if has_full else ''}
+기존 기사에 새로 들어온 관련 기사들을 반영해 업데이트하세요. ({today_str})
 
 [기존 기사]
 {existing_summary}
@@ -366,73 +365,42 @@ def build_issue_prompt(cluster, existing_summary=None):
 [추가된 관련 기사]
 {article_list}
 
-[작성 규칙]
-1. 기존 분석을 바탕으로 새 기사의 내용을 통합해 업데이트
-2. 개별 사건들이 보여주는 공통 패턴과 트렌드를 중심으로 서술
-3. {'1500~2000자' if has_full else '900~1200자'} 분량
-4. 다음 구조로 작성:
-   - 현재 상황: 어떤 사건들이 일어나고 있는가
-   - 패턴 분석: 개별 사건들의 공통점과 의미
-   - 투자/비즈니스 시사점: 프론티어 마켓 관점에서의 리스크 또는 기회
-5. 한국어로만 작성
-6. 반드시 2~3개 문단으로 나누고, 각 문단 사이에 빈 줄을 넣을 것
-7. 반드시 아래 형식으로 출력:
-   제목: (25자 이내의 핵심 제목)
-   본문: (기사 본문)
-
-업데이트된 기사:"""
+새로 들어온 기사의 팩트를 기존 기사에 자연스럽게 통합해 완성도 높은 기사로 다시 써주세요.
+팩트(수치, 인명, 날짜, 기관명)를 최대한 살리고, 한국어로 작성하세요.
+아래 형식으로 출력:
+제목: (핵심을 담은 제목)
+본문: (기사 본문)"""
 
     else:
-        sources = list({a.get("source","") for a in cluster})
-        same_event = len(sources) >= 2 and len(cluster) <= 4
-
-        if same_event:
+        if len(main_articles) == 1 or (len(main_articles) <= 4 and len({a.get("source","") for a in main_articles}) >= 2):
             return f"""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다.
-아래는 같은 사건을 여러 매체가 다각도로 보도한 {len(cluster)}개의 기사입니다.({today_str})
+아래 기사를 바탕으로 완성도 높은 한국어 기사를 작성하세요. ({today_str})
 국가: {country} | 분야: {category}
-{'원문 전문이 포함된 기사가 있습니다. 원문의 구체적인 수치, 인명, 사실을 최대한 활용하세요.' if has_full else ''}
 
-[관련 기사]
+[기사 원문]
 {article_list}
 
-[작성 규칙]
-1. {'1500~2000자' if has_full else '800~1200자'} 분량의 단일 완성 기사
-2. 여러 보도를 종합해 하나의 완성된 기사로 작성 (중복 내용 제거, 누락 정보 보완)
-3. 다음 구조로 작성:
-   - 핵심 사실: 무슨 일이 일어났는가 (2~3문장, 육하원칙 중심)
-   - 배경과 맥락: 이 사건의 배경과 의미 (1~2문장)
-   - 프론티어 마켓 시사점: 투자자/기업 관점의 리스크 또는 기회 (1~2문장)
-4. 한국어로만 작성
-5. 반드시 2~3개 문단으로 나누고, 각 문단 사이에 빈 줄을 넣을 것
-6. 반드시 아래 형식으로 출력:
-   제목: (25자 이내의 핵심 제목)
-   본문: (기사 본문)
-
-기사:"""
+팩트(수치, 인명, 날짜, 기관명, 구체적 내용)를 빠짐없이 살려서 작성하세요.
+원문이 길수록 기사도 충분히 길게 쓰세요. 억지로 줄이지 마세요.
+한국어로만 작성하세요.
+아래 형식으로 출력:
+제목: (핵심을 담은 제목)
+본문: (기사 본문)"""
         else:
             return f"""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다.
-아래는 같은 이슈/패턴을 보여주는 {len(cluster)}개의 기사입니다.({today_str})
+아래 {len(main_articles)}개 기사는 같은 이슈를 다루고 있습니다. ({today_str})
 국가: {country} | 분야: {category}
-{'원문 전문이 포함된 기사가 있습니다. 원문의 구체적인 수치, 인명, 사실을 최대한 활용하세요.' if has_full else ''}
 
 [관련 기사]
 {article_list}
 
-[작성 규칙]
-1. {'1500~2000자' if has_full else '800~1200자'} 분량의 트렌드 분석 기사
-2. 개별 사건을 단순 나열하지 말고, 공통 패턴과 그 의미를 분석
-3. 다음 구조로 작성:
-   - 현재 상황: 어떤 사건들이 일어나고 있는가 (1~2문장)
-   - 패턴 분석: 이 사건들이 공통적으로 시사하는 것 (2~3문장)
-   - 투자/비즈니스 시사점: 프론티어 마켓 투자자/기업이 주목해야 할 리스크 또는 기회 (1~2문장)
-4. 거시적 트렌드 관점으로 서술
-5. 한국어로만 작성
-6. 반드시 2~3개 문단으로 나누고, 각 문단 사이에 빈 줄을 넣을 것
-7. 반드시 아래 형식으로 출력:
-   제목: (25자 이내의 핵심 제목)
-   본문: (기사 본문)
-
-기사:"""
+여러 기사의 팩트를 종합해 하나의 완성된 기사로 작성하세요.
+각 기사의 구체적인 수치, 인명, 날짜, 기관명을 최대한 살려주세요.
+원문이 풍부할수록 기사도 충분히 길게 쓰세요. 억지로 줄이지 마세요.
+한국어로만 작성하세요.
+아래 형식으로 출력:
+제목: (핵심을 담은 제목)
+본문: (기사 본문)"""
 # ── Gemini 호출 ───────────────────────────────────────────
 
 def call_gemini(prompt, max_tokens=1000, retry=2):
@@ -532,7 +500,7 @@ def run():
             print(f"  → 기존 기사 업데이트 ({prev_count}건 → {cur_count}건)")
             prompt  = build_issue_prompt(cluster, existing["summary_ko"])
             has_full = any(a.get("full_text") for a in cluster)
-            content = call_gemini(prompt, max_tokens=2000 if has_full else 1500)
+            content = call_gemini(prompt, max_tokens=4000 if has_full else 1500)
 
             if content:
                 today_label = time.strftime("%Y.%m.%d")
@@ -554,7 +522,7 @@ def run():
             print(f"  → 신규 이슈 기사 생성")
             prompt  = build_issue_prompt(cluster)
             has_full = any(a.get("full_text") for a in cluster)
-            content = call_gemini(prompt, max_tokens=2000 if has_full else 1500)
+            content = call_gemini(prompt, max_tokens=4000 if has_full else 1500)
 
             if content:
                 today_label = time.strftime("%Y.%m.%d")
@@ -580,14 +548,12 @@ def run():
         time.sleep(CALL_INTERVAL)
         processed += 1
 
-    # ── 단독 기사화 — 클러스터에 묶이지 않은 원문 충분한 기사 ──
-    clustered_ids = {a.get("id") for c in clusters for a in c}
+    # ── 단독 기사화 — 원문 충분한 기사 (클러스터 여부 무관) ──
     solo_candidates = [
         a for a in all_articles
-        if a.get("id") not in clustered_ids
-        and len(a.get("full_text") or "") >= 1000
+        if len(a.get("full_text") or "") >= 1000
     ]
-    print(f"\n[단독 기사] 원문 충분한 미클러스터 기사 {len(solo_candidates)}건")
+    print(f"\n[단독 기사] 원문 충분한 기사 {len(solo_candidates)}건")
 
     solo_generated = 0
     for a in solo_candidates[:5]:  # 실행당 최대 5건
@@ -612,22 +578,13 @@ def run():
 [원문]
 {a.get('full_text','')}
 
-[작성 규칙]
-1. 1500~2000자 분량의 완성된 기사
-2. 원문의 팩트(수치, 인명, 날짜, 기관명)를 정확히 포함
-3. 다음 구조로 작성:
-   - 핵심 사실: 무슨 일이 일어났는가 (2~3문장)
-   - 배경과 맥락: 이 사건의 배경과 의미 (2~3문장)
-   - 프론티어 마켓 시사점: 투자자/기업 관점의 리스크 또는 기회 (2문장)
-4. 한국어로만 작성
-5. 반드시 2~3개 문단으로 나누고 빈 줄로 구분
-6. 반드시 아래 형식으로 출력:
-   제목: (25자 이내)
-   본문: (기사 본문)
+원문의 팩트(수치, 인명, 날짜, 기관명, 구체적 내용)를 빠짐없이 살려서 한국어 기사로 작성하세요.
+원문이 길면 기사도 충분히 길게 쓰세요. 억지로 줄이지 마세요.
+아래 형식으로 출력:
+제목: (핵심을 담은 제목)
+본문: (기사 본문)"""
 
-기사:"""
-
-        content = call_gemini(prompt, max_tokens=2000)
+        content = call_gemini(prompt, max_tokens=4000)
         if content:
             gen_title, gen_body = parse_title_and_body(content)
             full_title = gen_title if gen_title else title[:50]
