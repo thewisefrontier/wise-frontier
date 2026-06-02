@@ -333,18 +333,28 @@ def call_gemini(prompt, max_tokens=1000, retry=3):
 # ── 프롬프트 빌더 ─────────────────────────────────────────
 
 def build_issue_prompt(cluster, existing_summary=None):
+    # 원문 있는 기사 우선 정렬, 최대 5개 선택
+    sorted_cluster = sorted(cluster, key=lambda a: bool(a.get("full_text")), reverse=True)
+    main_articles = sorted_cluster[:5]  # 핵심 기사
+    extra_titles = [a.get("title_ko") or a.get("title_en") or "" for a in sorted_cluster[5:]]
+
     article_list = ""
-    for i, a in enumerate(cluster, 1):
+    for i, a in enumerate(main_articles, 1):
         t = a.get("title_ko") or a.get("title_en") or ""
-        # full_text 있으면 우선 사용, 없으면 summary 사용
         full_text = a.get("full_text") or ""
-        s = full_text[:800] if full_text else (a.get("summary_ko") or a.get("summary_en") or "")
+        s = full_text[:1500] if full_text else (a.get("summary_ko") or a.get("summary_en") or "")
         article_list += f"{i}. [{a.get('source','')}] {t}\n"
         if s:
             article_list += f"   {s}\n\n"
 
+    # 추가 기사는 제목만
+    if extra_titles:
+        article_list += f"\n[추가 관련 기사 제목]\n"
+        for t in extra_titles:
+            article_list += f"- {t}\n"
+
     # 원문 있는 기사 수
-    full_text_count = sum(1 for a in cluster if a.get("full_text"))
+    full_text_count = sum(1 for a in main_articles if a.get("full_text"))
     has_full = full_text_count > 0
 
     today_str = time.strftime("%Y년 %m월 %d일")
@@ -365,7 +375,7 @@ def build_issue_prompt(cluster, existing_summary=None):
 [작성 규칙]
 1. 기존 분석을 바탕으로 새 기사의 내용을 통합해 업데이트
 2. 개별 사건들이 보여주는 공통 패턴과 트렌드를 중심으로 서술
-3. {'1000~1500자' if has_full else '900~1200자'} 분량
+3. {'1500~2000자' if has_full else '900~1200자'} 분량
 4. 다음 구조로 작성:
    - 현재 상황: 어떤 사건들이 일어나고 있는가
    - 패턴 분석: 개별 사건들의 공통점과 의미
@@ -392,7 +402,7 @@ def build_issue_prompt(cluster, existing_summary=None):
 {article_list}
 
 [작성 규칙]
-1. {'1000~1500자' if has_full else '800~1200자'} 분량의 단일 완성 기사
+1. {'1500~2000자' if has_full else '800~1200자'} 분량의 단일 완성 기사
 2. 여러 보도를 종합해 하나의 완성된 기사로 작성 (중복 내용 제거, 누락 정보 보완)
 3. 다음 구조로 작성:
    - 핵심 사실: 무슨 일이 일어났는가 (2~3문장, 육하원칙 중심)
@@ -415,7 +425,7 @@ def build_issue_prompt(cluster, existing_summary=None):
 {article_list}
 
 [작성 규칙]
-1. {'1000~1500자' if has_full else '800~1200자'} 분량의 트렌드 분석 기사
+1. {'1500~2000자' if has_full else '800~1200자'} 분량의 트렌드 분석 기사
 2. 개별 사건을 단순 나열하지 말고, 공통 패턴과 그 의미를 분석
 3. 다음 구조로 작성:
    - 현재 상황: 어떤 사건들이 일어나고 있는가 (1~2문장)
