@@ -175,7 +175,51 @@ COUNTRY_INFO = {
     "mauritius": ("🇲🇺", "모리셔스"),
     "madagascar": ("🇲🇬", "마다가스카르"),
     "seychelles": ("🇸🇨", "세이셸"),
+    # 주요국 (글로벌 분류용)
+    "united states": ("🇺🇸", "미국"), "american": ("🇺🇸", "미국"),
+    "china": ("🇨🇳", "중국"), "chinese": ("🇨🇳", "중국"),
+    "japan": ("🇯🇵", "일본"), "japanese": ("🇯🇵", "일본"),
+    "france": ("🇫🇷", "프랑스"), "french": ("🇫🇷", "프랑스"),
+    "germany": ("🇩🇪", "독일"), "german": ("🇩🇪", "독일"),
+    "united kingdom": ("🇬🇧", "영국"), "british": ("🇬🇧", "영국"),
+    "russia": ("🇷🇺", "러시아"), "russian": ("🇷🇺", "러시아"),
+    "turkey": ("🇹🇷", "튀르키예"), "turkish": ("🇹🇷", "튀르키예"),
+    "south korea": ("🇰🇷", "한국"), "korean": ("🇰🇷", "한국"),
+    "brazil": ("🇧🇷", "브라질"), "brazilian": ("🇧🇷", "브라질"),
+    "mexico": ("🇲🇽", "멕시코"), "mexican": ("🇲🇽", "멕시코"),
+    "colombia": ("🇨🇴", "콜롬비아"), "colombian": ("🇨🇴", "콜롬비아"),
+    "argentina": ("🇦🇷", "아르헨티나"), "argentine": ("🇦🇷", "아르헨티나"),
+    "chile": ("🇨🇱", "칠레"), "chilean": ("🇨🇱", "칠레"),
+    "peru": ("🇵🇪", "페루"), "peruvian": ("🇵🇪", "페루"),
+    "israel": ("🇮🇱", "이스라엘"), "israeli": ("🇮🇱", "이스라엘"),
+    "italy": ("🇮🇹", "이탈리아"), "italian": ("🇮🇹", "이탈리아"),
+    "spain": ("🇪🇸", "스페인"), "spanish": ("🇪🇸", "스페인"),
+    "netherlands": ("🇳🇱", "네덜란드"), "dutch": ("🇳🇱", "네덜란드"),
+    "canada": ("🇨🇦", "캐나다"), "canadian": ("🇨🇦", "캐나다"),
+    "portugal": ("🇵🇹", "포르투갈"), "portuguese": ("🇵🇹", "포르투갈"),
 }
+
+# 주요국 — 글로벌 카테고리로 분류
+GLOBAL_COUNTRIES = {
+    "미국", "중국", "일본", "프랑스", "독일", "영국", "러시아",
+    "튀르키예", "한국", "브라질", "멕시코", "콜롬비아", "아르헨티나",
+    "칠레", "페루", "이스라엘", "이탈리아", "스페인", "네덜란드",
+    "캐나다", "포르투갈", "호주", "뉴질랜드",
+}
+
+def detect_countries(text: str, source: str = "") -> list:
+    """텍스트에서 감지된 모든 국가 반환 [(flag, name), ...]"""
+    import re
+    t = text.lower()
+    found = {}
+    sorted_keys = sorted(COUNTRY_INFO.keys(), key=len, reverse=True)
+    for keyword in sorted_keys:
+        pattern = r'\b' + re.escape(keyword) + r'\b'
+        if re.search(pattern, t):
+            flag, name = COUNTRY_INFO[keyword]
+            if name not in found:
+                found[name] = flag
+    return [(flag, name) for name, flag in found.items()]
 
 def detect_country(text: str, source: str = ""):
     """제목/요약에서 국가 정보 반환 (국기, 국가명)
@@ -637,6 +681,16 @@ for data in results:
     else:
         country_flag, country_name = content_flag or "", content_country or ""
 
+    # 다국가 감지
+    all_countries = detect_countries(title + " " + summary_en, source=name)
+    country_names = [n for _, n in all_countries] if all_countries else ([country_name] if country_name else [])
+
+    # 주요국만 있으면 글로벌 카테고리로
+    frontier_countries = [n for n in country_names if n not in GLOBAL_COUNTRIES]
+    if not frontier_countries and country_names:
+        category = "글로벌"
+        region = "global"
+
     # 한국어 번역
     try:
         title_ko = GoogleTranslator(source="auto", target="ko").translate(title[:500])
@@ -663,6 +717,7 @@ for data in results:
             subcategory=subcategory, region=region,
             country=country_name, country_flag=country_flag,
             score=0, full_text=full_text,
+            countries=country_names,
         )
         print(f"[SOFT] [{category}] [{country_name}] {title_ko[:50]}")
         continue
@@ -681,6 +736,7 @@ for data in results:
             subcategory=subcategory, region=region,
             country=country_name, country_flag=country_flag,
             score=0, full_text=full_text,
+            countries=country_names,
         )
         if article_id > 0:
             mark_sent_telegram(article_id)
