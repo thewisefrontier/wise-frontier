@@ -45,6 +45,34 @@ GEMINI_API_KEYS = [k for k in [
 
 _current_key_idx = 0
 
+# 프롬프트 캐시
+_prompt_cache = {}
+
+def load_prompt(name: str, fallback: str = "") -> str:
+    """Supabase에서 활성 프롬프트 로드 (캐시 사용)"""
+    global _prompt_cache
+    if name in _prompt_cache:
+        return _prompt_cache[name]
+    try:
+        res = requests.get(
+            f"{SUPABASE_URL}/rest/v1/prompts",
+            headers={
+                "apikey": SUPABASE_SERVICE_KEY,
+                "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
+            },
+            params={"name": f"eq.{name}", "is_active": "eq.true", "order": "version.desc", "limit": "1"},
+            timeout=10
+        )
+        if res.status_code in (200, 206):
+            data = res.json()
+            if data:
+                _prompt_cache[name] = data[0]["content"]
+                return _prompt_cache[name]
+    except Exception as e:
+        print(f"[WARN] 프롬프트 로드 실패 ({name}): {e}")
+    _prompt_cache[name] = fallback
+    return fallback
+
 # 클러스터링 설정
 SIMILARITY_HIGH         = 55
 SIMILARITY_SAME_COUNTRY = 40
@@ -327,9 +355,8 @@ def call_gemini(prompt, max_tokens=1000, retry=3):
 # ── 프롬프트 빌더 ─────────────────────────────────────────
 
 def build_issue_prompt(cluster, existing_summary=None):
-    # 원문 있는 기사 우선 정렬, 최대 5개 선택
     sorted_cluster = sorted(cluster, key=lambda a: bool(a.get("full_text")), reverse=True)
-    main_articles = sorted_cluster[:5]  # 핵심 기사
+    main_articles = sorted_cluster[:5]
     extra_titles = [a.get("title_ko") or a.get("title_en") or "" for a in sorted_cluster[5:]]
 
     article_list = ""
@@ -341,22 +368,29 @@ def build_issue_prompt(cluster, existing_summary=None):
         if s:
             article_list += f"   {s}\n\n"
 
-    # 추가 기사는 제목만
     if extra_titles:
-        article_list += f"\n[추가 관련 기사 제목]\n"
+        article_list += "\n[추가 관련 기사 제목]\n"
         for t in extra_titles:
             article_list += f"- {t}\n"
 
-    # 원문 있는 기사 수
-    full_text_count = sum(1 for a in main_articles if a.get("full_text"))
-    has_full = full_text_count > 0
-
     today_str = time.strftime("%Y년 %m월 %d일")
-    country  = cluster[0].get("country") or ""
+    country = cluster[0].get("country") or ""
     category = cluster[0].get("category") or ""
 
+    FALLBACK_RULES = """[주의사항]
+- 본문 앞에 [도시명], [날짜] 같은 전문 형식 헤더를 붙이지 마세요.
+- 마크다운 문법(**굵게**, ##제목 등)을 사용하지 마세요.
+- 매체 홍보성 내용(구독 유도, 텔레그램 채널 안내 등)은 포함하지 마세요.
+- 날짜 표기는 "2일(현지시간)" 형식으로 간결하게 쓰세요.
+- 기사 문체로 작성하세요. 논평/칼럼 문체는 금지입니다.
+아래 형식으로 출력:
+제목: (핵심을 담은 제목)
+본문: (기사 본문)"""
+
+    rules = load_prompt("writer_rules", fallback=FALLBACK_RULES)
+
     if existing_summary:
-        return f"""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다.
+        template = load_prompt("writer_update", fallback="""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다.
 기존 기사에 새로 들어온 관련 기사들을 반영해 업데이트하세요. ({today_str})
 
 [기존 기사]
@@ -367,20 +401,13 @@ def build_issue_prompt(cluster, existing_summary=None):
 
 새로 들어온 기사의 팩트를 기존 기사에 자연스럽게 통합해 완성도 높은 기사로 다시 써주세요.
 팩트(수치, 인명, 날짜, 기관명)를 최대한 살리고, 한국어로 작성하세요.
-[주의] 기사 본문 앞에 [도시명 = NewsFinal], [날짜] 같은 전문(電文) 형식 헤더를 붙이지 마세요.
-[주의사항]
-- 본문 앞에 [도시명], [날짜] 같은 전문 형식 헤더를 붙이지 마세요.
-- 마크다운 문법(**굵게**, ##제목 등)을 사용하지 마세요.
-- 매체 홍보성 내용(구독 유도, 텔레그램 채널 안내 등)은 포함하지 마세요.
-- 날짜 표기는 "2일(현지시간)" 형식으로 간결하게 쓰세요.
-- 기사 문체로 작성하세요. "~를 보여줍니다", "~을 도모하고 있습니다" 같은 논평/칼럼 문체는 금지입니다.
-아래 형식으로 출력:
-제목: (핵심을 담은 제목)
-본문: (기사 본문)"""
+{rules}""")
+        return template.format(today_str=today_str, existing_summary=existing_summary,
+                               article_list=article_list, rules=rules,
+                               country=country, category=category)
 
-    else:
-        if len(main_articles) == 1 or (len(main_articles) <= 4 and len({a.get("source","") for a in main_articles}) >= 2):
-            return f"""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다.
+    elif len(main_articles) == 1 or (len(main_articles) <= 4 and len({a.get("source","") for a in main_articles}) >= 2):
+        template = load_prompt("writer_single", fallback="""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다.
 아래 기사를 바탕으로 완성도 높은 한국어 기사를 작성하세요. ({today_str})
 국가: {country} | 분야: {category}
 
@@ -390,18 +417,13 @@ def build_issue_prompt(cluster, existing_summary=None):
 팩트(수치, 인명, 날짜, 기관명, 구체적 내용)를 빠짐없이 살려서 작성하세요.
 원문이 길수록 기사도 충분히 길게 쓰세요. 억지로 줄이지 마세요.
 한국어로만 작성하세요.
-[주의사항]
-- 본문 앞에 [도시명], [날짜] 같은 전문 형식 헤더를 붙이지 마세요.
-- 마크다운 문법(**굵게**, ##제목 등)을 사용하지 마세요.
-- 매체 홍보성 내용(구독 유도, 텔레그램 채널 안내 등)은 포함하지 마세요.
-- 날짜 표기는 "2일(현지시간)" 형식으로 간결하게 쓰세요.
-- 기사 문체로 작성하세요. "~를 보여줍니다", "~을 도모하고 있습니다" 같은 논평/칼럼 문체는 금지입니다.
-아래 형식으로 출력:
-제목: (핵심을 담은 제목)
-본문: (기사 본문)"""
-        else:
-            return f"""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다.
-아래 {len(main_articles)}개 기사는 같은 이슈를 다루고 있습니다. ({today_str})
+{rules}""")
+        return template.format(today_str=today_str, article_list=article_list,
+                               rules=rules, country=country, category=category,
+                               count=len(main_articles))
+    else:
+        template = load_prompt("writer_cluster", fallback="""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다.
+아래 {count}개 기사는 같은 이슈를 다루고 있습니다. ({today_str})
 국가: {country} | 분야: {category}
 
 [관련 기사]
@@ -411,16 +433,11 @@ def build_issue_prompt(cluster, existing_summary=None):
 각 기사의 구체적인 수치, 인명, 날짜, 기관명을 최대한 살려주세요.
 원문이 풍부할수록 기사도 충분히 길게 쓰세요. 억지로 줄이지 마세요.
 한국어로만 작성하세요.
-[주의사항]
-- 본문 앞에 [도시명], [날짜] 같은 전문 형식 헤더를 붙이지 마세요.
-- 마크다운 문법(**굵게**, ##제목 등)을 사용하지 마세요.
-- 매체 홍보성 내용(구독 유도, 텔레그램 채널 안내 등)은 포함하지 마세요.
-- 날짜 표기는 "2일(현지시간)" 형식으로 간결하게 쓰세요.
-- 기사 문체로 작성하세요. "~를 보여줍니다", "~을 도모하고 있습니다" 같은 논평/칼럼 문체는 금지입니다.
-아래 형식으로 출력:
-제목: (핵심을 담은 제목)
-본문: (기사 본문)"""
-# ── Gemini 호출 ───────────────────────────────────────────
+{rules}""")
+        return template.format(today_str=today_str, article_list=article_list,
+                               rules=rules, country=country, category=category,
+                               count=len(main_articles))
+
 
 def call_gemini(prompt, max_tokens=1000, retry=2):
     global _current_key_idx

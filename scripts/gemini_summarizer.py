@@ -25,94 +25,35 @@ GEMINI_API_KEYS = [k for k in [
 ] if k]
 
 _current_key_idx = 0
-
 MAX_ARTICLES = 30
 CALL_INTERVAL = 5
 
+# 프롬프트 캐시
+_prompt_cache = {}
 
-def _sb_headers():
-    return {
-        "apikey": SUPABASE_SERVICE_KEY,
-        "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
-        "Content-Type": "application/json",
-        "Prefer": "return=representation",
-    }
-
-def _sb_url():
-    return f"{SUPABASE_URL}/rest/v1/articles"
-
-
-def get_articles_to_summarize(limit: int) -> list:
-    since = time.strftime("%Y-%m-%d %H:%M", time.gmtime(time.time() - 86400))
-    res = requests.get(
-        _sb_url(),
-        headers=_sb_headers(),
-        params={
-            "select": "id,title_en,title_ko,summary_en,summary_ko,source,category,subcategory,region,country,full_text",
-            "created_at": f"gte.{since}",
-            "summary_ko": "is.null",
-            "order": "created_at.desc",
-            "limit": str(limit),
-        },
-        timeout=30
-    )
-    short_res = requests.get(
-        _sb_url(),
-        headers=_sb_headers(),
-        params={
-            "select": "id,title_en,title_ko,summary_en,summary_ko,source,category,subcategory,region,country,full_text",
-            "created_at": f"gte.{since}",
-            "order": "created_at.desc",
-            "limit": str(limit),
-        },
-        timeout=30
-    )
-    articles = []
-    if res.status_code in (200, 206):
-        articles.extend(res.json())
-    if short_res.status_code in (200, 206):
-        for a in short_res.json():
-            sk = a.get("summary_ko") or ""
-            if len(sk) < 100 and a not in articles:
-                articles.append(a)
-    return articles[:limit]
-
-
-def update_summary(article_id: int, summary_ko: str, summary_en: str = None):
-    payload = {"summary_ko": summary_ko}
-    if summary_en:
-        payload["summary_en"] = summary_en
-    requests.patch(
-        f"{_sb_url()}?id=eq.{article_id}",
-        headers=_sb_headers(),
-        json=payload,
-        timeout=15
-    )
-
-
-# 공식/공공 소스 목록 — 번역 중심 프롬프트 적용
-OFFICIAL_SOURCES = {
-    "APO", "AfDB", "WHO", "ASEAN", "ADB", "IMF", "World Bank",
-    "African Union", "UNCTAD", "IFC",
-    "Vietnam Government", "VietnamPlus", "Indonesia Setkab",
-    "Kazakhstan Inform", "Kazinform", "Uzbekistan President",
-    "Saudi Press Agency", "Qatar News Agency", "Kuwait News Agency",
-    "Philippine Information Agency", "Bangkok Post Economics",
-}
-
-def is_official_source(source: str) -> bool:
-    """공식/공공 소스 여부 판단"""
-    if not source:
-        return False
-    source_lower = source.lower()
-    # APO Group 계열
-    if source_lower.startswith("apo ") or "africa-newsroom" in source_lower:
-        return True
-    # 기타 공식 소스
-    for official in OFFICIAL_SOURCES:
-        if official.lower() in source_lower:
-            return True
-    return False
+def load_prompt(name: str, fallback: str = "") -> str:
+    global _prompt_cache
+    if name in _prompt_cache:
+        return _prompt_cache[name]
+    try:
+        res = requests.get(
+            f"{SUPABASE_URL}/rest/v1/prompts",
+            headers={
+                "apikey": SUPABASE_SERVICE_KEY,
+                "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
+            },
+            params={"name": f"eq.{name}", "is_active": "eq.true", "order": "version.desc", "limit": "1"},
+            timeout=10
+        )
+        if res.status_code in (200, 206):
+            data = res.json()
+            if data:
+                _prompt_cache[name] = data[0]["content"]
+                return _prompt_cache[name]
+    except Exception as e:
+        print(f"[WARN] 프롬프트 로드 실패 ({name}): {e}")
+    _prompt_cache[name] = fallback
+    return fallback
 
 
 def build_prompt(article: dict) -> str:
@@ -123,15 +64,22 @@ def build_prompt(article: dict) -> str:
     category = article.get("category") or ""
     country = article.get("country") or ""
     region = article.get("region") or ""
-
-    # 원문이 있으면 원문 기반 프롬프트
     content = full_text if full_text else summary
     has_full_text = bool(full_text)
 
-    if is_official_source(source):
-        return f"""당신은 프론티어 미디어 NewsFinal의 에디터입니다.
+    FALLBACK_RULES = """원문이 길면 더 길게 써도 됩니다.
+본문 앞에 [도시명], [날짜] 같은 전문 형식 헤더를 붙이지 마세요.
+마크다운 문법(**굵게**, ##제목 등)을 사용하지 마세요.
+매체 홍보성 내용(구독 유도, 텔레그램 채널 안내 등)은 절대 포함하지 마세요.
+날짜 표기는 "2일(현지시간)" 형식으로 간결하게 쓰세요.
+기사 문체로 작성하세요. "~를 보여줍니다", "~을 도모하고 있습니다" 같은 논평/칼럼 문체는 금지입니다."""
 
-아래는 공식 기관/정부의 공식 발표 자료입니다. 원문의 내용을 정확하게 한국어로 번역하되, 마지막에 한 줄의 맥락 설명을 추가하세요.
+    rules = load_prompt("summarizer_rules", fallback=FALLBACK_RULES)
+
+    if is_official_source(source):
+        template = load_prompt("summarizer_official", fallback="""당신은 프론티어 미디어 NewsFinal의 에디터입니다.
+
+아래는 공식 기관/정부의 공식 발표 자료입니다.
 
 [기사 정보]
 - 제목(영문): {title}
@@ -141,17 +89,15 @@ def build_prompt(article: dict) -> str:
 - 원문 내용: {content}
 
 원문 내용을 한국어로 정확하게 번역하세요. 팩트를 빠짐없이 살리고, 원문이 길면 번역도 충분히 길게 쓰세요.
-본문 앞에 [도시명], [날짜] 같은 전문 형식 헤더를 붙이지 마세요.
-마크다운 문법(**굵게**, ##제목 등)을 사용하지 마세요. 일반 텍스트로만 작성하세요.
-매체 홍보성 내용(구독 유도, 텔레그램 채널 안내, 프리미엄 서비스 광고 등)은 절대 포함하지 마세요.
-날짜 표기는 "2일(현지시간)" 형식으로 간결하게 쓰세요. "2026년 6월 2일, 경제 전문 매체 X는" 같은 형식은 쓰지 마세요.
-기사 문체로 작성하세요. "~를 보여줍니다", "~을 도모하고 있습니다", "~라고 할 수 있습니다" 같은 논평/칼럼 문체는 금지입니다. 육하원칙에 따라 사실을 전달하세요.
-번역문만 출력하세요."""
+{rules}
+번역문만 출력하세요.""")
+        return template.format(title=title, source=source, category=category,
+                               country=country, region=region, content=content, rules=rules)
 
     elif has_full_text:
-        return f"""당신은 프론티어 미디어 NewsFinal의 에디터입니다.
+        template = load_prompt("summarizer_fulltext", fallback="""당신은 프론티어 미디어 NewsFinal의 에디터입니다.
 
-아래는 {source}의 원문 기사입니다. 팩트를 중심으로 핵심 내용을 한국어로 재작성하세요.
+아래는 {source}의 원문 기사입니다.
 
 [기사 정보]
 - 제목: {title}
@@ -159,16 +105,14 @@ def build_prompt(article: dict) -> str:
 - 국가/지역: {country} ({region})
 - 원문: {content}
 
-원문의 팩트(수치, 인명, 날짜, 기관명)를 빠짐없이 살려서 한국어로 작성하세요. 원문이 길면 더 길게 써도 됩니다.
-본문 앞에 [도시명], [날짜] 같은 전문 형식 헤더를 붙이지 마세요.
-마크다운 문법(**굵게**, ##제목 등)을 사용하지 마세요. 일반 텍스트로만 작성하세요.
-매체 홍보성 내용(구독 유도, 텔레그램 채널 안내, 프리미엄 서비스 광고 등)은 절대 포함하지 마세요.
-날짜 표기는 "2일(현지시간)" 형식으로 간결하게 쓰세요. "2026년 6월 2일, 경제 전문 매체 X는" 같은 형식은 쓰지 마세요.
-기사 문체로 작성하세요. "~를 보여줍니다", "~을 도모하고 있습니다", "~라고 할 수 있습니다" 같은 논평/칼럼 문체는 금지입니다. 육하원칙에 따라 사실을 전달하세요.
-요약문만 출력하세요."""
+원문의 팩트(수치, 인명, 날짜, 기관명)를 빠짐없이 살려서 한국어로 작성하세요.
+{rules}
+요약문만 출력하세요.""")
+        return template.format(title=title, source=source, category=category,
+                               country=country, region=region, content=content, rules=rules)
 
     else:
-        return f"""당신은 프론티어 미디어 NewsFinal의 에디터입니다.
+        template = load_prompt("summarizer_rss", fallback="""당신은 프론티어 미디어 NewsFinal의 에디터입니다.
 
 아래 기사를 바탕으로 한국어 요약문을 작성하세요.
 
@@ -180,12 +124,12 @@ def build_prompt(article: dict) -> str:
 - 원문 요약(영문): {summary}
 
 기사의 핵심 내용을 한국어로 작성하세요. 팩트를 중심으로 쓰되 억지로 줄이지 마세요.
-본문 앞에 [도시명], [날짜] 같은 전문 형식 헤더를 붙이지 마세요.
-마크다운 문법(**굵게**, ##제목 등)을 사용하지 마세요. 일반 텍스트로만 작성하세요.
-매체 홍보성 내용(구독 유도, 텔레그램 채널 안내, 프리미엄 서비스 광고 등)은 절대 포함하지 마세요.
-날짜 표기는 "2일(현지시간)" 형식으로 간결하게 쓰세요. "2026년 6월 2일, 경제 전문 매체 X는" 같은 형식은 쓰지 마세요.
-기사 문체로 작성하세요. "~를 보여줍니다", "~을 도모하고 있습니다", "~라고 할 수 있습니다" 같은 논평/칼럼 문체는 금지입니다. 육하원칙에 따라 사실을 전달하세요.
-요약문만 출력하세요."""
+{rules}
+요약문만 출력하세요.""")
+        return template.format(title=title, source=source, category=category,
+                               country=country, region=region,
+                               content=content, summary=summary, rules=rules)
+
 
 def call_gemini(prompt: str, retry: int = 2) -> str | None:
     global _current_key_idx
