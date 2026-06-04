@@ -158,7 +158,36 @@ def get_cluster_article_count(cluster_key):
     return 0
 
 
-def save_article(title_ko, summary_ko, cluster_key, category, region, country="", article_count=0):
+def get_today_own_articles():
+    """오늘 생성된 자체 기사 제목 목록"""
+    today = time.strftime("%Y-%m-%d")
+    res = requests.get(
+        _sb_url(),
+        headers=_sb_headers(),
+        params={
+            "select": "id,title_ko,subcategory",
+            "source": "eq.NewsFinal",
+            "created_at": f"like.{today}%",
+            "order": "created_at.desc",
+        },
+        timeout=15
+    )
+    if res.status_code in (200, 206):
+        return res.json()
+    return []
+
+
+def find_similar_article(title: str, own_articles: list, threshold: int = 85):
+    """유사한 자체 기사 찾기 — threshold 이상이면 중복으로 판단"""
+    for a in own_articles:
+        existing_title = a.get("title_ko") or ""
+        score = fuzz.token_sort_ratio(title, existing_title)
+        if score >= threshold:
+            return a, score
+    return None, 0
+
+
+def save_article(title_ko, summary_ko, cluster_key, category, region, country="", article_count=0, published=True):
     url = f"internal://{cluster_key}"
     payload = {
         "title_en": title_ko,
@@ -174,7 +203,7 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
         "country_flag": "",
         "score": article_count,
         "created_at": time.strftime("%Y-%m-%d %H:%M"),
-        "sent_telegram": 1,
+        "sent_telegram": 1 if published else 0,
         "posted_blog": 0,
     }
     headers = {**_sb_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
@@ -506,6 +535,9 @@ def run():
     clusters = cluster_articles(all_articles)
     print(f"  → {len(all_articles)}건 중 {len(clusters)}개 클러스터 발견\n")
 
+    # 오늘 생성된 자체 기사 목록 (중복 체크용)
+    today_own_articles = get_today_own_articles()
+
     generated = 0
     updated   = 0
     processed = 0
@@ -561,9 +593,17 @@ def run():
             content = call_gemini(prompt, max_tokens=4000 if has_full else 1500)
 
             if content:
-                today_label = time.strftime("%Y.%m.%d")
                 gen_title, gen_body = parse_title_and_body(content)
                 full_title = gen_title if gen_title else titles[0][:50]
+
+                # 유사 기사 체크 — 85% 이상이면 미발행으로 저장
+                similar, sim_score = find_similar_article(full_title, today_own_articles)
+                if similar:
+                    print(f"  ⚠️ 유사 기사 발견 (유사도 {sim_score}%) → 미발행으로 저장: {similar.get('title_ko','')[:40]}")
+                    published = False
+                else:
+                    published = True
+
                 article_id = save_article(
                     title_ko      = full_title,
                     summary_ko    = gen_body or content,
@@ -572,10 +612,14 @@ def run():
                     region        = cluster[0].get("region") or "global",
                     country       = country,
                     article_count = cur_count,
+                    published     = published,
                 )
                 if article_id > 0:
-                    print(f"  ✅ 저장 완료 (id={article_id}): {full_title}\n")
-                    generated += 1
+                    status = "✅ 저장 완료" if published else "📋 미발행 저장"
+                    print(f"  {status} (id={article_id}): {full_title}\n")
+                    if published:
+                        today_own_articles.append({"id": article_id, "title_ko": full_title})
+                        generated += 1
                 else:
                     print(f"  ⚠️ 저장 실패\n")
             else:
@@ -607,30 +651,49 @@ def run():
 
         print(f"  → 단독 기사 생성: {title[:60]}")
 
-        prompt = f"""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다.
-아래는 {a.get('source','')}의 원문 기사입니다. ({time.strftime('%Y년 %m월 %d일')})
-국가: {a.get('country','')} | 분야: {a.get('category','')}
-
-[원문]
-{a.get('full_text','')}
-
-원문의 팩트(수치, 인명, 날짜, 기관명, 구체적 내용)를 빠짐없이 살려서 한국어 기사로 작성하세요.
-원문이 길면 기사도 충분히 길게 쓰세요. 억지로 줄이지 마세요.
-[주의] 기사 본문 앞에 [도시명 = NewsFinal], [날짜] 같은 전문(電文) 형식 헤더를 붙이지 마세요.
-[주의사항]
+        rules = load_prompt("writer_rules", fallback="""[주의사항]
 - 본문 앞에 [도시명], [날짜] 같은 전문 형식 헤더를 붙이지 마세요.
 - 마크다운 문법(**굵게**, ##제목 등)을 사용하지 마세요.
 - 매체 홍보성 내용(구독 유도, 텔레그램 채널 안내 등)은 포함하지 마세요.
 - 날짜 표기는 "2일(현지시간)" 형식으로 간결하게 쓰세요.
-- 기사 문체로 작성하세요. "~를 보여줍니다", "~을 도모하고 있습니다" 같은 논평/칼럼 문체는 금지입니다.
+- 기사 문체로 작성하세요. 논평/칼럼 문체는 금지입니다.
 아래 형식으로 출력:
 제목: (핵심을 담은 제목)
-본문: (기사 본문)"""
+본문: (기사 본문)""")
+
+        template = load_prompt("writer_solo", fallback="""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다.
+아래는 {source}의 원문 기사입니다. ({today_str})
+국가: {country} | 분야: {category}
+
+[원문]
+{full_text}
+
+원문의 팩트(수치, 인명, 날짜, 기관명, 구체적 내용)를 빠짐없이 살려서 한국어 기사로 작성하세요.
+원문이 길면 기사도 충분히 길게 쓰세요. 억지로 줄이지 마세요.
+{rules}""")
+
+        prompt = template.format(
+            source=a.get('source', ''),
+            today_str=time.strftime('%Y년 %m월 %d일'),
+            country=a.get('country', ''),
+            category=a.get('category', ''),
+            full_text=a.get('full_text', ''),
+            rules=rules,
+        )
 
         content = call_gemini(prompt, max_tokens=4000)
         if content:
             gen_title, gen_body = parse_title_and_body(content)
             full_title = gen_title if gen_title else title[:50]
+
+            # 유사 기사 체크
+            similar, sim_score = find_similar_article(full_title, today_own_articles)
+            if similar:
+                print(f"  ⚠️ 유사 기사 발견 (유사도 {sim_score}%) → 미발행으로 저장")
+                published = False
+            else:
+                published = True
+
             article_id = save_article(
                 title_ko=full_title,
                 summary_ko=gen_body or content,
@@ -639,10 +702,14 @@ def run():
                 region=a.get("region") or "global",
                 country=a.get("country") or "",
                 article_count=1,
+                published=published,
             )
             if article_id > 0:
-                print(f"  ✅ 단독 저장 (id={article_id}): {full_title}\n")
-                solo_generated += 1
+                status = "✅ 단독 저장" if published else "📋 단독 미발행"
+                print(f"  {status} (id={article_id}): {full_title}\n")
+                if published:
+                    today_own_articles.append({"id": article_id, "title_ko": full_title})
+                    solo_generated += 1
         time.sleep(CALL_INTERVAL)
 
     print(f"✅ 완료 — 클러스터 {generated}건 생성 / {updated}건 업데이트 / 단독 {solo_generated}건 생성")
