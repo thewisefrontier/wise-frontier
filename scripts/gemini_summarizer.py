@@ -28,6 +28,85 @@ _current_key_idx = 0
 MAX_ARTICLES = 30
 CALL_INTERVAL = 5
 
+
+def _sb_headers():
+    return {
+        "apikey": SUPABASE_SERVICE_KEY,
+        "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
+        "Content-Type": "application/json",
+        "Prefer": "return=representation",
+    }
+
+def _sb_url():
+    return f"{SUPABASE_URL}/rest/v1/articles"
+
+
+def get_articles_to_summarize(limit: int) -> list:
+    since = time.strftime("%Y-%m-%d %H:%M", time.gmtime(time.time() - 86400))
+    res = requests.get(
+        _sb_url(),
+        headers=_sb_headers(),
+        params={
+            "select": "id,title_en,title_ko,summary_en,summary_ko,source,category,subcategory,region,country,full_text",
+            "created_at": f"gte.{since}",
+            "summary_ko": "is.null",
+            "order": "created_at.desc",
+            "limit": str(limit),
+        },
+        timeout=30
+    )
+    short_res = requests.get(
+        _sb_url(),
+        headers=_sb_headers(),
+        params={
+            "select": "id,title_en,title_ko,summary_en,summary_ko,source,category,subcategory,region,country,full_text",
+            "created_at": f"gte.{since}",
+            "order": "created_at.desc",
+            "limit": str(limit),
+        },
+        timeout=30
+    )
+    articles = []
+    if res.status_code in (200, 206):
+        articles.extend(res.json())
+    if short_res.status_code in (200, 206):
+        for a in short_res.json():
+            sk = a.get("summary_ko") or ""
+            if len(sk) < 100 and a not in articles:
+                articles.append(a)
+    return articles[:limit]
+
+
+def update_summary(article_id: int, summary_ko: str):
+    requests.patch(
+        f"{_sb_url()}?id=eq.{article_id}",
+        headers=_sb_headers(),
+        json={"summary_ko": summary_ko},
+        timeout=15
+    )
+
+
+# 공식/공공 소스 목록
+OFFICIAL_SOURCES = {
+    "APO", "AfDB", "WHO", "ASEAN", "ADB", "IMF", "World Bank",
+    "African Union", "UNCTAD", "IFC",
+    "Vietnam Government", "VietnamPlus", "Indonesia Setkab",
+    "Kazakhstan Inform", "Kazinform", "Uzbekistan President",
+    "Saudi Press Agency", "Qatar News Agency", "Kuwait News Agency",
+    "Philippine Information Agency", "Bangkok Post Economics",
+}
+
+def is_official_source(source: str) -> bool:
+    if not source:
+        return False
+    source_lower = source.lower()
+    if source_lower.startswith("apo ") or "africa-newsroom" in source_lower:
+        return True
+    for official in OFFICIAL_SOURCES:
+        if official.lower() in source_lower:
+            return True
+    return False
+
 # 프롬프트 캐시
 _prompt_cache = {}
 
