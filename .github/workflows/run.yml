@@ -1,4 +1,4 @@
-name: The Wise Frontier - Auto Run
+name: NewsFinal - Auto Run
 
 on:
   schedule:
@@ -23,6 +23,13 @@ jobs:
 
       - name: 패키지 설치
         run: pip install -r requirements.txt
+
+      - name: 프롬프트 초기화 (최초 1회)
+        continue-on-error: true
+        run: python scripts/init_prompts.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
 
       - name: RSS 수집 및 발송
         run: python scripts/rss_fetcher.py
@@ -90,8 +97,8 @@ jobs:
           git stash
           git pull --rebase origin main
           git stash pop || true
-          git add data/state.json data/articles.db
-          git diff --staged --quiet || git commit -m "Update state and DB"
+          git add data/state.json
+          git diff --staged --quiet || git commit -m "Update state"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
