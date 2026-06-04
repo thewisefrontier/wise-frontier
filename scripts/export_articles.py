@@ -29,7 +29,7 @@ def _export_from_sqlite(limit=9999):
     today = time.strftime("%Y-%m-%d")
     c.execute("""
         SELECT * FROM articles
-        WHERE sent_telegram = 1 AND source = 'NewsFinal' AND created_at >= date('now', '-7 days')
+        WHERE is_published = 1 AND source = 'NewsFinal' AND created_at >= date('now', '-7 days')
         ORDER BY created_at DESC
         LIMIT ?
     """, (limit,))
@@ -58,7 +58,7 @@ def export_articles(limit=9999):
             headers={**_headers(), "Range": f"{offset}-{offset+batch-1}"},
             params={
                 "select": "*",
-                "sent_telegram": "eq.1",
+                "is_published": "eq.true",
                 "source": "eq.NewsFinal",
                 "created_at": f"gte.{__import__('time').strftime('%Y-%m-%d', __import__('time').gmtime(__import__('time').time() - 7 * 86400))}",
                 "order": "created_at.desc",

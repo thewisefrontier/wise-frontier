@@ -203,7 +203,8 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
         "country_flag": "",
         "score": article_count,
         "created_at": time.strftime("%Y-%m-%d %H:%M"),
-        "sent_telegram": 1 if published else 0,
+        "sent_telegram": 0,
+        "is_published": published,
         "posted_blog": 0,
     }
     headers = {**_sb_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}

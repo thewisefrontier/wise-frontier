@@ -709,7 +709,6 @@ for data in results:
 
     # 텔레그램 발송 (소프트 노이즈는 스킵)
     if soft_noise:
-        # DB에만 저장 (sent_telegram = 0 유지)
         article_id = insert_article(
             title_en=title, title_ko=title_ko,
             summary_en=summary_en, summary_ko=summary_ko,
@@ -718,6 +717,7 @@ for data in results:
             country=country_name, country_flag=country_flag,
             score=0, full_text=full_text,
             countries=country_names,
+            is_published=False,
         )
         print(f"[SOFT] [{category}] [{country_name}] {title_ko[:50]}")
         continue
@@ -728,7 +728,7 @@ for data in results:
         state["daily_count"] += 1
         rss_health[name]["ok"] += 1
 
-        # DB 저장
+        # DB 저장 — RSS 기사는 is_published=False (홈페이지 미노출)
         article_id = insert_article(
             title_en=title, title_ko=title_ko,
             summary_en=summary_en, summary_ko=summary_ko,
@@ -737,6 +737,7 @@ for data in results:
             country=country_name, country_flag=country_flag,
             score=0, full_text=full_text,
             countries=country_names,
+            is_published=False,
         )
         if article_id > 0:
             mark_sent_telegram(article_id)
