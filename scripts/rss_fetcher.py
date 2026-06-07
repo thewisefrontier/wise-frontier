@@ -152,6 +152,14 @@ COUNTRY_INFO = {
     "el salvador": ("🇸🇻", "엘살바도르"),
     "guatemala": ("🇬🇹", "과테말라"),
     "honduras": ("🇭🇳", "온두라스"),
+    # 카리브해
+    "jamaica": ("🇯🇲", "자메이카"), "jamaican": ("🇯🇲", "자메이카"),
+    "trinidad": ("🇹🇹", "트리니다드"), "tobago": ("🇹🇹", "트리니다드"),
+    "barbados": ("🇧🇧", "바베이도스"), "bahamas": ("🇧🇸", "바하마"),
+    "haiti": ("🇭🇹", "아이티"), "haitian": ("🇭🇹", "아이티"),
+    "cuba": ("🇨🇺", "쿠바"), "cuban": ("🇨🇺", "쿠바"),
+    "dominican": ("🇩🇴", "도미니카공화국"),
+    "guyana": ("🇬🇾", "가이아나"), "suriname": ("🇸🇷", "수리남"),
     # 오세아니아
     "australia": ("🇦🇺", "호주"), "australian": ("🇦🇺", "호주"),
     "new zealand": ("🇳🇿", "뉴질랜드"),
@@ -477,7 +485,10 @@ SOURCE_COUNTRY_MAP = {
     # 필리핀
     "philippine star": ("🇵🇭", "필리핀"), "rappler": ("🇵🇭", "필리핀"),
     "philippine information agency": ("🇵🇭", "필리핀"),
-    # 카자흐스탄
+    # 자메이카
+    "jamaica observer": ("🇯🇲", "자메이카"), "jamaica gleaner": ("🇯🇲", "자메이카"),
+    "loop jamaica": ("🇯🇲", "자메이카"), "rjr news": ("🇯🇲", "자메이카"),
+    # 트리니다드
     "astana times": ("🇰🇿", "카자흐스탄"), "kazinform": ("🇰🇿", "카자흐스탄"),
     "kazakhstan inform": ("🇰🇿", "카자흐스탄"),
     # 우즈베키스탄
