@@ -1,0 +1,12 @@
+name = "newsfinal-image-upload"
+main = "image-upload-worker.js"
+compatibility_date = "2026-01-01"
+
+[[r2_buckets]]
+binding = "R2_BUCKET"
+bucket_name = "newsfinal-images"
+
+[vars]
+R2_PUBLIC_URL = "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev"
+
+# UPLOAD_SECRET은 wrangler secret put UPLOAD_SECRET 으로 설정
