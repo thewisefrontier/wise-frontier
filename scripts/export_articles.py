@@ -88,6 +88,7 @@ def export_articles(limit=9999):
         json.dump(final[:limit], f, ensure_ascii=False, indent=2)
 
     print(f"[EXPORT] {len(final)}개 기사 → {OUTPUT_FILE}")
+    return final[:limit]
 
 
 def fetch_market_data():
@@ -156,6 +157,30 @@ def fetch_market_data():
     print(f"[MARKET] {len(market_data['indices'])}개 시세 저장 완료")
 
 
+def generate_sitemap(articles):
+    """sitemap.xml 생성"""
+    os.makedirs("docs", exist_ok=True)
+    urls = [
+        '<url><loc>https://newsfinal.co.kr/</loc><changefreq>hourly</changefreq><priority>1.0</priority></url>',
+        '<url><loc>https://newsfinal.co.kr/about.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>',
+        '<url><loc>https://newsfinal.co.kr/privacy.html</loc><changefreq>monthly</changefreq><priority>0.3</priority></url>',
+    ]
+    for a in articles:
+        if a.get('id'):
+            urls.append(f'<url><loc>https://newsfinal.co.kr/article.html?id={a["id"]}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>')
+
+    sitemap = f'''<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{chr(10).join(urls)}
+</urlset>'''
+
+    with open("docs/sitemap.xml", "w", encoding="utf-8") as f:
+        f.write(sitemap)
+    print(f"[SITEMAP] {len(urls)}개 URL → docs/sitemap.xml")
+
+
 if __name__ == "__main__":
-    export_articles()
+    articles = export_articles()
     fetch_market_data()
+    if articles:
+        generate_sitemap(articles)

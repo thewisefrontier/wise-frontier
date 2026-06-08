@@ -24,6 +24,13 @@ jobs:
       - name: 패키지 설치
         run: pip install -r requirements.txt
 
+      - name: 프롬프트 초기화 (최초 1회)
+        continue-on-error: true
+        run: python scripts/init_prompts.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+
       - name: RSS 수집 및 발송
         run: python scripts/rss_fetcher.py
         env:
@@ -75,6 +82,7 @@ jobs:
           mkdir -p web_repo/data
           cp docs/data/articles.json web_repo/data/articles.json
           cp docs/data/market_data.json web_repo/data/market_data.json
+          cp -f docs/sitemap.xml web_repo/sitemap.xml 2>/dev/null || true
           cd web_repo
           git config user.name "github-actions"
           git config user.email "actions@github.com"
