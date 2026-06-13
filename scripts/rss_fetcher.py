@@ -680,27 +680,29 @@ for data in results:
     if full_text:
         print(f"  [크롤링] {len(full_text)}자 추출")
 
-    # 국가 감지 — 소스 기본값 우선, 기사 내용으로 보완
-    source_flag, source_country = get_source_country(name)
+    # 국가 감지 — 기사 내용 기반으로만 판단 (소스 국가는 폴백으로만 사용 안 함)
     content_flag, content_country = detect_country(title + " " + summary_en, source=name)
-
-    # 기사 내용에서 명확한 국가가 감지되면 사용, 아니면 소스 기본값
-    if content_country and content_country != source_country:
-        country_flag, country_name = content_flag, content_country
-    elif source_country:
-        country_flag, country_name = source_flag, source_country
-    else:
-        country_flag, country_name = content_flag or "", content_country or ""
-
-    # 다국가 감지
     all_countries = detect_countries(title + " " + summary_en, source=name)
-    country_names = [n for _, n in all_countries] if all_countries else ([country_name] if country_name else [])
+    country_names = [n for _, n in all_countries]
 
-    # 주요국만 있으면 글로벌 카테고리로
-    frontier_countries = [n for n in country_names if n not in GLOBAL_COUNTRIES]
-    if not frontier_countries and country_names:
+    if country_names:
+        # 프론티어 국가 우선
+        frontier_countries = [n for n in country_names if n not in GLOBAL_COUNTRIES]
+        if frontier_countries:
+            country_name = frontier_countries[0]
+            country_flag = next((f for f, n in all_countries if n == country_name), "")
+        else:
+            # 주요국만 있으면 글로벌
+            country_name = country_names[0]
+            country_flag = next((f for f, n in all_countries if n == country_name), "")
+            category = "글로벌"
+            region = "global"
+    else:
+        # 내용에서 어떤 국가도 감지 안 됨 → 글로벌
+        country_name, country_flag = "", ""
         category = "글로벌"
         region = "global"
+        country_names = []
 
     # 한국어 번역
     try:
