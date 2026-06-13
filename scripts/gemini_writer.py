@@ -415,6 +415,8 @@ def build_issue_prompt(cluster, existing_summary=None):
 - 기사 문체로 작성하세요. 논평/칼럼 문체는 금지입니다.
 아래 형식으로 출력:
 제목: (핵심을 담은 제목)
+국가: (기사의 핵심 주제가 되는 국가명 1개. 특정 국가 얘기가 아니면 "없음")
+분야: (경제/금융/자원·에너지/산업·기업/정치·외교/사회/IT·과학/글로벌 중 하나)
 본문: (기사 본문)"""
 
     rules = load_prompt("writer_rules", fallback=FALLBACK_RULES)
@@ -507,19 +509,74 @@ def call_gemini(prompt, max_tokens=1000, retry=2):
     return None
 
 
+# 국가 → 지역 매핑
+COUNTRY_TO_REGION = {
+    "나이지리아": "africa", "케냐": "africa", "가나": "africa", "남아공": "africa",
+    "에티오피아": "africa", "르완다": "africa", "탄자니아": "africa", "우간다": "africa",
+    "이집트": "africa", "모로코": "africa", "알제리": "africa", "튀니지": "africa",
+    "세네갈": "africa", "코트디부아르": "africa", "잠비아": "africa", "짐바브웨": "africa",
+    "보츠와나": "africa", "나미비아": "africa", "모잠비크": "africa", "앙골라": "africa",
+    "베트남": "southeast_asia", "인도네시아": "southeast_asia", "태국": "southeast_asia",
+    "필리핀": "southeast_asia", "말레이시아": "southeast_asia", "캄보디아": "southeast_asia",
+    "미얀마": "southeast_asia", "라오스": "southeast_asia", "동티모르": "southeast_asia",
+    "카자흐스탄": "central_asia", "우즈베키스탄": "central_asia", "키르기스스탄": "central_asia",
+    "타지키스탄": "central_asia", "투르크메니스탄": "central_asia",
+    "사우디아라비아": "middle_east", "아랍에미리트": "middle_east", "카타르": "middle_east",
+    "쿠웨이트": "middle_east", "이라크": "middle_east", "이란": "middle_east",
+    "이스라엘": "middle_east", "요르단": "middle_east", "오만": "middle_east", "튀르키예": "middle_east",
+    "방글라데시": "south_asia", "파키스탄": "south_asia", "스리랑카": "south_asia", "네팔": "south_asia",
+    "자메이카": "caribbean", "트리니다드": "caribbean", "바베이도스": "caribbean",
+    "아이티": "caribbean", "쿠바": "caribbean", "도미니카공화국": "caribbean",
+    "콜롬비아": "latin_america", "페루": "latin_america", "칠레": "latin_america",
+    "아르헨티나": "latin_america", "브라질": "latin_america", "멕시코": "latin_america",
+    "가이아나": "latin_america", "수리남": "latin_america",
+}
+
+def country_to_region(country: str) -> str:
+    return COUNTRY_TO_REGION.get(country, "global")
+
+
+def update_article_fields(article_id: int, fields: dict):
+    requests.patch(
+        f"{_sb_url()}?id=eq.{article_id}",
+        headers=_sb_headers(),
+        json=fields,
+        timeout=15
+    )
+
+
 def parse_title_and_body(text):
-    """Gemini 응답에서 제목과 본문 분리"""
+    """Gemini 응답에서 제목/본문/국가/분야 분리"""
     title = ""
+    country = ""
+    category = ""
     body = text
     lines = text.strip().split("\n")
+    body_start = 0
     for i, line in enumerate(lines):
         if line.startswith("제목:"):
             title = line.replace("제목:", "").strip()
-            body = "\n".join(lines[i+1:]).strip()
+        elif line.startswith("국가:"):
+            country = line.replace("국가:", "").strip()
+            if country in ("없음", "글로벌", "-", "N/A"):
+                country = ""
+        elif line.startswith("분야:"):
+            category = line.replace("분야:", "").strip()
+        elif line.startswith("본문:"):
+            body = "\n".join(lines[i:]).replace("본문:", "", 1).strip()
+            body_start = i
+            break
+    if not body_start and title:
+        # 본문: 라벨이 없으면 제목 이후 전체를 본문으로
+        idx = next((i for i, l in enumerate(lines) if l.startswith("제목:")), -1)
+        if idx >= 0:
+            body = "\n".join(lines[idx+1:]).strip()
+            # 국가:/분야: 라인 제거
+            body_lines = [l for l in body.split("\n") if not l.startswith("국가:") and not l.startswith("분야:")]
+            body = "\n".join(body_lines).strip()
             if body.startswith("본문:"):
                 body = body[3:].strip()
-            break
-    return title, body
+    return title, body, country, category
 
 
 # ── 메인 실행 ─────────────────────────────────────────────
@@ -572,11 +629,22 @@ def run():
             content = call_gemini(prompt, max_tokens=4000 if has_full else 1500)
 
             if content:
-                today_label = time.strftime("%Y.%m.%d")
-                gen_title, gen_body = parse_title_and_body(content)
+                gen_title, gen_body, gen_country, gen_category = parse_title_and_body(content)
                 new_title = gen_title if gen_title else titles[0][:50]
                 update_article(existing["id"], new_title, gen_body or content)
                 update_article_count(existing["id"], cur_count)
+                # 국가/분야 재분류 업데이트
+                if gen_country or gen_category:
+                    update_fields = {}
+                    if gen_country:
+                        update_fields["country"] = gen_country
+                        update_fields["region"] = country_to_region(gen_country)
+                    if gen_category:
+                        update_fields["category"] = gen_category
+                        if gen_category == "글로벌":
+                            update_fields["region"] = "global"
+                    if update_fields:
+                        update_article_fields(existing["id"], update_fields)
                 print(f"  ✅ 업데이트 완료: {new_title}\n")
                 updated += 1
             else:
@@ -594,8 +662,15 @@ def run():
             content = call_gemini(prompt, max_tokens=4000 if has_full else 1500)
 
             if content:
-                gen_title, gen_body = parse_title_and_body(content)
+                gen_title, gen_body, gen_country, gen_category = parse_title_and_body(content)
                 full_title = gen_title if gen_title else titles[0][:50]
+
+                # Gemini가 재분류한 국가/분야 우선 사용
+                final_country = gen_country or country
+                final_category = gen_category or category or "종합"
+                final_region = country_to_region(final_country) if final_country else (cluster[0].get("region") or "global")
+                if final_category == "글로벌":
+                    final_region = "global"
 
                 # 유사 기사 체크 — 85% 이상이면 미발행으로 저장
                 similar, sim_score = find_similar_article(full_title, today_own_articles)
@@ -609,9 +684,9 @@ def run():
                     title_ko      = full_title,
                     summary_ko    = gen_body or content,
                     cluster_key   = cluster_key,
-                    category      = category or "종합",
-                    region        = cluster[0].get("region") or "global",
-                    country       = country,
+                    category      = final_category,
+                    region        = final_region,
+                    country       = final_country,
                     article_count = cur_count,
                     published     = published,
                 )
@@ -660,6 +735,8 @@ def run():
 - 기사 문체로 작성하세요. 논평/칼럼 문체는 금지입니다.
 아래 형식으로 출력:
 제목: (핵심을 담은 제목)
+국가: (기사의 핵심 주제가 되는 국가명 1개. 특정 국가 얘기가 아니면 "없음")
+분야: (경제/금융/자원·에너지/산업·기업/정치·외교/사회/IT·과학/글로벌 중 하나)
 본문: (기사 본문)""")
 
         template = load_prompt("writer_solo", fallback="""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다.
@@ -684,8 +761,14 @@ def run():
 
         content = call_gemini(prompt, max_tokens=4000)
         if content:
-            gen_title, gen_body = parse_title_and_body(content)
+            gen_title, gen_body, gen_country, gen_category = parse_title_and_body(content)
             full_title = gen_title if gen_title else title[:50]
+
+            final_country = gen_country or a.get("country") or ""
+            final_category = gen_category or a.get("category") or "종합"
+            final_region = country_to_region(final_country) if final_country else (a.get("region") or "global")
+            if final_category == "글로벌":
+                final_region = "global"
 
             # 유사 기사 체크
             similar, sim_score = find_similar_article(full_title, today_own_articles)
@@ -699,9 +782,9 @@ def run():
                 title_ko=full_title,
                 summary_ko=gen_body or content,
                 cluster_key=cluster_key,
-                category=a.get("category") or "종합",
-                region=a.get("region") or "global",
-                country=a.get("country") or "",
+                category=final_category,
+                region=final_region,
+                country=final_country,
                 article_count=1,
                 published=published,
             )
