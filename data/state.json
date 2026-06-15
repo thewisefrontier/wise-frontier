@@ -51,7 +51,7 @@
       "status": "active"
     },
     "Africanews Business": {
-      "ok": 87,
+      "ok": 88,
       "fail": 0,
       "status": "active"
     },
@@ -327,7 +327,7 @@
     },
     "Moneycontrol India": {
       "ok": 0,
-      "fail": 109,
+      "fail": 110,
       "status": "active"
     },
     "Zambia Daily Mail Business": {
@@ -841,8 +841,13 @@
       "status": "active"
     },
     "Vietnam Stock News": {
+<<<<<<< Updated upstream
       "ok": 30,
       "fail": 135,
+=======
+      "ok": 31,
+      "fail": 134,
+>>>>>>> Stashed changes
       "status": "active"
     },
     "UNCTAD News": {
@@ -861,6 +866,10 @@
       "status": "active"
     }
   },
+<<<<<<< Updated upstream
   "daily_count": 18,
+=======
+  "daily_count": 12,
+>>>>>>> Stashed changes
   "last_reset": "2026-06-15"
 }
