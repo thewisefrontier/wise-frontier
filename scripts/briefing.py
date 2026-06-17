@@ -65,7 +65,7 @@ def build_briefing(date: str = None) -> str:
     if date is None:
         date = time.strftime("%Y-%m-%d")
 
-    articles = get_today_articles(date=date, limit=20)
+    articles = get_today_articles(date=date, limit=30)
     if not articles:
         return ""
 
@@ -75,27 +75,25 @@ def build_briefing(date: str = None) -> str:
         f"오늘의 프론티어 마켓 주요 뉴스입니다.\n"
     ]
 
-    # 지역별 분류
-    by_region = {}
+    # 국가별 분류 (기사 많은 나라 우선)
+    by_country = {}
     for a in articles:
-        r = a.get("region", "global") or "global"
-        if r not in by_region:
-            by_region[r] = []
-        by_region[r].append(a)
+        country = a.get("country") or ""
+        country_flag = a.get("country_flag") or ""
+        key = f"{country_flag} {country}".strip() if country else "🌐 글로벌"
+        if key not in by_country:
+            by_country[key] = []
+        by_country[key].append(a)
 
-    for region, items in by_region.items():
-        emoji = REGION_EMOJI.get(region, "🗺️")
-        name = REGION_NAME.get(region, region)
-        lines.append(f"\n{emoji} *{name}*")
+    # 기사 많은 나라 먼저, 같으면 가나다순
+    sorted_countries = sorted(by_country.items(), key=lambda x: (-len(x[1]), x[0]))
 
-        for a in items:
-            country_flag = a.get("country_flag", "")
-            country = a.get("country", "")
+    for country_key, items in sorted_countries:
+        lines.append(f"\n*{country_key}*")
+        for a in items[:3]:  # 국가당 최대 3건
             title_ko = a.get("title_ko") or a.get("title_en", "")
-            # 자체 기사는 사이트 링크로
             url = f"https://newsfinal.co.kr/article.html?id={a.get('id')}"
-            country_str = f" {country_flag} {country}" if country_flag else ""
-            lines.append(f"📌{country_str} [{title_ko}]({url})")
+            lines.append(f"· [{title_ko}]({url})")
 
     lines.append(f"\n_NewsFinal | 프론티어 미디어_")
     return "\n".join(lines)
