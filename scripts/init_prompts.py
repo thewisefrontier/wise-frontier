@@ -155,6 +155,20 @@ def init():
         print("[ERROR] 환경변수 없음")
         return
 
+    # 안전장치: 이미 데이터가 있으면 스킵 (중복 INSERT 방지)
+    check = requests.get(
+        f"{SUPABASE_URL}/rest/v1/prompts",
+        headers={
+            "apikey": SUPABASE_SERVICE_KEY,
+            "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
+        },
+        params={"select": "id", "limit": "1"},
+    )
+    if check.status_code in (200, 206) and len(check.json()) > 0:
+        print("[SKIP] prompts 테이블에 이미 데이터가 있습니다. (중복 방지를 위해 실행하지 않음)")
+        print("       강제로 다시 초기화하려면 Supabase에서 테이블을 비운 후 실행하세요.")
+        return
+
     for p in PROMPTS:
         res = requests.post(
             f"{SUPABASE_URL}/rest/v1/prompts",
