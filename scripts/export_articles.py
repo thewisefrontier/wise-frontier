@@ -2,7 +2,7 @@ import os
 import json
 import requests
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
@@ -94,7 +94,7 @@ def export_articles(limit=9999):
 def fetch_market_data():
     os.makedirs("docs/data", exist_ok=True)
     market_data = {
-        "updated_at": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC"),
+        "updated_at": (datetime.utcnow() + timedelta(hours=9)).strftime("%Y-%m-%d %H:%M"),
         "indices": [],   # 기존 호환용 — 프론티어 지수 전체를 평평하게 담음 (사이드바 티커용)
         "groups": {
             "us": [],       # 미국
