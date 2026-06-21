@@ -231,6 +231,7 @@ def find_similar_article(title: str, own_articles: list, threshold: int = 80):
 
 def save_article(title_ko, summary_ko, cluster_key, category, region, country="", article_count=0, published=True):
     url = f"internal://{cluster_key}"
+    now_str = now_kst().strftime("%Y-%m-%d %H:%M")
     payload = {
         "title_en": title_ko,
         "title_ko": title_ko,
@@ -244,7 +245,8 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
         "country": country,
         "country_flag": "",
         "score": article_count,
-        "created_at": now_kst().strftime("%Y-%m-%d %H:%M"),
+        "created_at": now_str,
+        "first_published_at": now_str,  # 최초 게시 시각 — 이후 병합 업데이트에도 변하지 않음
         "sent_telegram": 0,
         "is_published": published,
         "posted_blog": 0,
@@ -258,6 +260,8 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
 
 
 def update_article(article_id, title_ko, summary_ko):
+    """기사 갱신(병합 업데이트 포함) — created_at(최종 갱신 시각)만 바뀌고
+    first_published_at(최초 게시 시각)은 절대 건드리지 않음 — 라이브 업데이트 표시의 기준이 됨"""
     res = requests.patch(
         f"{_sb_url()}?id=eq.{article_id}",
         headers=_sb_headers(),
