@@ -2,10 +2,17 @@ import sys
 import os
 import time
 import requests
+from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
 
 sys.stdout.reconfigure(encoding='utf-8')
 load_dotenv()
+
+KST = timezone(timedelta(hours=9))
+
+def now_kst() -> datetime:
+    """GitHub Actions 러너(UTC)와 무관하게 정확한 KST 현재시각 반환"""
+    return datetime.now(timezone.utc).astimezone(KST)
 
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 CHAT_ID = "@NewsFinalKR"
@@ -63,13 +70,13 @@ def send_telegram(msg: str):
 
 def build_briefing(date: str = None) -> str:
     if date is None:
-        date = time.strftime("%Y-%m-%d")
+        date = now_kst().strftime("%Y-%m-%d")
 
     articles = get_today_articles(date=date, limit=30)
     if not articles:
         return ""
 
-    date_str = time.strftime("%Y년 %m월 %d일")
+    date_str = now_kst().strftime("%Y년 %m월 %d일")
     lines = [
         f"📰 *NewsFinal — {date_str} 브리핑*",
         f"오늘의 프론티어 마켓 주요 뉴스입니다.\n"
@@ -103,7 +110,7 @@ if __name__ == "__main__":
         print("[ERROR] SUPABASE_URL 또는 SUPABASE_SERVICE_KEY 없음")
         exit(1)
 
-    date = time.strftime("%Y-%m-%d")
+    date = now_kst().strftime("%Y-%m-%d")
     print(f"[브리핑] {date} 브리핑 생성 중...")
 
     briefing = build_briefing(date)
