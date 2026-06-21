@@ -42,10 +42,12 @@ jobs:
           git clone https://x-access-token:${{ secrets.WEB_PUSH_TOKEN }}@github.com/thewisefrontier/wise-frontier-web.git web_repo
           mkdir -p web_repo/data
           cp docs/data/articles.json web_repo/data/articles.json
+          cp -f docs/data/market_data.json web_repo/data/market_data.json 2>/dev/null || true
+          cp -f docs/sitemap.xml web_repo/sitemap.xml 2>/dev/null || true
           cd web_repo
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add data/articles.json
+          git add -A
           git diff --staged --quiet || git commit -m "Update briefing"
           git pull --rebase origin main
           git push
