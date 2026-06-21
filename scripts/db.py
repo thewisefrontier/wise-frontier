@@ -7,9 +7,16 @@ IPv6 문제 없이 HTTP로 동작
 import os
 import time
 import requests
+from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
 
 load_dotenv()
+
+KST = timezone(timedelta(hours=9))
+
+def now_kst() -> datetime:
+    """GitHub Actions 러너(UTC)와 무관하게 정확한 KST 현재시각 반환"""
+    return datetime.now(timezone.utc).astimezone(KST)
 
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
@@ -71,7 +78,7 @@ def insert_article(
         "full_text": full_text or None,
         "countries": countries or ([country] if country else None),
         "is_published": is_published,
-        "created_at": time.strftime("%Y-%m-%d %H:%M"),
+        "created_at": now_kst().strftime("%Y-%m-%d %H:%M"),
         "sent_telegram": 0,
         "posted_blog": 0,
     }
@@ -108,7 +115,7 @@ def mark_posted_blog(article_id: int):
 
 def get_top_articles(date: str = None, limit: int = 10, region: str = None) -> list:
     if date is None:
-        date = time.strftime("%Y-%m-%d")
+        date = now_kst().strftime("%Y-%m-%d")
     params = {
         "select": "*",
         "sent_telegram": "eq.1",
