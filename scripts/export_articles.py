@@ -95,19 +95,17 @@ def fetch_market_data():
     os.makedirs("docs/data", exist_ok=True)
     market_data = {
         "updated_at": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC"),
-        "indices": []
-    }
-    symbols = {
-        "NGX": "^NGSEINDX",
-        "JSE": "^J203.JO",
-        "NSE KE": "^NASI",
-        "EGX30": "^CASE30",
-        "SET": "^SET.BK",
-        "IDX": "^JKSE",
-        "PSEi": "PSEI.PS",
+        "indices": [],   # 기존 호환용 — 프론티어 지수 전체를 평평하게 담음 (사이드바 티커용)
+        "groups": {
+            "us": [],       # 미국
+            "kr": [],       # 한국
+            "frontier": [], # 아프리카 · 프론티어 마켓
+            "fx": [],       # 환율
+        }
     }
     headers = {"User-Agent": "Mozilla/5.0"}
-    for name, symbol in symbols.items():
+
+    def fetch_one(name, symbol):
         try:
             url = f"https://query1.finance.yahoo.com/v8/finance/chart/{symbol}?interval=1d&range=2d"
             res = requests.get(url, headers=headers, timeout=8)
@@ -117,40 +115,58 @@ def fetch_market_data():
             price = meta.get("regularMarketPrice", 0)
             prev = meta.get("chartPreviousClose", meta.get("previousClose", price))
             change_pct = ((price - prev) / prev * 100) if prev else 0
-            market_data["indices"].append({
+            entry = {
                 "name": name, "symbol": symbol,
                 "price": round(price, 2),
                 "change_pct": round(change_pct, 2),
-                "up": change_pct >= 0
-            })
+                "up": change_pct >= 0,
+            }
             print(f"[MARKET] {name}: {price} ({change_pct:+.2f}%)")
+            return entry
         except Exception as e:
             print(f"[MARKET] {name} 실패: {e}")
+            return None
 
+    # 미국 주요 지수
+    us_symbols = {
+        "S&P 500": "^GSPC",
+        "나스닥": "^IXIC",
+        "다우존스": "^DJI",
+    }
+    # 한국 주요 지수
+    kr_symbols = {
+        "코스피": "^KS11",
+        "코스닥": "^KQ11",
+    }
+    # 아프리카 · 프론티어 마켓 지수
+    frontier_symbols = {
+        "NGX (나이지리아)": "^NGSEINDX",
+        "JSE (남아공)": "^J203.JO",
+        "NSE (케냐)": "^NASI",
+        "EGX30 (이집트)": "^CASE30",
+        "SET (태국)": "^SET.BK",
+        "IDX (인도네시아)": "^JKSE",
+        "PSEi (필리핀)": "PSEI.PS",
+    }
+    # 환율 (프론티어 통화 vs USD)
     forex_pairs = {
         "USD/NGN": "USDNGN=X",
         "USD/KES": "USDKES=X",
         "USD/ZAR": "USDZAR=X",
     }
+
+    for group_key, symbols in [("us", us_symbols), ("kr", kr_symbols), ("frontier", frontier_symbols)]:
+        for name, symbol in symbols.items():
+            entry = fetch_one(name, symbol)
+            if entry:
+                market_data["groups"][group_key].append(entry)
+                market_data["indices"].append(entry)
+
     for name, symbol in forex_pairs.items():
-        try:
-            url = f"https://query1.finance.yahoo.com/v8/finance/chart/{symbol}?interval=1d&range=2d"
-            res = requests.get(url, headers=headers, timeout=8)
-            data = res.json()
-            result = data["chart"]["result"][0]
-            meta = result["meta"]
-            price = meta.get("regularMarketPrice", 0)
-            prev = meta.get("chartPreviousClose", price)
-            change_pct = ((price - prev) / prev * 100) if prev else 0
-            market_data["indices"].append({
-                "name": name, "symbol": symbol,
-                "price": round(price, 2),
-                "change_pct": round(change_pct, 2),
-                "up": change_pct >= 0
-            })
-            print(f"[MARKET] {name}: {price} ({change_pct:+.2f}%)")
-        except Exception as e:
-            print(f"[MARKET] {name} 실패: {e}")
+        entry = fetch_one(name, symbol)
+        if entry:
+            market_data["groups"]["fx"].append(entry)
+            market_data["indices"].append(entry)
 
     with open(MARKET_FILE, "w", encoding="utf-8") as f:
         json.dump(market_data, f, ensure_ascii=False, indent=2)
@@ -166,6 +182,7 @@ def generate_sitemap(articles):
         '<url><loc>https://newsfinal.co.kr/privacy.html</loc><changefreq>monthly</changefreq><priority>0.3</priority></url>',
         '<url><loc>https://newsfinal.co.kr/archive.html</loc><changefreq>daily</changefreq><priority>0.6</priority></url>',
         '<url><loc>https://newsfinal.co.kr/calendar.html</loc><changefreq>daily</changefreq><priority>0.6</priority></url>',
+        '<url><loc>https://newsfinal.co.kr/markets.html</loc><changefreq>hourly</changefreq><priority>0.7</priority></url>',
     ]
     for a in articles:
         if a.get('id'):
