@@ -10,9 +10,16 @@ Gemini Flash로 고품질 한국어 요약을 재생성합니다.
 import os
 import time
 import requests
+from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
 
 load_dotenv()
+
+KST = timezone(timedelta(hours=9))
+
+def now_kst() -> datetime:
+    """GitHub Actions 러너(UTC)와 무관하게 정확한 KST 현재시각 반환"""
+    return datetime.now(timezone.utc).astimezone(KST)
 
 GEMINI_MODEL = "gemini-3.1-flash-lite"
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
@@ -42,7 +49,7 @@ def _sb_url():
 
 
 def get_articles_to_summarize(limit: int) -> list:
-    since = time.strftime("%Y-%m-%d %H:%M", time.gmtime(time.time() - 86400))
+    since = (now_kst() - timedelta(hours=24)).strftime("%Y-%m-%d %H:%M")
     res = requests.get(
         _sb_url(),
         headers=_sb_headers(),
