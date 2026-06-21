@@ -146,6 +146,27 @@ def get_existing_cluster(cluster_key):
     return None
 
 
+def get_article_by_id(article_id):
+    """id로 기사 전체 정보(본문 포함) 조회 — 유사 기사 병합 시 기존 본문을 가져오기 위함"""
+    try:
+        res = requests.get(
+            _sb_url(),
+            headers=_sb_headers(),
+            params={
+                "select": "id,title_ko,summary_ko,subcategory,score,country,category",
+                "id": f"eq.{article_id}",
+                "limit": "1",
+            },
+            timeout=15
+        )
+        if res.status_code in (200, 206):
+            data = res.json()
+            return data[0] if data else None
+    except Exception as e:
+        print(f"  ⚠️ get_article_by_id 실패: {e}")
+    return None
+
+
 def get_cluster_article_count(cluster_key):
     res = requests.get(
         _sb_url(),
@@ -675,6 +696,47 @@ def run():
                 print(f"  [SKIP] 기사 부족 ({cur_count}건)\n")
                 continue
 
+            # 같은 cluster_key는 아니지만 표현이 달라 같은 사건일 수 있는 기존 기사 탐색
+            # (원문 클러스터의 대표 제목으로 먼저 검사 — 병합 가능하면 새로 만들지 않고 기존 글에 합침)
+            probe_title = titles[0][:80] if titles else ""
+            similar_existing, sim_score = find_similar_article(probe_title, today_own_articles) if probe_title else (None, 0)
+
+            if similar_existing:
+                print(f"  → 유사 기존 기사 발견 (유사도 {sim_score}%) → 병합 업데이트: {similar_existing.get('title_ko','')[:40]}")
+                # 기존 기사 본문을 가져와서 병합 프롬프트 생성
+                existing_full = get_article_by_id(similar_existing["id"])
+                existing_summary = existing_full.get("summary_ko") if existing_full else None
+
+                prompt = build_issue_prompt(cluster, existing_summary) if existing_summary else build_issue_prompt(cluster)
+                has_full = any(a.get("full_text") for a in cluster)
+                content = call_gemini(prompt, max_tokens=4000 if has_full else 1500)
+
+                if content:
+                    gen_title, gen_body, gen_country, gen_category = parse_title_and_body(content)
+                    new_title = gen_title if gen_title else probe_title
+                    update_article(similar_existing["id"], new_title, gen_body or content)
+                    prev_count = existing_full.get("score", 0) if existing_full else 0
+                    update_article_count(similar_existing["id"], max(prev_count, cur_count) + 1)
+                    if gen_country or gen_category:
+                        update_fields = {}
+                        if gen_country:
+                            norm_country = normalize_country(gen_country)
+                            update_fields["country"] = norm_country
+                            update_fields["region"] = country_to_region(norm_country)
+                        if gen_category:
+                            update_fields["category"] = gen_category
+                            if gen_category == "글로벌":
+                                update_fields["region"] = "global"
+                        if update_fields:
+                            update_article_fields(similar_existing["id"], update_fields)
+                    print(f"  ✅ 병합 완료: {new_title}\n")
+                    updated += 1
+                else:
+                    print(f"  ❌ 병합 실패\n")
+                time.sleep(CALL_INTERVAL)
+                processed += 1
+                continue
+
             print(f"  → 신규 이슈 기사 생성")
             prompt  = build_issue_prompt(cluster)
             has_full = any(a.get("full_text") for a in cluster)
@@ -691,10 +753,10 @@ def run():
                 if final_category == "글로벌":
                     final_region = "global"
 
-                # 유사 기사 체크 — 85% 이상이면 미발행으로 저장
+                # 제목 생성 후 한 번 더 유사 기사 체크 (이중 안전장치)
                 similar, sim_score = find_similar_article(full_title, today_own_articles)
                 if similar:
-                    print(f"  ⚠️ 유사 기사 발견 (유사도 {sim_score}%) → 미발행으로 저장: {similar.get('title_ko','')[:40]}")
+                    print(f"  ⚠️ 유사 기사 재발견 (유사도 {sim_score}%) → 미발행으로 저장: {similar.get('title_ko','')[:40]}")
                     published = False
                 else:
                     published = True
@@ -758,6 +820,67 @@ def run():
 분야: (경제/금융/자원·에너지/산업·기업/정치·외교/사회/IT·과학/글로벌 중 하나)
 본문: (기사 본문)""")
 
+        # 원본 제목으로 먼저 유사 기존 기사 탐색 — 매치되면 신규 생성 대신 병합
+        similar_existing, pre_sim_score = find_similar_article(title, today_own_articles) if title else (None, 0)
+
+        if similar_existing:
+            print(f"  → 유사 기존 기사 발견 (유사도 {pre_sim_score}%) → 병합 업데이트: {similar_existing.get('title_ko','')[:40]}")
+            existing_full = get_article_by_id(similar_existing["id"])
+            existing_summary = existing_full.get("summary_ko") if existing_full else None
+
+            merge_template = """당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다.
+기존 기사에 새로 들어온 관련 기사를 반영해 업데이트하세요. ({today_str})
+
+[기존 기사]
+{existing_summary}
+
+[새로 들어온 원문 — {source}]
+{full_text}
+
+새로 들어온 기사의 팩트를 기존 기사에 자연스럽게 통합해 완성도 높은 기사로 다시 써주세요.
+팩트(수치, 인명, 날짜, 기관명)를 최대한 살리고, 한국어로 작성하세요.
+{rules}
+
+아래 형식으로 출력:
+제목: (통합된 핵심을 담은 제목)
+국가: (기사의 핵심 주제가 되는 국가명 1개. 특정 국가 얘기가 아니면 "없음")
+분야: (경제/금융/자원·에너지/산업·기업/정치·외교/사회/IT·과학/글로벌 중 하나)
+본문: (통합된 기사 본문)"""
+
+            prompt = merge_template.format(
+                today_str=now_kst().strftime('%Y년 %m월 %d일'),
+                existing_summary=existing_summary or "",
+                source=a.get('source', ''),
+                full_text=a.get('full_text', ''),
+                rules=rules,
+            )
+            content = call_gemini(prompt, max_tokens=4000)
+
+            if content:
+                gen_title, gen_body, gen_country, gen_category = parse_title_and_body(content)
+                new_title = gen_title if gen_title else title[:50]
+                update_article(similar_existing["id"], new_title, gen_body or content)
+                prev_count = existing_full.get("score", 0) if existing_full else 0
+                update_article_count(similar_existing["id"], prev_count + 1)
+                if gen_country or gen_category:
+                    update_fields = {}
+                    if gen_country:
+                        norm_country = normalize_country(gen_country)
+                        update_fields["country"] = norm_country
+                        update_fields["region"] = country_to_region(norm_country)
+                    if gen_category:
+                        update_fields["category"] = gen_category
+                        if gen_category == "글로벌":
+                            update_fields["region"] = "global"
+                    if update_fields:
+                        update_article_fields(similar_existing["id"], update_fields)
+                print(f"  ✅ 단독 병합 완료: {new_title}\n")
+                updated += 1
+            else:
+                print(f"  ❌ 단독 병합 실패\n")
+            time.sleep(CALL_INTERVAL)
+            continue
+
         template = load_prompt("writer_solo", fallback="""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다.
 아래는 {source}의 원문 기사입니다. ({today_str})
 국가: {country} | 분야: {category}
@@ -789,10 +912,10 @@ def run():
             if final_category == "글로벌":
                 final_region = "global"
 
-            # 유사 기사 체크
+            # 제목 생성 후 한 번 더 유사 기사 체크 (이중 안전장치)
             similar, sim_score = find_similar_article(full_title, today_own_articles)
             if similar:
-                print(f"  ⚠️ 유사 기사 발견 (유사도 {sim_score}%) → 미발행으로 저장")
+                print(f"  ⚠️ 유사 기사 재발견 (유사도 {sim_score}%) → 미발행으로 저장")
                 published = False
             else:
                 published = True
