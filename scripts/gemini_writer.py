@@ -31,6 +31,8 @@ MAX_CLUSTERS_PER_RUN = 10  # 한 번 실행당 최대 처리 클러스터 수
 
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "")
+NEWSFINAL_CHANNEL = "@newsfinal"  # NewsFinal 자체기사 전용 채널
 
 def _sb_headers():
     return {
@@ -42,6 +44,34 @@ def _sb_headers():
 
 def _sb_url():
     return f"{SUPABASE_URL}/rest/v1/articles"
+
+
+def send_to_newsfinal_channel(article_id, title, body, is_update=False):
+    """NewsFinal 자체기사를 텔레그램 @newsfinal 채널에 발송"""
+    if not TELEGRAM_TOKEN:
+        return False
+    try:
+        preview = (body or "").strip().replace("\n\n", "\n")[:300]
+        url = f"https://newsfinal.co.kr/article.html?id={article_id}"
+        label = "🔄 업데이트" if is_update else "📋 NewsFinal"
+        msg = f"{label}\n\n*{title}*\n\n{preview}{'…' if len(body or '') > 300 else ''}\n\n[전체 기사 보기]({url})"
+        res = requests.post(
+            f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage",
+            data={
+                "chat_id": NEWSFINAL_CHANNEL,
+                "text": msg,
+                "parse_mode": "Markdown",
+                "disable_web_page_preview": False,
+            },
+            timeout=15
+        )
+        data = res.json()
+        if not data.get("ok"):
+            print(f"  ⚠️ 텔레그램 발송 실패: {data}")
+        return data.get("ok", False)
+    except Exception as e:
+        print(f"  ⚠️ 텔레그램 발송 예외: {e}")
+        return False
 
 # API 키 폴백 체인
 GEMINI_API_KEYS = [k for k in [
@@ -729,6 +759,7 @@ def run():
                             update_article_fields(similar_existing["id"], update_fields)
                     print(f"  ✅ 병합 완료: {new_title}\n")
                     updated += 1
+                    send_to_newsfinal_channel(similar_existing["id"], new_title, gen_body or content, is_update=True)
                 else:
                     print(f"  ❌ 병합 실패\n")
                 time.sleep(CALL_INTERVAL)
@@ -775,6 +806,7 @@ def run():
                     if published:
                         today_own_articles.append({"id": article_id, "title_ko": full_title})
                         generated += 1
+                        send_to_newsfinal_channel(article_id, full_title, gen_body or content, is_update=False)
                 else:
                     print(f"  ⚠️ 저장 실패\n")
             else:
@@ -874,6 +906,7 @@ def run():
                         update_article_fields(similar_existing["id"], update_fields)
                 print(f"  ✅ 단독 병합 완료: {new_title}\n")
                 updated += 1
+                send_to_newsfinal_channel(similar_existing["id"], new_title, gen_body or content, is_update=True)
             else:
                 print(f"  ❌ 단독 병합 실패\n")
             time.sleep(CALL_INTERVAL)
@@ -934,6 +967,7 @@ def run():
                 if published:
                     today_own_articles.append({"id": article_id, "title_ko": full_title})
                     solo_generated += 1
+                    send_to_newsfinal_channel(article_id, full_title, gen_body or content, is_update=False)
         time.sleep(CALL_INTERVAL)
 
     print(f"✅ 완료 — 클러스터 {generated}건 생성 / {updated}건 업데이트 / 단독 {solo_generated}건 생성")
