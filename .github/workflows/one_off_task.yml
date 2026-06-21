@@ -1,0 +1,42 @@
+name: One-Off Maintenance Task
+
+# 수동 실행 전용 — 1회성 스크립트를 돌릴 때 사용
+# 실행 방법: Actions 탭 > One-Off Maintenance Task > Run workflow
+on:
+  workflow_dispatch:
+    inputs:
+      script:
+        description: '실행할 스크립트 파일명 (scripts/ 폴더 기준, 예: fix_country_names.py)'
+        required: true
+        default: 'fix_country_names.py'
+
+permissions:
+  contents: read
+
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v5
+
+      - name: Python 설정
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: 패키지 설치
+        run: pip install -r requirements.txt
+
+      - name: 스크립트 실행
+        run: python scripts/${{ inputs.script }}
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
