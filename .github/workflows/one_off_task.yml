@@ -6,9 +6,9 @@ on:
   workflow_dispatch:
     inputs:
       script:
-        description: '실행할 스크립트 파일명 (scripts/ 폴더 기준, 예: fix_country_names.py)'
+        description: '실행할 스크립트 파일명 (scripts/ 폴더 기준, 1회성 스크립트는 scripts/one_off/ 안에 있음. 예: one_off/fix_country_names.py)'
         required: true
-        default: 'fix_country_names.py'
+        default: 'one_off/fix_country_names.py'
 
 permissions:
   contents: read
