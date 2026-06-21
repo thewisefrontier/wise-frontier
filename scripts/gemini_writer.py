@@ -286,10 +286,6 @@ def update_article_count(article_id, new_count):
     return res.status_code in (200, 204)
 
 
-def init_db():
-    pass  # Supabase는 대시보드에서 테이블 관리
-
-
 # ── 클러스터링 ────────────────────────────────────────────
 
 def extract_keywords(text):
@@ -628,8 +624,6 @@ def run():
     if not GEMINI_API_KEYS:
         print("[SKIP] GEMINI_API_KEY 없음")
         return
-
-    init_db()
 
     print("\n[클러스터링] 오늘 기사 분석 중...")
     all_articles = get_today_articles(limit=300)
