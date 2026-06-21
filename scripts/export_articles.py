@@ -183,6 +183,7 @@ def generate_sitemap(articles):
         '<url><loc>https://newsfinal.co.kr/archive.html</loc><changefreq>daily</changefreq><priority>0.6</priority></url>',
         '<url><loc>https://newsfinal.co.kr/calendar.html</loc><changefreq>daily</changefreq><priority>0.6</priority></url>',
         '<url><loc>https://newsfinal.co.kr/markets.html</loc><changefreq>hourly</changefreq><priority>0.7</priority></url>',
+        '<url><loc>https://newsfinal.co.kr/country.html</loc><changefreq>daily</changefreq><priority>0.7</priority></url>',
     ]
     for a in articles:
         if a.get('id'):
