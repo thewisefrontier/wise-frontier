@@ -89,7 +89,7 @@ def update_summary(article_id: int, summary_ko: str):
 # 공식/공공 소스 목록
 OFFICIAL_SOURCES = {
     "APO", "AfDB", "WHO", "ASEAN", "ADB", "IMF", "World Bank",
-    "African Union", "UNCTAD", "IFC",
+    "African Union", "UNCTAD", "IFC", "WFP",
     "Vietnam Government", "VietnamPlus", "Indonesia Setkab",
     "Kazakhstan Inform", "Kazinform", "Uzbekistan President",
     "Saudi Press Agency", "Qatar News Agency", "Kuwait News Agency",
