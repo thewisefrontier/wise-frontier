@@ -2,7 +2,7 @@ name: NewsFinal - Daily Digest
 
 on:
   schedule:
-    - cron: '0 13 * * *'    # UTC 13:00 = KST 22:00
+    - cron: '0 20 * * *'    # UTC 20:00 = KST 05:00 (다음날)
   workflow_dispatch:
 
 permissions:
