@@ -346,42 +346,6 @@ def make_cluster_key(cluster):
 
 # ── Gemini 호출 ───────────────────────────────────────────
 
-def call_gemini(prompt, max_tokens=1000, retry=3):
-    api_key = os.getenv("GEMINI_API_KEY")
-    if not api_key:
-        print("[ERROR] GEMINI_API_KEY 없음")
-        return None
-
-    url = (
-        f"https://generativelanguage.googleapis.com/v1beta/models/"
-        f"{GEMINI_MODEL}:generateContent?key={api_key}"
-    )
-    payload = {
-        "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {"temperature": 0.6, "maxOutputTokens": max_tokens},
-    }
-
-    for attempt in range(retry):
-        try:
-            res = requests.post(url, json=payload, timeout=(10, 30))
-            if res.status_code == 200:
-                return res.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
-            elif res.status_code == 429:
-                wait = 60 * (attempt + 1)
-                print(f"  [429] {wait}초 대기 후 재시도 ({attempt+1}/{retry})")
-                time.sleep(wait)
-            else:
-                print(f"[ERROR] Gemini {res.status_code}: {res.text[:200]}")
-                return None
-        except requests.exceptions.Timeout:
-            print(f"  [TIMEOUT] {attempt+1}/{retry}회 — 넘어갑니다.")
-            return None
-        except Exception as e:
-            print(f"[ERROR] {e}")
-            return None
-    return None
-
-
 # ── 프롬프트 빌더 ─────────────────────────────────────────
 
 def build_issue_prompt(cluster, existing_summary=None):
