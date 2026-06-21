@@ -76,9 +76,9 @@ def load_prompt(name: str, fallback: str = "") -> str:
     return fallback
 
 
-def get_today_own_articles(limit=200):
-    """오늘 발행된 NewsFinal 자체 기사 전체 (다이제스트 제외)"""
-    today = now_kst().strftime("%Y-%m-%d")
+def get_yesterday_own_articles(limit=200):
+    """어제(KST) 발행된 NewsFinal 자체 기사 전체 (다이제스트 제외) — 하루 결산용"""
+    yesterday = (now_kst() - timedelta(days=1)).strftime("%Y-%m-%d")
     res = requests.get(
         _sb_url(),
         headers=_sb_headers(),
@@ -86,7 +86,7 @@ def get_today_own_articles(limit=200):
             "select": "id,title_ko,summary_ko,category,country,countries,region,created_at,subcategory",
             "source": "eq.NewsFinal",
             "is_published": "eq.true",
-            "created_at": f"like.{today}%",
+            "created_at": f"like.{yesterday}%",
             "subcategory": "not.like.digest_%",
             "order": "created_at.asc",
             "limit": str(limit),
@@ -98,12 +98,12 @@ def get_today_own_articles(limit=200):
     return []
 
 
-def digest_exists_today() -> bool:
-    today_key = f"digest_{now_kst().strftime('%Y%m%d')}"
+def digest_exists_for_yesterday() -> bool:
+    yesterday_key = f"digest_{(now_kst() - timedelta(days=1)).strftime('%Y%m%d')}"
     res = requests.get(
         _sb_url(),
         headers=_sb_headers(),
-        params={"select": "id", "subcategory": f"eq.{today_key}", "limit": "1"},
+        params={"select": "id", "subcategory": f"eq.{yesterday_key}", "limit": "1"},
         timeout=15
     )
     return res.status_code in (200, 206) and len(res.json()) > 0
@@ -148,7 +148,7 @@ def call_gemini(prompt, max_tokens=3000):
 
 
 def build_digest_prompt(articles):
-    today_str = now_kst().strftime("%Y년 %m월 %d일")
+    yesterday_str = (now_kst() - timedelta(days=1)).strftime("%Y년 %m월 %d일")
 
     # 국가별로 그룹화해서 제공 (Gemini가 패턴 찾기 쉽도록)
     by_country = {}
@@ -167,24 +167,24 @@ def build_digest_prompt(articles):
             article_list += f"- {title}\n  {summary}\n"
 
     rules = load_prompt("digest_rules", fallback="""[작성 규칙]
-- 오늘 NewsFinal이 다룬 프론티어 마켓 기사들을 종합해 "오늘의 핵심 테마" 다이제스트를 작성하세요.
+- 어제 하루 동안 NewsFinal이 다룬 프론티어 마켓 기사들을 종합해 "어제의 핵심 테마"를 정리하는 일일 결산 다이제스트를 작성하세요.
 - 개별 기사를 단순 나열하지 말고, 여러 국가/기사에 걸쳐 공통적으로 나타나는 패턴, 테마, 트렌드를 중심으로 통찰을 제공하세요.
 - 예: "이번 주 여러 아프리카 국가에서 통화 평가절하 압력이 동시에 나타남", "동남아 국가들의 외국인직접투자 유치 경쟁 심화" 같은 교차 비교형 분석을 우선하세요.
 - 지역별/테마별로 섹션을 나누고, 각 섹션은 불릿(- 로 시작)으로 핵심을 정리하세요.
 - 마크다운 문법(**굵게**, ##제목)을 쓰지 말고 일반 텍스트와 줄바꿈, "- " 불릿만 사용하세요.
 - 전문 형식 헤더([도시=출처] 등)나 매체 홍보 문구를 넣지 마세요.
-- 오늘 다룬 기사가 적으면 무리하게 늘리지 말고 있는 그대로 간결하게 작성하세요.
+- 다룬 기사가 적으면 무리하게 늘리지 말고 있는 그대로 간결하게 작성하세요.
 - 한국어로만 작성하세요.""")
 
     return f"""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다.
-아래는 오늘({today_str}) NewsFinal이 다룬 프론티어 마켓 기사 목록입니다. 국가별로 정리되어 있습니다.
+아래는 어제({yesterday_str}) NewsFinal이 다룬 프론티어 마켓 기사 목록입니다. 국가별로 정리되어 있습니다.
 
 {article_list}
 
 {rules}
 
 아래 형식으로 출력:
-제목: (오늘 다이제스트의 핵심을 담은 제목, 예: "{today_str} 프론티어 마켓 — 통화 압력과 인프라 투자 확대")
+제목: (어제 하루를 정리하는 다이제스트의 핵심을 담은 제목, 예: "{yesterday_str} 프론티어 마켓 — 통화 압력과 인프라 투자 확대")
 본문: (다이제스트 본문)"""
 
 
@@ -203,21 +203,21 @@ def parse_title_and_body(text):
 
 
 def save_digest(title, body, article_count):
-    today_key = f"digest_{now_kst().strftime('%Y%m%d')}"
+    yesterday_key = f"digest_{(now_kst() - timedelta(days=1)).strftime('%Y%m%d')}"
     payload = {
         "title_en": title,
         "title_ko": title,
         "summary_en": "",
         "summary_ko": body,
-        "url": f"internal://{today_key}",
+        "url": f"internal://{yesterday_key}",
         "source": "NewsFinal",
         "category": "다이제스트",
-        "subcategory": today_key,
+        "subcategory": yesterday_key,  # 다이제스트가 다루는 대상 날짜(어제)
         "region": "global",
         "country": "",
         "country_flag": "",
         "score": article_count,
-        "created_at": now_kst().strftime("%Y-%m-%d %H:%M"),
+        "created_at": now_kst().strftime("%Y-%m-%d %H:%M"),  # 실제 발행 시각(오늘 새벽) — 홈 노출 판단 기준
         "sent_telegram": 0,
         "is_published": True,
         "posted_blog": 0,
@@ -238,12 +238,12 @@ def run():
         print("[SKIP] SUPABASE 환경변수 없음")
         return
 
-    if digest_exists_today():
-        print("[SKIP] 오늘 다이제스트 이미 생성됨")
+    if digest_exists_for_yesterday():
+        print("[SKIP] 어제자 다이제스트 이미 생성됨")
         return
 
-    articles = get_today_own_articles()
-    print(f"[다이제스트] 오늘 자체 기사 {len(articles)}건 발견")
+    articles = get_yesterday_own_articles()
+    print(f"[다이제스트] 어제 자체 기사 {len(articles)}건 발견")
 
     if len(articles) < 3:
         print("[SKIP] 다이제스트 작성에 충분한 기사가 없습니다 (최소 3건 필요)")
@@ -258,7 +258,8 @@ def run():
 
     title, body = parse_title_and_body(content)
     if not title:
-        title = f"{now_kst().strftime('%Y년 %m월 %d일')} 프론티어 마켓 다이제스트"
+        yesterday_str = (now_kst() - timedelta(days=1)).strftime('%Y년 %m월 %d일')
+        title = f"{yesterday_str} 프론티어 마켓 다이제스트"
 
     article_id = save_digest(title, body or content, len(articles))
     if article_id > 0:
