@@ -16,7 +16,14 @@ import os
 import re
 import time
 import requests
+from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
+
+KST = timezone(timedelta(hours=9))
+
+def now_kst() -> datetime:
+    """GitHub Actions 러너(UTC)와 무관하게 정확한 KST 현재시각 반환"""
+    return datetime.now(timezone.utc).astimezone(KST)
 
 load_dotenv()
 
@@ -157,7 +164,7 @@ def call_gemini_with_search(prompt, max_tokens=4000):
 
 
 def build_calendar_prompt():
-    today = time.strftime("%Y년 %m월 %d일")
+    today = now_kst().strftime("%Y년 %m월 %d일")
     trusted_list = "\n".join(f"  - {d}" for d in TRUSTED_DOMAINS)
     return f"""오늘은 {today}입니다. 웹검색을 활용해 향후 14일간(오늘부터 2주) 예정된
 프론티어 마켓(아프리카, 동남아시아, 중앙아시아, 중동, 남아시아, 라틴아메리카, 카리브해 국가)의
@@ -308,7 +315,7 @@ def run():
         send_telegram_notice("📅 이번 주 경제 일정 자동조사: 새로 발견된 일정이 없습니다.")
         return
 
-    today = time.strftime("%Y-%m-%d")
+    today = now_kst().strftime("%Y-%m-%d")
     existing = get_existing_titles(today)
     new_events = [e for e in events if (e["event_date"], e["title"]) not in existing]
 
