@@ -13,6 +13,28 @@ import requests
 
 GEMINI_MODEL = "gemini-2.5-flash-image"
 
+def list_models(api_key):
+    """이 API 키로 실제 사용 가능한 모델 목록 조회 (정확한 모델명 확인용)"""
+    url = f"https://generativelanguage.googleapis.com/v1beta/models?key={api_key}"
+    print("\n[모델 목록 조회] 이 키로 사용 가능한 image/imagen 관련 모델 확인 중...")
+    try:
+        res = requests.get(url, timeout=30)
+        if res.status_code != 200:
+            print(f"⚠️ 모델 목록 조회 실패: {res.status_code}")
+            print(res.text[:500])
+            return
+        data = res.json()
+        models = data.get("models", [])
+        print(f"[모델 목록] 총 {len(models)}개 모델 사용 가능. 이미지 관련 모델만 표시:\n")
+        for m in models:
+            name = m.get("name", "")
+            if "image" in name.lower() or "imagen" in name.lower():
+                methods = m.get("supportedGenerationMethods", [])
+                print(f"  - {name}  (지원 메서드: {methods})")
+    except Exception as e:
+        print(f"⚠️ 모델 목록 조회 예외: {e}")
+
+
 def test():
     api_key = os.getenv("GEMINI_API_KEY_4") or os.getenv("GEMINI_API_KEY")
     if not api_key:
@@ -21,6 +43,8 @@ def test():
 
     print(f"[테스트] 모델: {GEMINI_MODEL}")
     print(f"[테스트] 키 앞 6자리: {api_key[:6]}... (총 {len(api_key)}자)")
+
+    list_models(api_key)
 
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent?key={api_key}"
     payload = {
