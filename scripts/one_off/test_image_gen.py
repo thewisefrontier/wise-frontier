@@ -28,7 +28,10 @@ def test():
             "parts": [
                 {"text": "A simple test image: a red circle on a white background"}
             ]
-        }]
+        }],
+        "generationConfig": {
+            "responseModalities": ["TEXT", "IMAGE"]
+        }
     }
 
     print(f"[테스트] 요청 URL: https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent")
