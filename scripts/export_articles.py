@@ -1,7 +1,6 @@
 import os
 import json
 import requests
-import time
 from datetime import datetime, timedelta
 
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
@@ -26,7 +25,6 @@ def _export_from_sqlite(limit=9999):
     conn = sqlite3.connect(DB_FILE)
     conn.row_factory = sqlite3.Row
     c = conn.cursor()
-    today = time.strftime("%Y-%m-%d")
     c.execute("""
         SELECT * FROM articles
         WHERE is_published = 1 AND source = 'NewsFinal' AND created_at >= date('now', '-7 days')
@@ -60,7 +58,7 @@ def export_articles(limit=9999):
                 "select": "*",
                 "is_published": "eq.true",
                 "source": "eq.NewsFinal",
-                "created_at": f"gte.{__import__('time').strftime('%Y-%m-%d', __import__('time').gmtime(__import__('time').time() - 7 * 86400))}",
+                "created_at": f"gte.{(datetime.utcnow() + timedelta(hours=9) - timedelta(days=7)).strftime('%Y-%m-%d')}",
                 "order": "created_at.desc",
             },
             timeout=30
