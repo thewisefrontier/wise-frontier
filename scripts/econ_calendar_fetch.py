@@ -35,6 +35,55 @@ GEMINI_API_KEYS = [k for k in [
 
 _current_key_idx = 0
 
+# 신뢰 도메인 화이트리스트 — 이 도메인 출처는 검수 없이 즉시 게시(is_verified=True)
+# 정부, 중앙은행, 국제기구 등 1차 공식 소스만 포함. 언론사/2차 가공 사이트는 절대 포함하지 않음.
+TRUSTED_DOMAINS = [
+    # 국제기구
+    "imf.org", "worldbank.org", "afdb.org", "adb.org", "un.org",
+    "africa-newsroom.com",
+    # 한국 공식
+    "kosis.kr", "mofa.go.kr", "bok.or.kr",
+    # 아프리카 중앙은행
+    "cbn.gov.ng",           # 나이지리아
+    "centralbank.go.ke",    # 케냐
+    "resbank.co.za",        # 남아공
+    "cbe.org.eg",           # 이집트
+    "bankofghana.gov.gh",   # 가나
+    "bot.go.tz",            # 탄자니아
+    "bou.or.ug",            # 우간다
+    "nbrwanda.org",         # 르완다
+    # 동남아 중앙은행
+    "bot.or.th",            # 태국
+    "bi.go.id",             # 인도네시아
+    "bsp.gov.ph",           # 필리핀
+    "sbv.gov.vn",           # 베트남
+    "bnm.gov.my",           # 말레이시아
+    # 중앙아시아
+    "nationalbank.kz",      # 카자흐스탄
+    "cbu.uz",                # 우즈베키스탄
+    # 중동
+    "sama.gov.sa",          # 사우디
+    "centralbank.ae",       # UAE
+    "qcb.gov.qa",           # 카타르
+    # 남아시아
+    "bb.org.bd",             # 방글라데시
+    "sbp.org.pk",            # 파키스탄
+    # 선거관리 등 정부기관 (.gov 도메인은 통째로 신뢰)
+]
+
+def is_trusted_source(url: str) -> bool:
+    """출처 URL이 화이트리스트 공식 도메인인지 확인"""
+    if not url:
+        return False
+    url_lower = url.lower()
+    for domain in TRUSTED_DOMAINS:
+        if domain in url_lower:
+            return True
+    # .gov 또는 .go.kr 등 정부 도메인 패턴은 통째로 신뢰
+    if re.search(r"://[^/]*\.gov(\.[a-z]{2})?/", url_lower) or re.search(r"://[^/]*\.go\.[a-z]{2}/", url_lower):
+        return True
+    return False
+
 
 def _sb_headers():
     return {
@@ -90,6 +139,7 @@ def call_gemini_with_search(prompt, max_tokens=4000):
 
 def build_calendar_prompt():
     today = time.strftime("%Y년 %m월 %d일")
+    trusted_list = "\n".join(f"  - {d}" for d in TRUSTED_DOMAINS[:20])
     return f"""오늘은 {today}입니다. 웹검색을 활용해 향후 14일간(오늘부터 2주) 예정된
 프론티어 마켓(아프리카, 동남아시아, 중앙아시아, 중동, 남아시아, 라틴아메리카, 카리브해 국가)의
 주요 경제 일정을 조사하세요.
@@ -99,6 +149,11 @@ def build_calendar_prompt():
 - 대통령/총리 선거, 국회의원 선거
 - 주요 경제지표 발표 (GDP, 물가상승률, 무역수지 등 국가 차원에서 중요한 것만)
 - IMF/World Bank 등 국제기구의 해당국 관련 주요 발표
+
+[우선 검색 대상 — 아래 공식 기관 사이트를 우선적으로 검색하세요]
+{trusted_list}
+  - 각국 정부 공식 도메인(.gov, .go.xx)
+이 사이트들에서 직접 확인한 정보일수록 가장 신뢰도가 높습니다. 가능하면 이 목록의 출처를 우선 사용하세요.
 
 [출력 규칙 — 매우 중요]
 - 검수자가 사실을 확인할 수 있도록, 각 일정마다 반드시 검색 결과에서 확인한 실제 출처 URL을 포함하세요.
@@ -136,6 +191,8 @@ def parse_events(text):
             if not source_url.startswith("http"):
                 skipped_no_source += 1
                 continue
+            # 화이트리스트 공식 도메인이면 검수 없이 즉시 게시
+            trusted = is_trusted_source(source_url)
             events.append({
                 "event_date": date_str,
                 "event_time": parts[1].strip() or None,
@@ -145,8 +202,8 @@ def parse_events(text):
                 "importance": parts[5].strip() if parts[5].strip() in ("high", "medium", "low") else "medium",
                 "description": parts[6].strip() if len(parts) > 6 else "",
                 "source_url": source_url,
-                "is_verified": False,
-                "source": "gemini",
+                "is_verified": trusted,  # 화이트리스트 도메인 → True(즉시 게시), 그 외 → False(검수 대기)
+                "source": "gemini" if not trusted else "gemini_trusted",
             })
         except Exception:
             continue
@@ -236,17 +293,30 @@ def run():
         return
 
     saved = save_events(new_events)
-    print(f"✅ {saved}건 저장 완료 (검수 대기 상태)")
+    auto_published = [e for e in new_events if e["is_verified"]]
+    pending_review = [e for e in new_events if not e["is_verified"]]
+    print(f"✅ {saved}건 저장 완료 — 즉시게시 {len(auto_published)}건 / 검수대기 {len(pending_review)}건")
 
-    # 텔레그램 알림 — 검수 요청 (출처 링크 포함)
-    lines = [f"📅 *이번 주 경제 일정 자동조사 완료*", f"신규 {saved}건이 검수 대기 상태로 등록됐습니다.\n"]
-    for ev in new_events[:10]:
-        lines.append(f"• {ev['event_date']} {ev['country_flag']} {ev['country']} — {ev['title']}")
-        if ev.get('source_url'):
-            lines.append(f"  [출처]({ev['source_url']})")
-    if len(new_events) > 10:
-        lines.append(f"...외 {len(new_events)-10}건")
-    lines.append(f"\n각 일정의 출처 링크를 확인 후, Admin > 경제 일정 관리에서 검수해주세요.")
+    # 텔레그램 알림
+    lines = [f"📅 *이번 주 경제 일정 자동조사 완료*"]
+    lines.append(f"신규 {saved}건 — 공식 출처 즉시게시 {len(auto_published)}건, 검수 필요 {len(pending_review)}건\n")
+
+    if auto_published:
+        lines.append("*✅ 공식 출처로 즉시 게시됨*")
+        for ev in auto_published[:10]:
+            lines.append(f"• {ev['event_date']} {ev['country_flag']} {ev['country']} — {ev['title']}")
+        lines.append("")
+
+    if pending_review:
+        lines.append("*⏳ 검수 필요 (출처 확인 후 승인해주세요)*")
+        for ev in pending_review[:10]:
+            lines.append(f"• {ev['event_date']} {ev['country_flag']} {ev['country']} — {ev['title']}")
+            if ev.get('source_url'):
+                lines.append(f"  [출처]({ev['source_url']})")
+        if len(pending_review) > 10:
+            lines.append(f"...외 {len(pending_review)-10}건")
+        lines.append(f"\nAdmin > 경제 일정 관리에서 검수해주세요.")
+
     send_telegram_notice("\n".join(lines))
 
 
