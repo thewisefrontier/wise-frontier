@@ -13,8 +13,15 @@ import re
 import time
 import hashlib
 import requests
+from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
 from rapidfuzz import fuzz
+
+KST = timezone(timedelta(hours=9))
+
+def now_kst() -> datetime:
+    """GitHub Actions 러너(UTC)와 무관하게 정확한 KST 현재시각 반환"""
+    return datetime.now(timezone.utc).astimezone(KST)
 
 load_dotenv()
 
@@ -89,7 +96,7 @@ STOPWORDS = {
 # ── DB 헬퍼 (Supabase REST API) ───────────────────────────
 
 def get_today_articles(limit=300):
-    since = time.strftime("%Y-%m-%d %H:%M", time.gmtime(time.time() - 48 * 3600))
+    since = (now_kst() - timedelta(hours=48)).strftime("%Y-%m-%d %H:%M")
     articles = []
     offset = 0
     batch = 500
@@ -119,7 +126,7 @@ def get_today_articles(limit=300):
 
 
 def get_existing_cluster(cluster_key):
-    today = time.strftime("%Y-%m-%d")
+    today = now_kst().strftime("%Y-%m-%d")
     res = requests.get(
         _sb_url(),
         headers=_sb_headers(),
@@ -159,29 +166,43 @@ def get_cluster_article_count(cluster_key):
 
 
 def get_today_own_articles():
-    """오늘 생성된 자체 기사 제목 목록"""
-    today = time.strftime("%Y-%m-%d")
-    res = requests.get(
-        _sb_url(),
-        headers=_sb_headers(),
-        params={
-            "select": "id,title_ko,subcategory",
-            "source": "eq.NewsFinal",
-            "created_at": f"like.{today}%",
-            "order": "created_at.desc",
-        },
-        timeout=15
-    )
-    if res.status_code in (200, 206):
-        return res.json()
-    return []
+    """최근 24시간(KST) 내 생성된 자체 기사 제목 목록 — 발행/미발행 모두 포함(중복 체크용)"""
+    since = (now_kst() - timedelta(hours=24)).strftime("%Y-%m-%d %H:%M")
+    try:
+        res = requests.get(
+            _sb_url(),
+            headers=_sb_headers(),
+            params={
+                "select": "id,title_ko,subcategory,is_published",
+                "source": "eq.NewsFinal",
+                "created_at": f"gte.{since}",
+                "order": "created_at.desc",
+            },
+            timeout=15
+        )
+        if res.status_code in (200, 206):
+            articles = res.json()
+            print(f"  [중복체크 준비] 최근 24시간 자체 기사 {len(articles)}건 로드됨")
+            return articles
+        print(f"  ⚠️ [중복체크 경고] 기존 기사 조회 실패 (status={res.status_code}) — 중복 검사 건너뜀 위험")
+        return []
+    except Exception as e:
+        print(f"  ⚠️ [중복체크 경고] 기존 기사 조회 예외 발생: {e} — 중복 검사 건너뜀 위험")
+        return []
 
 
-def find_similar_article(title: str, own_articles: list, threshold: int = 85):
-    """유사한 자체 기사 찾기 — threshold 이상이면 중복으로 판단"""
+def find_similar_article(title: str, own_articles: list, threshold: int = 80):
+    """유사한 자체 기사 찾기 — threshold 이상이면 중복으로 판단.
+    token_sort_ratio(어순 무관 전체 비교)와 token_set_ratio(공통 단어 집합 비교) 중 높은 쪽을 사용해
+    "삼성전자 워치 출시 전망" vs "삼성전자, 차세대 워치 출시 전망 분석"처럼
+    표현이 늘어나거나 어순이 바뀐 같은 사건도 더 안정적으로 잡아냄."""
     for a in own_articles:
         existing_title = a.get("title_ko") or ""
-        score = fuzz.token_sort_ratio(title, existing_title)
+        if not existing_title:
+            continue
+        score_sort = fuzz.token_sort_ratio(title, existing_title)
+        score_set = fuzz.token_set_ratio(title, existing_title)
+        score = max(score_sort, score_set)
         if score >= threshold:
             return a, score
     return None, 0
@@ -202,7 +223,7 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
         "country": country,
         "country_flag": "",
         "score": article_count,
-        "created_at": time.strftime("%Y-%m-%d %H:%M"),
+        "created_at": now_kst().strftime("%Y-%m-%d %H:%M"),
         "sent_telegram": 0,
         "is_published": published,
         "posted_blog": 0,
@@ -223,7 +244,7 @@ def update_article(article_id, title_ko, summary_ko):
             "title_ko": title_ko,
             "title_en": title_ko,
             "summary_ko": summary_ko,
-            "created_at": time.strftime("%Y-%m-%d %H:%M"),
+            "created_at": now_kst().strftime("%Y-%m-%d %H:%M"),
         },
         timeout=15
     )
@@ -339,7 +360,7 @@ def cluster_articles(articles):
 def make_cluster_key(cluster):
     """클러스터 고유 키 생성 — 날짜 + 대표 기사 제목 해시"""
     rep = (cluster[0].get("title_ko") or cluster[0].get("title_en") or "")[:50]
-    today = time.strftime("%Y%m%d")
+    today = now_kst().strftime("%Y%m%d")
     h = hashlib.md5(f"{today}:{rep}".encode()).hexdigest()[:8]
     return f"cluster_{today}_{h}"
 
@@ -367,7 +388,7 @@ def build_issue_prompt(cluster, existing_summary=None):
         for t in extra_titles:
             article_list += f"- {t}\n"
 
-    today_str = time.strftime("%Y년 %m월 %d일")
+    today_str = now_kst().strftime("%Y년 %m월 %d일")
     country = cluster[0].get("country") or ""
     category = cluster[0].get("category") or ""
 
@@ -500,6 +521,39 @@ def country_to_region(country: str) -> str:
     return COUNTRY_TO_REGION.get(country, "global")
 
 
+# 국가명 별칭 통합 — Gemini가 매번 다른 표현을 쓰는 문제 방지
+# (예: "대한민국"/"한국"/"South Korea" → "한국" 하나로 통일)
+COUNTRY_ALIASES = {
+    "대한민국": "한국", "남한": "한국", "south korea": "한국", "korea": "한국",
+    "미국": "미국", "usa": "미국", "united states": "미국",
+    "중국": "중국", "china": "중국",
+    "일본": "일본", "japan": "일본",
+    "나이지리아": "나이지리아", "nigeria": "나이지리아",
+    "케냐": "케냐", "kenya": "케냐",
+    "남아프리카공화국": "남아공", "남아프리카": "남아공", "south africa": "남아공",
+    "베트남": "베트남", "vietnam": "베트남",
+    "인도네시아": "인도네시아", "indonesia": "인도네시아",
+    "태국": "태국", "thailand": "태국",
+    "필리핀": "필리핀", "philippines": "필리핀",
+    "이집트": "이집트", "egypt": "이집트",
+    "사우디": "사우디아라비아", "사우디아라비아": "사우디아라비아", "saudi arabia": "사우디아라비아",
+    "uae": "아랍에미리트", "아랍에미리트": "아랍에미리트",
+    "튀르키예": "튀르키예", "터키": "튀르키예", "turkey": "튀르키예",
+    "인도": "인도", "india": "인도",
+}
+
+def normalize_country(country: str) -> str:
+    """Gemini가 생성한 국가명을 표준 표기로 통일"""
+    if not country:
+        return ""
+    key = country.strip().lower()
+    # 별칭 테이블에 소문자로도 매칭 시도
+    for alias, standard in COUNTRY_ALIASES.items():
+        if alias.lower() == key:
+            return standard
+    return country.strip()
+
+
 def update_article_fields(article_id: int, fields: dict):
     requests.patch(
         f"{_sb_url()}?id=eq.{article_id}",
@@ -601,8 +655,9 @@ def run():
                 if gen_country or gen_category:
                     update_fields = {}
                     if gen_country:
-                        update_fields["country"] = gen_country
-                        update_fields["region"] = country_to_region(gen_country)
+                        norm_country = normalize_country(gen_country)
+                        update_fields["country"] = norm_country
+                        update_fields["region"] = country_to_region(norm_country)
                     if gen_category:
                         update_fields["category"] = gen_category
                         if gen_category == "글로벌":
@@ -630,7 +685,7 @@ def run():
                 full_title = gen_title if gen_title else titles[0][:50]
 
                 # Gemini가 재분류한 국가/분야 우선 사용
-                final_country = gen_country or country
+                final_country = normalize_country(gen_country or country)
                 final_category = gen_category or category or "종합"
                 final_region = country_to_region(final_country) if final_country else (cluster[0].get("region") or "global")
                 if final_category == "글로벌":
@@ -682,7 +737,7 @@ def run():
 
         title = a.get("title_ko") or a.get("title_en") or ""
         url = f"solo_{a.get('id')}"
-        cluster_key = f"solo_{time.strftime('%Y%m%d')}_{hashlib.md5(title.encode()).hexdigest()[:8]}"
+        cluster_key = f"solo_{now_kst().strftime('%Y%m%d')}_{hashlib.md5(title.encode()).hexdigest()[:8]}"
 
         # 이미 생성된 단독 기사면 스킵
         existing = get_existing_cluster(cluster_key)
@@ -716,7 +771,7 @@ def run():
 
         prompt = template.format(
             source=a.get('source', ''),
-            today_str=time.strftime('%Y년 %m월 %d일'),
+            today_str=now_kst().strftime('%Y년 %m월 %d일'),
             country=a.get('country', ''),
             category=a.get('category', ''),
             full_text=a.get('full_text', ''),
@@ -728,7 +783,7 @@ def run():
             gen_title, gen_body, gen_country, gen_category = parse_title_and_body(content)
             full_title = gen_title if gen_title else title[:50]
 
-            final_country = gen_country or a.get("country") or ""
+            final_country = normalize_country(gen_country or a.get("country") or "")
             final_category = gen_category or a.get("category") or "종합"
             final_region = country_to_region(final_country) if final_country else (a.get("region") or "global")
             if final_category == "글로벌":
