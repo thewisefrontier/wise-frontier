@@ -100,13 +100,14 @@ def build_calendar_prompt():
 - 주요 경제지표 발표 (GDP, 물가상승률, 무역수지 등 국가 차원에서 중요한 것만)
 - IMF/World Bank 등 국제기구의 해당국 관련 주요 발표
 
-[출력 규칙]
-- 확인된 사실만 포함하세요. 불확실하거나 추측이면 포함하지 마세요.
+[출력 규칙 — 매우 중요]
+- 검수자가 사실을 확인할 수 있도록, 각 일정마다 반드시 검색 결과에서 확인한 실제 출처 URL을 포함하세요.
+- 출처 URL을 명확히 확인할 수 없는 일정은 절대 포함하지 마세요. "아마 ~일 것이다" 같은 추측은 제외하세요.
 - 각 일정을 한 줄씩, 아래 형식의 파이프(|)로 구분된 데이터로만 출력하세요. 다른 설명 텍스트는 쓰지 마세요.
-- 형식: 날짜(YYYY-MM-DD)|시간(HH:MM 또는 빈칸)|국가|국기이모지|제목|중요도(high/medium/low)|간단설명(1문장, 없으면 빈칸)
+- 형식: 날짜(YYYY-MM-DD)|시간(HH:MM 또는 빈칸)|국가|국기이모지|제목|중요도(high/medium/low)|간단설명(1문장, 없으면 빈칸)|출처URL(필수, https://로 시작하는 전체 URL)
 - 예시:
-2026-06-25|14:00|나이지리아|🇳🇬|중앙은행 통화정책위원회 기준금리 결정|high|인플레이션 압력에 따른 금리 동결 여부 주목
-2026-06-28||케냐|🇰🇪|대통령 선거 1차 투표|high|
+2026-06-25|14:00|나이지리아|🇳🇬|중앙은행 통화정책위원회 기준금리 결정|high|인플레이션 압력에 따른 금리 동결 여부 주목|https://www.cbn.gov.ng/MonetaryPolicy/
+2026-06-28||케냐|🇰🇪|대통령 선거 1차 투표|high||https://www.iebc.or.ke/
 - 일정이 없으면 "NONE"만 출력하세요.
 - 최대 20개까지만 출력하세요."""
 
@@ -115,17 +116,25 @@ def parse_events(text):
     if not text or text.strip() == "NONE":
         return []
     events = []
+    skipped_no_source = 0
     for line in text.strip().split("\n"):
         line = line.strip()
         if not line or "|" not in line:
             continue
         parts = line.split("|")
-        if len(parts) < 6:
+        if len(parts) < 8:
+            # 출처 URL 필드(8번째)가 없는 줄은 검수 불가능하므로 통째로 스킵
+            skipped_no_source += 1
             continue
         try:
             date_str = parts[0].strip()
             # 날짜 형식 검증
             if not re.match(r"^\d{4}-\d{2}-\d{2}$", date_str):
+                continue
+            source_url = parts[7].strip()
+            # 출처 URL이 http(s)로 시작하지 않으면 검수 불가능 — 제외
+            if not source_url.startswith("http"):
+                skipped_no_source += 1
                 continue
             events.append({
                 "event_date": date_str,
@@ -135,11 +144,14 @@ def parse_events(text):
                 "title": parts[4].strip(),
                 "importance": parts[5].strip() if parts[5].strip() in ("high", "medium", "low") else "medium",
                 "description": parts[6].strip() if len(parts) > 6 else "",
+                "source_url": source_url,
                 "is_verified": False,
                 "source": "gemini",
             })
         except Exception:
             continue
+    if skipped_no_source:
+        print(f"[경제일정 조사] 출처 URL 없어 제외된 항목: {skipped_no_source}건")
     return events
 
 
@@ -226,13 +238,15 @@ def run():
     saved = save_events(new_events)
     print(f"✅ {saved}건 저장 완료 (검수 대기 상태)")
 
-    # 텔레그램 알림 — 검수 요청
+    # 텔레그램 알림 — 검수 요청 (출처 링크 포함)
     lines = [f"📅 *이번 주 경제 일정 자동조사 완료*", f"신규 {saved}건이 검수 대기 상태로 등록됐습니다.\n"]
     for ev in new_events[:10]:
         lines.append(f"• {ev['event_date']} {ev['country_flag']} {ev['country']} — {ev['title']}")
+        if ev.get('source_url'):
+            lines.append(f"  [출처]({ev['source_url']})")
     if len(new_events) > 10:
         lines.append(f"...외 {len(new_events)-10}건")
-    lines.append(f"\nAdmin > 경제 일정 관리에서 검수 후 발행해주세요.")
+    lines.append(f"\n각 일정의 출처 링크를 확인 후, Admin > 경제 일정 관리에서 검수해주세요.")
     send_telegram_notice("\n".join(lines))
 
 
