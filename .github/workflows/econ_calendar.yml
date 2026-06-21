@@ -1,0 +1,36 @@
+name: NewsFinal - Weekly Economic Calendar
+
+on:
+  schedule:
+    - cron: '0 22 * * 0'   # UTC 22:00 일요일 = KST 월요일 07:00
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fetch_calendar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v5
+
+      - name: Python 설정
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: 패키지 설치
+        run: pip install -r requirements.txt
+
+      - name: 경제 일정 자동조사 (검수 대기 상태로 저장)
+        run: python scripts/econ_calendar_fetch.py
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
