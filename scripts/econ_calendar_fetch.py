@@ -38,9 +38,28 @@ _current_key_idx = 0
 # 신뢰 도메인 화이트리스트 — 이 도메인 출처는 검수 없이 즉시 게시(is_verified=True)
 # 정부, 중앙은행, 국제기구 등 1차 공식 소스만 포함. 언론사/2차 가공 사이트는 절대 포함하지 않음.
 TRUSTED_DOMAINS = [
-    # 국제기구
+    # 국제금융기구
     "imf.org", "worldbank.org", "afdb.org", "adb.org", "un.org",
+    "iadb.org",              # 미주개발은행(IDB)
+    "isdb.org",              # 이슬람개발은행
+    "ebrd.com",              # 유럽부흥개발은행
     "africa-newsroom.com",
+    # UN 산하 기구 (보건/식량/개발/난민 등)
+    "who.int",                # WHO
+    "wfp.org",                 # WFP (세계식량계획)
+    "unicef.org",              # UNICEF
+    "undp.org",                # UNDP
+    "unhcr.org",               # UNHCR
+    "fao.org",                 # FAO
+    "unfpa.org",               # UNFPA
+    # 양자 원조기관 (ODA 집행기관)
+    "usaid.gov",               # 미국 USAID
+    "jica.go.jp",              # 일본 JICA
+    "koica.go.kr",             # 한국 KOICA
+    "gov.uk",                  # 영국 FCDO 등 (gov.uk 도메인 전체)
+    "giz.de",                  # 독일 GIZ
+    "afd.fr",                  # 프랑스 AFD
+    "ec.europa.eu",            # EU 집행위(ECHO, INTPA 등)
     # 한국 공식
     "kosis.kr", "mofa.go.kr", "bok.or.kr",
     # 아프리카 중앙은행
@@ -139,7 +158,7 @@ def call_gemini_with_search(prompt, max_tokens=4000):
 
 def build_calendar_prompt():
     today = time.strftime("%Y년 %m월 %d일")
-    trusted_list = "\n".join(f"  - {d}" for d in TRUSTED_DOMAINS[:20])
+    trusted_list = "\n".join(f"  - {d}" for d in TRUSTED_DOMAINS)
     return f"""오늘은 {today}입니다. 웹검색을 활용해 향후 14일간(오늘부터 2주) 예정된
 프론티어 마켓(아프리카, 동남아시아, 중앙아시아, 중동, 남아시아, 라틴아메리카, 카리브해 국가)의
 주요 경제 일정을 조사하세요.
@@ -148,12 +167,14 @@ def build_calendar_prompt():
 - 중앙은행 기준금리 결정 회의
 - 대통령/총리 선거, 국회의원 선거
 - 주요 경제지표 발표 (GDP, 물가상승률, 무역수지 등 국가 차원에서 중요한 것만)
-- IMF/World Bank 등 국제기구의 해당국 관련 주요 발표
+- IMF/World Bank/AfDB/ADB/IDB 등 국제금융기구의 해당국 프로그램 리뷰, 이사회 일정, 주요 보고서 발표
+- WHO/WFP/UNICEF/UNDP 등 UN 산하 기구의 해당국 관련 주요 발표·캠페인 개시일
+- USAID/JICA/KOICA/GIZ/AFD 등 양자 원조기관의 해당국 주요 사업 발표·협정 체결일
 
 [우선 검색 대상 — 아래 공식 기관 사이트를 우선적으로 검색하세요]
 {trusted_list}
   - 각국 정부 공식 도메인(.gov, .go.xx)
-이 사이트들에서 직접 확인한 정보일수록 가장 신뢰도가 높습니다. 가능하면 이 목록의 출처를 우선 사용하세요.
+이 사이트들에서 직접 확인한 정보일수록 가장 신뢰도가 높습니다. 반드시 이 목록의 출처만 사용하세요. 이 목록에 없는 도메인(언론사, 블로그, 2차 가공 사이트 등)은 출처로 사용하지 마세요.
 
 [출력 규칙 — 매우 중요]
 - 검수자가 사실을 확인할 수 있도록, 각 일정마다 반드시 검색 결과에서 확인한 실제 출처 URL을 포함하세요.
