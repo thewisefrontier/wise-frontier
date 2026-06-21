@@ -11,9 +11,16 @@ StockHub의 "오늘의 핵심 테마" 패턴을 프론티어 마켓에 맞게 �
 import os
 import time
 import requests
+from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
 
 load_dotenv()
+
+KST = timezone(timedelta(hours=9))
+
+def now_kst() -> datetime:
+    """GitHub Actions 러너(UTC)와 무관하게 정확한 KST 현재시각 반환"""
+    return datetime.now(timezone.utc).astimezone(KST)
 
 GEMINI_MODEL = "gemini-3.1-flash-lite"
 
@@ -71,7 +78,7 @@ def load_prompt(name: str, fallback: str = "") -> str:
 
 def get_today_own_articles(limit=200):
     """오늘 발행된 NewsFinal 자체 기사 전체 (다이제스트 제외)"""
-    today = time.strftime("%Y-%m-%d")
+    today = now_kst().strftime("%Y-%m-%d")
     res = requests.get(
         _sb_url(),
         headers=_sb_headers(),
@@ -92,7 +99,7 @@ def get_today_own_articles(limit=200):
 
 
 def digest_exists_today() -> bool:
-    today_key = f"digest_{time.strftime('%Y%m%d')}"
+    today_key = f"digest_{now_kst().strftime('%Y%m%d')}"
     res = requests.get(
         _sb_url(),
         headers=_sb_headers(),
@@ -141,7 +148,7 @@ def call_gemini(prompt, max_tokens=3000):
 
 
 def build_digest_prompt(articles):
-    today_str = time.strftime("%Y년 %m월 %d일")
+    today_str = now_kst().strftime("%Y년 %m월 %d일")
 
     # 국가별로 그룹화해서 제공 (Gemini가 패턴 찾기 쉽도록)
     by_country = {}
@@ -196,7 +203,7 @@ def parse_title_and_body(text):
 
 
 def save_digest(title, body, article_count):
-    today_key = f"digest_{time.strftime('%Y%m%d')}"
+    today_key = f"digest_{now_kst().strftime('%Y%m%d')}"
     payload = {
         "title_en": title,
         "title_ko": title,
@@ -210,7 +217,7 @@ def save_digest(title, body, article_count):
         "country": "",
         "country_flag": "",
         "score": article_count,
-        "created_at": time.strftime("%Y-%m-%d %H:%M"),
+        "created_at": now_kst().strftime("%Y-%m-%d %H:%M"),
         "sent_telegram": 0,
         "is_published": True,
         "posted_blog": 0,
@@ -251,7 +258,7 @@ def run():
 
     title, body = parse_title_and_body(content)
     if not title:
-        title = f"{time.strftime('%Y년 %m월 %d일')} 프론티어 마켓 다이제스트"
+        title = f"{now_kst().strftime('%Y년 %m월 %d일')} 프론티어 마켓 다이제스트"
 
     article_id = save_digest(title, body or content, len(articles))
     if article_id > 0:
