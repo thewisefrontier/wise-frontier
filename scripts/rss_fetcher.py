@@ -402,7 +402,7 @@ def extract_summary(entry):
 SKIP_CRAWL_DOMAINS = {
     "allafrica.com", "africa-newsroom.com", "afdb.org",
     "imf.org", "worldbank.org", "afro.who.int", "au.int",
-    "unctad.org", "ifc.org", "asean.org",
+    "unctad.org", "ifc.org", "asean.org", "adb.org",
 }
 
 def crawl_full_text(url: str, timeout: int = 10) -> str:
