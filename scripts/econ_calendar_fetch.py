@@ -172,13 +172,14 @@ def parse_events(text):
         return []
     events = []
     skipped_no_source = 0
+    skipped_untrusted = 0
     for line in text.strip().split("\n"):
         line = line.strip()
         if not line or "|" not in line:
             continue
         parts = line.split("|")
         if len(parts) < 8:
-            # 출처 URL 필드(8번째)가 없는 줄은 검수 불가능하므로 통째로 스킵
+            # 출처 URL 필드(8번째)가 없는 줄은 신뢰 불가능하므로 통째로 스킵
             skipped_no_source += 1
             continue
         try:
@@ -187,12 +188,14 @@ def parse_events(text):
             if not re.match(r"^\d{4}-\d{2}-\d{2}$", date_str):
                 continue
             source_url = parts[7].strip()
-            # 출처 URL이 http(s)로 시작하지 않으면 검수 불가능 — 제외
+            # 출처 URL이 http(s)로 시작하지 않으면 신뢰 불가능 — 제외
             if not source_url.startswith("http"):
                 skipped_no_source += 1
                 continue
-            # 화이트리스트 공식 도메인이면 검수 없이 즉시 게시
-            trusted = is_trusted_source(source_url)
+            # 화이트리스트 공식 도메인이 아니면 통째로 버림 (사람 검수 없음 — 공식 출처만 신뢰)
+            if not is_trusted_source(source_url):
+                skipped_untrusted += 1
+                continue
             events.append({
                 "event_date": date_str,
                 "event_time": parts[1].strip() or None,
@@ -202,13 +205,15 @@ def parse_events(text):
                 "importance": parts[5].strip() if parts[5].strip() in ("high", "medium", "low") else "medium",
                 "description": parts[6].strip() if len(parts) > 6 else "",
                 "source_url": source_url,
-                "is_verified": trusted,  # 화이트리스트 도메인 → True(즉시 게시), 그 외 → False(검수 대기)
-                "source": "gemini" if not trusted else "gemini_trusted",
+                "is_verified": True,  # 화이트리스트 공식 도메인만 여기 도달 — 항상 즉시 게시
+                "source": "gemini_trusted",
             })
         except Exception:
             continue
     if skipped_no_source:
         print(f"[경제일정 조사] 출처 URL 없어 제외된 항목: {skipped_no_source}건")
+    if skipped_untrusted:
+        print(f"[경제일정 조사] 비공식 출처라 제외된 항목: {skipped_untrusted}건 (화이트리스트 외 도메인)")
     return events
 
 
@@ -293,30 +298,16 @@ def run():
         return
 
     saved = save_events(new_events)
-    auto_published = [e for e in new_events if e["is_verified"]]
-    pending_review = [e for e in new_events if not e["is_verified"]]
-    print(f"✅ {saved}건 저장 완료 — 즉시게시 {len(auto_published)}건 / 검수대기 {len(pending_review)}건")
+    print(f"✅ {saved}건 공식 출처로 자동 게시 완료")
 
-    # 텔레그램 알림
+    # 텔레그램 알림 — 단순 보고 (검수 불필요, 전부 화이트리스트 공식 출처)
     lines = [f"📅 *이번 주 경제 일정 자동조사 완료*"]
-    lines.append(f"신규 {saved}건 — 공식 출처 즉시게시 {len(auto_published)}건, 검수 필요 {len(pending_review)}건\n")
-
-    if auto_published:
-        lines.append("*✅ 공식 출처로 즉시 게시됨*")
-        for ev in auto_published[:10]:
-            lines.append(f"• {ev['event_date']} {ev['country_flag']} {ev['country']} — {ev['title']}")
-        lines.append("")
-
-    if pending_review:
-        lines.append("*⏳ 검수 필요 (출처 확인 후 승인해주세요)*")
-        for ev in pending_review[:10]:
-            lines.append(f"• {ev['event_date']} {ev['country_flag']} {ev['country']} — {ev['title']}")
-            if ev.get('source_url'):
-                lines.append(f"  [출처]({ev['source_url']})")
-        if len(pending_review) > 10:
-            lines.append(f"...외 {len(pending_review)-10}건")
-        lines.append(f"\nAdmin > 경제 일정 관리에서 검수해주세요.")
-
+    lines.append(f"공식 출처(IMF·중앙은행·정부) 기반 신규 {saved}건이 게시됐습니다.\n")
+    for ev in new_events[:15]:
+        lines.append(f"• {ev['event_date']} {ev['country_flag']} {ev['country']} — {ev['title']}")
+    if len(new_events) > 15:
+        lines.append(f"...외 {len(new_events)-15}건")
+    lines.append(f"\n별도 검수 없이 자동 게시됐습니다 (calendar.html에서 확인 가능).")
     send_telegram_notice("\n".join(lines))
 
 
