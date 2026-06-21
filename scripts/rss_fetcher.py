@@ -11,7 +11,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from deep_translator import GoogleTranslator
 from dotenv import load_dotenv
 from rapidfuzz import fuzz
-from db import init_db, is_url_exists, insert_article, mark_sent_telegram
+from db import init_db, is_url_exists, insert_article, mark_sent_telegram, now_kst
 
 # UTF-8 출력 설정 (Windows 인코딩 오류 방지)
 sys.stdout.reconfigure(encoding='utf-8')
@@ -278,7 +278,7 @@ def load_state():
     default = {
         "rss_health": {},
         "daily_count": 0,
-        "last_reset": time.strftime("%Y-%m-%d")
+        "last_reset": now_kst().strftime("%Y-%m-%d")
     }
     if os.path.exists(STATE_FILE):
         try:
@@ -294,7 +294,7 @@ def load_state():
 state = load_state()
 rss_health = state["rss_health"]
 
-today = time.strftime("%Y-%m-%d")
+today = now_kst().strftime("%Y-%m-%d")
 if state["last_reset"] != today:
     state["daily_count"] = 0
     state["last_reset"] = today
