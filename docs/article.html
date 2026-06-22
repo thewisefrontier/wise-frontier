@@ -371,6 +371,15 @@
         ${a.country ? `<span>📍 ${a.country}</span>` : ''}
       </div>
 
+      ${Array.isArray(a.update_log) && a.update_log.length > 1 ? `
+        <div style="margin:12px 0;padding:10px 12px;background:var(--bg3);border-left:3px solid var(--accent2);font-family:'IBM Plex Mono',monospace;font-size:11px;">
+          <div style="font-weight:700;color:var(--accent2);margin-bottom:6px;">업데이트 기록</div>
+          ${[...a.update_log].reverse().map((l, i) => `
+            <div style="display:flex;gap:12px;padding:2px 0;${i===0?'color:var(--text);font-weight:600;':'color:var(--muted);'}">
+              <span style="min-width:115px;">${l.timestamp || ''}</span>
+              <span>${l.note || '업데이트'}</span>
+            </div>`).join('')}
+        </div>` : ''}
 
       <div class="article-body">
         <p>${bodyHtml}</p>
