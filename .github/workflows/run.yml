@@ -1,8 +1,8 @@
 name: NewsFinal - Auto Run
 
 on:
-  schedule:
-    - cron: '0 */2 * * *'   # 2시간마다
+  # schedule: (일시 중단 — 2026-07-01 Actions 한도 리셋 후 복구)
+  #   - cron: '0 */2 * * *'   # 2시간마다
   workflow_dispatch:
 
 permissions:
