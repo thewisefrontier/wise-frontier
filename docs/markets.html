@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <meta name="description" content="NewsFinal 시장 지표 — 미국, 한국, 아프리카·프론티어 마켓 주요 지수 및 환율">
+  <title>시장 지표 — NewsFinal</title>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7TKGYEM467"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7TKGYEM467');
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f8f6f1; --bg2: #ffffff; --bg3: #f0ede6;
+      --border: #ddd9d0; --text: #1a1a1a; --muted: #888;
+      --accent: #8b5e2a; --accent2: #1a5fa8; --red: #c0392b; --green: #1a7a3c;
+      --up: var(--green); --down: var(--red);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-size: 14px; line-height: 1.6; }
+
+    header { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 0 24px; }
+    .header-top {
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid var(--border); font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px; color: var(--muted); background: var(--bg3);
+      margin: 0 -24px; padding: 5px 24px; gap: 16px; line-height: 1.4;
+    }
+    .ticker-strip { display: flex; gap: 20px; overflow: hidden; flex: 1; }
+    .ticker-item { display: flex; gap: 6px; align-items: center; white-space: nowrap; }
+    .ticker-label { color: var(--muted); }
+    .ticker-val { color: var(--text); font-weight: 500; }
+    .up { color: var(--green); } .down { color: var(--red); }
+    .header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; white-space: nowrap; }
+
+    .header-main {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 0; border-bottom: 3px solid var(--text);
+    }
+    .logo { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 900; letter-spacing: -1px; color: var(--text); text-decoration: none; }
+    .logo span { color: var(--accent); }
+    .header-meta { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); text-align: right; }
+
+    nav.page-nav { display: flex; gap: 0; overflow-x: auto; background: var(--bg3); border-bottom: 1px solid var(--border); }
+    nav.page-nav a {
+      padding: 9px 14px; font-size: 12px; font-weight: 500; color: var(--muted);
+      text-decoration: none; border-right: 1px solid var(--border); white-space: nowrap;
+      transition: color 0.2s, background 0.2s;
+    }
+    nav.page-nav a:first-child { border-left: 1px solid var(--border); }
+    nav.page-nav a:hover, nav.page-nav a.active { color: var(--accent2); background: var(--bg2); }
+
+    .page-container { max-width: 800px; margin: 0 auto; padding: 28px 24px 60px; }
+    h1.page-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; margin-bottom: 6px; color: var(--text); }
+    .page-sub { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 28px; }
+
+    .group { margin-bottom: 28px; }
+    .group-header {
+      font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 700;
+      color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase;
+      padding-bottom: 6px; margin-bottom: 10px; border-bottom: 2px solid var(--text);
+    }
+    .index-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
+    .index-card { background: var(--bg2); border: 1px solid var(--border); padding: 12px 14px; }
+    .index-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .index-price { font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 700; }
+    .index-change { font-family: 'IBM Plex Mono', monospace; font-size: 12px; margin-top: 3px; }
+    .index-change.up { color: var(--up); }
+    .index-change.down { color: var(--down); }
+
+    .empty { text-align: center; padding: 50px 20px; color: var(--muted); font-family: 'IBM Plex Mono', monospace; font-size: 13px; }
+    .source-note { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 24px; text-align: center; }
+
+    /* 투자 가능 상품 섹션 */
+    .invest-section { margin-top: 36px; }
+    .invest-disclaimer {
+      background: var(--bg3); border: 1px solid var(--border); border-left: 3px solid var(--accent);
+      padding: 12px 16px; margin-bottom: 20px; font-size: 12px; color: var(--text); line-height: 1.6;
+    }
+    .invest-disclaimer strong { color: var(--accent); }
+    .invest-group { margin-bottom: 24px; }
+    .invest-group-header {
+      font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 700;
+      color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase;
+      padding-bottom: 6px; margin-bottom: 10px; border-bottom: 2px solid var(--text);
+    }
+    .product-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .product-table th {
+      text-align: left; padding: 8px 10px; font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px; color: var(--muted); border-bottom: 1px solid var(--border); font-weight: 500;
+    }
+    .product-table td { padding: 9px 10px; border-bottom: 1px solid var(--border); background: var(--bg2); }
+    .product-table tr:hover td { background: var(--bg3); }
+    .product-name { font-weight: 700; color: var(--text); }
+    .product-ticker { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--accent2); }
+    .product-desc { color: var(--muted); font-size: 11px; }
+
+    footer {
+      border-top: 1px solid var(--border); background: var(--bg2);
+      padding: 24px; text-align: center; font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px; color: var(--muted); margin-top: 0;
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+
+    @media (max-width: 600px) {
+      header { padding: 0 14px; }
+      .header-top { margin: 0 -14px; padding: 8px 14px; }
+      .logo { font-size: 24px; }
+      .page-container { padding: 20px 16px 40px; }
+      .index-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="ticker-strip" id="ticker"><span style="color:var(--muted)">시세 로딩 중...</span></div>
+    <div class="header-right">
+      <div id="datetime"></div>
+    </div>
+  </div>
+  <div class="header-main">
+    <a href="/" class="logo">News<span>Final</span></a>
+    <div class="header-meta">프론티어 미디어</div>
+  </div>
+  <nav class="page-nav">
+    <a href="/">홈</a>
+    <a href="/live.html" style="color:var(--red);">🔴 라이브</a>
+    <a href="/archive.html">아카이브</a>
+    <a href="/calendar.html">경제 일정</a>
+    <a href="/markets.html" class="active">시장 지표</a>
+    <a href="/country.html">국가별</a>
+    <a href="/about.html">소개</a>
+  </nav>
+</header>
+
+<div class="page-container">
+  <h1 class="page-title">시장 지표</h1>
+  <div class="page-sub" id="updated-at">불러오는 중...</div>
+
+  <div id="markets-container"><div class="empty">시장 데이터를 불러오는 중입니다...</div></div>
+
+  <div class="source-note">데이터 출처: Yahoo Finance · 약 2시간 간격 갱신 · 투자 참고용이며 실시간 시세와 차이가 있을 수 있습니다</div>
+
+  <div class="invest-section">
+    <h2 class="page-title" style="font-size:20px;margin-top:8px;">투자 가능 상품</h2>
+    <div class="invest-disclaimer">
+      <strong>안내</strong> — 아래 상품 정보는 매수를 권유하는 것이 아니라, 한국에서 프론티어 마켓에 접근할 수 있는 경로를 소개하기 위한 정보 제공입니다. 투자 판단과 책임은 투자자 본인에게 있으며, 매수 전 반드시 운용사 공식 자료(투자설명서)를 확인하시기 바랍니다.
+    </div>
+
+    <div class="invest-group">
+      <div class="invest-group-header">🇰🇷 국내(KRX) 상장 — 원화로 직접 매수</div>
+      <table class="product-table">
+        <thead><tr><th>상품명</th><th>운용사</th><th>추종 지수 / 설명</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="product-name">ACE 베트남VN30(합성)<br><span class="product-ticker">245710</span></td>
+            <td>한국투자신탁운용</td>
+            <td class="product-desc">베트남 호치민거래소 VN30 지수 추종. 국내 유일 베트남 단일국 ETF</td>
+          </tr>
+          <tr>
+            <td class="product-name">TIGER 인도니프티50</td>
+            <td>미래에셋자산운용</td>
+            <td class="product-desc">인도 Nifty 50 지수 추종</td>
+          </tr>
+          <tr>
+            <td class="product-name">KODEX 인도Nifty50</td>
+            <td>삼성자산운용</td>
+            <td class="product-desc">인도 Nifty 50 지수 추종 (TIGER와 동일 지수)</td>
+          </tr>
+          <tr>
+            <td class="product-name">KODEX 인도타타그룹</td>
+            <td>삼성자산운용</td>
+            <td class="product-desc">인도 타타그룹 계열 상위 10종목 구성</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="invest-group">
+      <div class="invest-group-header">🌐 해외(미국) 상장 — 해외주식 거래로 매수</div>
+      <table class="product-table">
+        <thead><tr><th>티커</th><th>상품명</th><th>설명</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="product-ticker">VNM</td>
+            <td class="product-name">VanEck Vietnam ETF</td>
+            <td class="product-desc">Cboe BZX 상장. 베트남 현지 상장기업 추종, 30개 미만 종목으로 구성</td>
+          </tr>
+          <tr>
+            <td class="product-ticker">AFK</td>
+            <td class="product-name">VanEck Africa Index ETF</td>
+            <td class="product-desc">NYSE Arca 상장. 아프리카 GDP 가중 지수, 약 65개 종목 구성</td>
+          </tr>
+          <tr>
+            <td class="product-ticker">FM</td>
+            <td class="product-name">iShares MSCI Frontier and Select EM ETF</td>
+            <td class="product-desc">프론티어 마켓 전반(베트남·쿠웨이트·케냐 등 약 150개 종목)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="invest-section">
+    <h2 class="page-title" style="font-size:20px;">국가별 거시경제 지표</h2>
+    <div class="invest-disclaimer">
+      출처: IMF World Economic Outlook (WEO) · 매년 4월·10월 자동 갱신 · 투자 권유 아님
+    </div>
+    <div id="econ-table-container"><div class="empty" style="padding:20px;">경제지표를 불러오는 중...</div></div>
+  </div>
+
+  <div class="invest-section">
+    <h2 class="page-title" style="font-size:20px;">거래소 대표 기업</h2>
+    <div class="invest-disclaimer">
+      <strong>안내</strong> — 아래 기업들은 한국 증권사를 통해 직접 매수할 수 없습니다. 각국 증시 구조를 이해하기 위한 참고 정보입니다.
+    </div>
+
+    <div class="invest-group">
+      <div class="invest-group-header">🇳🇬 나이지리아 — NGX (Nigerian Exchange)</div>
+      <table class="product-table">
+        <thead><tr><th>기업명</th><th>업종</th></tr></thead>
+        <tbody>
+          <tr><td class="product-name">Dangote Cement</td><td class="product-desc">시멘트·산업재 — NGX 시가총액 최상위권</td></tr>
+          <tr><td class="product-name">Airtel Africa</td><td class="product-desc">통신</td></tr>
+          <tr><td class="product-name">MTN Nigeria</td><td class="product-desc">통신</td></tr>
+          <tr><td class="product-name">Zenith Bank / GTCO / UBA</td><td class="product-desc">은행</td></tr>
+          <tr><td class="product-name">Nigerian Breweries</td><td class="product-desc">소비재(음료)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="invest-group">
+      <div class="invest-group-header">🇰🇪 케냐 — NSE (Nairobi Securities Exchange)</div>
+      <table class="product-table">
+        <thead><tr><th>기업명</th><th>업종</th></tr></thead>
+        <tbody>
+          <tr><td class="product-name">Safaricom</td><td class="product-desc">통신 · 모바일머니(M-PESA) — NSE 시가총액 1위</td></tr>
+          <tr><td class="product-name">Equity Group Holdings</td><td class="product-desc">은행 (동아프리카 6개국 영업)</td></tr>
+          <tr><td class="product-name">KCB Group</td><td class="product-desc">은행 (동아프리카 7개국 영업)</td></tr>
+          <tr><td class="product-name">East African Breweries (EABL)</td><td class="product-desc">소비재(음료), Diageo 계열</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="invest-group">
+      <div class="invest-group-header">🇿🇦 남아공 — JSE (Johannesburg Stock Exchange)</div>
+      <table class="product-table">
+        <thead><tr><th>기업명</th><th>업종</th></tr></thead>
+        <tbody>
+          <tr><td class="product-name">Naspers / Prosus</td><td class="product-desc">미디어·인터넷 투자(텐센트 지분 보유)</td></tr>
+          <tr><td class="product-name">Richemont</td><td class="product-desc">명품(Cartier 등), JSE에 예탁증권 상장</td></tr>
+          <tr><td class="product-name">MTN Group</td><td class="product-desc">통신 — 아프리카·중동 19개국 영업</td></tr>
+          <tr><td class="product-name">Standard Bank / FirstRand / Capitec</td><td class="product-desc">은행</td></tr>
+          <tr><td class="product-name">Anglo American / Gold Fields</td><td class="product-desc">광업(철광석·금·백금 등)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="invest-group">
+      <div class="invest-group-header">🇻🇳 베트남 — HOSE (호치민증권거래소, VN30 구성종목)</div>
+      <table class="product-table">
+        <thead><tr><th>기업명</th><th>업종</th></tr></thead>
+        <tbody>
+          <tr><td class="product-name">Vietnam Prosperity Bank (VPBank)</td><td class="product-desc">은행</td></tr>
+          <tr><td class="product-name">FPT Corporation</td><td class="product-desc">정보통신기술(ICT)</td></tr>
+          <tr><td class="product-name">Asia Commercial Bank (ACB)</td><td class="product-desc">은행</td></tr>
+          <tr><td class="product-name">Hoa Phat Group</td><td class="product-desc">철강</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="invest-group">
+      <div class="invest-group-header">🇮🇩 인도네시아 — IDX (자카르타증권거래소)</div>
+      <table class="product-table">
+        <thead><tr><th>기업명</th><th>업종</th></tr></thead>
+        <tbody>
+          <tr><td class="product-name">Bank Central Asia (BBCA)</td><td class="product-desc">은행 — IDX 시가총액 최상위권</td></tr>
+          <tr><td class="product-name">Bank Rakyat Indonesia (BBRI)</td><td class="product-desc">은행</td></tr>
+          <tr><td class="product-name">Bank Mandiri (BMRI)</td><td class="product-desc">은행</td></tr>
+          <tr><td class="product-name">Astra International (ASII)</td><td class="product-desc">자동차·복합기업</td></tr>
+          <tr><td class="product-name">Telkom Indonesia (TLKM)</td><td class="product-desc">통신</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="invest-group">
+      <div class="invest-group-header">🇹🇭 태국 — SET (태국증권거래소, SET50 구성종목)</div>
+      <table class="product-table">
+        <thead><tr><th>기업명</th><th>업종</th></tr></thead>
+        <tbody>
+          <tr><td class="product-name">PTT</td><td class="product-desc">에너지(국영 석유·가스)</td></tr>
+          <tr><td class="product-name">CP All</td><td class="product-desc">유통(세븐일레븐 태국 운영)</td></tr>
+          <tr><td class="product-name">Airports of Thailand (AOT)</td><td class="product-desc">공항·인프라</td></tr>
+          <tr><td class="product-name">Kasikornbank (KBANK)</td><td class="product-desc">은행</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="invest-group">
+      <div class="invest-group-header">🇵🇭 필리핀 — PSE (필리핀증권거래소, PSEi 구성종목)</div>
+      <table class="product-table">
+        <thead><tr><th>기업명</th><th>업종</th></tr></thead>
+        <tbody>
+          <tr><td class="product-name">SM Investments</td><td class="product-desc">복합기업·유통 — PSEi 최대 비중</td></tr>
+          <tr><td class="product-name">BDO Unibank</td><td class="product-desc">은행</td></tr>
+          <tr><td class="product-name">Ayala Corporation</td><td class="product-desc">복합기업</td></tr>
+          <tr><td class="product-name">SM Prime Holdings</td><td class="product-desc">부동산</td></tr>
+          <tr><td class="product-name">International Container Terminal Services</td><td class="product-desc">항만 운영</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="invest-group">
+      <div class="invest-group-header">🇪🇬 이집트 — EGX (이집트증권거래소, EGX30 구성종목)</div>
+      <table class="product-table">
+        <thead><tr><th>기업명</th><th>업종</th></tr></thead>
+        <tbody>
+          <tr><td class="product-name">Commercial International Bank (CIB)</td><td class="product-desc">은행 — EGX30 비중 약 14%, 최대 비중 종목</td></tr>
+          <tr><td class="product-name">Telecom Egypt</td><td class="product-desc">통신</td></tr>
+          <tr><td class="product-name">Talaat Moustafa Group (TMGH)</td><td class="product-desc">부동산</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="source-note">기업 목록은 각 거래소 시가총액 상위권 기준으로 선별된 참고 정보이며, 실시간 순위와 다를 수 있습니다</div>
+  </div>
+</div>
+
+<footer>
+  <div>NEWSFINAL © 2026</div>
+  <div style="margin-top:6px;">
+    <a href="/about.html">소개</a> ·
+    <a href="/archive.html">아카이브</a> ·
+    <a href="/calendar.html">경제 일정</a> ·
+    <a href="/country.html">국가별</a> ·
+    <a href="/privacy.html">개인정보처리방침</a> ·
+    <a href="/terms.html">이용약관</a>
+  </div>
+  <div style="margin-top:6px;"><a href="https://t.me/TheWiseFrontier" style="color:var(--accent2);">텔레그램 채널 →</a></div>
+</footer>
+
+<script>
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function nowKST() {
+    return new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
+  }
+
+  function updateDatetime() {
+    const now = nowKST();
+    const el = document.getElementById('datetime');
+    if (el) el.textContent = `${now.getFullYear()}.${pad(now.getMonth()+1)}.${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())} KST`;
+  }
+  updateDatetime();
+  setInterval(updateDatetime, 30000);
+
+  const GROUP_LABELS = {
+    us: '🇺🇸 미국',
+    kr: '🇰🇷 한국',
+    frontier: '🌍 아프리카 · 프론티어 마켓',
+    fx: '💱 환율',
+  };
+  const GROUP_ORDER = ['us', 'kr', 'frontier', 'fx'];
+
+  function renderGroup(key, items) {
+    if (!items || !items.length) return '';
+    return `
+      <div class="group">
+        <div class="group-header">${GROUP_LABELS[key] || key}</div>
+        <div class="index-grid">
+          ${items.map(m => {
+            const sign = m.change_pct >= 0 ? '+' : '';
+            const cls = m.change_pct >= 0 ? 'up' : 'down';
+            const arrow = m.change_pct >= 0 ? '▲' : '▼';
+            return `
+              <div class="index-card">
+                <div class="index-name">${m.name}</div>
+                <div class="index-price">${m.price.toLocaleString()}</div>
+                <div class="index-change ${cls}">${arrow} ${sign}${m.change_pct.toFixed(2)}%</div>
+              </div>`;
+          }).join('')}
+        </div>
+      </div>`;
+  }
+
+  async function loadTicker() {
+    try {
+      const res = await fetch('data/market_data.json');
+      if (!res.ok) return;
+      const data = await res.json();
+      const indices = data.indices || [];
+      if (!indices.length) return;
+      const ticker = document.getElementById('ticker');
+      if (!ticker) return;
+      ticker.innerHTML = indices.map(m => {
+        const sign = m.change_pct >= 0 ? '+' : '';
+        const cls = m.change_pct >= 0 ? 'up' : 'down';
+        return `<span class="ticker-item"><span class="ticker-label">${m.name}</span><span class="ticker-val ${cls}">${m.price.toLocaleString()} ${sign}${m.change_pct.toFixed(2)}%</span></span>`;
+      }).join('');
+    } catch(e) {}
+  }
+
+  async function load() {
+    try {
+      const res = await fetch('data/market_data.json');
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+
+      document.getElementById('updated-at').textContent = `기준: ${data.updated_at || ''} KST`;
+
+      const groups = data.groups || {};
+      let html = '';
+      let hasAny = false;
+      GROUP_ORDER.forEach(key => {
+        const g = renderGroup(key, groups[key]);
+        if (g) { html += g; hasAny = true; }
+      });
+
+      if (!hasAny && data.indices && data.indices.length) {
+        html = renderGroup('frontier', data.indices);
+      }
+
+      document.getElementById('markets-container').innerHTML = html || '<div class="empty">표시할 시장 데이터가 없습니다</div>';
+    } catch(e) {
+      document.getElementById('markets-container').innerHTML = '<div class="empty">시장 데이터를 불러올 수 없습니다</div>';
+    }
+  }
+
+  async function loadEconTable() {
+    const container = document.getElementById('econ-table-container');
+    try {
+      const res = await fetch('data/econ_indicators.json');
+      if (!res.ok) { container.innerHTML = '<div class="empty" style="padding:20px;">경제지표 데이터 없음</div>'; return; }
+      const data = await res.json();
+      const countries = data.countries || {};
+
+      const COUNTRY_ORDER = ['NGA','KEN','ZAF','VNM','IDN','THA','PHL','EGY'];
+      const LABELS = {
+        gdp_growth: 'GDP 성장률',
+        inflation: '인플레이션',
+        unemployment: '실업률',
+        current_account: '경상수지/GDP',
+      };
+
+      let html = `<table class="product-table">
+        <thead><tr>
+          <th>국가</th>
+          <th>GDP 성장률</th>
+          <th>인플레이션</th>
+          <th>실업률</th>
+          <th>경상수지/GDP</th>
+        </tr></thead><tbody>`;
+
+      for (const code of COUNTRY_ORDER) {
+        const d = countries[code];
+        if (!d) continue;
+        const fmt = (val, key) => {
+          if (val === null || val === undefined) return '<span style="color:var(--muted)">N/A</span>';
+          const n = parseFloat(val);
+          const sign = n > 0 ? '+' : '';
+          const cls = key === 'gdp_growth' || key === 'current_account'
+            ? (n >= 0 ? 'up' : 'down')
+            : (n > 10 ? 'down' : '');
+          return `<span class="${cls}" style="font-family:'IBM Plex Mono',monospace;font-weight:700;">${sign}${n.toFixed(1)}%</span>`;
+        };
+        html += `<tr>
+          <td class="product-name">${d.country_name} <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);">(${d.gdp_growth_year || ''})</span></td>
+          <td>${fmt(d.gdp_growth, 'gdp_growth')}</td>
+          <td>${fmt(d.inflation, 'inflation')}</td>
+          <td>${fmt(d.unemployment, 'unemployment')}</td>
+          <td>${fmt(d.current_account, 'current_account')}</td>
+        </tr>`;
+      }
+      html += `</tbody></table>
+        <div class="source-note" style="margin-top:8px;">기준 연도는 국가별로 다를 수 있음 · 갱신: ${data.updated_at || ''}</div>`;
+
+      container.innerHTML = html;
+    } catch(e) {
+      container.innerHTML = '<div class="empty" style="padding:20px;">경제지표를 불러올 수 없습니다</div>';
+    }
+  }
+
+  loadTicker();
+  load();
+  loadEconTable();
+</script>
+
+</body>
+</html>
