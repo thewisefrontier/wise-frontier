@@ -1,8 +1,8 @@
-name: NewsFinal - Weekly Economic Calendar
+name: NewsFinal - Monthly Economic Calendar
 
 on:
   schedule:
-    - cron: '0 22 * * 0'   # UTC 22:00 일요일 = KST 월요일 07:00
+    - cron: '0 1 1 * *'    # 매월 1일 UTC 01:00 = KST 10:00
   workflow_dispatch:
 
 permissions:
@@ -24,7 +24,7 @@ jobs:
       - name: 패키지 설치
         run: pip install requests python-dotenv
 
-      - name: 경제 일정 등록 (공식 출처 기반)
+      - name: 경제 일정 수집 (공식 출처 크롤링 + 정적 일정)
         run: python scripts/econ_calendar_fetch.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
