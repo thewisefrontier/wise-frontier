@@ -168,7 +168,7 @@ def build_digest_prompt(articles):
             article_list += f"- {title}\n  {summary}\n"
 
     rules = load_prompt("digest_rules", fallback="""[작성 규칙]
-- 어제 하루 동안 NewsFinal이 다룬 프론티어 마켓 기사들을 종합해 "어제의 핵심 테마"를 정리하는 일일 결산 다이제스트를 작성하세요.
+- 지난 하루 동안 NewsFinal이 다룬 프론티어 마켓 기사들을 종합해 오늘의 핵심 테마를 정리하는 일일 다이제스트를 작성하세요.
 - 개별 기사를 단순 나열하지 말고, 여러 국가/기사에 걸쳐 공통적으로 나타나는 패턴, 테마, 트렌드를 중심으로 통찰을 제공하세요.
 - 예: "이번 주 여러 아프리카 국가에서 통화 평가절하 압력이 동시에 나타남", "동남아 국가들의 외국인직접투자 유치 경쟁 심화" 같은 교차 비교형 분석을 우선하세요.
 - 지역별/테마별로 섹션을 나누고, 각 섹션은 불릿(- 로 시작)으로 핵심을 정리하세요.
@@ -178,7 +178,7 @@ def build_digest_prompt(articles):
 - 한국어로만 작성하세요.""")
 
     return f"""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다.
-아래는 어제 하루 동안 NewsFinal이 다룬 프론티어 마켓 기사 목록입니다. 국가별로 정리되어 있습니다.
+아래는 지난 24시간 동안 NewsFinal이 다룬 프론티어 마켓 기사 목록입니다. 국가별로 정리되어 있습니다.
 
 {article_list}
 
@@ -244,7 +244,7 @@ def run():
         return
 
     articles = get_yesterday_own_articles()
-    print(f"[다이제스트] 어제 자체 기사 {len(articles)}건 발견")
+    print(f"[다이제스트] 최근 24시간 자체 기사 {len(articles)}건 발견")
 
     if len(articles) < 3:
         print("[SKIP] 다이제스트 작성에 충분한 기사가 없습니다 (최소 3건 필요)")
