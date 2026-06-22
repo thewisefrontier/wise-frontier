@@ -486,11 +486,15 @@
 
     if (!companies || !companies.length) { section.style.display = 'none'; return; }
 
-    container.innerHTML = companies.map(([name, sector]) => `
-      <div class="company-item">
-        <span class="company-name">${name}</span>
-        <span class="company-sector">${sector}</span>
-      </div>`).join('');
+    container.innerHTML = companies.map(([name, sector]) => {
+      // 기업 ID 생성 (소문자, 공백→언더스코어, 괄호 제거)
+      const id = name.toLowerCase().replace(/\s*\(.*?\)/g, '').trim().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
+      return `
+        <a class="company-item" href="/company.html?id=${id}" style="text-decoration:none;display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;">
+          <span class="company-name" style="color:var(--accent2);font-weight:600;">${name}</span>
+          <span class="company-sector" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);">${sector}</span>
+        </a>`;
+    }).join('');
     section.style.display = 'block';
   }
 
