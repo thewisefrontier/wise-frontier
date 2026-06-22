@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <meta name="description" content="NewsFinal 국가별 허브 — 기사, 지수·환율, 경제 일정을 한곳에서">
+  <title>국가별 정보 — NewsFinal</title>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7TKGYEM467"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7TKGYEM467');
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f8f6f1; --bg2: #ffffff; --bg3: #f0ede6;
+      --border: #ddd9d0; --text: #1a1a1a; --muted: #888;
+      --accent: #8b5e2a; --accent2: #1a5fa8; --red: #c0392b; --green: #1a7a3c;
+      --up: var(--green); --down: var(--red);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-size: 14px; line-height: 1.6; }
+
+    header { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 0 24px; }
+    .header-top {
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid var(--border); font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px; color: var(--muted); background: var(--bg3);
+      margin: 0 -24px; padding: 5px 24px; gap: 16px; line-height: 1.4;
+    }
+    .ticker-strip { display: flex; gap: 20px; overflow: hidden; flex: 1; }
+    .ticker-item { display: flex; gap: 6px; align-items: center; white-space: nowrap; }
+    .ticker-label { color: var(--muted); }
+    .ticker-val { color: var(--text); font-weight: 500; }
+    .up { color: var(--green); } .down { color: var(--red); }
+    .header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; white-space: nowrap; }
+
+    .header-main {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 0; border-bottom: 3px solid var(--text);
+    }
+    .logo { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 900; letter-spacing: -1px; color: var(--text); text-decoration: none; }
+    .logo span { color: var(--accent); }
+    .header-meta { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); text-align: right; }
+
+    nav.page-nav { display: flex; gap: 0; overflow-x: auto; background: var(--bg3); border-bottom: 1px solid var(--border); }
+    nav.page-nav a {
+      padding: 9px 14px; font-size: 12px; font-weight: 500; color: var(--muted);
+      text-decoration: none; border-right: 1px solid var(--border); white-space: nowrap;
+      transition: color 0.2s, background 0.2s;
+    }
+    nav.page-nav a:first-child { border-left: 1px solid var(--border); }
+    nav.page-nav a:hover, nav.page-nav a.active { color: var(--accent2); background: var(--bg2); }
+
+    .country-hero { background: var(--text); color: var(--bg); padding: 28px 20px; text-align: center; }
+    .country-name { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 900; }
+    .country-sub { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #c8a060; margin-top: 6px; letter-spacing: 0.05em; }
+
+    .page-container { max-width: 800px; margin: 0 auto; padding: 28px 24px 60px; }
+
+    .selector-box {
+      background: var(--bg2); border: 1px solid var(--border); padding: 16px; margin-bottom: 24px;
+      display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+    }
+    .selector-box label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); }
+    .selector-box select {
+      padding: 8px 12px; border: 1px solid var(--border); background: var(--bg3);
+      color: var(--text); font-family: 'IBM Plex Mono', monospace; font-size: 12px; flex: 1; min-width: 160px;
+    }
+
+    .section { margin-bottom: 28px; }
+    .section-header {
+      font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 700;
+      color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase;
+      padding-bottom: 6px; margin-bottom: 10px; border-bottom: 2px solid var(--text);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .section-header a { color: var(--accent2); text-decoration: none; font-size: 10px; text-transform: none; letter-spacing: 0; }
+
+    .index-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+    .index-card { background: var(--bg2); border: 1px solid var(--border); padding: 10px 12px; }
+    .index-name { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+    .index-price { font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 700; }
+    .index-change { font-family: 'IBM Plex Mono', monospace; font-size: 11px; margin-top: 2px; }
+    .index-change.up { color: var(--up); }
+    .index-change.down { color: var(--down); }
+
+    .article-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-left: 3px solid var(--border); padding: 12px 14px;
+      margin-bottom: 6px; cursor: pointer; transition: border-left-color 0.2s, background 0.2s;
+    }
+    .article-card:hover { border-left-color: var(--accent); background: var(--bg3); }
+    .article-title { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+    .article-meta { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); }
+
+    .cal-item { padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 12px; display: flex; gap: 8px; }
+    .cal-item:last-child { border-bottom: none; }
+    .cal-dot { width: 7px; height: 7px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+    .cal-dot.high { background: var(--red); }
+    .cal-dot.medium { background: var(--accent); }
+    .cal-dot.low { background: var(--muted); }
+    .cal-meta { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); }
+
+    .company-disclaimer {
+      font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted);
+      margin-bottom: 10px; padding: 8px 10px; background: var(--bg3); border-left: 3px solid var(--border);
+    }
+    .company-list { display: flex; flex-direction: column; gap: 6px; }
+    .company-item {
+      background: var(--bg2); border: 1px solid var(--border); padding: 9px 12px;
+      display: flex; justify-content: space-between; align-items: center; font-size: 12px;
+    }
+    .company-name { font-weight: 700; color: var(--text); }
+    .company-sector { color: var(--muted); font-size: 11px; }
+
+    .empty { text-align: center; padding: 30px 20px; color: var(--muted); font-family: 'IBM Plex Mono', monospace; font-size: 12px; }
+
+    footer {
+      border-top: 1px solid var(--border); background: var(--bg2);
+      padding: 24px; text-align: center; font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px; color: var(--muted); margin-top: 0;
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+
+    @media (max-width: 600px) {
+      header { padding: 0 14px; }
+      .header-top { margin: 0 -14px; padding: 8px 14px; }
+      .logo { font-size: 24px; }
+      .page-container { padding: 20px 16px 40px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="ticker-strip" id="ticker"><span style="color:var(--muted)">시세 로딩 중...</span></div>
+    <div class="header-right">
+      <div id="datetime"></div>
+    </div>
+  </div>
+  <div class="header-main">
+    <a href="/" class="logo">News<span>Final</span></a>
+    <div class="header-meta">프론티어 미디어</div>
+  </div>
+  <nav class="page-nav">
+    <a href="/">홈</a>
+    <a href="/live.html" style="color:var(--red);">🔴 라이브</a>
+    <a href="/archive.html">아카이브</a>
+    <a href="/calendar.html">경제 일정</a>
+    <a href="/markets.html">시장 지표</a>
+    <a href="/country.html" class="active">국가별</a>
+    <a href="/about.html">소개</a>
+  </nav>
+</header>
+
+<div class="country-hero">
+  <div class="country-name" id="country-title">국가 선택</div>
+  <div class="country-sub" id="country-sub">COUNTRY HUB</div>
+</div>
+
+<div class="page-container">
+  <div class="selector-box">
+    <label>국가 변경:</label>
+    <select id="country-select" onchange="onCountryChange()">
+      <option value="">불러오는 중...</option>
+    </select>
+  </div>
+
+  <div class="section" id="market-section" style="display:none;">
+    <div class="section-header">관련 지수 · 환율</div>
+    <div class="index-grid" id="market-container"></div>
+  </div>
+
+  <div class="section" id="econ-section" style="display:none;">
+    <div class="section-header">
+      <span>거시경제 지표</span>
+      <span style="font-size:10px;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-weight:400;" id="econ-source"></span>
+    </div>
+    <div class="index-grid" id="econ-container"></div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin-top:8px;">출처: IMF World Economic Outlook · 투자 권유 아님</div>
+  </div>
+
+  <div class="section" id="company-section" style="display:none;">
+    <div class="section-header">
+      <span>거래소 대표 기업</span>
+      <a href="/markets.html">전체 보기 →</a>
+    </div>
+    <div class="company-disclaimer">한국에서 직접 매수할 수 없는 종목입니다. 참고용 정보입니다.</div>
+    <div class="company-list" id="company-container"></div>
+  </div>
+
+  <div class="section" id="calendar-section" style="display:none;">
+    <div class="section-header">
+      <span>다가오는 경제 일정</span>
+      <a href="/calendar.html">전체 보기 →</a>
+    </div>
+    <div id="calendar-container"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span id="article-section-title">관련 기사</span>
+      <a href="/archive.html" id="archive-link">아카이브에서 더 보기 →</a>
+    </div>
+    <div id="articles-container"><div class="empty">국가를 선택해 주세요</div></div>
+  </div>
+</div>
+
+<footer>
+  <div>NEWSFINAL © 2026</div>
+  <div style="margin-top:6px;">
+    <a href="/about.html">소개</a> ·
+    <a href="/archive.html">아카이브</a> ·
+    <a href="/calendar.html">경제 일정</a> ·
+    <a href="/markets.html">시장 지표</a> ·
+    <a href="/privacy.html">개인정보처리방침</a> ·
+    <a href="/terms.html">이용약관</a>
+  </div>
+  <div style="margin-top:6px;"><a href="https://t.me/TheWiseFrontier" style="color:var(--accent2);">텔레그램 채널 →</a></div>
+</footer>
+
+<script>
+  const SUPABASE_URL = 'https://fotdngseksqaghvtcvqh.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_rT3kSEAAdM0DJlDW5fEWww_M37h6dDW';
+
+  const COUNTRY_MARKET_MAP = {
+    '나이지리아': ['NGX (나이지리아)', 'USD/NGN'],
+    '남아공': ['JSE (남아공)', 'USD/ZAR'],
+    '케냐': ['NSE (케냐)', 'USD/KES'],
+    '이집트': ['EGX30 (이집트)'],
+    '태국': ['SET (태국)'],
+    '인도네시아': ['IDX (인도네시아)'],
+    '필리핀': ['PSEi (필리핀)'],
+  };
+
+  // 거래소 대표 기업 — 한국에서 직접 매수 불가, 참고용 정보
+  const COUNTRY_COMPANY_MAP = {
+    '나이지리아': [
+      ['Dangote Cement', '시멘트·산업재'],
+      ['Airtel Africa', '통신'],
+      ['MTN Nigeria', '통신'],
+      ['Zenith Bank', '은행'],
+      ['Nigerian Breweries', '소비재(음료)'],
+    ],
+    '케냐': [
+      ['Safaricom', '통신·모바일머니'],
+      ['Equity Group Holdings', '은행'],
+      ['KCB Group', '은행'],
+      ['East African Breweries', '소비재(음료)'],
+    ],
+    '남아공': [
+      ['Naspers / Prosus', '미디어·인터넷투자'],
+      ['Richemont', '명품'],
+      ['MTN Group', '통신'],
+      ['Standard Bank', '은행'],
+      ['Anglo American', '광업'],
+    ],
+    '베트남': [
+      ['VPBank', '은행'],
+      ['FPT Corporation', 'IT서비스'],
+      ['Asia Commercial Bank', '은행'],
+      ['Hoa Phat Group', '철강'],
+    ],
+    '인도네시아': [
+      ['Bank Central Asia (BBCA)', '은행'],
+      ['Bank Rakyat Indonesia (BBRI)', '은행'],
+      ['Bank Mandiri (BMRI)', '은행'],
+      ['Astra International (ASII)', '자동차·복합기업'],
+      ['Telkom Indonesia (TLKM)', '통신'],
+    ],
+    '태국': [
+      ['PTT', '에너지'],
+      ['CP All', '유통'],
+      ['Airports of Thailand (AOT)', '공항·인프라'],
+      ['Kasikornbank (KBANK)', '은행'],
+    ],
+    '필리핀': [
+      ['SM Investments', '복합기업·유통'],
+      ['BDO Unibank', '은행'],
+      ['Ayala Corporation', '복합기업'],
+      ['SM Prime Holdings', '부동산'],
+      ['International Container Terminal Services', '항만운영'],
+    ],
+    '이집트': [
+      ['Commercial International Bank (CIB)', '은행'],
+      ['Telecom Egypt', '통신'],
+      ['Talaat Moustafa Group (TMGH)', '부동산'],
+    ],
+  };
+
+  let allArticles = [];
+  let allMarketData = null;
+  let allEconData = null;
+
+  // 국가명(한국어) → IMF ISO-3 코드 매핑
+  const COUNTRY_ISO_MAP = {
+    '나이지리아': 'NGA', '케냐': 'KEN', '남아공': 'ZAF',
+    '베트남': 'VNM', '인도네시아': 'IDN', '태국': 'THA',
+    '필리핀': 'PHL', '이집트': 'EGY',
+  };
+  let countryList = [];
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function formatTime(dateStr) {
+    if (!dateStr) return '';
+    const d = new Date(dateStr.replace(' ', 'T'));
+    if (isNaN(d)) return dateStr;
+    return `${pad(d.getMonth()+1)}/${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  }
+
+  function nowKST() {
+    return new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
+  }
+
+  function updateDatetime() {
+    const now = nowKST();
+    const el = document.getElementById('datetime');
+    if (el) el.textContent = `${now.getFullYear()}.${pad(now.getMonth()+1)}.${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())} KST`;
+  }
+  updateDatetime();
+  setInterval(updateDatetime, 30000);
+
+  async function loadTicker() {
+    try {
+      const res = await fetch('data/market_data.json');
+      if (!res.ok) return;
+      const data = await res.json();
+      const indices = data.indices || [];
+      if (!indices.length) return;
+      const ticker = document.getElementById('ticker');
+      if (!ticker) return;
+      ticker.innerHTML = indices.map(m => {
+        const sign = m.change_pct >= 0 ? '+' : '';
+        const cls = m.change_pct >= 0 ? 'up' : 'down';
+        return `<span class="ticker-item"><span class="ticker-label">${m.name}</span><span class="ticker-val ${cls}">${m.price.toLocaleString()} ${sign}${m.change_pct.toFixed(2)}%</span></span>`;
+      }).join('');
+    } catch(e) {}
+  }
+
+  function cleanBody(text) {
+    if (!text) return '';
+    return text
+      .replace(/\*\*(.+?)\*\*/g, '$1')
+      .replace(/\*(.+?)\*/g, '$1')
+      .replace(/^#{1,6}\s+/gm, '')
+      .replace(/\[.{1,20}=.{1,30}\]/g, '')
+      .replace(/^\[.{1,30}\]\s*/gm, '')
+      .trim();
+  }
+
+  async function loadCountryList() {
+    try {
+      const res = await fetch('data/articles.json');
+      if (!res.ok) throw new Error();
+      allArticles = await res.json();
+
+      const countrySet = new Set();
+      allArticles.forEach(a => {
+        const countries = (a.countries && a.countries.length) ? a.countries : (a.country ? [a.country] : []);
+        countries.forEach(c => { if (c) countrySet.add(c); });
+      });
+      countryList = [...countrySet].sort((a, b) => a.localeCompare(b, 'ko'));
+
+      const select = document.getElementById('country-select');
+      select.innerHTML = '<option value="">국가를 선택하세요</option>' +
+        countryList.map(c => `<option value="${c}">${c}</option>`).join('');
+
+      const params = new URLSearchParams(location.search);
+      const initial = params.get('name');
+      if (initial && countryList.includes(initial)) {
+        select.value = initial;
+        onCountryChange();
+      }
+    } catch(e) {
+      document.getElementById('articles-container').innerHTML = '<div class="empty">데이터를 불러올 수 없습니다</div>';
+    }
+  }
+
+  async function loadMarketData() {
+    try {
+      const res = await fetch('data/market_data.json');
+      if (!res.ok) return;
+      allMarketData = await res.json();
+    } catch(e) {}
+  }
+
+  async function loadEconData() {
+    try {
+      const res = await fetch('data/econ_indicators.json');
+      if (!res.ok) return;
+      allEconData = await res.json();
+    } catch(e) {}
+  }
+
+  function renderEcon(country) {
+    const section = document.getElementById('econ-section');
+    const container = document.getElementById('econ-container');
+    const sourceEl = document.getElementById('econ-source');
+    if (!allEconData) { section.style.display = 'none'; return; }
+
+    const isoCode = COUNTRY_ISO_MAP[country];
+    if (!isoCode) { section.style.display = 'none'; return; }
+
+    const data = allEconData.countries && allEconData.countries[isoCode];
+    if (!data) { section.style.display = 'none'; return; }
+
+    const LABELS = {
+      gdp_growth: 'GDP 성장률',
+      inflation: '인플레이션',
+      unemployment: '실업률',
+      current_account: '경상수지/GDP',
+    };
+    const UNITS = {
+      gdp_growth: '%',
+      inflation: '%',
+      unemployment: '%',
+      current_account: '%',
+    };
+
+    let html = '';
+    for (const [key, label] of Object.entries(LABELS)) {
+      const val = data[key];
+      const year = data[`${key}_year`];
+      if (val === null || val === undefined) continue;
+      const num = parseFloat(val);
+      const cls = key === 'inflation' || key === 'unemployment'
+        ? (num > 10 ? 'down' : '')
+        : (num >= 0 ? 'up' : 'down');
+      const sign = num > 0 ? '+' : '';
+      html += `
+        <div class="index-card">
+          <div class="index-name">${label}</div>
+          <div class="index-price ${cls}">${sign}${num.toFixed(1)}${UNITS[key]}</div>
+          <div class="index-change" style="color:var(--muted)">${year || ''}년 기준</div>
+        </div>`;
+    }
+
+    if (!html) { section.style.display = 'none'; return; }
+
+    container.innerHTML = html;
+    if (sourceEl) sourceEl.textContent = `IMF WEO · ${allEconData.updated_at || ''} 기준`;
+    section.style.display = 'block';
+  }
+
+  function renderMarket(country) {
+    const section = document.getElementById('market-section');
+    const container = document.getElementById('market-container');
+    const symbols = COUNTRY_MARKET_MAP[country];
+
+    if (!symbols || !allMarketData) { section.style.display = 'none'; return; }
+
+    const indices = allMarketData.indices || [];
+    const matched = indices.filter(m => symbols.includes(m.name));
+
+    if (!matched.length) { section.style.display = 'none'; return; }
+
+    container.innerHTML = matched.map(m => {
+      const sign = m.change_pct >= 0 ? '+' : '';
+      const cls = m.change_pct >= 0 ? 'up' : 'down';
+      const arrow = m.change_pct >= 0 ? '▲' : '▼';
+      return `
+        <div class="index-card">
+          <div class="index-name">${m.name}</div>
+          <div class="index-price">${m.price.toLocaleString()}</div>
+          <div class="index-change ${cls}">${arrow} ${sign}${m.change_pct.toFixed(2)}%</div>
+        </div>`;
+    }).join('');
+    section.style.display = 'block';
+  }
+
+  function renderCompanies(country) {
+    const section = document.getElementById('company-section');
+    const container = document.getElementById('company-container');
+    const companies = COUNTRY_COMPANY_MAP[country];
+
+    if (!companies || !companies.length) { section.style.display = 'none'; return; }
+
+    container.innerHTML = companies.map(([name, sector]) => `
+      <div class="company-item">
+        <span class="company-name">${name}</span>
+        <span class="company-sector">${sector}</span>
+      </div>`).join('');
+    section.style.display = 'block';
+  }
+
+  async function renderCalendar(country) {
+    const section = document.getElementById('calendar-section');
+    const container = document.getElementById('calendar-container');
+    try {
+      const _n = nowKST();
+      const today = `${_n.getFullYear()}-${pad(_n.getMonth()+1)}-${pad(_n.getDate())}`;
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/econ_events?select=*&event_date=gte.${today}&is_verified=eq.true&country=eq.${encodeURIComponent(country)}&order=event_date.asc&limit=5`,
+        { headers: { 'apikey': SUPABASE_ANON_KEY } }
+      );
+      if (!res.ok) throw new Error();
+      const events = await res.json();
+      if (!events.length) { section.style.display = 'none'; return; }
+
+      container.innerHTML = events.map(ev => {
+        const d = new Date(ev.event_date + 'T00:00:00');
+        return `
+          <div class="cal-item">
+            <div class="cal-dot ${ev.importance || 'medium'}"></div>
+            <div>
+              <div class="cal-meta">${d.getMonth()+1}/${d.getDate()} ${ev.event_time || ''}</div>
+              <div>${ev.title}</div>
+            </div>
+          </div>`;
+      }).join('');
+      section.style.display = 'block';
+    } catch(e) {
+      section.style.display = 'none';
+    }
+  }
+
+  function renderArticles(country) {
+    const filtered = allArticles.filter(a => {
+      const countries = (a.countries && a.countries.length) ? a.countries : (a.country ? [a.country] : []);
+      return countries.includes(country) && a.source === 'NewsFinal';
+    }).sort((a, b) => (b.created_at || '').localeCompare(a.created_at || ''));
+
+    document.getElementById('article-section-title').textContent = `관련 기사 (${filtered.length}건, 최근 7일)`;
+    document.getElementById('archive-link').href = `/archive.html?country=${encodeURIComponent(country)}`;
+
+    const container = document.getElementById('articles-container');
+    if (!filtered.length) {
+      container.innerHTML = '<div class="empty">최근 7일 내 기사가 없습니다. 아카이브에서 더 찾아보세요.</div>';
+      return;
+    }
+
+    container.innerHTML = filtered.slice(0, 15).map(a => {
+      const title = a.title_ko || a.title_en;
+      return `
+        <div class="article-card" onclick="location.href='article.html?id=${a.id}'">
+          <div class="article-title">${title}</div>
+          <div class="article-meta">${a.category || ''} · ${formatTime(a.created_at)}</div>
+        </div>`;
+    }).join('');
+  }
+
+  function onCountryChange() {
+    const country = document.getElementById('country-select').value;
+    if (!country) return;
+
+    document.getElementById('country-title').textContent = country;
+
+    const url = new URL(location);
+    url.searchParams.set('name', country);
+    history.replaceState(null, '', url);
+
+    renderMarket(country);
+    renderEcon(country);
+    renderCompanies(country);
+    renderCalendar(country);
+    renderArticles(country);
+  }
+
+  loadTicker();
+  Promise.all([loadCountryList(), loadMarketData(), loadEconData()]);
+</script>
+
+</body>
+</html>
