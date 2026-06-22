@@ -4,7 +4,7 @@ on:
   schedule:
     - cron: '0 1 1 4 *'    # 매년 4월 1일 KST 10:00 (IMF WEO 봄 발표 직후)
     - cron: '0 1 1 10 *'   # 매년 10월 1일 KST 10:00 (IMF WEO 가을 발표 직후)
-  workflow_dispatch:        # 수동 실행 가능
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -28,25 +28,13 @@ jobs:
       - name: IMF 경제지표 수집
         run: python scripts/fetch_econ_indicators.py
 
-      - name: wise-frontier-web에 econ_indicators.json 푸시
+      - name: 변경사항 커밋 및 푸시
         run: |
-          git clone https://x-access-token:${{ secrets.WEB_PUSH_TOKEN }}@github.com/thewisefrontier/wise-frontier-web.git web_repo
-          mkdir -p web_repo/data
-          cp -f docs/data/econ_indicators.json web_repo/data/econ_indicators.json
-          cd web_repo
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add -A
           git diff --staged --quiet || git commit -m "Update economic indicators (IMF WEO)"
           git pull --rebase origin main
           git push
-
-      - name: 상태 저장
-        run: |
-          cd $GITHUB_WORKSPACE
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
-          git add -A
-          git diff --staged --quiet || git commit -m "Update econ indicators state"
-          git pull --rebase origin main
-          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
