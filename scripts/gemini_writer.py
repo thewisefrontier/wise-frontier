@@ -218,7 +218,7 @@ def get_cluster_article_count(cluster_key):
 
 def get_today_own_articles():
     """최근 24시간(KST) 내 생성된 자체 기사 제목 목록 — 발행/미발행 모두 포함(중복 체크용)"""
-    since = (now_kst() - timedelta(hours=24)).strftime("%Y-%m-%d %H:%M")
+    since = (now_kst() - timedelta(hours=72)).strftime("%Y-%m-%d %H:%M")
     try:
         res = requests.get(
             _sb_url(),
