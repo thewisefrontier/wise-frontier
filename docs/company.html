@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <meta name="description" content="NewsFinal 기업 정보">
+  <title>기업 정보 — NewsFinal</title>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7TKGYEM467"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7TKGYEM467');
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f8f6f1; --bg2: #ffffff; --bg3: #f0ede6;
+      --border: #ddd9d0; --text: #1a1a1a; --muted: #888;
+      --accent: #8b5e2a; --accent2: #1a5fa8; --red: #c0392b; --green: #1a7a3c;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-size: 14px; line-height: 1.6; }
+
+    header { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 0 24px; }
+    .header-top {
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid var(--border); font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px; color: var(--muted); background: var(--bg3);
+      margin: 0 -24px; padding: 5px 24px; gap: 16px; line-height: 1.4;
+    }
+    .ticker-strip { display: flex; gap: 20px; overflow: hidden; flex: 1; }
+    .ticker-item { display: flex; gap: 6px; align-items: center; white-space: nowrap; }
+    .ticker-label { color: var(--muted); }
+    .ticker-val { color: var(--text); font-weight: 500; }
+    .up { color: var(--green); } .down { color: var(--red); }
+    .header-right { white-space: nowrap; }
+
+    .header-main {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 0; border-bottom: 3px solid var(--text);
+    }
+    .logo { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 900; letter-spacing: -1px; color: var(--text); text-decoration: none; }
+    .logo span { color: var(--accent); }
+    .header-meta { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); text-align: right; }
+
+    nav.page-nav { display: flex; gap: 0; overflow-x: auto; background: var(--bg3); border-bottom: 1px solid var(--border); }
+    nav.page-nav a {
+      padding: 9px 14px; font-size: 12px; font-weight: 500; color: var(--muted);
+      text-decoration: none; border-right: 1px solid var(--border); white-space: nowrap;
+      transition: color 0.2s, background 0.2s;
+    }
+    nav.page-nav a:first-child { border-left: 1px solid var(--border); }
+    nav.page-nav a:hover, nav.page-nav a.active { color: var(--accent2); background: var(--bg2); }
+
+    /* 기업 히어로 */
+    .company-hero {
+      background: var(--text); color: var(--bg);
+      padding: 32px 24px; text-align: center;
+    }
+    .company-flag { font-size: 36px; margin-bottom: 8px; }
+    .company-name { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 900; }
+    .company-meta { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #c8a060; margin-top: 8px; letter-spacing: 0.05em; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    /* 본문 */
+    .page-container { max-width: 800px; margin: 0 auto; padding: 28px 24px 60px; }
+
+    .section { margin-bottom: 28px; }
+    .section-header {
+      font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+      border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 14px;
+    }
+
+    /* 핵심 지표 카드 */
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+    .info-card {
+      background: var(--bg2); border: 1px solid var(--border); padding: 14px 16px;
+    }
+    .info-card-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); margin-bottom: 4px; }
+    .info-card-value { font-size: 14px; font-weight: 600; color: var(--text); }
+
+    /* 기업 설명 */
+    .description-box {
+      background: var(--bg2); border: 1px solid var(--border);
+      padding: 20px; line-height: 1.8; font-size: 14px;
+    }
+
+    /* 관련 기사 */
+    .article-item {
+      background: var(--bg2); border: 1px solid var(--border);
+      padding: 14px 16px; margin-bottom: 8px; text-decoration: none;
+      display: block; transition: border-color 0.2s;
+    }
+    .article-item:hover { border-color: var(--accent2); }
+    .article-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .article-meta { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); }
+
+    /* 투자 접근 */
+    .etf-box {
+      background: var(--bg2); border: 1px solid var(--border); padding: 16px;
+    }
+    .etf-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .etf-item:last-child { border-bottom: none; }
+    .etf-name { font-weight: 600; }
+    .etf-desc { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .etf-unavailable { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); padding: 8px 0; }
+
+    /* 면책 */
+    .disclaimer {
+      font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted);
+      border-top: 1px solid var(--border); padding-top: 16px; margin-top: 32px;
+      line-height: 1.7;
+    }
+
+    /* 로딩/에러 */
+    .loading { text-align: center; padding: 60px 20px; color: var(--muted); font-family: 'IBM Plex Mono', monospace; font-size: 12px; }
+    .error-box { background: #fff5f5; border: 1px solid var(--red); padding: 20px; text-align: center; color: var(--red); font-size: 13px; }
+
+    @media (max-width: 600px) {
+      header { padding: 0 14px; }
+      .header-top { margin: 0 -14px; padding: 5px 14px; }
+      .page-container { padding: 16px 14px 40px; }
+      .company-name { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="ticker-strip" id="ticker"><span style="color:var(--muted)">시세 로딩 중...</span></div>
+    <div class="header-right"><div id="datetime"></div></div>
+  </div>
+  <div class="header-main">
+    <a href="/" class="logo">News<span>Final</span></a>
+    <div class="header-meta">프론티어 미디어</div>
+  </div>
+  <nav class="page-nav">
+    <a href="/">홈</a>
+    <a href="/?category=경제">경제</a>
+    <a href="/?category=금융">금융</a>
+    <a href="/?category=자원·에너지">자원·에너지</a>
+    <a href="/?category=산업·기업">산업·기업</a>
+    <a href="/?category=정치·외교">정치·외교</a>
+    <a href="/?category=사회">사회</a>
+    <a href="/?category=IT·과학">IT·과학</a>
+    <a href="/live.html">🔴 라이브</a>
+    <a href="/archive.html">아카이브</a>
+    <a href="/markets.html" class="active">시장 지표</a>
+    <a href="/country.html">국가별</a>
+  </nav>
+</header>
+
+<div id="hero">
+  <div class="loading">기업 정보를 불러오는 중...</div>
+</div>
+
+<div class="page-container" id="main-content" style="display:none;">
+
+  <div class="section" id="section-description" style="display:none;">
+    <div class="section-header">기업 개요</div>
+    <div class="description-box" id="description-text"></div>
+  </div>
+
+  <div class="section" id="section-info" style="display:none;">
+    <div class="section-header">기본 정보</div>
+    <div class="info-grid" id="info-grid"></div>
+  </div>
+
+  <div class="section" id="section-investment">
+    <div class="section-header">한국 투자자 접근 방법</div>
+    <div class="etf-box">
+      <div class="etf-unavailable">🇰🇷 이 기업의 주식은 한국 증권사를 통해 직접 매수할 수 없습니다.</div>
+      <div id="etf-list"></div>
+    </div>
+  </div>
+
+  <div class="section" id="section-articles" style="display:none;">
+    <div class="section-header">관련 기사 <span style="font-weight:400;color:var(--muted)" id="article-count"></span></div>
+    <div id="article-list"></div>
+    <div id="article-more" style="display:none; text-align:center; margin-top:12px;">
+      <a href="#" id="article-more-btn" style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--accent2);">더 보기</a>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    이 페이지의 기업 정보는 참고용이며 투자 권유가 아닙니다. 정보의 정확성을 보장하지 않으며, 투자 판단과 그 손익은 이용자 본인 책임입니다. · <a href="/terms.html" style="color:var(--muted)">이용약관</a>
+  </div>
+
+</div>
+
+<script>
+  // ── 설정 ────────────────────────────────────────────────────────────
+  const SUPABASE_URL = "https://fotdngseksqaghvtcvqh.supabase.co";
+  const SUPABASE_ANON = "sb_publishable_rT3kSEAAdM0DJlDW5fEWww_M37h6dDW";
+
+  // 기업별 관련 ETF 매핑
+  const COMPANY_ETF_MAP = {
+    // 케냐
+    "safaricom": [
+      { ticker: "AFK", name: "VanEck Africa Index ETF", desc: "아프리카 지수 ETF — Safaricom 편입", market: "NYSE" },
+    ],
+    // 기본값 (ETF 없음)
+  };
+
+  // 국가별 관련 ETF 매핑 (기업 ETF가 없을 때 fallback)
+  const COUNTRY_ETF_MAP = {
+    "케냐": [{ ticker: "AFK", name: "VanEck Africa Index ETF", desc: "아프리카 지수 ETF", market: "NYSE" }],
+    "나이지리아": [{ ticker: "AFK", name: "VanEck Africa Index ETF", desc: "아프리카 지수 ETF", market: "NYSE" }],
+    "남아공": [{ ticker: "AFK", name: "VanEck Africa Index ETF", desc: "아프리카 지수 ETF", market: "NYSE" }],
+    "베트남": [
+      { ticker: "VNM", name: "VanEck Vietnam ETF", desc: "베트남 지수 ETF", market: "NYSE" },
+      { ticker: "ACE 베트남VN30", name: "ACE 베트남VN30(합성)", desc: "국내 상장 베트남 ETF", market: "KRX" },
+    ],
+    "인도네시아": [{ ticker: "KODEX 인도네시아", name: "KODEX 인도네시아", desc: "국내 상장 인도네시아 ETF", market: "KRX" }],
+    "태국": [],
+    "필리핀": [],
+    "이집트": [],
+  };
+
+  // ── 유틸 ────────────────────────────────────────────────────────────
+  function getParam(key) {
+    return new URLSearchParams(window.location.search).get(key);
+  }
+
+  function formatDate(str) {
+    if (!str) return '';
+    const d = new Date(str);
+    return d.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+  }
+
+  // ── 시세 티커 ────────────────────────────────────────────────────────
+  async function loadTicker() {
+    try {
+      const res = await fetch('data/market_data.json');
+      if (!res.ok) return;
+      const data = await res.json();
+      const ticker = document.getElementById('ticker');
+      const indices = (data.indices || []).filter(m => m.price && m.change_pct !== undefined);
+      ticker.innerHTML = indices.map(m => {
+        const sign = m.change_pct >= 0 ? '+' : '';
+        const cls = m.change_pct >= 0 ? 'up' : 'down';
+        return `<span class="ticker-item"><span class="ticker-label">${m.name}</span><span class="ticker-val ${cls}">${m.price.toLocaleString()} ${sign}${m.change_pct.toFixed(2)}%</span></span>`;
+      }).join('');
+    } catch(e) {}
+  }
+
+  // 시각 업데이트
+  function updateDatetime() {
+    const el = document.getElementById('datetime');
+    if (el) el.textContent = new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }).replace(/\. /g, '.').replace('.', '.');
+  }
+
+  // ── Supabase에서 기업 정보 로드 ──────────────────────────────────────
+  async function loadCompany(companyId) {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/companies?id=eq.${encodeURIComponent(companyId)}&is_published=eq.true&limit=1`,
+      { headers: { "apikey": SUPABASE_ANON, "Authorization": `Bearer ${SUPABASE_ANON}` } }
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data[0] || null;
+  }
+
+  // ── 관련 기사 로드 (articles.json에서 기업명 검색) ──────────────────
+  async function loadRelatedArticles(company) {
+    try {
+      const res = await fetch('data/articles.json');
+      if (!res.ok) return [];
+      const data = await res.json();
+      const articles = data.articles || [];
+      const keywords = [company.name, company.name_ko].filter(Boolean);
+      return articles.filter(a => {
+        const text = `${a.title_ko || ''} ${a.summary_ko || ''}`.toLowerCase();
+        return keywords.some(k => k && text.includes(k.toLowerCase()));
+      }).slice(0, 10);
+    } catch(e) { return []; }
+  }
+
+  // ── 렌더링 ──────────────────────────────────────────────────────────
+  function renderHero(company) {
+    document.getElementById('hero').innerHTML = `
+      <div class="company-hero">
+        <div class="company-flag">${company.country_flag || ''}</div>
+        <div class="company-name">${company.name}</div>
+        ${company.name_ko ? `<div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#c8a060;margin-top:4px;">${company.name_ko}</div>` : ''}
+        <div class="company-meta">
+          <span>${company.country || ''}</span>
+          ${company.exchange ? `<span>${company.exchange}</span>` : ''}
+          ${company.ticker ? `<span>${company.ticker}</span>` : ''}
+          ${company.sector ? `<span>${company.sector}</span>` : ''}
+        </div>
+      </div>`;
+    document.title = `${company.name} — NewsFinal`;
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.content = `${company.name} (${company.country}) — NewsFinal 기업 정보`;
+  }
+
+  function renderDescription(company) {
+    if (!company.description) return;
+    document.getElementById('description-text').textContent = company.description;
+    document.getElementById('section-description').style.display = 'block';
+  }
+
+  function renderInfo(company) {
+    const fields = [
+      { label: '설립연도', value: company.founded_year ? `${company.founded_year}년` : null },
+      { label: '본사', value: company.headquarters },
+      { label: '거래소', value: company.exchange },
+      { label: '티커', value: company.ticker },
+      { label: '업종', value: company.sector },
+      { label: '웹사이트', value: company.website ? `<a href="${company.website}" target="_blank" rel="noopener" style="color:var(--accent2)">${company.website.replace(/^https?:\/\//, '')}</a>` : null },
+    ].filter(f => f.value);
+
+    if (!fields.length) return;
+    document.getElementById('info-grid').innerHTML = fields.map(f =>
+      `<div class="info-card"><div class="info-card-label">${f.label}</div><div class="info-card-value">${f.value}</div></div>`
+    ).join('');
+    document.getElementById('section-info').style.display = 'block';
+  }
+
+  function renderETF(company) {
+    const etfs = COMPANY_ETF_MAP[company.id] || COUNTRY_ETF_MAP[company.country] || [];
+    const list = document.getElementById('etf-list');
+    if (!etfs.length) {
+      list.innerHTML = `<div class="etf-unavailable" style="margin-top:8px;">관련 투자 상품 정보가 없습니다.</div>`;
+      return;
+    }
+    list.innerHTML = etfs.map(e => `
+      <div class="etf-item">
+        <div>
+          <div class="etf-name">${e.ticker}</div>
+          <div class="etf-desc">${e.name} · ${e.market}</div>
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);">${e.desc}</div>
+      </div>`).join('');
+  }
+
+  function renderArticles(articles) {
+    if (!articles.length) return;
+    const section = document.getElementById('section-articles');
+    const list = document.getElementById('article-list');
+    document.getElementById('article-count').textContent = `(${articles.length}건)`;
+
+    const SHOW = 5;
+    const renderItems = (items) => items.map(a => `
+      <a class="article-item" href="/article.html?id=${a.id}">
+        <div class="article-title">${a.title_ko || ''}</div>
+        <div class="article-meta">${formatDate(a.created_at)} · ${a.country || ''} · ${a.category || ''}</div>
+      </a>`).join('');
+
+    list.innerHTML = renderItems(articles.slice(0, SHOW));
+
+    if (articles.length > SHOW) {
+      const moreDiv = document.getElementById('article-more');
+      moreDiv.style.display = 'block';
+      document.getElementById('article-more-btn').addEventListener('click', (e) => {
+        e.preventDefault();
+        list.innerHTML = renderItems(articles);
+        moreDiv.style.display = 'none';
+      });
+    }
+    section.style.display = 'block';
+  }
+
+  // ── 메인 ────────────────────────────────────────────────────────────
+  async function run() {
+    const companyId = getParam('id');
+    if (!companyId) {
+      document.getElementById('hero').innerHTML = `<div class="error-box" style="margin:40px 24px;">기업 ID가 없습니다. <a href="/markets.html">시장 지표</a>로 돌아가세요.</div>`;
+      return;
+    }
+
+    const company = await loadCompany(companyId);
+    if (!company) {
+      document.getElementById('hero').innerHTML = `<div class="error-box" style="margin:40px 24px;">기업 정보를 찾을 수 없습니다. (id: ${companyId})</div>`;
+      return;
+    }
+
+    renderHero(company);
+    document.getElementById('main-content').style.display = 'block';
+    renderDescription(company);
+    renderInfo(company);
+    renderETF(company);
+
+    const articles = await loadRelatedArticles(company);
+    renderArticles(articles);
+  }
+
+  loadTicker();
+  updateDatetime();
+  setInterval(updateDatetime, 60000);
+  run();
+</script>
+
+</body>
+</html>
