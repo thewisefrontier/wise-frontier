@@ -276,7 +276,8 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
         "country_flag": "",
         "score": article_count,
         "created_at": now_str,
-        "first_published_at": now_str,  # 최초 게시 시각 — 이후 병합 업데이트에도 변하지 않음
+        "first_published_at": now_str,
+        "update_log": [{"timestamp": now_str, "note": "최초 게시"}],
         "sent_telegram": 0,
         "is_published": published,
         "posted_blog": 0,
@@ -290,8 +291,25 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
 
 
 def update_article(article_id, title_ko, summary_ko):
-    """기사 갱신(병합 업데이트 포함) — created_at(최종 갱신 시각)만 바뀌고
-    first_published_at(최초 게시 시각)은 절대 건드리지 않음 — 라이브 업데이트 표시의 기준이 됨"""
+    """기사 갱신(병합 업데이트) — update_log에 업데이트 기록 추가"""
+    now_str = now_kst().strftime("%Y-%m-%d %H:%M")
+
+    # 기존 update_log 가져오기
+    try:
+        res = requests.get(
+            f"{_sb_url()}?id=eq.{article_id}&select=update_log",
+            headers=_sb_headers(), timeout=10
+        )
+        existing_log = []
+        if res.status_code in (200, 206):
+            data = res.json()
+            if data and data[0].get("update_log"):
+                existing_log = data[0]["update_log"]
+    except Exception:
+        existing_log = []
+
+    new_log = existing_log + [{"timestamp": now_str, "note": "업데이트"}]
+
     res = requests.patch(
         f"{_sb_url()}?id=eq.{article_id}",
         headers=_sb_headers(),
@@ -299,7 +317,8 @@ def update_article(article_id, title_ko, summary_ko):
             "title_ko": title_ko,
             "title_en": title_ko,
             "summary_ko": summary_ko,
-            "created_at": now_kst().strftime("%Y-%m-%d %H:%M"),
+            "created_at": now_str,
+            "update_log": new_log,
         },
         timeout=15
     )
