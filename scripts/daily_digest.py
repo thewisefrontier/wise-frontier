@@ -149,7 +149,7 @@ def call_gemini(prompt, max_tokens=3000):
 
 
 def build_digest_prompt(articles):
-    yesterday_str = (now_kst() - timedelta(days=1)).strftime("%Y년 %m월 %d일")
+    today_str = now_kst().strftime("%Y년 %m월 %d일")  # 발행일(오늘) 기준 — 신문 날짜와 동일
 
     # 국가별로 그룹화해서 제공 (Gemini가 패턴 찾기 쉽도록)
     by_country = {}
@@ -178,14 +178,14 @@ def build_digest_prompt(articles):
 - 한국어로만 작성하세요.""")
 
     return f"""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다.
-아래는 어제({yesterday_str}) NewsFinal이 다룬 프론티어 마켓 기사 목록입니다. 국가별로 정리되어 있습니다.
+아래는 어제 하루 동안 NewsFinal이 다룬 프론티어 마켓 기사 목록입니다. 국가별로 정리되어 있습니다.
 
 {article_list}
 
 {rules}
 
 아래 형식으로 출력:
-제목: (어제 하루를 정리하는 다이제스트의 핵심을 담은 제목, 예: "{yesterday_str} 프론티어 마켓 — 통화 압력과 인프라 투자 확대")
+제목: (다이제스트의 핵심을 담은 제목, 예: "{today_str} 프론티어 마켓 — 통화 압력과 인프라 투자 확대")
 본문: (다이제스트 본문)"""
 
 
@@ -259,8 +259,8 @@ def run():
 
     title, body = parse_title_and_body(content)
     if not title:
-        yesterday_str = (now_kst() - timedelta(days=1)).strftime('%Y년 %m월 %d일')
-        title = f"{yesterday_str} 프론티어 마켓 다이제스트"
+        today_str = now_kst().strftime('%Y년 %m월 %d일')
+        title = f"{today_str} 프론티어 마켓 다이제스트"
 
     article_id = save_digest(title, body or content, len(articles))
     if article_id > 0:
