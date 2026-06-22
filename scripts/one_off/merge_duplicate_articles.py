@@ -81,7 +81,7 @@ def unpublish(article_id):
 
 def run():
     print("[검색] '갤럭시 위치' 관련 NewsFinal 기사...")
-    articles = get_articles_by_keyword("갤럭시 위치")
+    articles = get_articles_by_keyword("울트라 2")
 
     if not articles:
         print("기사를 찾을 수 없습니다.")
