@@ -24,10 +24,13 @@ jobs:
       - name: 패키지 설치
         run: pip install -r requirements.txt
 
-      - name: 일일 브리핑 발송
+      - name: 오늘의 브리핑 생성
         run: python scripts/briefing.py
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
 
@@ -37,17 +40,13 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
 
-      - name: wise-frontier-web에 articles.json 푸시
+      - name: 변경사항 커밋 및 푸시
         run: |
-          git clone https://x-access-token:${{ secrets.WEB_PUSH_TOKEN }}@github.com/thewisefrontier/wise-frontier-web.git web_repo
-          mkdir -p web_repo/data
-          cp docs/data/articles.json web_repo/data/articles.json
-          cp -f docs/data/market_data.json web_repo/data/market_data.json 2>/dev/null || true
-          cp -f docs/sitemap.xml web_repo/sitemap.xml 2>/dev/null || true
-          cd web_repo
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add -A
           git diff --staged --quiet || git commit -m "Update briefing"
           git pull --rebase origin main
           git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
