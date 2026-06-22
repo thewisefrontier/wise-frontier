@@ -50,7 +50,7 @@ def unpublish(article_id):
 def run():
     # 삼성전자 갤럭시 언팩 중복 기사 찾기
     print("[검색] '갤럭시 언팩' 관련 NewsFinal 기사...")
-    articles = get_articles_by_keyword("갤럭시 언팩")
+    articles = get_articles_by_keyword("갤럭시 위치")
 
     if not articles:
         print("기사를 찾을 수 없습니다.")
