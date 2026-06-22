@@ -34,15 +34,9 @@ def _url(table="articles"):
 
 
 def init_db():
-    """Supabase는 대시보드에서 테이블 생성 — 여기서는 연결 확인만"""
-    if not SUPABASE_URL or not SUPABASE_SERVICE_KEY:
-        print("[WARNING] SUPABASE_URL 또는 SUPABASE_SERVICE_KEY 없음 — SQLite 폴백")
-        return
-    res = requests.get(_url(), headers=_headers(), params={"select": "id", "limit": "1"}, timeout=10)
-    if res.status_code in (200, 206):
-        print("✅ Supabase DB 연결 확인")
-    else:
-        print(f"[WARNING] Supabase 연결 실패: {res.status_code}")
+    """하위 호환용 — Supabase 전환 완료로 실제 동작 없음"""
+    pass
+
 
 
 def is_url_exists(url: str) -> bool:
