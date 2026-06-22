@@ -1,8 +1,8 @@
 name: NewsFinal - Daily Briefing
 
 on:
-  schedule:
-    - cron: '0 8 * * *'    # UTC 08:00 = KST 17:00 오후 5시
+  # schedule: (일시 중단 — 2026-07-01 복구)
+  #   - cron: '0 8 * * *'    # UTC 08:00 = KST 17:00 오후 5시
   workflow_dispatch:
 
 permissions:
