@@ -98,12 +98,13 @@ def get_yesterday_own_articles(limit=200):
     return []
 
 
-def digest_exists_for_yesterday() -> bool:
-    yesterday_key = f"digest_{(now_kst() - timedelta(days=1)).strftime('%Y%m%d')}"
+def digest_exists_for_today() -> bool:
+    """오늘(KST) 이미 다이제스트를 발행했는지 확인 — subcategory 키는 발행일 기준"""
+    today_key = f"digest_{now_kst().strftime('%Y%m%d')}"
     res = requests.get(
         _sb_url(),
         headers=_sb_headers(),
-        params={"select": "id", "subcategory": f"eq.{yesterday_key}", "limit": "1"},
+        params={"select": "id", "subcategory": f"eq.{today_key}", "limit": "1"},
         timeout=15
     )
     return res.status_code in (200, 206) and len(res.json()) > 0
@@ -203,16 +204,16 @@ def parse_title_and_body(text):
 
 
 def save_digest(title, body, article_count):
-    yesterday_key = f"digest_{(now_kst() - timedelta(days=1)).strftime('%Y%m%d')}"
+    today_key = f"digest_{now_kst().strftime('%Y%m%d')}"
     payload = {
         "title_en": title,
         "title_ko": title,
         "summary_en": "",
         "summary_ko": body,
-        "url": f"internal://{yesterday_key}",
+        "url": f"internal://{today_key}",
         "source": "NewsFinal",
         "category": "다이제스트",
-        "subcategory": yesterday_key,  # 다이제스트가 다루는 대상 날짜(어제)
+        "subcategory": today_key,  # 발행일(오늘) 기준 키 — 홈 노출 판단 기준
         "region": "global",
         "country": "",
         "country_flag": "",
@@ -238,8 +239,8 @@ def run():
         print("[SKIP] SUPABASE 환경변수 없음")
         return
 
-    if digest_exists_for_yesterday():
-        print("[SKIP] 어제자 다이제스트 이미 생성됨")
+    if digest_exists_for_today():
+        print("[SKIP] 오늘 다이제스트 이미 생성됨")
         return
 
     articles = get_yesterday_own_articles()
