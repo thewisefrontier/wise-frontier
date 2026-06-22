@@ -395,7 +395,7 @@
     <!-- 경제 일정 — 최상단 -->
     <div class="widget">
       <div class="widget-header">
-        <span>📅 이번 주 일정</span>
+        <span>📅 예정된 일정</span>
         <a href="/calendar.html" style="font-size:10px;color:var(--accent2);text-decoration:none;font-family:'IBM Plex Mono',monospace;">전체 →</a>
       </div>
       <div id="calendar-widget"><div class="empty">데이터 준비 중</div></div>
@@ -895,6 +895,8 @@
   function renderCard(a, standalone) {
     const idx = allArticles.indexOf(a);
     const clickAction = idx >= 0 ? `toggleExpand(${idx})` : `location.href='article.html?id=${a.id}'`;
+    const isLive = (a.score || 0) >= 2 && a.source === 'NewsFinal';
+    const liveBadge = isLive ? `<span style="color:var(--red);font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;margin-right:6px;">● LIVE · ${a.score}차</span>` : '';
     const catTag = a.category ? `<span class="tag" style="cursor:pointer;" onclick="filterByTag('sector','${a.category}',event)">${a.category}</span>` : '';
     const subTag = a.subcategory && a.subcategory !== a.category
       && !a.subcategory.startsWith('cluster_')
@@ -908,10 +910,10 @@
       : (a.country ? `<span class="tag country" style="cursor:pointer;" onclick="filterByTag('country','${a.country}',event)">${a.country}</span>` : '');
 
     return `
-      <div class="article-card ${standalone?'standalone':''}" data-idx="${idx}" onclick="${clickAction}">
+      <div class="article-card ${standalone?'standalone':''}" data-idx="${idx}" onclick="${clickAction}" ${isLive ? 'style="border-left:3px solid var(--red);"' : ''}>
         <div class="article-header">
           <div class="article-tags">
-            ${catTag}${subTag}${regionTag}${countryTag}
+            ${liveBadge}${catTag}${subTag}${regionTag}${countryTag}
           </div>
           <span class="article-time" data-created="${a.created_at}">${formatTime(a.created_at)}</span>
         </div>
