@@ -120,6 +120,21 @@
       .page-container { padding: 20px 16px 40px; }
       .index-grid { grid-template-columns: repeat(2, 1fr); }
     }
+
+    .market-tabs {
+      display: flex; border-bottom: 2px solid var(--border);
+      margin: 16px 0 0; overflow-x: auto; position: sticky; top: 0; background: var(--bg); z-index: 10;
+    }
+    .market-tab {
+      padding: 10px 18px; font-size: 12px; font-weight: 500;
+      font-family: 'IBM Plex Mono', monospace; background: none; border: none;
+      color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent;
+      margin-bottom: -2px; white-space: nowrap; flex-shrink: 0;
+    }
+    .market-tab.active { color: var(--accent2); border-bottom-color: var(--accent2); font-weight: 700; }
+    .market-tab:hover { color: var(--text); }
+    .market-section { display: none; }
+    .market-section.active { display: block; }
   </style>
 </head>
 <body>
@@ -153,18 +168,26 @@
 </header>
 
 <div class="page-container">
-  <h1 class="page-title">시장 지표</h1>
+  <h1 class="page-title">마켓</h1>
   <div class="page-sub" id="updated-at">불러오는 중...</div>
 
+
+  <div class="market-tabs">
+    <button class="market-tab active" onclick="switchMarketTab('indices',this)">지수 · 환율</button>
+    <button class="market-tab" onclick="switchMarketTab('etf',this)">ETF</button>
+    <button class="market-tab" onclick="switchMarketTab('macro',this)">거시지표</button>
+    <button class="market-tab" onclick="switchMarketTab('companies',this)">거래소 기업</button>
+  </div>
+
+  <div id="section-indices" class="market-section active">
   <div id="markets-container"><div class="empty">시장 데이터를 불러오는 중입니다...</div></div>
 
-  <div class="source-note">데이터 출처: Yahoo Finance · 약 2시간 간격 갱신 · 투자 참고용이며 실시간 시세와 차이가 있을 수 있습니다</div>
+  <div class="source-note">출처: Yahoo Finance</div>
+  </div><!-- /section-indices -->
 
-  <div class="invest-section">
+  <div id="section-etf" class="market-section invest-section">
     <h2 class="page-title" style="font-size:20px;margin-top:8px;">투자 가능 상품</h2>
-    <div class="invest-disclaimer">
-      <strong>안내</strong> — 아래 상품 정보는 매수를 권유하는 것이 아니라, 한국에서 프론티어 마켓에 접근할 수 있는 경로를 소개하기 위한 정보 제공입니다. 투자 판단과 책임은 투자자 본인에게 있으며, 매수 전 반드시 운용사 공식 자료(투자설명서)를 확인하시기 바랍니다.
-    </div>
+
 
     <div class="invest-group">
       <div class="invest-group-header">🇰🇷 국내(KRX) 상장 — 원화로 직접 매수</div>
@@ -220,19 +243,15 @@
     </div>
   </div>
 
-  <div class="invest-section">
-    <h2 class="page-title" style="font-size:20px;">국가별 거시경제 지표</h2>
-    <div class="invest-disclaimer">
-      출처: IMF World Economic Outlook (WEO) · 매년 4월·10월 자동 갱신 · 투자 권유 아님
-    </div>
+  <div id="section-macro" class="market-section invest-section">
+    <h2 class="page-title" style="font-size:20px;">거시경제 지표</h2>
+    <div class="invest-disclaimer">출처: IMF World Economic Outlook</div>
     <div id="econ-table-container"><div class="empty" style="padding:20px;">경제지표를 불러오는 중...</div></div>
   </div>
 
-  <div class="invest-section">
+  <div id="section-companies" class="market-section invest-section">
     <h2 class="page-title" style="font-size:20px;">거래소 대표 기업</h2>
-    <div class="invest-disclaimer">
-      <strong>안내</strong> — 아래 기업들은 한국 증권사를 통해 직접 매수할 수 없습니다. 각국 증시 구조를 이해하기 위한 참고 정보입니다.
-    </div>
+
 
     <div class="invest-group">
       <div class="invest-group-header">🇳🇬 나이지리아 — NGX (Nigerian Exchange)</div>
@@ -492,6 +511,14 @@
     } catch(e) {
       container.innerHTML = '<div class="empty" style="padding:20px;">경제지표를 불러올 수 없습니다</div>';
     }
+  }
+
+
+  function switchMarketTab(name, btn) {
+    document.querySelectorAll('.market-section').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.market-tab').forEach(el => el.classList.remove('active'));
+    document.getElementById('section-' + name).classList.add('active');
+    btn.classList.add('active');
   }
 
   loadTicker();
