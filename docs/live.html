@@ -96,6 +96,16 @@
     }
     .live-meta strong { color: var(--text); font-weight: 700; }
 
+    .update-log {
+      margin: 8px 0; padding: 8px 10px;
+      background: var(--bg3); border-left: 2px solid var(--accent2);
+      font-family: 'IBM Plex Mono', monospace; font-size: 10px;
+    }
+    .update-log-item { display: flex; gap: 10px; padding: 2px 0; color: var(--muted); }
+    .update-log-item.latest { color: var(--text); font-weight: 600; }
+    .update-log-time { min-width: 110px; }
+    .update-log-note { }
+
     .empty { text-align: center; padding: 60px 20px; color: var(--muted); font-family: 'IBM Plex Mono', monospace; font-size: 13px; }
 
     footer {
@@ -261,12 +271,26 @@
       const lastUpdate = formatDateTime(a.created_at);
       const updateCount = a.score || 0;
 
+      // 업데이트 로그 (최신순, 최대 5개)
+      const logs = Array.isArray(a.update_log) && a.update_log.length > 0
+        ? [...a.update_log].reverse().slice(0, 5)
+        : [];
+      const logHtml = logs.length > 1 ? `
+        <div class="update-log">
+          ${logs.map((l, i) => `
+            <div class="update-log-item ${i === 0 ? 'latest' : ''}">
+              <span class="update-log-time">${l.timestamp || ''}</span>
+              <span class="update-log-note">${l.note || '업데이트'}</span>
+            </div>`).join('')}
+        </div>` : '';
+
       return `
         <div class="live-card" onclick="location.href='article.html?id=${a.id}'">
           <div class="live-badge"><span class="dot"></span>LIVE · ${updateCount}차 업데이트</div>
           <div class="live-tags">${catTag}${regionTag}${countryTags}</div>
           <div class="live-title">${title}</div>
           <div class="live-preview">${preview}${preview.length >= 120 ? '…' : ''}</div>
+          ${logHtml}
           <div class="live-meta">
             <span>최초 게시: ${firstPub}</span>
             <span>최종 업데이트: <strong>${lastUpdate}</strong></span>
