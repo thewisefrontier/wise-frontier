@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>마켓 — NewsFinal (프리뷰)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f8f6f1; --bg2: #ffffff; --bg3: #f0ede6;
+      --border: #ddd9d0; --text: #1a1a1a; --muted: #888;
+      --accent: #8b5e2a; --accent2: #1a5fa8; --red: #c0392b; --green: #1a7a3c;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-size: 14px; line-height: 1.6; }
+
+    header { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 0 24px; }
+    .header-main {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 0; border-bottom: 3px solid var(--text);
+    }
+    .logo { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 900; letter-spacing: -1px; color: var(--text); text-decoration: none; }
+    .logo span { color: var(--accent); }
+
+    nav.page-nav { display: flex; gap: 0; overflow-x: auto; background: var(--bg3); border-bottom: 1px solid var(--border); }
+    nav.page-nav a {
+      padding: 9px 14px; font-size: 12px; font-weight: 500; color: var(--muted);
+      text-decoration: none; border-right: 1px solid var(--border); white-space: nowrap;
+    }
+    nav.page-nav a.active { color: var(--accent2); background: var(--bg2); }
+
+    .page-container { max-width: 1100px; margin: 0 auto; padding: 28px 24px 60px; }
+
+    /* 섹션 헤더 */
+    .section-title {
+      font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .section-sub {
+      font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    /* 탭 */
+    .tab-bar {
+      display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 24px;
+    }
+    .tab-bar button {
+      padding: 8px 16px; font-size: 12px; font-weight: 500;
+      font-family: 'IBM Plex Mono', monospace; background: none; border: none;
+      color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent;
+      margin-bottom: -2px; transition: color 0.15s;
+    }
+    .tab-bar button.active { color: var(--accent2); border-bottom-color: var(--accent2); }
+    .tab-bar button:hover { color: var(--text); }
+
+    /* 마켓 테이블 */
+    .market-table { width: 100%; border-collapse: collapse; }
+    .market-table th {
+      font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500;
+      color: var(--muted); text-align: left; padding: 8px 12px;
+      border-bottom: 2px solid var(--border); white-space: nowrap;
+    }
+    .market-table th.right { text-align: right; }
+    .market-table td {
+      padding: 12px 12px; border-bottom: 1px solid var(--border);
+      vertical-align: middle; font-size: 13px;
+    }
+    .market-table tr:hover td { background: var(--bg3); }
+    .market-table tr:last-child td { border-bottom: none; }
+
+    .country-cell { display: flex; align-items: center; gap: 8px; }
+    .country-flag { font-size: 18px; }
+    .country-name { font-weight: 600; }
+    .country-exchange { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); }
+
+    .price-cell { text-align: right; font-family: 'IBM Plex Mono', monospace; font-weight: 600; }
+    .change-cell { text-align: right; font-family: 'IBM Plex Mono', monospace; font-size: 12px; }
+    .up { color: var(--green); } .down { color: var(--red); }
+
+    .companies-cell { font-size: 12px; color: var(--muted); }
+    .company-link { color: var(--accent2); text-decoration: none; margin-right: 6px; white-space: nowrap; }
+    .company-link:hover { text-decoration: underline; }
+
+    .etf-cell { font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
+    .etf-tag {
+      display: inline-block; padding: 2px 6px; background: var(--bg3);
+      border: 1px solid var(--border); font-size: 10px; margin-right: 4px; margin-bottom: 2px;
+    }
+
+    .econ-cell { font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
+    .econ-val { font-weight: 700; }
+
+    /* ETF 섹션 */
+    .etf-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-top: 16px; }
+    .etf-card { background: var(--bg2); border: 1px solid var(--border); padding: 16px; }
+    .etf-ticker { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--accent2); }
+    .etf-name { font-size: 13px; color: var(--muted); margin: 4px 0 8px; }
+    .etf-meta { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); display: flex; gap: 12px; }
+
+    /* 탭 컨텐츠 */
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    .source-note { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 16px; }
+
+    footer { border-top: 1px solid var(--border); background: var(--bg2); padding: 16px 24px; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); }
+
+    @media (max-width: 768px) {
+      .page-container { padding: 16px 14px 40px; }
+      .market-table { font-size: 12px; }
+      .market-table th, .market-table td { padding: 8px 6px; }
+      .companies-cell, .etf-cell { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-main">
+    <a href="/" class="logo">News<span>Final</span></a>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);">프론티어 미디어</div>
+  </div>
+  <nav class="page-nav">
+    <a href="/">홈</a>
+    <a href="/?category=경제">경제</a>
+    <a href="/?category=금융">금융</a>
+    <a href="/?category=자원·에너지">자원·에너지</a>
+    <a href="/?category=산업·기업">산업·기업</a>
+    <a href="/?category=정치·외교">정치·외교</a>
+    <a href="/?category=사회">사회</a>
+    <a href="/?category=IT·과학">IT·과학</a>
+    <a href="/live.html">🔴 라이브</a>
+    <a href="/archive.html">아카이브</a>
+    <a href="/calendar.html">경제 일정</a>
+    <a href="/markets.html" class="active">시장 지표</a>
+    <a href="/country.html">국가별</a>
+  </nav>
+</header>
+
+<div class="page-container">
+
+  <div class="section-title">마켓</div>
+  <div class="section-sub">프론티어 마켓 주요 지수 · 환율 · 대표 기업 · 투자 가능 ETF</div>
+
+  <div class="tab-bar">
+    <button class="active" onclick="switchTab('indices', this)">지수 · 환율</button>
+    <button onclick="switchTab('companies', this)">거래소 기업</button>
+    <button onclick="switchTab('etf', this)">투자 가능 ETF</button>
+    <button onclick="switchTab('macro', this)">거시지표</button>
+  </div>
+
+  <!-- 탭1: 지수·환율 -->
+  <div id="tab-indices" class="tab-content active">
+    <table class="market-table">
+      <thead>
+        <tr>
+          <th>국가 · 거래소</th>
+          <th class="right">현재가</th>
+          <th class="right">등락</th>
+          <th>주요 ETF</th>
+        </tr>
+      </thead>
+      <tbody id="indices-tbody">
+        <tr><td colspan="4" style="text-align:center;color:var(--muted);padding:24px;font-family:'IBM Plex Mono',monospace;font-size:12px;">시세 데이터 로딩 중...</td></tr>
+      </tbody>
+    </table>
+    <div class="source-note" id="indices-updated"></div>
+  </div>
+
+  <!-- 탭2: 거래소 기업 -->
+  <div id="tab-companies" class="tab-content">
+    <table class="market-table">
+      <thead>
+        <tr>
+          <th>국가</th>
+          <th>대표 기업</th>
+          <th>업종</th>
+          <th>거래소</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>🇳🇬 나이지리아</td><td><a class="company-link" href="/company.html?id=dangote_cement">Dangote Cement</a></td><td style="color:var(--muted);font-size:12px;">시멘트·산업재</td><td style="font-family:'IBM Plex Mono',monospace;font-size:11px;">NGX</td></tr>
+        <tr><td></td><td><a class="company-link" href="/company.html?id=mtn_nigeria">MTN Nigeria</a></td><td style="color:var(--muted);font-size:12px;">통신</td><td style="font-family:'IBM Plex Mono',monospace;font-size:11px;">NGX</td></tr>
+        <tr><td></td><td><a class="company-link" href="/company.html?id=zenith_bank">Zenith Bank</a></td><td style="color:var(--muted);font-size:12px;">은행</td><td style="font-family:'IBM Plex Mono',monospace;font-size:11px;">NGX</td></tr>
+        <tr><td>🇰🇪 케냐</td><td><a class="company-link" href="/company.html?id=safaricom">Safaricom</a></td><td style="color:var(--muted);font-size:12px;">통신·모바일머니</td><td style="font-family:'IBM Plex Mono',monospace;font-size:11px;">NSE</td></tr>
+        <tr><td></td><td><a class="company-link" href="/company.html?id=equity_group">Equity Group</a></td><td style="color:var(--muted);font-size:12px;">은행</td><td style="font-family:'IBM Plex Mono',monospace;font-size:11px;">NSE</td></tr>
+        <tr><td>🇿🇦 남아공</td><td><a class="company-link" href="/company.html?id=naspers">Naspers / Prosus</a></td><td style="color:var(--muted);font-size:12px;">미디어·인터넷</td><td style="font-family:'IBM Plex Mono',monospace;font-size:11px;">JSE</td></tr>
+        <tr><td></td><td><a class="company-link" href="/company.html?id=mtn_group">MTN Group</a></td><td style="color:var(--muted);font-size:12px;">통신</td><td style="font-family:'IBM Plex Mono',monospace;font-size:11px;">JSE</td></tr>
+        <tr><td>🇻🇳 베트남</td><td><a class="company-link" href="/company.html?id=fpt_corporation">FPT Corporation</a></td><td style="color:var(--muted);font-size:12px;">IT서비스</td><td style="font-family:'IBM Plex Mono',monospace;font-size:11px;">HOSE</td></tr>
+        <tr><td></td><td><a class="company-link" href="/company.html?id=vpbank">VPBank</a></td><td style="color:var(--muted);font-size:12px;">은행</td><td style="font-family:'IBM Plex Mono',monospace;font-size:11px;">HOSE</td></tr>
+        <tr><td>🇮🇩 인도네시아</td><td><a class="company-link" href="/company.html?id=bank_central_asia">Bank Central Asia</a></td><td style="color:var(--muted);font-size:12px;">은행</td><td style="font-family:'IBM Plex Mono',monospace;font-size:11px;">IDX</td></tr>
+        <tr><td></td><td><a class="company-link" href="/company.html?id=astra_international">Astra International</a></td><td style="color:var(--muted);font-size:12px;">자동차·복합</td><td style="font-family:'IBM Plex Mono',monospace;font-size:11px;">IDX</td></tr>
+        <tr><td>🇹🇭 태국</td><td><a class="company-link" href="/company.html?id=ptt">PTT</a></td><td style="color:var(--muted);font-size:12px;">에너지</td><td style="font-family:'IBM Plex Mono',monospace;font-size:11px;">SET</td></tr>
+        <tr><td></td><td><a class="company-link" href="/company.html?id=cp_all">CP All</a></td><td style="color:var(--muted);font-size:12px;">유통</td><td style="font-family:'IBM Plex Mono',monospace;font-size:11px;">SET</td></tr>
+        <tr><td>🇵🇭 필리핀</td><td><a class="company-link" href="/company.html?id=sm_investments">SM Investments</a></td><td style="color:var(--muted);font-size:12px;">복합기업</td><td style="font-family:'IBM Plex Mono',monospace;font-size:11px;">PSE</td></tr>
+        <tr><td></td><td><a class="company-link" href="/company.html?id=bdo_unibank">BDO Unibank</a></td><td style="color:var(--muted);font-size:12px;">은행</td><td style="font-family:'IBM Plex Mono',monospace;font-size:11px;">PSE</td></tr>
+        <tr><td>🇪🇬 이집트</td><td><a class="company-link" href="/company.html?id=commercial_international_bank">CIB</a></td><td style="color:var(--muted);font-size:12px;">은행</td><td style="font-family:'IBM Plex Mono',monospace;font-size:11px;">EGX</td></tr>
+        <tr><td></td><td><a class="company-link" href="/company.html?id=telecom_egypt">Telecom Egypt</a></td><td style="color:var(--muted);font-size:12px;">통신</td><td style="font-family:'IBM Plex Mono',monospace;font-size:11px;">EGX</td></tr>
+      </tbody>
+    </table>
+    <div class="source-note">시가총액 상위 기업 기준 · 참고 정보</div>
+  </div>
+
+  <!-- 탭3: 투자 가능 ETF -->
+  <div id="tab-etf" class="tab-content">
+    <div class="etf-grid">
+      <div class="etf-card">
+        <div class="etf-ticker">ACE 베트남VN30</div>
+        <div class="etf-name">ACE 베트남VN30(합성)</div>
+        <div class="etf-meta"><span>KRX 상장</span><span>베트남 VN30 지수 추종</span></div>
+      </div>
+      <div class="etf-card">
+        <div class="etf-ticker">TIGER 인도니프티50</div>
+        <div class="etf-name">TIGER 인도니프티50</div>
+        <div class="etf-meta"><span>KRX 상장</span><span>인도 Nifty50 지수 추종</span></div>
+      </div>
+      <div class="etf-card">
+        <div class="etf-ticker">KODEX 인도타타그룹</div>
+        <div class="etf-name">KODEX 인도타타그룹</div>
+        <div class="etf-meta"><span>KRX 상장</span><span>인도 타타그룹 테마</span></div>
+      </div>
+      <div class="etf-card">
+        <div class="etf-ticker">VNM</div>
+        <div class="etf-name">VanEck Vietnam ETF</div>
+        <div class="etf-meta"><span>NYSE 상장</span><span>베트남 주요 기업</span></div>
+      </div>
+      <div class="etf-card">
+        <div class="etf-ticker">AFK</div>
+        <div class="etf-name">VanEck Africa Index ETF</div>
+        <div class="etf-meta"><span>NYSE 상장</span><span>아프리카 지수 추종</span></div>
+      </div>
+      <div class="etf-card">
+        <div class="etf-ticker">FM</div>
+        <div class="etf-name">iShares MSCI Frontier &amp; Select EM ETF</div>
+        <div class="etf-meta"><span>NYSE 상장</span><span>프론티어 마켓 전반</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 탭4: 거시지표 -->
+  <div id="tab-macro" class="tab-content">
+    <table class="market-table">
+      <thead>
+        <tr>
+          <th>국가</th>
+          <th class="right">GDP 성장률</th>
+          <th class="right">인플레이션</th>
+          <th class="right">실업률</th>
+          <th class="right">경상수지/GDP</th>
+        </tr>
+      </thead>
+      <tbody id="macro-tbody">
+        <tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px;font-family:'IBM Plex Mono',monospace;font-size:12px;">IMF 경제지표 로딩 중...</td></tr>
+      </tbody>
+    </table>
+    <div class="source-note">출처: IMF World Economic Outlook</div>
+  </div>
+
+</div>
+
+<footer>
+  <div>NEWSFINAL © 2026</div>
+  <div style="margin-top:6px;">
+    <a href="/about.html" style="color:var(--muted);text-decoration:none;">소개</a> ·
+    <a href="/privacy.html" style="color:var(--muted);text-decoration:none;">개인정보처리방침</a> ·
+    <a href="/terms.html" style="color:var(--muted);text-decoration:none;">이용약관</a>
+  </div>
+</footer>
+
+<script>
+  function switchTab(name, btn) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-bar button').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  // 지수·환율 데이터 로드
+  async function loadIndices() {
+    try {
+      const res = await fetch('data/market_data.json');
+      if (!res.ok) return;
+      const data = await res.json();
+      const indices = data.indices || [];
+
+      // 프론티어 마켓 지수·환율 구분
+      const FRONTIER_NAMES = ['JSE', 'EGX30', 'SET', 'IDX', 'PSE1', 'VNI', 'NGX', 'NSE20'];
+      const ETF_MAP = {
+        'JSE': ['AFK'], 'NGX': ['AFK'], 'NSE20': ['AFK'], 'EGX30': [],
+        'SET': [], 'IDX': [], 'PSE1': [],
+        'VNI': ['VNM', 'ACE 베트남VN30'],
+      };
+
+      const tbody = document.getElementById('indices-tbody');
+      if (!indices.length) { tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:24px;">데이터 없음</td></tr>'; return; }
+
+      tbody.innerHTML = indices.map(m => {
+        const sign = m.change_pct >= 0 ? '+' : '';
+        const cls = m.change_pct >= 0 ? 'up' : 'down';
+        const etfs = ETF_MAP[m.symbol] || ETF_MAP[m.name] || [];
+        const etfHtml = etfs.length ? etfs.map(e => `<span class="etf-tag">${e}</span>`).join('') : '<span style="color:var(--muted);font-size:11px;">—</span>';
+        const isFx = m.type === 'fx' || (m.name || '').startsWith('USD/');
+        return `<tr>
+          <td>
+            <div style="font-weight:600;">${m.name}</div>
+            ${isFx ? '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:10px;color:var(--muted);">환율</div>' : ''}
+          </td>
+          <td class="price-cell">${m.price ? m.price.toLocaleString() : '—'}</td>
+          <td class="change-cell ${cls}">${sign}${(m.change_pct || 0).toFixed(2)}%</td>
+          <td class="etf-cell">${etfHtml}</td>
+        </tr>`;
+      }).join('');
+
+      const updatedEl = document.getElementById('indices-updated');
+      if (updatedEl && data.updated_at) updatedEl.textContent = `갱신: ${data.updated_at} · 출처: Yahoo Finance`;
+    } catch(e) {}
+  }
+
+  // 거시지표 로드
+  async function loadMacro() {
+    try {
+      const res = await fetch('data/econ_indicators.json');
+      if (!res.ok) return;
+      const data = await res.json();
+      const countries = data.countries || {};
+      const ORDER = ['NGA','KEN','ZAF','VNM','IDN','THA','PHL','EGY'];
+      const FLAGS = {'NGA':'🇳🇬','KEN':'🇰🇪','ZAF':'🇿🇦','VNM':'🇻🇳','IDN':'🇮🇩','THA':'🇹🇭','PHL':'🇵🇭','EGY':'🇪🇬'};
+
+      const tbody = document.getElementById('macro-tbody');
+      tbody.innerHTML = ORDER.map(code => {
+        const d = countries[code];
+        if (!d) return '';
+        const fmt = (val, positive_good=true) => {
+          if (val === null || val === undefined) return '<span style="color:var(--muted)">N/A</span>';
+          const n = parseFloat(val);
+          const sign = n > 0 ? '+' : '';
+          const cls = positive_good ? (n >= 0 ? 'up' : 'down') : (n > 10 ? 'down' : '');
+          return `<span class="${cls}" style="font-family:'IBM Plex Mono',monospace;font-weight:700;">${sign}${n.toFixed(1)}%</span>`;
+        };
+        return `<tr>
+          <td><span style="margin-right:6px;">${FLAGS[code]||''}</span>${d.country_name}</td>
+          <td style="text-align:right;">${fmt(d.gdp_growth)}</td>
+          <td style="text-align:right;">${fmt(d.inflation, false)}</td>
+          <td style="text-align:right;">${fmt(d.unemployment, false)}</td>
+          <td style="text-align:right;">${fmt(d.current_account)}</td>
+        </tr>`;
+      }).join('');
+    } catch(e) {}
+  }
+
+  loadIndices();
+  loadMacro();
+</script>
+
+</body>
+</html>
