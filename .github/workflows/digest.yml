@@ -1,8 +1,8 @@
 name: NewsFinal - Daily Digest
 
 on:
-  schedule:
-    - cron: '0 20 * * *'    # UTC 20:00 = KST 05:00 (다음날)
+  # schedule: (일시 중단 — 2026-07-01 복구)
+  #   - cron: '0 20 * * *'    # UTC 20:00 = KST 05:00 (다음날)
   workflow_dispatch:
 
 permissions:
