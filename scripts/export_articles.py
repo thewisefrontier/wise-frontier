@@ -58,7 +58,7 @@ def export_articles(limit=9999):
                 "select": "*",
                 "is_published": "eq.true",
                 "source": "eq.NewsFinal",
-                "created_at": f"gte.{(datetime.utcnow() + timedelta(hours=9) - timedelta(days=7)).strftime('%Y-%m-%d')}",
+                "created_at": f"gte.{(datetime.now(timezone.utc).astimezone(timezone(timedelta(hours=9))) - timedelta(days=7)).strftime('%Y-%m-%d')}",
                 "order": "created_at.desc",
             },
             timeout=30
@@ -92,7 +92,7 @@ def export_articles(limit=9999):
 def fetch_market_data():
     os.makedirs("docs/data", exist_ok=True)
     market_data = {
-        "updated_at": (datetime.utcnow() + timedelta(hours=9)).strftime("%Y-%m-%d %H:%M"),
+        "updated_at": datetime.now(timezone.utc).astimezone(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M"),
         "indices": [],   # 기존 호환용 — 프론티어 지수 전체를 평평하게 담음 (사이드바 티커용)
         "groups": {
             "us": [],       # 미국
