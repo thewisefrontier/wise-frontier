@@ -80,8 +80,8 @@ def unpublish(article_id):
     return res.status_code in (200, 201, 204)
 
 def run():
-    print("[검색] '갤럭시 위치' 관련 NewsFinal 기사...")
-    articles = get_articles_by_keyword("울트라 2")
+    print("[검색] '갤럭시 워치' 관련 NewsFinal 기사...")
+    articles = get_articles_by_keyword("갤럭시 워치")
 
     if not articles:
         print("기사를 찾을 수 없습니다.")
