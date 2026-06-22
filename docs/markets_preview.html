@@ -122,16 +122,16 @@
     }
 
     /* 탭 */
-    .market-tabs { display: flex; border-bottom: 2px solid var(--border); margin: 16px 0 0; }
+    .market-tabs { display: flex; border-bottom: 2px solid var(--border); margin: 16px 0 0; overflow-x: auto; }
     .market-tab {
       padding: 10px 18px; font-size: 12px; font-weight: 500;
       font-family: 'IBM Plex Mono', monospace; background: none; border: none;
       color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent;
-      margin-bottom: -2px; white-space: nowrap;
+      margin-bottom: -2px; white-space: nowrap; flex-shrink: 0;
     }
     .market-tab.active { color: var(--accent2); border-bottom-color: var(--accent2); font-weight: 700; }
     .market-tab:hover { color: var(--text); }
-    .market-tab-content { display: none; padding-top: 4px; }
+    .market-tab-content { display: none; }
     .market-tab-content.active { display: block; }
   </style>
 </head>
@@ -169,6 +169,9 @@
   <h1 class="page-title">시장 지표</h1>
   <div class="page-sub" id="updated-at">불러오는 중...</div>
 
+  <div id="markets-container"><div class="empty">시장 데이터를 불러오는 중입니다...</div></div>
+
+
 
   <div class="market-tabs">
     <button class="market-tab active" onclick="switchMarketTab('indices',this)">지수 · 환율</button>
@@ -178,16 +181,13 @@
   </div>
 
   <div id="market-tab-indices" class="market-tab-content active">
-  <div id="markets-container"><div class="empty">시장 데이터를 불러오는 중입니다...</div></div>
-
-  <div class="source-note">출처: Yahoo Finance</div>
-
+   <div id="markets-container"><div class="empty">시장 데이터를 불러오는 중입니다...</div></div>
+   <div class="source-note">출처: Yahoo Finance</div>
   </div>
 
   <div id="market-tab-etf" class="market-tab-content">
   <div class="invest-section">
     <h2 class="page-title" style="font-size:20px;margin-top:8px;">투자 가능 상품</h2>
-    </div>
 
     <div class="invest-group">
       <div class="invest-group-header">🇰🇷 국내(KRX) 상장 — 원화로 직접 매수</div>
@@ -242,7 +242,6 @@
       </table>
     </div>
   </div>
-
   </div>
 
   <div id="market-tab-macro" class="market-tab-content">
@@ -253,8 +252,6 @@
     </div>
     <div id="econ-table-container"><div class="empty" style="padding:20px;">경제지표를 불러오는 중...</div></div>
   </div>
-
-  <div class="invest-section">
   </div>
 
   <div id="market-tab-companies" class="market-tab-content">
@@ -369,9 +366,10 @@
     </div>
 
     <div class="source-note">시가총액 상위권 기준 참고 정보</div>
-  </div><!-- /invest-section -->
-  </div><!-- /market-tab-companies -->
-</div><!-- /page-container -->
+  </div>
+  </div>
+
+</div>
 
 
 <footer>
