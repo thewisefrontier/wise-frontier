@@ -648,6 +648,148 @@ def parse_title_and_body(text):
     return title, body, country, category
 
 
+# ── 기업 자동 감지·등록 ────────────────────────────────────────────────
+
+def get_company_by_id(company_id: str) -> dict | None:
+    """companies 테이블에서 기업 조회"""
+    try:
+        res = requests.get(
+            f"{SUPABASE_URL}/rest/v1/companies",
+            headers=_sb_headers(),
+            params={"id": f"eq.{company_id}", "limit": "1"},
+            timeout=10
+        )
+        if res.status_code in (200, 206):
+            data = res.json()
+            return data[0] if data else None
+    except Exception as e:
+        print(f"  ⚠️ 기업 조회 실패: {e}")
+    return None
+
+
+def save_company(company_id: str, name: str, name_ko: str, country: str,
+                 country_flag: str, exchange: str, ticker: str, sector: str,
+                 description: str, founded_year: int = None,
+                 headquarters: str = None, website: str = None) -> bool:
+    """companies 테이블에 기업 저장"""
+    try:
+        payload = {
+            "id": company_id,
+            "name": name,
+            "name_ko": name_ko,
+            "country": country,
+            "country_flag": country_flag,
+            "exchange": exchange,
+            "ticker": ticker,
+            "sector": sector,
+            "description": description,
+            "founded_year": founded_year,
+            "headquarters": headquarters,
+            "website": website,
+            "is_published": True,
+            "created_at": now_kst().strftime("%Y-%m-%d %H:%M"),
+            "updated_at": now_kst().strftime("%Y-%m-%d %H:%M"),
+        }
+        # None 값 제거
+        payload = {k: v for k, v in payload.items() if v is not None}
+        res = requests.post(
+            f"{SUPABASE_URL}/rest/v1/companies",
+            headers=_sb_headers(),
+            json=payload,
+            timeout=15
+        )
+        return res.status_code in (200, 201)
+    except Exception as e:
+        print(f"  ⚠️ 기업 저장 실패: {e}")
+    return False
+
+
+def detect_and_register_companies(title: str, body: str, country: str):
+    """
+    기사 제목/본문에서 기업을 감지하고, companies 테이블에 없으면 자동 등록.
+    Gemini에게 기업명·기업 개요 생성 요청.
+    """
+    if not title and not body:
+        return
+
+    prompt = f"""아래 뉴스 기사에서 언급된 주요 기업(상장사 또는 대형 민간기업)을 최대 3개 추출하세요.
+프론티어 마켓(아프리카, 동남아시아, 중동, 동유럽 등) 기업만 대상으로 합니다.
+글로벌 대기업(애플, 구글, 삼성 등)은 제외합니다.
+
+기사 제목: {title}
+기사 본문: {body[:800]}
+기사 국가: {country}
+
+각 기업에 대해 아래 JSON 형식으로만 응답하세요 (마크다운, 추가 설명 없이):
+[
+  {{
+    "id": "영문_소문자_언더스코어_ID (예: safaricom, dangote_cement)",
+    "name": "공식 영문 기업명",
+    "name_ko": "한국어 기업명",
+    "exchange": "거래소 약칭 (예: NSE, NGX, IDX, SET, PSE, EGX, HOSE, JSE)",
+    "ticker": "티커 심볼 (모르면 빈 문자열)",
+    "sector": "업종 (예: 통신, 은행, 에너지, 부동산)",
+    "description": "한국 투자자를 위한 3문장 이내 기업 소개. 설립연도, 핵심 사업, 시장 내 위상 포함. 투자 권유 없이 사실만.",
+    "founded_year": 설립연도_숫자_또는_null,
+    "headquarters": "본사 도시, 국가 (예: 나이로비, 케냐)"
+  }}
+]
+추출할 기업이 없으면 빈 배열 []을 반환하세요."""
+
+    raw = call_gemini(prompt, max_tokens=800)
+    if not raw:
+        return
+
+    try:
+        import json, re
+        # JSON 부분만 추출
+        match = re.search(r'\[.*\]', raw, re.DOTALL)
+        if not match:
+            return
+        companies = json.loads(match.group())
+        if not isinstance(companies, list):
+            return
+
+        for comp in companies[:3]:
+            company_id = comp.get("id", "").strip().lower().replace(" ", "_")
+            if not company_id or not comp.get("name"):
+                continue
+
+            # 이미 등록된 기업이면 스킵
+            existing = get_company_by_id(company_id)
+            if existing:
+                continue
+
+            # 국가 정보 보완
+            comp_country = country or ""
+            flag_map = {
+                "나이지리아": "🇳🇬", "케냐": "🇰🇪", "남아공": "🇿🇦", "남아프리카공화국": "🇿🇦",
+                "베트남": "🇻🇳", "인도네시아": "🇮🇩", "태국": "🇹🇭", "필리핀": "🇵🇭",
+                "이집트": "🇪🇬", "가나": "🇬🇭", "에티오피아": "🇪🇹", "탄자니아": "🇹🇿",
+                "방글라데시": "🇧🇩", "파키스탄": "🇵🇰", "카자흐스탄": "🇰🇿",
+            }
+            country_flag = flag_map.get(comp_country, "🌍")
+
+            ok = save_company(
+                company_id=company_id,
+                name=comp.get("name", ""),
+                name_ko=comp.get("name_ko", ""),
+                country=comp_country,
+                country_flag=country_flag,
+                exchange=comp.get("exchange", ""),
+                ticker=comp.get("ticker", ""),
+                sector=comp.get("sector", ""),
+                description=comp.get("description", ""),
+                founded_year=comp.get("founded_year"),
+                headquarters=comp.get("headquarters", ""),
+            )
+            if ok:
+                print(f"  🏢 새 기업 등록: {comp.get('name')} ({company_id})")
+
+    except Exception as e:
+        print(f"  ⚠️ 기업 감지 파싱 오류: {e}")
+
+
 # ── 메인 실행 ─────────────────────────────────────────────
 
 def run():
@@ -807,6 +949,7 @@ def run():
                         today_own_articles.append({"id": article_id, "title_ko": full_title})
                         generated += 1
                         send_to_newsfinal_channel(article_id, full_title, gen_body or content, is_update=False)
+                        detect_and_register_companies(full_title, gen_body or content, final_country)
                 else:
                     print(f"  ⚠️ 저장 실패\n")
             else:
@@ -968,6 +1111,7 @@ def run():
                     today_own_articles.append({"id": article_id, "title_ko": full_title})
                     solo_generated += 1
                     send_to_newsfinal_channel(article_id, full_title, gen_body or content, is_update=False)
+                    detect_and_register_companies(full_title, gen_body or content, final_country)
         time.sleep(CALL_INTERVAL)
 
     print(f"✅ 완료 — 클러스터 {generated}건 생성 / {updated}건 업데이트 / 단독 {solo_generated}건 생성")
