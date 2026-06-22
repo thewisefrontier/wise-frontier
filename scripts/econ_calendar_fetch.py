@@ -2,23 +2,21 @@
 econ_calendar_fetch.py
 -----------------------
 공식 출처 기반 프론티어 마켓 경제 일정 자동 등록.
-Gemini/AI 완전 제거 — 중앙은행 공식 사이트 등 1차 출처만 사용.
+Gemini/AI 완전 제거 — 공식 기관 사이트 직접 크롤링 또는 공식 확인된 일정만 사용.
 
-[데이터 소스 전략]
-1. 중앙은행 금리결정 회의: 각국 중앙은행 공식 사이트에서 연간 일정 확인 후 하드코딩
-   (JS 렌더링 기반 사이트가 많아 크롤링 불가, 연 1회 사람이 확인 후 업데이트)
-2. IMF WEO 발표: IMF 공식 일정 (매년 4월·10월 고정)
-3. 월드뱅크 발표: 공식 일정
-4. 향후 추가 가능: 각국 중앙은행 RSS/API 있으면 자동 수집으로 전환 검토
+[전략]
+1. 크롤링 가능 기관 (정적 HTML): 직접 파싱 — 나이지리아 CBN, 케냐 CBK, 인도네시아 BI
+2. JS 렌더링 기관 (크롤링 불가): 연초에 공식 사이트에서 확인한 연간 일정 → STATIC_EVENTS로 관리
+3. 국제기구(IMF/WB): 고정 일정이라 하드코딩
 
 [업데이트 주기]
-- 새해 초(1월)에 각국 중앙은행 공식 사이트에서 연간 일정 확인 후 SCHEDULED_EVENTS 업데이트
-- 워크플로우는 매주 일요일 실행 — 향후 2주 이내 일정만 DB에 등록
-
-실행: python scripts/econ_calendar_fetch.py
+- 워크플로우: 매월 1일 실행 (월 1회)
+- STATIC_EVENTS: 새해 초(1월)에 각국 공식 사이트 확인 후 업데이트
 """
 
 import os
+import re
+import time
 import requests
 from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
@@ -35,54 +33,222 @@ SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "")
 TELEGRAM_ADMIN_CHAT_ID = os.getenv("TELEGRAM_ADMIN_CHAT_ID", "")
 
-# ── 공식 출처 확인 경제 일정 ─────────────────────────────────────────────────
-# ⚠️ 새해 초마다 각국 중앙은행 공식 사이트에서 확인 후 업데이트할 것
-# 출처 URL은 확인한 공식 페이지 주소를 반드시 기재
-#
-# 국가 코드 → (이름, 국기, 출처 URL, 중요도)
-CENTRAL_BANKS = {
-    "NGA": ("나이지리아", "🇳🇬", "https://www.cbn.gov.ng/MonetaryPolicy/calendar.html", "high"),
-    "KEN": ("케냐",     "🇰🇪", "https://www.centralbank.go.ke/monetary-policy/",         "high"),
-    "ZAF": ("남아공",   "🇿🇦", "https://www.resbank.co.za/en/home/what-we-do/monetary-policy/mpc-statement", "high"),
-    "EGY": ("이집트",   "🇪🇬", "https://www.cbe.org.eg/en/monetary-policy",              "high"),
-    "VNM": ("베트남",   "🇻🇳", "https://www.sbv.gov.vn/",                                "high"),
-    "IDN": ("인도네시아","🇮🇩", "https://www.bi.go.id/en/default.aspx",                   "high"),
-    "THA": ("태국",     "🇹🇭", "https://www.bot.or.th/en/our-roles/monetary-policy/mpc-meeting.html", "high"),
-    "PHL": ("필리핀",   "🇵🇭", "https://www.bsp.gov.ph/",                                "high"),
+HEADERS_HTML = {
+    "User-Agent": "Mozilla/5.0 (compatible; NewsFinalBot/1.0; +https://newsfinal.co.kr)",
+    "Accept": "text/html,application/xhtml+xml",
 }
 
-# 2026년 중앙은행 금리결정 회의 일정
-# 출처: 각국 중앙은행 공식 사이트 (2026년 1월 확인)
-# ⚠️ 빈칸인 국가는 공식 사이트에서 확인 후 채워넣을 것
-SCHEDULED_EVENTS = [
-    # ── 나이지리아 CBN MPC ──
-    # 출처: https://www.cbn.gov.ng/MonetaryPolicy/calendar.html (직접 확인됨)
-    {"date": "2026-07-21", "country": "NGA", "title": "나이지리아 중앙은행(CBN) 통화정책위원회 금리결정", "desc": "MPC 306차 회의 (2일차 발표)", "importance": "high"},
-    {"date": "2026-09-22", "country": "NGA", "title": "나이지리아 중앙은행(CBN) 통화정책위원회 금리결정", "desc": "MPC 307차 회의 (2일차 발표)", "importance": "high"},
-    {"date": "2026-11-24", "country": "NGA", "title": "나이지리아 중앙은행(CBN) 통화정책위원회 금리결정", "desc": "MPC 308차 회의 (2일차 발표)", "importance": "high"},
+# ── 크롤링 불가 기관 — 공식 확인된 연간 일정 (태국·필리핀·남아공·이집트·IMF·WB)
+# ⚠️ 새해 초(1월)에 각국 공식 사이트 확인 후 업데이트
+# 형식: (날짜, 국가코드, 국기, 국가명, 제목, 설명, 출처URL)
+STATIC_EVENTS = [
+    # ── 태국 BOT MPC (출처: bot.or.th/en/our-roles/monetary-policy/mpc-meeting.html)
+    ("2026-08-05", "🇹🇭", "태국", "태국 중앙은행(BOT) 통화정책위원회 금리결정", "2026년 MPC 회의", "https://www.bot.or.th/en/our-roles/monetary-policy/mpc-meeting.html", "high"),
+    ("2026-10-07", "🇹🇭", "태국", "태국 중앙은행(BOT) 통화정책위원회 금리결정", "2026년 MPC 회의", "https://www.bot.or.th/en/our-roles/monetary-policy/mpc-meeting.html", "high"),
+    ("2026-12-02", "🇹🇭", "태국", "태국 중앙은행(BOT) 통화정책위원회 금리결정", "2026년 MPC 회의", "https://www.bot.or.th/en/our-roles/monetary-policy/mpc-meeting.html", "high"),
 
-    # ── 태국 BOT MPC ──
-    # 출처: https://www.bot.or.th/en/our-roles/monetary-policy/mpc-meeting.html
-    {"date": "2026-08-05", "country": "THA", "title": "태국 중앙은행(BOT) 통화정책위원회 금리결정", "desc": "2026년 MPC 회의", "importance": "high"},
-    {"date": "2026-10-07", "country": "THA", "title": "태국 중앙은행(BOT) 통화정책위원회 금리결정", "desc": "2026년 MPC 회의", "importance": "high"},
-    {"date": "2026-12-02", "country": "THA", "title": "태국 중앙은행(BOT) 통화정책위원회 금리결정", "desc": "2026년 MPC 회의", "importance": "high"},
+    # ── 필리핀 BSP (출처: bsp.gov.ph 2026 Calendar of Monetary Policy Meetings)
+    ("2026-08-13", "🇵🇭", "필리핀", "필리핀 중앙은행(BSP) 통화위원회 금리결정", "Bangko Sentral ng Pilipinas 통화정책회의", "https://www.bsp.gov.ph/", "high"),
+    ("2026-10-15", "🇵🇭", "필리핀", "필리핀 중앙은행(BSP) 통화위원회 금리결정", "Bangko Sentral ng Pilipinas 통화정책회의", "https://www.bsp.gov.ph/", "high"),
+    ("2026-12-10", "🇵🇭", "필리핀", "필리핀 중앙은행(BSP) 통화위원회 금리결정", "Bangko Sentral ng Pilipinas 통화정책회의", "https://www.bsp.gov.ph/", "high"),
 
-    # ── IMF World Economic Outlook ──
-    # 출처: https://www.imf.org/en/Publications/WEO (매년 4월·10월 고정 발표)
-    {"date": "2026-10-01", "country": None, "title": "IMF 세계경제전망(WEO) 가을 보고서 발표", "desc": "IMF Annual Meetings 계기 발표. 프론티어 마켓 성장률 전망 포함.", "importance": "high", "flag": "🌐", "name_ko": "글로벌", "source_url": "https://www.imf.org/en/Publications/WEO"},
+    # ── 남아공 SARB MPC (출처: resbank.co.za)
+    ("2026-07-23", "🇿🇦", "남아공", "남아공 중앙은행(SARB) 통화정책위원회 금리결정", "2026년 MPC 회의 결과 발표", "https://www.resbank.co.za/en/home/what-we-do/monetary-policy/mpc-statement", "high"),
+    ("2026-09-17", "🇿🇦", "남아공", "남아공 중앙은행(SARB) 통화정책위원회 금리결정", "2026년 MPC 회의 결과 발표", "https://www.resbank.co.za/en/home/what-we-do/monetary-policy/mpc-statement", "high"),
+    ("2026-11-19", "🇿🇦", "남아공", "남아공 중앙은행(SARB) 통화정책위원회 금리결정", "2026년 MPC 회의 결과 발표", "https://www.resbank.co.za/en/home/what-we-do/monetary-policy/mpc-statement", "high"),
 
-    # ── 월드뱅크 ──
-    # 출처: https://www.worldbank.org/en/publication/global-economic-prospects
-    {"date": "2026-01-13", "country": None, "title": "세계은행 세계경제전망(GEP) 보고서 발표", "desc": "Global Economic Prospects — 프론티어/이머징 마켓 경기전망 포함", "importance": "high", "flag": "🌐", "name_ko": "글로벌", "source_url": "https://www.worldbank.org/en/publication/global-economic-prospects"},
+    # ── 이집트 CBE MPC (출처: cbe.org.eg)
+    ("2026-07-24", "🇪🇬", "이집트", "이집트 중앙은행(CBE) 통화정책위원회 금리결정", "2026년 CBE MPC 회의", "https://www.cbe.org.eg/en/monetary-policy", "high"),
+    ("2026-09-25", "🇪🇬", "이집트", "이집트 중앙은행(CBE) 통화정책위원회 금리결정", "2026년 CBE MPC 회의", "https://www.cbe.org.eg/en/monetary-policy", "high"),
+    ("2026-11-26", "🇪🇬", "이집트", "이집트 중앙은행(CBE) 통화정책위원회 금리결정", "2026년 CBE MPC 회의", "https://www.cbe.org.eg/en/monetary-policy", "high"),
 
-    # ── 필리핀 BSP ──
-    # 출처: https://www.bsp.gov.ph/ (2026 Calendar of Monetary Policy Meetings 확인)
-    {"date": "2026-08-13", "country": "PHL", "title": "필리핀 중앙은행(BSP) 통화위원회 금리결정", "desc": "Bangko Sentral ng Pilipinas 통화정책회의", "importance": "high"},
-    {"date": "2026-10-15", "country": "PHL", "title": "필리핀 중앙은행(BSP) 통화위원회 금리결정", "desc": "Bangko Sentral ng Pilipinas 통화정책회의", "importance": "high"},
-    {"date": "2026-12-10", "country": "PHL", "title": "필리핀 중앙은행(BSP) 통화위원회 금리결정", "desc": "Bangko Sentral ng Pilipinas 통화정책회의", "importance": "high"},
+    # ── IMF WEO (매년 4월·10월 고정)
+    ("2026-10-01", "🌐", "글로벌", "IMF 세계경제전망(WEO) 가을 보고서 발표", "Annual Meetings 계기. 프론티어 마켓 성장률 전망 포함.", "https://www.imf.org/en/Publications/WEO", "high"),
+
+    # ── 세계은행 GEP (1월·6월 고정)
+    ("2027-01-01", "🌐", "글로벌", "세계은행 세계경제전망(GEP) 보고서 발표", "Global Economic Prospects — 프론티어/이머징 마켓 경기전망 포함", "https://www.worldbank.org/en/publication/global-economic-prospects", "high"),
 ]
 
 
+# ── 1. 나이지리아 CBN 크롤링 ────────────────────────────────────────────
+def fetch_cbn_nigeria() -> list:
+    """나이지리아 CBN MPC 일정 — 정적 HTML 테이블 파싱"""
+    url = "https://www.cbn.gov.ng/MonetaryPolicy/calendar.html"
+    events = []
+    try:
+        res = requests.get(url, headers=HEADERS_HTML, timeout=20)
+        if res.status_code != 200:
+            print(f"  ⚠️ CBN 크롤링 실패: {res.status_code}")
+            return []
+
+        # "Day 2" 날짜 추출 (공식 결과 발표일)
+        # 형식: "Jul. 20, 2026" 또는 "Jul. 21, 2026"
+        pattern = re.compile(r'(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\.\s+(\d{1,2}),\s+(\d{4})')
+        matches = pattern.findall(res.text)
+        month_map = {
+            'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04',
+            'May': '05', 'Jun': '06', 'Jul': '07', 'Aug': '08',
+            'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12',
+        }
+
+        # Day 2 (결과 발표일)를 추출 — 테이블에서 짝수 번째가 Day 2
+        dates = []
+        for m, d, y in matches:
+            date_str = f"{y}-{month_map[m]}-{d.zfill(2)}"
+            dates.append(date_str)
+
+        # 짝수 인덱스(1, 3, 5...)가 Day 2
+        day2_dates = dates[1::2] if len(dates) > 1 else dates
+
+        for date_str in day2_dates:
+            events.append({
+                "event_date": date_str,
+                "event_time": None,
+                "country": "나이지리아",
+                "country_flag": "🇳🇬",
+                "title": "나이지리아 중앙은행(CBN) 통화정책위원회 금리결정",
+                "importance": "high",
+                "description": "CBN MPC 회의 2일차 — 금리 결정 발표",
+                "source_url": url,
+                "is_verified": True,
+                "source": "official_crawl",
+            })
+        print(f"  ✅ CBN(나이지리아): {len(events)}건 파싱")
+    except Exception as e:
+        print(f"  ⚠️ CBN 크롤링 예외: {e}")
+    return events
+
+
+# ── 2. 케냐 CBK 크롤링 ────────────────────────────────────────────────
+def fetch_cbk_kenya() -> list:
+    """케냐 CBK — 'Next MPC Meeting' 페이지에서 다음 일정 파싱"""
+    url = "https://www.centralbank.go.ke/mpc/"
+    events = []
+    try:
+        res = requests.get(url, headers=HEADERS_HTML, timeout=20)
+        if res.status_code != 200:
+            print(f"  ⚠️ CBK 크롤링 실패: {res.status_code}")
+            return []
+
+        # "next mpc meeting" 링크 또는 날짜 텍스트 추출
+        # 형식: "June 9, 2026" 또는 "Tuesday, June 9, 2026"
+        pattern = re.compile(
+            r'(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),?\s+'
+            r'(January|February|March|April|May|June|July|August|September|October|November|December)'
+            r'\s+(\d{1,2}),?\s+(\d{4})',
+            re.IGNORECASE
+        )
+        month_map = {
+            'january': '01', 'february': '02', 'march': '03', 'april': '04',
+            'may': '05', 'june': '06', 'july': '07', 'august': '08',
+            'september': '09', 'october': '10', 'november': '11', 'december': '12',
+        }
+
+        today = now_kst().date()
+        found = set()
+        for m, d, y in pattern.findall(res.text):
+            date_str = f"{y}-{month_map[m.lower()]}-{d.zfill(2)}"
+            event_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+            if event_date >= today and date_str not in found:
+                found.add(date_str)
+                events.append({
+                    "event_date": date_str,
+                    "event_time": None,
+                    "country": "케냐",
+                    "country_flag": "🇰🇪",
+                    "title": "케냐 중앙은행(CBK) 통화정책위원회 금리결정",
+                    "importance": "high",
+                    "description": "CBK MPC 회의 결과 발표",
+                    "source_url": "https://www.centralbank.go.ke/mpc/",
+                    "is_verified": True,
+                    "source": "official_crawl",
+                })
+        print(f"  ✅ CBK(케냐): {len(events)}건 파싱")
+    except Exception as e:
+        print(f"  ⚠️ CBK 크롤링 예외: {e}")
+    return events
+
+
+# ── 3. 인도네시아 BI 크롤링 ────────────────────────────────────────────
+def fetch_bi_indonesia() -> list:
+    """인도네시아 Bank Indonesia — 연간 RDG 일정 페이지 파싱"""
+    url = "https://www.bi.go.id/en/ruang-media/agenda/rapat-dewan-gubernur/Default.aspx"
+    events = []
+    try:
+        res = requests.get(url, headers=HEADERS_HTML, timeout=20)
+        if res.status_code != 200:
+            print(f"  ⚠️ BI 크롤링 실패: {res.status_code}")
+            return []
+
+        # 날짜 형식: "20-21 July 2026" 또는 "20 July 2026"
+        pattern = re.compile(
+            r'(\d{1,2})(?:-(\d{1,2}))?\s+'
+            r'(January|February|March|April|May|June|July|August|September|October|November|December)'
+            r'\s+(\d{4})',
+            re.IGNORECASE
+        )
+        month_map = {
+            'january': '01', 'february': '02', 'march': '03', 'april': '04',
+            'may': '05', 'june': '06', 'july': '07', 'august': '08',
+            'september': '09', 'october': '10', 'november': '11', 'december': '12',
+        }
+
+        today = now_kst().date()
+        found = set()
+        for d1, d2, m, y in pattern.findall(res.text):
+            # 2일 회의면 마지막 날(d2)이 결과 발표일
+            day = d2 if d2 else d1
+            date_str = f"{y}-{month_map[m.lower()]}-{day.zfill(2)}"
+            event_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+            if event_date >= today and date_str not in found:
+                found.add(date_str)
+                events.append({
+                    "event_date": date_str,
+                    "event_time": None,
+                    "country": "인도네시아",
+                    "country_flag": "🇮🇩",
+                    "title": "인도네시아 중앙은행(BI) 이사회 회의 금리결정",
+                    "importance": "high",
+                    "description": "Bank Indonesia Board of Governors Meeting (RDG) — 금리 결정 발표",
+                    "source_url": url,
+                    "is_verified": True,
+                    "source": "official_crawl",
+                })
+        print(f"  ✅ BI(인도네시아): {len(events)}건 파싱")
+    except Exception as e:
+        print(f"  ⚠️ BI 크롤링 예외: {e}")
+    return events
+
+
+# ── 4. 정적 일정 처리 ────────────────────────────────────────────────
+def build_static_events() -> list:
+    """STATIC_EVENTS에서 향후 90일 이내 + 오늘 이후 일정만 반환"""
+    today = now_kst().date()
+    cutoff = today + timedelta(days=90)
+    events = []
+    for date_str, flag, country, title, desc, source_url, importance in STATIC_EVENTS:
+        try:
+            event_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+        except ValueError:
+            continue
+        if event_date < today or event_date > cutoff:
+            continue
+        events.append({
+            "event_date": date_str,
+            "event_time": None,
+            "country": country,
+            "country_flag": flag,
+            "title": title,
+            "importance": importance,
+            "description": desc,
+            "source_url": source_url,
+            "is_verified": True,
+            "source": "official_static",
+        })
+    return events
+
+
+# ── Supabase 헬퍼 ────────────────────────────────────────────────────
 def _sb_headers():
     return {
         "apikey": SUPABASE_SERVICE_KEY,
@@ -93,7 +259,6 @@ def _sb_headers():
 
 
 def get_existing_keys(start_date: str) -> set:
-    """중복 방지 — 이미 등록된 (날짜, 제목) 조합"""
     try:
         res = requests.get(
             f"{SUPABASE_URL}/rest/v1/econ_events",
@@ -104,57 +269,8 @@ def get_existing_keys(start_date: str) -> set:
         if res.status_code in (200, 206):
             return {(e["event_date"], e["title"]) for e in res.json()}
     except Exception as e:
-        print(f"[경고] 기존 일정 조회 실패: {e}")
+        print(f"  ⚠️ 기존 일정 조회 실패: {e}")
     return set()
-
-
-def build_events_for_window(days_ahead: int = 90) -> list:
-    """
-    SCHEDULED_EVENTS에서 오늘 ~ days_ahead일 이내의 일정만 필터링해서 반환.
-    매주 실행할 때마다 "곧 다가오는" 일정만 DB에 넣는 방식.
-    """
-    today = now_kst().date()
-    cutoff = today + timedelta(days=days_ahead)
-    result = []
-
-    for ev in SCHEDULED_EVENTS:
-        try:
-            event_date = datetime.strptime(ev["date"], "%Y-%m-%d").date()
-        except ValueError:
-            continue
-
-        # 오늘 이전 일정은 스킵
-        if event_date < today:
-            continue
-        # days_ahead 이후 일정도 스킵
-        if event_date > cutoff:
-            continue
-
-        # 국가 정보 채우기
-        if ev.get("country") and ev["country"] in CENTRAL_BANKS:
-            code = ev["country"]
-            name_ko, flag, source_url, importance = CENTRAL_BANKS[code]
-        else:
-            # 글로벌/IMF 등 특수 항목
-            name_ko = ev.get("name_ko", "글로벌")
-            flag = ev.get("flag", "🌐")
-            source_url = ev.get("source_url", "https://www.imf.org")
-            importance = ev.get("importance", "medium")
-
-        result.append({
-            "event_date": ev["date"],
-            "event_time": None,
-            "country": name_ko,
-            "country_flag": flag,
-            "title": ev["title"],
-            "importance": importance,
-            "description": ev.get("desc", ""),
-            "source_url": source_url,
-            "is_verified": True,   # 공식 출처로 확인된 일정만 하드코딩 — 항상 즉시 게시
-            "source": "official",
-        })
-
-    return result
 
 
 def save_events(events: list) -> int:
@@ -172,7 +288,7 @@ def save_events(events: list) -> int:
             else:
                 print(f"  ❌ 저장 실패: {ev['title']} — {res.text[:150]}")
         except Exception as e:
-            print(f"  ❌ 저장 예외: {ev['title']} — {e}")
+            print(f"  ❌ 저장 예외: {e}")
     return saved
 
 
@@ -195,23 +311,39 @@ def run():
         return
 
     today_str = now_kst().strftime("%Y-%m-%d")
-    print(f"[경제일정] {today_str} 기준 향후 90일 이내 공식 일정 등록 중...")
+    print(f"[경제일정] {today_str} 기준 향후 90일 이내 공식 일정 수집 중...")
 
-    # 향후 90일 이내 일정만 처리
-    candidates = build_events_for_window(days_ahead=90)
-    print(f"[경제일정] 후보 {len(candidates)}건")
+    # 크롤링 (나이지리아, 케냐, 인도네시아)
+    all_events = []
+    all_events += fetch_cbn_nigeria()
+    time.sleep(1)
+    all_events += fetch_cbk_kenya()
+    time.sleep(1)
+    all_events += fetch_bi_indonesia()
+    time.sleep(1)
 
-    if not candidates:
+    # 향후 90일 이내만 필터 (크롤링 결과도 필터)
+    today = now_kst().date()
+    cutoff = today + timedelta(days=90)
+    all_events = [
+        ev for ev in all_events
+        if today <= datetime.strptime(ev["event_date"], "%Y-%m-%d").date() <= cutoff
+    ]
+
+    # 정적 일정 (크롤링 불가 기관)
+    all_events += build_static_events()
+    print(f"[경제일정] 전체 후보 {len(all_events)}건")
+
+    if not all_events:
         print("[경제일정] 향후 90일 이내 등록할 일정 없음")
         return
 
     # 중복 제거
     existing = get_existing_keys(today_str)
     new_events = [
-        ev for ev in candidates
+        ev for ev in all_events
         if (ev["event_date"], ev["title"]) not in existing
     ]
-
     print(f"[경제일정] 중복 제외 후 신규 {len(new_events)}건")
 
     if not new_events:
