@@ -290,7 +290,7 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
     return -1
 
 
-def update_article(article_id, title_ko, summary_ko):
+def update_article(article_id, title_ko, summary_ko, note: str = "업데이트"):
     """기사 갱신(병합 업데이트) — update_log에 업데이트 기록 추가"""
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
 
@@ -308,7 +308,7 @@ def update_article(article_id, title_ko, summary_ko):
     except Exception:
         existing_log = []
 
-    new_log = existing_log + [{"timestamp": now_str, "note": "업데이트"}]
+    new_log = existing_log + [{"timestamp": now_str, "note": note}]
 
     res = requests.patch(
         f"{_sb_url()}?id=eq.{article_id}",
@@ -723,7 +723,19 @@ def save_company(company_id: str, name: str, name_ko: str, country: str,
     return False
 
 
-def detect_and_register_companies(title: str, body: str, country: str):
+def generate_update_note(existing_summary: str, new_summary: str) -> str:
+    """기존 기사와 새 내용을 비교해서 '이번 업데이트에서 추가된 핵심 내용' 한 줄 생성"""
+    prompt = f"""기존 기사와 업데이트된 기사를 비교해서, 이번 업데이트에서 새롭게 추가되거나 변경된 핵심 내용을 15자 이내 한 줄로 요약하세요.
+예시: "현지 당국 공식 발표 추가", "사망자 수 214명으로 업데이트", "정부 대응 방안 발표"
+마크다운 없이 텍스트만 출력하세요.
+
+기존 내용: {(existing_summary or '')[:300]}
+새 내용: {(new_summary or '')[:300]}"""
+    result = call_gemini(prompt, max_tokens=50)
+    return (result or "업데이트").strip().replace('\n', ' ')[:30]
+
+
+
     """
     기사 제목/본문에서 기업을 감지하고, companies 테이블에 없으면 자동 등록.
     Gemini에게 기업명·기업 개요 생성 요청.
@@ -859,7 +871,8 @@ def run():
             if content:
                 gen_title, gen_body, gen_country, gen_category = parse_title_and_body(content)
                 new_title = gen_title if gen_title else titles[0][:50]
-                update_article(existing["id"], new_title, gen_body or content)
+                note = generate_update_note(existing["summary_ko"], gen_body or content)
+                update_article(existing["id"], new_title, gen_body or content, note=note)
                 update_article_count(existing["id"], cur_count)
                 # 국가/분야 재분류 업데이트
                 if gen_country or gen_category:
@@ -903,7 +916,8 @@ def run():
                 if content:
                     gen_title, gen_body, gen_country, gen_category = parse_title_and_body(content)
                     new_title = gen_title if gen_title else probe_title
-                    update_article(similar_existing["id"], new_title, gen_body or content)
+                    note = generate_update_note(existing_summary, gen_body or content)
+                    update_article(similar_existing["id"], new_title, gen_body or content, note=note)
                     prev_count = existing_full.get("score", 0) if existing_full else 0
                     update_article_count(similar_existing["id"], max(prev_count, cur_count) + 1)
                     if gen_country or gen_category:
@@ -1051,7 +1065,9 @@ def run():
             if content:
                 gen_title, gen_body, gen_country, gen_category = parse_title_and_body(content)
                 new_title = gen_title if gen_title else title[:50]
-                update_article(similar_existing["id"], new_title, gen_body or content)
+                existing_sum = existing_full.get("summary_ko") if existing_full else None
+                note = generate_update_note(existing_sum, gen_body or content)
+                update_article(similar_existing["id"], new_title, gen_body or content, note=note)
                 prev_count = existing_full.get("score", 0) if existing_full else 0
                 update_article_count(similar_existing["id"], prev_count + 1)
                 if gen_country or gen_category:
