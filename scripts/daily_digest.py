@@ -77,8 +77,8 @@ def load_prompt(name: str, fallback: str = "") -> str:
 
 
 def get_yesterday_own_articles(limit=200):
-    """어제(KST) 발행된 NewsFinal 자체 기사 전체 (다이제스트 제외) — 하루 결산용"""
-    yesterday = (now_kst() - timedelta(days=1)).strftime("%Y-%m-%d")
+    """직전 24시간 동안 발행된 NewsFinal 자체 기사 (다이제스트 제외) — 발행 시점 기준"""
+    since = (now_kst() - timedelta(hours=24)).strftime("%Y-%m-%d %H:%M")
     res = requests.get(
         _sb_url(),
         headers=_sb_headers(),
@@ -86,7 +86,7 @@ def get_yesterday_own_articles(limit=200):
             "select": "id,title_ko,summary_ko,category,country,countries,region,created_at,subcategory",
             "source": "eq.NewsFinal",
             "is_published": "eq.true",
-            "created_at": f"like.{yesterday}%",
+            "created_at": f"gte.{since}",
             "subcategory": "not.like.digest_%",
             "order": "created_at.asc",
             "limit": str(limit),
