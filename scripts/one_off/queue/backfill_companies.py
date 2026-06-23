@@ -5,7 +5,10 @@ backfill_companies.py
 detect_and_register_companies()를 기존 기사에 적용.
 """
 import os, sys, time
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+
+# GitHub Actions에서 scripts/ 폴더를 path에 추가
+_scripts_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..')
+sys.path.insert(0, _scripts_dir)
 
 import requests
 from dotenv import load_dotenv
