@@ -166,6 +166,45 @@ def fetch_market_data():
             market_data["groups"]["fx"].append(entry)
             market_data["indices"].append(entry)
 
+    # 기업 주가 수집 (companies 테이블에서 ticker + exchange 있는 기업)
+    try:
+        comp_res = requests.get(
+            f"{SUPABASE_URL}/rest/v1/companies",
+            headers=_headers(),
+            params={"select": "id,ticker,exchange,name", "is_published": "eq.true",
+                    "ticker": "not.is.null", "order": "name.asc"},
+            timeout=15
+        )
+        if comp_res.status_code in (200, 206):
+            companies = comp_res.json()
+            EXCHANGE_SUFFIX = {
+                'NSE': '.NR', 'NGX': '.LG', 'JSE': '.JO',
+                'IDX': '.JK', 'SET': '.BK', 'PSE': '.PS',
+                'EGX': '.CA', 'HOSE': '.VN', 'KSE': '.KA',
+            }
+            company_prices = {}
+            for comp in companies[:30]:  # 최대 30개
+                ticker = comp.get("ticker", "")
+                exchange = comp.get("exchange", "")
+                if not ticker:
+                    continue
+                suffix = EXCHANGE_SUFFIX.get(exchange, "")
+                symbol = ticker + suffix
+                entry = fetch_one(comp["name"], symbol)
+                if entry:
+                    company_prices[ticker] = {
+                        "name": comp["name"],
+                        "symbol": symbol,
+                        "price": entry["price"],
+                        "change_pct": entry["change_pct"],
+                        "up": entry["up"],
+                    }
+            market_data["company_prices"] = company_prices
+            print(f"[MARKET] 기업 주가 {len(company_prices)}개 수집")
+    except Exception as e:
+        print(f"[MARKET] 기업 주가 수집 실패: {e}")
+        market_data["company_prices"] = {}
+
     with open(MARKET_FILE, "w", encoding="utf-8") as f:
         json.dump(market_data, f, ensure_ascii=False, indent=2)
     print(f"[MARKET] {len(market_data['indices'])}개 시세 저장 완료")
@@ -200,9 +239,43 @@ def generate_sitemap(articles):
     print(f"[SITEMAP] {len(urls)}개 URL → docs/sitemap.xml")
 
 
+def export_companies():
+    """Supabase companies 테이블 → docs/data/companies.json"""
+    os.makedirs("docs/data", exist_ok=True)
+    all_companies = []
+    offset = 0
+    batch = 1000
+    while True:
+        res = requests.get(
+            f"{SUPABASE_URL}/rest/v1/companies",
+            headers={**_headers(), "Range": f"{offset}-{offset+batch-1}"},
+            params={
+                "select": "id,name,name_ko,country,country_flag,exchange,ticker,sector,description,founded_year,headquarters,website,is_published,updated_at",
+                "is_published": "eq.true",
+                "order": "country.asc,name.asc",
+            },
+            timeout=30
+        )
+        if res.status_code not in (200, 206):
+            print(f"[COMPANIES] 오류: {res.status_code}")
+            break
+        data = res.json()
+        if not data:
+            break
+        all_companies.extend(data)
+        if len(data) < batch:
+            break
+        offset += batch
+
+    with open("docs/data/companies.json", "w", encoding="utf-8") as f:
+        json.dump(all_companies, f, ensure_ascii=False, indent=2)
+    print(f"[COMPANIES] {len(all_companies)}개 기업 → docs/data/companies.json")
+
+
 if __name__ == "__main__":
     articles = export_articles()
     fetch_market_data()
+    export_companies()
     if articles:
         generate_sitemap(articles)
 
