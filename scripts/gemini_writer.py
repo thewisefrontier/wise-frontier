@@ -539,15 +539,22 @@ def articles_are_related(a, b):
 def is_coherent_cluster(cluster: list) -> bool:
     """
     클러스터가 실제로 같은 이슈인지 검증.
-    서로 다른 국가 기사가 3개 이상 섞여 있으면 엉터리 클러스터로 판단.
+    기사 수 대비 국가 다양성이 너무 높으면 엉터리 클러스터.
+    - 5건 이하: 국가 3개 이상이면 엉터리
+    - 6건 이상: 국가 수가 기사 수의 절반 이상이면 엉터리
     """
     countries = set()
     for a in cluster:
         c = a.get("country") or ""
         if c and c not in ("글로벌", "없음"):
             countries.add(c)
-    # 명시된 국가가 3개 이상이면 다국가 혼합 → 엉터리
-    if len(countries) >= 3:
+
+    n = len(cluster)
+    nc = len(countries)
+
+    if n <= 5 and nc >= 3:
+        return False
+    if n > 5 and nc >= max(3, n // 2):
         return False
     return True
 
