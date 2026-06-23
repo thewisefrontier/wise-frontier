@@ -512,17 +512,25 @@ def articles_are_related(a, b):
     title_kw_b = title_keywords(title_b)
     title_common = title_kw_a & title_kw_b
 
+    # 국가 정보 없는 글로벌 기사는 더 엄격하게 판단
+    both_global = not country_a and not country_b
+    high_threshold = SIMILARITY_HIGH + 10 if both_global else SIMILARITY_HIGH
+
     # 조건 1: 제목이 매우 유사 + 본문 앞부분도 키워드 2개 이상 공유
-    if title_sim >= SIMILARITY_HIGH and len(lead_common) >= 2:
+    if title_sim >= high_threshold and len(lead_common) >= 2:
         return True
 
     # 조건 2: 제목 키워드 2개 이상 공유 + 본문 앞부분 키워드 3개 이상 공유 + 같은 카테고리
-    if len(title_common) >= 2 and len(lead_common) >= 3 and same_category:
+    # 글로벌 기사는 키워드 요건 강화
+    req_title = 3 if both_global else 2
+    req_lead  = 4 if both_global else 3
+    if len(title_common) >= req_title and len(lead_common) >= req_lead and same_category:
         return True
 
-    # 조건 3: 제목+본문 키워드 합산 4개 이상 공유 + 같은 카테고리
+    # 조건 3: 제목+본문 키워드 합산 — 글로벌은 더 많이 요구
     all_common = (title_kw_a | lead_kw_a) & (title_kw_b | lead_kw_b)
-    if len(all_common) >= 4 and same_category:
+    req_all = 6 if both_global else 4
+    if len(all_common) >= req_all and same_category:
         return True
 
     return False
@@ -1006,13 +1014,15 @@ def park_multi_topic_articles(articles: list) -> int:
         for part in parts:
             # 이미 같은 파킹 제목이 있으면 스킵
             try:
+                # 특수문자 제거 후 검색
+                safe_kw = part[:20].replace("'", "").replace('"', '').replace('(', '').replace(')', '')
                 check = requests.get(
                     f"{SUPABASE_URL}/rest/v1/articles",
                     headers=_sb_headers(),
                     params={
                         "select": "id",
                         "subcategory": "eq.parked_topic",
-                        "title_en": f"ilike.*{part[:20]}*",
+                        "title_en": f"ilike.*{safe_kw}*",
                         "limit": "1",
                     },
                     timeout=10
@@ -1072,7 +1082,8 @@ def park_multi_topic_articles(articles: list) -> int:
 
 def get_stale_live_articles() -> list:
     """업데이트되지 않은 라이브 기사 조회 (score=1, 최근 48시간)"""
-    since = (now_kst() - timedelta(hours=48)).strftime("%Y-%m-%d %H:%M")
+    since     = (now_kst() - timedelta(hours=48)).strftime("%Y-%m-%d %H:%M")
+    not_after = (now_kst() - timedelta(hours=3)).strftime("%Y-%m-%d %H:%M")  # 3시간 이상 된 기사만
     try:
         res = requests.get(
             _sb_url(),
@@ -1083,6 +1094,7 @@ def get_stale_live_articles() -> list:
                 "is_published": "eq.true",
                 "score": "eq.1",
                 "created_at": f"gte.{since}",
+                "created_at": f"lte.{not_after}",
                 "order": "created_at.desc",
                 "limit": "20",
             },
