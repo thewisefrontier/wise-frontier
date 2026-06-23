@@ -152,6 +152,28 @@ def get_today_articles(limit=300):
         if len(data) < batch:
             break
         offset += batch
+
+    # 파킹된 토픽 기사도 클러스터링 소스로 포함
+    try:
+        parked_res = requests.get(
+            _sb_url(),
+            headers=_sb_headers(),
+            params={
+                "select": "id,title_ko,title_en,summary_ko,summary_en,source,category,subcategory,country,region,url,created_at,score,full_text",
+                "subcategory": "eq.parked_topic",
+                "created_at": f"gte.{since}",
+                "order": "created_at.desc",
+                "limit": "200",
+            },
+            timeout=15
+        )
+        if parked_res.status_code in (200, 206):
+            parked = parked_res.json()
+            existing_ids = {a["id"] for a in articles}
+            articles.extend(a for a in parked if a["id"] not in existing_ids)
+    except Exception:
+        pass
+
     return articles[:limit]
 
 
@@ -339,26 +361,27 @@ def update_article_count(article_id, new_count):
 
 # ── 클러스터링 ────────────────────────────────────────────
 
-def is_multi_topic_title(title: str) -> bool:
+def split_multi_topic_title(title: str) -> list:
     """
-    제목이 관련 없는 여러 주제를 나열하는 경우 감지.
+    복수 주제 제목을 개별 토픽으로 분리.
     예: "우간다 군 수뇌부 갈등 및 나이지리아 채용 사기 주의보"
+    → ["우간다 군 수뇌부 갈등", "나이지리아 채용 사기 주의보"]
+    단일 주제면 빈 리스트 반환.
     """
     if not title:
-        return False
-    t = title.lower()
-    # 복수 주제 구분자 패턴
-    separators = [
-        ' 및 ', ' and ', ' & ', ' et ', ' + ',
-        '…및', ', and ', '; ',
-    ]
+        return []
+    separators = [' 및 ', ' and ', ' & ', ' et ', '…및', ', and ', '; ']
     for sep in separators:
-        if sep in t:
-            # 구분자 앞뒤에 서로 다른 국가/주제가 있는지 확인
-            parts = t.split(sep)
-            if len(parts) >= 2 and all(len(p.strip()) > 5 for p in parts):
-                return True
-    return False
+        if sep.lower() in title.lower():
+            parts = [p.strip() for p in title.split(sep) if p.strip() and len(p.strip()) > 5]
+            if len(parts) >= 2:
+                return parts
+    return []
+
+
+def is_multi_topic_title(title: str) -> bool:
+    """복수 주제 제목 여부"""
+    return len(split_multi_topic_title(title)) >= 2
 
 
 def extract_keywords(text):
@@ -886,6 +909,89 @@ def detect_and_register_companies(title: str, body: str, country: str):
 
 # ── 메인 실행 ─────────────────────────────────────────────
 
+
+def park_multi_topic_articles(articles: list) -> int:
+    """
+    복수 주제 RSS 기사를 토픽별로 분리해서 DB에 파킹.
+    is_published=False, subcategory=parked_topic 으로 저장.
+    나중에 관련 소스가 들어오면 클러스터링에서 자동으로 활용됨.
+    """
+    parked = 0
+    for a in articles:
+        title_en = a.get("title_en") or a.get("title_ko") or ""
+        parts = split_multi_topic_title(title_en)
+        if not parts:
+            continue
+
+        full_text = a.get("full_text") or a.get("summary_en") or a.get("summary_ko") or ""
+        country   = a.get("country") or ""
+        category  = a.get("category") or "글로벌"
+        region    = a.get("region") or "global"
+
+        print(f"  [파킹] 복수 주제 분리: {title_en[:60]}")
+        for part in parts:
+            # 이미 같은 파킹 제목이 있으면 스킵
+            try:
+                check = requests.get(
+                    f"{SUPABASE_URL}/rest/v1/articles",
+                    headers=_sb_headers(),
+                    params={
+                        "select": "id",
+                        "subcategory": "eq.parked_topic",
+                        "title_en": f"ilike.*{part[:20]}*",
+                        "limit": "1",
+                    },
+                    timeout=10
+                )
+                if check.status_code in (200, 206) and check.json():
+                    print(f"    → 이미 파킹됨: {part[:50]}")
+                    continue
+            except Exception:
+                pass
+
+            now_str = now_kst().strftime("%Y-%m-%d %H:%M")
+            payload = {
+                "title_en":    part,
+                "title_ko":    part,
+                "summary_en":  full_text[:500],
+                "summary_ko":  "",
+                "full_text":   full_text,
+                "url":         a.get("url", f"parked://{part[:30]}"),
+                "source":      a.get("source", ""),
+                "category":    category,
+                "subcategory": "parked_topic",
+                "region":      region,
+                "country":     country,
+                "country_flag":"",
+                "countries":   a.get("countries") or ([country] if country else []),
+                "score":       0,
+                "created_at":  a.get("created_at", now_str),
+                "first_published_at": now_str,
+                "update_log":  [{"timestamp": now_str, "note": f"복수주제 분리 파킹 (원제: {title_en[:60]})"}],
+                "sent_telegram": 0,
+                "is_published":  False,
+                "posted_blog":   0,
+            }
+            try:
+                res = requests.post(
+                    f"{SUPABASE_URL}/rest/v1/articles",
+                    headers=_sb_headers(),
+                    json=payload,
+                    timeout=15
+                )
+                if res.status_code in (200, 201):
+                    data = res.json()
+                    art_id = data[0].get("id", -1) if data else -1
+                    print(f"    → 파킹 완료 (id={art_id}): {part[:60]}")
+                    parked += 1
+                else:
+                    print(f"    → 파킹 실패: {res.status_code}")
+            except Exception as e:
+                print(f"    → 파킹 예외: {e}")
+
+    return parked
+
+
 def run():
     if not GEMINI_API_KEYS:
         print("[SKIP] GEMINI_API_KEY 없음")
@@ -1068,9 +1174,9 @@ def run():
         and is_multi_topic_title(a.get("title_en","") or a.get("title_ko",""))
     ]
     if multi_topic_skipped:
-        print(f"  [스킵] 복수 주제 제목 {len(multi_topic_skipped)}건:")
-        for a in multi_topic_skipped:
-            print(f"    - {(a.get('title_en') or a.get('title_ko',''))[:80]}")
+        print(f"  [파킹] 복수 주제 제목 {len(multi_topic_skipped)}건 → DB 파킹")
+        parked_count = park_multi_topic_articles(multi_topic_skipped)
+        print(f"  [파킹] {parked_count}개 토픽 파킹 완료")
 
     print(f"\n[단독 기사] 원문 충분한 기사 {len(solo_candidates)}건")
 
