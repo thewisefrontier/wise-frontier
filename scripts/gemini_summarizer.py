@@ -13,6 +13,13 @@ import requests
 from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
 
+# 외부 트렌드 수집 모듈 (GDELT, Google Trends, Reddit)
+try:
+    from external_trends import collect_external_trends
+    EXTERNAL_TRENDS_AVAILABLE = True
+except ImportError:
+    EXTERNAL_TRENDS_AVAILABLE = False
+
 load_dotenv()
 
 KST = timezone(timedelta(hours=9))
@@ -896,6 +903,222 @@ JSON 배열로만 응답하세요 (마크다운 없이):
 
     print(f"[실시간 트렌드] 완료 — {generated}건 생성")
 
+
+# ── 외부 트렌드 신호 기반 기사 생성 ──────────────────────────
+
+EXT_MIN_SCORE     = 5   # 최소 합산 점수
+EXT_MAX_ARTICLES  = 3   # 1회 최대 생성 건수
+EXT_CHECK_HOURS   = 8   # 중복 방지 간격
+
+
+def ext_trend_exists(topic: str) -> bool:
+    """최근 N시간 내 같은 토픽 기사가 있는지 확인"""
+    since = (now_kst() - timedelta(hours=EXT_CHECK_HOURS)).strftime("%Y-%m-%d %H:%M")
+    try:
+        res = requests.get(
+            _sb_url(),
+            headers=_sb_headers(),
+            params={
+                "select": "id",
+                "source": "eq.NewsFinal",
+                "subcategory": "like.extrend_%",
+                "title_ko": f"ilike.*{topic[:12]}*",
+                "created_at": f"gte.{since}",
+                "limit": "1",
+            },
+            timeout=10
+        )
+        if res.status_code in (200, 206):
+            return len(res.json()) > 0
+    except Exception:
+        pass
+    return False
+
+
+def run_external_trend_articles(signals: list):
+    """외부 트렌드 신호 기반 기사 생성"""
+    if not signals or not GEMINI_API_KEYS:
+        return
+
+    print(f"\n[외부 트렌드 기사화] 점수 {EXT_MIN_SCORE}pt 이상 토픽 처리...")
+    today_str = now_kst().strftime("%Y년 %m월 %d일")
+
+    # 점수 높은 순, 최대 처리 수 제한
+    candidates = [s for s in signals if s["score"] >= EXT_MIN_SCORE][:10]
+    if not candidates:
+        print("  [SKIP] 임계값 이상 토픽 없음")
+        return
+
+    # Gemini로 실제 기사화할 토픽 최종 선별
+    topic_list = ""
+    for i, s in enumerate(candidates[:10], 1):
+        src_str = "+".join(s["sources"])
+        countries = ", ".join(list(s["countries"])[:3])
+        titles_str = " / ".join(s["titles"][:2])
+        topic_list += f"{i}. [{s['score']}pt/{src_str}] {s['topic']} ({countries})\n   예시: {titles_str}\n"
+
+    screen_prompt = f"""당신은 프론티어 마켓 전문 에디터입니다. ({today_str})
+아래는 Google Trends, Reddit, GDELT에서 수집한 프론티어 마켓 트렌드 신호입니다.
+
+{topic_list}
+
+위 신호들 중 NewsFinal 독자(한국인 프론티어 마켓 투자자)에게 실제로 의미 있는 이슈 최대 {EXT_MAX_ARTICLES}개를 선별하세요.
+- 단순 스포츠/연예/날씨/로또는 제외
+- 경제·금융·정치·사회 분야 실질적 사건이나 정책 변화 우선
+- 여러 소스에서 동시에 잡힌 토픽 우선
+
+JSON 배열로만 응답 (마크다운 없이):
+[
+  {{
+    "topic": "토픽 키워드",
+    "issue_ko": "한 줄 설명",
+    "category": "경제/금융/자원·에너지/산업·기업/정치·외교/사회/IT·과학 중 하나",
+    "countries": ["국가1", "국가2"],
+    "region": "africa/southeast_asia/central_asia/middle_east/south_asia/caribbean/global 중 하나"
+  }}
+]
+선별할 이슈 없으면 []"""
+
+    import json, re
+    raw = call_gemini(screen_prompt, max_tokens=600)
+    if not raw:
+        return
+
+    try:
+        match = re.search(r'\[.*\]', raw, re.DOTALL)
+        if not match:
+            return
+        selected = json.loads(match.group())
+        if not isinstance(selected, list) or not selected:
+            print("  [SKIP] 선별된 토픽 없음")
+            return
+    except Exception as e:
+        print(f"  [SKIP] JSON 파싱 실패: {e}")
+        return
+
+    print(f"  Gemini 선별: {len(selected)}개")
+
+    generated = 0
+    for item in selected:
+        if generated >= EXT_MAX_ARTICLES:
+            break
+
+        topic    = item.get("topic", "")
+        issue_ko = item.get("issue_ko", "")
+        category = item.get("category", "경제")
+        countries_list = item.get("countries", [])
+        region   = item.get("region", "global")
+        country  = countries_list[0] if countries_list else ""
+
+        if not topic or ext_trend_exists(topic):
+            continue
+
+        # 관련 신호에서 대표 제목 수집
+        matched_signal = next(
+            (s for s in candidates if topic.lower() in s["topic"].lower()
+             or s["topic"].lower() in topic.lower()), None
+        )
+        ref_titles = matched_signal["titles"] if matched_signal else []
+
+        # 기사 생성
+        write_prompt = f"""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다. ({today_str})
+Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습니다.
+
+관련 신호:
+{chr(10).join(f"- {t}" for t in ref_titles)}
+
+이 이슈에 대해 한국 투자자/독자를 위한 완성도 높은 기사를 작성하세요.
+- 이슈의 배경, 현재 상황, 의미를 담으세요.
+- 확인된 팩트 중심으로, 추측은 최소화하세요.
+- 반드시 하나의 토픽만 다루세요.
+- 마크다운 문법, 헤더, 홍보 문구 금지.
+- 한국어로만 작성하세요.
+
+아래 형식으로 출력:
+제목: (핵심을 담은 제목)
+국가: (주요 국가 1개, 없으면 "없음")
+관련국가: (관련국 최대 4개, 없으면 "없음")
+분야: ({category})
+본문: (기사 본문)"""
+
+        content_text = call_gemini(write_prompt, max_tokens=1500)
+        if not content_text:
+            print(f"  [{topic}] ❌ 생성 실패")
+            time.sleep(CALL_INTERVAL)
+            continue
+
+        # 파싱
+        title, body, art_country, art_countries = "", content_text, country, countries_list
+        for line in content_text.strip().split("\n"):
+            if line.startswith("제목:"):
+                title = line.replace("제목:", "").strip()
+            elif line.startswith("국가:"):
+                c = line.replace("국가:", "").strip()
+                if c not in ("없음", "-", ""):
+                    art_country = c
+            elif line.startswith("관련국가:"):
+                raw2 = line.replace("관련국가:", "").strip()
+                if raw2 not in ("없음", "-", ""):
+                    art_countries = [x.strip() for x in raw2.split(",") if x.strip()]
+            elif line.startswith("본문:"):
+                idx = content_text.find("본문:")
+                body = content_text[idx + 3:].strip()
+                break
+
+        if not title:
+            title = f"{issue_ko} — {today_str}"
+
+        now_str = now_kst().strftime("%Y-%m-%d %H:%M")
+        payload = {
+            "title_en": title, "title_ko": title,
+            "summary_en": "", "summary_ko": body,
+            "url": f"internal://extrend_{topic[:20].replace(' ','_')}_{now_kst().strftime('%Y%m%d%H')}",
+            "source": "NewsFinal",
+            "category": category,
+            "subcategory": f"extrend_{topic[:20].replace(' ','_')}",
+            "region": region,
+            "country": art_country,
+            "country_flag": "",
+            "countries": art_countries or ([art_country] if art_country else []),
+            "score": 2,
+            "created_at": now_str,
+            "first_published_at": now_str,
+            "update_log": [{"timestamp": now_str,
+                            "note": f"외부 트렌드 감지 (Google Trends+Reddit+GDELT)"}],
+            "sent_telegram": 0,
+            "is_published": True,
+            "posted_blog": 0,
+        }
+        try:
+            res = requests.post(_sb_url(), headers=_sb_headers(), json=payload, timeout=15)
+            if res.status_code in (200, 201):
+                data = res.json()
+                art_id = data[0].get("id", -1) if data else -1
+                print(f"  [{topic}] ✅ 외부 트렌드 기사 생성 (id={art_id}): {title}")
+                generated += 1
+                if TELEGRAM_TOKEN and art_id > 0:
+                    try:
+                        preview = body[:300]
+                        url = f"https://newsfinal.co.kr/article.html?id={art_id}"
+                        src_str = "+".join(matched_signal["sources"]) if matched_signal else "외부"
+                        msg = f"🌐 외부 트렌드 [{src_str}]\n\n*{title}*\n\n{preview}{'…' if len(body)>300 else ''}\n\n[전체 기사 보기]({url})"
+                        requests.post(
+                            f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage",
+                            data={"chat_id": NEWSFINAL_CHANNEL, "text": msg,
+                                  "parse_mode": "Markdown"},
+                            timeout=15
+                        )
+                    except Exception:
+                        pass
+            else:
+                print(f"  [{topic}] ❌ 저장 실패: {res.status_code}")
+        except Exception as e:
+            print(f"  [{topic}] ❌ 예외: {e}")
+
+        time.sleep(CALL_INTERVAL)
+
+    print(f"[외부 트렌드 기사화] 완료 — {generated}건 생성")
+
 def run():
     if not GEMINI_API_KEYS:
         print("[SKIP] GEMINI_API_KEY 없음 — gemini_summarizer 건너뜀")
@@ -937,6 +1160,13 @@ def run():
 
     # 실시간 트렌드 감지 (A+B)
     run_realtime_trend_tracker()
+
+    # 외부 트렌드 신호 수집 및 기사화 (GDELT + Google Trends + Reddit)
+    if EXTERNAL_TRENDS_AVAILABLE:
+        ext_signals = collect_external_trends(verbose=True)
+        run_external_trend_articles(ext_signals)
+    else:
+        print("[외부 트렌드] external_trends.py 모듈 없음 — 스킵")
 
 
 if __name__ == "__main__":
