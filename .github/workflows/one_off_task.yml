@@ -1,17 +1,19 @@
 name: One-Off Maintenance Task
 
-# 수동 실행 전용 — 1회성 스크립트를 돌릴 때 사용
-# 실행 방법: Actions 탭 > One-Off Maintenance Task > Run workflow
+# 수동 실행 또는 scripts/one_off/queue/ 폴더에 파일 push시 자동 실행
 on:
   workflow_dispatch:
     inputs:
       script:
-        description: '실행할 스크립트 파일명 (scripts/ 폴더 기준, 1회성 스크립트는 scripts/one_off/ 안에 있음. 예: one_off/fix_country_names.py)'
+        description: '실행할 스크립트 파일명 (scripts/ 폴더 기준)'
         required: true
         default: 'one_off/fix_country_names.py'
+  push:
+    paths:
+      - 'scripts/one_off/queue/*.py'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   run_script:
@@ -29,8 +31,28 @@ jobs:
       - name: 패키지 설치
         run: pip install -r requirements.txt
 
+      - name: 실행할 스크립트 결정
+        id: resolve
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            # queue/ 폴더에 새로 추가된 .py 파일 찾기
+            SCRIPT=$(git diff --name-only HEAD~1 HEAD -- 'scripts/one_off/queue/*.py' | head -1)
+            if [ -z "$SCRIPT" ]; then
+              SCRIPT=$(ls scripts/one_off/queue/*.py 2>/dev/null | head -1)
+            fi
+            # scripts/ 기준 상대경로로 변환
+            SCRIPT=${SCRIPT#scripts/}
+            echo "script=$SCRIPT" >> $GITHUB_OUTPUT
+            echo "auto=true" >> $GITHUB_OUTPUT
+          else
+            echo "script=${{ inputs.script }}" >> $GITHUB_OUTPUT
+            echo "auto=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: 스크립트 실행
-        run: python scripts/${{ inputs.script }}
+        run: |
+          echo "실행: scripts/${{ steps.resolve.outputs.script }}"
+          python scripts/${{ steps.resolve.outputs.script }}
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
@@ -41,3 +63,12 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+
+      - name: 실행 완료 후 queue에서 제거
+        if: steps.resolve.outputs.auto == 'true' && steps.resolve.outputs.script != ''
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git rm -f "scripts/${{ steps.resolve.outputs.script }}" || true
+          git commit -m "chore: remove executed queue script" || true
+          git push || true
