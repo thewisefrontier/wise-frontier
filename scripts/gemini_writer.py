@@ -242,7 +242,7 @@ def get_today_own_articles():
         return []
 
 
-def find_similar_article(title: str, own_articles: list, threshold: int = 80):
+def find_similar_article(title: str, own_articles: list, threshold: int = 70):
     """유사한 자체 기사 찾기 — threshold 이상이면 중복으로 판단.
     token_sort_ratio(어순 무관 전체 비교)와 token_set_ratio(공통 단어 집합 비교) 중 높은 쪽을 사용해
     "삼성전자 워치 출시 전망" vs "삼성전자, 차세대 워치 출시 전망 분석"처럼
@@ -1165,4 +1165,5 @@ def run():
 
 if __name__ == "__main__":
     run()
+
 
