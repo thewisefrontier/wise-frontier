@@ -386,7 +386,7 @@
   <main>
     <div id="digest-box" style="display:none;"></div>
     <div class="feed-header">
-      <span class="feed-title" id="feed-title">● LIVE FEED</span>
+      <span class="feed-title" id="feed-title">● 최신 기사</span>
       <span class="feed-count" id="article-count">로딩 중...</span>
     </div>
     <div id="articles-container"><div class="loading">기사 데이터 로딩 중</div></div>
@@ -582,7 +582,7 @@
     clearBtn.style.display = currentQuery ? 'inline-block' : 'none';
 
     const filtered = getFiltered();
-    document.getElementById('feed-title').textContent = currentQuery ? `🔍 ${currentQuery}` : '● LIVE FEED';
+    document.getElementById('feed-title').textContent = currentQuery ? `🔍 ${currentQuery}` : '● 최신 기사';
 
     if (!currentQuery) {
       searchExtraResults = [];
@@ -628,7 +628,7 @@
     searchExtraResults = [];
     document.getElementById('search-clear').style.display = 'none';
     document.getElementById('search-info').textContent = '';
-    document.getElementById('feed-title').textContent = '● LIVE FEED';
+    document.getElementById('feed-title').textContent = '● 최신 기사';
     renderArticles(getFiltered());
   }
 
@@ -677,7 +677,7 @@
     currentSector = 'all';
     currentIssue = null;
     closeExpand();
-    document.getElementById('feed-title').textContent = region === 'all' ? '● LIVE FEED' : `● ${label}`;
+    document.getElementById('feed-title').textContent = region === 'all' ? '● 최신 기사' : `● ${label}`;
     renderArticles(getFiltered());
   }
 
@@ -690,7 +690,7 @@
     closeExpand();
     document.getElementById('region-label').textContent = '전체 지역';
     document.getElementById('region-btn').classList.remove('active');
-    document.getElementById('feed-title').textContent = sector === 'all' ? '● LIVE FEED' : `● ${sector}`;
+    document.getElementById('feed-title').textContent = sector === 'all' ? '● 최신 기사' : `● ${sector}`;
     renderArticles(getFiltered());
   }
 
@@ -884,8 +884,10 @@
   function renderCard(a, standalone) {
     const idx = allArticles.indexOf(a);
     const clickAction = idx >= 0 ? `toggleExpand(${idx})` : `location.href='article.html?id=${a.id}'`;
-    const isLive = (a.score || 0) >= 2 && a.source === 'NewsFinal';
-    const liveBadge = isLive ? `<span style="color:var(--red);font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;margin-right:6px;">● LIVE · ${a.score}차</span>` : '';
+    // isLive 제거 — 트렌드 탭으로 분리됨
+    const TREND_PREFIXES = ['trend_', 'realtrend_', 'extrend_'];
+    const isTrend = TREND_PREFIXES.some(p => (a.subcategory || '').startsWith(p));
+    const liveBadge = isTrend ? `<span style="color:var(--accent2);font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;margin-right:6px;">📈 트렌드</span>` : '';
     const catTag = a.category ? `<span class="tag" style="cursor:pointer;" onclick="filterByTag('sector','${a.category}',event)">${a.category}</span>` : '';
     const subTag = a.subcategory && a.subcategory !== a.category
       && !a.subcategory.startsWith('cluster_')
