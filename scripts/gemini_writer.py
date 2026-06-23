@@ -536,6 +536,22 @@ def articles_are_related(a, b):
     return False
 
 
+def is_coherent_cluster(cluster: list) -> bool:
+    """
+    클러스터가 실제로 같은 이슈인지 검증.
+    서로 다른 국가 기사가 3개 이상 섞여 있으면 엉터리 클러스터로 판단.
+    """
+    countries = set()
+    for a in cluster:
+        c = a.get("country") or ""
+        if c and c not in ("글로벌", "없음"):
+            countries.add(c)
+    # 명시된 국가가 3개 이상이면 다국가 혼합 → 엉터리
+    if len(countries) >= 3:
+        return False
+    return True
+
+
 def cluster_articles(articles):
     """기사를 이슈별로 클러스터링"""
     clusters = []
@@ -555,6 +571,11 @@ def cluster_articles(articles):
                 used.add(j)
 
         if len(cluster) >= CLUSTER_MIN_SIZE:
+            # 다국가 혼합 클러스터 필터링
+            if not is_coherent_cluster(cluster):
+                print(f"  [스킵] 다국가 혼합 클러스터 ({len(cluster)}건) — 파킹 처리")
+                park_multi_topic_articles(cluster)
+                continue
             clusters.append(cluster)
 
     # 큰 클러스터 우선
