@@ -237,7 +237,7 @@
 
       // 라이브 기준: NewsFinal 자체 기사 + score(병합 누적 건수) 2 이상 = 여러 번 갱신된 진행형 이슈
       // 다이제스트(digest_)는 라이브 대상에서 제외
-      const liveArticles = articles
+      const raw = articles
         .filter(a =>
           a.source === 'NewsFinal' &&
           a.is_published !== false &&
@@ -245,6 +245,24 @@
           !(a.subcategory || '').startsWith('digest_')
         )
         .sort((a, b) => (b.created_at || '').localeCompare(a.created_at || ''));
+
+      // 제목 유사도 기반 중복 제거 (같은 이슈 다른 버전 필터)
+      function titleSimilar(a, b) {
+        const ta = (a.title_ko || '').replace(/[\s·,\-]/g, '');
+        const tb = (b.title_ko || '').replace(/[\s·,\-]/g, '');
+        if (!ta || !tb) return false;
+        const longer = ta.length > tb.length ? ta : tb;
+        const shorter = ta.length > tb.length ? tb : ta;
+        let matches = 0;
+        for (let i = 0; i < shorter.length - 1; i++) {
+          if (longer.includes(shorter.slice(i, i+2))) matches++;
+        }
+        return matches / (shorter.length - 1) > 0.7;
+      }
+      const liveArticles = [];
+      for (const a of raw) {
+        if (!liveArticles.some(b => titleSimilar(a, b))) liveArticles.push(a);
+      }
 
       render(liveArticles);
     } catch(e) {
@@ -305,4 +323,5 @@
 
 </body>
 </html>
+
 
