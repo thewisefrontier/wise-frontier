@@ -359,7 +359,7 @@
     document.getElementById('article-wrapper').innerHTML = `
       <a class="back-btn" href="/">← 홈으로</a>
 
-      ${a.source === 'NewsFinal' && (a.score || 0) >= 2 ? `<div class="live-badge"><span class="dot"></span>LIVE · ${a.score}차 업데이트</div>` : ''}
+      ${a.source === 'NewsFinal' && ['trend_','realtrend_','extrend_'].some(p=>(a.subcategory||'').startsWith(p)) ? `<div class="live-badge"><span class="dot"></span>TREND</div>` : ''}
 
       <div class="article-tags">
         ${a.category ? `<a class="tag" href="/?category=${encodeURIComponent(a.category)}">${a.category}</a>` : ''}
