@@ -37,7 +37,7 @@ jobs:
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
 
       - name: Gemini 요약 고도화
-        timeout-minutes: 5
+        timeout-minutes: 20
         continue-on-error: true
         run: python scripts/gemini_summarizer.py
         env:
@@ -53,7 +53,7 @@ jobs:
         run: sleep 60
 
       - name: Gemini 자체 기사 생성 (30분마다 클러스터 감지)
-        timeout-minutes: 10
+        timeout-minutes: 15
         continue-on-error: true
         run: python scripts/gemini_writer.py
         env:
