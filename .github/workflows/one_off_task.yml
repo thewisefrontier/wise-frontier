@@ -1,27 +1,20 @@
 name: One-Off Maintenance Task
 
-# 수동 실행 또는 scripts/one_off/queue/ 폴더에 파일 push시 자동 실행
+# 수동 실행 전용
 on:
   workflow_dispatch:
     inputs:
       script:
-        description: '실행할 스크립트 파일명 (scripts/ 폴더 기준)'
+        description: '실행할 스크립트 파일명 (scripts/ 폴더 기준, 예: one_off/backfill_companies.py)'
         required: true
-        default: 'one_off/fix_country_names.py'
-  push:
-    branches:
-      - main
-    paths:
-      - 'scripts/one_off/queue/*.py'
+        default: 'one_off/backfill_companies.py'
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   run_script:
     runs-on: ubuntu-latest
-    # Cloudflare 봇 커밋은 무시
-    if: github.actor != 'cloudflare-workers-and-pages[bot]'
 
     steps:
       - name: 코드 체크아웃
@@ -35,26 +28,10 @@ jobs:
       - name: 패키지 설치
         run: pip install -r requirements.txt
 
-      - name: 실행할 스크립트 결정
-        id: resolve
-        run: |
-          if [ "${{ github.event_name }}" = "push" ]; then
-            SCRIPT=$(git diff --name-only HEAD~1 HEAD -- 'scripts/one_off/queue/*.py' | head -1)
-            if [ -z "$SCRIPT" ]; then
-              SCRIPT=$(ls scripts/one_off/queue/*.py 2>/dev/null | head -1)
-            fi
-            SCRIPT=${SCRIPT#scripts/}
-            echo "script=$SCRIPT" >> $GITHUB_OUTPUT
-            echo "auto=true" >> $GITHUB_OUTPUT
-          else
-            echo "script=${{ inputs.script }}" >> $GITHUB_OUTPUT
-            echo "auto=false" >> $GITHUB_OUTPUT
-          fi
-
       - name: 스크립트 실행
         run: |
-          echo "실행: scripts/${{ steps.resolve.outputs.script }}"
-          python scripts/${{ steps.resolve.outputs.script }}
+          echo "실행: scripts/${{ inputs.script }}"
+          python scripts/${{ inputs.script }}
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
@@ -65,12 +42,3 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
-
-      - name: 실행 완료 후 queue에서 제거
-        if: steps.resolve.outputs.auto == 'true' && steps.resolve.outputs.script != ''
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git rm -f "scripts/${{ steps.resolve.outputs.script }}" || true
-          git commit -m "chore: remove executed queue script" || true
-          git push || true
