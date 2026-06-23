@@ -76,7 +76,7 @@ COUNTRY_INFO = {
     "uganda": ("🇺🇬", "우간다"), "ugandan": ("🇺🇬", "우간다"),
     "rwanda": ("🇷🇼", "르완다"), "rwandan": ("🇷🇼", "르완다"),
     "senegal": ("🇸🇳", "세네갈"), "senegalese": ("🇸🇳", "세네갈"),
-    "ivory coast": ("🇨🇮", "코트디부아르"), "cote d'ivoire": ("🇨🇮", "코트디부아르"),
+    "ivory coast": ("🇨🇮", "코트디부아르"), "cote divoire": ("🇨🇮", "코트디부아르"),
     "morocco": ("🇲🇦", "모로코"), "moroccan": ("🇲🇦", "모로코"),
     "angola": ("🇦🇴", "앙골라"), "angolan": ("🇦🇴", "앙골라"),
     "mozambique": ("🇲🇿", "모잠비크"),
@@ -206,7 +206,7 @@ COUNTRY_INFO = {
     "canada": ("🇨🇦", "캐나다"), "canadian": ("🇨🇦", "캐나다"),
     "portugal": ("🇵🇹", "포르투갈"), "portuguese": ("🇵🇹", "포르투갈"),
     # ── 프랑스어/현지 지명 ──
-    "côte d'ivoire": ("🇨🇮", "코트디부아르"), "cote d'ivoire": ("🇨🇮", "코트디부아르"),
+    "cote divoire": ("🇨🇮", "코트디부아르"), "ivory coast": ("🇨🇮", "코트디부아르"), "abidjan": ("🇨🇮", "코트디부아르"),
     "abidjan": ("🇨🇮", "코트디부아르"), "ivoirien": ("🇨🇮", "코트디부아르"),
     "dakar": ("🇸🇳", "세네갈"), "sénégal": ("🇸🇳", "세네갈"),
     "bamako": ("🇲🇱", "말리"), "malien": ("🇲🇱", "말리"),
