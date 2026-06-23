@@ -126,7 +126,7 @@ STOPWORDS = {
 # ── DB 헬퍼 (Supabase REST API) ───────────────────────────
 
 def get_today_articles(limit=300):
-    since = (now_kst() - timedelta(hours=48)).strftime("%Y-%m-%d %H:%M")
+    since = (now_kst() - timedelta(hours=96)).strftime("%Y-%m-%d %H:%M")
     articles = []
     offset = 0
     batch = 500
