@@ -51,19 +51,13 @@ def fetch_indicator(indicator_code, country_codes, periods):
     """IMF DataMapper API에서 특정 지표의 여러 국가 데이터를 한 번에 조회"""
     countries_path = "/".join(country_codes)
     url = f"{DATAMAPPER_URL}/{indicator_code}/{countries_path}"
-    params = {"periods": ",".join(str(p) for p in periods)}
     try:
-        res = requests.get(url, headers=HEADERS, params=params, timeout=20)
-        print(f"    [디버그] 요청 URL: {res.url}")
-        print(f"    [디버그] 상태코드: {res.status_code}")
+        res = requests.get(url, headers=HEADERS, timeout=20)
         if res.status_code != 200:
             print(f"  ⚠️ {indicator_code} 조회 실패: {res.status_code}")
-            print(f"    응답 본문(앞부분): {res.text[:300]}")
             return {}
         data = res.json()
         values = data.get("values", {}).get(indicator_code, {})
-        if not values:
-            print(f"    [디버그] 응답에 values가 비어있음. 전체 키: {list(data.keys())}")
         return values
     except Exception as e:
         print(f"  ⚠️ {indicator_code} 조회 예외: {type(e).__name__}: {e}")
@@ -90,7 +84,7 @@ def run():
     indicator_data = {}
     for ind_code, ind_key in INDICATORS.items():
         print(f"  → {ind_code} ({ind_key}) 조회 중...")
-        indicator_data[ind_key] = fetch_indicator(ind_code, country_codes, periods)
+        indicator_data[ind_key] = fetch_indicator(ind_code, country_codes, None)
         time.sleep(1)  # API 예의상 텀
 
     # 국가별로 재구성
@@ -101,12 +95,24 @@ def run():
             # 가장 최신 연도(확정치 우선)부터 값 찾기
             latest_value = None
             latest_year = None
-            for year in sorted(country_values.keys(), reverse=True):
+            current_year = str(now_kst().year)
+            # 현재 연도 이하 중 가장 최근 확정값 선택
+            for year in sorted(
+                (y for y in country_values.keys() if y <= current_year),
+                reverse=True
+            ):
                 val = country_values.get(year)
                 if val is not None:
                     latest_value = val
                     latest_year = year
                     break
+            # 현재 연도 값이 없으면 다음 연도 전망치까지 허용
+            if latest_value is None:
+                next_year = str(now_kst().year + 1)
+                val = country_values.get(next_year)
+                if val is not None:
+                    latest_value = val
+                    latest_year = next_year
             country_entry[ind_key] = latest_value
             country_entry[f"{ind_key}_year"] = latest_year
         result["countries"][code] = country_entry
