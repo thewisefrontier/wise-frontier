@@ -111,7 +111,7 @@ def load_prompt(name: str, fallback: str = "") -> str:
     return fallback
 
 # 클러스터링 설정
-SIMILARITY_HIGH         = 55
+SIMILARITY_HIGH         = 65
 SIMILARITY_SAME_COUNTRY = 40
 CLUSTER_MIN_SIZE        = 2
 
@@ -377,8 +377,16 @@ def articles_are_related(a, b):
     title_a = (a.get("title_ko") or a.get("title_en") or "").lower()
     title_b = (b.get("title_ko") or b.get("title_en") or "").lower()
 
-    # 1. 제목 유사도
+    # 제목이 너무 짧으면 비교 불가
+    if len(title_a) < 8 or len(title_b) < 8:
+        return False
+
+    # 1. 제목 유사도 (가중치 높임)
     title_sim = fuzz.token_sort_ratio(title_a, title_b)
+
+    # 제목 유사도가 매우 낮으면 다른 토픽으로 즉시 판단
+    if title_sim < 30:
+        return False
 
     # 2. 키워드 겹침
     kw_sim = keyword_overlap(a, b) * 100
@@ -388,18 +396,24 @@ def articles_are_related(a, b):
     kw_b = extract_keywords(title_b) | extract_keywords(b.get("summary_ko") or "")
     common_kw = kw_a & kw_b
 
-    # 같은 카테고리 여부 (약한 보정만)
+    # 같은 카테고리 여부
     same_category = a.get("category") == b.get("category")
 
-    # 종합 점수 — 토픽 유사도 중심
-    score = title_sim * 0.4 + kw_sim * 0.6
-    if same_category:
-        score += 3  # 카테고리 보정 약하게
-    if len(common_kw) >= 3:
-        score += 5  # 공통 키워드 3개 이상일 때만 보정
+    # 국가 불일치 페널티 — 국가가 명시됐고 서로 다르면 감점
+    country_a = a.get("country") or ""
+    country_b = b.get("country") or ""
+    country_penalty = 0
+    if country_a and country_b and country_a != country_b:
+        country_penalty = 15  # 국가가 다르면 강한 페널티
 
-    # 국가 보정 제거 — 국가만 같아서 묶이지 않도록
-    # 대신 임계값 통일
+    # 종합 점수 — 제목 유사도 비중 높임
+    score = title_sim * 0.6 + kw_sim * 0.4
+    if same_category:
+        score += 3
+    if len(common_kw) >= 3:
+        score += 5
+    score -= country_penalty
+
     return score >= SIMILARITY_HIGH
 
 
