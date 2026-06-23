@@ -25,7 +25,7 @@ def now_kst() -> datetime:
 
 load_dotenv()
 
-GEMINI_MODEL       = "gemini-3.1-flash-lite"
+GEMINI_MODEL       = "gemini-2.0-flash-lite"
 CALL_INTERVAL      = 5
 MAX_CLUSTERS_PER_RUN = 10  # 한 번 실행당 최대 처리 클러스터 수
 
@@ -742,6 +742,7 @@ def generate_update_note(existing_summary: str, new_summary: str) -> str:
 
 
 
+def detect_and_register_companies(title: str, body: str, country: str):
     """
     기사 제목/본문에서 기업을 감지하고, companies 테이블에 없으면 자동 등록.
     Gemini에게 기업명·기업 개요 생성 요청.
@@ -1164,3 +1165,4 @@ def run():
 
 if __name__ == "__main__":
     run()
+
