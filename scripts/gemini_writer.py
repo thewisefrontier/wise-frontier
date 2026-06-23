@@ -371,13 +371,21 @@ def title_keywords(text):
     return result
 
 
+def get_lead(text, chars=300):
+    """본문 앞 2문단 추출 (약 300자)"""
+    if not text:
+        return ""
+    # 문단 구분: 줄바꿈 또는 마침표+공백
+    paragraphs = [p.strip() for p in re.split(r'\n+', text) if p.strip()]
+    lead = " ".join(paragraphs[:2])
+    return lead[:chars]
+
+
 def articles_are_related(a, b):
     """
     두 기사가 같은 이슈인지 판단.
-    핵심 원칙:
-    1. 제목 유사도가 높거나 (같은 사건을 다른 소스가 보도)
-    2. 제목 핵심 키워드(고유명사)가 2개 이상 겹치고 + 같은 국가
-    둘 중 하나를 만족해야 클러스터링.
+    제목 유사도 + 본문 앞 2문단 키워드 겹침 기반.
+    국가가 다르면 즉시 제외.
     """
     title_a = (a.get("title_ko") or a.get("title_en") or "").lower()
     title_b = (b.get("title_ko") or b.get("title_en") or "").lower()
@@ -387,29 +395,40 @@ def articles_are_related(a, b):
 
     country_a = a.get("country") or ""
     country_b = b.get("country") or ""
-    same_country = (country_a == country_b) if (country_a and country_b) else False
     diff_country = bool(country_a and country_b and country_a != country_b)
 
     # 국가가 명시적으로 다르면 즉시 제외 — 절대 조건
     if diff_country:
         return False
 
-    # 조건 1: 제목 문자열 자체가 매우 유사 (같은 사건을 여러 소스가 보도)
-    title_sim = fuzz.token_sort_ratio(title_a, title_b)
-    if title_sim >= SIMILARITY_HIGH:
-        return True
-
-    # 조건 2: 제목 핵심 키워드 2개 이상 공유 + 같은 카테고리
-    kw_a = title_keywords(title_a)
-    kw_b = title_keywords(title_b)
-    common = kw_a & kw_b
     same_category = a.get("category") == b.get("category")
 
-    if len(common) >= 2 and same_category:
+    # 제목 유사도
+    title_sim = fuzz.token_sort_ratio(title_a, title_b)
+
+    # 본문 앞 2문단 키워드
+    lead_a = get_lead(a.get("summary_ko") or a.get("summary_en") or "")
+    lead_b = get_lead(b.get("summary_ko") or b.get("summary_en") or "")
+    lead_kw_a = title_keywords(lead_a)
+    lead_kw_b = title_keywords(lead_b)
+    lead_common = lead_kw_a & lead_kw_b
+
+    # 제목 핵심 키워드
+    title_kw_a = title_keywords(title_a)
+    title_kw_b = title_keywords(title_b)
+    title_common = title_kw_a & title_kw_b
+
+    # 조건 1: 제목이 매우 유사 + 본문 앞부분도 키워드 2개 이상 공유
+    if title_sim >= SIMILARITY_HIGH and len(lead_common) >= 2:
         return True
 
-    # 조건 3: 제목 핵심 키워드 3개 이상 공유 (카테고리 무관)
-    if len(common) >= 3:
+    # 조건 2: 제목 키워드 2개 이상 공유 + 본문 앞부분 키워드 3개 이상 공유 + 같은 카테고리
+    if len(title_common) >= 2 and len(lead_common) >= 3 and same_category:
+        return True
+
+    # 조건 3: 제목+본문 키워드 합산 4개 이상 공유 + 같은 카테고리
+    all_common = (title_kw_a | lead_kw_a) & (title_kw_b | lead_kw_b)
+    if len(all_common) >= 4 and same_category:
         return True
 
     return False
