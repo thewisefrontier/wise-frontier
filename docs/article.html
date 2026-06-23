@@ -291,6 +291,19 @@
     }
   }
 
+  function formatUpdateTime(str) {
+    if (!str) return '';
+    const d = new Date(str.replace(' ', 'T'));
+    if (!isNaN(d)) {
+      const mo = String(d.getMonth()+1).padStart(2,'0');
+      const dy = String(d.getDate()).padStart(2,'0');
+      const hh = String(d.getHours()).padStart(2,'0');
+      const mm = String(d.getMinutes()).padStart(2,'0');
+      return `${mo}/${dy} ${hh}:${mm}`;
+    }
+    return str.slice(-11);
+  }
+
   function formatDate(str) {
     if (!str) return '';
     const d = new Date(str.replace(' ', 'T'));
@@ -375,12 +388,12 @@
         ${a.country ? `<span>📍 ${a.country}</span>` : ''}
       </div>
 
-      ${Array.isArray(a.update_log) && a.update_log.length > 1 ? `
-        <div style="margin:12px 0;padding:10px 12px;background:var(--bg3);border-left:3px solid var(--accent2);font-family:'IBM Plex Mono',monospace;font-size:11px;">
-          <div style="font-weight:700;color:var(--accent2);margin-bottom:6px;">업데이트 기록</div>
+      ${Array.isArray(a.update_log) && a.update_log.length > 0 ? `
+        <div style="margin:12px 0;border-left:3px solid var(--accent2);font-family:'IBM Plex Mono',monospace;font-size:11px;">
+          <div style="padding:6px 10px;font-weight:700;color:var(--accent2);border-bottom:1px solid var(--border);">업데이트 기록</div>
           ${[...a.update_log].reverse().map((l, i) => `
-            <div style="display:flex;gap:12px;padding:2px 0;${i===0?'color:var(--text);font-weight:600;':'color:var(--muted);'}">
-              <span style="min-width:115px;">${l.timestamp || ''}</span>
+            <div style="display:flex;gap:10px;padding:4px 10px;${i===0?'background:rgba(26,95,168,0.06);color:var(--text);font-weight:600;':'color:var(--muted);'}">
+              <span style="min-width:78px;flex-shrink:0;">${formatUpdateTime(l.timestamp)}</span>
               <span>${l.note || '업데이트'}</span>
             </div>`).join('')}
         </div>` : ''}
