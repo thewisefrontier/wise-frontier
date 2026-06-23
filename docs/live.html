@@ -250,7 +250,7 @@
       if (!res.ok) throw new Error();
       const articles = await res.json();
 
-      // 라이브 기준: NewsFinal 자체 기사 + score(병합 누적 건수) 2 이상 = 여러 번 갱신된 진행형 이슈
+      // 라이브 기준: NewsFinal 자체 기사 + score(업데이트 횟수) 2 이상 = 여러 번 업데이트된 진행형 이슈
       // 다이제스트(digest_)는 라이브 대상에서 제외
       const raw = articles
         .filter(a =>
@@ -302,7 +302,7 @@
 
       const firstPub = a.first_published_at ? formatDateTime(a.first_published_at) : formatDateTime(a.created_at);
       const lastUpdate = formatDateTime(a.created_at);
-      const updateCount = a.score || 0;
+      const updateCount = Array.isArray(a.update_log) ? a.update_log.length : (a.score || 1);
 
       // 업데이트 로그 (최신순, 최대 5개)
       const logs = Array.isArray(a.update_log) && a.update_log.length > 0
