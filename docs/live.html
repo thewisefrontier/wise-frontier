@@ -274,10 +274,17 @@
         }
         return matches / (shorter.length - 1) > 0.7;
       }
-      const liveArticles = [];
+      const deduped = [];
       for (const a of raw) {
-        if (!liveArticles.some(b => titleSimilar(a, b))) liveArticles.push(a);
+        if (!deduped.some(b => titleSimilar(a, b))) deduped.push(a);
       }
+      // 트렌드 기사(실시간 감지) 상단 고정, 나머지는 최신순
+      const TREND_PREFIXES = ['trend_', 'realtrend_', 'extrend_'];
+      const isTrend = a => TREND_PREFIXES.some(p => (a.subcategory || '').startsWith(p));
+      const liveArticles = [
+        ...deduped.filter(a => isTrend(a)),
+        ...deduped.filter(a => !isTrend(a)),
+      ];
 
       render(liveArticles);
     } catch(e) {
