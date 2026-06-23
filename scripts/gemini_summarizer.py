@@ -31,6 +31,9 @@ GEMINI_API_KEYS = [k for k in [
     os.getenv("GEMINI_API_KEY_3"),
 ] if k]
 
+TELEGRAM_TOKEN    = os.getenv("TELEGRAM_TOKEN", "")
+NEWSFINAL_CHANNEL = "@newsfinal"
+
 _current_key_idx = 0
 MAX_ARTICLES = 30
 CALL_INTERVAL = 5
@@ -218,7 +221,7 @@ def build_prompt(article: dict) -> str:
                                content=content, summary=summary, rules=rules)
 
 
-def call_gemini(prompt: str, retry: int = 2) -> str | None:
+def call_gemini(prompt: str, retry: int = 2, max_tokens: int = 500) -> str | None:
     global _current_key_idx
     if not GEMINI_API_KEYS:
         print("[ERROR] GEMINI_API_KEY 없음")
@@ -228,7 +231,7 @@ def call_gemini(prompt: str, retry: int = 2) -> str | None:
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {
             "temperature": 0.4,
-            "maxOutputTokens": 500,
+            "maxOutputTokens": max_tokens,
         }
     }
 
@@ -257,6 +260,238 @@ def call_gemini(prompt: str, retry: int = 2) -> str | None:
 
     print("[ERROR] 모든 키 소진")
     return None
+
+
+# ── 장기 이슈 트래커 ────────────────────────────────────────
+
+# 추적할 키워드 그룹 — (그룹명, 카테고리, [키워드 목록])
+TREND_KEYWORDS = [
+    ("에볼라",       "사회",    ["ebola", "에볼라", "hemorrhagic fever", "출혈열", "MVD", "marburg"]),
+    ("mpox",        "사회",    ["mpox", "monkeypox", "원숭이두창"]),
+    ("콜레라",       "사회",    ["cholera", "콜레라"]),
+    ("수단 분쟁",    "정치·외교", ["sudan", "RSF", "수단", "다르푸르", "darfur", "khartoum"]),
+    ("DRC 분쟁",    "정치·외교", ["DRC", "congo", "콩고", "M23", "키부", "kivu"]),
+    ("소말리아",     "정치·외교", ["somalia", "소말리아", "al-shabaab", "알샤바브"]),
+    ("미얀마",       "정치·외교", ["myanmar", "미얀마", "junta", "군부", "NUG"]),
+    ("아이티",       "사회",    ["haiti", "아이티", "gang", "갱단"]),
+    ("사헬 쿠데타",  "정치·외교", ["sahel", "사헬", "mali", "말리", "niger", "burkina", "부르키나"]),
+    ("중앙아프리카",  "정치·외교", ["central african", "중앙아프리카", "CAR", "bangui"]),
+]
+
+# 추적 윈도우: 7일간 기사에서 키워드 빈도 분석
+TREND_WINDOW_DAYS = 7
+TREND_MIN_ARTICLES = 3   # 최소 N건 이상 등장해야 트렌드로 판단
+TREND_CHECK_HOURS  = 12  # 마지막 추적기사 생성 후 N시간 이내면 스킵
+
+
+def get_trend_articles(keywords: list, days: int = 7) -> list:
+    """지난 N일간 특정 키워드가 포함된 수집 기사 반환"""
+    since = (now_kst() - timedelta(days=days)).strftime("%Y-%m-%d %H:%M")
+    all_articles = []
+    for kw in keywords:
+        try:
+            res = requests.get(
+                _sb_url(),
+                headers=_sb_headers(),
+                params={
+                    "select": "id,title_en,title_ko,summary_ko,summary_en,full_text,source,country,category,region,created_at",
+                    "source": "neq.NewsFinal",
+                    "created_at": f"gte.{since}",
+                    "or": f"(title_en.ilike.*{kw}*,title_ko.ilike.*{kw}*,summary_en.ilike.*{kw}*)",
+                    "order": "created_at.desc",
+                    "limit": "50",
+                },
+                timeout=15
+            )
+            if res.status_code in (200, 206):
+                all_articles.extend(res.json())
+        except Exception as e:
+            print(f"  ⚠️ 트렌드 조회 실패 ({kw}): {e}")
+
+    # 중복 제거
+    seen = set()
+    unique = []
+    for a in all_articles:
+        if a["id"] not in seen:
+            seen.add(a["id"])
+            unique.append(a)
+    return unique
+
+
+def trend_article_exists(group_name: str) -> bool:
+    """최근 N시간 내 해당 트렌드 추적 기사가 이미 있는지 확인"""
+    since = (now_kst() - timedelta(hours=TREND_CHECK_HOURS)).strftime("%Y-%m-%d %H:%M")
+    try:
+        res = requests.get(
+            _sb_url(),
+            headers=_sb_headers(),
+            params={
+                "select": "id",
+                "source": "eq.NewsFinal",
+                "subcategory": f"eq.trend_{group_name}",
+                "created_at": f"gte.{since}",
+                "limit": "1",
+            },
+            timeout=10
+        )
+        if res.status_code in (200, 206):
+            return len(res.json()) > 0
+    except Exception:
+        pass
+    return False
+
+
+def save_trend_article(group_name: str, title: str, body: str,
+                       category: str, country: str, region: str,
+                       countries: list) -> int:
+    """트렌드 추적 기사 저장"""
+    now_str = now_kst().strftime("%Y-%m-%d %H:%M")
+    payload = {
+        "title_en": title, "title_ko": title,
+        "summary_en": "", "summary_ko": body,
+        "url": f"internal://trend_{group_name}_{now_kst().strftime('%Y%m%d%H')}",
+        "source": "NewsFinal",
+        "category": category,
+        "subcategory": f"trend_{group_name}",
+        "region": region,
+        "country": country,
+        "country_flag": "",
+        "countries": countries or ([country] if country else []),
+        "score": 2,  # 라이브 탭에 바로 표시
+        "created_at": now_str,
+        "first_published_at": now_str,
+        "update_log": [{"timestamp": now_str, "note": "트렌드 추적 최초 게시"}],
+        "sent_telegram": 0,
+        "is_published": True,
+        "posted_blog": 0,
+    }
+    try:
+        res = requests.post(_sb_url(), headers=_sb_headers(), json=payload, timeout=15)
+        if res.status_code in (200, 201):
+            data = res.json()
+            return data[0].get("id", -1) if data else -1
+    except Exception as e:
+        print(f"  ⚠️ 트렌드 기사 저장 실패: {e}")
+    return -1
+
+
+def run_trend_tracker():
+    """장기 이슈 트렌드 감지 및 추적 기사 생성"""
+    if not GEMINI_API_KEYS:
+        return
+
+    print("\n[트렌드 트래커] 장기 이슈 분석 시작...")
+
+    for group_name, category, keywords in TREND_KEYWORDS:
+        articles = get_trend_articles(keywords, days=TREND_WINDOW_DAYS)
+
+        if len(articles) < TREND_MIN_ARTICLES:
+            print(f"  [{group_name}] {len(articles)}건 — 임계값 미달, 스킵")
+            continue
+
+        print(f"  [{group_name}] {len(articles)}건 감지 → 추적 기사 생성 검토")
+
+        if trend_article_exists(group_name):
+            print(f"  [{group_name}] 최근 {TREND_CHECK_HOURS}시간 내 이미 생성됨 — 스킵")
+            continue
+
+        # 최신 기사 최대 8건으로 Gemini 프롬프트 구성
+        top = sorted(articles, key=lambda a: a.get("created_at", ""), reverse=True)[:8]
+        today_str = now_kst().strftime("%Y년 %m월 %d일")
+
+        article_list = ""
+        for i, a in enumerate(top, 1):
+            t = a.get("title_ko") or a.get("title_en") or ""
+            body = a.get("full_text") or a.get("summary_ko") or a.get("summary_en") or ""
+            article_list += f"{i}. [{a.get('source','')}] {t}\n"
+            if body:
+                article_list += f"   {body[:300]}\n\n"
+
+        prompt = f"""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다.
+아래는 지난 {TREND_WINDOW_DAYS}일간 [{group_name}] 관련 기사 {len(articles)}건의 주요 내용입니다. ({today_str})
+
+[수집된 관련 기사]
+{article_list}
+
+이 기사들을 종합해 현재 진행 중인 상황을 정리하는 추적 기사를 작성하세요.
+- 현재 상황이 어떻게 전개되고 있는지 시간 순으로 정리하세요.
+- 수치, 인명, 날짜, 기관명 등 구체적 팩트를 최대한 살리세요.
+- 한국 투자자/독자 관점에서 왜 중요한지 한 문단으로 마무리하세요.
+- 마크다운 문법, 헤더, 홍보 문구 금지.
+- 한국어로만 작성하세요.
+
+아래 형식으로 출력:
+제목: (현재 상황을 담은 추적 기사 제목)
+국가: (주요 대상 국가 1개, 없으면 "없음")
+관련국가: (관련국 최대 4개, 없으면 "없음")
+분야: ({category})
+본문: (추적 기사 본문)"""
+
+        content = call_gemini(prompt, max_tokens=2000)
+        if not content:
+            print(f"  [{group_name}] ❌ Gemini 생성 실패")
+            continue
+
+        # 파싱
+        title, body, country, gen_category, countries = "", content, "", category, []
+        for line in content.strip().split("\n"):
+            if line.startswith("제목:"):
+                title = line.replace("제목:", "").strip()
+            elif line.startswith("국가:"):
+                c = line.replace("국가:", "").strip()
+                if c not in ("없음", "-", ""):
+                    country = c
+            elif line.startswith("관련국가:"):
+                raw = line.replace("관련국가:", "").strip()
+                if raw not in ("없음", "-", ""):
+                    countries = [x.strip() for x in raw.split(",") if x.strip()]
+            elif line.startswith("분야:"):
+                gen_category = line.replace("분야:", "").strip() or category
+            elif line.startswith("본문:"):
+                idx = content.find("본문:")
+                body = content[idx + 3:].strip()
+                break
+
+        if not title:
+            title = f"{group_name} 동향 — {today_str}"
+
+        # 지역 추론
+        region_map = {
+            "아프리카": "africa", "나이지리아": "africa", "케냐": "africa",
+            "수단": "africa", "콩고": "africa", "소말리아": "africa",
+            "말리": "africa", "부르키나파소": "africa", "중앙아프리카": "africa",
+            "미얀마": "southeast_asia", "아이티": "caribbean",
+        }
+        region = region_map.get(country, "africa")
+
+        article_id = save_trend_article(
+            group_name=group_name, title=title, body=body,
+            category=gen_category, country=country, region=region,
+            countries=countries
+        )
+
+        if article_id > 0:
+            print(f"  [{group_name}] ✅ 추적 기사 생성 (id={article_id}): {title}")
+            # 텔레그램 발송
+            if TELEGRAM_TOKEN:
+                try:
+                    preview = body[:300]
+                    url = f"https://newsfinal.co.kr/article.html?id={article_id}"
+                    msg = f"📡 트렌드 추적\n\n*{title}*\n\n{preview}{'…' if len(body) > 300 else ''}\n\n[전체 기사 보기]({url})"
+                    requests.post(
+                        f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage",
+                        data={"chat_id": NEWSFINAL_CHANNEL, "text": msg,
+                              "parse_mode": "Markdown", "disable_web_page_preview": False},
+                        timeout=15
+                    )
+                except Exception:
+                    pass
+        else:
+            print(f"  [{group_name}] ❌ 저장 실패")
+
+        time.sleep(CALL_INTERVAL)
+
+    print("[트렌드 트래커] 완료")
 
 
 def run():
@@ -294,6 +529,9 @@ def run():
             time.sleep(CALL_INTERVAL)
 
     print(f"\n✅ 요약 고도화 완료: {success}/{len(articles)}건 성공")
+
+    # 장기 이슈 트렌드 추적
+    run_trend_tracker()
 
 
 if __name__ == "__main__":
