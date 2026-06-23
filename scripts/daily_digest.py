@@ -151,21 +151,29 @@ def call_gemini(prompt, max_tokens=3000):
 def build_digest_prompt(articles):
     today_str = now_kst().strftime("%Y년 %m월 %d일")  # 발행일(오늘) 기준 — 신문 날짜와 동일
 
-    # 국가별로 그룹화해서 제공 (Gemini가 패턴 찾기 쉽도록)
+    # 국가별로 그룹화 — 기사 ID 기준 중복 제거 (관련국가 많은 기사가 반복되지 않도록)
     by_country = {}
+    seen_ids = set()
     for a in articles:
-        countries = a.get("countries") or ([a.get("country")] if a.get("country") else [])
-        countries = [c for c in countries if c] or ["글로벌"]
-        for c in countries:
-            by_country.setdefault(c, []).append(a)
+        main_country = a.get("country") or "글로벌"
+        by_country.setdefault(main_country, [])
+        if a["id"] not in seen_ids:
+            by_country[main_country].append(a)
+            seen_ids.add(a["id"])
 
     article_list = ""
     for country, items in by_country.items():
+        if not items:
+            continue
         article_list += f"\n[{country}]\n"
         for a in items:
             title = a.get("title_ko") or ""
             summary = (a.get("summary_ko") or "")[:200]
-            article_list += f"- {title}\n  {summary}\n"
+            # 관련국가가 여러 개면 참고용으로 표시
+            related = a.get("countries") or []
+            related = [c for c in related if c and c != country]
+            related_str = f" (관련: {', '.join(related[:3])})" if related else ""
+            article_list += f"- {title}{related_str}\n  {summary}\n"
 
     rules = load_prompt("digest_rules", fallback="""[작성 규칙]
 - 지난 하루 동안 NewsFinal이 다룬 프론티어 마켓 기사들을 종합해 오늘의 핵심 테마를 정리하는 일일 다이제스트를 작성하세요.
