@@ -205,6 +205,59 @@ COUNTRY_INFO = {
     "netherlands": ("🇳🇱", "네덜란드"), "dutch": ("🇳🇱", "네덜란드"),
     "canada": ("🇨🇦", "캐나다"), "canadian": ("🇨🇦", "캐나다"),
     "portugal": ("🇵🇹", "포르투갈"), "portuguese": ("🇵🇹", "포르투갈"),
+    # ── 프랑스어/현지 지명 ──
+    "côte d'ivoire": ("🇨🇮", "코트디부아르"), "cote d'ivoire": ("🇨🇮", "코트디부아르"),
+    "abidjan": ("🇨🇮", "코트디부아르"), "ivoirien": ("🇨🇮", "코트디부아르"),
+    "dakar": ("🇸🇳", "세네갈"), "sénégal": ("🇸🇳", "세네갈"),
+    "bamako": ("🇲🇱", "말리"), "malien": ("🇲🇱", "말리"),
+    "ouagadougou": ("🇧🇫", "부르키나파소"), "burkinabè": ("🇧🇫", "부르키나파소"),
+    "niamey": ("🇳🇪", "니제르"), "nigérien": ("🇳🇪", "니제르"),
+    "ndjamena": ("🇹🇩", "차드"), "tchad": ("🇹🇩", "차드"),
+    "yaoundé": ("🇨🇲", "카메룬"), "yaounde": ("🇨🇲", "카메룬"), "cameroun": ("🇨🇲", "카메룬"),
+    "douala": ("🇨🇲", "카메룬"),
+    "kinshasa": ("🇨🇩", "DRC"), "rdc": ("🇨🇩", "DRC"),
+    "brazzaville": ("🇨🇬", "콩고공화국"),
+    "bangui": ("🇨🇫", "중앙아프리카"), "centrafrique": ("🇨🇫", "중앙아프리카"),
+    "libreville": ("🇬🇦", "가봉"),
+    "lomé": ("🇹🇬", "토고"), "lome": ("🇹🇬", "토고"),
+    "cotonou": ("🇧🇯", "베냉"), "bénin": ("🇧🇯", "베냉"),
+    "conakry": ("🇬🇳", "기니"), "guinée": ("🇬🇳", "기니"),
+    "antananarivo": ("🇲🇬", "마다가스카르"),
+    "port-au-prince": ("🇭🇹", "아이티"), "haïti": ("🇭🇹", "아이티"),
+    # ── 아랍어 지명 (로마자) ──
+    "khartoum": ("🇸🇩", "수단"), "al-khartoum": ("🇸🇩", "수단"),
+    "mogadishu": ("🇸🇴", "소말리아"), "muqdisho": ("🇸🇴", "소말리아"),
+    "tripoli": ("🇱🇾", "리비아"),
+    "tunis": ("🇹🇳", "튀니지"), "tunisie": ("🇹🇳", "튀니지"),
+    "alger": ("🇩🇿", "알제리"), "algérie": ("🇩🇿", "알제리"),
+    "rabat": ("🇲🇦", "모로코"), "maroc": ("🇲🇦", "모로코"),
+    "riyadh": ("🇸🇦", "사우디"),
+    "abu dhabi": ("🇦🇪", "UAE"), "dubai": ("🇦🇪", "UAE"),
+    "baghdad": ("🇮🇶", "이라크"),
+    "amman": ("🇯🇴", "요르단"),
+    "beirut": ("🇱🇧", "레바논"), "beyrouth": ("🇱🇧", "레바논"),
+    "sanaa": ("🇾🇪", "예멘"),
+    # ── 포르투갈어 지명 ──
+    "luanda": ("🇦🇴", "앙골라"), "angolano": ("🇦🇴", "앙골라"),
+    "maputo": ("🇲🇿", "모잠비크"), "moçambique": ("🇲🇿", "모잠비크"),
+    "cabo verde": ("🇨🇻", "카보베르데"),
+    # ── 동남아/인도네시아어 지명 ──
+    "jakarta": ("🇮🇩", "인도네시아"),
+    "kuala lumpur": ("🇲🇾", "말레이시아"),
+    "manila": ("🇵🇭", "필리핀"),
+    "naypyidaw": ("🇲🇲", "미얀마"), "yangon": ("🇲🇲", "미얀마"),
+    "phnom penh": ("🇰🇭", "캄보디아"),
+    "vientiane": ("🇱🇦", "라오스"),
+    "hanoi": ("🇻🇳", "베트남"), "ho chi minh": ("🇻🇳", "베트남"),
+    # ── 중앙아시아 지명 ──
+    "bishkek": ("🇰🇬", "키르기스스탄"),
+    "dushanbe": ("🇹🇯", "타지키스탄"),
+    "ashgabat": ("🇹🇲", "투르크메니스탄"),
+    "tashkent": ("🇺🇿", "우즈베키스탄"),
+    "astana": ("🇰🇿", "카자흐스탄"), "almaty": ("🇰🇿", "카자흐스탄"),
+    "yerevan": ("🇦🇲", "아르메니아"), "armenia": ("🇦🇲", "아르메니아"),
+    "baku": ("🇦🇿", "아제르바이잔"),
+    "tbilisi": ("🇬🇪", "조지아"),
 }
 
 # 주요국 — 글로벌 카테고리로 분류
@@ -672,6 +725,24 @@ for data in results:
     # 소프트 노이즈 — DB에만 저장, 텔레그램/홈페이지 발송 안 함
     soft_noise = is_soft_noise(title)
 
+
+    # 언어 감지 (간단한 휴리스틱)
+    def detect_lang(text):
+        if not text:
+            return "en"
+        t = text[:200]
+        if any('\u0600' <= c <= '\u06ff' for c in t):
+            return "ar"
+        if any(c in t for c in "éèêëàâùûüôîïœç"):
+            return "fr"
+        if any(c in t for c in "ãõçáéíóúâêîôû") and any(w in t.lower() for w in ["da","de","do","dos","das","em","para","por"]):
+            return "pt"
+        if any(w in t.lower().split() for w in ["yang","dan","untuk","dengan","dalam","tidak","ini","itu","dari","pada"]):
+            return "id"
+        return "en"
+
+    src_lang = detect_lang(title + " " + (summary_en or ""))
+
     # 요약 추출
     summary_en = extract_summary(latest)
 
@@ -719,6 +790,14 @@ for data in results:
             summary_ko = clean_text(summary_ko)
         except Exception:
             summary_ko = ""
+
+
+    # 비영어 소스면 full_text 앞에 언어 태그 추가
+    if src_lang != "en" and full_text:
+        lang_labels = {"fr": "[원문: 프랑스어]", "ar": "[원문: 아랍어]",
+                       "pt": "[원문: 포르투갈어]", "id": "[원문: 인도네시아어]"}
+        lang_tag = lang_labels.get(src_lang, "[원문: " + src_lang + "]")
+        full_text = lang_tag + "\n" + full_text
 
     # 텔레그램 발송 (소프트 노이즈는 스킵)
     if soft_noise:
