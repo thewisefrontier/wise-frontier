@@ -43,8 +43,8 @@ TELEGRAM_TOKEN    = os.getenv("TELEGRAM_TOKEN", "")
 NEWSFINAL_CHANNEL = "@newsfinal"
 
 _current_key_idx = 0
-MAX_ARTICLES = 30
-CALL_INTERVAL = 5
+MAX_ARTICLES = 20
+CALL_INTERVAL = 8
 
 
 def _sb_headers():
@@ -908,7 +908,7 @@ JSON 배열로만 응답하세요 (마크다운 없이):
 # ── 외부 트렌드 신호 기반 기사 생성 ──────────────────────────
 
 EXT_MIN_SCORE     = 5   # 최소 합산 점수
-EXT_MAX_ARTICLES  = 3   # 1회 최대 생성 건수
+EXT_MAX_ARTICLES  = 2   # 1회 최대 생성 건수
 EXT_CHECK_HOURS   = 8   # 중복 방지 간격
 
 
