@@ -44,7 +44,7 @@
     .ticker-item { display: flex; gap: 6px; align-items: center; white-space: nowrap; }
     .ticker-label { color: var(--muted); }
     .ticker-val { color: var(--text); font-weight: 500; }
-    .up { color: var(--green); } .down { color: var(--red); }
+    .up { color: var(--green); } .down { color: var(--accent2); }
     .header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; white-space: nowrap; }
 
     .header-main {
@@ -81,16 +81,16 @@
     }
     .tag:hover { border-color: var(--accent); color: var(--accent); }
 
-    .live-badge {
+    .trend-badge {
       display: inline-flex; align-items: center; gap: 6px;
       font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 700;
-      color: var(--red); letter-spacing: 0.05em; margin-bottom: 12px;
+      color: var(--accent2); letter-spacing: 0.05em; margin-bottom: 12px;
     }
-    .live-badge .dot {
-      width: 8px; height: 8px; border-radius: 50%; background: var(--red);
-      animation: live-pulse 1.6s ease-in-out infinite;
+    .trend-badge .dot {
+      width: 8px; height: 8px; border-radius: 50%; background: var(--accent2);
+      animation: trend-pulse 1.6s ease-in-out infinite;
     }
-    @keyframes live-pulse {
+    @keyframes trend-pulse {
       0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(192,57,43,0.5); }
       50% { opacity: 0.6; box-shadow: 0 0 0 5px rgba(192,57,43,0); }
     }
@@ -139,7 +139,7 @@
     footer a:hover { color: var(--accent); }
 
     .loading { text-align: center; padding: 60px; color: var(--muted); font-family: 'IBM Plex Mono', monospace; }
-    .error { text-align: center; padding: 60px; color: var(--red); font-family: 'IBM Plex Mono', monospace; }
+    .error { text-align: center; padding: 60px; color: var(--accent2); font-family: 'IBM Plex Mono', monospace; }
 
     @media (max-width: 600px) {
       header { padding: 0 14px; }
@@ -359,7 +359,7 @@
     document.getElementById('article-wrapper').innerHTML = `
       <a class="back-btn" href="/">← 홈으로</a>
 
-      ${a.source === 'NewsFinal' && ['trend_','realtrend_','extrend_'].some(p=>(a.subcategory||'').startsWith(p)) ? `<div class="live-badge"><span class="dot"></span>TREND</div>` : ''}
+      ${a.source === 'NewsFinal' && ['trend_','realtrend_','extrend_'].some(p=>(a.subcategory||'').startsWith(p)) ? `<div class="trend-badge"><span class="dot"></span>TREND</div>` : ''}
 
       <div class="article-tags">
         ${a.category ? `<a class="tag" href="/?category=${encodeURIComponent(a.category)}">${a.category}</a>` : ''}
