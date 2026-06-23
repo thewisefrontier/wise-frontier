@@ -343,78 +343,76 @@ def extract_keywords(text):
     """텍스트에서 의미 있는 키워드 추출"""
     if not text:
         return set()
-    # 소문자, 특수문자 제거
     text = text.lower()
     text = re.sub(r'[^\w\s가-힣]', ' ', text)
     words = text.split()
-    # 불용어 제거, 3자 이상만
     return {w for w in words if w not in STOPWORDS and len(w) >= 3}
 
 
-def keyword_overlap(a, b):
-    """두 기사 키워드 겹침 비율 (0~1)"""
-    title_a = (a.get("title_ko") or a.get("title_en") or "")
-    title_b = (b.get("title_ko") or b.get("title_en") or "")
-    summ_a  = (a.get("summary_ko") or a.get("summary_en") or "")
-    summ_b  = (b.get("summary_ko") or b.get("summary_en") or "")
-
-    kw_a = extract_keywords(title_a) | extract_keywords(summ_a)
-    kw_b = extract_keywords(title_b) | extract_keywords(summ_b)
-
-    if not kw_a or not kw_b:
-        return 0.0
-
-    intersection = kw_a & kw_b
-    union = kw_a | kw_b
-    return len(intersection) / len(union)
+def title_keywords(text):
+    """제목에서만 키워드 추출 — 고유명사(기관명·인명·지명) 중심"""
+    if not text:
+        return set()
+    # 한글 2자 이상 단어 (고유명사 위주)
+    text_clean = text.lower()
+    text_clean = re.sub(r'[^\w\s가-힣]', ' ', text_clean)
+    words = text_clean.split()
+    # 불용어 제거, 한글은 2자 이상, 영문은 4자 이상
+    result = set()
+    for w in words:
+        if w in STOPWORDS:
+            continue
+        # 한글 포함 단어
+        if re.search(r'[가-힣]', w) and len(w) >= 2:
+            result.add(w)
+        # 영문 단어
+        elif not re.search(r'[가-힣]', w) and len(w) >= 4:
+            result.add(w)
+    return result
 
 
 def articles_are_related(a, b):
     """
-    두 기사가 같은 이슈인지 판단
-    제목 유사도 + 키워드 겹침 기반 — 국가만 같다고 묶지 않음
+    두 기사가 같은 이슈인지 판단.
+    핵심 원칙:
+    1. 제목 유사도가 높거나 (같은 사건을 다른 소스가 보도)
+    2. 제목 핵심 키워드(고유명사)가 2개 이상 겹치고 + 같은 국가
+    둘 중 하나를 만족해야 클러스터링.
     """
     title_a = (a.get("title_ko") or a.get("title_en") or "").lower()
     title_b = (b.get("title_ko") or b.get("title_en") or "").lower()
 
-    # 제목이 너무 짧으면 비교 불가
-    if len(title_a) < 8 or len(title_b) < 8:
+    if len(title_a) < 6 or len(title_b) < 6:
         return False
 
-    # 1. 제목 유사도 (가중치 높임)
-    title_sim = fuzz.token_sort_ratio(title_a, title_b)
-
-    # 제목 유사도가 매우 낮으면 다른 토픽으로 즉시 판단
-    if title_sim < 30:
-        return False
-
-    # 2. 키워드 겹침
-    kw_sim = keyword_overlap(a, b) * 100
-
-    # 3. 공통 키워드 — 제목+요약 기준
-    kw_a = extract_keywords(title_a) | extract_keywords(a.get("summary_ko") or "")
-    kw_b = extract_keywords(title_b) | extract_keywords(b.get("summary_ko") or "")
-    common_kw = kw_a & kw_b
-
-    # 같은 카테고리 여부
-    same_category = a.get("category") == b.get("category")
-
-    # 국가 불일치 페널티 — 국가가 명시됐고 서로 다르면 감점
     country_a = a.get("country") or ""
     country_b = b.get("country") or ""
-    country_penalty = 0
-    if country_a and country_b and country_a != country_b:
-        country_penalty = 15  # 국가가 다르면 강한 페널티
+    same_country = (country_a == country_b) if (country_a and country_b) else False
+    diff_country = bool(country_a and country_b and country_a != country_b)
 
-    # 종합 점수 — 제목 유사도 비중 높임
-    score = title_sim * 0.6 + kw_sim * 0.4
-    if same_category:
-        score += 3
-    if len(common_kw) >= 3:
-        score += 5
-    score -= country_penalty
+    # 국가가 명시적으로 다르면 즉시 제외 — 절대 조건
+    if diff_country:
+        return False
 
-    return score >= SIMILARITY_HIGH
+    # 조건 1: 제목 문자열 자체가 매우 유사 (같은 사건을 여러 소스가 보도)
+    title_sim = fuzz.token_sort_ratio(title_a, title_b)
+    if title_sim >= SIMILARITY_HIGH:
+        return True
+
+    # 조건 2: 제목 핵심 키워드 2개 이상 공유 + 같은 카테고리
+    kw_a = title_keywords(title_a)
+    kw_b = title_keywords(title_b)
+    common = kw_a & kw_b
+    same_category = a.get("category") == b.get("category")
+
+    if len(common) >= 2 and same_category:
+        return True
+
+    # 조건 3: 제목 핵심 키워드 3개 이상 공유 (카테고리 무관)
+    if len(common) >= 3:
+        return True
+
+    return False
 
 
 def cluster_articles(articles):
