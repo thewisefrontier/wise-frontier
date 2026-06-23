@@ -298,7 +298,7 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
         "country": country,
         "country_flag": "",
         "countries": countries or ([country] if country else []),
-        "score": article_count,
+        "score": 1,  # 최초 게시는 항상 1, 업데이트마다 +1
         "created_at": now_str,
         "first_published_at": now_str,
         "update_log": [{"timestamp": now_str, "note": "최초 게시"}],
@@ -1044,7 +1044,7 @@ def run():
                 new_title = gen_title if gen_title else titles[0][:50]
                 note = generate_update_note(existing["summary_ko"], gen_body or content)
                 update_article(existing["id"], new_title, gen_body or content, note=note, countries=gen_countries if gen_countries else None)
-                update_article_count(existing["id"], cur_count)
+                update_article_count(existing["id"], prev_count + 1)
                 # 국가/분야 재분류 업데이트
                 if gen_country or gen_category:
                     update_fields = {}
