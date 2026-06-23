@@ -904,7 +904,7 @@
       : (a.country ? `<span class="tag country" style="cursor:pointer;" onclick="filterByTag('country','${a.country}',event)">${a.country}</span>` : '');
 
     return `
-      <div class="article-card ${standalone?'standalone':''}" data-idx="${idx}" onclick="${clickAction}" ${isLive ? 'style="border-left:3px solid var(--red);"' : ''}>
+      <div class="article-card ${standalone?'standalone':''}" data-idx="${idx}" onclick="${clickAction}">
         <div class="article-header">
           <div class="article-tags">
             ${liveBadge}${catTag}${subTag}${regionTag}${countryTag}
