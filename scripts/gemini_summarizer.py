@@ -326,6 +326,43 @@ def get_trend_articles(keywords: list, days: int = 7) -> list:
     return unique
 
 
+
+def trend_title_exists(title: str, hours: int = 24) -> bool:
+    """
+    최근 N시간 내 트렌드 탭 기사 중 제목 유사도 65% 이상인 기사가 있는지 확인.
+    realtrend_, extrend_, trend_ 전부 대상.
+    """
+    from rapidfuzz import fuzz
+    since = (now_kst() - timedelta(hours=hours)).strftime("%Y-%m-%d %H:%M")
+    try:
+        res = requests.get(
+            _sb_url(),
+            headers=_sb_headers(),
+            params={
+                "select": "id,title_ko",
+                "source": "eq.NewsFinal",
+                "or": "(subcategory.like.trend_*,subcategory.like.realtrend_*,subcategory.like.extrend_*)",
+                "created_at": f"gte.{since}",
+                "limit": "50",
+            },
+            timeout=10
+        )
+        if res.status_code not in (200, 206):
+            return False
+        existing = res.json()
+        for a in existing:
+            existing_title = a.get("title_ko") or ""
+            if not existing_title:
+                continue
+            sim = fuzz.token_sort_ratio(title.lower(), existing_title.lower())
+            if sim >= 65:
+                print(f"    → 유사 트렌드 기사 존재 (유사도 {sim}%): {existing_title[:50]}")
+                return True
+    except Exception as e:
+        print(f"    → 유사도 체크 실패: {e}")
+    return False
+
+
 def trend_article_exists(group_name: str) -> bool:
     """최근 N시간 내 해당 트렌드 추적 기사가 이미 있는지 확인"""
     since = (now_kst() - timedelta(hours=TREND_CHECK_HOURS)).strftime("%Y-%m-%d %H:%M")
@@ -399,8 +436,8 @@ def run_trend_tracker():
 
         print(f"  [{group_name}] {len(articles)}건 감지 → 추적 기사 생성 검토")
 
-        if trend_article_exists(group_name):
-            print(f"  [{group_name}] 최근 {TREND_CHECK_HOURS}시간 내 이미 생성됨 — 스킵")
+        if trend_article_exists(group_name) or trend_title_exists(f"{group_name} 동향", hours=24):
+            print(f"  [{group_name}] 최근 24시간 내 유사 기사 존재 — 스킵")
             continue
 
         # 최신 기사 최대 8건으로 Gemini 프롬프트 구성
@@ -764,8 +801,8 @@ JSON 배열로만 응답하세요 (마크다운 없이):
         if not topic or urgency == "low":
             continue
 
-        if realtime_trend_article_exists(topic):
-            print(f"  [{topic}] 최근 {RT_CHECK_HOURS}시간 내 이미 생성됨 — 스킵")
+        if realtime_trend_article_exists(topic) or trend_title_exists(issue_ko, hours=12):
+            print(f"  [{topic}] 최근 12시간 내 유사 기사 존재 — 스킵")
             continue
 
         # 관련 기사 수집
@@ -1011,7 +1048,7 @@ JSON 배열로만 응답 (마크다운 없이):
         region   = item.get("region", "global")
         country  = countries_list[0] if countries_list else ""
 
-        if not topic or ext_trend_exists(topic):
+        if not topic or ext_trend_exists(topic) or trend_title_exists(issue_ko, hours=12):
             continue
 
         # 관련 신호에서 대표 제목 수집
