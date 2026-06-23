@@ -538,25 +538,37 @@ def articles_are_related(a, b):
 
 def is_coherent_cluster(cluster: list) -> bool:
     """
-    클러스터가 실제로 같은 이슈인지 검증.
-    기사 수 대비 국가 다양성이 너무 높으면 엉터리 클러스터.
-    - 5건 이하: 국가 3개 이상이면 엉터리
-    - 6건 이상: 국가 수가 기사 수의 절반 이상이면 엉터리
+    클러스터가 실제로 같은 이슈인지 Gemini에게 판단.
+    국가 수가 많아도 단일 이슈면 OK (예: 싱가포르 기업 + 소말릴란드 활동).
+    국가가 적어도 전혀 다른 사건 묶음이면 엉터리.
+    클러스터 크기 4건 이상일 때만 검수 (2~3건은 통과).
     """
-    countries = set()
+    if len(cluster) < 4:
+        return True  # 소규모는 통과
+
+    # 대표 기사 제목들로 Gemini에게 판단 요청
+    titles = []
     for a in cluster:
-        c = a.get("country") or ""
-        if c and c not in ("글로벌", "없음"):
-            countries.add(c)
+        t = a.get("title_ko") or a.get("title_en") or ""
+        if t and not a.get("__needs_review__"):
+            titles.append(t[:80])
+    if not titles:
+        return True
 
-    n = len(cluster)
-    nc = len(countries)
+    sample = titles[:6]
+    prompt = f"""아래 뉴스 기사 제목들이 하나의 연결된 이슈/사건을 다루고 있는지 판단하세요.
+하나의 주제(같은 사건, 같은 기업, 같은 정책, 같은 인물)를 여러 소스가 다루거나 관련 맥락을 다루면 "YES".
+전혀 다른 국가/사건/주체가 나열된 것이면 "NO".
 
-    if n <= 5 and nc >= 3:
-        return False
-    if n > 5 and nc >= max(3, n // 2):
-        return False
-    return True
+제목 목록:
+{chr(10).join(f"- {t}" for t in sample)}
+
+답변 (YES 또는 NO만):"""
+
+    result = call_gemini(prompt, max_tokens=5)
+    if not result:
+        return True  # API 실패 시 통과
+    return "YES" in result.upper()
 
 
 def cluster_articles(articles):
