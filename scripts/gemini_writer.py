@@ -994,6 +994,157 @@ def park_multi_topic_articles(articles: list) -> int:
     return parked
 
 
+
+
+# ── 라이브 기사 능동적 업데이트 ──────────────────────────────
+
+def get_stale_live_articles() -> list:
+    """업데이트되지 않은 라이브 기사 조회 (score=1, 최근 48시간)"""
+    since = (now_kst() - timedelta(hours=48)).strftime("%Y-%m-%d %H:%M")
+    try:
+        res = requests.get(
+            _sb_url(),
+            headers=_sb_headers(),
+            params={
+                "select": "id,title_ko,summary_ko,country,category,score",
+                "source": "eq.NewsFinal",
+                "is_published": "eq.true",
+                "score": "eq.1",
+                "created_at": f"gte.{since}",
+                "order": "created_at.desc",
+                "limit": "20",
+            },
+            timeout=15
+        )
+        if res.status_code in (200, 206):
+            return [a for a in res.json()
+                    if not (a.get("subcategory") or "").startswith("digest_")]
+    except Exception as e:
+        print(f"  [라이브 업데이트] 조회 실패: {e}")
+    return []
+
+
+def search_followup(title: str, country: str) -> list:
+    """제목/국가 키워드로 내부 DB + GDELT에서 후속 기사 검색"""
+    import urllib.parse
+    since = (now_kst() - timedelta(hours=48)).strftime("%Y-%m-%d %H:%M")
+
+    kw_list = [w for w in title.replace(",", "").replace("\xb7", " ").split() if len(w) >= 2]
+    kw = kw_list[0] if kw_list else country
+
+    results = []
+
+    # 내부 DB
+    try:
+        res = requests.get(
+            _sb_url(),
+            headers=_sb_headers(),
+            params={
+                "select": "title_en,title_ko,summary_en,summary_ko,full_text,source",
+                "source": "neq.NewsFinal",
+                "created_at": f"gte.{since}",
+                "or": f"(title_ko.ilike.*{kw}*,title_en.ilike.*{kw}*)",
+                "order": "created_at.desc",
+                "limit": "8",
+            },
+            timeout=15
+        )
+        if res.status_code in (200, 206):
+            results.extend(res.json())
+    except Exception:
+        pass
+
+    # GDELT
+    try:
+        eng_words = [w for w in title.split() if not any("\uAC00" <= c <= "\uD7A3" for c in w)]
+        eng_kw = " ".join(eng_words[:3]) if eng_words else country
+        if eng_kw:
+            gres = requests.get(
+                f"https://api.gdeltproject.org/api/v2/doc/doc"
+                f"?query={urllib.parse.quote(eng_kw)}&mode=artlist&maxrecords=5&timespan=2d&format=json",
+                headers={"User-Agent": "Mozilla/5.0"}, timeout=12
+            )
+            if gres.status_code == 200:
+                for a in gres.json().get("articles", []):
+                    results.append({
+                        "title_en": a.get("title", ""),
+                        "summary_en": a.get("title", ""),
+                        "source": a.get("domain", "GDELT"),
+                    })
+    except Exception:
+        pass
+
+    return results
+
+
+def update_live_articles():
+    """업데이트되지 않은 라이브 기사를 능동적으로 후속 검색해서 업데이트"""
+    if not GEMINI_API_KEYS:
+        return
+
+    stale = get_stale_live_articles()
+    if not stale:
+        print("[라이브 업데이트] 대상 없음")
+        return
+
+    print(f"\n[라이브 업데이트] 대상 {len(stale)}건 → 최대 5건 처리")
+    updated = 0
+
+    for a in stale[:5]:
+        title   = a.get("title_ko") or ""
+        summary = a.get("summary_ko") or ""
+        country = a.get("country") or ""
+        art_id  = a["id"]
+
+        print(f"  → {title[:50]}")
+        followups = search_followup(title, country)
+        if not followups:
+            print(f"     후속 없음")
+            continue
+
+        followup_text = ""
+        for f in followups[:5]:
+            t = f.get("title_ko") or f.get("title_en") or ""
+            b = f.get("summary_ko") or f.get("summary_en") or ""
+            followup_text += f"- {t}\n  {b[:200]}\n"
+
+        prompt = f"""현재 기사와 후속 정보를 비교해서, 추가할 새로운 내용이 있으면 업데이트하세요.
+새로운 내용이 없으면 "업데이트 불필요"라고만 답하세요.
+
+[현재 기사]
+제목: {title}
+내용: {summary[:500]}
+
+[후속 정보]
+{followup_text}
+
+새 내용이 있으면:
+업데이트노트: (핵심 변경 15자 이내)
+본문: (업데이트된 전체 본문)"""
+
+        result = call_gemini(prompt, max_tokens=2000)
+        if not result or "업데이트 불필요" in result:
+            print(f"     업데이트 불필요")
+            continue
+
+        note = "후속 정보 업데이트"
+        new_body = result
+        for line in result.strip().split("\n"):
+            if line.startswith("업데이트노트:"):
+                note = line.replace("업데이트노트:", "").strip()
+            elif line.startswith("본문:"):
+                new_body = result[result.find("본문:")+3:].strip()
+                break
+
+        if update_article(art_id, title, new_body, note=note):
+            update_article_count(art_id, 2)
+            print(f"     ✅ {note}")
+            updated += 1
+
+        time.sleep(CALL_INTERVAL)
+
+    print(f"[라이브 업데이트] {updated}건 완료")
+
 def run():
     if not GEMINI_API_KEYS:
         print("[SKIP] GEMINI_API_KEY 없음")
@@ -1339,6 +1490,9 @@ def run():
         time.sleep(CALL_INTERVAL)
 
     print(f"✅ 완료 — 클러스터 {generated}건 생성 / {updated}건 업데이트 / 단독 {solo_generated}건 생성")
+
+    # 라이브 기사 능동적 업데이트
+    update_live_articles()
 
 
 if __name__ == "__main__":
