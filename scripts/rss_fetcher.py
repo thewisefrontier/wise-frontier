@@ -726,6 +726,9 @@ for data in results:
     soft_noise = is_soft_noise(title)
 
 
+    # 요약 추출
+    summary_en = extract_summary(latest)
+
     # 언어 감지 (간단한 휴리스틱)
     def detect_lang(text):
         if not text:
@@ -742,9 +745,6 @@ for data in results:
         return "en"
 
     src_lang = detect_lang(title + " " + (summary_en or ""))
-
-    # 요약 추출
-    summary_en = extract_summary(latest)
 
     # 원문 크롤링 (타임아웃 8초, 실패해도 계속)
     full_text = crawl_full_text(link, timeout=8)
