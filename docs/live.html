@@ -188,7 +188,7 @@
 
   async function loadTicker() {
     try {
-      const res = await fetch('data/market_data.json');
+      const res = await fetch('/data/market_data.json');
       if (!res.ok) return;
       const data = await res.json();
       const indices = data.indices || [];
@@ -305,3 +305,4 @@
 
 </body>
 </html>
+
