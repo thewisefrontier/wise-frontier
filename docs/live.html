@@ -97,14 +97,19 @@
     .live-meta strong { color: var(--text); font-weight: 700; }
 
     .update-log {
-      margin: 8px 0; padding: 8px 10px;
-      background: var(--bg3); border-left: 2px solid var(--accent2);
+      margin: 10px 0 4px; border-left: 2px solid var(--accent2);
       font-family: 'IBM Plex Mono', monospace; font-size: 10px;
     }
-    .update-log-item { display: flex; gap: 10px; padding: 2px 0; color: var(--muted); }
-    .update-log-item.latest { color: var(--text); font-weight: 600; }
-    .update-log-time { min-width: 110px; }
-    .update-log-note { }
+    .update-log-item {
+      display: flex; gap: 8px; padding: 3px 8px;
+      color: var(--muted); line-height: 1.5;
+    }
+    .update-log-item.latest {
+      color: var(--text); font-weight: 600;
+      background: rgba(26,95,168,0.06);
+    }
+    .update-log-time { min-width: 80px; flex-shrink: 0; }
+    .update-log-note { flex: 1; }
 
     .empty { text-align: center; padding: 60px 20px; color: var(--muted); font-family: 'IBM Plex Mono', monospace; font-size: 13px; }
 
@@ -229,6 +234,16 @@
     return `${d.getMonth()+1}/${d.getDate()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
   }
 
+  function formatUpdateTime(str) {
+    if (!str) return '';
+    const d = new Date(str.replace(' ', 'T'));
+    if (!isNaN(d)) {
+      const mo = pad(d.getMonth()+1), dy = pad(d.getDate());
+      return `${mo}/${dy} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    }
+    return str.slice(-11);
+  }
+
   async function load() {
     try {
       const res = await fetch('data/articles.json');
@@ -293,11 +308,11 @@
       const logs = Array.isArray(a.update_log) && a.update_log.length > 0
         ? [...a.update_log].reverse().slice(0, 5)
         : [];
-      const logHtml = logs.length > 1 ? `
+      const logHtml = logs.length > 0 ? `
         <div class="update-log">
           ${logs.map((l, i) => `
             <div class="update-log-item ${i === 0 ? 'latest' : ''}">
-              <span class="update-log-time">${l.timestamp || ''}</span>
+              <span class="update-log-time">${formatUpdateTime(l.timestamp)}</span>
               <span class="update-log-note">${l.note || '업데이트'}</span>
             </div>`).join('')}
         </div>` : '';
