@@ -578,11 +578,10 @@ def cluster_articles(articles):
                 used.add(j)
 
         if len(cluster) >= CLUSTER_MIN_SIZE:
-            # 다국가 혼합 클러스터 필터링
+            # 다국가 혼합 클러스터 → 검토 필요로 미발행 저장
             if not is_coherent_cluster(cluster):
-                print(f"  [스킵] 다국가 혼합 클러스터 ({len(cluster)}건) — 파킹 처리")
-                park_multi_topic_articles(cluster)
-                continue
+                print(f"  [검토필요] 다국가 혼합 클러스터 ({len(cluster)}건) — 미발행 저장")
+                cluster.append({"__needs_review__": True})
             clusters.append(cluster)
 
     # 큰 클러스터 우선
@@ -1391,18 +1390,24 @@ def run():
                 if final_category == "글로벌":
                     final_region = "global"
 
+                # 다국가 혼합 클러스터면 검토 필요로 미발행
+                needs_review = any(a.get("__needs_review__") for a in cluster)
+                if needs_review:
+                    published = False
+                    final_subcategory = "needs_review"
+                else:
+                    final_subcategory = cluster_key
+
                 # 제목 생성 후 한 번 더 유사 기사 체크 (이중 안전장치)
                 similar, sim_score = find_similar_article(full_title, today_own_articles)
                 if similar:
                     print(f"  ⚠️ 유사 기사 재발견 (유사도 {sim_score}%) → 미발행으로 저장: {similar.get('title_ko','')[:40]}")
                     published = False
-                else:
-                    published = True
 
                 article_id = save_article(
                     title_ko      = full_title,
                     summary_ko    = gen_body or content,
-                    cluster_key   = cluster_key,
+                    cluster_key   = final_subcategory if 'final_subcategory' in dir() else cluster_key,
                     category      = final_category,
                     region        = final_region,
                     country       = final_country,
