@@ -25,7 +25,7 @@ def now_kst() -> datetime:
 
 load_dotenv()
 
-GEMINI_MODEL       = "gemini-2.0-flash-lite"
+GEMINI_MODEL       = "gemini-3.1-flash-lite"
 CALL_INTERVAL      = 5
 MAX_CLUSTERS_PER_RUN = 10  # 한 번 실행당 최대 처리 클러스터 수
 
