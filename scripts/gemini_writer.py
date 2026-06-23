@@ -259,7 +259,7 @@ def find_similar_article(title: str, own_articles: list, threshold: int = 80):
     return None, 0
 
 
-def save_article(title_ko, summary_ko, cluster_key, category, region, country="", article_count=0, published=True):
+def save_article(title_ko, summary_ko, cluster_key, category, region, country="", article_count=0, published=True, countries=None):
     url = f"internal://{cluster_key}"
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
     payload = {
@@ -274,6 +274,7 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
         "region": region,
         "country": country,
         "country_flag": "",
+        "countries": countries or ([country] if country else []),
         "score": article_count,
         "created_at": now_str,
         "first_published_at": now_str,
@@ -290,7 +291,7 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
     return -1
 
 
-def update_article(article_id, title_ko, summary_ko, note: str = "업데이트"):
+def update_article(article_id, title_ko, summary_ko, note: str = "업데이트", countries=None):
     """기사 갱신(병합 업데이트) — update_log에 업데이트 기록 추가"""
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
 
@@ -319,6 +320,7 @@ def update_article(article_id, title_ko, summary_ko, note: str = "업데이트")
             "summary_ko": summary_ko,
             "created_at": now_str,
             "update_log": new_log,
+            **( {"countries": countries} if countries else {} ),
         },
         timeout=15
     )
@@ -470,7 +472,8 @@ def build_issue_prompt(cluster, existing_summary=None):
 - 기사 문체로 작성하세요. 논평/칼럼 문체는 금지입니다.
 아래 형식으로 출력:
 제목: (핵심을 담은 제목)
-국가: (기사의 주체(주인공)가 되는 국가명 1개. 판단 기준: 어느 나라 기업/정부/기관이 행동의 주체인가. 예) 메타(미국기업)가 주체면 "없음"(글로벌), 인도 정부가 정책 발표하면 "인도". 단순히 본문에 많이 언급되는 국가가 아니라 기사의 핵심 주체 국가. 글로벌 기업이나 국제기구가 주체면 "없음"으로)
+국가: (기사의 핵심 주체가 되는 국가 1개. 어느 나라 기업/정부/기관이 주체인가 기준. 글로벌 기업·국제기구가 주체면 "없음")
+관련국가: (기사에서 유의미하게 다뤄지는 국가들. 쉼표로 구분, 최대 4개. 없으면 "없음". 예: 인도, 나이지리아)
 분야: (경제/금융/자원·에너지/산업·기업/정치·외교/사회/IT·과학/글로벌 중 하나)
 본문: (기사 본문)"""
 
@@ -634,9 +637,10 @@ def update_article_fields(article_id: int, fields: dict):
 
 
 def parse_title_and_body(text):
-    """Gemini 응답에서 제목/본문/국가/분야 분리"""
+    """Gemini 응답에서 제목/본문/국가/관련국가/분야 분리"""
     title = ""
     country = ""
+    countries = []
     category = ""
     body = text
     lines = text.strip().split("\n")
@@ -646,8 +650,12 @@ def parse_title_and_body(text):
             title = line.replace("제목:", "").strip()
         elif line.startswith("국가:"):
             country = line.replace("국가:", "").strip()
-            if country in ("없음", "글로벌", "-", "N/A"):
+            if country in ("없음", "글로벌", "-", "N/A", ""):
                 country = ""
+        elif line.startswith("관련국가:"):
+            raw = line.replace("관련국가:", "").strip()
+            if raw not in ("없음", "-", "N/A", ""):
+                countries = [c.strip() for c in raw.split(",") if c.strip() and c.strip() not in ("없음", "-")]
         elif line.startswith("분야:"):
             category = line.replace("분야:", "").strip()
         elif line.startswith("본문:"):
@@ -655,16 +663,14 @@ def parse_title_and_body(text):
             body_start = i
             break
     if not body_start and title:
-        # 본문: 라벨이 없으면 제목 이후 전체를 본문으로
         idx = next((i for i, l in enumerate(lines) if l.startswith("제목:")), -1)
         if idx >= 0:
             body = "\n".join(lines[idx+1:]).strip()
-            # 국가:/분야: 라인 제거
-            body_lines = [l for l in body.split("\n") if not l.startswith("국가:") and not l.startswith("분야:")]
+            body_lines = [l for l in body.split("\n") if not l.startswith("국가:") and not l.startswith("관련국가:") and not l.startswith("분야:")]
             body = "\n".join(body_lines).strip()
             if body.startswith("본문:"):
                 body = body[3:].strip()
-    return title, body, country, category
+    return title, body, country, category, countries
 
 
 # ── 기업 자동 감지·등록 ────────────────────────────────────────────────
@@ -869,10 +875,10 @@ def run():
             content = call_gemini(prompt, max_tokens=4000 if has_full else 1500)
 
             if content:
-                gen_title, gen_body, gen_country, gen_category = parse_title_and_body(content)
+                gen_title, gen_body, gen_country, gen_category, gen_countries = parse_title_and_body(content)
                 new_title = gen_title if gen_title else titles[0][:50]
                 note = generate_update_note(existing["summary_ko"], gen_body or content)
-                update_article(existing["id"], new_title, gen_body or content, note=note)
+                update_article(existing["id"], new_title, gen_body or content, note=note, countries=gen_countries if gen_countries else None)
                 update_article_count(existing["id"], cur_count)
                 # 국가/분야 재분류 업데이트
                 if gen_country or gen_category:
@@ -914,10 +920,10 @@ def run():
                 content = call_gemini(prompt, max_tokens=4000 if has_full else 1500)
 
                 if content:
-                    gen_title, gen_body, gen_country, gen_category = parse_title_and_body(content)
+                    gen_title, gen_body, gen_country, gen_category, gen_countries = parse_title_and_body(content)
                     new_title = gen_title if gen_title else probe_title
                     note = generate_update_note(existing_summary, gen_body or content)
-                    update_article(similar_existing["id"], new_title, gen_body or content, note=note)
+                    update_article(similar_existing["id"], new_title, gen_body or content, note=note, countries=gen_countries if gen_countries else None)
                     prev_count = existing_full.get("score", 0) if existing_full else 0
                     update_article_count(similar_existing["id"], max(prev_count, cur_count) + 1)
                     if gen_country or gen_category:
@@ -947,7 +953,7 @@ def run():
             content = call_gemini(prompt, max_tokens=4000 if has_full else 1500)
 
             if content:
-                gen_title, gen_body, gen_country, gen_category = parse_title_and_body(content)
+                gen_title, gen_body, gen_country, gen_category, gen_countries = parse_title_and_body(content)
                 full_title = gen_title if gen_title else titles[0][:50]
 
                 # Gemini가 재분류한 국가/분야 우선 사용
@@ -974,6 +980,7 @@ def run():
                     country       = final_country,
                     article_count = cur_count,
                     published     = published,
+                    countries     = gen_countries,
                 )
                 if article_id > 0:
                     status = "✅ 저장 완료" if published else "📋 미발행 저장"
@@ -1022,7 +1029,8 @@ def run():
 - 기사 문체로 작성하세요. 논평/칼럼 문체는 금지입니다.
 아래 형식으로 출력:
 제목: (핵심을 담은 제목)
-국가: (기사의 주체(주인공)가 되는 국가명 1개. 판단 기준: 어느 나라 기업/정부/기관이 행동의 주체인가. 예) 메타(미국기업)가 주체면 "없음"(글로벌), 인도 정부가 정책 발표하면 "인도". 단순히 본문에 많이 언급되는 국가가 아니라 기사의 핵심 주체 국가. 글로벌 기업이나 국제기구가 주체면 "없음"으로)
+국가: (기사의 핵심 주체가 되는 국가 1개. 어느 나라 기업/정부/기관이 주체인가 기준. 글로벌 기업·국제기구가 주체면 "없음")
+관련국가: (기사에서 유의미하게 다뤄지는 국가들. 쉼표로 구분, 최대 4개. 없으면 "없음". 예: 인도, 나이지리아)
 분야: (경제/금융/자원·에너지/산업·기업/정치·외교/사회/IT·과학/글로벌 중 하나)
 본문: (기사 본문)""")
 
@@ -1049,7 +1057,8 @@ def run():
 
 아래 형식으로 출력:
 제목: (통합된 핵심을 담은 제목)
-국가: (기사의 주체(주인공)가 되는 국가명 1개. 판단 기준: 어느 나라 기업/정부/기관이 행동의 주체인가. 예) 메타(미국기업)가 주체면 "없음"(글로벌), 인도 정부가 정책 발표하면 "인도". 단순히 본문에 많이 언급되는 국가가 아니라 기사의 핵심 주체 국가. 글로벌 기업이나 국제기구가 주체면 "없음"으로)
+국가: (기사의 핵심 주체가 되는 국가 1개. 어느 나라 기업/정부/기관이 주체인가 기준. 글로벌 기업·국제기구가 주체면 "없음")
+관련국가: (기사에서 유의미하게 다뤄지는 국가들. 쉼표로 구분, 최대 4개. 없으면 "없음". 예: 인도, 나이지리아)
 분야: (경제/금융/자원·에너지/산업·기업/정치·외교/사회/IT·과학/글로벌 중 하나)
 본문: (통합된 기사 본문)"""
 
@@ -1063,11 +1072,11 @@ def run():
             content = call_gemini(prompt, max_tokens=4000)
 
             if content:
-                gen_title, gen_body, gen_country, gen_category = parse_title_and_body(content)
+                gen_title, gen_body, gen_country, gen_category, gen_countries = parse_title_and_body(content)
                 new_title = gen_title if gen_title else title[:50]
                 existing_sum = existing_full.get("summary_ko") if existing_full else None
                 note = generate_update_note(existing_sum, gen_body or content)
-                update_article(similar_existing["id"], new_title, gen_body or content, note=note)
+                update_article(similar_existing["id"], new_title, gen_body or content, note=note, countries=gen_countries if gen_countries else None)
                 prev_count = existing_full.get("score", 0) if existing_full else 0
                 update_article_count(similar_existing["id"], prev_count + 1)
                 if gen_country or gen_category:
@@ -1112,7 +1121,7 @@ def run():
 
         content = call_gemini(prompt, max_tokens=4000)
         if content:
-            gen_title, gen_body, gen_country, gen_category = parse_title_and_body(content)
+            gen_title, gen_body, gen_country, gen_category, gen_countries = parse_title_and_body(content)
             full_title = gen_title if gen_title else title[:50]
 
             final_country = normalize_country(gen_country or a.get("country") or "")
@@ -1138,6 +1147,7 @@ def run():
                 country=final_country,
                 article_count=1,
                 published=published,
+                countries=gen_countries,
             )
             if article_id > 0:
                 status = "✅ 단독 저장" if published else "📋 단독 미발행"
