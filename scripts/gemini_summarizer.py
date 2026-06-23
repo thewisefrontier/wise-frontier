@@ -494,6 +494,408 @@ def run_trend_tracker():
     print("[트렌드 트래커] 완료")
 
 
+
+# ── 실시간 트렌드 감지 (A+B) ─────────────────────────────────
+
+# 불용어 — 빈도 분석에서 제외할 일반 단어
+FREQ_STOPWORDS = {
+    "the","a","an","in","on","at","to","of","for","and","or","is","are","was","were",
+    "has","have","been","will","with","by","from","this","that","as","its","it","be",
+    "not","but","also","over","after","amid","says","say","said","new","following",
+    "government","minister","country","president","million","billion","year","years",
+    "percent","growth","economy","economic","market","africa","report","reports",
+    "kenya","nigeria","ghana","ethiopia","south","north","east","west","central",
+    "기자","특파원","뉴스","오늘","이번","정부","대통령","장관","경제","시장","아프리카",
+}
+
+# 실시간 트렌드 설정
+RT_WINDOW_NOW  = 2   # 현재 윈도우: 최근 N일
+RT_WINDOW_PREV = 7   # 비교 윈도우: 이전 N일
+RT_MIN_COUNT   = 3   # 현재 윈도우 최소 등장 건수
+RT_SURGE_RATIO = 2.5 # 이전 대비 급증 배율
+RT_TOP_TOPICS  = 5   # Gemini에 넘길 급증 토픽 수
+RT_CHECK_HOURS = 6   # 중복 방지: 같은 토픽 N시간 이내 재생성 금지
+
+
+def fetch_recent_titles(days: int) -> list:
+    """최근 N일간 수집 기사 제목+요약 반환"""
+    since = (now_kst() - timedelta(days=days)).strftime("%Y-%m-%d %H:%M")
+    articles = []
+    offset = 0
+    while True:
+        try:
+            res = requests.get(
+                _sb_url(),
+                headers={**_sb_headers(), "Range": f"{offset}-{offset+499}"},
+                params={
+                    "select": "id,title_en,title_ko,summary_en,summary_ko,country,category,region,created_at,source",
+                    "source": "neq.NewsFinal",
+                    "created_at": f"gte.{since}",
+                    "order": "created_at.desc",
+                },
+                timeout=20
+            )
+            if res.status_code not in (200, 206):
+                break
+            batch = res.json()
+            if not batch:
+                break
+            articles.extend(batch)
+            if len(batch) < 500:
+                break
+            offset += 500
+        except Exception as e:
+            print(f"  ⚠️ 기사 조회 실패: {e}")
+            break
+    return articles
+
+
+def extract_ngrams(text: str, n: int = 2) -> list:
+    """텍스트에서 n-gram 추출 (한글 2자 이상 단어, 영문 4자 이상)"""
+    import re
+    text = text.lower()
+    text = re.sub(r'[^\w\s가-힣]', ' ', text)
+    words = [w for w in text.split()
+             if w not in FREQ_STOPWORDS
+             and (
+                 (re.search(r'[가-힣]', w) and len(w) >= 2) or
+                 (not re.search(r'[가-힣]', w) and len(w) >= 4)
+             )]
+    # 단어 단위 + bigram
+    tokens = words[:]
+    for i in range(len(words) - 1):
+        tokens.append(f"{words[i]} {words[i+1]}")
+    return tokens
+
+
+def count_keywords(articles: list) -> dict:
+    """기사 목록에서 키워드 빈도 카운트"""
+    from collections import Counter
+    counter = Counter()
+    for a in articles:
+        text = " ".join(filter(None, [
+            a.get("title_en") or "",
+            a.get("title_ko") or "",
+            (a.get("summary_en") or "")[:200],
+            (a.get("summary_ko") or "")[:200],
+        ]))
+        for token in extract_ngrams(text):
+            counter[token] += 1
+    return dict(counter)
+
+
+def detect_surging_keywords(now_articles: list, prev_articles: list) -> list:
+    """
+    현재 윈도우 vs 이전 윈도우 비교해서 급증 키워드 반환
+    반환: [(keyword, now_count, prev_count, ratio), ...]
+    """
+    now_counts  = count_keywords(now_articles)
+    prev_counts = count_keywords(prev_articles)
+
+    # 현재 윈도우 기간이 더 짧으므로 일별 정규화
+    now_days  = RT_WINDOW_NOW
+    prev_days = RT_WINDOW_PREV
+
+    surging = []
+    for kw, now_cnt in now_counts.items():
+        if now_cnt < RT_MIN_COUNT:
+            continue
+        prev_cnt = prev_counts.get(kw, 0)
+        # 일별 정규화 비율
+        now_rate  = now_cnt  / now_days
+        prev_rate = (prev_cnt / prev_days) if prev_cnt > 0 else 0.1
+        ratio = now_rate / prev_rate
+        if ratio >= RT_SURGE_RATIO:
+            surging.append((kw, now_cnt, prev_cnt, round(ratio, 1)))
+
+    # 비율 높은 순 정렬
+    surging.sort(key=lambda x: x[3], reverse=True)
+    return surging
+
+
+def realtime_trend_article_exists(keyword: str) -> bool:
+    """최근 N시간 내 같은 키워드로 생성된 실시간 트렌드 기사가 있는지 확인"""
+    since = (now_kst() - timedelta(hours=RT_CHECK_HOURS)).strftime("%Y-%m-%d %H:%M")
+    try:
+        res = requests.get(
+            _sb_url(),
+            headers=_sb_headers(),
+            params={
+                "select": "id",
+                "source": "eq.NewsFinal",
+                "subcategory": "like.realtrend_%",
+                "title_ko": f"ilike.*{keyword[:10]}*",
+                "created_at": f"gte.{since}",
+                "limit": "1",
+            },
+            timeout=10
+        )
+        if res.status_code in (200, 206):
+            return len(res.json()) > 0
+    except Exception:
+        pass
+    return False
+
+
+def get_articles_for_keyword(keyword: str, articles: list, max_n: int = 10) -> list:
+    """주어진 기사 목록에서 키워드 포함 기사 필터링"""
+    import re
+    kw_lower = keyword.lower()
+    matched = []
+    for a in articles:
+        text = " ".join(filter(None, [
+            a.get("title_en") or "",
+            a.get("title_ko") or "",
+            a.get("summary_en") or "",
+            a.get("summary_ko") or "",
+        ])).lower()
+        if kw_lower in text:
+            matched.append(a)
+    # 최신순
+    matched.sort(key=lambda a: a.get("created_at", ""), reverse=True)
+    return matched[:max_n]
+
+
+def run_realtime_trend_tracker():
+    """실시간 트렌드 감지 및 기사 생성 (A+B)"""
+    if not GEMINI_API_KEYS:
+        return
+
+    print("\n[실시간 트렌드] 분석 시작...")
+
+    # A. 기사 수집
+    now_articles  = fetch_recent_titles(days=RT_WINDOW_NOW)
+    prev_articles = fetch_recent_titles(days=RT_WINDOW_NOW + RT_WINDOW_PREV)
+    # prev는 전체 기간 - 현재 기간
+    now_ids = {a["id"] for a in now_articles}
+    prev_only = [a for a in prev_articles if a["id"] not in now_ids]
+
+    print(f"  현재({RT_WINDOW_NOW}일): {len(now_articles)}건 / 이전({RT_WINDOW_PREV}일): {len(prev_only)}건")
+
+    if len(now_articles) < 5:
+        print("  [SKIP] 기사 수 부족")
+        return
+
+    # A. 급증 키워드 감지
+    surging = detect_surging_keywords(now_articles, prev_only)
+    print(f"  급증 키워드 {len(surging)}개 감지")
+    for kw, nc, pc, r in surging[:15]:
+        print(f"    '{kw}' — 현재 {nc}건 / 이전 {pc}건 / {r}x")
+
+    if not surging:
+        print("  [SKIP] 급증 키워드 없음")
+        return
+
+    # B. 급증 키워드 목록을 Gemini에 넘겨 실제 트렌드 이슈 판단
+    today_str = now_kst().strftime("%Y년 %m월 %d일")
+    top_surging = surging[:20]
+
+    # 키워드별 대표 기사 제목도 같이 전달
+    keyword_context = ""
+    for kw, nc, pc, r in top_surging:
+        sample_articles = get_articles_for_keyword(kw, now_articles, max_n=3)
+        titles = [a.get("title_en") or a.get("title_ko") or "" for a in sample_articles]
+        keyword_context += f"\n- '{kw}' ({r}x 급증, {nc}건): {' / '.join(titles[:2])}"
+
+    screening_prompt = f"""당신은 프론티어 마켓 전문 에디터입니다. ({today_str})
+아래는 최근 {RT_WINDOW_NOW}일간 프론티어 마켓 뉴스에서 이전 {RT_WINDOW_PREV}일 대비 급증한 키워드와 관련 기사 제목입니다.
+
+[급증 키워드 목록]
+{keyword_context}
+
+위 키워드들을 분석해서 실제 주목할 만한 새로운 이슈 최대 {RT_TOP_TOPICS}개를 선별하세요.
+단순 반복 보도(정기 경제지표, 일상적 기업 실적 등)는 제외하고,
+실제로 새롭게 부상하는 사건·분쟁·위기·정책 변화·산업 동향만 선별하세요.
+
+JSON 배열로만 응답하세요 (마크다운 없이):
+[
+  {{
+    "topic": "이슈 핵심 키워드 (영문 또는 한글)",
+    "issue_ko": "이슈 한 줄 설명 (한국어)",
+    "category": "경제/금융/자원·에너지/산업·기업/정치·외교/사회/IT·과학 중 하나",
+    "urgency": "high/medium/low"
+  }}
+]
+선별할 이슈가 없으면 빈 배열 []을 반환하세요."""
+
+    raw = call_gemini(screening_prompt, max_tokens=800)
+    if not raw:
+        print("  [SKIP] Gemini 스크리닝 응답 없음")
+        return
+
+    # JSON 파싱
+    import json, re
+    try:
+        match = re.search(r'\[.*\]', raw, re.DOTALL)
+        if not match:
+            print("  [SKIP] JSON 파싱 실패")
+            return
+        topics = json.loads(match.group())
+        if not isinstance(topics, list) or not topics:
+            print("  [SKIP] 선별된 이슈 없음")
+            return
+    except Exception as e:
+        print(f"  [SKIP] JSON 오류: {e}")
+        return
+
+    print(f"  Gemini 선별 이슈 {len(topics)}개:")
+    for t in topics:
+        print(f"    [{t.get('urgency','?')}] {t.get('issue_ko','')} ({t.get('topic','')})")
+
+    # B. 각 이슈별 기사 생성
+    generated = 0
+    for topic_info in topics:
+        if generated >= 3:  # 1회 실행당 최대 3건
+            break
+
+        topic     = topic_info.get("topic", "")
+        issue_ko  = topic_info.get("issue_ko", "")
+        category  = topic_info.get("category", "사회")
+        urgency   = topic_info.get("urgency", "medium")
+
+        if not topic or urgency == "low":
+            continue
+
+        if realtime_trend_article_exists(topic):
+            print(f"  [{topic}] 최근 {RT_CHECK_HOURS}시간 내 이미 생성됨 — 스킵")
+            continue
+
+        # 관련 기사 수집
+        related = get_articles_for_keyword(topic, now_articles, max_n=8)
+        if len(related) < 2:
+            related = get_articles_for_keyword(
+                topic.split()[0] if ' ' in topic else topic,
+                now_articles, max_n=8
+            )
+        if not related:
+            print(f"  [{topic}] 관련 기사 없음 — 스킵")
+            continue
+
+        # 기사 생성 프롬프트
+        article_list = ""
+        for i, a in enumerate(related, 1):
+            t = a.get("title_ko") or a.get("title_en") or ""
+            body = a.get("summary_ko") or a.get("summary_en") or ""
+            article_list += f"{i}. [{a.get('source','')}] {t}\n"
+            if body:
+                article_list += f"   {body[:300]}\n\n"
+
+        # 대표 국가 추론
+        countries_in_articles = [a.get("country") for a in related if a.get("country")]
+        from collections import Counter
+        country = Counter(countries_in_articles).most_common(1)[0][0] if countries_in_articles else ""
+
+        region_map = {
+            "나이지리아":"africa","케냐":"africa","가나":"africa","에티오피아":"africa",
+            "남아공":"africa","탄자니아":"africa","르완다":"africa","우간다":"africa",
+            "수단":"africa","콩고":"africa","소말리아":"africa","이집트":"africa",
+            "모로코":"africa","잠비아":"africa","짐바브웨":"africa","앙골라":"africa",
+            "말리":"africa","부르키나파소":"africa","중앙아프리카":"africa",
+            "베트남":"southeast_asia","인도네시아":"southeast_asia","태국":"southeast_asia",
+            "필리핀":"southeast_asia","말레이시아":"southeast_asia","미얀마":"southeast_asia",
+            "카자흐스탄":"central_asia","우즈베키스탄":"central_asia",
+            "아이티":"caribbean","자메이카":"caribbean",
+        }
+        region = region_map.get(country, "africa")
+
+        write_prompt = f"""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다. ({today_str})
+아래는 최근 급부상한 이슈 [{issue_ko}]에 관한 기사들입니다.
+
+[관련 기사]
+{article_list}
+
+이 기사들을 종합해 완성도 높은 한국어 기사를 작성하세요.
+- 반드시 하나의 토픽만 다루세요.
+- 수치, 인명, 날짜, 기관명 등 구체적 팩트를 최대한 살리세요.
+- 왜 지금 이 이슈가 중요한지 맥락을 담으세요.
+- 마크다운 문법, 헤더, 홍보 문구 금지.
+
+아래 형식으로 출력:
+제목: (핵심을 담은 제목)
+국가: (주요 대상 국가 1개, 없으면 "없음")
+관련국가: (관련국 최대 4개, 없으면 "없음")
+분야: ({category})
+본문: (기사 본문)"""
+
+        content_text = call_gemini(write_prompt, max_tokens=2000)
+        if not content_text:
+            print(f"  [{topic}] ❌ 기사 생성 실패")
+            time.sleep(CALL_INTERVAL)
+            continue
+
+        # 파싱
+        title, body, art_country, art_countries = "", content_text, country, []
+        for line in content_text.strip().split("\n"):
+            if line.startswith("제목:"):
+                title = line.replace("제목:", "").strip()
+            elif line.startswith("국가:"):
+                c = line.replace("국가:", "").strip()
+                if c not in ("없음", "-", ""):
+                    art_country = c
+            elif line.startswith("관련국가:"):
+                raw2 = line.replace("관련국가:", "").strip()
+                if raw2 not in ("없음", "-", ""):
+                    art_countries = [x.strip() for x in raw2.split(",") if x.strip()]
+            elif line.startswith("본문:"):
+                idx = content_text.find("본문:")
+                body = content_text[idx + 3:].strip()
+                break
+
+        if not title:
+            title = f"{issue_ko} — {today_str}"
+
+        now_str = now_kst().strftime("%Y-%m-%d %H:%M")
+        payload = {
+            "title_en": title, "title_ko": title,
+            "summary_en": "", "summary_ko": body,
+            "url": f"internal://realtrend_{topic.replace(' ','_')}_{now_kst().strftime('%Y%m%d%H')}",
+            "source": "NewsFinal",
+            "category": category,
+            "subcategory": f"realtrend_{topic[:20].replace(' ','_')}",
+            "region": region_map.get(art_country, region),
+            "country": art_country,
+            "country_flag": "",
+            "countries": art_countries or ([art_country] if art_country else []),
+            "score": 2,
+            "created_at": now_str,
+            "first_published_at": now_str,
+            "update_log": [{"timestamp": now_str, "note": f"실시간 트렌드 감지 ({topic}, {urgency})"}],
+            "sent_telegram": 0,
+            "is_published": True,
+            "posted_blog": 0,
+        }
+
+        try:
+            res = requests.post(_sb_url(), headers=_sb_headers(), json=payload, timeout=15)
+            if res.status_code in (200, 201):
+                data = res.json()
+                art_id = data[0].get("id", -1) if data else -1
+                print(f"  [{topic}] ✅ 실시간 트렌드 기사 생성 (id={art_id}): {title}")
+                generated += 1
+
+                # 텔레그램 발송
+                if TELEGRAM_TOKEN and art_id > 0:
+                    try:
+                        preview = body[:300]
+                        url = f"https://newsfinal.co.kr/article.html?id={art_id}"
+                        msg = f"📈 실시간 트렌드\n\n*{title}*\n\n{preview}{'…' if len(body) > 300 else ''}\n\n[전체 기사 보기]({url})"
+                        requests.post(
+                            f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage",
+                            data={"chat_id": NEWSFINAL_CHANNEL, "text": msg,
+                                  "parse_mode": "Markdown", "disable_web_page_preview": False},
+                            timeout=15
+                        )
+                    except Exception:
+                        pass
+            else:
+                print(f"  [{topic}] ❌ 저장 실패: {res.status_code}")
+        except Exception as e:
+            print(f"  [{topic}] ❌ 저장 예외: {e}")
+
+        time.sleep(CALL_INTERVAL)
+
+    print(f"[실시간 트렌드] 완료 — {generated}건 생성")
+
 def run():
     if not GEMINI_API_KEYS:
         print("[SKIP] GEMINI_API_KEY 없음 — gemini_summarizer 건너뜀")
@@ -532,6 +934,9 @@ def run():
 
     # 장기 이슈 트렌드 추적
     run_trend_tracker()
+
+    # 실시간 트렌드 감지 (A+B)
+    run_realtime_trend_tracker()
 
 
 if __name__ == "__main__":
