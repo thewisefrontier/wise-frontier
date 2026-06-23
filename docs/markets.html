@@ -138,6 +138,29 @@
     .market-tab:hover { color: var(--text); }
     .market-section { display: none; }
     .market-section.active { display: block; }
+
+    /* 기업 목록 */
+    .company-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+    .company-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      padding: 14px 16px; cursor: pointer; text-decoration: none;
+      display: block; transition: border-color 0.15s, background 0.15s;
+    }
+    .company-card:hover { border-color: var(--accent2); background: var(--bg3); }
+    .company-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+    .company-card-name { font-size: 13px; font-weight: 700; color: var(--text); }
+    .company-card-name-ko { font-size: 11px; color: var(--muted); margin-top: 1px; }
+    .company-card-price { text-align: right; }
+    .company-card-ticker { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--accent2); }
+    .company-card-val { font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 700; }
+    .company-card-chg { font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
+    .company-card-meta { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; }
+    .filter-btn {
+      padding: 5px 12px; font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+      background: var(--bg2); border: 1px solid var(--border); cursor: pointer;
+      color: var(--muted); transition: all 0.15s;
+    }
+    .filter-btn:hover, .filter-btn.active { border-color: var(--accent2); color: var(--accent2); background: var(--bg3); }
   </style>
 </head>
 <body>
@@ -253,117 +276,13 @@
   </div>
 
   <div id="section-companies" class="market-section invest-section">
-    <h2 class="page-title" style="font-size:20px;">거래소 대표 기업</h2>
-
-
-    <div class="invest-group">
-      <div class="invest-group-header">🇳🇬 나이지리아 — NGX (Nigerian Exchange)</div>
-      <table class="product-table">
-        <thead><tr><th>기업명</th><th>업종</th></tr></thead>
-        <tbody>
-          <tr><td class="product-name">Dangote Cement</td><td class="product-desc">시멘트·산업재 — NGX 시가총액 최상위권</td></tr>
-          <tr><td class="product-name">Airtel Africa</td><td class="product-desc">통신</td></tr>
-          <tr><td class="product-name">MTN Nigeria</td><td class="product-desc">통신</td></tr>
-          <tr><td class="product-name">Zenith Bank / GTCO / UBA</td><td class="product-desc">은행</td></tr>
-          <tr><td class="product-name">Nigerian Breweries</td><td class="product-desc">소비재(음료)</td></tr>
-        </tbody>
-      </table>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+      <h2 class="page-title" style="font-size:20px;">거래소 대표 기업</h2>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);" id="companies-count"></span>
     </div>
-
-    <div class="invest-group">
-      <div class="invest-group-header">🇰🇪 케냐 — NSE (Nairobi Securities Exchange)</div>
-      <table class="product-table">
-        <thead><tr><th>기업명</th><th>업종</th></tr></thead>
-        <tbody>
-          <tr><td class="product-name">Safaricom</td><td class="product-desc">통신 · 모바일머니(M-PESA) — NSE 시가총액 1위</td></tr>
-          <tr><td class="product-name">Equity Group Holdings</td><td class="product-desc">은행 (동아프리카 6개국 영업)</td></tr>
-          <tr><td class="product-name">KCB Group</td><td class="product-desc">은행 (동아프리카 7개국 영업)</td></tr>
-          <tr><td class="product-name">East African Breweries (EABL)</td><td class="product-desc">소비재(음료), Diageo 계열</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="invest-group">
-      <div class="invest-group-header">🇿🇦 남아공 — JSE (Johannesburg Stock Exchange)</div>
-      <table class="product-table">
-        <thead><tr><th>기업명</th><th>업종</th></tr></thead>
-        <tbody>
-          <tr><td class="product-name">Naspers / Prosus</td><td class="product-desc">미디어·인터넷 투자(텐센트 지분 보유)</td></tr>
-          <tr><td class="product-name">Richemont</td><td class="product-desc">명품(Cartier 등), JSE에 예탁증권 상장</td></tr>
-          <tr><td class="product-name">MTN Group</td><td class="product-desc">통신 — 아프리카·중동 19개국 영업</td></tr>
-          <tr><td class="product-name">Standard Bank / FirstRand / Capitec</td><td class="product-desc">은행</td></tr>
-          <tr><td class="product-name">Anglo American / Gold Fields</td><td class="product-desc">광업(철광석·금·백금 등)</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="invest-group">
-      <div class="invest-group-header">🇻🇳 베트남 — HOSE (호치민증권거래소, VN30 구성종목)</div>
-      <table class="product-table">
-        <thead><tr><th>기업명</th><th>업종</th></tr></thead>
-        <tbody>
-          <tr><td class="product-name">Vietnam Prosperity Bank (VPBank)</td><td class="product-desc">은행</td></tr>
-          <tr><td class="product-name">FPT Corporation</td><td class="product-desc">정보통신기술(ICT)</td></tr>
-          <tr><td class="product-name">Asia Commercial Bank (ACB)</td><td class="product-desc">은행</td></tr>
-          <tr><td class="product-name">Hoa Phat Group</td><td class="product-desc">철강</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="invest-group">
-      <div class="invest-group-header">🇮🇩 인도네시아 — IDX (자카르타증권거래소)</div>
-      <table class="product-table">
-        <thead><tr><th>기업명</th><th>업종</th></tr></thead>
-        <tbody>
-          <tr><td class="product-name">Bank Central Asia (BBCA)</td><td class="product-desc">은행 — IDX 시가총액 최상위권</td></tr>
-          <tr><td class="product-name">Bank Rakyat Indonesia (BBRI)</td><td class="product-desc">은행</td></tr>
-          <tr><td class="product-name">Bank Mandiri (BMRI)</td><td class="product-desc">은행</td></tr>
-          <tr><td class="product-name">Astra International (ASII)</td><td class="product-desc">자동차·복합기업</td></tr>
-          <tr><td class="product-name">Telkom Indonesia (TLKM)</td><td class="product-desc">통신</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="invest-group">
-      <div class="invest-group-header">🇹🇭 태국 — SET (태국증권거래소, SET50 구성종목)</div>
-      <table class="product-table">
-        <thead><tr><th>기업명</th><th>업종</th></tr></thead>
-        <tbody>
-          <tr><td class="product-name">PTT</td><td class="product-desc">에너지(국영 석유·가스)</td></tr>
-          <tr><td class="product-name">CP All</td><td class="product-desc">유통(세븐일레븐 태국 운영)</td></tr>
-          <tr><td class="product-name">Airports of Thailand (AOT)</td><td class="product-desc">공항·인프라</td></tr>
-          <tr><td class="product-name">Kasikornbank (KBANK)</td><td class="product-desc">은행</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="invest-group">
-      <div class="invest-group-header">🇵🇭 필리핀 — PSE (필리핀증권거래소, PSEi 구성종목)</div>
-      <table class="product-table">
-        <thead><tr><th>기업명</th><th>업종</th></tr></thead>
-        <tbody>
-          <tr><td class="product-name">SM Investments</td><td class="product-desc">복합기업·유통 — PSEi 최대 비중</td></tr>
-          <tr><td class="product-name">BDO Unibank</td><td class="product-desc">은행</td></tr>
-          <tr><td class="product-name">Ayala Corporation</td><td class="product-desc">복합기업</td></tr>
-          <tr><td class="product-name">SM Prime Holdings</td><td class="product-desc">부동산</td></tr>
-          <tr><td class="product-name">International Container Terminal Services</td><td class="product-desc">항만 운영</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="invest-group">
-      <div class="invest-group-header">🇪🇬 이집트 — EGX (이집트증권거래소, EGX30 구성종목)</div>
-      <table class="product-table">
-        <thead><tr><th>기업명</th><th>업종</th></tr></thead>
-        <tbody>
-          <tr><td class="product-name">Commercial International Bank (CIB)</td><td class="product-desc">은행 — EGX30 비중 약 14%, 최대 비중 종목</td></tr>
-          <tr><td class="product-name">Telecom Egypt</td><td class="product-desc">통신</td></tr>
-          <tr><td class="product-name">Talaat Moustafa Group (TMGH)</td><td class="product-desc">부동산</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="source-note">기업 목록은 각 거래소 시가총액 상위권 기준으로 선별된 참고 정보이며, 실시간 순위와 다를 수 있습니다</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;" id="country-filter-bar"></div>
+    <div id="companies-container"><div class="empty">기업 정보를 불러오는 중...</div></div>
+    <div class="source-note">기업 정보는 NewsFinal이 수집한 기사 기반으로 자동 등록됩니다 · 주가: Yahoo Finance</div>
   </div>
 </div>
 
@@ -527,6 +446,159 @@
   loadTicker();
   load();
   loadEconTable();
+  loadCompanies();
+
+  // ── 기업 목록 (Supabase → companies.json) ─────────────────
+  const SUPABASE_URL = "https://fotdngseksqaghvtcvqh.supabase.co";
+  const SUPABASE_ANON = "sb_publishable_rT3kSEAAdM0DJlDW5fEWww_M37h6dDW";
+
+  let allCompanies = [];
+  let activeCountry = 'all';
+  let stockCache = {};
+
+  async function loadCompanies() {
+    try {
+      // companies.json에서 로드 (export_articles.py가 생성)
+      const res = await fetch('data/companies.json');
+      if (!res.ok) throw new Error();
+      allCompanies = await res.json();
+    } catch(e) {
+      // fallback: Supabase 직접 조회
+      try {
+        const res = await fetch(
+          `${SUPABASE_URL}/rest/v1/companies?select=id,name,name_ko,country,country_flag,exchange,ticker,sector,is_published&is_published=eq.true&order=country.asc,name.asc`,
+          { headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` } }
+        );
+        allCompanies = await res.json();
+      } catch(e2) {
+        document.getElementById('companies-container').innerHTML = '<div class="empty">기업 정보를 불러올 수 없습니다</div>';
+        return;
+      }
+    }
+
+    if (!allCompanies.length) {
+      document.getElementById('companies-container').innerHTML = '<div class="empty">등록된 기업이 없습니다.<br>기사가 쌓이면 자동으로 등록됩니다.</div>';
+      return;
+    }
+
+    document.getElementById('companies-count').textContent = `총 ${allCompanies.length}개`;
+    renderCountryFilter();
+    renderCompanies();
+
+    // 주가 비동기 로드
+    loadStockPrices();
+  }
+
+  function renderCountryFilter() {
+    const countries = ['all', ...new Set(allCompanies.map(c => c.country).filter(Boolean))];
+    const bar = document.getElementById('country-filter-bar');
+    bar.innerHTML = countries.map(c => `
+      <button class="filter-btn ${c === 'all' ? 'active' : ''}"
+        onclick="setCountryFilter('${c}', this)">
+        ${c === 'all' ? '전체' : (allCompanies.find(x => x.country === c)?.country_flag || '') + ' ' + c}
+      </button>`).join('');
+  }
+
+  function setCountryFilter(country, el) {
+    activeCountry = country;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    renderCompanies();
+  }
+
+  function renderCompanies() {
+    const filtered = activeCountry === 'all'
+      ? allCompanies
+      : allCompanies.filter(c => c.country === activeCountry);
+
+    if (!filtered.length) {
+      document.getElementById('companies-container').innerHTML = '<div class="empty">해당 국가 기업이 없습니다</div>';
+      return;
+    }
+
+    // 국가별 그룹
+    const byCountry = {};
+    filtered.forEach(c => {
+      const key = c.country || '기타';
+      if (!byCountry[key]) byCountry[key] = [];
+      byCountry[key].push(c);
+    });
+
+    let html = '';
+    for (const [country, companies] of Object.entries(byCountry)) {
+      const flag = companies[0]?.country_flag || '';
+      const exch = companies[0]?.exchange || '';
+      html += `<div class="invest-group">
+        <div class="invest-group-header">${flag} ${country}${exch ? ' — ' + exch : ''}</div>
+        <div class="company-grid">
+          ${companies.map(c => renderCompanyCard(c)).join('')}
+        </div>
+      </div>`;
+    }
+
+    document.getElementById('companies-container').innerHTML = html;
+  }
+
+  function renderCompanyCard(c) {
+    const stock = stockCache[c.ticker] || null;
+    const priceHtml = stock
+      ? `<div class="company-card-val">${stock.price.toLocaleString()}</div>
+         <div class="company-card-chg ${stock.change_pct >= 0 ? 'up' : 'down'}">
+           ${stock.change_pct >= 0 ? '▲' : '▼'} ${Math.abs(stock.change_pct).toFixed(2)}%
+         </div>`
+      : `<div class="company-card-val" style="color:var(--muted);font-size:11px;">-</div>`;
+
+    return `<a class="company-card" href="/company.html?id=${c.id}">
+      <div class="company-card-top">
+        <div>
+          <div class="company-card-name">${c.name}</div>
+          ${c.name_ko ? `<div class="company-card-name-ko">${c.name_ko}</div>` : ''}
+        </div>
+        <div class="company-card-price">
+          ${c.ticker ? `<div class="company-card-ticker">${c.ticker}</div>` : ''}
+          ${priceHtml}
+        </div>
+      </div>
+      <div class="company-card-meta">
+        ${c.sector ? `<span>${c.sector}</span>` : ''}
+      </div>
+    </a>`;
+  }
+
+  // ── Yahoo Finance 주가 연동 ────────────────────────────────
+  async function loadStockPrices() {
+    // 티커가 있는 기업만 필터 (Yahoo Finance에서 조회 가능한 거래소 심볼 포함)
+    const EXCHANGE_SUFFIX = {
+      'NSE': '.NR', 'NGX': '.LG', 'JSE': '.JO',
+      'IDX': '.JK', 'SET': '.BK', 'PSE': '.PS',
+      'EGX': '.CA', 'HOSE': '.VN',
+    };
+
+    const toFetch = allCompanies.filter(c => c.ticker && c.exchange);
+    if (!toFetch.length) return;
+
+    // Yahoo Finance 심볼 구성
+    const symbols = toFetch.map(c => {
+      const suffix = EXCHANGE_SUFFIX[c.exchange] || '';
+      return { company: c, symbol: c.ticker + suffix };
+    });
+
+    // 배치로 Yahoo Finance 조회 (CORS 문제로 브라우저에서 직접 호출)
+    // Yahoo Finance v8 API는 브라우저에서 직접 안 되므로
+    // market_data.json에 주가를 포함시키는 방식으로 대신 처리
+    // → export_articles.py의 fetch_market_data()에서 회사 주가도 같이 저장하도록 별도 처리
+    // 여기서는 market_data.json에 company_prices 있으면 표시
+    try {
+      const res = await fetch('data/market_data.json');
+      if (!res.ok) return;
+      const data = await res.json();
+      const prices = data.company_prices || {};
+      if (!Object.keys(prices).length) return;
+
+      stockCache = prices;
+      renderCompanies(); // 주가 업데이트 후 재렌더
+    } catch(e) {}
+  }
 </script>
 
 </body>
