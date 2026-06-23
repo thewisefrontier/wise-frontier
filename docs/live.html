@@ -8,7 +8,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png">
   <link rel="shortcut icon" href="/favicon.ico">
   <meta name="description" content="NewsFinal 트렌드 — AI가 감지한 프론티어 마켓 실시간 이슈">
-  <title>라이브 — NewsFinal</title>
+  <title>트렌드 — NewsFinal</title>
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7TKGYEM467"></script>
   <script>
@@ -63,7 +63,7 @@
 
     .page-title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
     .live-dot {
-      width: 10px; height: 10px; border-radius: 50%; background: var(--red);
+      width: 10px; height: 10px; border-radius: 50%; background: var(--accent2);
       animation: pulse 1.6s ease-in-out infinite;
     }
     @keyframes pulse {
@@ -84,7 +84,7 @@
       font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 700;
       color: var(--red); letter-spacing: 0.05em; margin-bottom: 8px;
     }
-    .live-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); }
+    .live-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent2); }
     .live-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 8px; }
     .tag { font-family: 'IBM Plex Mono', monospace; font-size: 10px; padding: 2px 7px; border: 1px solid var(--border); color: var(--muted); background: var(--bg3); }
     .tag.country { border-color: var(--accent); color: var(--accent); }
@@ -144,7 +144,7 @@
   </div>
   <nav class="page-nav">
     <a href="/">홈</a>
-    <a href="/live.html" class="active" style="color:var(--red);">🔴 라이브</a>
+    <a href="/live.html" class="active" style="color:var(--accent2);">📈 트렌드</a>
     <a href="/?category=경제">경제</a>
     <a href="/?category=금융">금융</a>
     <a href="/?category=자원·에너지">자원·에너지</a>
@@ -162,7 +162,7 @@
 <div class="page-container">
   <div class="page-title-row">
     <span class="live-dot"></span>
-    <h1 class="page-title">라이브</h1>
+    <h1 class="page-title">📈 트렌드</h1>
   </div>
   <div class="page-sub">이슈 트래커</div>
 
@@ -250,8 +250,8 @@
       if (!res.ok) throw new Error();
       const articles = await res.json();
 
-      // 라이브 기준: NewsFinal 자체 기사 + score(업데이트 횟수) 2 이상 = 여러 번 업데이트된 진행형 이슈
-      // 다이제스트(digest_)는 라이브 대상에서 제외
+      // 트렌드 기준: subcategory가 trend_/realtrend_/extrend_인 기사
+      
       const TREND_PREFIXES = ['trend_', 'realtrend_', 'extrend_'];
       const raw = articles
         .filter(a => {
@@ -282,7 +282,7 @@
 
       render(liveArticles);
     } catch(e) {
-      document.getElementById('live-container').innerHTML = '<div class="empty">라이브 이슈를 불러올 수 없습니다</div>';
+      document.getElementById('live-container').innerHTML = '<div class="empty">트렌드 이슈를 불러올 수 없습니다</div>';
     }
   }
 
