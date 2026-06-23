@@ -7,7 +7,7 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png">
   <link rel="shortcut icon" href="/favicon.ico">
-  <meta name="description" content="NewsFinal 라이브 — 계속 업데이트되는 프론티어 마켓 주요 이슈">
+  <meta name="description" content="NewsFinal 트렌드 — AI가 감지한 프론티어 마켓 실시간 이슈">
   <title>라이브 — NewsFinal</title>
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7TKGYEM467"></script>
@@ -164,7 +164,7 @@
     <span class="live-dot"></span>
     <h1 class="page-title">라이브</h1>
   </div>
-  <div class="page-sub">계속 업데이트되는 프론티어 마켓 주요 이슈 — 최신 업데이트 순</div>
+  <div class="page-sub">Google Trends · Reddit · GDELT · 뉴스 패턴 분석으로 감지한 프론티어 마켓 이슈</div>
 
   <div id="live-container"><div class="empty">불러오는 중...</div></div>
 </div>
@@ -252,15 +252,13 @@
 
       // 라이브 기준: NewsFinal 자체 기사 + score(업데이트 횟수) 2 이상 = 여러 번 업데이트된 진행형 이슈
       // 다이제스트(digest_)는 라이브 대상에서 제외
+      const TREND_PREFIXES = ['trend_', 'realtrend_', 'extrend_'];
       const raw = articles
         .filter(a => {
           if (a.source !== 'NewsFinal') return false;
           if (a.is_published === false) return false;
-          if ((a.subcategory || '').startsWith('digest_')) return false;
-          // 실제로 업데이트된 기사만 LIVE 표시
-          // update_log 2건 이상 = 최초 게시 + 업데이트 1회 이상
-          const logLen = Array.isArray(a.update_log) ? a.update_log.length : 0;
-          return logLen >= 2;
+          // 트렌드 트래커 생성 기사만 표시
+          return TREND_PREFIXES.some(p => (a.subcategory || '').startsWith(p));
         })
         .sort((a, b) => (b.created_at || '').localeCompare(a.created_at || ''));
 
@@ -277,17 +275,10 @@
         }
         return matches / (shorter.length - 1) > 0.7;
       }
-      const deduped = [];
+      const liveArticles = [];
       for (const a of raw) {
-        if (!deduped.some(b => titleSimilar(a, b))) deduped.push(a);
+        if (!liveArticles.some(b => titleSimilar(a, b))) liveArticles.push(a);
       }
-      // 트렌드 기사(실시간 감지) 상단 고정, 나머지는 최신순
-      const TREND_PREFIXES = ['trend_', 'realtrend_', 'extrend_'];
-      const isTrend = a => TREND_PREFIXES.some(p => (a.subcategory || '').startsWith(p));
-      const liveArticles = [
-        ...deduped.filter(a => isTrend(a)),
-        ...deduped.filter(a => !isTrend(a)),
-      ];
 
       render(liveArticles);
     } catch(e) {
@@ -298,7 +289,7 @@
   function render(articles) {
     const container = document.getElementById('live-container');
     if (!articles.length) {
-      container.innerHTML = '<div class="empty">현재 업데이트 중인 라이브 이슈가 없습니다.<br>새로운 이슈가 추가되면 이곳에 표시됩니다.</div>';
+      container.innerHTML = '<div class="empty">현재 감지된 트렌드 이슈가 없습니다.<br>3시간마다 자동으로 업데이트됩니다.</div>';
       return;
     }
 
@@ -329,7 +320,7 @@
 
       return `
         <div class="live-card" onclick="location.href='article.html?id=${a.id}'">
-          <div class="live-badge"><span class="dot"></span>LIVE</div>
+          <div class="live-badge"><span class="dot"></span>TREND</div>
           <div class="live-tags">${catTag}${regionTag}${countryTags}</div>
           <div class="live-title">${title}</div>
           <div class="live-preview">${preview}${preview.length >= 120 ? '…' : ''}</div>
