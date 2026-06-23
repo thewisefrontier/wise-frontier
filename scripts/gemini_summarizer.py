@@ -327,10 +327,10 @@ def get_trend_articles(keywords: list, days: int = 7) -> list:
 
 
 
-def trend_title_exists(title: str, hours: int = 24) -> bool:
+def find_similar_trend(title: str, hours: int = 24) -> dict | None:
     """
-    최근 N시간 내 트렌드 탭 기사 중 제목 유사도 65% 이상인 기사가 있는지 확인.
-    realtrend_, extrend_, trend_ 전부 대상.
+    최근 N시간 내 트렌드 탭 기사 중 제목 유사도 65% 이상인 기사 반환.
+    있으면 해당 기사 dict, 없으면 None.
     """
     from rapidfuzz import fuzz
     since = (now_kst() - timedelta(hours=hours)).strftime("%Y-%m-%d %H:%M")
@@ -339,7 +339,7 @@ def trend_title_exists(title: str, hours: int = 24) -> bool:
             _sb_url(),
             headers=_sb_headers(),
             params={
-                "select": "id,title_ko",
+                "select": "id,title_ko,summary_ko,update_log",
                 "source": "eq.NewsFinal",
                 "or": "(subcategory.like.trend_*,subcategory.like.realtrend_*,subcategory.like.extrend_*)",
                 "created_at": f"gte.{since}",
@@ -348,19 +348,46 @@ def trend_title_exists(title: str, hours: int = 24) -> bool:
             timeout=10
         )
         if res.status_code not in (200, 206):
-            return False
-        existing = res.json()
-        for a in existing:
+            return None
+        for a in res.json():
             existing_title = a.get("title_ko") or ""
             if not existing_title:
                 continue
             sim = fuzz.token_sort_ratio(title.lower(), existing_title.lower())
             if sim >= 65:
-                print(f"    → 유사 트렌드 기사 존재 (유사도 {sim}%): {existing_title[:50]}")
-                return True
+                print(f"    → 유사 트렌드 기사 발견 (유사도 {sim}%): {existing_title[:50]}")
+                return a
     except Exception as e:
         print(f"    → 유사도 체크 실패: {e}")
-    return False
+    return None
+
+
+def merge_trend_article(existing: dict, new_title: str, new_body: str, note: str) -> bool:
+    """기존 트렌드 기사에 새 내용 병합 업데이트"""
+    art_id = existing["id"]
+    existing_summary = existing.get("summary_ko") or ""
+    existing_log = existing.get("update_log") or []
+
+    now_str = now_kst().strftime("%Y-%m-%d %H:%M")
+    new_log = existing_log + [{"timestamp": now_str, "note": note}]
+
+    try:
+        res = requests.patch(
+            f"{_sb_url()}?id=eq.{art_id}",
+            headers=_sb_headers(),
+            json={
+                "title_ko": new_title,
+                "title_en": new_title,
+                "summary_ko": new_body,
+                "created_at": now_str,
+                "update_log": new_log,
+            },
+            timeout=15
+        )
+        return res.status_code in (200, 204)
+    except Exception as e:
+        print(f"    → 병합 실패: {e}")
+        return False
 
 
 def trend_article_exists(group_name: str) -> bool:
@@ -436,8 +463,9 @@ def run_trend_tracker():
 
         print(f"  [{group_name}] {len(articles)}건 감지 → 추적 기사 생성 검토")
 
-        if trend_article_exists(group_name) or trend_title_exists(f"{group_name} 동향", hours=24):
-            print(f"  [{group_name}] 최근 24시간 내 유사 기사 존재 — 스킵")
+        trend_similar = find_similar_trend(f"{group_name} 동향", hours=24)
+        if trend_article_exists(group_name) and not trend_similar:
+            print(f"  [{group_name}] 최근 {TREND_CHECK_HOURS}시간 내 이미 생성됨 — 스킵")
             continue
 
         # 최신 기사 최대 8건으로 Gemini 프롬프트 구성
@@ -801,8 +829,9 @@ JSON 배열로만 응답하세요 (마크다운 없이):
         if not topic or urgency == "low":
             continue
 
-        if realtime_trend_article_exists(topic) or trend_title_exists(issue_ko, hours=12):
-            print(f"  [{topic}] 최근 12시간 내 유사 기사 존재 — 스킵")
+        similar = find_similar_trend(issue_ko, hours=24)
+        if realtime_trend_article_exists(topic) and not similar:
+            print(f"  [{topic}] 최근 {RT_CHECK_HOURS}시간 내 이미 생성됨 — 스킵")
             continue
 
         # 관련 기사 수집
@@ -888,6 +917,16 @@ JSON 배열로만 응답하세요 (마크다운 없이):
 
         if not title:
             title = f"{issue_ko} — {today_str}"
+
+        # 유사 기존 트렌드 기사 있으면 병합
+        if similar:
+            note = f"추가 정보 업데이트 ({topic})"
+            ok = merge_trend_article(similar, title, body, note)
+            if ok:
+                print(f"  [{topic}] ✅ 기존 트렌드 기사에 병합 (id={similar['id']}): {title}")
+                generated += 1
+            time.sleep(CALL_INTERVAL)
+            continue
 
         now_str = now_kst().strftime("%Y-%m-%d %H:%M")
         payload = {
@@ -1048,7 +1087,10 @@ JSON 배열로만 응답 (마크다운 없이):
         region   = item.get("region", "global")
         country  = countries_list[0] if countries_list else ""
 
-        if not topic or ext_trend_exists(topic) or trend_title_exists(issue_ko, hours=12):
+        if not topic:
+            continue
+        ext_similar = find_similar_trend(issue_ko, hours=24)
+        if ext_trend_exists(topic) and not ext_similar:
             continue
 
         # 관련 신호에서 대표 제목 수집
@@ -1127,6 +1169,16 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
             "is_published": True,
             "posted_blog": 0,
         }
+        # 유사 기존 트렌드 기사 있으면 병합
+        if ext_similar:
+            note = f"외부 트렌드 추가 정보 ({topic})"
+            ok = merge_trend_article(ext_similar, title, body, note)
+            if ok:
+                print(f"  [{topic}] ✅ 기존 트렌드 기사에 병합 (id={ext_similar['id']}): {title}")
+                generated += 1
+            time.sleep(CALL_INTERVAL)
+            continue
+
         try:
             res = requests.post(_sb_url(), headers=_sb_headers(), json=payload, timeout=15)
             if res.status_code in (200, 201):
