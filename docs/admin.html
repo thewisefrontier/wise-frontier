@@ -138,6 +138,15 @@
     .toast.success { border-color: var(--success); color: var(--success); }
     .toast.error { border-color: var(--danger); color: var(--danger); }
     @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; } }
+    .calendar-table { width: 100%; border-collapse: collapse; table-layout: auto; }
+    .calendar-table th {
+      text-align: left; padding: 8px 10px; font-size: 11px; color: var(--muted);
+      border-bottom: 1px solid var(--border); white-space: nowrap;
+    }
+    .calendar-table td { padding: 8px 10px; font-size: 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .calendar-table tr:hover td { background: var(--bg3); }
+    .calendar-table .actions { display: flex; gap: 4px; flex-wrap: nowrap; white-space: nowrap; }
+
     .empty { text-align: center; padding: 50px; color: var(--muted); font-size: 13px; }
     .loading { text-align: center; padding: 30px; color: var(--muted); }
 
@@ -705,7 +714,7 @@
           <button class="btn btn-primary" style="font-size:11px;" onclick="openEventForm()">+ 일정 추가</button>
         </div>
       </div>
-      <table class="article-table">
+      <table class="calendar-table">
         <thead><tr>
           <th style="width:90px;">날짜</th><th style="width:60px;">시간</th>
           <th style="width:100px;">국가</th><th>제목</th>
@@ -1101,4 +1110,5 @@
 </script>
 </body>
 </html>
+
 
