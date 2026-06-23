@@ -189,6 +189,7 @@
       <div class="sidebar-item" onclick="showArticles('cluster',this)">🔥 이슈</div>
       <div class="sidebar-item" onclick="showArticles('rss',this)">📡 수집 기사</div>
       <div class="sidebar-item" onclick="showArticles('unpublished',this)">📋 미발행 기사</div>
+      <div class="sidebar-item" onclick="showNeedsReview(this)">⚠️ 검토 필요</div>
       <div class="sidebar-divider"></div>
       <div class="sidebar-item" id="calendar-menu" onclick="showCalendar(this)">📅 경제 일정 관리</div>
       <div class="sidebar-divider"></div>
@@ -866,6 +867,119 @@
     'summarizer_fulltext': '원문 기반 요약 프롬프트',
     'summarizer_rss': 'RSS 요약 프롬프트',
   };
+
+  async function showNeedsReview(el) {
+    document.querySelectorAll('.sidebar-item').forEach(e => e.classList.remove('active'));
+    el.classList.add('active');
+    currentSection = 'needs_review';
+
+    const container = document.getElementById('article-list');
+    container.innerHTML = '<div class="empty">검토 필요 기사 로딩 중...</div>';
+
+    const { data, error } = await supabase
+      .from('articles')
+      .select('id,title_ko,summary_ko,created_at,country,category,subcategory')
+      .eq('source', 'NewsFinal')
+      .eq('is_published', false)
+      .eq('subcategory', 'needs_review')
+      .order('created_at', { ascending: false })
+      .limit(50);
+
+    if (error || !data?.length) {
+      container.innerHTML = '<div class="empty">검토 필요 기사가 없습니다 ✅</div>';
+      return;
+    }
+
+    container.innerHTML = data.map(a => `
+      <div class="article-item" style="border-left:3px solid #e67e22;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:600;margin-bottom:4px;">${a.title_ko || '(제목 없음)'}</div>
+            <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">
+              ${a.created_at?.slice(0,16) || ''} · ${a.category || ''} · ${a.country || '글로벌'}
+            </div>
+            <div style="font-size:11px;color:var(--muted);line-height:1.5;">${(a.summary_ko || '').slice(0,200)}...</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;">
+            <button class="btn-sm" style="background:var(--accent2);color:#fff;border-color:var(--accent2);"
+              onclick="aiRewrite(${a.id}, this)">✨ AI 리라이팅</button>
+            <button class="btn-sm" style="border-color:var(--success);color:var(--success);"
+              onclick="publishArticle(${a.id}, this)">발행</button>
+            <button class="btn-sm btn-sm-danger"
+              onclick="deleteArticle(${a.id}, this)">삭제</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  async function aiRewrite(articleId, btn) {
+    btn.disabled = true;
+    btn.textContent = '처리 중...';
+
+    const { data, error } = await supabase
+      .from('articles')
+      .select('id,title_ko,summary_ko,country,category')
+      .eq('id', articleId)
+      .single();
+
+    if (error || !data) { btn.textContent = '오류'; return; }
+
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-6',
+          max_tokens: 2000,
+          messages: [{
+            role: 'user',
+            content: `아래 기사는 여러 주제가 혼합된 기사입니다. 가장 중요하고 구체적인 하나의 토픽만 골라서 완성도 높은 단일 기사로 재작성하세요. 마크다운 없이 기사 문체로 작성하세요.
+
+제목: ${data.title_ko}
+내용: ${(data.summary_ko || '').slice(0, 1500)}
+
+아래 형식으로만 출력하세요:
+제목: (새로운 단일 토픽 제목)
+본문: (재작성된 기사 본문)`
+          }]
+        })
+      });
+
+      const result = await response.json();
+      const text = result.content?.[0]?.text || '';
+
+      let newTitle = '', newBody = '';
+      for (const line of text.split('\n')) {
+        if (line.startsWith('제목:')) newTitle = line.replace('제목:', '').trim();
+      }
+      const bodyIdx = text.indexOf('본문:');
+      if (bodyIdx >= 0) newBody = text.slice(bodyIdx + 3).trim();
+
+      if (!newTitle || !newBody) throw new Error('파싱 실패');
+
+      const { error: updateError } = await supabase
+        .from('articles')
+        .update({ title_ko: newTitle, title_en: newTitle, summary_ko: newBody, subcategory: 'rewritten' })
+        .eq('id', articleId);
+
+      if (updateError) throw updateError;
+
+      btn.textContent = '✅ 완료';
+      btn.style.background = 'var(--success)';
+      btn.style.borderColor = 'var(--success)';
+
+      const card = btn.closest('.article-item');
+      card.querySelector('div[style*="font-weight:600"]').textContent = newTitle;
+      card.querySelector('div[style*="line-height:1.5"]').textContent = newBody.slice(0, 200) + '...';
+      card.style.borderLeftColor = 'var(--success)';
+
+    } catch(e) {
+      console.error(e);
+      btn.textContent = '실패';
+      btn.disabled = false;
+    }
+  }
 
   async function showPrompts(el) {
     if (currentRole !== 'admin') return;
