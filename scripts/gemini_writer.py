@@ -381,8 +381,31 @@ def split_multi_topic_title(title: str) -> list:
 
 
 def is_multi_topic_title(title: str) -> bool:
-    """복수 주제 제목 여부"""
-    return len(split_multi_topic_title(title)) >= 2
+    """복수 주제 제목 여부 — 분리 가능한 패턴 + 글로벌 종합 제목"""
+    import re
+    if not title:
+        return False
+    # 분리 가능한 복수 주제
+    if len(split_multi_topic_title(title)) >= 2:
+        return True
+    # "글로벌 X의 Y" 식 추상적 종합 제목
+    if re.match(r'^글로벌\s+\S+.+(?:변화|동향|행보|흐름|속에서|격화|가속화)', title):
+        return True
+    if re.search(r'각국의?\s+(경제|사회|정치|행보|대응|현안)', title):
+        return True
+    if re.match(r'^전\s+세계\s+주요국', title):
+        return True
+    if '등 글로벌' in title or '등 주요 단신' in title or '등 주요 현안' in title:
+        return True
+    # 서로 다른 국가명 3개 이상 나열
+    country_names = ['나이지리아','케냐','가나','에티오피아','필리핀','베트남',
+                     '인도네시아','태국','이집트','우간다','탄자니아','수단',
+                     '키르기스스탄','미얀마','캄보디아','인도','중국','미국',
+                     '방글라데시','파키스탄','카자흐스탄','라오스','캄보디아']
+    hits = [c for c in country_names if c in title]
+    if len(hits) >= 3:
+        return True
+    return False
 
 
 def extract_keywords(text):
