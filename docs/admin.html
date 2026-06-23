@@ -174,8 +174,8 @@
 
   <div class="container">
     <div class="sidebar">
-      <div class="sidebar-item active" onclick="showArticles('all',this)">📰 전체 기사</div>
-      <div class="sidebar-item" onclick="showArticles('own',this)">📰 NewsFinal 기사</div>
+      <div class="sidebar-item" onclick="showArticles('all',this)">📰 전체 기사</div>
+      <div class="sidebar-item active" onclick="showArticles('own',this)">📰 NewsFinal 기사</div>
       <div class="sidebar-item" onclick="showArticles('cluster',this)">🔥 이슈</div>
       <div class="sidebar-item" onclick="showArticles('rss',this)">📡 수집 기사</div>
       <div class="sidebar-item" onclick="showArticles('unpublished',this)">📋 미발행 기사</div>
@@ -288,7 +288,7 @@
 
   let currentUser = null;
   let currentRole = null;
-  let currentFilter = 'all';
+  let currentFilter = 'own';
   let currentPage = 0;
   let pageSize = 30;
   let searchTimer = null;
@@ -337,7 +337,7 @@
       document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
     }
 
-    loadArticles();
+    showArticles('own', document.querySelector('.sidebar-item.active'));
   }
 
   async function logout() {
@@ -1101,3 +1101,4 @@
 </script>
 </body>
 </html>
+
