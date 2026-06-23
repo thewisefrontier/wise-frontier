@@ -22,7 +22,7 @@ def now_kst() -> datetime:
     """GitHub Actions 러너(UTC)와 무관하게 정확한 KST 현재시각 반환"""
     return datetime.now(timezone.utc).astimezone(KST)
 
-GEMINI_MODEL = "gemini-2.0-flash-lite"
+GEMINI_MODEL = "gemini-3.1-flash-lite"
 
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
