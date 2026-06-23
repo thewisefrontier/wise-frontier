@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="NewsFinal — 프론티어 미디어">
   <meta property="og:type" content="article">
+  <meta property="og:image" content="https://newsfinal.co.kr/favicon-512.png">
   <meta property="og:title" content="NewsFinal">
   <meta property="og:description" content="">
   <link rel="canonical" href="https://newsfinal.co.kr/article.html">
@@ -239,7 +240,7 @@
 
   async function loadMarketData() {
     try {
-      const res = await fetch('data/market_data.json');
+      const res = await fetch('/data/market_data.json');
       if (!res.ok) return;
       const data = await res.json();
       const indices = data.indices || [];
@@ -406,3 +407,4 @@
 </script>
 </body>
 </html>
+
