@@ -339,6 +339,28 @@ def update_article_count(article_id, new_count):
 
 # ── 클러스터링 ────────────────────────────────────────────
 
+def is_multi_topic_title(title: str) -> bool:
+    """
+    제목이 관련 없는 여러 주제를 나열하는 경우 감지.
+    예: "우간다 군 수뇌부 갈등 및 나이지리아 채용 사기 주의보"
+    """
+    if not title:
+        return False
+    t = title.lower()
+    # 복수 주제 구분자 패턴
+    separators = [
+        ' 및 ', ' and ', ' & ', ' et ', ' + ',
+        '…및', ', and ', '; ',
+    ]
+    for sep in separators:
+        if sep in t:
+            # 구분자 앞뒤에 서로 다른 국가/주제가 있는지 확인
+            parts = t.split(sep)
+            if len(parts) >= 2 and all(len(p.strip()) > 5 for p in parts):
+                return True
+    return False
+
+
 def extract_keywords(text):
     """텍스트에서 의미 있는 키워드 추출"""
     if not text:
@@ -537,6 +559,7 @@ def build_issue_prompt(cluster, existing_summary=None):
 [기사 원문]
 {article_list}
 
+원문이 여러 주제나 사건을 다루더라도 반드시 하나의 핵심 주제만 골라 작성하세요.
 팩트(수치, 인명, 날짜, 기관명, 구체적 내용)를 빠짐없이 살려서 작성하세요.
 원문이 길수록 기사도 충분히 길게 쓰세요. 억지로 줄이지 마세요.
 한국어로만 작성하세요.
@@ -1036,7 +1059,19 @@ def run():
     solo_candidates = [
         a for a in all_articles
         if len(a.get("full_text") or "") >= 1000
+        and not is_multi_topic_title(a.get("title_en","") or a.get("title_ko",""))
     ]
+
+    multi_topic_skipped = [
+        a for a in all_articles
+        if len(a.get("full_text") or "") >= 1000
+        and is_multi_topic_title(a.get("title_en","") or a.get("title_ko",""))
+    ]
+    if multi_topic_skipped:
+        print(f"  [스킵] 복수 주제 제목 {len(multi_topic_skipped)}건:")
+        for a in multi_topic_skipped:
+            print(f"    - {(a.get('title_en') or a.get('title_ko',''))[:80]}")
+
     print(f"\n[단독 기사] 원문 충분한 기사 {len(solo_candidates)}건")
 
     solo_generated = 0
