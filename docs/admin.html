@@ -143,7 +143,7 @@
       text-align: left; padding: 8px 10px; font-size: 11px; color: var(--muted);
       border-bottom: 1px solid var(--border); white-space: nowrap;
     }
-    .calendar-table td { padding: 8px 10px; font-size: 12px; border-bottom: 1px solid var(--border); vertical-align: middle; white-space: nowrap; }
+    .calendar-table td { padding: 8px 10px; font-size: 12px; border-bottom: 1px solid var(--border); vertical-align: middle; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .calendar-table td:nth-child(4) { white-space: normal; width: 99%; }
     .calendar-table tr:hover td { background: var(--bg3); }
     .calendar-table .actions { display: flex; gap: 4px; align-items: center; }
@@ -732,10 +732,12 @@
               <td>${ev.title}${ev.description ? `<div style="font-size:10px;color:var(--muted);margin-top:2px;">${ev.description}</div>` : ''}${ev.source_url ? `<div style="margin-top:3px;"><a href="${ev.source_url}" target="_blank" rel="noopener" style="font-size:10px;color:var(--accent2);" onclick="event.stopPropagation();">🔗 출처 확인</a></div>` : (pending ? `<div style="font-size:10px;color:var(--danger);margin-top:3px;">⚠️ 출처 없음</div>` : '')}</td>
               <td>${IMPORTANCE_LABEL[ev.importance] || ev.importance}</td>
               <td>${pending ? '<span style="font-size:10px;color:var(--accent);">⏳ 대기</span>' : `<span style="font-size:10px;color:var(--success);">✅ 게시</span>${ev.source === 'gemini_trusted' ? '<div style="font-size:9px;color:var(--muted);margin-top:2px;">공식출처 자동</div>' : ''}`}</td>
-              <td class="actions">
+              <td style="vertical-align:middle;white-space:nowrap;">
+                <div style="display:flex;gap:4px;align-items:center;">
                 ${pending ? `<button class="btn-sm" style="border-color:var(--success);color:var(--success);" onclick="approveEvent(${ev.id})">승인</button>` : ''}
                 <button class="btn-sm" onclick="openEventForm(${ev.id})">편집</button>
                 <button class="btn-sm btn-sm-danger" onclick="deleteEvent(${ev.id})">삭제</button>
+                </div>
               </td>
             </tr>
           `}).join('')}
@@ -1111,6 +1113,7 @@
 </script>
 </body>
 </html>
+
 
 
 
