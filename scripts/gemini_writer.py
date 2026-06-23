@@ -385,10 +385,8 @@ def is_multi_topic_title(title: str) -> bool:
     import re
     if not title:
         return False
-    # 분리 가능한 복수 주제
     if len(split_multi_topic_title(title)) >= 2:
         return True
-    # "글로벌 X의 Y" 식 추상적 종합 제목
     if re.match(r'^글로벌\s+\S+.+(?:변화|동향|행보|흐름|속에서|격화|가속화)', title):
         return True
     if re.search(r'각국의?\s+(경제|사회|정치|행보|대응|현안)', title):
@@ -397,7 +395,6 @@ def is_multi_topic_title(title: str) -> bool:
         return True
     if '등 글로벌' in title or '등 주요 단신' in title or '등 주요 현안' in title:
         return True
-    # 서로 다른 국가명 3개 이상 나열
     country_names = ['나이지리아','케냐','가나','에티오피아','필리핀','베트남',
                      '인도네시아','태국','이집트','우간다','탄자니아','수단',
                      '키르기스스탄','미얀마','캄보디아','인도','중국','미국',
@@ -406,6 +403,34 @@ def is_multi_topic_title(title: str) -> bool:
     if len(hits) >= 3:
         return True
     return False
+
+
+def is_multi_topic_body(text: str) -> bool:
+    """
+    본문 앞 3문단이 서로 다른 국가/주제를 다루는지 감지.
+    각 문단에서 국가명을 추출해서 3개 이상 다른 국가가 나오면 복수 주제로 판단.
+    """
+    if not text:
+        return False
+    import re
+    # 앞 600자만 분석
+    lead = text[:600]
+    paragraphs = [p.strip() for p in re.split(r'[.!?。]\s+', lead) if len(p.strip()) > 20][:6]
+
+    country_names = ['나이지리아','케냐','가나','에티오피아','필리핀','베트남',
+                     '인도네시아','태국','이집트','우간다','탄자니아','수단',
+                     '키르기스스탄','미얀마','캄보디아','방글라데시','파키스탄',
+                     '카자흐스탄','라오스','카메룬','코트디부아르','세네갈',
+                     '잠비아','짐바브웨','앙골라','모잠비크','르완다']
+
+    found_countries = set()
+    for para in paragraphs:
+        for c in country_names:
+            if c in para:
+                found_countries.add(c)
+
+    # 3개 이상 다른 국가가 앞부분에 나오면 복수 주제
+    return len(found_countries) >= 3
 
 
 def extract_keywords(text):
@@ -935,6 +960,30 @@ def detect_and_register_companies(title: str, body: str, country: str):
 # ── 메인 실행 ─────────────────────────────────────────────
 
 
+
+def verify_single_topic(title: str, body: str) -> bool:
+    """
+    Gemini에게 생성된 기사가 단일 토픽인지 검증.
+    복수 토픽이면 False 반환.
+    """
+    if not title or not body:
+        return True  # 판단 불가면 통과
+
+    prompt = f"""아래 기사가 하나의 명확한 토픽(사건/이슈/기업/정책)만 다루는지 판단하세요.
+서로 다른 국가나 전혀 관련 없는 사건 여러 개를 한 기사에 묶은 경우 "NO"라고만 답하세요.
+하나의 토픽이면 "YES"라고만 답하세요.
+
+제목: {title}
+본문 앞부분: {body[:400]}
+
+답변 (YES 또는 NO만):"""
+
+    result = call_gemini(prompt, max_tokens=5)
+    if not result:
+        return True  # API 실패 시 통과
+    return "YES" in result.upper()
+
+
 def park_multi_topic_articles(articles: list) -> int:
     """
     복수 주제 RSS 기사를 토픽별로 분리해서 DB에 파킹.
@@ -1342,6 +1391,7 @@ def run():
         a for a in all_articles
         if len(a.get("full_text") or "") >= 1000
         and not is_multi_topic_title(a.get("title_en","") or a.get("title_ko",""))
+        and not is_multi_topic_body(a.get("full_text","") or a.get("summary_en",""))
     ]
 
     multi_topic_skipped = [
@@ -1482,6 +1532,14 @@ def run():
             final_region = country_to_region(final_country) if final_country else (a.get("region") or "global")
             if final_category == "글로벌":
                 final_region = "global"
+
+            # B. 생성 후 단일 토픽 검수
+            if not verify_single_topic(full_title, gen_body or content):
+                print(f"  ❌ 검수 실패 (복수 토픽) — 파킹: {full_title[:50]}")
+                park_multi_topic_articles([{"title_en": full_title, "full_text": gen_body or content,
+                    "country": final_country, "category": final_category, "region": final_region}])
+                time.sleep(CALL_INTERVAL)
+                continue
 
             # 제목 생성 후 한 번 더 유사 기사 체크 (이중 안전장치)
             similar, sim_score = find_similar_article(full_title, today_own_articles)
