@@ -44,7 +44,7 @@ NEWSFINAL_CHANNEL = "@newsfinal"
 
 _current_key_idx = 0
 MAX_ARTICLES = 20
-CALL_INTERVAL = 8
+CALL_INTERVAL = 10
 
 
 def _sb_headers():
