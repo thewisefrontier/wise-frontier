@@ -717,8 +717,11 @@ def call_gemini(prompt, max_tokens=1000, retry=2):
         "generationConfig": {"temperature": 0.6, "maxOutputTokens": max_tokens},
     }
 
-    while _current_key_idx < len(GEMINI_API_KEYS):
-        api_key = GEMINI_API_KEYS[_current_key_idx]
+    n = len(GEMINI_API_KEYS)
+    # 라운드로빈: 현재 키부터 전체 순환
+    for attempt in range(n):
+        idx = (_current_key_idx + attempt) % n
+        api_key = GEMINI_API_KEYS[idx]
         url = (
             f"https://generativelanguage.googleapis.com/v1beta/models/"
             f"{GEMINI_MODEL}:generateContent?key={api_key}"
@@ -726,21 +729,26 @@ def call_gemini(prompt, max_tokens=1000, retry=2):
         try:
             res = requests.post(url, json=payload, timeout=(10, 30))
             if res.status_code == 200:
+                # 다음 호출은 다음 키부터 시작 (고르게 분산)
+                _current_key_idx = (idx + 1) % n
                 return res.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
             elif res.status_code == 429:
-                print(f"  [429] 키 {_current_key_idx+1} 한도 초과 → 키 {_current_key_idx+2}로 전환")
-                _current_key_idx += 1
+                print(f"  [429] 키 {idx+1} 한도 초과 → 다음 키로")
+                continue
+            elif res.status_code == 503:
+                print(f"  [503] 키 {idx+1} 일시적 과부하 → 다음 키로")
+                continue
             else:
                 print(f"[ERROR] Gemini {res.status_code}: {res.text[:200]}")
                 return None
         except requests.exceptions.Timeout:
-            print(f"  [TIMEOUT] 키 {_current_key_idx+1} — 넘어갑니다.")
-            return None
+            print(f"  [TIMEOUT] 키 {idx+1} — 다음 키로")
+            continue
         except Exception as e:
             print(f"[ERROR] {e}")
             return None
 
-    print("[ERROR] 모든 키 소진")
+    print("[ERROR] 모든 키 한도 초과 또는 응답 없음")
     return None
 
 
