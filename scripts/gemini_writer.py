@@ -538,37 +538,77 @@ def articles_are_related(a, b):
 
 def is_coherent_cluster(cluster: list) -> bool:
     """
-    클러스터가 실제로 같은 이슈인지 Gemini에게 판단.
-    국가 수가 많아도 단일 이슈면 OK (예: 싱가포르 기업 + 소말릴란드 활동).
-    국가가 적어도 전혀 다른 사건 묶음이면 엉터리.
-    클러스터 크기 4건 이상일 때만 검수 (2~3건은 통과).
+    클러스터가 실제로 같은 이슈인지 키워드 기반으로 판단.
+    기사들이 공통 핵심 키워드(주체/사건/기관명)를 공유하면 단일 이슈.
+    공통 키워드 없이 각자 다른 주제면 엉터리.
+    Gemini 호출 없이 규칙 기반으로 처리.
     """
     if len(cluster) < 4:
         return True  # 소규모는 통과
 
-    # 대표 기사 제목들로 Gemini에게 판단 요청
-    titles = []
+    import re
+
+    def extract_core_kw(text):
+        """제목에서 핵심 키워드 추출 (고유명사 위주)"""
+        if not text:
+            return set()
+        text = text.lower()
+        text = re.sub(r'[^\w\s가-힣]', ' ', text)
+        words = text.split()
+        stopwords = {
+            'the','a','an','in','on','at','to','of','for','and','or','is',
+            'are','was','with','by','from','as','its','new','says','said',
+            '및','에서','으로','이후','위해','통해','대한','관련','주요',
+            '발표','강화','확대','추진','계획','정부','시장','경제','기업',
+        }
+        result = set()
+        for w in words:
+            if w in stopwords:
+                continue
+            if re.search(r'[가-힣]', w) and len(w) >= 2:
+                result.add(w)
+            elif not re.search(r'[가-힣]', w) and len(w) >= 4:
+                result.add(w)
+        return result
+
+    # 각 기사의 핵심 키워드 추출
+    article_kws = []
     for a in cluster:
-        t = a.get("title_ko") or a.get("title_en") or ""
-        if t and not a.get("__needs_review__"):
-            titles.append(t[:80])
-    if not titles:
+        if a.get("__needs_review__"):
+            continue
+        title = a.get("title_ko") or a.get("title_en") or ""
+        kw = extract_core_kw(title)
+        if kw:
+            article_kws.append(kw)
+
+    if len(article_kws) < 2:
         return True
 
-    sample = titles[:6]
-    prompt = f"""아래 뉴스 기사 제목들이 하나의 연결된 이슈/사건을 다루고 있는지 판단하세요.
-하나의 주제(같은 사건, 같은 기업, 같은 정책, 같은 인물)를 여러 소스가 다루거나 관련 맥락을 다루면 "YES".
-전혀 다른 국가/사건/주체가 나열된 것이면 "NO".
+    # 공통 키워드가 있는 기사 쌍 비율 계산
+    # 절반 이상의 기사가 적어도 하나의 공통 키워드를 공유하면 단일 이슈
+    n = len(article_kws)
+    connected = 0
+    for i in range(n):
+        for j in range(i+1, n):
+            if article_kws[i] & article_kws[j]:  # 공통 키워드 있으면
+                connected += 1
+                break  # 이 기사(i)는 연결됨
+        else:
+            # i번 기사가 어느 기사와도 키워드 안 겹치면 고립
+            pass
 
-제목 목록:
-{chr(10).join(f"- {t}" for t in sample)}
+    # 실제로 연결된 기사 수 계산
+    has_connection = []
+    for i in range(n):
+        linked = any(article_kws[i] & article_kws[j] for j in range(n) if j != i)
+        has_connection.append(linked)
 
-답변 (YES 또는 NO만):"""
+    connected_ratio = sum(has_connection) / n
 
-    result = call_gemini(prompt, max_tokens=5)
-    if not result:
-        return True  # API 실패 시 통과
-    return "YES" in result.upper()
+    # 절반 미만의 기사만 연결돼 있으면 엉터리 클러스터
+    if connected_ratio < 0.5:
+        return False
+    return True
 
 
 def cluster_articles(articles):
