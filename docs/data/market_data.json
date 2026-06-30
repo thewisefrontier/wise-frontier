@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-06-30 16:14",
+  "updated_at": "2026-06-30 18:00",
   "indices": [
     {
       "name": "S&P 500",
@@ -32,36 +32,36 @@
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 920.57,
-      "change_pct": 8.13,
+      "price": 916.18,
+      "change_pct": 7.61,
       "up": true
     },
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 110271.44,
-      "change_pct": 0.0,
-      "up": true
+      "price": 110007.58,
+      "change_pct": -0.24,
+      "up": false
     },
     {
       "name": "EGX30 (이집트)",
       "symbol": "^CASE30",
-      "price": 49825.6,
-      "change_pct": -1.03,
-      "up": false
+      "price": 50543.5,
+      "change_pct": 1.44,
+      "up": true
     },
     {
       "name": "SET (태국)",
       "symbol": "^SET.BK",
-      "price": 1581.74,
-      "change_pct": 0.25,
+      "price": 1591.55,
+      "change_pct": 0.87,
       "up": true
     },
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 5709.84,
-      "change_pct": -1.91,
+      "price": 5665.17,
+      "change_pct": -2.67,
       "up": false
     },
     {
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.42,
-      "change_pct": -0.33,
+      "price": 16.4,
+      "change_pct": -0.43,
       "up": false
     }
   ],
@@ -128,8 +128,8 @@
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 920.57,
-        "change_pct": 8.13,
+        "price": 916.18,
+        "change_pct": 7.61,
         "up": true
       }
     ],
@@ -137,29 +137,29 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 110271.44,
-        "change_pct": 0.0,
-        "up": true
+        "price": 110007.58,
+        "change_pct": -0.24,
+        "up": false
       },
       {
         "name": "EGX30 (이집트)",
         "symbol": "^CASE30",
-        "price": 49825.6,
-        "change_pct": -1.03,
-        "up": false
+        "price": 50543.5,
+        "change_pct": 1.44,
+        "up": true
       },
       {
         "name": "SET (태국)",
         "symbol": "^SET.BK",
-        "price": 1581.74,
-        "change_pct": 0.25,
+        "price": 1591.55,
+        "change_pct": 0.87,
         "up": true
       },
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 5709.84,
-        "change_pct": -1.91,
+        "price": 5665.17,
+        "change_pct": -2.67,
         "up": false
       },
       {
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.42,
-        "change_pct": -0.33,
+        "price": 16.4,
+        "change_pct": -0.43,
         "up": false
       }
     ]
