@@ -42,7 +42,7 @@
     .ticker-item { display: flex; gap: 6px; align-items: center; white-space: nowrap; }
     .ticker-label { color: var(--muted); }
     .ticker-val { color: var(--text); font-weight: 500; }
-    .up { color: var(--green); } .down { color: var(--red); }
+    .up { color: var(--red); } .down { color: var(--accent2); }
     .header-right { white-space: nowrap; }
 
     .header-main {
@@ -304,7 +304,7 @@
     const stockHtml = stockInfo
       ? `<div style="margin-top:12px;display:flex;gap:16px;justify-content:center;align-items:baseline;">
            <span style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:700;color:#fff;">${stockInfo.price.toLocaleString()}</span>
-           <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:${stockInfo.change_pct >= 0 ? '#50c878' : '#e74c3c'};">
+           <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:${stockInfo.change_pct >= 0 ? '#c0392b' : '#1a5fa8'};">
              ${stockInfo.change_pct >= 0 ? '▲' : '▼'} ${Math.abs(stockInfo.change_pct).toFixed(2)}%
            </span>
          </div>`
