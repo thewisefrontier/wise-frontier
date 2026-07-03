@@ -272,9 +272,11 @@
           <input class="field-input" id="edit-image-url" type="text" placeholder="이미지 URL" style="flex:1;" oninput="this.value ? showImagePreview(this.value) : removeImage()" />
           <button class="btn-sm" onclick="document.getElementById('image-file-input').click()">📁 업로드</button>
           <button class="btn-sm" onclick="generateImage()">✨ AI 생성</button>
+          <button class="btn-sm" onclick="searchPixabay()">🔍 사진 검색</button>
           <button class="btn-sm" onclick="removeImage()">🗑 제거</button>
           <input type="file" id="image-file-input" accept="image/*" style="display:none;" onchange="uploadImage(this)" />
         </div>
+        <div id="pixabay-results" style="margin-top:8px;display:none;grid-template-columns:repeat(4,1fr);gap:6px;"></div>
         <div id="image-preview" style="margin-top:8px;display:none;">
           <img id="image-preview-img" style="max-width:100%;max-height:200px;border:1px solid var(--border);" />
         </div>
@@ -1220,6 +1222,48 @@
   function removeImage() {
     document.getElementById('edit-image-url').value = '';
     document.getElementById('image-preview').style.display = 'none';
+    document.getElementById('pixabay-results').style.display = 'none';
+  }
+
+  async function searchPixabay() {
+    let pixKey = sessionStorage.getItem('pixabay_key');
+    if (!pixKey) {
+      pixKey = prompt('Pixabay API Key 입력 (이번 세션에만 저장):');
+      if (!pixKey) return;
+      sessionStorage.setItem('pixabay_key', pixKey);
+    }
+    const defaultQ = document.getElementById('edit-title-ko').value.slice(0, 50);
+    const q = prompt('검색어 (영문 권장):', defaultQ);
+    if (!q) return;
+
+    const box = document.getElementById('pixabay-results');
+    box.style.display = 'grid';
+    box.innerHTML = '<div style="grid-column:1/-1;font-size:12px;">검색 중...</div>';
+
+    try {
+      const res = await fetch(`https://pixabay.com/api/?key=${pixKey}&q=${encodeURIComponent(q)}&image_type=photo&safesearch=true&per_page=12`);
+      const data = await res.json();
+      const hits = data.hits || [];
+      if (!hits.length) {
+        box.innerHTML = '<div style="grid-column:1/-1;font-size:12px;">결과 없음</div>';
+        return;
+      }
+      box.innerHTML = '';
+      hits.forEach(h => {
+        const img = document.createElement('img');
+        img.src = h.previewURL;
+        img.style.cssText = 'width:100%;height:70px;object-fit:cover;cursor:pointer;border:1px solid var(--border);border-radius:4px;';
+        img.title = h.tags;
+        img.onclick = () => {
+          document.getElementById('edit-image-url').value = h.largeImageURL;
+          showImagePreview(h.largeImageURL);
+          box.style.display = 'none';
+        };
+        box.appendChild(img);
+      });
+    } catch (e) {
+      box.innerHTML = `<div style="grid-column:1/-1;font-size:12px;color:red;">오류: ${e.message}</div>`;
+    }
   }
 
   // ── 토스트 ────────────────────────────────────────────
