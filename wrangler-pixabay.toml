@@ -1,0 +1,5 @@
+name = "newsfinal-pixabay-search"
+main = "pixabay-search-worker.js"
+compatibility_date = "2026-01-01"
+
+# PIXABAY_API_KEY는 wrangler secret put PIXABAY_API_KEY --config wrangler-pixabay.toml 으로 설정

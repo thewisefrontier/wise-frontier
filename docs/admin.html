@@ -1225,13 +1225,9 @@
     document.getElementById('pixabay-results').style.display = 'none';
   }
 
+  const PIXABAY_WORKER_URL = 'https://newsfinal-pixabay-search.thewisefrontier.workers.dev';
+
   async function searchPixabay() {
-    let pixKey = sessionStorage.getItem('pixabay_key');
-    if (!pixKey) {
-      pixKey = prompt('Pixabay API Key 입력 (이번 세션에만 저장):');
-      if (!pixKey) return;
-      sessionStorage.setItem('pixabay_key', pixKey);
-    }
     const defaultQ = document.getElementById('edit-title-ko').value.slice(0, 50);
     const q = prompt('검색어 (영문 권장):', defaultQ);
     if (!q) return;
@@ -1241,7 +1237,7 @@
     box.innerHTML = '<div style="grid-column:1/-1;font-size:12px;">검색 중...</div>';
 
     try {
-      const res = await fetch(`https://pixabay.com/api/?key=${pixKey}&q=${encodeURIComponent(q)}&image_type=photo&safesearch=true&per_page=12`);
+      const res = await fetch(`${PIXABAY_WORKER_URL}/?q=${encodeURIComponent(q)}`);
       const data = await res.json();
       const hits = data.hits || [];
       if (!hits.length) {
