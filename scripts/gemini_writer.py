@@ -32,6 +32,7 @@ MAX_CLUSTERS_PER_RUN = 7  # 한 번 실행당 최대 처리 클러스터 수
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "")
+PIXABAY_API_KEY = os.getenv("PIXABAY_API_KEY", "")
 NEWSFINAL_CHANNEL = "@newsfinal"  # NewsFinal 자체기사 전용 채널
 
 def _sb_headers():
@@ -283,7 +284,7 @@ def find_similar_article(title: str, own_articles: list, threshold: int = 70):
     return None, 0
 
 
-def save_article(title_ko, summary_ko, cluster_key, category, region, country="", article_count=0, published=True, countries=None):
+def save_article(title_ko, summary_ko, cluster_key, category, region, country="", article_count=0, published=True, countries=None, image_url=""):
     url = f"internal://{cluster_key}"
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
     payload = {
@@ -299,6 +300,7 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
         "country": country,
         "country_flag": "",
         "countries": countries or ([country] if country else []),
+        "image_url": image_url,
         "score": 1,  # 최초 게시는 항상 1, 업데이트마다 +1
         "created_at": now_str,
         "first_published_at": now_str,
@@ -976,6 +978,48 @@ def generate_update_note(existing_summary: str, new_summary: str) -> str:
 
 
 
+def fetch_article_image(title: str, body: str) -> str:
+    """
+    Gemini로 영문 키워드 추출 → Pixabay 검색 → largeImageURL 반환.
+    실패 시 빈 문자열 반환. (largeImageURL은 24시간 만료 없음)
+    """
+    if not PIXABAY_API_KEY:
+        return ""
+    prompt = f"""아래 뉴스 기사의 이미지 검색용 영문 키워드를 2~3개 추출하세요.
+일반적인 시각 소재 위주로 (예: oil refinery, stock market, container port, farmland).
+인명·기업명·구체적 지명은 제외. 쉼표 구분, 키워드만 출력.
+
+제목: {title}
+본문 앞부분: {body[:300]}"""
+    kw = call_gemini(prompt, max_tokens=30)
+    if not kw:
+        return ""
+    query = kw.strip().replace(",", " ").split("\n")[0][:100]
+    if not query:
+        return ""
+    try:
+        res = requests.get(
+            "https://pixabay.com/api/",
+            params={
+                "key": PIXABAY_API_KEY,
+                "q": query,
+                "image_type": "photo",
+                "safesearch": "true",
+                "per_page": 3,
+            },
+            timeout=15
+        )
+        if res.status_code == 200:
+            hits = res.json().get("hits", [])
+            if hits:
+                return hits[0].get("largeImageURL", "")
+        else:
+            print(f"  ⚠️ Pixabay {res.status_code}: {res.text[:100]}")
+    except Exception as e:
+        print(f"  ⚠️ Pixabay 실패: {e}")
+    return ""
+
+
 def detect_and_register_companies(title: str, body: str, country: str):
     """
     기사 제목/본문에서 기업을 감지하고, companies 테이블에 없으면 자동 등록.
@@ -1474,6 +1518,9 @@ def run():
                     print(f"  ⚠️ 유사 기사 재발견 (유사도 {sim_score}%) → 미발행으로 저장: {similar.get('title_ko','')[:40]}")
                     published = False
 
+                # 발행되는 기사만 Pixabay 이미지 fetch (Gemini 호출 1회 소모)
+                image_url = fetch_article_image(full_title, gen_body or content) if published else ""
+
                 article_id = save_article(
                     title_ko      = full_title,
                     summary_ko    = gen_body or content,
@@ -1484,6 +1531,7 @@ def run():
                     article_count = cur_count,
                     published     = published,
                     countries     = gen_countries,
+                    image_url     = image_url,
                 )
                 if article_id > 0:
                     status = "✅ 저장 완료" if published else "📋 미발행 저장"
@@ -1665,6 +1713,9 @@ def run():
             else:
                 published = True
 
+            # 발행되는 기사만 Pixabay 이미지 fetch (Gemini 호출 1회 소모)
+            image_url = fetch_article_image(full_title, gen_body or content) if published else ""
+
             article_id = save_article(
                 title_ko=full_title,
                 summary_ko=gen_body or content,
@@ -1675,6 +1726,7 @@ def run():
                 article_count=1,
                 published=published,
                 countries=gen_countries,
+                image_url=image_url,
             )
             if article_id > 0:
                 status = "✅ 단독 저장" if published else "📋 단독 미발행"
