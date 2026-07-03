@@ -852,6 +852,7 @@
     if (!text) return '';
     // 마크다운 제거
     text = text
+      .replace(/!\[[^\]]*\]\([^)]+\)/g, '')
       .replace(/\*\*(.+?)\*\*/g, '$1')
       .replace(/\*(.+?)\*/g, '$1')
       .replace(/^#{1,6}\s+/gm, '')

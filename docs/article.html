@@ -352,9 +352,10 @@
       .map(x => x.article);
 
     document.title = `${title} — NewsFinal`;
-    document.querySelector('meta[name="description"]')?.setAttribute('content', cleanBody(a.summary_ko || '').slice(0, 150));
+    const metaDesc = cleanBody(a.summary_ko || '').replace(/!\[[^\]]*\]\([^)]+\)/g, '').replace(/\n+/g, ' ').trim().slice(0, 150);
+    document.querySelector('meta[name="description"]')?.setAttribute('content', metaDesc);
     document.querySelector('meta[property="og:title"]')?.setAttribute('content', `${title} — NewsFinal`);
-    document.querySelector('meta[property="og:description"]')?.setAttribute('content', cleanBody(a.summary_ko || '').slice(0, 150));
+    document.querySelector('meta[property="og:description"]')?.setAttribute('content', metaDesc);
     document.querySelector('link[rel="canonical"]')?.setAttribute('href', `https://newsfinal.co.kr/article.html?id=${a.id}`);
 
     document.getElementById('article-wrapper').innerHTML = `
