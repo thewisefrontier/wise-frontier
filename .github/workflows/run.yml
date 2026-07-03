@@ -8,6 +8,11 @@ on:
 permissions:
   contents: write
 
+# 동시 실행 방지 — 이전 실행이 끝나지 않았으면 취소하고 새 실행 시작
+concurrency:
+  group: newsfinal-auto-run
+  cancel-in-progress: true
+
 jobs:
   run:
     runs-on: ubuntu-latest
@@ -79,7 +84,7 @@ jobs:
           git config user.email "actions@github.com"
           git add -A
           git diff --staged --quiet || git commit -m "Update articles & state"
-          git pull --rebase origin main
-          git push
+          git pull origin main --rebase --strategy-option=theirs || true
+          git push --force-with-lease
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
