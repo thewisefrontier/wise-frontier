@@ -328,6 +328,7 @@
     let processedBody = bulletified.html + (bulletified.inList ? '</ul>' : '');
 
     const bodyHtml = processedBody
+      .replace(/!\[([^\]]*)\]\((https?:\/\/[^)\s]+)\)/g, '<img src="$2" alt="$1" loading="lazy" style="max-width:100%;border-radius:6px;margin:8px 0;display:block;">')
       .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
       .replace(/\n\n/g, '</p><p>')
       .replace(/\n/g, '<br>')
