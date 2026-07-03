@@ -269,9 +269,10 @@
       <div>
         <div class="field-label">대표 이미지</div>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-          <input class="field-input" id="edit-image-url" type="text" placeholder="이미지 URL" style="flex:1;" />
+          <input class="field-input" id="edit-image-url" type="text" placeholder="이미지 URL" style="flex:1;" oninput="this.value ? showImagePreview(this.value) : removeImage()" />
           <button class="btn-sm" onclick="document.getElementById('image-file-input').click()">📁 업로드</button>
           <button class="btn-sm" onclick="generateImage()">✨ AI 생성</button>
+          <button class="btn-sm" onclick="removeImage()">🗑 제거</button>
           <input type="file" id="image-file-input" accept="image/*" style="display:none;" onchange="uploadImage(this)" />
         </div>
         <div id="image-preview" style="margin-top:8px;display:none;">
@@ -1214,6 +1215,11 @@
     const img = document.getElementById('image-preview-img');
     img.src = url;
     preview.style.display = 'block';
+  }
+
+  function removeImage() {
+    document.getElementById('edit-image-url').value = '';
+    document.getElementById('image-preview').style.display = 'none';
   }
 
   // ── 토스트 ────────────────────────────────────────────
