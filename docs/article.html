@@ -352,11 +352,11 @@
       .map(x => x.article);
 
     document.title = `${title} — NewsFinal`;
-    const metaDesc = cleanBody(a.summary_ko || '').replace(/!\[[^\]]*\]\([^)]+\)/g, '').replace(/\n+/g, ' ').trim().slice(0, 150);
-    document.querySelector('meta[name="description"]')?.setAttribute('content', metaDesc);
+    document.querySelector('meta[name="description"]')?.setAttribute('content', cleanBody(a.summary_ko || '').slice(0, 150));
     document.querySelector('meta[property="og:title"]')?.setAttribute('content', `${title} — NewsFinal`);
-    document.querySelector('meta[property="og:description"]')?.setAttribute('content', metaDesc);
+    document.querySelector('meta[property="og:description"]')?.setAttribute('content', cleanBody(a.summary_ko || '').slice(0, 150));
     document.querySelector('link[rel="canonical"]')?.setAttribute('href', `https://newsfinal.co.kr/article.html?id=${a.id}`);
+    if (a.image_url) document.querySelector('meta[property="og:image"]')?.setAttribute('content', a.image_url);
 
     document.getElementById('article-wrapper').innerHTML = `
       <a class="back-btn" href="/">← 홈으로</a>
@@ -399,6 +399,8 @@
               <span>${l.note || '업데이트'}</span>
             </div>`).join('')}
         </div>` : ''}
+
+      ${a.image_url ? `<img class="article-hero" src="${a.image_url}" alt="${title.replace(/"/g,'&quot;')}" loading="lazy" style="width:100%;max-height:420px;object-fit:cover;border-radius:8px;margin:16px 0 8px;display:block;">` : ''}
 
       <div class="article-body">
         <p>${bodyHtml}</p>

@@ -852,7 +852,6 @@
     if (!text) return '';
     // 마크다운 제거
     text = text
-      .replace(/!\[[^\]]*\]\([^)]+\)/g, '')
       .replace(/\*\*(.+?)\*\*/g, '$1')
       .replace(/\*(.+?)\*/g, '$1')
       .replace(/^#{1,6}\s+/gm, '')
@@ -912,8 +911,13 @@
           </div>
           <span class="article-time" data-created="${a.created_at}">${formatTime(a.created_at)}</span>
         </div>
-        <div class="article-title">${a.title_ko||a.title_en}</div>
-        ${a.summary_ko ? `<div class="article-summary">${cleanBody(a.summary_ko).slice(0,120)}${a.summary_ko.length>120?'…':''}</div>` : ''}
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="flex:1;min-width:0;">
+            <div class="article-title">${a.title_ko||a.title_en}</div>
+            ${a.summary_ko ? `<div class="article-summary">${cleanBody(a.summary_ko).slice(0,120)}${a.summary_ko.length>120?'…':''}</div>` : ''}
+          </div>
+          ${a.image_url ? `<img src="${a.image_url}" alt="" loading="lazy" style="width:88px;height:66px;object-fit:cover;border-radius:6px;flex-shrink:0;">` : ''}
+        </div>
         <div class="article-footer">
           <span class="article-source">ⓒ NewsFinal</span>
         </div>
