@@ -310,6 +310,21 @@
     return `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
   }
 
+  async function shareArticle() {
+    const url = location.href;
+    const title = document.title;
+    if (navigator.share) {
+      try { await navigator.share({ title, url }); } catch(e) {}
+    } else {
+      try {
+        await navigator.clipboard.writeText(url);
+        alert('링크가 복사되었습니다.');
+      } catch(e) {
+        prompt('링크를 복사하세요:', url);
+      }
+    }
+  }
+
   function renderArticle(a, allArticles) {
     const title = a.title_ko || a.title_en || '';
     const body = cleanBody(a.summary_ko || a.summary_en || '');
@@ -406,7 +421,7 @@
         <p>${bodyHtml}</p>
       </div>
 
-      <div class="source-link">ⓒ NewsFinal</div>
+      <div class="source-link">ⓒ NewsFinal <button onclick="shareArticle()" style="float:right;background:none;border:1px solid var(--border);border-radius:6px;padding:4px 12px;cursor:pointer;color:var(--text);font-size:12px;">🔗 공유</button></div>
 
       ${related.length ? `
         <div class="related">
