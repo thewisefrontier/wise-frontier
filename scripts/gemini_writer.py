@@ -1519,7 +1519,7 @@ def run():
                     published = False
 
                 # 발행되는 기사만 Pixabay 이미지 fetch (Gemini 호출 1회 소모)
-                image_url = fetch_article_image(full_title, gen_body or content) if published else ""
+                image_url = ""  # fetch_article_image 자동 호출 임시 중단
 
                 article_id = save_article(
                     title_ko      = full_title,
@@ -1714,7 +1714,7 @@ def run():
                 published = True
 
             # 발행되는 기사만 Pixabay 이미지 fetch (Gemini 호출 1회 소모)
-            image_url = fetch_article_image(full_title, gen_body or content) if published else ""
+            image_url = ""  # fetch_article_image 자동 호출 임시 중단
 
             article_id = save_article(
                 title_ko=full_title,
