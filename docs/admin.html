@@ -195,6 +195,7 @@
       <div class="sidebar-divider"></div>
       <div class="sidebar-item admin-only" id="user-menu" onclick="showUsers(this)">👥 사용자 관리</div>
       <div class="sidebar-item admin-only" id="prompt-menu" onclick="showPrompts(this)">✏️ 프롬프트 관리</div>
+      <div class="sidebar-item admin-only" id="rss-menu" onclick="showRssSources(this)">📡 RSS 소스 관리</div>
     </div>
 
     <div class="main" id="main-content">
@@ -1271,6 +1272,89 @@
     } catch (e) {
       box.innerHTML = `<div style="grid-column:1/-1;font-size:12px;color:red;">오류: ${e.message}</div>`;
     }
+  }
+
+  // ── RSS 소스 관리 ────────────────────────────────────
+
+  async function showRssSources(el) {
+    currentSection = 'rss_sources';
+    document.querySelectorAll('.sidebar-item').forEach(e => e.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('main-content').innerHTML = '<div class="loading">로딩 중...</div>';
+
+    const { data, error } = await sb.from('rss_sources')
+      .select('*')
+      .order('category', { ascending: true })
+      .order('name', { ascending: true });
+
+    if (error) { document.getElementById('main-content').innerHTML = `<div class="empty">오류: ${error.message}</div>`; return; }
+
+    const activeCount = data.filter(s => s.is_active).length;
+
+    const rows = data.map(s => `
+      <tr style="${s.is_active ? '' : 'opacity:0.45;'}">
+        <td title="${s.name.replace(/"/g,'&quot;')}">${s.name}</td>
+        <td>${s.category}</td>
+        <td>${s.subcategory}</td>
+        <td title="${s.url.replace(/"/g,'&quot;')}" style="max-width:280px;overflow:hidden;text-overflow:ellipsis;"><a href="${s.url}" target="_blank" style="color:var(--muted);">${s.url}</a></td>
+        <td>
+          <div class="actions" style="display:flex;gap:4px;">
+            <button class="btn" style="font-size:11px;" onclick="toggleRssSource(${s.id}, ${!s.is_active})">${s.is_active ? '⏸ 중지' : '▶ 활성'}</button>
+            <button class="btn" style="font-size:11px;color:var(--danger);" onclick="deleteRssSource(${s.id}, '${s.name.replace(/'/g,"\\'")}')">🗑</button>
+          </div>
+        </td>
+      </tr>`).join('');
+
+    document.getElementById('main-content').innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <span style="font-size:13px;font-weight:700;">RSS 소스 관리 <span style="color:var(--muted);font-weight:400;">(활성 ${activeCount} / 전체 ${data.length})</span></span>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+        <input id="rss-name" placeholder="소스명" style="flex:1;min-width:120px;padding:6px 10px;background:var(--bg2);border:1px solid var(--border);color:var(--text);font-size:12px;">
+        <input id="rss-category" placeholder="카테고리 (예: 경제)" style="width:130px;padding:6px 10px;background:var(--bg2);border:1px solid var(--border);color:var(--text);font-size:12px;">
+        <input id="rss-subcategory" placeholder="서브카테고리" style="width:130px;padding:6px 10px;background:var(--bg2);border:1px solid var(--border);color:var(--text);font-size:12px;">
+        <input id="rss-url" placeholder="RSS URL (https://...)" style="flex:2;min-width:200px;padding:6px 10px;background:var(--bg2);border:1px solid var(--border);color:var(--text);font-size:12px;">
+        <button class="btn btn-primary" style="font-size:12px;" onclick="addRssSource()">+ 추가</button>
+      </div>
+      <table class="calendar-table">
+        <thead><tr>
+          <th>소스명</th><th style="width:80px;">카테고리</th><th style="width:100px;">서브카테고리</th><th>URL</th><th style="width:120px;">관리</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+  }
+
+  async function addRssSource() {
+    const name = document.getElementById('rss-name').value.trim();
+    const category = document.getElementById('rss-category').value.trim();
+    const subcategory = document.getElementById('rss-subcategory').value.trim() || category;
+    const url = document.getElementById('rss-url').value.trim();
+
+    if (!name || !category || !url) { toast('소스명, 카테고리, URL은 필수입니다.', 'error'); return; }
+    if (!url.startsWith('http')) { toast('URL 형식이 잘못됐습니다.', 'error'); return; }
+
+    const { error } = await sb.from('rss_sources').insert({ name, category, subcategory, url, is_active: true });
+    if (error) {
+      toast(error.code === '23505' ? '이미 등록된 URL입니다.' : `오류: ${error.message}`, 'error');
+      return;
+    }
+    toast('소스가 추가되었습니다.');
+    showRssSources(document.getElementById('rss-menu'));
+  }
+
+  async function toggleRssSource(id, active) {
+    const { error } = await sb.from('rss_sources').update({ is_active: active }).eq('id', id);
+    if (error) { toast(`오류: ${error.message}`, 'error'); return; }
+    toast(active ? '활성화되었습니다.' : '중지되었습니다.');
+    showRssSources(document.getElementById('rss-menu'));
+  }
+
+  async function deleteRssSource(id, name) {
+    if (!confirm(`"${name}" 소스를 삭제할까요?\n(비활성화만 원하면 취소 후 ⏸ 중지를 사용하세요)`)) return;
+    const { error } = await sb.from('rss_sources').delete().eq('id', id);
+    if (error) { toast(`오류: ${error.message}`, 'error'); return; }
+    toast('삭제되었습니다.');
+    showRssSources(document.getElementById('rss-menu'));
   }
 
   // ── 토스트 ────────────────────────────────────────────
