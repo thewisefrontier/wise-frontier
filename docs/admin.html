@@ -196,6 +196,7 @@
       <div class="sidebar-item admin-only" id="user-menu" onclick="showUsers(this)">👥 사용자 관리</div>
       <div class="sidebar-item admin-only" id="prompt-menu" onclick="showPrompts(this)">✏️ 프롬프트 관리</div>
       <div class="sidebar-item admin-only" id="rss-menu" onclick="showRssSources(this)">📡 RSS 소스 관리</div>
+      <div class="sidebar-item" id="stats-menu" onclick="showStats(this)">📊 발행 통계</div>
     </div>
 
     <div class="main" id="main-content">
@@ -1355,6 +1356,101 @@
     if (error) { toast(`오류: ${error.message}`, 'error'); return; }
     toast('삭제되었습니다.');
     showRssSources(document.getElementById('rss-menu'));
+  }
+
+  // ── 발행 통계 ────────────────────────────────────────
+
+  async function showStats(el) {
+    currentSection = 'stats';
+    document.querySelectorAll('.sidebar-item').forEach(e => e.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('main-content').innerHTML = '<div class="loading">로딩 중...</div>';
+
+    const since = new Date(Date.now() - 30 * 86400000).toISOString();
+    const { data, error } = await sb.from('articles')
+      .select('created_at,is_published,category')
+      .gte('created_at', since);
+
+    if (error) { document.getElementById('main-content').innerHTML = `<div class="empty">오류: ${error.message}</div>`; return; }
+
+    // 날짜별(KST) 집계
+    const byDate = {};
+    const byCategory = {};
+    data.forEach(a => {
+      const d = new Date(a.created_at);
+      const kstDate = new Date(d.getTime() + 9 * 3600000).toISOString().slice(0, 10);
+      if (!byDate[kstDate]) byDate[kstDate] = { total: 0, published: 0 };
+      byDate[kstDate].total++;
+      if (a.is_published) byDate[kstDate].published++;
+      const cat = a.category || '미분류';
+      byCategory[cat] = (byCategory[cat] || 0) + 1;
+    });
+
+    // 최근 30일 날짜 배열 (빈 날짜도 0으로 채움)
+    const days = [];
+    for (let i = 29; i >= 0; i--) {
+      const d = new Date(Date.now() + 9 * 3600000 - i * 86400000).toISOString().slice(0, 10);
+      days.push(d);
+    }
+
+    const counts = days.map(d => byDate[d]?.total || 0);
+    const maxCount = Math.max(...counts, 1);
+    const totalArticles = data.length;
+    const totalPublished = data.filter(a => a.is_published).length;
+    const avgPerDay = (totalArticles / 30).toFixed(1);
+    const last7 = days.slice(-7).reduce((s, d) => s + (byDate[d]?.total || 0), 0);
+    const avg7 = (last7 / 7).toFixed(1);
+
+    const barsHtml = days.map(d => {
+      const c = byDate[d]?.total || 0;
+      const p = byDate[d]?.published || 0;
+      const heightPct = Math.round((c / maxCount) * 100);
+      const label = d.slice(5).replace('-', '/');
+      return `
+        <div style="display:flex;flex-direction:column;align-items:center;flex:1;min-width:0;" title="${d}: 전체 ${c}건 (발행 ${p}건)">
+          <div style="font-size:9px;color:var(--muted);margin-bottom:2px;">${c > 0 ? c : ''}</div>
+          <div style="width:100%;max-width:18px;height:120px;display:flex;align-items:flex-end;">
+            <div style="width:100%;background:var(--accent);border-radius:2px 2px 0 0;height:${heightPct}%;min-height:${c > 0 ? '2px' : '0'};"></div>
+          </div>
+          <div style="font-size:9px;color:var(--muted);margin-top:4px;writing-mode:vertical-rl;transform:rotate(180deg);height:32px;">${label}</div>
+        </div>`;
+    }).join('');
+
+    const categoryRows = Object.entries(byCategory)
+      .sort((a, b) => b[1] - a[1])
+      .map(([cat, cnt]) => `
+        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px;">
+          <span>${cat}</span><span class="muted">${cnt}건</span>
+        </div>`).join('');
+
+    document.getElementById('main-content').innerHTML = `
+      <div style="font-size:13px;font-weight:700;margin-bottom:16px;">발행 통계 (최근 30일)</div>
+      <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:140px;background:var(--bg2);border:1px solid var(--border);padding:12px 16px;">
+          <div style="font-size:11px;color:var(--muted);">30일 총 기사</div>
+          <div style="font-size:20px;font-weight:700;color:var(--accent);">${totalArticles.toLocaleString()}건</div>
+        </div>
+        <div style="flex:1;min-width:140px;background:var(--bg2);border:1px solid var(--border);padding:12px 16px;">
+          <div style="font-size:11px;color:var(--muted);">발행됨</div>
+          <div style="font-size:20px;font-weight:700;">${totalPublished.toLocaleString()}건</div>
+        </div>
+        <div style="flex:1;min-width:140px;background:var(--bg2);border:1px solid var(--border);padding:12px 16px;">
+          <div style="font-size:11px;color:var(--muted);">일평균 (30일)</div>
+          <div style="font-size:20px;font-weight:700;">${avgPerDay}건</div>
+        </div>
+        <div style="flex:1;min-width:140px;background:var(--bg2);border:1px solid var(--border);padding:12px 16px;">
+          <div style="font-size:11px;color:var(--muted);">일평균 (최근 7일)</div>
+          <div style="font-size:20px;font-weight:700;">${avg7}건</div>
+        </div>
+      </div>
+      <div style="background:var(--bg2);border:1px solid var(--border);padding:16px;margin-bottom:20px;">
+        <div style="font-size:12px;font-weight:700;margin-bottom:12px;">일별 발행 건수</div>
+        <div style="display:flex;gap:2px;align-items:flex-end;">${barsHtml}</div>
+      </div>
+      <div style="background:var(--bg2);border:1px solid var(--border);padding:16px;max-width:400px;">
+        <div style="font-size:12px;font-weight:700;margin-bottom:8px;">카테고리별 분포 (30일)</div>
+        ${categoryRows}
+      </div>`;
   }
 
   // ── 토스트 ────────────────────────────────────────────
