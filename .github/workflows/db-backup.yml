@@ -1,0 +1,39 @@
+name: DB 암호화 백업
+
+on:
+  schedule:
+    - cron: "0 18 * * *"   # 매일 03:00 KST
+  workflow_dispatch:
+
+concurrency:
+  group: db-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: PostgreSQL 클라이언트 설치
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq postgresql-client
+
+      - name: DB 덤프
+        run: pg_dump "$SUPABASE_DB_URL" --no-owner --no-privileges -F c -f backup.dump
+        env:
+          SUPABASE_DB_URL: postgresql://postgres:${{ secrets.SUPABASE_DB_PASSWORD }}@db.fotdngseksgqhytcvqh.supabase.co:5432/postgres
+
+      - name: 암호화 (AES-256)
+        run: |
+          openssl enc -aes-256-cbc -pbkdf2 -salt \
+            -in backup.dump \
+            -out "newsfinal-$(date +%Y%m%d).dump.enc" \
+            -pass env:BACKUP_PASSWORD
+          rm backup.dump
+        env:
+          BACKUP_PASSWORD: ${{ secrets.BACKUP_PASSWORD }}
+
+      - name: 백업 업로드 (30일 보관)
+        uses: actions/upload-artifact@v4
+        with:
+          name: db-backup-${{ github.run_id }}
+          path: "*.dump.enc"
+          retention-days: 30

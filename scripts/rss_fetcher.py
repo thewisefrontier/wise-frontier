@@ -29,7 +29,6 @@ init_db()
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 CHAT_ID = "@TheWiseFrontier"
 
-RSS_FILE = "sources/rss_sources.txt"
 STATE_FILE = "data/state.json"
 
 # =========================
@@ -357,27 +356,23 @@ if state["last_reset"] != today:
 # =========================
 
 def load_rss():
-    sources = []
-    with open(RSS_FILE, "r", encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if not line or line.startswith("#") or "|" not in line:
-                continue
-            parts = line.split("|")
-            if len(parts) == 4:
-                sources.append({
-                    "name":        parts[0],
-                    "category":    parts[1],
-                    "subcategory": parts[2],
-                    "url":         parts[3]
-                })
-            elif len(parts) == 3:
-                sources.append({
-                    "name":        parts[0],
-                    "category":    parts[1],
-                    "subcategory": parts[1],
-                    "url":         parts[2]
-                })
+    """Supabase rss_sources 테이블에서 소스 로드 (파일 노출 방지)"""
+    supabase_url = os.getenv("SUPABASE_URL", "").rstrip("/")
+    supabase_key = os.getenv("SUPABASE_SERVICE_KEY", "")
+    res = requests.get(
+        f"{supabase_url}/rest/v1/rss_sources",
+        headers={
+            "apikey": supabase_key,
+            "Authorization": f"Bearer {supabase_key}",
+        },
+        params={"select": "name,category,subcategory,url", "is_active": "eq.true", "limit": "1000"},
+        timeout=15,
+    )
+    res.raise_for_status()
+    sources = res.json()
+    if not sources:
+        raise RuntimeError("rss_sources 테이블이 비어 있습니다. 마이그레이션 SQL을 먼저 실행하세요.")
+    print(f"✅ RSS 소스 {len(sources)}개 로드 (Supabase)")
     return sources
 
 # =========================
