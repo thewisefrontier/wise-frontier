@@ -398,6 +398,7 @@
       <h1 class="article-title">${title}</h1>
 
       <div class="article-meta">
+        <span>✍ ${a.byline || '뉴스파이널 편집국'}</span>
         ${a.first_published_at && a.first_published_at !== a.created_at
           ? `<span>🕐 최초 게시: ${formatDate(a.first_published_at)}</span><span>🔄 최종 업데이트: ${formatDate(a.created_at)}</span>`
           : `<span>🕐 ${formatDate(a.created_at)}</span>`}
@@ -442,4 +443,3 @@
 </script>
 </body>
 </html>
-
