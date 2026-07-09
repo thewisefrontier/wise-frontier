@@ -13,13 +13,33 @@ jobs:
   backup:
     runs-on: ubuntu-latest
     steps:
-      - name: PostgreSQL 클라이언트 설치
-        run: sudo apt-get update -qq && sudo apt-get install -y -qq postgresql-client
+      - name: PostgreSQL 17 클라이언트 설치
+        run: |
+          sudo install -d /usr/share/postgresql-common/pgdg
+          sudo curl -sSf -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc
+          echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-client-17
 
-      - name: DB 덤프
-        run: pg_dump "$SUPABASE_DB_URL" --no-owner --no-privileges -F c -f backup.dump
+      - name: DB 덤프 (Session Pooler, IPv4)
         env:
-          SUPABASE_DB_URL: postgresql://postgres:${{ secrets.SUPABASE_DB_PASSWORD }}@db.fotdngseksgqhytcvqh.supabase.co:5432/postgres
+          PGPASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+        run: |
+          set -u
+          DB_USER="postgres.fotdngseksqaghvtcvqh"
+          DUMPED=0
+          for HOST in aws-1-ap-northeast-2.pooler.supabase.com aws-0-ap-northeast-2.pooler.supabase.com; do
+            echo "시도: $HOST"
+            if pg_dump -h "$HOST" -p 5432 -U "$DB_USER" -d postgres --no-owner --no-privileges -F c -f backup.dump; then
+              echo "✅ 성공: $HOST"
+              DUMPED=1
+              break
+            fi
+          done
+          if [ "$DUMPED" -ne 1 ]; then
+            echo "❌ 두 pooler 호스트 모두 실패"
+            exit 1
+          fi
 
       - name: 암호화 (AES-256)
         run: |
