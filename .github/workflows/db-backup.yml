@@ -25,21 +25,9 @@ jobs:
         env:
           PGPASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
         run: |
-          set -u
-          DB_USER="postgres.fotdngseksqaghvtcvqh"
-          DUMPED=0
-          for HOST in aws-1-ap-northeast-2.pooler.supabase.com aws-0-ap-northeast-2.pooler.supabase.com; do
-            echo "시도: $HOST"
-            if pg_dump -h "$HOST" -p 5432 -U "$DB_USER" -d postgres --no-owner --no-privileges -F c -f backup.dump; then
-              echo "✅ 성공: $HOST"
-              DUMPED=1
-              break
-            fi
-          done
-          if [ "$DUMPED" -ne 1 ]; then
-            echo "❌ 두 pooler 호스트 모두 실패"
-            exit 1
-          fi
+          pg_dump -h aws-1-ap-northeast-2.pooler.supabase.com -p 5432 \
+            -U postgres.fotdngseksqaghvtcvqh -d postgres \
+            --no-owner --no-privileges -F c -f backup.dump
 
       - name: 암호화 (AES-256)
         run: |
