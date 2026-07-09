@@ -194,6 +194,9 @@
 </footer>
 
 <script>
+  const SUPABASE_URL = 'https://fotdngseksqaghvtcvqh.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_rT3kSEAAdM0DJlDW5fEWww_M37h6dDW';
+
   const REGION_KO = {
     'africa': '아프리카', 'southeast_asia': '동남아시아',
     'eastern_europe': '동유럽', 'middle_east': '중동',
@@ -255,6 +258,21 @@
     } catch(e) {}
   }
 
+  // articles.json에는 최근 7일치 기사만 담김(export_articles.py). 검색엔진이 색인한
+  // 오래된 기사 URL이 "찾을 수 없음"으로 뜨는 걸 막기 위해, 목록에 없으면
+  // Supabase에서 해당 id 하나만 직접 조회한다.
+  async function fetchArticleFromSupabase(id) {
+    try {
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/articles?id=eq.${encodeURIComponent(id)}&is_published=eq.true&select=*`,
+        { headers: { 'apikey': SUPABASE_ANON_KEY } }
+      );
+      if (!res.ok) return null;
+      const rows = await res.json();
+      return rows[0] || null;
+    } catch(e) { return null; }
+  }
+
   async function loadArticle() {
     const params = new URLSearchParams(location.search);
     const id = params.get('id');
@@ -267,7 +285,12 @@
     try {
       const res = await fetch('data/articles.json');
       const articles = await res.json();
-      const article = articles.find(a => String(a.id) === String(id));
+      let article = articles.find(a => String(a.id) === String(id));
+
+      if (!article) {
+        // 최근 7일 목록에 없는 오래된 기사 — DB에서 직접 조회
+        article = await fetchArticleFromSupabase(id);
+      }
 
       if (!article) {
         document.getElementById('article-wrapper').innerHTML = '<div class="error">기사를 찾을 수 없습니다.</div>';
@@ -277,10 +300,10 @@
       renderArticle(article, articles);
 
       // view_count 증가
-      fetch(`https://fotdngseksqaghvtcvqh.supabase.co/rest/v1/rpc/increment_view_count`, {
+      fetch(`${SUPABASE_URL}/rest/v1/rpc/increment_view_count`, {
         method: 'POST',
         headers: {
-          'apikey': 'sb_publishable_rT3kSEAAdM0DJlDW5fEWww_M37h6dDW',
+          'apikey': SUPABASE_ANON_KEY,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ article_id: parseInt(id) })
@@ -351,7 +374,7 @@
       .replace(/(<\/ul>)<br>/g, '$1');
 
     const myCountries = new Set(a.countries && a.countries.length ? a.countries : (a.country ? [a.country] : []));
-    const related = allArticles
+    const related = (allArticles || [])
       .filter(r => r.id !== a.id && r.source === 'NewsFinal')
       .map(r => {
         let score = 0;
