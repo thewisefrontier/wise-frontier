@@ -264,6 +264,12 @@
           <input class="field-select" id="edit-source" type="text" placeholder="NewsFinal" />
         </div>
       </div>
+      <div class="field-row">
+        <div>
+          <div class="field-label">바이라인</div>
+          <input class="field-select" id="edit-byline" type="text" placeholder="뉴스파이널 편집국" />
+        </div>
+      </div>
       <div id="url-field">
         <div class="field-label">원문 URL</div>
         <input class="field-input" id="edit-url" type="text" placeholder="https://..." />
@@ -522,6 +528,7 @@
     document.getElementById('edit-region').value = data.region || '';
     document.getElementById('edit-country').value = data.country || '';
     document.getElementById('edit-source').value = data.source || '';
+    document.getElementById('edit-byline').value = data.byline || '뉴스파이널 편집국';
     document.getElementById('edit-url').value = data.url || '';
     document.getElementById('edit-image-url').value = data.image_url || '';
     if (data.image_url) showImagePreview(data.image_url);
@@ -542,6 +549,7 @@
     document.getElementById('edit-category').value = '';
     document.getElementById('edit-region').value = '';
     document.getElementById('edit-source').value = 'NewsFinal';
+    document.getElementById('edit-byline').value = '뉴스파이널 편집국';
     document.getElementById('edit-image-url').value = '';
     document.getElementById('image-preview').style.display = 'none';
     document.getElementById('url-field').style.display = 'none';
@@ -563,6 +571,7 @@
       region: document.getElementById('edit-region').value,
       country: document.getElementById('edit-country').value,
       source: document.getElementById('edit-source').value,
+      byline: document.getElementById('edit-byline').value,
       url: document.getElementById('edit-url').value,
       image_url: document.getElementById('edit-image-url').value || null,
     };
@@ -1464,9 +1473,3 @@
 </script>
 </body>
 </html>
-
-
-
-
-
-
