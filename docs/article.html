@@ -8,16 +8,21 @@
   <meta property="og:image" content="https://newsfinal.co.kr/favicon-512.png">
   <meta property="og:title" content="NewsFinal">
   <meta property="og:description" content="">
-  <link rel="canonical" href="https://newsfinal.co.kr/article.html">
+  <link rel="canonical" href="https://newsfinal.co.kr/article">
   <script>
     // canonical을 데이터 로딩 전, 파싱 즉시 실제 기사 주소로 고정 —
     // 그렇지 않으면 크롤러가 id 없는 일반 주소를 정본으로 읽어
     // "적절한 표준 태그가 포함된 대체 페이지"로 색인 제외되는 문제가 생김
+    //
+    // URL은 확장자 없는 형태(article?id=..)를 사용한다. Cloudflare Pages가
+    // *.html?query 요청을 자동으로 확장자 없는 주소로 301 리디렉션하는
+    // 내장 동작이 있어(끌 수 없음), canonical이 .html 버전을 가리키면
+    // 구글이 "리디렉션이 포함된 페이지"로 색인 제외한다.
     (function() {
       var id = new URLSearchParams(location.search).get('id');
       if (id) {
         var link = document.querySelector('link[rel="canonical"]');
-        if (link) link.setAttribute('href', 'https://newsfinal.co.kr/article.html?id=' + encodeURIComponent(id));
+        if (link) link.setAttribute('href', 'https://newsfinal.co.kr/article?id=' + encodeURIComponent(id));
       }
     })();
   </script>
@@ -405,7 +410,7 @@
     document.querySelector('meta[name="description"]')?.setAttribute('content', cleanBody(a.summary_ko || '').slice(0, 150));
     document.querySelector('meta[property="og:title"]')?.setAttribute('content', `${title} — NewsFinal`);
     document.querySelector('meta[property="og:description"]')?.setAttribute('content', cleanBody(a.summary_ko || '').slice(0, 150));
-    document.querySelector('link[rel="canonical"]')?.setAttribute('href', `https://newsfinal.co.kr/article.html?id=${a.id}`);
+    document.querySelector('link[rel="canonical"]')?.setAttribute('href', `https://newsfinal.co.kr/article?id=${a.id}`);
     if (a.image_url) document.querySelector('meta[property="og:image"]')?.setAttribute('content', a.image_url);
 
     document.getElementById('article-wrapper').innerHTML = `
@@ -463,7 +468,7 @@
           <div class="related-title">관련 기사</div>
           ${related.map(r => `
             <div class="related-item">
-              <a class="related-item-title" href="/article.html?id=${r.id}">${r.title_ko || r.title_en}</a>
+              <a class="related-item-title" href="/article?id=${r.id}">${r.title_ko || r.title_en}</a>
               <div class="related-meta">NewsFinal · ${(r.created_at || '').slice(0,10)}</div>
             </div>
           `).join('')}

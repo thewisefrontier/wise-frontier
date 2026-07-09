@@ -288,7 +288,7 @@
   }
 
   // ── 렌더링 ──────────────────────────────────────────────────────────
-  function renderHero(company) {
+  async function renderHero(company) {
     // 주가 데이터 조회
     let stockInfo = null;
     if (company.ticker) {
@@ -376,7 +376,7 @@
 
     const SHOW = 5;
     const renderItems = (items) => items.map(a => `
-      <a class="article-item" href="/article.html?id=${a.id}">
+      <a class="article-item" href="/article?id=${a.id}">
         <div class="article-title">${a.title_ko || ''}</div>
         <div class="article-meta">${formatDate(a.created_at)} · ${a.country || ''} · ${a.category || ''}</div>
       </a>`).join('');

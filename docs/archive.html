@@ -315,7 +315,7 @@
       const countryTags = [...new Set(countries)].filter(c=>c).map(c => `<span class="tag country">${c}</span>`).join('');
 
       return `
-        <div class="article-card" onclick="location.href='article.html?id=${a.id}'">
+        <div class="article-card" onclick="location.href='article?id=${a.id}'">
           <div class="article-tags">${catTag}${regionTag}${countryTags}</div>
           <div class="article-title">${title}</div>
           <div class="article-meta">${formatTime(a.created_at)}${summary ? ' · ' + summary + (a.summary_ko && a.summary_ko.length > 100 ? '…' : '') : ''}</div>

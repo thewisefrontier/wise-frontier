@@ -657,7 +657,7 @@
   function toggleExpand(idx) {
     const a = allArticles[idx];
     if (!a) return;
-    location.href = `article.html?id=${a.id}`;
+    location.href = `article?id=${a.id}`;
   }
 
   // 탭 active 초기화
@@ -883,7 +883,7 @@
 
   function renderCard(a, standalone) {
     const idx = allArticles.indexOf(a);
-    const clickAction = idx >= 0 ? `toggleExpand(${idx})` : `location.href='article.html?id=${a.id}'`;
+    const clickAction = idx >= 0 ? `toggleExpand(${idx})` : `location.href='article?id=${a.id}'`;
     // isLive 제거 — 트렌드 탭으로 분리됨
     const TREND_PREFIXES = ['trend_', 'realtrend_', 'extrend_'];
     const isTrend = TREND_PREFIXES.some(p => (a.subcategory || '').startsWith(p));
@@ -932,7 +932,7 @@
       <div class="wire-item">
         <div class="wire-dot ${i<2?'new':''}"></div>
         <div>
-          <div class="wire-text" style="cursor:pointer;" onclick="location.href='article.html?id=${a.id}'">${a.title_ko||a.title_en}</div>
+          <div class="wire-text" style="cursor:pointer;" onclick="location.href='article?id=${a.id}'">${a.title_ko||a.title_en}</div>
           <div class="wire-meta">NewsFinal · <span data-created="${a.created_at}">${formatTime(a.created_at)}</span></div>
         </div>
       </div>`).join('');
@@ -970,7 +970,7 @@
         <div class="briefing-region">${country}</div>
         ${items.map(a => {
           const title = a.title_ko || a.title_en;
-          return `<div class="briefing-title" style="cursor:pointer;" onclick="location.href='article.html?id=${a.id}'">· ${title}</div>`;
+          return `<div class="briefing-title" style="cursor:pointer;" onclick="location.href='article?id=${a.id}'">· ${title}</div>`;
         }).join('')}
       </div>`).join('');
 
@@ -1000,7 +1000,7 @@
       <div class="digest-more">전체 보기 →</div>
     `;
     box.style.display = 'block';
-    box.onclick = () => location.href = `article.html?id=${digest.id}`;
+    box.onclick = () => location.href = `article?id=${digest.id}`;
   }
 
   async function loadArticles() {

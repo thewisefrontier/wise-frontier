@@ -211,7 +211,13 @@ def fetch_market_data():
 
 
 def generate_sitemap(articles):
-    """sitemap.xml 생성"""
+    """sitemap.xml 생성
+
+    주의: URL은 확장자 없는 형태(article?id=..)로 생성한다.
+    Cloudflare Pages가 *.html?query 요청을 자동으로 확장자 없는 주소로
+    301 리디렉션하는 내장 동작이 있어(끌 수 없음), sitemap/canonical이
+    .html 버전을 가리키면 구글이 "리디렉션 있는 페이지"로 색인 제외한다.
+    """
     os.makedirs("docs", exist_ok=True)
     urls = [
         '<url><loc>https://newsfinal.co.kr/</loc><changefreq>hourly</changefreq><priority>1.0</priority></url>',
@@ -227,7 +233,7 @@ def generate_sitemap(articles):
     ]
     for a in articles:
         if a.get('id'):
-            urls.append(f'<url><loc>https://newsfinal.co.kr/article.html?id={a["id"]}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>')
+            urls.append(f'<url><loc>https://newsfinal.co.kr/article?id={a["id"]}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>')
 
     sitemap = f'''<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -278,4 +284,3 @@ if __name__ == "__main__":
     export_companies()
     if articles:
         generate_sitemap(articles)
-

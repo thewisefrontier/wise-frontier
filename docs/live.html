@@ -252,7 +252,7 @@
       const articles = await res.json();
 
       // 트렌드 기준: subcategory가 trend_/realtrend_/extrend_인 기사
-      
+
       const TREND_PREFIXES = ['trend_', 'realtrend_', 'extrend_'];
       const raw = articles
         .filter(a => {
@@ -320,7 +320,7 @@
         </div>` : '';
 
       return `
-        <div class="live-card" onclick="location.href='article.html?id=${a.id}'">
+        <div class="live-card" onclick="location.href='article?id=${a.id}'">
           <div class="live-badge"><span class="dot"></span>TREND</div>
           <div class="live-tags">${catTag}${regionTag}${countryTags}</div>
           <div class="live-title">${title}</div>
