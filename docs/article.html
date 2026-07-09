@@ -398,7 +398,6 @@
       <h1 class="article-title">${title}</h1>
 
       <div class="article-meta">
-        <span>${a.byline || '뉴스파이널 편집국'}</span>
         ${a.first_published_at && a.first_published_at !== a.created_at
           ? `<span>🕐 최초 게시: ${formatDate(a.first_published_at)}</span><span>🔄 최종 업데이트: ${formatDate(a.created_at)}</span>`
           : `<span>🕐 ${formatDate(a.created_at)}</span>`}
@@ -422,7 +421,7 @@
         <p>${bodyHtml}</p>
       </div>
 
-      <div class="source-link">ⓒ NewsFinal <button onclick="shareArticle()" style="float:right;background:none;border:1px solid var(--border);border-radius:6px;padding:4px 12px;cursor:pointer;color:var(--text);font-size:12px;">🔗 공유</button></div>
+      <div class="source-link">ⓒ NewsFinal · ${a.byline || '뉴스파이널 편집국'} <button onclick="shareArticle()" style="float:right;background:none;border:1px solid var(--border);border-radius:6px;padding:4px 12px;cursor:pointer;color:var(--text);font-size:12px;">🔗 공유</button></div>
 
       ${related.length ? `
         <div class="related">
