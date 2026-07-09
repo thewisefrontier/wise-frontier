@@ -9,6 +9,18 @@
   <meta property="og:title" content="NewsFinal">
   <meta property="og:description" content="">
   <link rel="canonical" href="https://newsfinal.co.kr/article.html">
+  <script>
+    // canonical을 데이터 로딩 전, 파싱 즉시 실제 기사 주소로 고정 —
+    // 그렇지 않으면 크롤러가 id 없는 일반 주소를 정본으로 읽어
+    // "적절한 표준 태그가 포함된 대체 페이지"로 색인 제외되는 문제가 생김
+    (function() {
+      var id = new URLSearchParams(location.search).get('id');
+      if (id) {
+        var link = document.querySelector('link[rel="canonical"]');
+        if (link) link.setAttribute('href', 'https://newsfinal.co.kr/article.html?id=' + encodeURIComponent(id));
+      }
+    })();
+  </script>
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7TKGYEM467"></script>
   <script>
