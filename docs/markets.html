@@ -39,8 +39,11 @@
       font-size: 10px; color: var(--muted); background: var(--bg3);
       margin: 0 -24px; padding: 5px 24px; gap: 16px; line-height: 1.4;
     }
-    .ticker-strip { display: flex; gap: 20px; overflow: hidden; flex: 1; }
-    .ticker-item { display: flex; gap: 6px; align-items: center; white-space: nowrap; }
+    .ticker-strip { display: flex; overflow: hidden; flex: 1; }
+    .ticker-track { display: flex; gap: 18px; white-space: nowrap; animation: ticker-scroll 40s linear infinite; }
+    .ticker-strip:hover .ticker-track { animation-play-state: paused; }
+    @keyframes ticker-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .ticker-item { display: flex; gap: 5px; align-items: center; white-space: nowrap; }
     .ticker-label { color: var(--muted); }
     .ticker-val { color: var(--text); font-weight: 500; }
     .up { color: var(--red); } .down { color: var(--accent2); }
@@ -347,11 +350,12 @@
       if (!indices.length) return;
       const ticker = document.getElementById('ticker');
       if (!ticker) return;
-      ticker.innerHTML = indices.map(m => {
+      const itemsHtml = indices.map(m => {
         const sign = m.change_pct >= 0 ? '+' : '';
         const cls = m.change_pct >= 0 ? 'up' : 'down';
         return `<span class="ticker-item"><span class="ticker-label">${m.name}</span><span class="ticker-val ${cls}">${m.price.toLocaleString()} ${sign}${m.change_pct.toFixed(2)}%</span></span>`;
       }).join('');
+      ticker.innerHTML = `<div class="ticker-track">${itemsHtml}${itemsHtml}</div>`;
     } catch(e) {}
   }
 
