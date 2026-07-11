@@ -959,9 +959,12 @@ def save_company(company_id: str, name: str, name_ko: str, country: str,
             json=payload,
             timeout=15
         )
-        return res.status_code in (200, 201)
+        if res.status_code in (200, 201):
+            return True
+        print(f"  ⚠️ 기업 저장 실패: HTTP {res.status_code} - {res.text[:300]}")
+        return False
     except Exception as e:
-        print(f"  ⚠️ 기업 저장 실패: {e}")
+        print(f"  ⚠️ 기업 저장 실패(예외): {e}")
     return False
 
 
@@ -1054,6 +1057,7 @@ def detect_and_register_companies(title: str, body: str, country: str):
 
     raw = call_gemini(prompt, max_tokens=800)
     if not raw:
+        print("  ⚠️ 기업 감지: Gemini 응답 없음")
         return
 
     try:
@@ -1083,6 +1087,7 @@ def detect_and_register_companies(title: str, body: str, country: str):
                 "베트남": "🇻🇳", "인도네시아": "🇮🇩", "태국": "🇹🇭", "필리핀": "🇵🇭",
                 "이집트": "🇪🇬", "가나": "🇬🇭", "에티오피아": "🇪🇹", "탄자니아": "🇹🇿",
                 "방글라데시": "🇧🇩", "파키스탄": "🇵🇰", "카자흐스탄": "🇰🇿",
+                "몽골": "🇲🇳",
             }
             country_flag = flag_map.get(comp_country, "🌍")
 
