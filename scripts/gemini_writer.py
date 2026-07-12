@@ -803,6 +803,50 @@ def call_gemini(prompt, max_tokens=1000, retry=2):
     return None
 
 
+# ── 논평/칼럼체 검출 및 재생성 ────────────────────────────
+# writer_rules 프롬프트에 "기사 문체로 작성, 논평/칼럼체 금지"를 명시해도
+# Gemini가 가끔 논평/칼럼 어투로 생성하는 경우가 있어, 생성 후 패턴 검사 →
+# 걸리면 1회 재생성을 시도해 최종 결과물에서의 노출 빈도를 낮춘다.
+BANNED_STYLE_PATTERNS = [
+    r"보여줍니다", r"보여주고 있습니다", r"보여준다",
+    r"도모하고 있습니다", r"도모한다",
+    r"강조하고 있습니다", r"강조한다",
+    r"시사합니다", r"시사한다",
+    r"주목됩니다", r"주목된다", r"주목받고 있습니다",
+    r"평가된다", r"평가받고 있습니다", r"라는 평가다", r"라는 분석이다",
+    r"필요해 보입니다", r"필요할 것으로 보입니다",
+    r"지켜볼 필요가 있습니다", r"지켜봐야 할 것입니다",
+    r"기대됩니다", r"기대해 볼 만합니다",
+]
+
+def has_column_style(text: str) -> bool:
+    """생성된 기사 본문에 논평/칼럼체 어미가 섞여 있는지 검사"""
+    if not text:
+        return False
+    return any(re.search(p, text) for p in BANNED_STYLE_PATTERNS)
+
+
+def call_gemini_article(prompt, max_tokens=1500, style_retries=1):
+    """기사 본문 생성 전용 호출. 논평/칼럼체 감지 시 최대 style_retries회 재생성."""
+    content = call_gemini(prompt, max_tokens=max_tokens)
+    attempt = 0
+    while content and has_column_style(content) and attempt < style_retries:
+        attempt += 1
+        print(f"  ⚠️ 논평/칼럼체 감지 → 재생성 시도 ({attempt}/{style_retries})")
+        retry_prompt = (
+            prompt
+            + "\n\n[재작성 지시] 방금 작성한 결과에 논평/칼럼 문체(예: '~를 보여줍니다', "
+              "'~을 도모하고 있습니다', '~라는 평가다', '~지켜볼 필요가 있습니다' 등)가 섞여 있었습니다. "
+              "감정·의견이 섞인 표현을 모두 배제하고, 사실 전달 중심의 스트레이트 뉴스 문체로만 다시 작성하세요."
+        )
+        retried = call_gemini(retry_prompt, max_tokens=max_tokens)
+        if retried:
+            content = retried
+    if content and has_column_style(content):
+        print("  ⚠️ 재생성 후에도 논평체 패턴이 남아있음 (그대로 진행)")
+    return content
+
+
 # 국가 → 지역 매핑
 COUNTRY_TO_REGION = {
     "나이지리아": "africa", "케냐": "africa", "가나": "africa", "남아공": "africa",
@@ -1352,7 +1396,7 @@ def update_live_articles():
 업데이트노트: (핵심 변경 15자 이내)
 본문: (업데이트된 전체 본문)"""
 
-        result = call_gemini(prompt, max_tokens=2000)
+        result = call_gemini_article(prompt, max_tokens=2000)
         if not result or "업데이트 불필요" in result:
             print(f"     업데이트 불필요")
             continue
@@ -1418,7 +1462,7 @@ def run():
             print(f"  → 기존 기사 업데이트 ({prev_count}건 → {cur_count}건)")
             prompt  = build_issue_prompt(cluster, existing["summary_ko"])
             has_full = any(a.get("full_text") for a in cluster)
-            content = call_gemini(prompt, max_tokens=4000 if has_full else 1500)
+            content = call_gemini_article(prompt, max_tokens=4000 if has_full else 1500)
 
             if content:
                 gen_title, gen_body, gen_country, gen_category, gen_countries = parse_title_and_body(content)
@@ -1463,7 +1507,7 @@ def run():
 
                 prompt = build_issue_prompt(cluster, existing_summary) if existing_summary else build_issue_prompt(cluster)
                 has_full = any(a.get("full_text") for a in cluster)
-                content = call_gemini(prompt, max_tokens=4000 if has_full else 1500)
+                content = call_gemini_article(prompt, max_tokens=4000 if has_full else 1500)
 
                 if content:
                     gen_title, gen_body, gen_country, gen_category, gen_countries = parse_title_and_body(content)
@@ -1496,7 +1540,7 @@ def run():
             print(f"  → 신규 이슈 기사 생성")
             prompt  = build_issue_prompt(cluster)
             has_full = any(a.get("full_text") for a in cluster)
-            content = call_gemini(prompt, max_tokens=4000 if has_full else 1500)
+            content = call_gemini_article(prompt, max_tokens=4000 if has_full else 1500)
 
             if content:
                 gen_title, gen_body, gen_country, gen_category, gen_countries = parse_title_and_body(content)
@@ -1641,7 +1685,7 @@ def run():
                 full_text=a.get('full_text', ''),
                 rules=rules,
             )
-            content = call_gemini(prompt, max_tokens=4000)
+            content = call_gemini_article(prompt, max_tokens=4000)
 
             if content:
                 gen_title, gen_body, gen_country, gen_category, gen_countries = parse_title_and_body(content)
@@ -1691,7 +1735,7 @@ def run():
             rules=rules,
         )
 
-        content = call_gemini(prompt, max_tokens=4000)
+        content = call_gemini_article(prompt, max_tokens=4000)
         if content:
             gen_title, gen_body, gen_country, gen_category, gen_countries = parse_title_and_body(content)
             full_title = gen_title if gen_title else title[:50]
