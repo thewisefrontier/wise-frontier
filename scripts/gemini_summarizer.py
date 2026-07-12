@@ -8,6 +8,7 @@ Gemini Flash로 고품질 한국어 요약을 재생성합니다.
 """
 
 import os
+import re
 import time
 import requests
 from datetime import datetime, timedelta, timezone
@@ -285,6 +286,46 @@ def call_gemini(prompt: str, retry: int = 2, max_tokens: int = 500) -> str | Non
     return None
 
 
+# ── 논평/칼럼체 검출 및 재생성 (트렌드/추적 기사는 "의미/중요성"을
+# 서술하라는 지시가 섞여 있어 논평체가 특히 섞이기 쉬워 재생성 안전장치를 둔다) ──
+BANNED_STYLE_PATTERNS = [
+    r"보여줍니다", r"보여주고 있습니다", r"보여준다",
+    r"도모하고 있습니다", r"도모한다",
+    r"강조하고 있습니다", r"강조한다",
+    r"시사합니다", r"시사한다",
+    r"주목됩니다", r"주목된다", r"주목받고 있습니다",
+    r"평가된다", r"평가받고 있습니다", r"라는 평가다", r"라는 분석이다",
+    r"필요해 보입니다", r"필요할 것으로 보입니다",
+    r"지켜볼 필요가 있습니다", r"지켜봐야 할 것입니다",
+    r"기대됩니다", r"기대해 볼 만합니다",
+]
+
+def has_column_style(text: str) -> bool:
+    if not text:
+        return False
+    return any(re.search(p, text) for p in BANNED_STYLE_PATTERNS)
+
+
+def call_gemini_article(prompt, max_tokens=2000, style_retries=1):
+    content = call_gemini(prompt, max_tokens=max_tokens)
+    attempt = 0
+    while content and has_column_style(content) and attempt < style_retries:
+        attempt += 1
+        print(f"  ⚠️ 논평/칼럼체 감지 → 재생성 시도 ({attempt}/{style_retries})")
+        retry_prompt = (
+            prompt
+            + "\n\n[재작성 지시] 방금 작성한 결과에 논평/칼럼 문체(예: '~를 보여줍니다', "
+              "'~을 도모하고 있습니다', '~라는 평가다', '~지켜볼 필요가 있습니다' 등)가 섞여 있었습니다. "
+              "감정·의견이 섞인 표현을 모두 배제하고, 사실 전달 중심의 스트레이트 뉴스 문체로만 다시 작성하세요."
+        )
+        retried = call_gemini(retry_prompt, max_tokens=max_tokens)
+        if retried:
+            content = retried
+    if content and has_column_style(content):
+        print("  ⚠️ 재생성 후에도 논평체 패턴이 남아있음 (그대로 진행)")
+    return content
+
+
 # ── 장기 이슈 트래커 ────────────────────────────────────────
 
 # 추적할 키워드 그룹 — (그룹명, 카테고리, [키워드 목록])
@@ -504,8 +545,9 @@ def run_trend_tracker():
 이 기사들을 종합해 현재 진행 중인 상황을 정리하는 추적 기사를 작성하세요.
 - 현재 상황이 어떻게 전개되고 있는지 시간 순으로 정리하세요.
 - 수치, 인명, 날짜, 기관명 등 구체적 팩트를 최대한 살리세요.
-- 한국 투자자/독자 관점에서 왜 중요한지 한 문단으로 마무리하세요.
+- 한국 투자자/독자 관점에서 왜 중요한지 한 문단으로 마무리하되, 사실 서술형으로만 쓰세요.
 - 마크다운 문법, 헤더, 홍보 문구 금지.
+- 기사 문체로 작성하세요. "~를 보여줍니다", "~을 도모하고 있습니다", "~라는 평가다", "~지켜볼 필요가 있습니다" 같은 논평/칼럼 문체는 금지입니다.
 - 한국어로만 작성하세요.
 
 아래 형식으로 출력:
@@ -515,7 +557,7 @@ def run_trend_tracker():
 분야: ({category})
 본문: (추적 기사 본문)"""
 
-        content = call_gemini(prompt, max_tokens=2000)
+        content = call_gemini_article(prompt, max_tokens=2000)
         if not content:
             print(f"  [{group_name}] ❌ Gemini 생성 실패")
             continue
@@ -896,8 +938,9 @@ JSON 배열로만 응답하세요 (마크다운 없이):
 이 기사들을 종합해 완성도 높은 한국어 기사를 작성하세요.
 - 반드시 하나의 토픽만 다루세요.
 - 수치, 인명, 날짜, 기관명 등 구체적 팩트를 최대한 살리세요.
-- 왜 지금 이 이슈가 중요한지 맥락을 담으세요.
+- 왜 지금 이 이슈가 중요한지 맥락을 담되, 사실 서술형으로만 쓰세요.
 - 마크다운 문법, 헤더, 홍보 문구 금지.
+- 기사 문체로 작성하세요. "~를 보여줍니다", "~을 도모하고 있습니다", "~라는 평가다" 같은 논평/칼럼 문체는 금지입니다.
 
 아래 형식으로 출력:
 제목: (핵심을 담은 제목)
@@ -906,7 +949,7 @@ JSON 배열로만 응답하세요 (마크다운 없이):
 분야: ({category})
 본문: (기사 본문)"""
 
-        content_text = call_gemini(write_prompt, max_tokens=2000)
+        content_text = call_gemini_article(write_prompt, max_tokens=2000)
         if not content_text:
             print(f"  [{topic}] ❌ 기사 생성 실패")
             time.sleep(CALL_INTERVAL)
@@ -1123,10 +1166,11 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
 {chr(10).join(f"- {t}" for t in ref_titles)}
 
 이 이슈에 대해 한국 투자자/독자를 위한 완성도 높은 기사를 작성하세요.
-- 이슈의 배경, 현재 상황, 의미를 담으세요.
+- 이슈의 배경, 현재 상황, 의미를 사실 서술형으로 담으세요.
 - 확인된 팩트 중심으로, 추측은 최소화하세요.
 - 반드시 하나의 토픽만 다루세요.
 - 마크다운 문법, 헤더, 홍보 문구 금지.
+- 기사 문체로 작성하세요. "~를 보여줍니다", "~을 도모하고 있습니다", "~라는 평가다" 같은 논평/칼럼 문체는 금지입니다.
 - 한국어로만 작성하세요.
 
 아래 형식으로 출력:
@@ -1136,7 +1180,7 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
 분야: ({category})
 본문: (기사 본문)"""
 
-        content_text = call_gemini(write_prompt, max_tokens=1500)
+        content_text = call_gemini_article(write_prompt, max_tokens=1500)
         if not content_text:
             print(f"  [{topic}] ❌ 생성 실패")
             time.sleep(CALL_INTERVAL)

@@ -9,6 +9,7 @@ StockHub의 "오늘의 핵심 테마" 패턴을 프론티어 마켓에 맞게 �
 """
 
 import os
+import re
 import time
 import requests
 from datetime import datetime, timedelta, timezone
@@ -148,6 +149,46 @@ def call_gemini(prompt, max_tokens=3000):
     return None
 
 
+# ── 논평/칼럼체 검출 및 재생성 (다이제스트는 "통찰/분석"을 요구하는 특성상
+# 논평체가 특히 섞이기 쉬워 재생성 안전장치를 둔다) ──────────────
+BANNED_STYLE_PATTERNS = [
+    r"보여줍니다", r"보여주고 있습니다", r"보여준다",
+    r"도모하고 있습니다", r"도모한다",
+    r"강조하고 있습니다", r"강조한다",
+    r"시사합니다", r"시사한다",
+    r"주목됩니다", r"주목된다", r"주목받고 있습니다",
+    r"평가된다", r"평가받고 있습니다", r"라는 평가다", r"라는 분석이다",
+    r"필요해 보입니다", r"필요할 것으로 보입니다",
+    r"지켜볼 필요가 있습니다", r"지켜봐야 할 것입니다",
+    r"기대됩니다", r"기대해 볼 만합니다",
+]
+
+def has_column_style(text: str) -> bool:
+    if not text:
+        return False
+    return any(re.search(p, text) for p in BANNED_STYLE_PATTERNS)
+
+
+def call_gemini_article(prompt, max_tokens=3000, style_retries=1):
+    content = call_gemini(prompt, max_tokens=max_tokens)
+    attempt = 0
+    while content and has_column_style(content) and attempt < style_retries:
+        attempt += 1
+        print(f"  ⚠️ 논평/칼럼체 감지 → 재생성 시도 ({attempt}/{style_retries})")
+        retry_prompt = (
+            prompt
+            + "\n\n[재작성 지시] 방금 작성한 결과에 논평/칼럼 문체(예: '~를 보여줍니다', "
+              "'~을 도모하고 있습니다', '~라는 평가다', '~지켜볼 필요가 있습니다' 등)가 섞여 있었습니다. "
+              "감정·의견이 섞인 표현을 모두 배제하고, 사실 전달 중심의 스트레이트 뉴스 문체로만 다시 작성하세요."
+        )
+        retried = call_gemini(retry_prompt, max_tokens=max_tokens)
+        if retried:
+            content = retried
+    if content and has_column_style(content):
+        print("  ⚠️ 재생성 후에도 논평체 패턴이 남아있음 (그대로 진행)")
+    return content
+
+
 def build_digest_prompt(articles):
     today_str = now_kst().strftime("%Y년 %m월 %d일")  # 발행일(오늘) 기준 — 신문 날짜와 동일
 
@@ -183,6 +224,7 @@ def build_digest_prompt(articles):
 - 마크다운 문법(**굵게**, ##제목)을 쓰지 말고 일반 텍스트와 줄바꿈, "- " 불릿만 사용하세요.
 - 전문 형식 헤더([도시=출처] 등)나 매체 홍보 문구를 넣지 마세요.
 - 다룬 기사가 적으면 무리하게 늘리지 말고 있는 그대로 간결하게 작성하세요.
+- 기사 문체로 작성하세요. "~를 보여줍니다", "~을 도모하고 있습니다", "~라는 평가다" 같은 논평/칼럼 문체는 금지입니다. 패턴이나 트렌드를 설명할 때도 사실 서술형("~로 나타났다", "~가 확인됐다", "~로 집계됐다")으로 쓰세요.
 - 한국어로만 작성하세요.""")
 
     return f"""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다.
@@ -259,7 +301,7 @@ def run():
         return
 
     prompt = build_digest_prompt(articles)
-    content = call_gemini(prompt, max_tokens=3000)
+    content = call_gemini_article(prompt, max_tokens=3000)
 
     if not content:
         print("[ERROR] Gemini 응답 없음")
