@@ -1375,33 +1375,20 @@
     el.classList.add('active');
     document.getElementById('main-content').innerHTML = '<div class="loading">로딩 중...</div>';
 
-    // 전체 누적 집계 (30일 범위와 무관, count만 조회 — 1000행 상한 영향 없음)
-    const { count: totalAllTime } = await sb.from('articles')
-      .select('id', { count: 'exact', head: true });
-    const { count: publishedAllTime } = await sb.from('articles')
-      .select('id', { count: 'exact', head: true }).eq('is_published', true);
-
-    const since = new Date(Date.now() - 30 * 86400000).toISOString();
-    const { data, error } = await sb.from('articles')
-      .select('created_at,is_published,category')
-      .gte('created_at', since);
-
+    // 자체기사(NewsFinal) 집계 — DB RPC로 일괄 반환 (PostgREST 1000행 상한 회피)
+    const { data: stats, error } = await sb.rpc('admin_stats', { p_days: 30 });
     if (error) { document.getElementById('main-content').innerHTML = `<div class="empty">오류: ${error.message}</div>`; return; }
 
-    // 날짜별(KST) 집계
-    const byDate = {};
-    const byCategory = {};
-    data.forEach(a => {
-      const d = new Date(a.created_at);
-      const kstDate = new Date(d.getTime() + 9 * 3600000).toISOString().slice(0, 10);
-      if (!byDate[kstDate]) byDate[kstDate] = { total: 0, published: 0 };
-      byDate[kstDate].total++;
-      if (a.is_published) byDate[kstDate].published++;
-      const cat = a.category || '미분류';
-      byCategory[cat] = (byCategory[cat] || 0) + 1;
-    });
+    const totalAllTime = stats.all_total || 0;
+    const publishedAllTime = stats.all_published || 0;
 
-    // 최근 30일 날짜 배열 (빈 날짜도 0으로 채움)
+    // 일별(KST)·카테고리 맵 구성
+    const byDate = {};
+    (stats.daily || []).forEach(r => { byDate[r.d] = { total: r.total, published: r.published }; });
+    const byCategory = {};
+    (stats.categories || []).forEach(r => { byCategory[r.cat] = r.cnt; });
+
+    // 최근 30일 날짜 배열 (KST, 빈 날짜도 0으로 채움)
     const days = [];
     for (let i = 29; i >= 0; i--) {
       const d = new Date(Date.now() + 9 * 3600000 - i * 86400000).toISOString().slice(0, 10);
@@ -1410,8 +1397,8 @@
 
     const counts = days.map(d => byDate[d]?.total || 0);
     const maxCount = Math.max(...counts, 1);
-    const totalArticles = data.length;
-    const totalPublished = data.filter(a => a.is_published).length;
+    const totalArticles = counts.reduce((s, c) => s + c, 0);
+    const totalPublished = days.reduce((s, d) => s + (byDate[d]?.published || 0), 0);
     const avgPerDay = (totalArticles / 30).toFixed(1);
     const last7 = days.slice(-7).reduce((s, d) => s + (byDate[d]?.total || 0), 0);
     const avg7 = (last7 / 7).toFixed(1);
@@ -1422,7 +1409,7 @@
       const heightPct = Math.round((c / maxCount) * 100);
       const label = d.slice(5).replace('-', '/');
       return `
-        <div style="display:flex;flex-direction:column;align-items:center;flex:1;min-width:0;" title="${d}: 전체 ${c}건 (발행 ${p}건)">
+        <div style="display:flex;flex-direction:column;align-items:center;flex:1;min-width:0;" title="${d}: 생성 ${c}건 (발행 ${p}건)">
           <div style="font-size:9px;color:var(--muted);margin-bottom:2px;">${c > 0 ? c : ''}</div>
           <div style="width:100%;max-width:18px;height:120px;display:flex;align-items:flex-end;">
             <div style="width:100%;background:var(--accent);border-radius:2px 2px 0 0;height:${heightPct}%;min-height:${c > 0 ? '2px' : '0'};"></div>
@@ -1439,15 +1426,15 @@
         </div>`).join('');
 
     document.getElementById('main-content').innerHTML = `
-      <div style="font-size:13px;font-weight:700;margin-bottom:16px;">발행 통계 (최근 30일)</div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:16px;">발행 통계 (최근 30일 · 자체기사)</div>
       <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
         <div style="flex:1;min-width:140px;background:var(--bg2);border:1px solid var(--border);padding:12px 16px;">
-          <div style="font-size:11px;color:var(--muted);">전체 기사수 (누적)</div>
+          <div style="font-size:11px;color:var(--muted);">자체기사 누적</div>
           <div style="font-size:20px;font-weight:700;color:var(--accent);">${(totalAllTime ?? 0).toLocaleString()}건</div>
           <div style="font-size:11px;color:var(--muted);margin-top:2px;">발행 ${(publishedAllTime ?? 0).toLocaleString()}건</div>
         </div>
         <div style="flex:1;min-width:140px;background:var(--bg2);border:1px solid var(--border);padding:12px 16px;">
-          <div style="font-size:11px;color:var(--muted);">30일 총 기사</div>
+          <div style="font-size:11px;color:var(--muted);">30일 생성</div>
           <div style="font-size:20px;font-weight:700;color:var(--accent);">${totalArticles.toLocaleString()}건</div>
         </div>
         <div style="flex:1;min-width:140px;background:var(--bg2);border:1px solid var(--border);padding:12px 16px;">
@@ -1464,11 +1451,11 @@
         </div>
       </div>
       <div style="background:var(--bg2);border:1px solid var(--border);padding:16px;margin-bottom:20px;">
-        <div style="font-size:12px;font-weight:700;margin-bottom:12px;">일별 발행 건수</div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:12px;">일별 생성 건수 (자체기사)</div>
         <div style="display:flex;gap:2px;align-items:flex-end;">${barsHtml}</div>
       </div>
       <div style="background:var(--bg2);border:1px solid var(--border);padding:16px;max-width:400px;">
-        <div style="font-size:12px;font-weight:700;margin-bottom:8px;">카테고리별 분포 (30일)</div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:8px;">카테고리별 분포 (30일 · 자체기사)</div>
         ${categoryRows}
       </div>`;
   }
