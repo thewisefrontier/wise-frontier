@@ -197,7 +197,6 @@
       <div class="sidebar-item admin-only" id="prompt-menu" onclick="showPrompts(this)">✏️ 프롬프트 관리</div>
       <div class="sidebar-item admin-only" id="rss-menu" onclick="showRssSources(this)">📡 RSS 소스 관리</div>
       <div class="sidebar-item" id="stats-menu" onclick="showStats(this)">📊 발행 통계</div>
-      <div class="sidebar-item" id="dailyviews-menu" onclick="showDailyViews(this)">📈 일별 조회수</div>
     </div>
 
     <div class="main" id="main-content">
@@ -1376,9 +1375,17 @@
     el.classList.add('active');
     document.getElementById('main-content').innerHTML = '<div class="loading">로딩 중...</div>';
 
-    // 자체기사(NewsFinal) 집계 — DB RPC로 일괄 반환 (PostgREST 1000행 상한 회피)
-    const { data: stats, error } = await sb.rpc('admin_stats', { p_days: 30 });
+    // 자체기사(NewsFinal) 집계 + 조회수 델타 — DB RPC 병렬 호출
+    const [statsRes, viewsRes] = await Promise.all([
+      sb.rpc('admin_stats', { p_days: 30 }),
+      sb.rpc('daily_views', { p_days: 30 })
+    ]);
+    const { data: stats, error } = statsRes;
     if (error) { document.getElementById('main-content').innerHTML = `<div class="empty">오류: ${error.message}</div>`; return; }
+    const vdata = viewsRes.data || {};
+    const vDaily = vdata.daily || [];
+    const vTop = vdata.top || [];
+    const vTopDay = vdata.top_day || null;
 
     const totalAllTime = stats.all_total || 0;
     const publishedAllTime = stats.all_published || 0;
@@ -1426,6 +1433,39 @@
           <span>${cat}</span><span class="muted">${cnt}건</span>
         </div>`).join('');
 
+    // ── 조회수 델타(스냅샷 기반) ──
+    const vMax = Math.max(...vDaily.map(r => r.total), 1);
+    const vSum30 = vDaily.reduce((s, r) => s + r.total, 0);
+    const vTopDayTotal = (vDaily.find(r => r.day === vTopDay) || {}).total || 0;
+    const vStep = Math.max(1, Math.ceil(vDaily.length / 8));
+    const vBarsHtml = vDaily.map((r, i) => {
+      const c = r.total;
+      const hp = Math.round((c / vMax) * 100);
+      const label = r.day.slice(5).replace('-', '/');
+      return `
+        <div style="display:flex;flex-direction:column;align-items:center;flex:1;min-width:0;" title="${r.day}: +${c} 조회">
+          <div style="font-size:9px;color:var(--muted);margin-bottom:2px;">${c > 0 ? c : ''}</div>
+          <div style="width:100%;max-width:18px;height:120px;display:flex;align-items:flex-end;">
+            <div style="width:100%;background:var(--accent);border-radius:2px 2px 0 0;height:${hp}%;min-height:${c > 0 ? '2px' : '0'};"></div>
+          </div>
+          <div style="font-size:9px;color:var(--muted);margin-top:4px;height:14px;white-space:nowrap;">${(i % vStep === 0 || i === vDaily.length - 1) ? label : ''}</div>
+        </div>`;
+    }).join('');
+    const vChartBlock = vDaily.length === 0
+      ? `<div class="empty" style="line-height:1.7;">조회수 증가 데이터는 매일 00:05(KST) 수집됩니다.<br><span class="muted">2일치가 쌓이면 내일부터 표시됩니다.</span></div>`
+      : `<div style="display:flex;gap:2px;align-items:flex-end;">${vBarsHtml}</div>`;
+    const vTopRows = vDaily.length === 0
+      ? `<div class="muted" style="font-size:12px;padding:8px 0;">데이터 대기 중</div>`
+      : (vTop.length === 0
+        ? `<div class="muted" style="font-size:12px;padding:8px 0;">상승 기사 없음</div>`
+        : vTop.map((r, i) => `
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;">
+          <span style="color:var(--muted);width:18px;text-align:right;">${i + 1}</span>
+          <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${(r.title_ko || '').replace(/"/g, '&quot;')}">${r.title_ko || '(제목 없음)'}</span>
+          <span style="color:var(--accent);font-weight:700;white-space:nowrap;">+${r.delta}</span>
+          <span class="muted" style="white-space:nowrap;">누적 ${r.view_count}</span>
+        </div>`).join(''));
+
     document.getElementById('main-content').innerHTML = `
       <div style="font-size:13px;font-weight:700;margin-bottom:16px;">발행 통계 (최근 30일 · 자체기사)</div>
       <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
@@ -1450,100 +1490,33 @@
           <div style="font-size:11px;color:var(--muted);">일평균 (최근 7일)</div>
           <div style="font-size:20px;font-weight:700;">${avg7}건</div>
         </div>
+        <div style="flex:1;min-width:140px;background:var(--bg2);border:1px solid var(--border);padding:12px 16px;">
+          <div style="font-size:11px;color:var(--muted);">조회수 증가 (측정일)</div>
+          <div style="font-size:20px;font-weight:700;color:var(--accent);">+${vTopDayTotal.toLocaleString()}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;">${vTopDay || '대기 중'}</div>
+        </div>
+        <div style="flex:1;min-width:140px;background:var(--bg2);border:1px solid var(--border);padding:12px 16px;">
+          <div style="font-size:11px;color:var(--muted);">조회수 증가 (30일)</div>
+          <div style="font-size:20px;font-weight:700;">+${vSum30.toLocaleString()}</div>
+        </div>
       </div>
       <div style="background:var(--bg2);border:1px solid var(--border);padding:16px;margin-bottom:20px;">
         <div style="font-size:12px;font-weight:700;margin-bottom:12px;">일별 생성 건수 (자체기사)</div>
         <div style="display:flex;gap:2px;align-items:flex-end;">${barsHtml}</div>
       </div>
-      <div style="background:var(--bg2);border:1px solid var(--border);padding:16px;max-width:400px;">
-        <div style="font-size:12px;font-weight:700;margin-bottom:8px;">카테고리별 분포 (30일 · 자체기사)</div>
-        ${categoryRows}
-      </div>`;
-  }
-
-  // ── 일별 조회수 ────────────────────────────────────────
-  async function showDailyViews(el) {
-    currentSection = 'dailyviews';
-    document.querySelectorAll('.sidebar-item').forEach(e => e.classList.remove('active'));
-    el.classList.add('active');
-    document.getElementById('main-content').innerHTML = '<div class="loading">로딩 중...</div>';
-
-    // 발행 자체기사 조회수 델타 — 스냅샷 기반 (매일 00:05 KST 수집)
-    const { data, error } = await sb.rpc('daily_views', { p_days: 30 });
-    if (error) { document.getElementById('main-content').innerHTML = `<div class="empty">오류: ${error.message}</div>`; return; }
-
-    const dailyArr = (data && data.daily) || [];
-    const topArr = (data && data.top) || [];
-    const topDay = (data && data.top_day) || null;
-
-    if (dailyArr.length === 0) {
-      document.getElementById('main-content').innerHTML = `
-        <div style="font-size:13px;font-weight:700;margin-bottom:16px;">일별 조회수 (자체기사)</div>
-        <div class="empty" style="line-height:1.7;">
-          아직 표시할 델타 데이터가 없습니다.<br>
-          조회수 스냅샷은 매일 <b>00:05 (KST)</b>에 자동 수집되며,<br>
-          최소 <b>2일치</b>가 쌓이면 일별 증가량이 계산됩니다.<br>
-          <span class="muted">첫 측정 결과는 내일 00:05 수집 이후 표시됩니다.</span>
-        </div>`;
-      return;
-    }
-
-    const maxTotal = Math.max(...dailyArr.map(r => r.total), 1);
-    const sum30 = dailyArr.reduce((s, r) => s + r.total, 0);
-    const topDayTotal = (dailyArr.find(r => r.day === topDay) || {}).total || 0;
-    const step = Math.max(1, Math.ceil(dailyArr.length / 8));
-
-    const barsHtml = dailyArr.map((r, i) => {
-      const c = r.total;
-      const heightPct = Math.round((c / maxTotal) * 100);
-      const label = r.day.slice(5).replace('-', '/');
-      return `
-        <div style="display:flex;flex-direction:column;align-items:center;flex:1;min-width:0;" title="${r.day}: +${c} 조회">
-          <div style="font-size:9px;color:var(--muted);margin-bottom:2px;">${c > 0 ? c : ''}</div>
-          <div style="width:100%;max-width:18px;height:120px;display:flex;align-items:flex-end;">
-            <div style="width:100%;background:var(--accent);border-radius:2px 2px 0 0;height:${heightPct}%;min-height:${c > 0 ? '2px' : '0'};"></div>
-          </div>
-          <div style="font-size:9px;color:var(--muted);margin-top:4px;height:14px;white-space:nowrap;">${(i % step === 0 || i === dailyArr.length - 1) ? label : ''}</div>
-        </div>`;
-    }).join('');
-
-    const topRows = topArr.length === 0
-      ? '<div class="muted" style="font-size:12px;padding:8px 0;">상승 기사 없음</div>'
-      : topArr.map((r, i) => `
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;">
-          <span style="color:var(--muted);width:18px;text-align:right;">${i + 1}</span>
-          <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${(r.title_ko || '').replace(/"/g, '&quot;')}">${r.title_ko || '(제목 없음)'}</span>
-          <span style="color:var(--accent);font-weight:700;white-space:nowrap;">+${r.delta}</span>
-          <span class="muted" style="white-space:nowrap;">누적 ${r.view_count}</span>
-        </div>`).join('');
-
-    document.getElementById('main-content').innerHTML = `
-      <div style="font-size:13px;font-weight:700;margin-bottom:16px;">일별 조회수 (최근 30일 · 발행 자체기사)</div>
-      <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
-        <div style="flex:1;min-width:140px;background:var(--bg2);border:1px solid var(--border);padding:12px 16px;">
-          <div style="font-size:11px;color:var(--muted);">최근 측정일</div>
-          <div style="font-size:20px;font-weight:700;color:var(--accent);">${topDay || '-'}</div>
-        </div>
-        <div style="flex:1;min-width:140px;background:var(--bg2);border:1px solid var(--border);padding:12px 16px;">
-          <div style="font-size:11px;color:var(--muted);">해당일 증가 조회수</div>
-          <div style="font-size:20px;font-weight:700;color:var(--accent);">+${topDayTotal.toLocaleString()}</div>
-        </div>
-        <div style="flex:1;min-width:140px;background:var(--bg2);border:1px solid var(--border);padding:12px 16px;">
-          <div style="font-size:11px;color:var(--muted);">30일 누적 증가</div>
-          <div style="font-size:20px;font-weight:700;">+${sum30.toLocaleString()}</div>
-        </div>
-        <div style="flex:1;min-width:140px;background:var(--bg2);border:1px solid var(--border);padding:12px 16px;">
-          <div style="font-size:11px;color:var(--muted);">측정 일수</div>
-          <div style="font-size:20px;font-weight:700;">${dailyArr.length}일</div>
-        </div>
-      </div>
       <div style="background:var(--bg2);border:1px solid var(--border);padding:16px;margin-bottom:20px;">
-        <div style="font-size:12px;font-weight:700;margin-bottom:12px;">일별 증가 조회수</div>
-        <div style="display:flex;gap:2px;align-items:flex-end;">${barsHtml}</div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:12px;">일별 증가 조회수 (발행 자체기사)</div>
+        ${vChartBlock}
       </div>
-      <div style="background:var(--bg2);border:1px solid var(--border);padding:16px;">
-        <div style="font-size:12px;font-weight:700;margin-bottom:8px;">당일 상승 기사 Top 10 <span class="muted" style="font-weight:400;">(${topDay || '-'})</span></div>
-        ${topRows}
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start;">
+        <div style="flex:1;min-width:280px;background:var(--bg2);border:1px solid var(--border);padding:16px;">
+          <div style="font-size:12px;font-weight:700;margin-bottom:8px;">카테고리별 분포 (30일 · 자체기사)</div>
+          ${categoryRows}
+        </div>
+        <div style="flex:1;min-width:280px;background:var(--bg2);border:1px solid var(--border);padding:16px;">
+          <div style="font-size:12px;font-weight:700;margin-bottom:8px;">당일 상승 기사 Top 10 <span class="muted" style="font-weight:400;">(${vTopDay || '-'})</span></div>
+          ${vTopRows}
+        </div>
       </div>`;
   }
 
