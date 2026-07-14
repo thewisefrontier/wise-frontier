@@ -1,96 +1,96 @@
 {
-  "updated_at": "2026-07-14 12:41",
+  "updated_at": "2026-07-14 23:21",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7515.34,
-      "change_pct": -0.38,
+      "price": 7529.19,
+      "change_pct": -0.61,
       "up": false
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 25873.18,
-      "change_pct": -1.27,
+      "price": 25978.99,
+      "change_pct": -1.15,
       "up": false
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 52498.64,
-      "change_pct": 0.02,
-      "up": true
+      "price": 52603.42,
+      "change_pct": -0.06,
+      "up": false
     },
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 6455.63,
-      "change_pct": -13.65,
+      "price": 6856.83,
+      "change_pct": -8.28,
       "up": false
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 750.07,
-      "change_pct": -10.43,
+      "price": 783.98,
+      "change_pct": -6.38,
       "up": false
     },
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 110003.37,
-      "change_pct": -0.32,
-      "up": false
+      "price": 110390.45,
+      "change_pct": 0.35,
+      "up": true
     },
     {
       "name": "EGX30 (이집트)",
       "symbol": "^CASE30",
-      "price": 52608.3,
-      "change_pct": 0.67,
-      "up": true
+      "price": 52299.3,
+      "change_pct": -0.59,
+      "up": false
     },
     {
       "name": "SET (태국)",
       "symbol": "^SET.BK",
-      "price": 1613.56,
-      "change_pct": -0.88,
+      "price": 1626.03,
+      "change_pct": -0.11,
       "up": false
     },
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 6072.79,
-      "change_pct": 0.58,
+      "price": 6039.52,
+      "change_pct": 0.03,
       "up": true
     },
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 6269.49,
-      "change_pct": 0.06,
-      "up": true
+      "price": 6256.02,
+      "change_pct": -0.15,
+      "up": false
     },
     {
       "name": "USD/NGN",
       "symbol": "USDNGN=X",
-      "price": 1378.35,
-      "change_pct": -0.0,
-      "up": false
+      "price": 1381.14,
+      "change_pct": 0.2,
+      "up": true
     },
     {
       "name": "USD/KES",
       "symbol": "USDKES=X",
-      "price": 129.19,
-      "change_pct": 0.63,
+      "price": 129.25,
+      "change_pct": 0.68,
       "up": true
     },
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.46,
-      "change_pct": 0.65,
-      "up": true
+      "price": 16.34,
+      "change_pct": -0.09,
+      "up": false
     }
   ],
   "groups": {
@@ -98,38 +98,38 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7515.34,
-        "change_pct": -0.38,
+        "price": 7529.19,
+        "change_pct": -0.61,
         "up": false
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 25873.18,
-        "change_pct": -1.27,
+        "price": 25978.99,
+        "change_pct": -1.15,
         "up": false
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 52498.64,
-        "change_pct": 0.02,
-        "up": true
+        "price": 52603.42,
+        "change_pct": -0.06,
+        "up": false
       }
     ],
     "kr": [
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 6455.63,
-        "change_pct": -13.65,
+        "price": 6856.83,
+        "change_pct": -8.28,
         "up": false
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 750.07,
-        "change_pct": -10.43,
+        "price": 783.98,
+        "change_pct": -6.38,
         "up": false
       }
     ],
@@ -137,61 +137,62 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 110003.37,
-        "change_pct": -0.32,
-        "up": false
+        "price": 110390.45,
+        "change_pct": 0.35,
+        "up": true
       },
       {
         "name": "EGX30 (이집트)",
         "symbol": "^CASE30",
-        "price": 52608.3,
-        "change_pct": 0.67,
-        "up": true
+        "price": 52299.3,
+        "change_pct": -0.59,
+        "up": false
       },
       {
         "name": "SET (태국)",
         "symbol": "^SET.BK",
-        "price": 1613.56,
-        "change_pct": -0.88,
+        "price": 1626.03,
+        "change_pct": -0.11,
         "up": false
       },
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 6072.79,
-        "change_pct": 0.58,
+        "price": 6039.52,
+        "change_pct": 0.03,
         "up": true
       },
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 6269.49,
-        "change_pct": 0.06,
-        "up": true
+        "price": 6256.02,
+        "change_pct": -0.15,
+        "up": false
       }
     ],
     "fx": [
       {
         "name": "USD/NGN",
         "symbol": "USDNGN=X",
-        "price": 1378.35,
-        "change_pct": -0.0,
-        "up": false
+        "price": 1381.14,
+        "change_pct": 0.2,
+        "up": true
       },
       {
         "name": "USD/KES",
         "symbol": "USDKES=X",
-        "price": 129.19,
-        "change_pct": 0.63,
+        "price": 129.25,
+        "change_pct": 0.68,
         "up": true
       },
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.46,
-        "change_pct": 0.65,
-        "up": true
+        "price": 16.34,
+        "change_pct": -0.09,
+        "up": false
       }
     ]
-  }
+  },
+  "company_prices": {}
 }
