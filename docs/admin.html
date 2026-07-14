@@ -1422,7 +1422,7 @@
           <div style="width:100%;max-width:18px;height:120px;display:flex;align-items:flex-end;">
             <div style="width:100%;background:var(--accent);border-radius:2px 2px 0 0;height:${heightPct}%;min-height:${c > 0 ? '2px' : '0'};"></div>
           </div>
-          <div style="font-size:9px;color:var(--muted);margin-top:4px;height:14px;white-space:nowrap;">${(i % 5 === 0 || i === days.length - 1) ? label : ''}</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:4px;height:14px;white-space:nowrap;">${label}</div>
         </div>`;
     }).join('');
 
@@ -1448,7 +1448,7 @@
           <div style="width:100%;max-width:18px;height:120px;display:flex;align-items:flex-end;">
             <div style="width:100%;background:var(--accent);border-radius:2px 2px 0 0;height:${hp}%;min-height:${c > 0 ? '2px' : '0'};"></div>
           </div>
-          <div style="font-size:9px;color:var(--muted);margin-top:4px;height:14px;white-space:nowrap;">${(i % vStep === 0 || i === vDaily.length - 1) ? label : ''}</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:4px;height:14px;white-space:nowrap;">${label}</div>
         </div>`;
     }).join('');
     const vChartBlock = vDaily.length === 0
