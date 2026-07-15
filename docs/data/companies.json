@@ -192,6 +192,22 @@
     "updated_at": null
   },
   {
+    "id": "roscosmos",
+    "name": "Roscosmos",
+    "name_ko": "로스코스모스",
+    "country": "러시아",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "우주항공",
+    "description": "러시아의 국영 우주 개발 기업으로, 우주 비행 및 우주 과학 연구를 총괄합니다. 1992년 설립되었으며, 유인 우주선 발사 및 국제우주정거장(ISS) 운영 등에서 세계적인 기술력을 보유하고 있습니다. 러시아 우주 산업의 핵심 주체로서 국가적 우주 정책을 수행합니다.",
+    "founded_year": 1992,
+    "headquarters": "모스크바, 러시아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-15 12:38"
+  },
+  {
     "id": "mukuru",
     "name": "Mukuru",
     "name_ko": "무쿠루",
@@ -304,6 +320,22 @@
     "updated_at": null
   },
   {
+    "id": "acb",
+    "name": "Asia Commercial Joint Stock Bank",
+    "name_ko": "아시아상업은행",
+    "country": "베트남",
+    "country_flag": "🇻🇳",
+    "exchange": "HOSE",
+    "ticker": "ACB",
+    "sector": "은행",
+    "description": "1993년에 설립된 베트남의 주요 민간 상업은행으로, 보수적이고 안정적인 자산 운용 전략으로 유명합니다. 개인 고객 대상 금융 서비스와 중소기업 대출을 핵심 사업으로 영위하며, 베트남 전역에 걸친 폭넓은 지점망을 보유하고 있습니다. 베트남 금융권 내에서 신뢰도가 높은 대형 민간 은행 중 하나로 평가받습니다.",
+    "founded_year": 1993,
+    "headquarters": "호찌민, 베트남",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-15 12:37"
+  },
+  {
     "id": "fpt_corporation",
     "name": "FPT Corporation",
     "name_ko": null,
@@ -336,6 +368,22 @@
     "updated_at": null
   },
   {
+    "id": "vietcombank",
+    "name": "Joint Stock Commercial Bank for Foreign Trade of Vietnam",
+    "name_ko": "비엣콤뱅크",
+    "country": "베트남",
+    "country_flag": "🇻🇳",
+    "exchange": "HOSE",
+    "ticker": "VCB",
+    "sector": "은행",
+    "description": "1963년에 설립된 베트남 최대의 국영 상업은행 중 하나로, 외환 거래 및 기업 금융 분야에서 독보적인 시장 지위를 보유하고 있습니다. 베트남 금융 시장의 벤치마크 역할을 하며, 안정적인 자본 구조와 광범위한 네트워크를 갖추고 있습니다. 베트남 증시 시가총액 상위권에 위치한 대표적인 금융 기업입니다.",
+    "founded_year": 1963,
+    "headquarters": "하노이, 베트남",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-15 12:37"
+  },
+  {
     "id": "khanh_hoa_sanest",
     "name": "Khanh Hoa Salanganes Nest Soft Drink Joint Stock Company",
     "name_ko": "칸호아 제비집 회사",
@@ -350,6 +398,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-14 20:13"
+  },
+  {
+    "id": "techcombank",
+    "name": "Vietnam Technological and Commercial Joint Stock Bank",
+    "name_ko": "테크콤뱅크",
+    "country": "베트남",
+    "country_flag": "🇻🇳",
+    "exchange": "HOSE",
+    "ticker": "TCB",
+    "sector": "은행",
+    "description": "1993년에 설립된 베트남의 대형 민간 상업은행으로, 디지털 뱅킹과 리테일 금융 분야에서 강력한 경쟁력을 갖추고 있습니다. 자산 규모와 수익성 측면에서 베트남 내 민간 은행 중 선두권에 위치하며, 다양한 금융 상품을 통해 개인 및 기업 고객에게 서비스를 제공합니다. 특히 부동산 및 대기업 금융 부문에서의 비중이 높은 것으로 알려져 있습니다.",
+    "founded_year": 1993,
+    "headquarters": "하노이, 베트남",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-15 12:37"
   },
   {
     "id": "vpbank",
@@ -414,6 +478,22 @@
     "website": null,
     "is_published": true,
     "updated_at": null
+  },
+  {
+    "id": "antam",
+    "name": "Aneka Tambang Tbk",
+    "name_ko": "안탐",
+    "country": "인도네시아",
+    "country_flag": "🇮🇩",
+    "exchange": "IDX",
+    "ticker": "ANTM",
+    "sector": "광업",
+    "description": "1968년에 설립된 인도네시아의 국영 광업 기업으로, 금, 니켈, 보크사이트 등 다양한 광물 자원을 탐사, 채굴 및 제련합니다. 인도네시아 금 시장에서 가장 높은 점유율과 인지도를 가진 브랜드인 'Logam Mulia'를 운영하고 있습니다. 인도네시아 정부가 대주주로 참여하고 있으며, 국가 핵심 자원 개발을 주도하는 주요 기업입니다.",
+    "founded_year": 1968,
+    "headquarters": "자카르타, 인도네시아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-15 12:38"
   },
   {
     "id": "astra_international",
