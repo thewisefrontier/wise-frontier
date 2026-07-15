@@ -219,6 +219,45 @@ def generate_sitemap(articles):
     .html 버전을 가리키면 구글이 "리디렉션 있는 페이지"로 색인 제외한다.
     """
     os.makedirs("docs", exist_ok=True)
+
+    # 게시된 전체 기사 조회 (홈 피드 7일 의존에서 분리)
+    sitemap_articles = []
+    if SUPABASE_URL and SUPABASE_SERVICE_KEY:
+        offset = 0
+        batch = 1000
+        fetch_ok = True
+        while True:
+            res = requests.get(
+                f"{SUPABASE_URL}/rest/v1/articles",
+                headers={**_headers(), "Range": f"{offset}-{offset+batch-1}"},
+                params={
+                    "select": "id,created_at",
+                    "is_published": "eq.true",
+                    "order": "created_at.desc",
+                },
+                timeout=30
+            )
+            if res.status_code not in (200, 206):
+                print(f"[SITEMAP] 전체 조회 오류: {res.status_code} — 7일치로 폴백")
+                fetch_ok = False
+                break
+            data = res.json()
+            if not data:
+                break
+            sitemap_articles.extend(data)
+            if len(data) < batch:
+                break
+            offset += batch
+        if not fetch_ok:
+            sitemap_articles = articles or []
+    else:
+        print("[SITEMAP] Supabase 환경변수 없음 — 7일치로 폴백")
+        sitemap_articles = articles or []
+
+    if not sitemap_articles:
+        print("[SITEMAP] 기사 목록 없음 — 기존 sitemap 유지(스킵)")
+        return
+
     urls = [
         '<url><loc>https://newsfinal.co.kr/</loc><changefreq>hourly</changefreq><priority>1.0</priority></url>',
         '<url><loc>https://newsfinal.co.kr/about.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>',
@@ -231,9 +270,11 @@ def generate_sitemap(articles):
         '<url><loc>https://newsfinal.co.kr/country.html</loc><changefreq>daily</changefreq><priority>0.7</priority></url>',
         '<url><loc>https://newsfinal.co.kr/company.html</loc><changefreq>daily</changefreq><priority>0.7</priority></url>',
     ]
-    for a in articles:
+    for a in sitemap_articles:
         if a.get('id'):
-            urls.append(f'<url><loc>https://newsfinal.co.kr/article?id={a["id"]}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>')
+            created = (a.get('created_at') or '')[:10]
+            lastmod = f'<lastmod>{created}</lastmod>' if len(created) == 10 else ''
+            urls.append(f'<url><loc>https://newsfinal.co.kr/article?id={a["id"]}</loc>{lastmod}<changefreq>weekly</changefreq><priority>0.8</priority></url>')
 
     sitemap = f'''<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -282,5 +323,4 @@ if __name__ == "__main__":
     articles = export_articles()
     fetch_market_data()
     export_companies()
-    if articles:
-        generate_sitemap(articles)
+    generate_sitemap(articles or [])
