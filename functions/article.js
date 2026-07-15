@@ -203,7 +203,7 @@ export async function onRequestGet(context) {
 
     const title = a.title_ko || a.title_en || '';
     const fullTitle = `${title} — NewsFinal`;
-    const desc = cleanBody(a.summary_ko || a.summary_en || '').slice(0, 150);
+    const desc = cleanBody(a.summary_ko || a.summary_en || '').replace(/\s+/g, ' ').trim().slice(0, 150);
     const canonical = `${SITE}/article?id=${a.id}`;
     const ogImage = a.image_url || `${SITE}/favicon-512.png`;
     const publishedIso = toIsoKST(a.created_at);
