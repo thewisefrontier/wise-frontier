@@ -952,9 +952,10 @@
       && !a.subcategory.endsWith('briefing')
       ? `<span class="tag" style="cursor:pointer;" onclick="filterByTag('sector','${a.subcategory}',event)">${a.subcategory}</span>` : '';
     const regionTag = a.region ? `<span class="tag">${regionKo(a.region)}</span>` : '';
-    const countryTag = a.countries && a.countries.length > 0
-      ? [...new Set(a.countries)].filter(c => c).map(c => `<span class="tag country" style="cursor:pointer;" onclick="filterByTag('country','${c}',event)">${c}</span>`).join('')
-      : (a.country ? `<span class="tag country" style="cursor:pointer;" onclick="filterByTag('country','${a.country}',event)">${a.country}</span>` : '');
+    const _allCountries = [...new Set([...(a.country ? [a.country] : []), ...((a.countries) || [])])].filter(c => c);
+    const countryTag = _allCountries.length > 0
+      ? _allCountries.map(c => `<span class="tag country" style="cursor:pointer;" onclick="filterByTag('country','${c}',event)">${c}</span>`).join('')
+      : '';
 
     return `
       <div class="article-card ${standalone?'standalone':''}" data-idx="${idx}" onclick="${clickAction}">
