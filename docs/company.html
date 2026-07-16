@@ -159,7 +159,8 @@
     <a href="/?category=사회">사회</a>
     <a href="/?category=IT·과학">IT·과학</a>
     <a href="/archive.html">아카이브</a>
-    <a href="/markets.html" class="active">시장 지표</a>
+    <a href="/calendar.html">경제 일정</a>
+    <a href="/markets.html">마켓</a>
     <a href="/country.html">국가별</a>
   </nav>
 </header>
@@ -403,7 +404,7 @@
   async function run() {
     const companyId = getParam('id');
     if (!companyId) {
-      document.getElementById('hero').innerHTML = `<div class="error-box" style="margin:40px 24px;">기업 ID가 없습니다. <a href="/markets.html">시장 지표</a>로 돌아가세요.</div>`;
+      document.getElementById('hero').innerHTML = `<div class="error-box" style="margin:40px 24px;">기업 ID가 없습니다. <a href="/markets.html">마켓</a>으로 돌아가세요.</div>`;
       return;
     }
 
