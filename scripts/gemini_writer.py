@@ -299,7 +299,7 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
         "region": region,
         "country": country,
         "country_flag": "",
-        "countries": countries or ([country] if country else []),
+        "countries": ([country] + [c for c in (countries or []) if c and c != country]) if country else (countries or []),
         "image_url": image_url,
         "score": 1,  # 최초 게시는 항상 1, 업데이트마다 +1
         "created_at": now_str,
@@ -1237,7 +1237,7 @@ def park_multi_topic_articles(articles: list) -> int:
                 "region":      region,
                 "country":     country,
                 "country_flag":"",
-                "countries":   a.get("countries") or ([country] if country else []),
+                "countries":   ([country] + [c for c in (a.get("countries") or []) if c and c != country]) if country else (a.get("countries") or []),
                 "score":       0,
                 "created_at":  a.get("created_at", now_str),
                 "first_published_at": now_str,

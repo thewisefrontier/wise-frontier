@@ -70,7 +70,7 @@ def insert_article(
         "country_flag": country_flag,
         "score": score,
         "full_text": full_text or None,
-        "countries": countries or ([country] if country else None),
+        "countries": ([country] + [c for c in (countries or []) if c and c != country]) if country else (countries or None),
         "is_published": is_published,
         "created_at": now_kst().strftime("%Y-%m-%d %H:%M"),
         "sent_telegram": 0,
