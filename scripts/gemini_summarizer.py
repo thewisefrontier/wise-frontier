@@ -383,10 +383,11 @@ def get_trend_articles(keywords: list, days: int = 7) -> list:
 
 
 
-def find_similar_trend(title: str, hours: int = 24) -> dict | None:
+def find_similar_trend(title: str, hours: int = 48) -> dict | None:
     """
-    최근 N시간 내 트렌드 탭 기사 중 제목 유사도 65% 이상인 기사 반환.
+    최근 N시간 내 트렌드 탭 기사 중 제목 유사도 70% 이상인 기사 반환.
     있으면 해당 기사 dict, 없으면 None.
+    ※ issue_ko(짧은 설명)가 아니라 '생성된 실제 제목'으로 호출해야 동일 사건을 안정적으로 잡음.
     """
     from rapidfuzz import fuzz
     since = (now_kst() - timedelta(hours=hours)).strftime("%Y-%m-%d %H:%M")
@@ -399,7 +400,7 @@ def find_similar_trend(title: str, hours: int = 24) -> dict | None:
                 "source": "eq.NewsFinal",
                 "or": "(subcategory.like.trend_*,subcategory.like.realtrend_*,subcategory.like.extrend_*)",
                 "created_at": f"gte.{since}",
-                "limit": "50",
+                "limit": "120",
             },
             timeout=10
         )
@@ -410,7 +411,7 @@ def find_similar_trend(title: str, hours: int = 24) -> dict | None:
             if not existing_title:
                 continue
             sim = fuzz.token_sort_ratio(title.lower(), existing_title.lower())
-            if sim >= 65:
+            if sim >= 70:
                 print(f"    → 유사 트렌드 기사 발견 (유사도 {sim}%): {existing_title[:50]}")
                 return a
     except Exception as e:
@@ -519,7 +520,7 @@ def run_trend_tracker():
 
         print(f"  [{group_name}] {len(articles)}건 감지 → 추적 기사 생성 검토")
 
-        trend_similar = find_similar_trend(f"{group_name} 동향", hours=24)
+        trend_similar = find_similar_trend(f"{group_name} 동향", hours=48)
         if trend_article_exists(group_name) and not trend_similar:
             print(f"  [{group_name}] 최근 {TREND_CHECK_HOURS}시간 내 이미 생성됨 — 스킵")
             continue
@@ -887,7 +888,7 @@ JSON 배열로만 응답하세요 (마크다운 없이):
         if not topic or urgency == "low":
             continue
 
-        similar = find_similar_trend(issue_ko, hours=24)
+        similar = find_similar_trend(issue_ko, hours=48)
         if realtime_trend_article_exists(topic) and not similar:
             print(f"  [{topic}] 최근 {RT_CHECK_HOURS}시간 내 이미 생성됨 — 스킵")
             continue
@@ -977,6 +978,10 @@ JSON 배열로만 응답하세요 (마크다운 없이):
 
         if not title:
             title = f"{issue_ko} — {today_str}"
+
+        # 생성된 실제 제목으로 재확인 (issue_ko 표현 편차로 놓친 동일 사건 병합)
+        if not similar:
+            similar = find_similar_trend(title, hours=48)
 
         # 유사 기존 트렌드 기사 있으면 병합
         if similar:
@@ -1149,7 +1154,7 @@ JSON 배열로만 응답 (마크다운 없이):
 
         if not topic:
             continue
-        ext_similar = find_similar_trend(issue_ko, hours=24)
+        ext_similar = find_similar_trend(issue_ko, hours=48)
         if ext_trend_exists(topic) and not ext_similar:
             continue
 
@@ -1209,6 +1214,10 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
 
         if not title:
             title = f"{issue_ko} — {today_str}"
+
+        # 생성된 실제 제목으로 재확인
+        if not ext_similar:
+            ext_similar = find_similar_trend(title, hours=48)
 
         now_str = now_kst().strftime("%Y-%m-%d %H:%M")
         payload = {
