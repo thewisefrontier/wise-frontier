@@ -317,7 +317,7 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
     return -1
 
 
-def update_article(article_id, title_ko, summary_ko, note: str = "업데이트", countries=None):
+def update_article(article_id, title_ko, summary_ko, note: str = "업데이트", countries=None, country=""):
     """기사 갱신(병합 업데이트) — update_log에 업데이트 기록 추가"""
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
 
@@ -337,6 +337,9 @@ def update_article(article_id, title_ko, summary_ko, note: str = "업데이트",
 
     new_log = existing_log + [{"timestamp": now_str, "note": note}]
 
+    # 주체국(country)을 관련국(countries)에 항상 병합 — 결함 A 재발 방지
+    merged_countries = ([country] + [c for c in (countries or []) if c and c != country]) if country else (countries or [])
+
     res = requests.patch(
         f"{_sb_url()}?id=eq.{article_id}",
         headers=_sb_headers(),
@@ -346,7 +349,7 @@ def update_article(article_id, title_ko, summary_ko, note: str = "업데이트",
             "summary_ko": summary_ko,
             "created_at": now_str,
             "update_log": new_log,
-            **( {"countries": countries} if countries else {} ),
+            **( {"countries": merged_countries} if merged_countries else {} ),
         },
         timeout=15
     )
@@ -1468,7 +1471,7 @@ def run():
                 gen_title, gen_body, gen_country, gen_category, gen_countries = parse_title_and_body(content)
                 new_title = gen_title if gen_title else titles[0][:50]
                 note = generate_update_note(existing["summary_ko"], gen_body or content)
-                update_article(existing["id"], new_title, gen_body or content, note=note, countries=gen_countries if gen_countries else None)
+                update_article(existing["id"], new_title, gen_body or content, note=note, countries=gen_countries if gen_countries else None, country=gen_country or "")
                 update_article_count(existing["id"], prev_count + 1)
                 # 국가/분야 재분류 업데이트
                 if gen_country or gen_category:
@@ -1513,7 +1516,7 @@ def run():
                     gen_title, gen_body, gen_country, gen_category, gen_countries = parse_title_and_body(content)
                     new_title = gen_title if gen_title else probe_title
                     note = generate_update_note(existing_summary, gen_body or content)
-                    update_article(similar_existing["id"], new_title, gen_body or content, note=note, countries=gen_countries if gen_countries else None)
+                    update_article(similar_existing["id"], new_title, gen_body or content, note=note, countries=gen_countries if gen_countries else None, country=gen_country or "")
                     prev_count = existing_full.get("score", 0) if existing_full else 0
                     update_article_count(similar_existing["id"], max(prev_count, cur_count) + 1)
                     if gen_country or gen_category:
@@ -1692,7 +1695,7 @@ def run():
                 new_title = gen_title if gen_title else title[:50]
                 existing_sum = existing_full.get("summary_ko") if existing_full else None
                 note = generate_update_note(existing_sum, gen_body or content)
-                update_article(similar_existing["id"], new_title, gen_body or content, note=note, countries=gen_countries if gen_countries else None)
+                update_article(similar_existing["id"], new_title, gen_body or content, note=note, countries=gen_countries if gen_countries else None, country=gen_country or "")
                 prev_count = existing_full.get("score", 0) if existing_full else 0
                 update_article_count(similar_existing["id"], prev_count + 1)
                 if gen_country or gen_category:
