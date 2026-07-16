@@ -1001,16 +1001,12 @@
       (a.created_at || '').startsWith(today)
     );
 
-    // 국가별로 그룹화
+    // 주체국(country) 기준 그룹화 — 언급국 제외, 기사당 1개국만(브리핑 중복 방지)
     const byCountry = {};
     todayArticles.forEach(a => {
-      const countries = a.countries && a.countries.length > 0
-        ? a.countries.filter(c => c)
-        : (a.country ? [a.country] : ['기타']);
-      countries.forEach(c => {
-        if (!byCountry[c]) byCountry[c] = [];
-        if (byCountry[c].length < 2) byCountry[c].push(a);
-      });
+      const c = a.country || (a.countries && a.countries.length ? a.countries[0] : '') || '기타';
+      if (!byCountry[c]) byCountry[c] = [];
+      if (byCountry[c].length < 2) byCountry[c].push(a);
     });
 
     if (!Object.keys(byCountry).length) {
