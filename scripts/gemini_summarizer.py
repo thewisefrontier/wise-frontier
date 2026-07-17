@@ -383,59 +383,103 @@ def get_trend_articles(keywords: list, days: int = 7) -> list:
 
 
 
-def find_similar_trend(title: str, hours: int = 48) -> dict | None:
+def _title_keywords(t: str) -> set:
+    """제목에서 의미 키워드 추출(2자 이상 토큰, 불용어 제외)."""
+    import re
+    toks = re.findall(r"[가-힣A-Za-z0-9]+", (t or "").lower())
+    return {w for w in toks if len(w) >= 2 and w not in FREQ_STOPWORDS}
+
+
+def find_similar_trend(title: str, country: str | None = None,
+                       days: int = 14, sim_threshold: int = 60) -> dict | None:
     """
-    최근 N시간 내 트렌드 탭 기사 중 제목 유사도 70% 이상인 기사 반환.
-    있으면 해당 기사 dict, 없으면 None.
-    ※ issue_ko(짧은 설명)가 아니라 '생성된 실제 제목'으로 호출해야 동일 사건을 안정적으로 잡음.
+    최근 N일 내 트렌드 기사 중 동일 사건의 '루트(최초 발행=최소 id)' 반환. 없으면 None.
+    매칭: country 지정 시 country 일치 필수 + 제목 token_sort_ratio>=sim_threshold + 공유 키워드>=1.
+          country=None이면 제목 유사도만으로 느슨히 탐색(사전 스킵 판단용).
+    id 오름차순 조회 → 첫 매칭이 곧 루트.
     """
     from rapidfuzz import fuzz
-    since = (now_kst() - timedelta(hours=hours)).strftime("%Y-%m-%d %H:%M")
+    since = (now_kst() - timedelta(days=days)).strftime("%Y-%m-%d %H:%M")
+    params = {
+        "select": "id,title_ko,summary_ko,update_log,country",
+        "source": "eq.NewsFinal",
+        "or": "(subcategory.like.trend_*,subcategory.like.realtrend_*,subcategory.like.extrend_*)",
+        "created_at": f"gte.{since}",
+        "order": "id.asc",
+        "limit": "200",
+    }
+    if country:
+        params["country"] = f"eq.{country}"
     try:
-        res = requests.get(
-            _sb_url(),
-            headers=_sb_headers(),
-            params={
-                "select": "id,title_ko,summary_ko,update_log",
-                "source": "eq.NewsFinal",
-                "or": "(subcategory.like.trend_*,subcategory.like.realtrend_*,subcategory.like.extrend_*)",
-                "created_at": f"gte.{since}",
-                "limit": "120",
-            },
-            timeout=10
-        )
+        res = requests.get(_sb_url(), headers=_sb_headers(), params=params, timeout=10)
         if res.status_code not in (200, 206):
             return None
+        new_kw = _title_keywords(title)
         for a in res.json():
             existing_title = a.get("title_ko") or ""
             if not existing_title:
                 continue
             sim = fuzz.token_sort_ratio(title.lower(), existing_title.lower())
-            if sim >= 70:
-                print(f"    → 유사 트렌드 기사 발견 (유사도 {sim}%): {existing_title[:50]}")
+            shared = new_kw & _title_keywords(existing_title)
+            if sim >= sim_threshold and (not country or len(shared) >= 1):
+                print(f"    → 유사 트렌드 루트 발견 (id={a['id']}, 유사도 {sim}%, 공유KW {len(shared)}): {existing_title[:40]}")
                 return a
     except Exception as e:
         print(f"    → 유사도 체크 실패: {e}")
     return None
 
 
+def _summarize_delta(root_summary: str, new_title: str, new_body: str) -> str:
+    """루트 기사에 없는 '새 전개'만 1~3문장으로 요약. 새 사실 없으면 '없음'."""
+    prompt = f"""아래는 진행 중인 사건의 기존 정리 기사와, 방금 수집된 새 기사입니다.
+기존 기사에 '없는 새로운 사실'만 1~3문장으로 요약하세요.
+- 날짜는 사건 현지시간 "N일(현지시간)" 형식으로, 소스에 나온 날짜만. "오늘"·절대날짜 금지, 모르면 생략.
+- 새로운 사실이 없으면 정확히 "없음" 한 단어만 출력.
+- 논평·마크다운·헤더 금지, 사실 서술형 한국어로만.
+
+[기존 정리 기사]
+{root_summary[:1500]}
+
+[새 기사] {new_title}
+{new_body[:1200]}
+
+새 전개 요약:"""
+    try:
+        out = call_gemini_article(prompt, max_tokens=300)
+        if out:
+            out = out.strip()
+            if out.startswith("새 전개 요약:"):
+                out = out.split(":", 1)[1].strip()
+            return out.strip()
+    except Exception as e:
+        print(f"    → 델타 요약 실패: {e}")
+    return ((new_body or "")[:200]).strip()
+
+
 def merge_trend_article(existing: dict, new_title: str, new_body: str, note: str) -> bool:
-    """기존 트렌드 기사에 새 내용 병합 업데이트"""
+    """기존 트렌드 루트 기사에 '새 전개'만 append(리빙 아티클). 제목·기존 본문은 덮어쓰지 않음."""
     art_id = existing["id"]
     existing_summary = existing.get("summary_ko") or ""
     existing_log = existing.get("update_log") or []
 
+    delta = _summarize_delta(existing_summary, new_title, new_body)
+    if not delta or delta.replace(".", "").strip() == "없음":
+        print(f"    → 새 전개 없음, append 생략 (id={art_id})")
+        return True  # 병합 성공 처리 → 신규 중복 생성 방지
+
+    if "[업데이트 이력]" not in existing_summary:
+        new_summary = existing_summary.rstrip() + "\n\n────────\n[업데이트 이력]\n■ " + delta
+    else:
+        new_summary = existing_summary.rstrip() + "\n■ " + delta
+
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
     new_log = existing_log + [{"timestamp": now_str, "note": note}]
-
     try:
         res = requests.patch(
             f"{_sb_url()}?id=eq.{art_id}",
             headers=_sb_headers(),
             json={
-                "title_ko": new_title,
-                "title_en": new_title,
-                "summary_ko": new_body,
+                "summary_ko": new_summary,
                 "created_at": now_str,
                 "update_log": new_log,
             },
@@ -520,8 +564,7 @@ def run_trend_tracker():
 
         print(f"  [{group_name}] {len(articles)}건 감지 → 추적 기사 생성 검토")
 
-        trend_similar = find_similar_trend(f"{group_name} 동향", hours=48)
-        if trend_article_exists(group_name) and not trend_similar:
+        if trend_article_exists(group_name):
             print(f"  [{group_name}] 최근 {TREND_CHECK_HOURS}시간 내 이미 생성됨 — 스킵")
             continue
 
@@ -595,6 +638,14 @@ def run_trend_tracker():
             "미얀마": "southeast_asia", "아이티": "caribbean",
         }
         region = region_map.get(country, "africa")
+
+        # 동일 사건 루트 있으면 신규 생성 대신 append 병합(리빙 아티클)
+        root = find_similar_trend(title, country=country, days=14)
+        if root:
+            if merge_trend_article(root, title, body, f"트렌드 추적 업데이트 ({group_name})"):
+                print(f"  [{group_name}] ✅ 기존 루트에 병합 (id={root['id']}): {title}")
+                time.sleep(CALL_INTERVAL)
+                continue
 
         article_id = save_trend_article(
             group_name=group_name, title=title, body=body,
@@ -888,7 +939,7 @@ JSON 배열로만 응답하세요 (마크다운 없이):
         if not topic or urgency == "low":
             continue
 
-        similar = find_similar_trend(issue_ko, hours=48)
+        similar = find_similar_trend(issue_ko, days=14)
         if realtime_trend_article_exists(topic) and not similar:
             print(f"  [{topic}] 최근 {RT_CHECK_HOURS}시간 내 이미 생성됨 — 스킵")
             continue
@@ -979,9 +1030,8 @@ JSON 배열로만 응답하세요 (마크다운 없이):
         if not title:
             title = f"{issue_ko} — {today_str}"
 
-        # 생성된 실제 제목으로 재확인 (issue_ko 표현 편차로 놓친 동일 사건 병합)
-        if not similar:
-            similar = find_similar_trend(title, hours=48)
+        # 생성된 실제 제목+국가로 동일 사건 루트 재확인 (우선)
+        similar = find_similar_trend(title, country=art_country, days=14)
 
         # 유사 기존 트렌드 기사 있으면 병합
         if similar:
@@ -1154,7 +1204,7 @@ JSON 배열로만 응답 (마크다운 없이):
 
         if not topic:
             continue
-        ext_similar = find_similar_trend(issue_ko, hours=48)
+        ext_similar = find_similar_trend(issue_ko, days=14)
         if ext_trend_exists(topic) and not ext_similar:
             continue
 
@@ -1215,9 +1265,8 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
         if not title:
             title = f"{issue_ko} — {today_str}"
 
-        # 생성된 실제 제목으로 재확인
-        if not ext_similar:
-            ext_similar = find_similar_trend(title, hours=48)
+        # 생성된 실제 제목+국가로 동일 사건 루트 재확인 (우선)
+        ext_similar = find_similar_trend(title, country=art_country, days=14)
 
         now_str = now_kst().strftime("%Y-%m-%d %H:%M")
         payload = {
