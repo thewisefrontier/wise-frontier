@@ -401,6 +401,7 @@
       <nav class="nav-sector" id="nav-sector">
       <a href="/live.html" style="color:var(--accent2);font-weight:700;">📈 트렌드</a>
       <a href="#" class="active" onclick="setSector('all',this);return false;">전체</a>
+      <a href="/country.html">국가별</a>
       <a href="#" onclick="setSector('경제',this);return false;" data-sector>경제</a>
       <a href="#" onclick="setSector('금융',this);return false;" data-sector>금융</a>
       <a href="#" onclick="setSector('자원·에너지',this);return false;" data-sector>자원·에너지</a>
@@ -409,9 +410,8 @@
       <a href="#" onclick="setSector('사회',this);return false;" data-sector>사회</a>
       <a href="#" onclick="setSector('IT·과학',this);return false;" data-sector>IT·과학</a>
       <a href="/markets.html">마켓</a>
-      <a href="/archive.html">아카이브</a>
       <a href="/calendar.html">경제 일정</a>
-      <a href="/country.html">국가별</a>
+      <a href="/archive.html">아카이브</a>
       </nav>
     </div>
   </div>
@@ -898,7 +898,62 @@
       html += `</div>`;
     }
 
+    // 마지막 페이지: Supabase 추가 로드 버튼
+    if (page === totalPages && !currentQuery) {
+      html += `<div style="text-align:center;padding:16px 0 24px;">
+        <button id="load-more-btn" onclick="loadMoreFromSupabase()" style="padding:8px 28px;border:1px solid var(--border);background:var(--bg3);font-family:'IBM Plex Mono',monospace;font-size:12px;cursor:pointer;color:var(--accent2);">더 보기 ↓</button>
+      </div>`;
+    }
+
     container.innerHTML = html;
+  }
+
+  let supabaseOffset = 0;
+
+  async function loadMoreFromSupabase() {
+    const btn = document.getElementById('load-more-btn');
+    if (btn) btn.textContent = '로딩 중...';
+
+    const SUPABASE_URL = 'https://fotdngseksqaghvtcvqh.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_rT3kSEAAdM0DJlDW5fEWww_M37h6dDW';
+
+    // 현재 allArticles의 가장 오래된 created_at 기준으로 이전 기사 조회
+    const oldest = allArticles.length ? allArticles[allArticles.length - 1].created_at : null;
+
+    try {
+      const params = new URLSearchParams({
+        select: '*',
+        source: 'eq.NewsFinal',
+        is_published: 'eq.true',
+        order: 'created_at.desc',
+        limit: 100,
+      });
+      if (oldest) params.append('created_at', `lt.${oldest}`);
+      if (currentRegion !== 'all') params.append('region', `eq.${currentRegion}`);
+
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/articles?${params}`, {
+        headers: { 'apikey': SUPABASE_ANON_KEY }
+      });
+      if (!res.ok) throw new Error();
+      const newArticles = await res.json();
+
+      if (!newArticles.length) {
+        if (btn) { btn.textContent = '더 이상 기사가 없습니다'; btn.disabled = true; }
+        return;
+      }
+
+      // 중복 제거 후 allArticles에 추가
+      const existingIds = new Set(allArticles.map(a => a.id));
+      const fresh = newArticles.filter(a => !existingIds.has(a.id));
+      allArticles = [...allArticles, ...fresh];
+
+      // 마지막 페이지로 이동
+      const totalPages = Math.ceil(allArticles.length / PAGE_SIZE);
+      renderArticles(allArticles, totalPages);
+      window.scrollTo(0, 0);
+    } catch(e) {
+      if (btn) { btn.textContent = '오류 — 다시 시도'; btn.disabled = false; }
+    }
   }
 
   function cleanBody(text) {
