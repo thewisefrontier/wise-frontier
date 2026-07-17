@@ -224,10 +224,6 @@
     }
     .article-card.standalone:hover { border-left-color: var(--accent); }
 
-    /* 자체 기사 스타일 제거 — 모든 기사 동일하게 */
-    .own-badge { display: none; }
-
-    /* 자체 기사 스타일 제거 — 모든 기사 동일하게 */
     .own-badge { display: none; }
 
     .article-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; gap: 8px; }
@@ -251,7 +247,6 @@
       letter-spacing: 1px; text-transform: uppercase; display: flex; justify-content: space-between; font-weight: 500;
     }
 
-    /* ISSUES 위젯 */
     .issue-item {
       padding: 8px 14px; border-bottom: 1px solid var(--border);
       cursor: pointer; transition: background 0.2s;
@@ -259,7 +254,6 @@
     }
     .issue-item:hover, .issue-item.active { background: var(--bg3); }
 
-    /* 경제일정 위젯 */
     .cal-item {
       padding: 9px 14px; border-bottom: 1px solid var(--border);
       font-size: 12px; display: flex; gap: 8px; align-items: flex-start;
@@ -326,7 +320,6 @@
       .main-feed { padding: 0; }
       .feed-header { padding: 10px 14px; }
       footer { flex-direction: column; gap: 8px; text-align: center; padding: 16px; }
-      /* 모바일: 카테고리 → '전체 지역' 옆 컴팩트 드롭다운 */
       .sector-dropdown { flex: 0 0 auto; }
       .sector-btn { display: flex; }
       .nav-sector {
@@ -373,7 +366,6 @@
     </div>
   </div>
 
-  <!-- 필터 바: 지역 드롭다운 + 분야 탭 -->
   <div class="nav-wrap" id="nav-tabs">
     <div class="region-dropdown" id="region-dropdown">
       <button class="region-btn" id="region-btn" onclick="toggleRegionMenu()">
@@ -427,7 +419,6 @@
   </main>
 
   <aside class="sidebar">
-    <!-- 경제 일정 — 최상단 -->
     <div class="widget">
       <div class="widget-header">
         <span>📅 예정 일정</span>
@@ -436,7 +427,6 @@
       <div id="calendar-widget"><div class="empty">데이터 준비 중</div></div>
     </div>
 
-    <!-- 브리핑 -->
     <div class="widget">
       <div class="widget-header">
         <span>오늘의 브리핑</span>
@@ -459,7 +449,6 @@
 <script>
   const PAGE_SIZE = 20;
 
-  // 불용어 — 이슈 키워드에서 제외
   const STOPWORDS = new Set([
     'the','a','an','in','on','at','to','for','of','and','or','is','are','was',
     'as','by','with','its','it','this','that','over','from','after','new','says',
@@ -500,13 +489,12 @@
     const freq = {};
     kws.forEach(w => freq[w] = (freq[w] || 0) + 1);
     return Object.entries(freq)
-      .filter(([,cnt]) => cnt >= 2) // 최소 2회 이상 등장
+      .filter(([,cnt]) => cnt >= 2)
       .sort((a,b) => b[1]-a[1])
       .slice(0,3)
       .map(e => '#' + e[0]);
   }
 
-  // KST 시간
   function nowKST() {
     return new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
   }
@@ -517,7 +505,6 @@
     const now = nowKST();
     document.getElementById('datetime').textContent =
       `${now.getFullYear()}.${pad(now.getMonth()+1)}.${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())} KST`;
-
   }
   updateTime();
   setInterval(updateTime, 60000);
@@ -527,7 +514,6 @@
     return `${now.getMonth()+1}월 ${now.getDate()}일`;
   })();
 
-  // DB created_at은 UTC로 저장됨
   function formatTime(dateStr) {
     if (!dateStr) return '';
     const d = new Date(dateStr.replace(' ', 'T'));
@@ -550,7 +536,6 @@
   let issueMap = {};
   let expandedIdx = null;
 
-  // 지역/분야 필터 — DB 컬럼과 정확히 매핑
   const REGION_MAP = {
     '아프리카': ['아프리카', 'africa'],
     '동남아시아': ['동남아시아', 'southeast_asia'],
@@ -605,7 +590,6 @@
     return results;
   }
 
-  // 검색
   let searchDebounce = null;
   let searchExtraResults = [];
 
@@ -614,21 +598,16 @@
     const clearBtn = document.getElementById('search-clear');
     const info = document.getElementById('search-info');
     clearBtn.style.display = currentQuery ? 'inline-block' : 'none';
-
     const filtered = getFiltered();
     document.getElementById('feed-title').textContent = currentQuery ? `🔍 ${currentQuery}` : '● 최신 기사';
-
     if (!currentQuery) {
       searchExtraResults = [];
       info.textContent = '';
       renderArticles(filtered);
       return;
     }
-
     info.textContent = `${filtered.length}건 (검색 중...)`;
     renderArticles(filtered);
-
-    // 디바운스 — Supabase 전체 검색
     clearTimeout(searchDebounce);
     searchDebounce = setTimeout(() => searchSupabase(currentQuery), 400);
   }
@@ -645,11 +624,8 @@
       if (!res.ok) return;
       const results = await res.json();
       if (query !== currentQuery) return;
-
-      // 기존 allArticles와 중복 제거
       const existingIds = new Set(allArticles.map(a => a.id));
       searchExtraResults = results.filter(a => !existingIds.has(a.id));
-
       const combined = [...getFiltered(), ...searchExtraResults];
       document.getElementById('search-info').textContent = `${combined.length}건`;
       renderArticles(combined);
@@ -666,7 +642,6 @@
     renderArticles(getFiltered());
   }
 
-  // 드롭다운
   function toggleRegionMenu() {
     const menu = document.getElementById('region-menu');
     const btn = document.getElementById('region-btn');
@@ -695,7 +670,6 @@
     }
   });
 
-  // 인라인 확장
   function closeExpand() {
     document.querySelectorAll('.article-expand').forEach(el => el.remove());
     document.querySelectorAll('.article-card.expanded').forEach(el => el.classList.remove('expanded'));
@@ -708,7 +682,6 @@
     location.href = `article?id=${a.id}`;
   }
 
-  // 탭 active 초기화
   function clearAllActive() {
     document.querySelectorAll('.nav-sector a').forEach(a => a.classList.remove('active'));
     document.querySelectorAll('.region-menu a').forEach(a => a.classList.remove('active'));
@@ -792,12 +765,10 @@
     const container = document.getElementById('articles-container');
     const entries = Object.entries(issueMap);
     document.getElementById('article-count').textContent = `${entries.length}개 이슈`;
-
     if (!entries.length) {
       container.innerHTML = '<div class="empty">주요 이슈가 없습니다.</div>';
       return;
     }
-
     container.innerHTML = entries.map(([label, group]) => `
       <div class="cluster" style="cursor:pointer;" onclick="showIssue('${label.replace(/'/g,"\\'")}')">
         <div class="cluster-header">
@@ -836,7 +807,6 @@
     renderArticles(issueMap[label]);
   }
 
-  // 이슈 — 3건 이상 묶인 클러스터만 저장
   function buildIssues(clusters) {
     issueMap = {};
     const significant = clusters.filter(g => g.length >= 3);
@@ -884,7 +854,6 @@
     if (totalPages > 1) {
       html += `<div class="pagination">`;
       if (page > 1) html += `<a href="#" onclick="renderArticles(currentArticles,${page-1});window.scrollTo(0,0);return false;">← 이전</a>`;
-
       const start = Math.max(1, page - 2);
       const end = Math.min(totalPages, page + 2);
       if (start > 1) html += `<a href="#" onclick="renderArticles(currentArticles,1);window.scrollTo(0,0);return false;">1</a><span>…</span>`;
@@ -893,12 +862,10 @@
         else html += `<a href="#" onclick="renderArticles(currentArticles,${i});window.scrollTo(0,0);return false;">${i}</a>`;
       }
       if (end < totalPages) html += `<span>…</span><a href="#" onclick="renderArticles(currentArticles,${totalPages});window.scrollTo(0,0);return false;">${totalPages}</a>`;
-
       if (page < totalPages) html += `<a href="#" onclick="renderArticles(currentArticles,${page+1});window.scrollTo(0,0);return false;">다음 →</a>`;
       html += `</div>`;
     }
 
-    // 마지막 페이지: Supabase 추가 로드 버튼
     if (page === totalPages && !currentQuery) {
       html += `<div style="text-align:center;padding:16px 0 24px;">
         <button id="load-more-btn" onclick="loadMoreFromSupabase()" style="padding:8px 28px;border:1px solid var(--border);background:var(--bg3);font-family:'IBM Plex Mono',monospace;font-size:12px;cursor:pointer;color:var(--accent2);">더 보기 ↓</button>
@@ -913,13 +880,9 @@
   async function loadMoreFromSupabase() {
     const btn = document.getElementById('load-more-btn');
     if (btn) btn.textContent = '로딩 중...';
-
     const SUPABASE_URL = 'https://fotdngseksqaghvtcvqh.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_rT3kSEAAdM0DJlDW5fEWww_M37h6dDW';
-
-    // 현재 allArticles의 가장 오래된 created_at 기준으로 이전 기사 조회
     const oldest = allArticles.length ? allArticles[allArticles.length - 1].created_at : null;
-
     try {
       const params = new URLSearchParams({
         select: '*',
@@ -930,24 +893,18 @@
       });
       if (oldest) params.append('created_at', `lt.${oldest}`);
       if (currentRegion !== 'all') params.append('region', `eq.${currentRegion}`);
-
       const res = await fetch(`${SUPABASE_URL}/rest/v1/articles?${params}`, {
         headers: { 'apikey': SUPABASE_ANON_KEY }
       });
       if (!res.ok) throw new Error();
       const newArticles = await res.json();
-
       if (!newArticles.length) {
         if (btn) { btn.textContent = '더 이상 기사가 없습니다'; btn.disabled = true; }
         return;
       }
-
-      // 중복 제거 후 allArticles에 추가
       const existingIds = new Set(allArticles.map(a => a.id));
       const fresh = newArticles.filter(a => !existingIds.has(a.id));
       allArticles = [...allArticles, ...fresh];
-
-      // 마지막 페이지로 이동
       const totalPages = Math.ceil(allArticles.length / PAGE_SIZE);
       renderArticles(allArticles, totalPages);
       window.scrollTo(0, 0);
@@ -958,14 +915,12 @@
 
   function cleanBody(text) {
     if (!text) return '';
-    // 마크다운 제거
     text = text
       .replace(/\*\*(.+?)\*\*/g, '$1')
       .replace(/\*(.+?)\*/g, '$1')
       .replace(/^#{1,6}\s+/gm, '')
       .replace(/\[.{1,20}=.{1,30}\]/g, '')
       .replace(/^\[.{1,30}\]\s*/gm, '');
-    // 홍보성 문구 제거 — 문장 단위로
     const promoPatterns = [
       /[^.]*텔레그램 채널[^.]*\./g,
       /[^.]*구독[^.]*프리미엄[^.]*\./g,
@@ -992,7 +947,6 @@
   function renderCard(a, standalone) {
     const idx = allArticles.indexOf(a);
     const clickAction = idx >= 0 ? `toggleExpand(${idx})` : `location.href='article?id=${a.id}'`;
-    // isLive 제거 — 트렌드 탭으로 분리됨
     const TREND_PREFIXES = ['trend_', 'realtrend_', 'extrend_'];
     const isTrend = TREND_PREFIXES.some(p => (a.subcategory || '').startsWith(p));
     const liveBadge = isTrend ? `<span style="color:var(--accent2);font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;margin-right:6px;">📈 트렌드</span>` : '';
@@ -1033,36 +987,28 @@
       </div>`;
   }
 
-  function renderWire(articles) {
-    const container = document.getElementById('wire-container');
-    const wireArticles = articles.filter(a => a.source === 'NewsFinal');
-    if (!wireArticles.length) { container.innerHTML = '<div class="empty">준비 중</div>'; return; }
-    container.innerHTML = wireArticles.slice(0,10).map((a,i) => `
-      <div class="wire-item">
-        <div class="wire-dot ${i<2?'new':''}"></div>
-        <div>
-          <div class="wire-text" style="cursor:pointer;" onclick="location.href='article?id=${a.id}'">${a.title_ko||a.title_en}</div>
-          <div class="wire-meta">NewsFinal · <span data-created="${a.created_at}">${formatTime(a.created_at)}</span></div>
-        </div>
-      </div>`).join('');
-  }
-
   function renderBriefing(articles) {
     const container = document.getElementById('briefing-container');
     const now = nowKST();
     const today = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
     const todayArticles = articles.filter(a =>
       a.source === 'NewsFinal' &&
+      a.country &&                               // 주체국 없는 기사 제외
       !(a.subcategory || '').startsWith('cluster_') &&
       (a.created_at || '').startsWith(today)
     );
 
-    // 주체국(country) 기준 그룹화 — 언급국 제외, 기사당 1개국만(브리핑 중복 방지)
+    // 주체국(country) 기준 그룹화 — countries(관련국) 불사용, 중복 방지
     const byCountry = {};
+    const usedArticleIds = new Set();
     todayArticles.forEach(a => {
-      const c = a.country || (a.countries && a.countries.length ? a.countries[0] : '') || '기타';
+      if (usedArticleIds.has(a.id)) return;  // 같은 기사 중복 노출 방지
+      const c = a.country;
       if (!byCountry[c]) byCountry[c] = [];
-      if (byCountry[c].length < 2) byCountry[c].push(a);
+      if (byCountry[c].length < 2) {
+        byCountry[c].push(a);
+        usedArticleIds.add(a.id);
+      }
     });
 
     if (!Object.keys(byCountry).length) {
@@ -1113,7 +1059,6 @@
       const res = await fetch('data/articles.json');
       if (!res.ok) throw new Error();
       const raw = await res.json();
-      // 다이제스트는 일반 피드에서 제외하고 별도 박스로
       allArticles = raw.filter(a => !(a.subcategory || '').startsWith('digest_'));
       renderDigest(raw);
       renderArticles(allArticles);
