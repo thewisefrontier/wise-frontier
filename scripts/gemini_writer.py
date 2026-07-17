@@ -242,45 +242,28 @@ def get_cluster_article_count(cluster_key):
 
 
 def get_today_own_articles():
-    """최근 24시간(KST) 내 생성된 자체 기사 제목 목록 — 발행/미발행 모두 포함(중복 체크용)"""
-    since = (now_kst() - timedelta(hours=72)).strftime("%Y-%m-%d %H:%M")
-    try:
-        res = requests.get(
-            _sb_url(),
-            headers=_sb_headers(),
-            params={
-                "select": "id,title_ko,subcategory,is_published",
-                "source": "eq.NewsFinal",
-                "created_at": f"gte.{since}",
-                "order": "created_at.desc",
-            },
-            timeout=15
-        )
-        if res.status_code in (200, 206):
-            articles = res.json()
-            print(f"  [중복체크 준비] 최근 24시간 자체 기사 {len(articles)}건 로드됨")
-            return articles
-        print(f"  ⚠️ [중복체크 경고] 기존 기사 조회 실패 (status={res.status_code}) — 중복 검사 건너뜀 위험")
-        return []
-    except Exception as e:
-        print(f"  ⚠️ [중복체크 경고] 기존 기사 조회 예외 발생: {e} — 중복 검사 건너뜀 위험")
-        return []
+    """하위 호환용 — 이제 find_similar_article이 RPC를 직접 호출하므로 빈 리스트 반환."""
+    return []
 
 
 def find_similar_article(title: str, own_articles: list, threshold: int = 70):
-    """유사한 자체 기사 찾기 — threshold 이상이면 중복으로 판단.
-    token_sort_ratio(어순 무관 전체 비교)와 token_set_ratio(공통 단어 집합 비교) 중 높은 쪽을 사용해
-    "삼성전자 워치 출시 전망" vs "삼성전자, 차세대 워치 출시 전망 분석"처럼
-    표현이 늘어나거나 어순이 바뀐 같은 사건도 더 안정적으로 잡아냄."""
-    for a in own_articles:
-        existing_title = a.get("title_ko") or ""
-        if not existing_title:
-            continue
-        score_sort = fuzz.token_sort_ratio(title, existing_title)
-        score_set = fuzz.token_set_ratio(title, existing_title)
-        score = max(score_sort, score_set)
-        if score >= threshold:
-            return a, score
+    """DB RPC(find_duplicate_title)로 유사 기사 탐색 — pg_trgm similarity 기반, 행 수 제한 없음."""
+    if not title:
+        return None, 0
+    try:
+        res = requests.post(
+            f"{SUPABASE_URL}/rest/v1/rpc/find_duplicate_title",
+            headers=_sb_headers(),
+            json={"p_title": title, "p_hours": 72, "p_threshold": 0.4},
+            timeout=10,
+        )
+        if res.status_code in (200, 201) and res.json():
+            top = res.json()[0]
+            score = int(top["score"] * 100)
+            if score >= threshold:
+                return top, score
+    except Exception as e:
+        print(f"  ⚠️ [중복체크 경고] RPC 호출 실패: {e}")
     return None, 0
 
 
