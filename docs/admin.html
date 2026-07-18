@@ -1474,7 +1474,7 @@
     btn.disabled = true;
     btn.textContent = '처리 중...';
     try {
-      const { error } = await sb.from('articles').update({ is_published: true }).eq('id', id);
+      const { error } = await sb.from('articles').update({ is_published: true, dedup_reviewed: true }).eq('id', id);
       if (error) throw new Error(error.message);
       toast(`#${id} 다시 발행 처리됨`, 'success');
       const row = btn.closest('tr');
@@ -1511,6 +1511,8 @@
 
       const result = await res.json();
       if (!res.ok) throw new Error(`${result.error || res.statusText}${result.detail ? ' — ' + result.detail : ''}`);
+
+      await sb.from('articles').update({ dedup_reviewed: true }).eq('id', id_remove);
 
       toast(`통합 완료: #${id_keep} 업데이트, #${id_remove} 미발행`, 'success');
       const rowId = `dup-row-${Math.min(id_a,id_b)}-${Math.max(id_a,id_b)}`;
