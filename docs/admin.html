@@ -197,6 +197,7 @@
       <div class="sidebar-item admin-only" id="user-menu" onclick="showUsers(this)">👥 사용자 관리</div>
       <div class="sidebar-item admin-only" id="prompt-menu" onclick="showPrompts(this)">✏️ 프롬프트 관리</div>
       <div class="sidebar-item admin-only" id="rss-menu" onclick="showRssSources(this)">📡 RSS 소스 관리</div>
+      <div class="sidebar-item" id="duplicate-menu" onclick="showDuplicates(this)">🔁 중복기사</div>
       <div class="sidebar-item" id="stats-menu" onclick="showStats(this)">📊 발행 통계</div>
     </div>
 
@@ -1382,6 +1383,111 @@
     if (error) { toast(`오류: ${error.message}`, 'error'); return; }
     toast('삭제되었습니다.');
     showRssSources(document.getElementById('rss-menu'));
+  }
+
+  // ── 중복기사 ──────────────────────────────────────────
+
+  async function showDuplicates(el) {
+    document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+    if (el) el.classList.add('active');
+
+    document.getElementById('main-content').innerHTML =
+      '<div style="padding:40px;color:var(--muted);font-size:13px;">중복기사 검색 중...</div>';
+
+    const { data, error } = await sb.rpc('find_duplicate_pairs', { p_hours: 72, p_threshold: 0.5 });
+
+    if (error) {
+      document.getElementById('main-content').innerHTML =
+        `<div style="padding:40px;color:var(--danger);font-size:13px;">오류: ${error.message}</div>`;
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      document.getElementById('main-content').innerHTML =
+        '<div style="padding:40px;color:var(--muted);font-size:13px;">최근 72시간 내 중복 기사가 없습니다.</div>';
+      return;
+    }
+
+    let rows = '';
+    for (const pair of data) {
+      const scoreColor = pair.score >= 0.7 ? 'var(--danger)' : pair.score >= 0.6 ? 'var(--accent)' : 'var(--muted)';
+      rows += `
+        <tr id="dup-row-${pair.id_a}-${pair.id_b}">
+          <td style="width:36%;white-space:normal;">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:2px;">#${pair.id_a} · ${pair.created_at_a}</div>
+            <a href="/article?id=${pair.id_a}" target="_blank" style="color:var(--text);font-size:12px;">${pair.title_a}</a>
+          </td>
+          <td style="width:36%;white-space:normal;">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:2px;">#${pair.id_b} · ${pair.created_at_b}</div>
+            <a href="/article?id=${pair.id_b}" target="_blank" style="color:var(--text);font-size:12px;">${pair.title_b}</a>
+          </td>
+          <td style="width:8%;text-align:center;font-size:13px;font-weight:700;color:${scoreColor};">${Math.round(pair.score * 100)}%</td>
+          <td style="width:10%;text-align:center;">
+            <button class="btn btn-primary" style="font-size:11px;padding:4px 10px;"
+              onclick="mergeDuplicates(${pair.id_a}, ${pair.id_b}, '${pair.created_at_a}', '${pair.created_at_b}', this)">통합</button>
+          </td>
+          <td style="width:10%;text-align:center;">
+            <button class="btn" style="font-size:11px;padding:4px 10px;background:var(--bg3);"
+              onclick="document.getElementById('dup-row-${pair.id_a}-${pair.id_b}').remove()">건너뜀</button>
+          </td>
+        </tr>`;
+    }
+
+    document.getElementById('main-content').innerHTML = `
+      <div style="padding:20px;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:16px;">중복기사 (최근 72시간 · 유사도 50% 이상) — ${data.length}쌍</div>
+        <table style="width:100%;border-collapse:collapse;">
+          <thead>
+            <tr style="border-bottom:1px solid var(--border);">
+              <th style="text-align:left;padding:8px 10px;font-size:11px;color:var(--muted);width:36%;">기사 A (먼저 작성)</th>
+              <th style="text-align:left;padding:8px 10px;font-size:11px;color:var(--muted);width:36%;">기사 B (나중 작성)</th>
+              <th style="text-align:center;padding:8px 10px;font-size:11px;color:var(--muted);width:8%;">유사도</th>
+              <th style="width:10%;"></th>
+              <th style="width:10%;"></th>
+            </tr>
+          </thead>
+          <tbody id="dup-tbody">${rows}</tbody>
+        </table>
+      </div>`;
+  }
+
+  async function mergeDuplicates(id_a, id_b, created_at_a, created_at_b, btn) {
+    // created_at 이른 쪽이 id_keep
+    const id_keep = created_at_a <= created_at_b ? id_a : id_b;
+    const id_remove = id_keep === id_a ? id_b : id_a;
+
+    if (!confirm(`통합하시겠습니까?\n유지: #${id_keep}\n미발행: #${id_remove}\n\nGemini가 두 기사를 합쳐 재작성합니다.`)) return;
+
+    btn.disabled = true;
+    btn.textContent = '처리 중...';
+
+    try {
+      const { data: { session } } = await sb.auth.getSession();
+      if (!session) { toast('로그인 세션이 없습니다', 'error'); btn.disabled = false; btn.textContent = '통합'; return; }
+
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/merge-articles`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`
+        },
+        body: JSON.stringify({ id_keep, id_remove })
+      });
+
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || res.statusText);
+
+      toast(`통합 완료: #${id_keep} 업데이트, #${id_remove} 미발행`, 'success');
+      // 해당 행 제거
+      const rowId = `dup-row-${Math.min(id_a,id_b)}-${Math.max(id_a,id_b)}`;
+      const row = document.getElementById(rowId);
+      if (row) row.remove();
+
+    } catch (e) {
+      toast(`오류: ${e.message}`, 'error');
+      btn.disabled = false;
+      btn.textContent = '통합';
+    }
   }
 
   // ── 발행 통계 ────────────────────────────────────────
