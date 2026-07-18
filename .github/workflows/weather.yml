@@ -2,7 +2,7 @@ name: NewsFinal - Daily Weather
 
 on:
   schedule:
-    - cron: '0 22 * * *'    # UTC 22:00 = KST 07:00 (다음날)
+    - cron: '0 22 * * 0-4'    # UTC 22:00 일~목 = KST 07:00 월~금 (주말 제외, 금요일에 주말예보 포함)
   workflow_dispatch:
 
 permissions:
@@ -24,7 +24,7 @@ jobs:
       - name: 패키지 설치
         run: pip install -r requirements.txt
 
-      - name: 오늘의 날씨 리포트 생성
+      - name: 날씨 리포트 생성 (평일: 오늘 / 금요일: 주말예보)
         run: python scripts/weather_report.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
