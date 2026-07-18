@@ -2,11 +2,15 @@ name: NewsFinal - Daily Weather
 
 on:
   schedule:
-    - cron: '0 22 * * 0-4'    # UTC 22:00 일~목 = KST 07:00 월~금 (주말 제외, 금요일에 주말예보 포함)
+    - cron: '0 * * * *'    # 매시 정각 (UTC) — 스크립트가 국가별 현지 아침 시간을 자체 판단
   workflow_dispatch:
 
 permissions:
   contents: write
+
+concurrency:
+  group: newsfinal-weather
+  cancel-in-progress: false
 
 jobs:
   weather:
@@ -24,7 +28,7 @@ jobs:
       - name: 패키지 설치
         run: pip install -r requirements.txt
 
-      - name: 날씨 리포트 생성 (평일: 오늘 / 금요일: 주말예보)
+      - name: 날씨 리포트 생성 (국가별 현지 아침 시간에만 발행)
         run: python scripts/weather_report.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -41,7 +45,7 @@ jobs:
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add -A
-          git diff --staged --quiet || git commit -m "Update daily weather"
+          git diff --staged --quiet || git commit -m "Update weather reports"
           git pull --rebase origin main
           git push
         env:
