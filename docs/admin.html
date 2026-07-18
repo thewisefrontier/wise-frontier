@@ -1411,14 +1411,17 @@
     let rows = '';
     for (const pair of data) {
       const scoreColor = pair.score >= 0.7 ? 'var(--danger)' : pair.score >= 0.6 ? 'var(--accent)' : 'var(--muted)';
+      const aIsKeep = pair.created_at_a <= pair.created_at_b;
+      const keepLabel = '<span style="font-size:10px;color:var(--accent);font-weight:700;">유지</span>';
+      const removeLabel = '<span style="font-size:10px;color:var(--danger);font-weight:700;">미발행</span>';
       rows += `
         <tr id="dup-row-${pair.id_a}-${pair.id_b}">
           <td style="width:36%;white-space:normal;">
-            <div style="font-size:11px;color:var(--muted);margin-bottom:2px;">#${pair.id_a} · ${pair.created_at_a}</div>
+            <div style="font-size:11px;color:var(--muted);margin-bottom:2px;">#${pair.id_a} · ${pair.created_at_a} ${aIsKeep ? keepLabel : removeLabel}</div>
             <a href="/article?id=${pair.id_a}" target="_blank" style="color:var(--text);font-size:12px;">${pair.title_a}</a>
           </td>
           <td style="width:36%;white-space:normal;">
-            <div style="font-size:11px;color:var(--muted);margin-bottom:2px;">#${pair.id_b} · ${pair.created_at_b}</div>
+            <div style="font-size:11px;color:var(--muted);margin-bottom:2px;">#${pair.id_b} · ${pair.created_at_b} ${aIsKeep ? removeLabel : keepLabel}</div>
             <a href="/article?id=${pair.id_b}" target="_blank" style="color:var(--text);font-size:12px;">${pair.title_b}</a>
           </td>
           <td style="width:8%;text-align:center;font-size:13px;font-weight:700;color:${scoreColor};">${Math.round(pair.score * 100)}%</td>
@@ -1439,8 +1442,8 @@
         <table style="width:100%;border-collapse:collapse;">
           <thead>
             <tr style="border-bottom:1px solid var(--border);">
-              <th style="text-align:left;padding:8px 10px;font-size:11px;color:var(--muted);width:36%;">기사 A (먼저 작성)</th>
-              <th style="text-align:left;padding:8px 10px;font-size:11px;color:var(--muted);width:36%;">기사 B (나중 작성)</th>
+              <th style="text-align:left;padding:8px 10px;font-size:11px;color:var(--muted);width:36%;">기사 A</th>
+              <th style="text-align:left;padding:8px 10px;font-size:11px;color:var(--muted);width:36%;">기사 B</th>
               <th style="text-align:center;padding:8px 10px;font-size:11px;color:var(--muted);width:8%;">유사도</th>
               <th style="width:10%;"></th>
               <th style="width:10%;"></th>
