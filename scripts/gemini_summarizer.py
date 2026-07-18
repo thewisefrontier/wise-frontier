@@ -1336,11 +1336,13 @@ def run():
         return
 
     # API 연결 테스트
+    global _current_key_idx
     print(f"[체크] Gemini API 연결 테스트... (키 {len(GEMINI_API_KEYS)}개)")
     test = call_gemini("ping", retry=1)
     if test is None:
         print("[SKIP] Gemini API 응답 없음 — 건너뜀")
         return
+    _current_key_idx = 0  # ping으로 밀린 로테이션 인덱스 리셋 — 실제 작업은 항상 1번 키부터 순환
     print("[체크] ✅ API 연결 확인")
 
     articles = get_articles_to_summarize(MAX_ARTICLES)
