@@ -47,6 +47,14 @@ def _sb_url():
     return f"{SUPABASE_URL}/rest/v1/articles"
 
 
+# ── 키릴 문자 감지 ────────────────────────────────────────
+def has_cyrillic(text: str) -> bool:
+    """제목/본문에 키릴 문자가 포함되어 있으면 True"""
+    if not text:
+        return False
+    return bool(re.search(r'[\u0400-\u04FF]', text))
+
+
 def send_to_newsfinal_channel(article_id, title, body, is_update=False):
     """NewsFinal 자체기사를 텔레그램 @newsfinal 채널에 발송"""
     if not TELEGRAM_TOKEN:
@@ -268,6 +276,11 @@ def find_similar_article(title: str, own_articles: list, threshold: int = 70):
 
 
 def save_article(title_ko, summary_ko, cluster_key, category, region, country="", article_count=0, published=True, countries=None, image_url=""):
+    # 키릴 문자 감지 — 저장 차단
+    if has_cyrillic(title_ko) or has_cyrillic(summary_ko):
+        print(f"  ⚠️ [키릴 감지] 저장 차단: {title_ko[:60]}")
+        return -1
+
     url = f"internal://{cluster_key}"
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
     payload = {
@@ -302,6 +315,11 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
 
 def update_article(article_id, title_ko, summary_ko, note: str = "업데이트", countries=None, country=""):
     """기사 갱신(병합 업데이트) — update_log에 업데이트 기록 추가"""
+    # 키릴 문자 감지 — 업데이트 차단
+    if has_cyrillic(title_ko) or has_cyrillic(summary_ko):
+        print(f"  ⚠️ [키릴 감지] 업데이트 차단: {title_ko[:60]}")
+        return False
+
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
 
     # 기존 update_log 가져오기
@@ -674,6 +692,7 @@ def build_issue_prompt(cluster, existing_summary=None):
 - 날짜 표기는 "2일(현지시간)" 형식으로 간결하게 쓰세요.
 - "2026년 6월 24일 현재", "오늘", "현재" 등 절대 날짜를 본문에 쓰지 마세요. 소스 기사의 날짜 기준으로 "N일(현지시간)"으로만 표기하세요.
 - 기사 문체로 작성하세요. 논평/칼럼 문체는 금지입니다.
+- 모든 인명·지명은 반드시 한글로 음차하세요. 키릴 문자, 아랍 문자, 데바나가리 등 비라틴 문자를 그대로 쓰지 마세요.
 아래 형식으로 출력:
 제목: (핵심을 담은 제목)
 국가: (기사의 핵심 주체가 되는 국가 1개. 어느 나라 기업/정부/기관이 주체인가 기준. 글로벌 기업·국제기구가 주체면 "없음")
@@ -790,9 +809,6 @@ def call_gemini(prompt, max_tokens=1000, retry=2):
 
 
 # ── 논평/칼럼체 검출 및 재생성 ────────────────────────────
-# writer_rules 프롬프트에 "기사 문체로 작성, 논평/칼럼체 금지"를 명시해도
-# Gemini가 가끔 논평/칼럼 어투로 생성하는 경우가 있어, 생성 후 패턴 검사 →
-# 걸리면 1회 재생성을 시도해 최종 결과물에서의 노출 빈도를 낮춘다.
 BANNED_STYLE_PATTERNS = [
     r"보여줍니다", r"보여주고 있습니다", r"보여준다",
     r"도모하고 있습니다", r"도모한다",
@@ -860,8 +876,6 @@ def country_to_region(country: str) -> str:
     return COUNTRY_TO_REGION.get(country, "global")
 
 
-# 국가명 별칭 통합 — Gemini가 매번 다른 표현을 쓰는 문제 방지
-# (예: "대한민국"/"한국"/"South Korea" → "한국" 하나로 통일)
 COUNTRY_ALIASES = {
     "대한민국": "한국", "남한": "한국", "south korea": "한국", "korea": "한국",
     "미국": "미국", "usa": "미국", "united states": "미국",
@@ -886,7 +900,6 @@ def normalize_country(country: str) -> str:
     if not country:
         return ""
     key = country.strip().lower()
-    # 별칭 테이블에 소문자로도 매칭 시도
     for alias, standard in COUNTRY_ALIASES.items():
         if alias.lower() == key:
             return standard
@@ -942,7 +955,6 @@ def parse_title_and_body(text):
 # ── 기업 자동 감지·등록 ────────────────────────────────────────────────
 
 def get_company_by_id(company_id: str) -> dict | None:
-    """companies 테이블에서 기업 조회"""
     try:
         res = requests.get(
             f"{SUPABASE_URL}/rest/v1/companies",
@@ -962,7 +974,6 @@ def save_company(company_id: str, name: str, name_ko: str, country: str,
                  country_flag: str, exchange: str, ticker: str, sector: str,
                  description: str, founded_year: int = None,
                  headquarters: str = None, website: str = None) -> bool:
-    """companies 테이블에 기업 저장"""
     try:
         payload = {
             "id": company_id,
@@ -981,7 +992,6 @@ def save_company(company_id: str, name: str, name_ko: str, country: str,
             "created_at": now_kst().strftime("%Y-%m-%d %H:%M"),
             "updated_at": now_kst().strftime("%Y-%m-%d %H:%M"),
         }
-        # None 값 제거
         payload = {k: v for k, v in payload.items() if v is not None}
         res = requests.post(
             f"{SUPABASE_URL}/rest/v1/companies",
@@ -999,7 +1009,6 @@ def save_company(company_id: str, name: str, name_ko: str, country: str,
 
 
 def generate_update_note(existing_summary: str, new_summary: str) -> str:
-    """기존 기사와 새 내용을 비교해서 '이번 업데이트에서 추가된 핵심 내용' 한 줄 생성"""
     prompt = f"""기존 기사와 업데이트된 기사를 비교해서, 이번 업데이트에서 새롭게 추가되거나 변경된 핵심 내용을 15자 이내 한 줄로 요약하세요.
 예시: "현지 당국 공식 발표 추가", "사망자 수 214명으로 업데이트", "정부 대응 방안 발표"
 마크다운 없이 텍스트만 출력하세요.
@@ -1010,12 +1019,7 @@ def generate_update_note(existing_summary: str, new_summary: str) -> str:
     return (result or "업데이트").strip().replace('\n', ' ')[:30]
 
 
-
 def fetch_article_image(title: str, body: str) -> str:
-    """
-    Gemini로 영문 키워드 추출 → Pixabay 검색 → largeImageURL 반환.
-    실패 시 빈 문자열 반환. (largeImageURL은 24시간 만료 없음)
-    """
     if not PIXABAY_API_KEY:
         return ""
     prompt = f"""아래 뉴스 기사의 이미지 검색용 영문 키워드를 2~3개 추출하세요.
@@ -1054,10 +1058,6 @@ def fetch_article_image(title: str, body: str) -> str:
 
 
 def detect_and_register_companies(title: str, body: str, country: str):
-    """
-    기사 제목/본문에서 기업을 감지하고, companies 테이블에 없으면 자동 등록.
-    Gemini에게 기업명·기업 개요 생성 요청.
-    """
     if not title and not body:
         return
 
@@ -1087,12 +1087,10 @@ def detect_and_register_companies(title: str, body: str, country: str):
 
     raw = call_gemini(prompt, max_tokens=800)
     if not raw:
-        print("  ⚠️ 기업 감지: Gemini 응답 없음")
         return
 
     try:
-        import json, re
-        # JSON 부분만 추출
+        import json
         match = re.search(r'\[.*\]', raw, re.DOTALL)
         if not match:
             return
@@ -1105,12 +1103,10 @@ def detect_and_register_companies(title: str, body: str, country: str):
             if not company_id or not comp.get("name"):
                 continue
 
-            # 이미 등록된 기업이면 스킵
             existing = get_company_by_id(company_id)
             if existing:
                 continue
 
-            # 국가 정보 보완
             comp_country = country or ""
             flag_map = {
                 "나이지리아": "🇳🇬", "케냐": "🇰🇪", "남아공": "🇿🇦", "남아프리카공화국": "🇿🇦",
@@ -1143,15 +1139,9 @@ def detect_and_register_companies(title: str, body: str, country: str):
 
 # ── 메인 실행 ─────────────────────────────────────────────
 
-
-
 def verify_single_topic(title: str, body: str) -> bool:
-    """
-    Gemini에게 생성된 기사가 단일 토픽인지 검증.
-    복수 토픽이면 False 반환.
-    """
     if not title or not body:
-        return True  # 판단 불가면 통과
+        return True
 
     prompt = f"""아래 기사가 하나의 명확한 토픽(사건/이슈/기업/정책)만 다루는지 판단하세요.
 서로 다른 국가나 전혀 관련 없는 사건 여러 개를 한 기사에 묶은 경우 "NO"라고만 답하세요.
@@ -1164,16 +1154,11 @@ def verify_single_topic(title: str, body: str) -> bool:
 
     result = call_gemini(prompt, max_tokens=5)
     if not result:
-        return True  # API 실패 시 통과
+        return True
     return "YES" in result.upper()
 
 
 def park_multi_topic_articles(articles: list) -> int:
-    """
-    복수 주제 RSS 기사를 토픽별로 분리해서 DB에 파킹.
-    is_published=False, subcategory=parked_topic 으로 저장.
-    나중에 관련 소스가 들어오면 클러스터링에서 자동으로 활용됨.
-    """
     parked = 0
     for a in articles:
         title_en = a.get("title_en") or a.get("title_ko") or ""
@@ -1188,9 +1173,7 @@ def park_multi_topic_articles(articles: list) -> int:
 
         print(f"  [파킹] 복수 주제 분리: {title_en[:60]}")
         for part in parts:
-            # 이미 같은 파킹 제목이 있으면 스킵
             try:
-                # 특수문자 제거 후 검색
                 safe_kw = part[:20].replace("'", "").replace('"', '').replace('(', '').replace(')', '')
                 check = requests.get(
                     f"{SUPABASE_URL}/rest/v1/articles",
@@ -1252,14 +1235,11 @@ def park_multi_topic_articles(articles: list) -> int:
     return parked
 
 
-
-
 # ── 라이브 기사 능동적 업데이트 ──────────────────────────────
 
 def get_stale_live_articles() -> list:
-    """업데이트되지 않은 라이브 기사 조회 (score=1, 최근 48시간)"""
     since     = (now_kst() - timedelta(hours=48)).strftime("%Y-%m-%d %H:%M")
-    not_after = (now_kst() - timedelta(hours=3)).strftime("%Y-%m-%d %H:%M")  # 3시간 이상 된 기사만
+    not_after = (now_kst() - timedelta(hours=3)).strftime("%Y-%m-%d %H:%M")
     try:
         res = requests.get(
             _sb_url(),
@@ -1285,7 +1265,6 @@ def get_stale_live_articles() -> list:
 
 
 def search_followup(title: str, country: str) -> list:
-    """제목/국가 키워드로 내부 DB + GDELT에서 후속 기사 검색"""
     import urllib.parse
     since = (now_kst() - timedelta(hours=48)).strftime("%Y-%m-%d %H:%M")
 
@@ -1294,7 +1273,6 @@ def search_followup(title: str, country: str) -> list:
 
     results = []
 
-    # 내부 DB
     try:
         res = requests.get(
             _sb_url(),
@@ -1314,7 +1292,6 @@ def search_followup(title: str, country: str) -> list:
     except Exception:
         pass
 
-    # GDELT
     try:
         eng_words = [w for w in title.split() if not any("\uAC00" <= c <= "\uD7A3" for c in w)]
         eng_kw = " ".join(eng_words[:3]) if eng_words else country
@@ -1338,7 +1315,6 @@ def search_followup(title: str, country: str) -> list:
 
 
 def update_live_articles():
-    """업데이트되지 않은 라이브 기사를 능동적으로 후속 검색해서 업데이트"""
     if not GEMINI_API_KEYS:
         return
 
@@ -1415,7 +1391,6 @@ def run():
     clusters = cluster_articles(all_articles)
     print(f"  → {len(all_articles)}건 중 {len(clusters)}개 클러스터 발견\n")
 
-    # 오늘 생성된 자체 기사 목록 (중복 체크용)
     today_own_articles = get_today_own_articles()
 
     generated = 0
@@ -1456,7 +1431,6 @@ def run():
                 note = generate_update_note(existing["summary_ko"], gen_body or content)
                 update_article(existing["id"], new_title, gen_body or content, note=note, countries=gen_countries if gen_countries else None, country=gen_country or "")
                 update_article_count(existing["id"], prev_count + 1)
-                # 국가/분야 재분류 업데이트
                 if gen_country or gen_category:
                     update_fields = {}
                     if gen_country:
@@ -1475,19 +1449,15 @@ def run():
                 print(f"  ❌ 업데이트 실패\n")
 
         else:
-            # 최소 2건 이상일 때만 신규 생성
             if cur_count < CLUSTER_MIN_SIZE:
                 print(f"  [SKIP] 기사 부족 ({cur_count}건)\n")
                 continue
 
-            # 같은 cluster_key는 아니지만 표현이 달라 같은 사건일 수 있는 기존 기사 탐색
-            # (원문 클러스터의 대표 제목으로 먼저 검사 — 병합 가능하면 새로 만들지 않고 기존 글에 합침)
             probe_title = titles[0][:80] if titles else ""
             similar_existing, sim_score = find_similar_article(probe_title, today_own_articles) if probe_title else (None, 0)
 
             if similar_existing:
                 print(f"  → 유사 기존 기사 발견 (유사도 {sim_score}%) → 병합 업데이트: {similar_existing.get('title_ko','')[:40]}")
-                # 기존 기사 본문을 가져와서 병합 프롬프트 생성
                 existing_full = get_article_by_id(similar_existing["id"])
                 existing_summary = existing_full.get("summary_ko") if existing_full else None
 
@@ -1532,14 +1502,12 @@ def run():
                 gen_title, gen_body, gen_country, gen_category, gen_countries = parse_title_and_body(content)
                 full_title = gen_title if gen_title else titles[0][:50]
 
-                # Gemini가 재분류한 국가/분야 우선 사용
                 final_country = normalize_country(gen_country or country)
                 final_category = gen_category or category or "종합"
                 final_region = country_to_region(final_country) if final_country else (cluster[0].get("region") or "global")
                 if final_category == "글로벌":
                     final_region = "global"
 
-                # 다국가 혼합 클러스터면 검토 필요로 미발행
                 needs_review = any(a.get("__needs_review__") for a in cluster)
                 if needs_review:
                     published = False
@@ -1547,13 +1515,11 @@ def run():
                 else:
                     final_subcategory = cluster_key
 
-                # 제목 생성 후 한 번 더 유사 기사 체크 (이중 안전장치)
                 similar, sim_score = find_similar_article(full_title, today_own_articles)
                 if similar:
                     print(f"  ⚠️ 유사 기사 재발견 (유사도 {sim_score}%) → 미발행으로 저장: {similar.get('title_ko','')[:40]}")
                     published = False
 
-                # 발행되는 기사만 Pixabay 이미지 fetch (Gemini 호출 1회 소모)
                 image_url = fetch_article_image(full_title, gen_body or content) if published else ""
 
                 article_id = save_article(
@@ -1584,7 +1550,7 @@ def run():
         time.sleep(CALL_INTERVAL)
         processed += 1
 
-    # ── 단독 기사화 — 원문 충분한 기사 (클러스터 여부 무관) ──
+    # ── 단독 기사화 ──
     solo_candidates = [
         a for a in all_articles
         if len(a.get("full_text") or "") >= 1000
@@ -1605,7 +1571,7 @@ def run():
     print(f"\n[단독 기사] 원문 충분한 기사 {len(solo_candidates)}건")
 
     solo_generated = 0
-    for a in solo_candidates[:5]:  # 실행당 최대 5건
+    for a in solo_candidates[:5]:
         if processed >= MAX_CLUSTERS_PER_RUN + 5:
             break
 
@@ -1613,7 +1579,6 @@ def run():
         url = f"solo_{a.get('id')}"
         cluster_key = f"solo_{now_kst().strftime('%Y%m%d')}_{hashlib.md5(title.encode()).hexdigest()[:8]}"
 
-        # 이미 생성된 단독 기사면 스킵
         existing = get_existing_cluster(cluster_key)
         if existing:
             continue
@@ -1621,22 +1586,21 @@ def run():
         print(f"  → 단독 기사 생성: {title[:60]}")
 
         rules = load_prompt("writer_rules", fallback="""[주의사항]
-- 반드시 하나의 토픽(사건/이슈)만 다루는 기사를 작성하세요. 관련 없는 두 개 이상의 사건을 한 기사에 묶지 마세요.
-- 여러 기사가 입력되더라도 가장 중요한 하나의 이슈에 집중하고, 나머지는 참고만 하세요.
+- 반드시 하나의 토픽(사건/이슈)만 다루는 기사를 작성하세요.
 - 본문 앞에 [도시명], [날짜] 같은 전문 형식 헤더를 붙이지 마세요.
 - 마크다운 문법(**굵게**, ##제목 등)을 사용하지 마세요.
 - 매체 홍보성 내용(구독 유도, 텔레그램 채널 안내 등)은 포함하지 마세요.
 - 날짜 표기는 "2일(현지시간)" 형식으로 간결하게 쓰세요.
-- "2026년 6월 24일 현재", "오늘", "현재" 등 절대 날짜를 본문에 쓰지 마세요. 소스 기사의 날짜 기준으로 "N일(현지시간)"으로만 표기하세요.
+- "2026년 6월 24일 현재", "오늘", "현재" 등 절대 날짜를 본문에 쓰지 마세요.
 - 기사 문체로 작성하세요. 논평/칼럼 문체는 금지입니다.
+- 모든 인명·지명은 반드시 한글로 음차하세요. 키릴 문자, 아랍 문자 등 비라틴 문자를 그대로 쓰지 마세요.
 아래 형식으로 출력:
 제목: (핵심을 담은 제목)
-국가: (기사의 핵심 주체가 되는 국가 1개. 어느 나라 기업/정부/기관이 주체인가 기준. 글로벌 기업·국제기구가 주체면 "없음")
-관련국가: (기사에서 유의미하게 다뤄지는 국가들. 쉼표로 구분, 최대 4개. 없으면 "없음". 예: 인도, 나이지리아)
+국가: (기사의 핵심 주체가 되는 국가 1개)
+관련국가: (직접 당사국, 쉼표로 구분, 최대 4개. 없으면 "없음")
 분야: (경제/금융/자원·에너지/산업·기업/정치·외교/사회/IT·과학/글로벌 중 하나)
 본문: (기사 본문)""")
 
-        # 원본 제목으로 먼저 유사 기존 기사 탐색 — 매치되면 신규 생성 대신 병합
         similar_existing, pre_sim_score = find_similar_article(title, today_own_articles) if title else (None, 0)
 
         if similar_existing:
@@ -1659,8 +1623,8 @@ def run():
 
 아래 형식으로 출력:
 제목: (통합된 핵심을 담은 제목)
-국가: (기사의 핵심 주체가 되는 국가 1개. 어느 나라 기업/정부/기관이 주체인가 기준. 글로벌 기업·국제기구가 주체면 "없음")
-관련국가: (기사에서 유의미하게 다뤄지는 국가들. 쉼표로 구분, 최대 4개. 없으면 "없음". 예: 인도, 나이지리아)
+국가: (기사의 핵심 주체가 되는 국가 1개)
+관련국가: (직접 당사국, 쉼표로 구분, 최대 4개. 없으면 "없음")
 분야: (경제/금융/자원·에너지/산업·기업/정치·외교/사회/IT·과학/글로벌 중 하나)
 본문: (통합된 기사 본문)"""
 
@@ -1732,7 +1696,6 @@ def run():
             if final_category == "글로벌":
                 final_region = "global"
 
-            # B. 생성 후 단일 토픽 검수
             if not verify_single_topic(full_title, gen_body or content):
                 print(f"  ❌ 검수 실패 (복수 토픽) — 파킹: {full_title[:50]}")
                 park_multi_topic_articles([{"title_en": full_title, "full_text": gen_body or content,
@@ -1740,7 +1703,6 @@ def run():
                 time.sleep(CALL_INTERVAL)
                 continue
 
-            # 제목 생성 후 한 번 더 유사 기사 체크 (이중 안전장치)
             similar, sim_score = find_similar_article(full_title, today_own_articles)
             if similar:
                 print(f"  ⚠️ 유사 기사 재발견 (유사도 {sim_score}%) → 미발행으로 저장")
@@ -1748,7 +1710,6 @@ def run():
             else:
                 published = True
 
-            # 발행되는 기사만 Pixabay 이미지 fetch (Gemini 호출 1회 소모)
             image_url = fetch_article_image(full_title, gen_body or content) if published else ""
 
             article_id = save_article(
@@ -1781,5 +1742,3 @@ def run():
 
 if __name__ == "__main__":
     run()
-
-
