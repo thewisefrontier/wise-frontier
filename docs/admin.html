@@ -1408,45 +1408,61 @@
       return;
     }
 
+    // 각 쌍에서 나중 기사(created_at 늦은 쪽) id 목록 산출 후 즉시 자동 미발행
+    const laterIds = [...new Set(data.map(pair =>
+      pair.created_at_a >= pair.created_at_b ? pair.id_a : pair.id_b
+    ))];
+
+    if (laterIds.length > 0) {
+      const { error: unpubErr } = await sb.from('articles').update({ is_published: false }).in('id', laterIds);
+      if (unpubErr) {
+        toast(`자동 미발행 처리 중 오류: ${unpubErr.message}`, 'error');
+      } else {
+        toast(`중복 후보 ${laterIds.length}건 자동 미발행 처리됨`, 'success');
+      }
+    }
+
     let rows = '';
     for (const pair of data) {
       const scoreColor = pair.score >= 0.7 ? 'var(--danger)' : pair.score >= 0.6 ? 'var(--accent)' : 'var(--muted)';
-      const aIsKeep = pair.created_at_a <= pair.created_at_b;
-      const keepLabel = '<span style="font-size:10px;color:var(--accent);font-weight:700;">유지</span>';
-      const removeLabel = '<span style="font-size:10px;color:var(--danger);font-weight:700;">미발행</span>';
+      const aIsLater = pair.created_at_a >= pair.created_at_b;
+      const laterId = aIsLater ? pair.id_a : pair.id_b;
+      const earlierLabel = '<span style="font-size:10px;color:var(--muted);">기존 발행</span>';
+      const laterLabel = '<span style="font-size:10px;color:var(--danger);font-weight:700;">자동 미발행됨</span>';
       rows += `
         <tr id="dup-row-${pair.id_a}-${pair.id_b}">
-          <td style="width:36%;white-space:normal;">
-            <div style="font-size:11px;color:var(--muted);margin-bottom:2px;">#${pair.id_a} · ${pair.created_at_a} ${aIsKeep ? keepLabel : removeLabel}</div>
+          <td style="width:34%;white-space:normal;">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:2px;">#${pair.id_a} · ${pair.created_at_a} ${aIsLater ? laterLabel : earlierLabel}</div>
             <a href="/article?id=${pair.id_a}" target="_blank" style="color:var(--text);font-size:12px;">${pair.title_a}</a>
           </td>
-          <td style="width:36%;white-space:normal;">
-            <div style="font-size:11px;color:var(--muted);margin-bottom:2px;">#${pair.id_b} · ${pair.created_at_b} ${aIsKeep ? removeLabel : keepLabel}</div>
+          <td style="width:34%;white-space:normal;">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:2px;">#${pair.id_b} · ${pair.created_at_b} ${aIsLater ? earlierLabel : laterLabel}</div>
             <a href="/article?id=${pair.id_b}" target="_blank" style="color:var(--text);font-size:12px;">${pair.title_b}</a>
           </td>
           <td style="width:8%;text-align:center;font-size:13px;font-weight:700;color:${scoreColor};">${Math.round(pair.score * 100)}%</td>
-          <td style="width:10%;text-align:center;">
-            <button class="btn btn-primary" style="font-size:11px;padding:4px 10px;"
+          <td style="width:12%;text-align:center;">
+            <button class="btn btn-primary" style="font-size:11px;padding:4px 8px;"
               onclick="mergeDuplicates(${pair.id_a}, ${pair.id_b}, '${pair.created_at_a}', '${pair.created_at_b}', this)">통합</button>
           </td>
-          <td style="width:10%;text-align:center;">
-            <button class="btn" style="font-size:11px;padding:4px 10px;background:var(--bg3);"
-              onclick="document.getElementById('dup-row-${pair.id_a}-${pair.id_b}').remove()">건너뜀</button>
+          <td style="width:12%;text-align:center;">
+            <button class="btn" style="font-size:11px;padding:4px 8px;background:var(--bg3);"
+              onclick="restoreArticle(${laterId}, this)">복구(중복아님)</button>
           </td>
         </tr>`;
     }
 
     document.getElementById('main-content').innerHTML = `
       <div style="padding:20px;">
-        <div style="font-size:13px;font-weight:700;margin-bottom:16px;">중복기사 (최근 72시간 · 유사도 50% 이상) — ${data.length}쌍</div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:8px;">중복기사 (최근 72시간 · 유사도 50% 이상) — ${data.length}쌍</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:16px;">나중에 작성된 기사는 자동으로 미발행 처리됩니다. 실제 중복이 아니면 "복구"를, 통합하려면 "통합"을 누르세요.</div>
         <table style="width:100%;border-collapse:collapse;">
           <thead>
             <tr style="border-bottom:1px solid var(--border);">
-              <th style="text-align:left;padding:8px 10px;font-size:11px;color:var(--muted);width:36%;">기사 A</th>
-              <th style="text-align:left;padding:8px 10px;font-size:11px;color:var(--muted);width:36%;">기사 B</th>
+              <th style="text-align:left;padding:8px 10px;font-size:11px;color:var(--muted);width:34%;">기사 A</th>
+              <th style="text-align:left;padding:8px 10px;font-size:11px;color:var(--muted);width:34%;">기사 B</th>
               <th style="text-align:center;padding:8px 10px;font-size:11px;color:var(--muted);width:8%;">유사도</th>
-              <th style="width:10%;"></th>
-              <th style="width:10%;"></th>
+              <th style="width:12%;"></th>
+              <th style="width:12%;"></th>
             </tr>
           </thead>
           <tbody id="dup-tbody">${rows}</tbody>
@@ -1454,8 +1470,24 @@
       </div>`;
   }
 
+  async function restoreArticle(id, btn) {
+    btn.disabled = true;
+    btn.textContent = '처리 중...';
+    try {
+      const { error } = await sb.from('articles').update({ is_published: true }).eq('id', id);
+      if (error) throw new Error(error.message);
+      toast(`#${id} 다시 발행 처리됨`, 'success');
+      const row = btn.closest('tr');
+      if (row) row.remove();
+    } catch (e) {
+      toast(`오류: ${e.message}`, 'error');
+      btn.disabled = false;
+      btn.textContent = '복구(중복아님)';
+    }
+  }
+
   async function mergeDuplicates(id_a, id_b, created_at_a, created_at_b, btn) {
-    // created_at 이른 쪽이 id_keep
+    // created_at 이른 쪽이 id_keep (나중 기사는 이미 자동 미발행 상태)
     const id_keep = created_at_a <= created_at_b ? id_a : id_b;
     const id_remove = id_keep === id_a ? id_b : id_a;
 
@@ -1478,22 +1510,23 @@
       });
 
       const result = await res.json();
-      if (!res.ok) throw new Error(result.error || res.statusText);
+      if (!res.ok) throw new Error(`${result.error || res.statusText}${result.detail ? ' — ' + result.detail : ''}`);
 
       toast(`통합 완료: #${id_keep} 업데이트, #${id_remove} 미발행`, 'success');
-      // 해당 행 제거
       const rowId = `dup-row-${Math.min(id_a,id_b)}-${Math.max(id_a,id_b)}`;
       const row = document.getElementById(rowId);
       if (row) row.remove();
 
     } catch (e) {
       toast(`오류: ${e.message}`, 'error');
+      alert(`통합 실패:\n${e.message}`);
       btn.disabled = false;
       btn.textContent = '통합';
     }
   }
 
   // ── 발행 통계 ────────────────────────────────────────
+
 
   async function showStats(el) {
     currentSection = 'stats';
