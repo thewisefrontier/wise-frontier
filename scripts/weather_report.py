@@ -10,7 +10,7 @@ weather_report.py
 - 현지 기준 월요일 아침에는 오늘 날씨에 더해 이번주(월~금) 예보도 함께 발행한다.
 - 현지 기준 토·일요일은 발행하지 않음 (금요일 아침에 이미 주말 예보 발행).
 - 워크플로우는 매시 정각에 실행되며, 이 스크립트가 국가별로 "지금이 그 나라 아침인지" 판단한다.
-- 국가별 대표 이미지는 Pixabay에서 조회해 자동 삽입한다.
+- 국가별 대표 이미지는 Pixabay에서 조회해 자동 삽입한다 (태그 기반 검증 포함).
 
 실행: python scripts/weather_report.py
 """
@@ -514,9 +514,39 @@ COUNTRY_EN = {
 
 _image_cache = {}  # 국가별 이미지 URL 캐시 (같은 실행에서 today+weekly 재사용)
 
+# 이 태그가 있으면 제외 (인물/전쟁/지도/국기 등 날씨 기사와 안 맞는 이미지 배제)
+IMAGE_TAG_BLACKLIST = {
+    "war", "military", "soldier", "weapon", "gun", "conflict", "protest", "riot",
+    "flag", "map", "person", "people", "portrait", "face", "man", "woman",
+    "child", "children", "wedding", "funeral", "police", "crime", "accident",
+    "corpse", "death", "blood", "nude", "naked", "sexy",
+}
+
+# 이 태그 중 하나라도 있으면 "도시/풍경" 이미지로 인정 (관련성 확인용)
+IMAGE_TAG_ALLOWLIST = {
+    "city", "skyline", "cityscape", "building", "buildings", "architecture",
+    "landmark", "tower", "downtown", "urban", "street", "landscape",
+    "sky", "sunset", "sunrise", "panorama", "travel", "tourism",
+}
+
+
+def _is_image_suitable(hit: dict, country_en: str) -> bool:
+    tags = {t.strip().lower() for t in (hit.get("tags") or "").split(",")}
+    if tags & IMAGE_TAG_BLACKLIST:
+        return False
+    country_words = set(country_en.lower().split())
+    if tags & IMAGE_TAG_ALLOWLIST or (tags & country_words):
+        return True
+    return False
+
 
 def fetch_country_image(country_name: str) -> str:
-    """Pixabay에서 국가 대표 이미지(스카이라인/랜드마크) 1건 조회. 실행 중 국가당 1회만 호출."""
+    """
+    Pixabay에서 국가 대표 이미지(스카이라인/랜드마크)를 조회.
+    카테고리를 'places'로 제한하고, 태그를 검사해 부적절하거나 무관한 이미지는 걸러낸다.
+    적합한 이미지가 없으면 빈 문자열(이미지 없음)을 반환 — 억지로 아무 이미지나 넣지 않는다.
+    실행 중 국가당 1회만 호출(캐싱).
+    """
     if country_name in _image_cache:
         return _image_cache[country_name]
 
@@ -534,17 +564,23 @@ def fetch_country_image(country_name: str) -> str:
                 "key": PIXABAY_API_KEY,
                 "q": query,
                 "image_type": "photo",
+                "category": "places",
                 "safesearch": "true",
                 "orientation": "horizontal",
-                "per_page": 3,
+                "min_width": 640,
+                "per_page": 10,
             },
             timeout=15,
         )
         image_url = ""
         if res.status_code == 200:
             hits = res.json().get("hits", [])
-            if hits:
-                image_url = hits[0].get("largeImageURL", "")
+            for hit in hits:
+                if _is_image_suitable(hit, country_en):
+                    image_url = hit.get("largeImageURL", "")
+                    break
+            if not image_url:
+                print(f"  ⚠️ {country_name}: 적합한 이미지 없음 — 이미지 없이 발행")
         else:
             print(f"  ⚠️ Pixabay {res.status_code}: {res.text[:100]}")
         _image_cache[country_name] = image_url
