@@ -10,6 +10,7 @@ weather_report.py
 - 현지 기준 월요일 아침에는 오늘 날씨에 더해 이번주(월~금) 예보도 함께 발행한다.
 - 현지 기준 토·일요일은 발행하지 않음 (금요일 아침에 이미 주말 예보 발행).
 - 워크플로우는 매시 정각에 실행되며, 이 스크립트가 국가별로 "지금이 그 나라 아침인지" 판단한다.
+- 국가별 대표 이미지는 Pixabay에서 조회해 자동 삽입한다.
 
 실행: python scripts/weather_report.py
 """
@@ -26,6 +27,7 @@ def now_kst() -> datetime:
 
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
+PIXABAY_API_KEY = os.getenv("PIXABAY_API_KEY", "")
 
 def _sb_headers():
     return {
@@ -487,6 +489,72 @@ def pick_weekend_dates(dates: list) -> tuple:
     return sat, sun
 
 
+# 국가명 → 이미지 검색용 영문명
+COUNTRY_EN = {
+    "나이지리아": "Nigeria", "케냐": "Kenya", "남아공": "South Africa", "이집트": "Egypt",
+    "모로코": "Morocco", "알제리": "Algeria", "에티오피아": "Ethiopia", "가나": "Ghana",
+    "탄자니아": "Tanzania", "앙골라": "Angola",
+    "베트남": "Vietnam", "인도네시아": "Indonesia", "태국": "Thailand", "필리핀": "Philippines",
+    "미얀마": "Myanmar", "캄보디아": "Cambodia", "말레이시아": "Malaysia", "싱가포르": "Singapore",
+    "사우디아라비아": "Saudi Arabia", "아랍에미리트": "United Arab Emirates", "튀르키예": "Turkey",
+    "이스라엘": "Israel", "이란": "Iran", "이라크": "Iraq", "카타르": "Qatar", "요르단": "Jordan",
+    "인도": "India", "방글라데시": "Bangladesh", "파키스탄": "Pakistan", "스리랑카": "Sri Lanka",
+    "네팔": "Nepal",
+    "카자흐스탄": "Kazakhstan", "우즈베키스탄": "Uzbekistan", "키르기스스탄": "Kyrgyzstan",
+    "브라질": "Brazil", "멕시코": "Mexico", "아르헨티나": "Argentina", "칠레": "Chile",
+    "콜롬비아": "Colombia", "페루": "Peru",
+    "쿠바": "Cuba", "도미니카공화국": "Dominican Republic",
+    "미국": "United States", "캐나다": "Canada",
+    "일본": "Japan", "중국": "China", "몽골": "Mongolia",
+    "영국": "United Kingdom", "독일": "Germany", "프랑스": "France", "이탈리아": "Italy",
+    "스페인": "Spain", "러시아": "Russia", "폴란드": "Poland", "우크라이나": "Ukraine",
+    "호주": "Australia", "뉴질랜드": "New Zealand",
+    "한국": "South Korea",
+}
+
+_image_cache = {}  # 국가별 이미지 URL 캐시 (같은 실행에서 today+weekly 재사용)
+
+
+def fetch_country_image(country_name: str) -> str:
+    """Pixabay에서 국가 대표 이미지(스카이라인/랜드마크) 1건 조회. 실행 중 국가당 1회만 호출."""
+    if country_name in _image_cache:
+        return _image_cache[country_name]
+
+    if not PIXABAY_API_KEY:
+        _image_cache[country_name] = ""
+        return ""
+
+    country_en = COUNTRY_EN.get(country_name, country_name)
+    query = f"{country_en} skyline landmark"
+
+    try:
+        res = requests.get(
+            "https://pixabay.com/api/",
+            params={
+                "key": PIXABAY_API_KEY,
+                "q": query,
+                "image_type": "photo",
+                "safesearch": "true",
+                "orientation": "horizontal",
+                "per_page": 3,
+            },
+            timeout=15,
+        )
+        image_url = ""
+        if res.status_code == 200:
+            hits = res.json().get("hits", [])
+            if hits:
+                image_url = hits[0].get("largeImageURL", "")
+        else:
+            print(f"  ⚠️ Pixabay {res.status_code}: {res.text[:100]}")
+        _image_cache[country_name] = image_url
+        return image_url
+    except Exception as e:
+        print(f"  ⚠️ Pixabay 실패 ({country_name}): {e}")
+        _image_cache[country_name] = ""
+        return ""
+
+
 def fetch_cities_weather(cities: list) -> list:
     """도시 목록에 대해 날씨를 한 번씩만 조회 (오늘/주말/주간 리포트가 이 결과를 공유해서 재사용)"""
     results = []
@@ -594,6 +662,8 @@ def save_report(country_name, region, title, body, kind: str, local_now: datetim
         print(f"  [SKIP] {country_name}({kind}) 리포트 이미 존재 (현지 {local_now.strftime('%Y-%m-%d %H:%M')})")
         return
 
+    image_url = fetch_country_image(country_name)
+
     payload = {
         "title_en": title,
         "title_ko": title,
@@ -607,7 +677,7 @@ def save_report(country_name, region, title, body, kind: str, local_now: datetim
         "country": country_name,
         "country_flag": "",
         "countries": [country_name],
-        "image_url": "",
+        "image_url": image_url,
         "score": 1,
         "created_at": now_str_kst,
         "first_published_at": now_str_kst,
