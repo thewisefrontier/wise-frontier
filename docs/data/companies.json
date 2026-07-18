@@ -64,6 +64,22 @@
     "updated_at": null
   },
   {
+    "id": "david_umahi_federal_teaching_hospital",
+    "name": "David Umahi Federal University Teaching Hospital",
+    "name_ko": "데이비드 우마히 연방 대학 부속 병원",
+    "country": "나이지리아",
+    "country_flag": "🇳🇬",
+    "exchange": "",
+    "ticker": "",
+    "sector": "의료",
+    "description": "나이지리아 에보니주 우부루에 위치한 공공 의료 및 교육 기관입니다. 의학 교육과 함께 지역 사회에 전문적인 의료 서비스를 제공하는 주요 병원 중 하나입니다. 나이지리아 연방 정부 산하 시설로서 지역 보건 인프라의 핵심 역할을 수행합니다.",
+    "founded_year": 2022,
+    "headquarters": "우부루, 나이지리아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-19 01:21"
+  },
+  {
     "id": "mtn_nigeria",
     "name": "MTN Nigeria",
     "name_ko": null,
@@ -704,6 +720,22 @@
     "updated_at": null
   },
   {
+    "id": "hdfc_bank",
+    "name": "HDFC Bank Limited",
+    "name_ko": "HDFC 은행",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "HDFCBANK",
+    "sector": "은행",
+    "description": "1994년 설립된 인도의 최대 민간 은행으로, 개인 및 기업 금융 서비스를 제공합니다. 광범위한 지점망과 디지털 플랫폼을 통해 인도 금융 시장에서 독보적인 점유율을 유지하고 있습니다. 자산 규모와 시가총액 면에서 인도 금융권을 대표하는 대형 은행입니다.",
+    "founded_year": 1994,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-19 01:21"
+  },
+  {
     "id": "icici_bank",
     "name": "ICICI Bank Limited",
     "name_ko": "ICICI 은행",
@@ -718,6 +750,38 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-18 22:57"
+  },
+  {
+    "id": "reliance_industries",
+    "name": "Reliance Industries Limited",
+    "name_ko": "릴라이언스 인더스트리스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "RELIANCE",
+    "sector": "에너지 및 통신",
+    "description": "1958년 설립된 인도의 최대 민간 기업으로 에너지, 석유화학, 통신, 소매업 등 다각화된 사업을 영위하고 있습니다. 인도 내 시가총액 1위 기업으로, 자회사인 지오(Jio)를 통해 인도 디지털 통신 시장을 주도하고 있습니다. 인도 경제 전반에 걸쳐 막대한 영향력을 행사하는 복합 기업입니다.",
+    "founded_year": 1958,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-19 01:21"
+  },
+  {
+    "id": "tata_consultancy_services",
+    "name": "Tata Consultancy Services Limited",
+    "name_ko": "타타 컨설턴시 서비스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "TCS",
+    "sector": "IT 서비스",
+    "description": "1968년 설립된 글로벌 IT 서비스 및 컨설팅 기업으로 타타 그룹의 핵심 계열사입니다. 전 세계 기업들을 대상으로 소프트웨어 개발, 비즈니스 솔루션, IT 아웃소싱 서비스를 제공합니다. 인도 IT 산업의 선구자이자 세계적인 수준의 기술력을 보유한 기업으로 평가받습니다.",
+    "founded_year": 1968,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-19 01:21"
   },
   {
     "id": "antam",
