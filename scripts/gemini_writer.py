@@ -254,10 +254,25 @@ def get_today_own_articles():
     return []
 
 
+def _strip_numbers(text: str) -> str:
+    """제목에서 숫자(한글 수사 포함)를 제거 — 사망자 수 등 수치 변화로 인한 미탐지 방지"""
+    text = re.sub(r'\d+', '', text)
+    # 한글 수사 제거
+    text = re.sub(r'[일이삼사오육칠팔구십백천만억]+\s*명', '명', text)
+    return re.sub(r'\s+', ' ', text).strip()
+
+
 def find_similar_article(title: str, own_articles: list, threshold: int = 70):
-    """DB RPC(find_duplicate_title)로 유사 기사 탐색 — pg_trgm similarity 기반, 행 수 제한 없음."""
+    """
+    중복 기사 탐색 — 2단계:
+    1차: DB RPC(find_duplicate_title) — pg_trgm 유사도 기반
+    2차: 숫자 제거 후 같은 국가·날짜 기사와 키워드 재비교
+         (사망자 수 등 수치가 바뀐 후속 보도 감지용)
+    """
     if not title:
         return None, 0
+
+    # ── 1차: RPC ──
     try:
         res = requests.post(
             f"{SUPABASE_URL}/rest/v1/rpc/find_duplicate_title",
@@ -272,6 +287,48 @@ def find_similar_article(title: str, own_articles: list, threshold: int = 70):
                 return top, score
     except Exception as e:
         print(f"  ⚠️ [중복체크 경고] RPC 호출 실패: {e}")
+
+    # ── 2차: 숫자 제거 + 국가+날짜+키워드 재비교 ──
+    try:
+        title_stripped = _strip_numbers(title)
+        today = now_kst().strftime("%Y-%m-%d")
+        since_48h = (now_kst() - timedelta(hours=48)).strftime("%Y-%m-%d %H:%M")
+
+        # 오늘 발행된 자체 기사 조회 (country 필터 없이 — 제목에서 국가명 추출 후 비교)
+        res2 = requests.get(
+            _sb_url(),
+            headers=_sb_headers(),
+            params={
+                "select": "id,title_ko,country",
+                "source": "eq.NewsFinal",
+                "is_published": "eq.true",
+                "created_at": f"gte.{since_48h}",
+                "order": "created_at.desc",
+                "limit": "100",
+            },
+            timeout=10,
+        )
+        if res2.status_code not in (200, 206):
+            return None, 0
+
+        candidates = res2.json()
+        title_kws = set(w for w in re.sub(r'[^\w가-힣]', ' ', title_stripped).split() if len(w) >= 2)
+
+        for cand in candidates:
+            cand_title = cand.get("title_ko") or ""
+            cand_stripped = _strip_numbers(cand_title)
+            cand_kws = set(w for w in re.sub(r'[^\w가-힣]', ' ', cand_stripped).split() if len(w) >= 2)
+
+            common = title_kws & cand_kws
+            # 공통 키워드 4개 이상 + rapidfuzz 유사도 50 이상이면 중복
+            sim = fuzz.token_sort_ratio(title_stripped, cand_stripped)
+            if len(common) >= 4 and sim >= 50:
+                print(f"  [2차 중복감지] 숫자제거 유사도 {sim}%, 공통키워드 {len(common)}개 → {cand_title[:50]}")
+                return {"id": cand["id"], "title_ko": cand_title, "score": sim / 100}, sim
+
+    except Exception as e:
+        print(f"  ⚠️ [2차 중복체크 경고] {e}")
+
     return None, 0
 
 
