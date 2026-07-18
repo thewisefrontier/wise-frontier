@@ -5,6 +5,10 @@ weather_report.py
 조회해 국가별로 각각 별도의 기사를 생성한다. 각 기사는 수도를 포함해 그 나라의
 여러 지역(2~5개 도시) 날씨를 함께 다룬다. Gemini를 쓰지 않는다 — 실제 수치만 사용.
 
+- 평일(월~목, KST): 오늘 날씨 (현재기온 + 최고/최저/체감/강수확률/강수량/풍속/자외선지수)
+- 금요일(KST): 주말(토·일) 예보를 같은 항목으로 보도
+- 토·일요일은 실행하지 않음 (금요일에 이미 보도)
+
 실행: python scripts/weather_report.py
 """
 
@@ -33,107 +37,135 @@ def _sb_url():
 
 
 # ── 국가별 도시 목록 (첫 번째가 수도) ──────────────────────
-# 국가명: (지역구분, [(도시명, 위도, 경도, 수도여부), ...])
 COUNTRIES = {
-    # ── 아프리카 ──
     "나이지리아": ("africa", [
         ("아부자", 9.0765, 7.3986, True),
         ("라고스", 6.5244, 3.3792, False),
         ("카노", 12.0022, 8.5920, False),
         ("포트하커트", 4.8156, 7.0498, False),
+        ("이바단", 7.3775, 3.9470, False),
     ]),
     "케냐": ("africa", [
         ("나이로비", -1.2864, 36.8172, True),
         ("몸바사", -4.0435, 39.6682, False),
         ("키수무", -0.0917, 34.7680, False),
+        ("나쿠루", -0.3031, 36.0800, False),
+        ("엘도레트", 0.5143, 35.2698, False),
     ]),
     "남아공": ("africa", [
         ("프리토리아", -25.7479, 28.2293, True),
         ("케이프타운", -33.9249, 18.4241, False),
         ("요하네스버그", -26.2041, 28.0473, False),
         ("더반", -29.8587, 31.0218, False),
+        ("블룸폰테인", -29.0852, 26.1596, False),
     ]),
     "이집트": ("africa", [
         ("카이로", 30.0444, 31.2357, True),
         ("알렉산드리아", 31.2001, 29.9187, False),
         ("아스완", 24.0889, 32.8998, False),
+        ("룩소르", 25.6872, 32.6396, False),
+        ("포트사이드", 31.2653, 32.3019, False),
     ]),
     "모로코": ("africa", [
         ("라바트", 34.0209, -6.8416, True),
         ("카사블랑카", 33.5731, -7.5898, False),
         ("마라케시", 31.6295, -7.9811, False),
+        ("페스", 34.0181, -5.0078, False),
+        ("탕헤르", 35.7595, -5.8340, False),
     ]),
     "알제리": ("africa", [
         ("알제", 36.7538, 3.0588, True),
         ("오랑", 35.6969, -0.6331, False),
+        ("콘스탄틴", 36.3650, 6.6147, False),
+        ("안나바", 36.9000, 7.7667, False),
     ]),
     "에티오피아": ("africa", [
         ("아디스아바바", 9.0320, 38.7469, True),
         ("드레다와", 9.5931, 41.8661, False),
+        ("메켈레", 13.4967, 39.4753, False),
+        ("하와사", 7.0504, 38.4955, False),
     ]),
     "가나": ("africa", [
         ("아크라", 5.6037, -0.1870, True),
         ("쿠마시", 6.6885, -1.6244, False),
+        ("타말레", 9.4008, -0.8393, False),
+        ("세콘디타코라디", 4.9344, -1.7133, False),
     ]),
     "탄자니아": ("africa", [
         ("도도마", -6.1630, 35.7516, True),
         ("다르에스살람", -6.7924, 39.2083, False),
+        ("아루샤", -3.3869, 36.6830, False),
+        ("음완자", -2.5164, 32.9175, False),
     ]),
     "앙골라": ("africa", [
         ("루안다", -8.8390, 13.2894, True),
+        ("우암보", -12.7756, 15.7392, False),
+        ("벵겔라", -12.5763, 13.4055, False),
     ]),
-
-    # ── 동남아시아 ──
     "베트남": ("southeast_asia", [
         ("하노이", 21.0278, 105.8342, True),
         ("호치민", 10.8231, 106.6297, False),
         ("다낭", 16.0544, 108.2022, False),
+        ("하이퐁", 20.8449, 106.6881, False),
+        ("껀터", 10.0452, 105.7469, False),
     ]),
     "인도네시아": ("southeast_asia", [
         ("자카르타", -6.2088, 106.8456, True),
         ("수라바야", -7.2575, 112.7521, False),
         ("메단", 3.5952, 98.6722, False),
         ("덴파사르", -8.6500, 115.2167, False),
+        ("마카사르", -5.1477, 119.4327, False),
     ]),
     "태국": ("southeast_asia", [
         ("방콕", 13.7563, 100.5018, True),
         ("치앙마이", 18.7883, 98.9853, False),
         ("푸켓", 7.8804, 98.3923, False),
+        ("콘깬", 16.4419, 102.8360, False),
+        ("나콘랏차시마", 14.9799, 102.0977, False),
     ]),
     "필리핀": ("southeast_asia", [
         ("마닐라", 14.5995, 120.9842, True),
         ("세부", 10.3157, 123.8854, False),
         ("다바오", 7.1907, 125.4553, False),
+        ("바기오", 16.4023, 120.5960, False),
+        ("일로일로", 10.7202, 122.5621, False),
     ]),
     "미얀마": ("southeast_asia", [
         ("네피도", 19.7633, 96.0785, True),
         ("양곤", 16.8661, 96.1951, False),
+        ("만달레이", 21.9588, 96.0891, False),
     ]),
     "캄보디아": ("southeast_asia", [
         ("프놈펜", 11.5564, 104.9282, True),
+        ("시엠립", 13.3633, 103.8564, False),
     ]),
     "말레이시아": ("southeast_asia", [
         ("쿠알라룸푸르", 3.1390, 101.6869, True),
         ("조호르바루", 1.4927, 103.7414, False),
+        ("페낭", 5.4141, 100.3288, False),
     ]),
     "싱가포르": ("southeast_asia", [
         ("싱가포르", 1.3521, 103.8198, True),
     ]),
-
-    # ── 중동 ──
     "사우디아라비아": ("middle_east", [
         ("리야드", 24.7136, 46.6753, True),
         ("제다", 21.4858, 39.1925, False),
         ("담맘", 26.4207, 50.0888, False),
+        ("메카", 21.3891, 39.8579, False),
+        ("메디나", 24.5247, 39.5692, False),
     ]),
     "아랍에미리트": ("middle_east", [
         ("아부다비", 24.4539, 54.3773, True),
         ("두바이", 25.2048, 55.2708, False),
+        ("샤르자", 25.3573, 55.4033, False),
+        ("알아인", 24.2075, 55.7447, False),
     ]),
     "튀르키예": ("middle_east", [
         ("앙카라", 39.9334, 32.8597, True),
         ("이스탄불", 41.0082, 28.9784, False),
         ("이즈미르", 38.4237, 27.1428, False),
+        ("안탈리아", 36.8969, 30.7133, False),
+        ("부르사", 40.1826, 29.0665, False),
     ]),
     "이스라엘": ("middle_east", [
         ("예루살렘", 31.7683, 35.2137, True),
@@ -142,19 +174,22 @@ COUNTRIES = {
     "이란": ("middle_east", [
         ("테헤란", 35.6892, 51.3890, True),
         ("이스파한", 32.6546, 51.6680, False),
+        ("마슈하드", 36.2605, 59.6168, False),
+        ("타브리즈", 38.0800, 46.2919, False),
     ]),
     "이라크": ("middle_east", [
         ("바그다드", 33.3152, 44.3661, True),
         ("바스라", 30.5085, 47.7835, False),
+        ("모술", 36.3350, 43.1189, False),
+        ("아르빌", 36.1901, 44.0091, False),
     ]),
     "카타르": ("middle_east", [
         ("도하", 25.2854, 51.5310, True),
     ]),
     "요르단": ("middle_east", [
         ("암만", 31.9454, 35.9284, True),
+        ("자르카", 32.0728, 36.0876, False),
     ]),
-
-    # ── 남아시아 ──
     "인도": ("south_asia", [
         ("뉴델리", 28.6139, 77.2090, True),
         ("뭄바이", 19.0760, 72.8777, False),
@@ -165,66 +200,72 @@ COUNTRIES = {
     "방글라데시": ("south_asia", [
         ("다카", 23.8103, 90.4125, True),
         ("치타공", 22.3569, 91.7832, False),
+        ("실헷", 24.8949, 91.8687, False),
+        ("쿨나", 22.8456, 89.5403, False),
     ]),
     "파키스탄": ("south_asia", [
         ("이슬라마바드", 33.6844, 73.0479, True),
         ("카라치", 24.8607, 67.0011, False),
         ("라호르", 31.5497, 74.3436, False),
+        ("페샤와르", 34.0151, 71.5249, False),
+        ("물탄", 30.1575, 71.5249, False),
     ]),
     "스리랑카": ("south_asia", [
         ("콜롬보", 6.9271, 79.8612, True),
+        ("캔디", 7.2906, 80.6337, False),
     ]),
     "네팔": ("south_asia", [
         ("카트만두", 27.7172, 85.3240, True),
+        ("포카라", 28.2096, 83.9856, False),
     ]),
-
-    # ── 중앙아시아 ──
     "카자흐스탄": ("central_asia", [
         ("아스타나", 51.1694, 71.4491, True),
         ("알마티", 43.2220, 76.8512, False),
+        ("심켄트", 42.3417, 69.5901, False),
     ]),
     "우즈베키스탄": ("central_asia", [
         ("타슈켄트", 41.2995, 69.2401, True),
+        ("사마르칸트", 39.6270, 66.9750, False),
     ]),
     "키르기스스탄": ("central_asia", [
         ("비슈케크", 42.8746, 74.5698, True),
     ]),
-
-    # ── 중남미 ──
     "브라질": ("latin_america", [
         ("브라질리아", -15.8267, -47.9218, True),
         ("상파울루", -23.5505, -46.6333, False),
         ("리우데자네이루", -22.9068, -43.1729, False),
+        ("살바도르", -12.9777, -38.5016, False),
     ]),
     "멕시코": ("latin_america", [
         ("멕시코시티", 19.4326, -99.1332, True),
         ("과달라하라", 20.6597, -103.3496, False),
         ("몬테레이", 25.6866, -100.3161, False),
+        ("칸쿤", 21.1619, -86.8515, False),
     ]),
     "아르헨티나": ("latin_america", [
         ("부에노스아이레스", -34.6037, -58.3816, True),
         ("코르도바", -31.4201, -64.1888, False),
+        ("로사리오", -32.9442, -60.6505, False),
     ]),
     "칠레": ("latin_america", [
         ("산티아고", -33.4489, -70.6693, True),
+        ("발파라이소", -33.0472, -71.6127, False),
     ]),
     "콜롬비아": ("latin_america", [
         ("보고타", 4.7110, -74.0721, True),
         ("메데인", 6.2442, -75.5812, False),
+        ("칼리", 3.4516, -76.5320, False),
     ]),
     "페루": ("latin_america", [
         ("리마", -12.0464, -77.0428, True),
+        ("아레키파", -16.4090, -71.5375, False),
     ]),
-
-    # ── 카리브해 ──
     "쿠바": ("caribbean", [
         ("아바나", 23.1136, -82.3666, True),
     ]),
     "도미니카공화국": ("caribbean", [
         ("산토도밍고", 18.4861, -69.9312, True),
     ]),
-
-    # ── 북미 ──
     "미국": ("north_america", [
         ("워싱턴DC", 38.9072, -77.0369, True),
         ("뉴욕", 40.7128, -74.0060, False),
@@ -236,8 +277,6 @@ COUNTRIES = {
         ("토론토", 43.6532, -79.3832, False),
         ("밴쿠버", 49.2827, -123.1207, False),
     ]),
-
-    # ── 동아시아 ──
     "일본": ("east_asia", [
         ("도쿄", 35.6762, 139.6503, True),
         ("오사카", 34.6937, 135.5023, False),
@@ -253,8 +292,6 @@ COUNTRIES = {
     "몽골": ("east_asia", [
         ("울란바토르", 47.8864, 106.9057, True),
     ]),
-
-    # ── 유럽 ──
     "영국": ("europe", [
         ("런던", 51.5074, -0.1278, True),
         ("맨체스터", 53.4808, -2.2426, False),
@@ -287,8 +324,6 @@ COUNTRIES = {
     "우크라이나": ("europe", [
         ("키이우", 50.4501, 30.5234, True),
     ]),
-
-    # ── 오세아니아 ──
     "호주": ("oceania", [
         ("캔버라", -35.2809, 149.1300, True),
         ("시드니", -33.8688, 151.2093, False),
@@ -299,8 +334,6 @@ COUNTRIES = {
         ("웰링턴", -41.2865, 174.7762, True),
         ("오클랜드", -36.8485, 174.7633, False),
     ]),
-
-    # ── 한국 ──
     "한국": ("global", [
         ("서울", 37.5665, 126.9780, True),
         ("부산", 35.1796, 129.0756, False),
@@ -324,9 +357,15 @@ WEATHER_CODE_KO = {
     95: "뇌우", 96: "약한 우박 동반 뇌우", 99: "강한 우박 동반 뇌우",
 }
 
+WEEKDAY_KO = ["월", "화", "수", "목", "금", "토", "일"]
 
-def fetch_weather(lat, lon):
-    """Open-Meteo 현재 날씨 + 오늘 최고/최저 조회"""
+
+def is_friday_kst() -> bool:
+    return now_kst().weekday() == 4  # 0=월 ... 4=금
+
+
+def fetch_full_weather(lat, lon):
+    """Open-Meteo 현재 날씨 + 10일 일별 상세 예보 조회"""
     try:
         res = requests.get(
             "https://api.open-meteo.com/v1/forecast",
@@ -334,63 +373,143 @@ def fetch_weather(lat, lon):
                 "latitude": lat,
                 "longitude": lon,
                 "current_weather": "true",
-                "daily": "temperature_2m_max,temperature_2m_min",
+                "daily": ",".join([
+                    "weathercode",
+                    "temperature_2m_max",
+                    "temperature_2m_min",
+                    "apparent_temperature_max",
+                    "apparent_temperature_min",
+                    "precipitation_sum",
+                    "precipitation_probability_max",
+                    "windspeed_10m_max",
+                    "uv_index_max",
+                ]),
                 "timezone": "auto",
+                "forecast_days": 10,
             },
             timeout=15,
         )
         if res.status_code != 200:
             return None
         data = res.json()
-        current = data.get("current_weather", {})
         daily = data.get("daily", {})
-        temp = current.get("temperature")
-        code = current.get("weathercode")
-        tmax = (daily.get("temperature_2m_max") or [None])[0]
-        tmin = (daily.get("temperature_2m_min") or [None])[0]
+        dates = daily.get("time", [])
+        if not dates:
+            return None
+
+        by_date = {}
+        for i, d in enumerate(dates):
+            def g(key):
+                arr = daily.get(key)
+                return arr[i] if arr and i < len(arr) else None
+            by_date[d] = {
+                "code": g("weathercode"),
+                "tmax": g("temperature_2m_max"),
+                "tmin": g("temperature_2m_min"),
+                "feels_max": g("apparent_temperature_max"),
+                "feels_min": g("apparent_temperature_min"),
+                "precip": g("precipitation_sum"),
+                "precip_prob": g("precipitation_probability_max"),
+                "wind_max": g("windspeed_10m_max"),
+                "uv": g("uv_index_max"),
+            }
+
         return {
-            "temp": temp,
-            "condition": WEATHER_CODE_KO.get(code, f"코드{code}"),
-            "tmax": tmax,
-            "tmin": tmin,
+            "current": data.get("current_weather", {}),
+            "daily": by_date,
         }
     except Exception as e:
         print(f"  ⚠️ 날씨 조회 실패 ({lat},{lon}): {e}")
         return None
 
 
-def build_country_report(country_name, cities):
-    today_str = now_kst().strftime("%Y년 %m월 %d일")
+def fmt_num(v, digits=0):
+    if v is None:
+        return "?"
+    return f"{v:.{digits}f}"
+
+
+def format_day_line(label, day_info, include_current=None):
+    """하루치 날씨를 한 줄로 포맷"""
+    if not day_info or day_info.get("tmax") is None:
+        return f"- {label}: 데이터 없음"
+
+    condition = WEATHER_CODE_KO.get(day_info["code"], f"코드{day_info['code']}")
+
+    detail = (
+        f"최고 {fmt_num(day_info['tmax'])}°C/최저 {fmt_num(day_info['tmin'])}°C "
+        f"(체감 {fmt_num(day_info['feels_max'])}°C/{fmt_num(day_info['feels_min'])}°C), "
+        f"강수확률 {fmt_num(day_info['precip_prob'])}%, 강수량 {fmt_num(day_info['precip'], 1)}mm, "
+        f"최대풍속 {fmt_num(day_info['wind_max'])}km/h, 자외선지수 {fmt_num(day_info['uv'], 1)}"
+    )
+
+    if include_current is not None:
+        return f"- {label}: {condition}, 현재 {fmt_num(include_current)}°C, {detail}"
+    return f"- {label}: {condition}, {detail}"
+
+
+def pick_weekend_dates(dates: list) -> tuple:
+    """dates(YYYY-MM-DD 리스트)에서 가장 가까운 토요일·일요일 날짜를 찾는다"""
+    sat = sun = None
+    for d in dates:
+        wd = datetime.strptime(d, "%Y-%m-%d").weekday()  # 5=토, 6=일
+        if wd == 5 and sat is None:
+            sat = d
+        elif wd == 6 and sun is None:
+            sun = d
+        if sat and sun:
+            break
+    return sat, sun
+
+
+def build_country_report(country_name, cities, weekend_mode: bool):
+    today_str = now_kst().strftime("%Y년 %m월 %d일") + f"({WEEKDAY_KO[now_kst().weekday()]})"
     lines = []
     any_success = False
 
     for name, lat, lon, is_capital in cities:
-        w = fetch_weather(lat, lon)
+        w = fetch_full_weather(lat, lon)
         label = f"{name}(수도)" if is_capital else name
-        if w is None or w["temp"] is None:
+
+        if w is None:
             lines.append(f"- {label}: 데이터 없음")
             continue
-        any_success = True
-        tmax_str = f"{w['tmax']:.0f}" if w["tmax"] is not None else "?"
-        tmin_str = f"{w['tmin']:.0f}" if w["tmin"] is not None else "?"
-        lines.append(
-            f"- {label}: 현재 {w['temp']:.0f}°C, {w['condition']} "
-            f"(오늘 최고 {tmax_str}°C / 최저 {tmin_str}°C)"
-        )
+
+        dates = list(w["daily"].keys())
+
+        if weekend_mode:
+            sat, sun = pick_weekend_dates(dates)
+            if sat:
+                lines.append(format_day_line(f"{label} 토요일({sat})", w["daily"].get(sat)))
+                any_success = any_success or w["daily"].get(sat, {}).get("tmax") is not None
+            if sun:
+                lines.append(format_day_line(f"{label} 일요일({sun})", w["daily"].get(sun)))
+                any_success = any_success or w["daily"].get(sun, {}).get("tmax") is not None
+        else:
+            today_key = dates[0] if dates else None
+            today_info = w["daily"].get(today_key) if today_key else None
+            current_temp = w["current"].get("temperature")
+            lines.append(format_day_line(label, today_info, include_current=current_temp))
+            any_success = any_success or (today_info and today_info.get("tmax") is not None)
 
     if not any_success:
         return None, None
 
-    title = f"오늘의 {country_name} 날씨 ({now_kst().strftime('%m월 %d일')})"
-    body = f"{today_str} 기준 {country_name} 주요 지역 실시간 날씨입니다.\n\n" + "\n".join(lines)
+    if weekend_mode:
+        title = f"주말 {country_name} 날씨 예보 ({now_kst().strftime('%m월 %d일')} 금요일 발표)"
+        body = f"{today_str} 발표된 {country_name} 주요 지역 주말(토·일) 날씨 예보입니다.\n\n" + "\n".join(lines)
+    else:
+        title = f"오늘의 {country_name} 날씨 ({now_kst().strftime('%m월 %d일')})"
+        body = f"{today_str} 기준 {country_name} 주요 지역 실시간 날씨입니다.\n\n" + "\n".join(lines)
+
     return title, body
 
 
-def save_report(country_name, region, title, body):
+def save_report(country_name, region, title, body, weekend_mode: bool):
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
-    subcategory = f"weather_{country_name}_{now_kst().strftime('%Y%m%d')}"
+    tag = "weekend" if weekend_mode else now_kst().strftime("%Y%m%d")
+    subcategory = f"weather_{country_name}_{tag}"
 
-    # 오늘 이미 생성됐는지 확인 (중복 방지)
     check = requests.get(
         _sb_url(),
         headers=_sb_headers(),
@@ -403,7 +522,7 @@ def save_report(country_name, region, title, body):
         timeout=15,
     )
     if check.status_code in (200, 206) and check.json():
-        print(f"  [SKIP] {country_name} 오늘 날씨 리포트 이미 존재")
+        print(f"  [SKIP] {country_name} 리포트 이미 존재")
         return
 
     payload = {
@@ -427,14 +546,14 @@ def save_report(country_name, region, title, body):
         "sent_telegram": 0,
         "is_published": True,
         "posted_blog": 0,
-        "dedup_reviewed": True,  # 날씨 기사는 매일 유사 제목이라 중복탐지 대상에서 제외
+        "dedup_reviewed": True,
     }
     headers = {**_sb_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
     res = requests.post(_sb_url(), headers=headers, json=payload, timeout=15)
     if res.status_code in (200, 201):
         data = res.json()
         art_id = data[0].get("id", -1) if data else -1
-        print(f"  ✅ {country_name} 날씨 저장 완료 (id={art_id})")
+        print(f"  ✅ {country_name} 저장 완료 (id={art_id})")
     else:
         print(f"  ❌ {country_name} 저장 실패: HTTP {res.status_code} - {res.text[:200]}")
 
@@ -444,14 +563,17 @@ def run():
         print("[SKIP] SUPABASE 환경변수 없음")
         return
 
-    print(f"[날씨] {len(COUNTRIES)}개국 개별 리포트 생성 시작...")
+    weekend_mode = is_friday_kst()
+    mode_label = "주말 예보(금요일)" if weekend_mode else "오늘 날씨"
+    print(f"[날씨] {len(COUNTRIES)}개국 — 모드: {mode_label}")
+
     for country_name, (region, cities) in COUNTRIES.items():
         print(f"→ {country_name}")
-        title, body = build_country_report(country_name, cities)
+        title, body = build_country_report(country_name, cities, weekend_mode)
         if not title:
             print(f"  ❌ {country_name} 모든 도시 조회 실패 — 건너뜀")
             continue
-        save_report(country_name, region, title, body)
+        save_report(country_name, region, title, body, weekend_mode)
 
     print("[날씨] 완료")
 
