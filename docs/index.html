@@ -402,7 +402,6 @@
       <a href="#" onclick="setSector('정치·외교',this);return false;" data-sector>정치·외교</a>
       <a href="#" onclick="setSector('사회',this);return false;" data-sector>사회</a>
       <a href="#" onclick="setSector('IT·과학',this);return false;" data-sector>IT·과학</a>
-      <a href="#" onclick="setSector('날씨',this);return false;" data-sector>🌤️ 날씨</a>
       <a href="/markets.html">마켓</a>
       <a href="/calendar.html">경제 일정</a>
       <a href="/archive.html">아카이브</a>
@@ -427,6 +426,14 @@
         <a href="/calendar.html" style="font-size:10px;color:var(--accent2);text-decoration:none;font-family:'IBM Plex Mono',monospace;">전체 →</a>
       </div>
       <div id="calendar-widget"><div class="empty">데이터 준비 중</div></div>
+    </div>
+
+    <div class="widget">
+      <div class="widget-header">
+        <span>🌤️ 세계의 날씨</span>
+        <span id="weather-date"></span>
+      </div>
+      <div id="weather-widget"><div class="empty">데이터 준비 중</div></div>
     </div>
 
     <div class="widget">
@@ -559,7 +566,6 @@
     '사회': ['사회', 'society'],
     'IT·과학': ['IT·과학', 'tech'],
     '글로벌경제': ['글로벌경제', 'global'],
-    '날씨': ['날씨', 'weather'],
   };
 
   function matchRegion(a, region) {
@@ -990,6 +996,39 @@
       </div>`;
   }
 
+  function renderWeatherWidget(weatherArticles) {
+    const container = document.getElementById('weather-widget');
+    const dateEl = document.getElementById('weather-date');
+    if (!weatherArticles || !weatherArticles.length) {
+      container.innerHTML = '<div class="empty">날씨 데이터 준비 중</div>';
+      return;
+    }
+
+    // 국가별 최신 1건만
+    const byCountry = {};
+    weatherArticles.forEach(a => {
+      const c = a.country || '기타';
+      if (!byCountry[c] || (a.created_at || '') > (byCountry[c].created_at || '')) {
+        byCountry[c] = a;
+      }
+    });
+
+    const items = Object.values(byCountry).sort((a, b) =>
+      (a.country || '').localeCompare(b.country || '', 'ko')
+    );
+
+    if (items.length && dateEl) {
+      const first = items[0];
+      const isWeekend = (first.title_ko || '').includes('주말');
+      dateEl.textContent = isWeekend ? '주말 예보' : (first.created_at || '').slice(5, 10).replace('-', '/');
+    }
+
+    container.innerHTML = items.map(a => {
+      const title = a.title_ko || a.title_en;
+      return `<div class="briefing-title" style="cursor:pointer;padding:4px 0;" onclick="location.href='article?id=${a.id}'">🌍 ${a.country} <span style="color:var(--muted);font-size:11px;">— ${title.replace(/^(오늘의|주말)\s*/, '').replace(a.country, '').trim()}</span></div>`;
+    }).join('');
+  }
+
   function renderBriefing(articles) {
     const container = document.getElementById('briefing-container');
     const now = nowKST();
@@ -1062,10 +1101,12 @@
       const res = await fetch('data/articles.json');
       if (!res.ok) throw new Error();
       const raw = await res.json();
-      allArticles = raw.filter(a => !(a.subcategory || '').startsWith('digest_'));
+      const weatherArticles = raw.filter(a => a.category === '날씨');
+      allArticles = raw.filter(a => !(a.subcategory || '').startsWith('digest_') && a.category !== '날씨');
       renderDigest(raw);
       renderArticles(allArticles);
       renderBriefing(allArticles);
+      renderWeatherWidget(weatherArticles);
     } catch(e) {
       document.getElementById('articles-container').innerHTML = `<div class="empty">아직 기사 데이터가 없습니다.<br>곧 업데이트됩니다.</div>`;
     }
