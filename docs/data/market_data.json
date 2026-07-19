@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-19 17:11",
+  "updated_at": "2026-07-19 17:50",
   "indices": [
     {
       "name": "S&P 500",
@@ -46,9 +46,9 @@
     {
       "name": "EGX30 (이집트)",
       "symbol": "^CASE30",
-      "price": 52637.3,
-      "change_pct": 0.15,
-      "up": true
+      "price": 52520.0,
+      "change_pct": -0.07,
+      "up": false
     },
     {
       "name": "SET (태국)",
@@ -144,9 +144,9 @@
       {
         "name": "EGX30 (이집트)",
         "symbol": "^CASE30",
-        "price": 52637.3,
-        "change_pct": 0.15,
-        "up": true
+        "price": 52520.0,
+        "change_pct": -0.07,
+        "up": false
       },
       {
         "name": "SET (태국)",
@@ -207,6 +207,13 @@
       "symbol": "ACB.VN",
       "price": 23550.0,
       "change_pct": 1.95,
+      "up": true
+    },
+    "FDH": {
+      "name": "FDH Bank",
+      "symbol": "FDH",
+      "price": 0,
+      "change_pct": 0,
       "up": true
     },
     "VCB": {

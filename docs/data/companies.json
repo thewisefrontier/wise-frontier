@@ -256,6 +256,22 @@
     "updated_at": "2026-07-18 13:12"
   },
   {
+    "id": "fdh_bank",
+    "name": "FDH Bank",
+    "name_ko": "FDH 은행",
+    "country": "말라위",
+    "country_flag": "🌍",
+    "exchange": "MSE",
+    "ticker": "FDH",
+    "sector": "은행",
+    "description": "2008년에 설립된 말라위의 주요 상업 은행으로, 말라위 증권거래소에 상장되어 있습니다. 개인 및 기업 금융 서비스를 제공하며 말라위 전역에 광범위한 지점망을 보유하고 있습니다. 말라위 금융 시장에서 디지털 금융 혁신을 주도하며 높은 시장 점유율을 기록하고 있습니다.",
+    "founded_year": 2008,
+    "headquarters": "블랜타이어, 말라위",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-19 17:47"
+  },
+  {
     "id": "mukuru",
     "name": "Mukuru",
     "name_ko": "무쿠루",
@@ -622,6 +638,22 @@
     "website": null,
     "is_published": true,
     "updated_at": null
+  },
+  {
+    "id": "itau_unibanco",
+    "name": "Itaú Unibanco",
+    "name_ko": "이타우 우니방쿠",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "B3",
+    "ticker": "ITUB4",
+    "sector": "은행",
+    "description": "1943년에 설립된 브라질 최대의 민간 은행으로, 라틴 아메리카 전역에서 금융 서비스를 제공합니다. 개인 및 기업 금융, 자산 관리, 보험 등 포괄적인 금융 솔루션을 운영하며 브라질 금융 시장에서 독보적인 지위를 차지하고 있습니다. 록 인 리오와 같은 대형 문화 행사의 공식 파트너 및 결제 수단 제공자로 자주 참여합니다.",
+    "founded_year": 1943,
+    "headquarters": "상파울루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-19 17:47"
   },
   {
     "id": "dpoc",
