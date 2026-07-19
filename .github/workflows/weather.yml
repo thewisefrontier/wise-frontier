@@ -28,12 +28,13 @@ jobs:
       - name: 패키지 설치
         run: pip install -r requirements.txt
 
-      - name: 날씨 리포트 생성 (국가별 현지 아침 시간에만 발행, Pixabay 이미지 포함)
+      - name: 날씨 리포트 생성 (국가별 현지 아침 시간에만 발행, 한국은 기상청 단기예보 우선)
         run: python scripts/weather_report.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          KMA_API_KEY: ${{ secrets.KMA_API_KEY }}
 
       - name: 웹사이트 데이터 내보내기
         run: python scripts/export_articles.py
