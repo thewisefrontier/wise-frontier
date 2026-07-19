@@ -14,12 +14,12 @@ weather_report.py
 - 여러 날짜(주말·주간)를 다룰 때는 도시당 한 줄로 압축해서 보여준다(하루하루 나열하지 않음).
 - 워크플로우는 매시 정각에 실행되며, 이 스크립트가 그룹별로 "지금이 발행 시점인지" 판단한다.
 - 대표 이미지는 Pixabay에서 조회해 자동 삽입한다 (태그 기반 검증 포함).
-- Open-Meteo 조회는 일시적 오류 시 최대 3회 재시도한다.
 
 실행: python scripts/weather_report.py
 """
 
 import os
+import time
 import requests
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
@@ -444,7 +444,6 @@ def should_run_now(tz_name: str):
 
 def fetch_full_weather(lat, lon, retries: int = 3):
     """Open-Meteo 현재 날씨 + 10일 일별 상세 예보 조회 (일시적 오류 시 최대 3회 재시도)"""
-    import time as _time
     last_err = None
     for attempt in range(retries):
         try:
@@ -503,7 +502,7 @@ def fetch_full_weather(lat, lon, retries: int = 3):
             last_err = str(e)
 
         if attempt < retries - 1:
-            _time.sleep(2)  # 재시도 전 잠깐 대기
+            time.sleep(2)
 
     print(f"  ⚠️ 날씨 조회 실패 ({lat},{lon}, {retries}회 시도): {last_err}")
     return None
@@ -534,16 +533,57 @@ def format_day_line(label, day_info, include_current=None):
     return f"- {label}: {condition}, {detail}"
 
 
+def _describe_trend(day_entries_with_data: list) -> str:
+    """
+    day_entries_with_data: [(요일약칭, day_info), ...] (데이터 있는 것만)
+    기온 흐름 + 비 오는 시점을 짧은 문장으로 설명.
+    """
+    if len(day_entries_with_data) < 2:
+        return ""
+
+    first_wd, first_info = day_entries_with_data[0]
+    last_wd, last_info = day_entries_with_data[-1]
+    n = len(day_entries_with_data)
+
+    # 기온 흐름 (첫날 대비 마지막날 최고기온 변화)
+    diff = last_info["tmax"] - first_info["tmax"]
+    if diff >= 3:
+        temp_trend = f"{first_wd}요일 이후 점차 더워지는 흐름이며"
+    elif diff <= -3:
+        temp_trend = f"{first_wd}요일 이후 점차 선선해지는 흐름이며"
+    else:
+        temp_trend = "한 주 내내 비슷한 기온대를 유지하며"
+
+    # 비 오는 시점(초반/중반/후반)
+    rain_positions = [i for i, (_, info) in enumerate(day_entries_with_data) if (info.get("precip_prob") or 0) >= 50]
+    if not rain_positions:
+        rain_part = "비 소식 없이 대체로 맑겠습니다"
+    else:
+        avg_pos = sum(rain_positions) / len(rain_positions)
+        if avg_pos < n / 3:
+            rain_part = f"{first_wd}요일 무렵 비 소식이 집중되겠습니다"
+        elif avg_pos > n * 2 / 3:
+            rain_part = f"{last_wd}요일 무렵 비 소식이 있겠습니다"
+        else:
+            rain_part = "주 중반 비 소식이 있겠습니다"
+
+    return f"{temp_trend} {rain_part}."
+
+
 def format_multi_day_line(label: str, day_entries: list) -> str:
     """
-    여러 날짜(주말 2일, 주간 5일 등)의 날씨를 도시당 한 줄로 압축.
+    여러 날짜(주말 2일, 주간 5일 등)의 날씨를 도시당 한 줄로 정리.
+    앞에는 흐름을 설명하는 짧은 문장, 뒤에는 일자별 압축 데이터가 이어진다.
     day_entries: [(요일약칭, day_info), ...]
-    예: "- 워싱턴DC(수도): 월 흐림(34°/20°) → 화 소나기(35°/22°) → ... . 최고 35°C(화)·최저 17°C(목), 화·수요일 비 소식."
+    예: "- 워싱턴DC(수도): 월요일 이후 점차 선선해지는 흐름이며 화요일 무렵 비 소식이 집중되겠습니다.
+         [월 흐림(34°/20°) → 화 소나기(35°/22°) → 수 이슬비(31°/21°) → 목 맑음(28°/17°) → 금 흐림(32°/19°)]
+         최고 35°C(화)·최저 17°C(목), 화·수요일 비 소식."
     """
     chain_parts = []
     tmax_list = []
     tmin_list = []
     rain_days = []
+    valid_entries = []
     any_data = False
 
     for wd, info in day_entries:
@@ -551,6 +591,7 @@ def format_multi_day_line(label: str, day_entries: list) -> str:
             chain_parts.append(f"{wd} 데이터없음")
             continue
         any_data = True
+        valid_entries.append((wd, info))
         condition = WEATHER_CODE_KO.get(info["code"], "")
         chain_parts.append(f"{wd} {condition}({fmt_num(info['tmax'])}°/{fmt_num(info['tmin'])}°)")
         tmax_list.append((info["tmax"], wd))
@@ -568,7 +609,10 @@ def format_multi_day_line(label: str, day_entries: list) -> str:
     if rain_days:
         extra += f", {'·'.join(rain_days)}요일 비 소식"
 
-    return f"- {label}: {chain}.{extra}"
+    trend = _describe_trend(valid_entries)
+    trend_part = f" {trend}" if trend else ""
+
+    return f"- {label}:{trend_part} [{chain}].{extra}"
 
 
 def pick_weekend_dates(dates: list) -> tuple:
@@ -688,9 +732,12 @@ def fetch_country_image(country_name: str) -> str:
 
 
 def fetch_cities_weather(cities: list) -> list:
-    """도시 목록에 대해 날씨를 한 번씩만 조회 (오늘/주말/주간 리포트가 이 결과를 공유해서 재사용)"""
+    """도시 목록에 대해 날씨를 한 번씩만 조회 (오늘/주말/주간 리포트가 이 결과를 공유해서 재사용).
+    API 호출이 몰리지 않도록 도시 사이에 짧은 텀을 둔다."""
     results = []
-    for name, lat, lon, is_capital in cities:
+    for i, (name, lat, lon, is_capital) in enumerate(cities):
+        if i > 0:
+            time.sleep(1)  # 요청 몰림 방지
         w = fetch_full_weather(lat, lon)
         results.append((name, is_capital, w))
     return results
@@ -828,12 +875,13 @@ def build_weekly_report(country_name, weather_list, local_now: datetime):
     if not any_success:
         return None, None
 
-    # 수도 기준 설명 문단 (5일 범위 요약)
+    # 수도 기준 설명 문단 (5일 범위 요약 + 요일별 흐름)
     cap_name, cap_w = _find_capital(weather_list)
     summary = ""
     if cap_w is not None:
         cap_dates = list(cap_w["daily"].keys())[1:6]
-        cap_days = [cap_w["daily"].get(d) for d in cap_dates if cap_w["daily"].get(d, {}).get("tmax") is not None]
+        cap_entries = [(WEEKDAY_KO[datetime.strptime(d, "%Y-%m-%d").weekday()], cap_w["daily"].get(d)) for d in cap_dates]
+        cap_days = [info for _, info in cap_entries if info and info.get("tmax") is not None]
         if cap_days:
             tmax_all = [d["tmax"] for d in cap_days]
             tmin_all = [d["tmin"] for d in cap_days]
@@ -842,10 +890,14 @@ def build_weekly_report(country_name, weather_list, local_now: datetime):
                 f"5일 중 {rain_days}일 정도 비가 예상되니 참고하시기 바랍니다."
                 if rain_days > 0 else "당분간 비 소식 없이 대체로 맑은 날씨가 이어질 전망입니다."
             )
+            day_by_day = ", ".join(
+                f"{wd} {WEATHER_CODE_KO.get(info['code'], '')} {fmt_num(info['tmax'])}°/{fmt_num(info['tmin'])}°"
+                for wd, info in cap_entries if info and info.get("tmax") is not None
+            )
             summary = (
                 f"{today_str} 발표된 다음주(월~금) 전망입니다. {country_name}의 수도 {cap_name}은 "
                 f"이번 주 최고 {fmt_num(max(tmax_all))}°C, 최저 {fmt_num(min(tmin_all))}°C 사이를 오갈 것으로 보입니다. "
-                f"{rain_str} 그 외 주요 지역 예보는 아래와 같습니다."
+                f"{rain_str} 요일별로는 {day_by_day} 순으로 예상됩니다. 그 외 주요 지역 예보는 아래와 같습니다."
             )
 
     if not summary:
@@ -1126,7 +1178,9 @@ def run():
         print(f"→ [그룹] {group_name} (현지 {local_now.strftime('%H:%M')}, {MODE_LABEL[mode]})")
 
         countries_data = []
-        for country_name in gconf["countries"]:
+        for ci, country_name in enumerate(gconf["countries"]):
+            if ci > 0:
+                time.sleep(1)  # 국가 간 요청 몰림 방지
             _, _, cities = COUNTRIES[country_name]
             weather_list = fetch_cities_weather(cities)
             countries_data.append((country_name, weather_list))
