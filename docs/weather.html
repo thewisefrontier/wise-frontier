@@ -7,12 +7,9 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png">
-
   <link rel="shortcut icon" href="/favicon.ico">
-  <meta name="description" content="NewsFinal 경제 일정 — 프론티어 마켓 주요국 중앙은행 회의, 선거, 경제지표 발표 일정">
-  <title>경제 일정 — NewsFinal</title>
+  <meta name="description" content="NewsFinal 세계 날씨 — 프론티어마켓 및 주요국 실시간 날씨와 주말·주간 예보">
+  <title>세계의 날씨 — NewsFinal</title>
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7TKGYEM467"></script>
   <script>
@@ -66,42 +63,33 @@
     nav.page-nav a:first-child { border-left: 1px solid var(--border); }
     nav.page-nav a:hover, nav.page-nav a.active { color: var(--accent2); background: var(--bg2); }
 
-    .page-container { max-width: 800px; margin: 0 auto; padding: 28px 24px 60px; }
-    h1.page-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; margin-bottom: 6px; color: var(--text); }
-    .page-sub { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 24px; }
+    .weather-hero { background: var(--text); color: var(--bg); padding: 28px 20px; text-align: center; }
+    .weather-title { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 900; }
+    .weather-sub { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #c8a060; margin-top: 6px; letter-spacing: 0.05em; }
 
-    .filters {
-      display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; align-items: center;
-      font-family: 'IBM Plex Mono', monospace; font-size: 12px;
-    }
-    .filters select {
-      padding: 7px 10px; border: 1px solid var(--border); background: var(--bg2);
-      color: var(--text); font-family: inherit; font-size: 12px;
-    }
+    .page-container { max-width: 900px; margin: 0 auto; padding: 28px 24px 60px; }
 
-    .day-group { margin-bottom: 22px; }
-    .day-header {
-      font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 700;
-      color: var(--text); padding-bottom: 6px; margin-bottom: 8px; border-bottom: 2px solid var(--text);
-      display: flex; justify-content: space-between; align-items: center;
+    .filter-tabs { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
+    .filter-tab {
+      padding: 6px 14px; font-size: 11px; font-family: 'IBM Plex Mono', monospace;
+      border: 1px solid var(--border); background: var(--bg2); color: var(--muted);
+      cursor: pointer; transition: color 0.2s, background 0.2s;
     }
-    .day-header .dow { color: var(--accent); }
+    .filter-tab:hover { color: var(--accent2); }
+    .filter-tab.active { background: var(--accent2); color: #fff; border-color: var(--accent2); }
 
-    .event-row {
+    .weather-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+    .weather-card {
       background: var(--bg2); border: 1px solid var(--border);
-      padding: 12px 14px; margin-bottom: 6px; display: flex; gap: 12px; align-items: flex-start;
+      border-left: 3px solid var(--accent2); padding: 14px 16px;
+      cursor: pointer; transition: background 0.2s, border-left-color 0.2s;
     }
-    .ev-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
-    .ev-dot.high { background: var(--red); }
-    .ev-dot.medium { background: var(--accent); }
-    .ev-dot.low { background: var(--muted); }
-    .ev-body { flex: 1; }
-    .ev-meta { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); margin-bottom: 3px; }
-    .ev-title { font-size: 14px; font-weight: 700; color: var(--text); }
-    .ev-desc { font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
-    .ev-values { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 5px; display: flex; gap: 12px; }
+    .weather-card:hover { background: var(--bg3); }
+    .weather-card-country { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--accent2); font-weight: 700; margin-bottom: 6px; }
+    .weather-card-title { font-size: 13px; font-weight: 700; line-height: 1.4; margin-bottom: 6px; }
+    .weather-card-meta { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); }
 
-    .empty { text-align: center; padding: 50px 20px; color: var(--muted); font-family: 'IBM Plex Mono', monospace; font-size: 13px; }
+    .empty { text-align: center; padding: 40px 20px; color: var(--muted); font-family: 'IBM Plex Mono', monospace; font-size: 12px; }
 
     footer {
       border-top: 1px solid var(--border); background: var(--bg2);
@@ -116,6 +104,7 @@
       .header-top { margin: 0 -14px; padding: 8px 14px; }
       .logo { font-size: 24px; }
       .page-container { padding: 20px 16px 40px; }
+      .weather-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -143,26 +132,21 @@
     <a href="/?category=사회">사회</a>
     <a href="/?category=IT·과학">IT·과학</a>
     <a href="/archive.html">아카이브</a>
-    <a href="/calendar.html" class="active">경제 일정</a>
+    <a href="/calendar.html">경제 일정</a>
     <a href="/markets.html">마켓</a>
     <a href="/country.html">국가별</a>
-    <a href="/weather.html">🌤️ 날씨</a>
+    <a href="/weather.html" class="active">🌤️ 날씨</a>
   </nav>
 </header>
 
+<div class="weather-hero">
+  <div class="weather-title">🌤️ 세계의 날씨</div>
+  <div class="weather-sub" id="weather-updated">WEATHER HUB</div>
+</div>
+
 <div class="page-container">
-  <h1 class="page-title">경제 일정</h1>
-  <div class="page-sub">프론티어 마켓 주요국 중앙은행 회의 · 선거 · 경제지표 발표 일정</div>
-
-  <div class="filters">
-    <select id="importance-filter" onchange="render()">
-      <option value="">전체 중요도</option>
-      <option value="high">🔴 높음만</option>
-      <option value="medium">🟡 중간 이상</option>
-    </select>
-  </div>
-
-  <div id="events-container"><div class="empty">불러오는 중...</div></div>
+  <div class="filter-tabs" id="filter-tabs"></div>
+  <div class="weather-grid" id="weather-container"><div class="empty">날씨 데이터 로딩 중</div></div>
 </div>
 
 <footer>
@@ -175,23 +159,99 @@
 </footer>
 
 <script>
-  const SUPABASE_URL = 'https://fotdngseksqaghvtcvqh.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable_rT3kSEAAdM0DJlDW5fEWww_M37h6dDW';
-  const DOW = ['일','월','화','수','목','금','토'];
-  let allEvents = [];
-
-  function pad(n) { return String(n).padStart(2, '0'); }
   function nowKST() {
     return new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
   }
-
-  function updateDatetime() {
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function updateTime() {
     const now = nowKST();
-    const el = document.getElementById('datetime');
-    if (el) el.textContent = `${now.getFullYear()}.${pad(now.getMonth()+1)}.${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())} KST`;
+    document.getElementById('datetime').textContent =
+      `${now.getFullYear()}.${pad(now.getMonth()+1)}.${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())} KST`;
   }
-  updateDatetime();
-  setInterval(updateDatetime, 30000);
+  updateTime();
+  setInterval(updateTime, 60000);
+
+  let allWeather = [];
+  let currentFilter = 'all';
+
+  function formatTime(dateStr) {
+    if (!dateStr) return '';
+    const d = new Date(dateStr.replace(' ', 'T'));
+    if (isNaN(d)) return dateStr;
+    return `${pad(d.getMonth()+1)}/${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  }
+
+  function classify(a) {
+    const t = a.title_ko || a.title_en || '';
+    if (t.includes('주말')) return 'weekend';
+    if (t.includes('다음주')) return 'weekly';
+    return 'today';
+  }
+
+  function renderFilters() {
+    const counts = { all: allWeather.length, today: 0, weekend: 0, weekly: 0 };
+    allWeather.forEach(a => counts[classify(a)]++);
+    const labels = { all: '전체', today: '오늘', weekend: '주말예보', weekly: '다음주예보' };
+    document.getElementById('filter-tabs').innerHTML = Object.keys(labels).map(key =>
+      `<div class="filter-tab ${currentFilter===key?'active':''}" onclick="setFilter('${key}')">${labels[key]} (${counts[key]})</div>`
+    ).join('');
+  }
+
+  function setFilter(key) {
+    currentFilter = key;
+    renderFilters();
+    renderWeather();
+  }
+
+  function renderWeather() {
+    const container = document.getElementById('weather-container');
+    let items = currentFilter === 'all' ? allWeather : allWeather.filter(a => classify(a) === currentFilter);
+    items = [...items].sort((a, b) => (a.country || '').localeCompare(b.country || '', 'ko'));
+
+    if (!items.length) {
+      container.innerHTML = '<div class="empty">해당 리포트가 없습니다.</div>';
+      return;
+    }
+
+    container.innerHTML = items.map(a => {
+      const title = a.title_ko || a.title_en || '';
+      return `
+        <div class="weather-card" onclick="location.href='article?id=${a.id}'">
+          <div class="weather-card-country">🌍 ${a.country || '기타'}</div>
+          <div class="weather-card-title">${title}</div>
+          <div class="weather-card-meta">${formatTime(a.created_at)}</div>
+        </div>`;
+    }).join('');
+  }
+
+  async function loadWeather() {
+    try {
+      const res = await fetch('data/articles.json');
+      if (!res.ok) throw new Error();
+      const raw = await res.json();
+      allWeather = raw.filter(a => a.category === '날씨');
+
+      // 국가/그룹별 최신 1건만
+      const byCountry = {};
+      allWeather.forEach(a => {
+        const c = a.country || '기타';
+        if (!byCountry[c] || (a.created_at || '') > (byCountry[c].created_at || '')) {
+          byCountry[c] = a;
+        }
+      });
+      allWeather = Object.values(byCountry);
+
+      if (allWeather.length) {
+        document.getElementById('weather-updated').textContent =
+          `최근 업데이트 ${formatTime(allWeather[0].created_at)}`;
+      }
+
+      renderFilters();
+      renderWeather();
+    } catch (e) {
+      document.getElementById('weather-container').innerHTML = '<div class="empty">날씨 데이터를 불러올 수 없습니다.</div>';
+    }
+  }
 
   async function loadMarketData() {
     try {
@@ -211,74 +271,8 @@
     } catch(e) {}
   }
 
-  async function load() {
-    try {
-      const _n = nowKST();
-      const today = `${_n.getFullYear()}-${pad(_n.getMonth()+1)}-${pad(_n.getDate())}`;
-      const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/econ_events?select=*&event_date=gte.${today}&is_verified=eq.true&order=event_date.asc,event_time.asc&limit=200`,
-        { headers: { 'apikey': SUPABASE_ANON_KEY } }
-      );
-      if (!res.ok) throw new Error();
-      allEvents = await res.json();
-      render();
-    } catch(e) {
-      document.getElementById('events-container').innerHTML = '<div class="empty">일정을 불러올 수 없습니다</div>';
-    }
-  }
-
-  function render() {
-    const filter = document.getElementById('importance-filter').value;
-    let events = allEvents;
-    if (filter === 'high') events = events.filter(e => e.importance === 'high');
-    else if (filter === 'medium') events = events.filter(e => e.importance === 'high' || e.importance === 'medium');
-
-    const container = document.getElementById('events-container');
-    if (!events.length) {
-      container.innerHTML = '<div class="empty">예정된 일정이 없습니다</div>';
-      return;
-    }
-
-    const byDate = {};
-    events.forEach(ev => {
-      if (!byDate[ev.event_date]) byDate[ev.event_date] = [];
-      byDate[ev.event_date].push(ev);
-    });
-
-    container.innerHTML = Object.entries(byDate).map(([date, items]) => {
-      const d = new Date(date + 'T00:00:00');
-      const dateLabel = `${d.getMonth()+1}월 ${d.getDate()}일`;
-      const dow = DOW[d.getDay()];
-
-      return `
-        <div class="day-group">
-          <div class="day-header">
-            <span>${dateLabel} <span class="dow">(${dow})</span></span>
-          </div>
-          ${items.map(ev => `
-            <div class="event-row">
-              <div class="ev-dot ${ev.importance || 'medium'}"></div>
-              <div class="ev-body">
-                <div class="ev-meta">${ev.event_time || ''} ${ev.country_flag || ''} ${ev.country || ''}</div>
-                <div class="ev-title">${ev.title}</div>
-                ${ev.description ? `<div class="ev-desc">${ev.description}</div>` : ''}
-                ${(ev.previous_value || ev.forecast_value || ev.actual_value) ? `
-                  <div class="ev-values">
-                    ${ev.previous_value ? `<span>이전 ${ev.previous_value}</span>` : ''}
-                    ${ev.forecast_value ? `<span>예상 ${ev.forecast_value}</span>` : ''}
-                    ${ev.actual_value ? `<span>실제 ${ev.actual_value}</span>` : ''}
-                  </div>` : ''}
-              </div>
-            </div>
-          `).join('')}
-        </div>
-      `;
-    }).join('');
-  }
-
   loadMarketData();
-  load();
+  loadWeather();
 </script>
-
 </body>
 </html>
