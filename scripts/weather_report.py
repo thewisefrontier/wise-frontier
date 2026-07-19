@@ -11,6 +11,7 @@ weather_report.py
 - 현지 기준 토요일 아침: 주말(토·일) 예보.
 - 현지 기준 일요일 아침: 다음주(월~금) 예보.
 - 모든 리포트는 요약 문단으로 시작한 뒤 국가별·지역별 상세 데이터가 이어진다.
+- 여러 날짜(주말·주간)를 다룰 때는 도시당 한 줄로 압축해서 보여준다(하루하루 나열하지 않음).
 - 워크플로우는 매시 정각에 실행되며, 이 스크립트가 그룹별로 "지금이 발행 시점인지" 판단한다.
 - 대표 이미지는 Pixabay에서 조회해 자동 삽입한다 (태그 기반 검증 포함).
 
@@ -524,6 +525,43 @@ def format_day_line(label, day_info, include_current=None):
     return f"- {label}: {condition}, {detail}"
 
 
+def format_multi_day_line(label: str, day_entries: list) -> str:
+    """
+    여러 날짜(주말 2일, 주간 5일 등)의 날씨를 도시당 한 줄로 압축.
+    day_entries: [(요일약칭, day_info), ...]
+    예: "- 워싱턴DC(수도): 월 흐림(34°/20°) → 화 소나기(35°/22°) → ... . 최고 35°C(화)·최저 17°C(목), 화·수요일 비 소식."
+    """
+    chain_parts = []
+    tmax_list = []
+    tmin_list = []
+    rain_days = []
+    any_data = False
+
+    for wd, info in day_entries:
+        if not info or info.get("tmax") is None:
+            chain_parts.append(f"{wd} 데이터없음")
+            continue
+        any_data = True
+        condition = WEATHER_CODE_KO.get(info["code"], "")
+        chain_parts.append(f"{wd} {condition}({fmt_num(info['tmax'])}°/{fmt_num(info['tmin'])}°)")
+        tmax_list.append((info["tmax"], wd))
+        tmin_list.append((info["tmin"], wd))
+        if (info.get("precip_prob") or 0) >= 50:
+            rain_days.append(wd)
+
+    if not any_data:
+        return f"- {label}: 데이터 없음"
+
+    chain = " → ".join(chain_parts)
+    max_t, max_wd = max(tmax_list)
+    min_t, min_wd = min(tmin_list)
+    extra = f" 최고 {fmt_num(max_t)}°C({max_wd})·최저 {fmt_num(min_t)}°C({min_wd})"
+    if rain_days:
+        extra += f", {'·'.join(rain_days)}요일 비 소식"
+
+    return f"- {label}: {chain}.{extra}"
+
+
 def pick_weekend_dates(dates: list) -> tuple:
     """dates(YYYY-MM-DD 리스트)에서 가장 가까운 토요일·일요일 날짜를 찾는다"""
     sat = sun = None
@@ -722,12 +760,13 @@ def build_weekend_report(country_name, weather_list, local_now: datetime):
             continue
         dates = list(w["daily"].keys())
         sat, sun = pick_weekend_dates(dates)
+        entries = []
         if sat:
-            lines.append(format_day_line(f"{label} 토요일({sat})", w["daily"].get(sat)))
-            any_success = any_success or w["daily"].get(sat, {}).get("tmax") is not None
+            entries.append(("토", w["daily"].get(sat)))
         if sun:
-            lines.append(format_day_line(f"{label} 일요일({sun})", w["daily"].get(sun)))
-            any_success = any_success or w["daily"].get(sun, {}).get("tmax") is not None
+            entries.append(("일", w["daily"].get(sun)))
+        lines.append(format_multi_day_line(label, entries))
+        any_success = any_success or any(e[1] and e[1].get("tmax") is not None for e in entries)
 
     if not any_success:
         return None, None
@@ -773,10 +812,9 @@ def build_weekly_report(country_name, weather_list, local_now: datetime):
             continue
         # 일요일에 조회하므로 dates[0]=오늘(일요일), dates[1:6]=다음주 월~금
         dates = list(w["daily"].keys())[1:6]
-        for d in dates:
-            wd_ko = WEEKDAY_KO[datetime.strptime(d, "%Y-%m-%d").weekday()]
-            lines.append(format_day_line(f"{label} {wd_ko}요일({d})", w["daily"].get(d)))
-            any_success = any_success or w["daily"].get(d, {}).get("tmax") is not None
+        entries = [(WEEKDAY_KO[datetime.strptime(d, "%Y-%m-%d").weekday()], w["daily"].get(d)) for d in dates]
+        lines.append(format_multi_day_line(label, entries))
+        any_success = any_success or any(e[1] and e[1].get("tmax") is not None for e in entries)
 
     if not any_success:
         return None, None
@@ -889,20 +927,22 @@ def build_group_weekend_report(group_name, countries_data, local_now: datetime):
                 continue
             dates = list(w["daily"].keys())
             sat, sun = pick_weekend_dates(dates)
+            entries = []
+            sat_info = w["daily"].get(sat) if sat else None
+            sun_info = w["daily"].get(sun) if sun else None
             if sat:
-                info = w["daily"].get(sat)
-                lines.append(format_day_line(f"{label} 토요일({sat})", info))
-                if info and info.get("tmax") is not None:
+                entries.append(("토", sat_info))
+                if sat_info and sat_info.get("tmax") is not None:
                     any_success = True
                     if is_capital:
-                        cap_sat = info
+                        cap_sat = sat_info
             if sun:
-                info = w["daily"].get(sun)
-                lines.append(format_day_line(f"{label} 일요일({sun})", info))
-                if info and info.get("tmax") is not None:
+                entries.append(("일", sun_info))
+                if sun_info and sun_info.get("tmax") is not None:
                     any_success = True
                     if is_capital:
-                        cap_sun = info
+                        cap_sun = sun_info
+            lines.append(format_multi_day_line(label, entries))
         country_blocks.append("\n".join(lines))
         capitals_info.append((country_name, cap_sat, cap_sun))
 
@@ -948,14 +988,16 @@ def build_group_weekly_report(group_name, countries_data, local_now: datetime):
                 lines.append(f"- {label}: 데이터 없음")
                 continue
             dates = list(w["daily"].keys())[1:6]
+            entries = []
             for d in dates:
                 info = w["daily"].get(d)
                 wd_ko = WEEKDAY_KO[datetime.strptime(d, "%Y-%m-%d").weekday()]
-                lines.append(format_day_line(f"{label} {wd_ko}요일({d})", info))
+                entries.append((wd_ko, info))
                 if info and info.get("tmax") is not None:
                     any_success = True
                     if is_capital:
                         cap_days.append(info)
+            lines.append(format_multi_day_line(label, entries))
         country_blocks.append("\n".join(lines))
         capitals_ranges.append((country_name, cap_days))
 
