@@ -14,6 +14,7 @@ weather_report.py
 - 여러 날짜(주말·주간)를 다룰 때는 도시당 한 줄로 압축해서 보여준다(하루하루 나열하지 않음).
 - 워크플로우는 매시 정각에 실행되며, 이 스크립트가 그룹별로 "지금이 발행 시점인지" 판단한다.
 - 대표 이미지는 Pixabay에서 조회해 자동 삽입한다 (태그 기반 검증 포함).
+- Open-Meteo 조회는 일시적 오류 시 최대 3회 재시도한다.
 
 실행: python scripts/weather_report.py
 """
@@ -441,63 +442,71 @@ def should_run_now(tz_name: str):
     return "today", local_now  # 월~금 — 오늘 날씨
 
 
-def fetch_full_weather(lat, lon):
-    """Open-Meteo 현재 날씨 + 10일 일별 상세 예보 조회"""
-    try:
-        res = requests.get(
-            "https://api.open-meteo.com/v1/forecast",
-            params={
-                "latitude": lat,
-                "longitude": lon,
-                "current_weather": "true",
-                "daily": ",".join([
-                    "weathercode",
-                    "temperature_2m_max",
-                    "temperature_2m_min",
-                    "apparent_temperature_max",
-                    "apparent_temperature_min",
-                    "precipitation_sum",
-                    "precipitation_probability_max",
-                    "windspeed_10m_max",
-                    "uv_index_max",
-                ]),
-                "timezone": "auto",
-                "forecast_days": 10,
-            },
-            timeout=15,
-        )
-        if res.status_code != 200:
-            return None
-        data = res.json()
-        daily = data.get("daily", {})
-        dates = daily.get("time", [])
-        if not dates:
-            return None
+def fetch_full_weather(lat, lon, retries: int = 3):
+    """Open-Meteo 현재 날씨 + 10일 일별 상세 예보 조회 (일시적 오류 시 최대 3회 재시도)"""
+    import time as _time
+    last_err = None
+    for attempt in range(retries):
+        try:
+            res = requests.get(
+                "https://api.open-meteo.com/v1/forecast",
+                params={
+                    "latitude": lat,
+                    "longitude": lon,
+                    "current_weather": "true",
+                    "daily": ",".join([
+                        "weathercode",
+                        "temperature_2m_max",
+                        "temperature_2m_min",
+                        "apparent_temperature_max",
+                        "apparent_temperature_min",
+                        "precipitation_sum",
+                        "precipitation_probability_max",
+                        "windspeed_10m_max",
+                        "uv_index_max",
+                    ]),
+                    "timezone": "auto",
+                    "forecast_days": 10,
+                },
+                timeout=15,
+            )
+            if res.status_code == 200:
+                data = res.json()
+                daily = data.get("daily", {})
+                dates = daily.get("time", [])
+                if not dates:
+                    last_err = "empty daily data"
+                else:
+                    by_date = {}
+                    for i, d in enumerate(dates):
+                        def g(key):
+                            arr = daily.get(key)
+                            return arr[i] if arr and i < len(arr) else None
+                        by_date[d] = {
+                            "code": g("weathercode"),
+                            "tmax": g("temperature_2m_max"),
+                            "tmin": g("temperature_2m_min"),
+                            "feels_max": g("apparent_temperature_max"),
+                            "feels_min": g("apparent_temperature_min"),
+                            "precip": g("precipitation_sum"),
+                            "precip_prob": g("precipitation_probability_max"),
+                            "wind_max": g("windspeed_10m_max"),
+                            "uv": g("uv_index_max"),
+                        }
+                    return {
+                        "current": data.get("current_weather", {}),
+                        "daily": by_date,
+                    }
+            else:
+                last_err = f"HTTP {res.status_code}"
+        except Exception as e:
+            last_err = str(e)
 
-        by_date = {}
-        for i, d in enumerate(dates):
-            def g(key):
-                arr = daily.get(key)
-                return arr[i] if arr and i < len(arr) else None
-            by_date[d] = {
-                "code": g("weathercode"),
-                "tmax": g("temperature_2m_max"),
-                "tmin": g("temperature_2m_min"),
-                "feels_max": g("apparent_temperature_max"),
-                "feels_min": g("apparent_temperature_min"),
-                "precip": g("precipitation_sum"),
-                "precip_prob": g("precipitation_probability_max"),
-                "wind_max": g("windspeed_10m_max"),
-                "uv": g("uv_index_max"),
-            }
+        if attempt < retries - 1:
+            _time.sleep(2)  # 재시도 전 잠깐 대기
 
-        return {
-            "current": data.get("current_weather", {}),
-            "daily": by_date,
-        }
-    except Exception as e:
-        print(f"  ⚠️ 날씨 조회 실패 ({lat},{lon}): {e}")
-        return None
+    print(f"  ⚠️ 날씨 조회 실패 ({lat},{lon}, {retries}회 시도): {last_err}")
+    return None
 
 
 def fmt_num(v, digits=0):
