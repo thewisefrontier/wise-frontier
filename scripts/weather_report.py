@@ -7,10 +7,9 @@ weather_report.py
 한국은 별도의 개별 기사로 발행한다. Gemini를 쓰지 않는다 — 실제 수치만 사용.
 
 - 각 그룹은 대표 국가의 "현지 아침"(06~09시) 시간대에 발행한다 (IANA 타임존 기준).
-- 현지 기준 월~목 아침: 오늘 날씨.
-- 현지 기준 금요일 아침: 주말(토·일) 예보.
+- 현지 기준 월~금 아침: 오늘 날씨.
+- 현지 기준 토요일 아침: 주말(토·일) 예보.
 - 현지 기준 일요일 아침: 다음주(월~금) 예보.
-- 현지 기준 토요일은 발행하지 않음.
 - 모든 리포트는 요약 문단으로 시작한 뒤 국가별·지역별 상세 데이터가 이어진다.
 - 워크플로우는 매시 정각에 실행되며, 이 스크립트가 그룹별로 "지금이 발행 시점인지" 판단한다.
 - 대표 이미지는 Pixabay에서 조회해 자동 삽입한다 (태그 기반 검증 포함).
@@ -424,9 +423,8 @@ def should_run_now(tz_name: str):
     """
     이 국가를 지금 실행해야 하는지, 어떤 리포트를 만들어야 하는지 판단.
     반환: (mode, local_now)
-      mode: None(건너뜀) | 'today'(오늘 날씨, 월~목) | 'weekend'(주말예보, 금요일)
-            | 'weekly'(다음주 월~금 예보, 일요일)
-    현지 토요일은 아무것도 발행하지 않는다 (금요일에 주말예보, 일요일에 주간예보로 커버됨).
+      mode: 'today'(오늘 날씨, 월~금) | 'weekend'(주말예보, 토요일 아침)
+            | 'weekly'(다음주 월~금 예보, 일요일 아침)
     """
     local_now = get_local_now(tz_name)
     hour = local_now.hour
@@ -435,13 +433,11 @@ def should_run_now(tz_name: str):
     if not (MORNING_HOUR_START <= hour < MORNING_HOUR_END):
         return None, local_now
 
-    if weekday == 5:  # 토요일 — 발행 없음
-        return None, local_now
     if weekday == 6:  # 일요일 아침 — 다음주(월~금) 예보
         return "weekly", local_now
-    if weekday == 4:  # 금요일 아침 — 주말(토·일) 예보
+    if weekday == 5:  # 토요일 아침 — 주말(토·일) 예보
         return "weekend", local_now
-    return "today", local_now  # 월~목 — 오늘 날씨
+    return "today", local_now  # 월~금 — 오늘 날씨
 
 
 def fetch_full_weather(lat, lon):
@@ -759,7 +755,7 @@ def build_weekend_report(country_name, weather_list, local_now: datetime):
     if not summary:
         summary = f"{today_str} 발표된 {country_name} 주요 지역 주말(토·일) 날씨 예보입니다."
 
-    title = f"주말 {country_name} 날씨 예보 ({local_now.strftime('%m월 %d일')} 현지 금요일 아침 발표)"
+    title = f"주말 {country_name} 날씨 예보 ({local_now.strftime('%m월 %d일')} 현지 토요일 아침 발표)"
     body = summary + "\n\n" + "\n".join(lines)
     return title, body
 
@@ -929,7 +925,7 @@ def build_group_weekend_report(group_name, countries_data, local_now: datetime):
             summary += " 대체로 비 소식 없이 맑을 전망입니다."
         summary += " 국가별 상세는 아래와 같습니다."
 
-    title = f"주말 {group_name} 날씨 예보 ({local_now.strftime('%m월 %d일')} 현지 금요일 아침 발표)"
+    title = f"주말 {group_name} 날씨 예보 ({local_now.strftime('%m월 %d일')} 현지 토요일 아침 발표)"
     body = summary + "\n\n" + "\n\n".join(country_blocks)
     return title, body
 
