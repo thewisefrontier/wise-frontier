@@ -968,6 +968,7 @@
       && !a.subcategory.startsWith('trend_')
       && !a.subcategory.startsWith('realtrend_')
       && !a.subcategory.startsWith('extrend_')
+      && !a.subcategory.startsWith('weather_')
       && !a.subcategory.endsWith('briefing')
       ? `<span class="tag" style="cursor:pointer;" onclick="filterByTag('sector','${a.subcategory}',event)">${a.subcategory}</span>` : '';
     const regionTag = a.region ? `<span class="tag">${regionKo(a.region)}</span>` : '';
