@@ -442,8 +442,34 @@ def should_run_now(tz_name: str):
     return "today", local_now  # 월~금 — 오늘 날씨
 
 
+def _summarize_ampm(hourly: dict) -> dict:
+    """오늘 하루(첫 24시간)의 오전(06~11시)/오후(12~18시) 대표 상태·최대강수확률 요약"""
+    times = hourly.get("time", [])
+    codes = hourly.get("weathercode", [])
+    precip_probs = hourly.get("precipitation_probability", [])
+    hours = []
+    for i in range(min(24, len(times))):
+        hours.append({
+            "hour": i,
+            "code": codes[i] if i < len(codes) else None,
+            "precip_prob": precip_probs[i] if i < len(precip_probs) else None,
+        })
+
+    def pick(hour_range, rep_hour):
+        subset = [h for h in hours if hour_range[0] <= h["hour"] <= hour_range[1]]
+        if not subset:
+            return None, None
+        rep = min(subset, key=lambda h: abs(h["hour"] - rep_hour))
+        max_precip = max((h["precip_prob"] or 0) for h in subset)
+        return rep["code"], max_precip
+
+    am_code, am_precip = pick((6, 11), 9)
+    pm_code, pm_precip = pick((12, 18), 15)
+    return {"am_code": am_code, "am_precip": am_precip, "pm_code": pm_code, "pm_precip": pm_precip}
+
+
 def fetch_full_weather(lat, lon, retries: int = 3):
-    """Open-Meteo 현재 날씨 + 10일 일별 상세 예보 조회 (일시적 오류 시 최대 3회 재시도)"""
+    """Open-Meteo 현재 날씨 + 10일 일별 상세 예보 + 오늘 시간대별(오전/오후) 예보 조회 (일시적 오류 시 최대 3회 재시도)"""
     last_err = None
     for attempt in range(retries):
         try:
@@ -464,6 +490,7 @@ def fetch_full_weather(lat, lon, retries: int = 3):
                         "windspeed_10m_max",
                         "uv_index_max",
                     ]),
+                    "hourly": "weathercode,precipitation_probability",
                     "timezone": "auto",
                     "forecast_days": 10,
                 },
@@ -492,9 +519,11 @@ def fetch_full_weather(lat, lon, retries: int = 3):
                             "wind_max": g("windspeed_10m_max"),
                             "uv": g("uv_index_max"),
                         }
+                    ampm = _summarize_ampm(data.get("hourly", {}))
                     return {
                         "current": data.get("current_weather", {}),
                         "daily": by_date,
+                        "ampm": ampm,
                     }
             else:
                 last_err = f"HTTP {res.status_code}"
@@ -737,7 +766,7 @@ def fetch_cities_weather(cities: list) -> list:
     results = []
     for i, (name, lat, lon, is_capital) in enumerate(cities):
         if i > 0:
-            time.sleep(1)  # 요청 몰림 방지
+            time.sleep(3)  # 요청 몰림 방지
         w = fetch_full_weather(lat, lon)
         results.append((name, is_capital, w))
     return results
@@ -761,43 +790,107 @@ def _find_capital(weather_list):
     return (weather_list[0][0], weather_list[0][2]) if weather_list else (None, None)
 
 
+def format_ampm_line(label: str, today_info: dict, ampm: dict) -> str:
+    """
+    연합뉴스 지역별 날씨 전망 스타일: "▲ 도시 : [오전 상태, 오후 상태] (최저∼최고) <오전 강수확률, 오후 강수확률>"
+    체감온도·최대풍속도 덧붙인다.
+    """
+    if not today_info or today_info.get("tmax") is None:
+        return f"▲ {label} : 데이터 없음"
+
+    am_code = ampm.get("am_code") if ampm else None
+    pm_code = ampm.get("pm_code") if ampm else None
+    am_precip = ampm.get("am_precip") if ampm else None
+    pm_precip = ampm.get("pm_precip") if ampm else None
+
+    am_cond = WEATHER_CODE_KO.get(am_code, WEATHER_CODE_KO.get(today_info["code"], "-")) if am_code is not None else WEATHER_CODE_KO.get(today_info["code"], "-")
+    pm_cond = WEATHER_CODE_KO.get(pm_code, WEATHER_CODE_KO.get(today_info["code"], "-")) if pm_code is not None else WEATHER_CODE_KO.get(today_info["code"], "-")
+
+    tmin = fmt_num(today_info["tmin"])
+    tmax = fmt_num(today_info["tmax"])
+    am_p = fmt_num(am_precip) if am_precip is not None else "-"
+    pm_p = fmt_num(pm_precip) if pm_precip is not None else "-"
+
+    extra = (
+        f" 체감 {fmt_num(today_info['feels_max'])}°C, 최대풍속 {fmt_num(today_info['wind_max'])}km/h"
+    )
+
+    return (
+        f"▲ {label} : [오전 {am_cond}, 오후 {pm_cond}] ({tmin}∼{tmax}) "
+        f"<오전 강수확률 {am_p}%, 오후 강수확률 {pm_p}%>{extra}"
+    )
+
+
 def build_today_report(country_name, weather_list, local_now: datetime):
+    """연합뉴스 지역별 날씨 전망 스타일 — 서두 설명 + 강수량 범위 + 안전 안내 + 도시별 상세"""
     today_str = local_now.strftime("%Y년 %m월 %d일") + f"({WEEKDAY_KO[local_now.weekday()]}, 현지시간)"
     lines = []
+    valid = []  # (name, is_capital, today_info)
     any_success = False
 
     for name, is_capital, w in weather_list:
         label = f"{name}(수도)" if is_capital else name
         if w is None:
-            lines.append(f"- {label}: 데이터 없음")
+            lines.append(f"▲ {label} : 데이터 없음")
             continue
         dates = list(w["daily"].keys())
         today_key = dates[0] if dates else None
         today_info = w["daily"].get(today_key) if today_key else None
-        current_temp = w["current"].get("temperature")
-        lines.append(format_day_line(label, today_info, include_current=current_temp))
-        any_success = any_success or (today_info and today_info.get("tmax") is not None)
+        ampm = w.get("ampm", {})
+        lines.append(format_ampm_line(label, today_info, ampm))
+        if today_info and today_info.get("tmax") is not None:
+            any_success = True
+            valid.append((name, is_capital, today_info))
 
     if not any_success:
         return None, None
 
-    # 수도 기준 설명 문단
+    # ── 서두 문단: 전국(전 도시) 개관 ──
     cap_name, cap_w = _find_capital(weather_list)
-    summary = ""
-    if cap_w is not None:
-        dates = list(cap_w["daily"].keys())
-        cap_info = cap_w["daily"].get(dates[0]) if dates else None
-        if cap_info and cap_info.get("tmax") is not None:
-            condition = WEATHER_CODE_KO.get(cap_info["code"], "")
-            summary = (
-                f"{today_str}, {country_name}의 수도 {cap_name}은 {condition}이며 "
-                f"최고 {fmt_num(cap_info['tmax'])}°C, 최저 {fmt_num(cap_info['tmin'])}°C가 예상됩니다."
-                f"{_describe_condition(cap_info.get('precip_prob'))}"
-                f" 그 외 주요 지역 날씨는 아래와 같습니다."
-            )
+    cap_today = next((info for n, c, info in valid if c), None)
 
-    if not summary:
-        summary = f"{today_str} 기준 {country_name} 주요 지역 실시간 날씨입니다."
+    lede = f"{today_str} {country_name} 주요 지역은 대체로 흐리거나 비가 오는 곳이 있는 가운데 지역별로 날씨 차이가 크겠습니다."
+    if cap_today:
+        cap_condition = WEATHER_CODE_KO.get(cap_today["code"], "")
+        lede = (
+            f"{today_str}, {country_name}의 수도 {cap_name}은 {cap_condition}이며 "
+            f"최고 {fmt_num(cap_today['tmax'])}°C, 최저 {fmt_num(cap_today['tmin'])}°C가 예상됩니다."
+            f"{_describe_condition(cap_today.get('precip_prob'))}"
+        )
+
+    # ── 지역별 예상 강수량 범위 ──
+    rain_cities = [(n, info) for n, c, info in valid if (info.get("precip") or 0) > 0]
+    precip_note = ""
+    if rain_cities:
+        amounts = [info["precip"] for _, info in rain_cities]
+        precip_note = (
+            f" 비가 예상되는 지역의 강수량은 {fmt_num(min(amounts), 1)}~{fmt_num(max(amounts), 1)}mm 수준이며, "
+            f"{', '.join(n for n, _ in rain_cities[:6])} 등에서 비 소식이 있습니다."
+        )
+
+    # ── 안전 안내 (뇌우/돌풍/폭염) ──
+    thunder_cities = [n for n, c, info in valid if info.get("code") in (95, 96, 99)]
+    windy_cities = [n for n, c, info in valid if (info.get("wind_max") or 0) >= 40]
+    heat_cities = [n for n, c, info in valid if (info.get("tmax") or 0) >= 33 or (info.get("feels_max") or 0) >= 33]
+
+    safety_notes = []
+    if thunder_cities:
+        safety_notes.append(f"{', '.join(thunder_cities[:5])} 등에서는 돌풍과 천둥·번개를 동반한 뇌우가 예상되니 외출과 교통 안전에 유의해야 합니다.")
+    if windy_cities:
+        safety_notes.append(f"{', '.join(windy_cities[:5])} 등은 최대풍속 40km/h 이상의 강풍이 예상됩니다.")
+    if heat_cities:
+        safety_notes.append(f"{', '.join(heat_cities[:5])} 등은 체감온도 33°C 안팎의 무더위가 예상되니 온열질환에 유의해야 합니다.")
+    safety_text = (" " + " ".join(safety_notes)) if safety_notes else ""
+
+    # ── 전체 기온·체감 범위 ──
+    tmax_all = [info["tmax"] for _, _, info in valid]
+    tmin_all = [info["tmin"] for _, _, info in valid]
+    feels_all = [info["feels_max"] for _, _, info in valid if info.get("feels_max") is not None]
+    temp_note = f" 이날 아침 최저기온은 {fmt_num(min(tmin_all))}°C, 낮 최고기온은 {fmt_num(max(tmax_all))}°C 수준으로 예보됐습니다."
+    if feels_all:
+        temp_note += f" 체감온도는 최고 {fmt_num(max(feels_all))}°C까지 오르는 곳이 있겠습니다."
+
+    summary = lede + precip_note + safety_text + temp_note + "\n\n다음은 지역별 날씨 전망입니다."
 
     title = f"오늘의 {country_name} 날씨 ({local_now.strftime('%m월 %d일')}, 현지시간)"
     body = summary + "\n\n" + "\n".join(lines)
@@ -917,11 +1010,12 @@ def _capital_day_info(weather_list, date_key):
 
 
 def build_group_today_report(group_name, countries_data, local_now: datetime):
-    """countries_data: [(country_name, weather_list), ...] — 대륙 그룹 오늘 날씨"""
+    """countries_data: [(country_name, weather_list), ...] — 대륙 그룹 오늘 날씨 (오전/오후 상세)"""
     today_str = local_now.strftime("%Y년 %m월 %d일") + f"({WEEKDAY_KO[local_now.weekday()]}, 현지시간)"
 
     capitals_info = []  # (country_name, capital_name, day_info)
     country_blocks = []
+    all_valid = []  # (country_name, city_name, is_capital, today_info)
     any_success = False
 
     for country_name, weather_list in countries_data:
@@ -931,15 +1025,16 @@ def build_group_today_report(group_name, countries_data, local_now: datetime):
         for name, is_capital, w in weather_list:
             label = f"{name}(수도)" if is_capital else name
             if w is None:
-                lines.append(f"- {label}: 데이터 없음")
+                lines.append(f"▲ {label} : 데이터 없음")
                 continue
             dates = list(w["daily"].keys())
             today_key = dates[0] if dates else None
             today_info = w["daily"].get(today_key) if today_key else None
-            current_temp = w["current"].get("temperature")
-            lines.append(format_day_line(label, today_info, include_current=current_temp))
+            ampm = w.get("ampm", {})
+            lines.append(format_ampm_line(label, today_info, ampm))
             if today_info and today_info.get("tmax") is not None:
                 any_success = True
+                all_valid.append((country_name, name, is_capital, today_info))
                 if is_capital:
                     cap_today = today_info
         country_blocks.append("\n".join(lines))
@@ -949,7 +1044,9 @@ def build_group_today_report(group_name, countries_data, local_now: datetime):
         return None, None
 
     successful_caps = [c for c in capitals_info if c[2] is not None]
-    summary = f"{today_str} 기준 {group_name} 주요국 실시간 날씨입니다."
+
+    # ── 서두 개관 ──
+    summary = f"{today_str} 기준 {group_name} 주요국 날씨입니다."
     if successful_caps:
         tmax_all = [c[2]["tmax"] for c in successful_caps]
         tmin_all = [c[2]["tmin"] for c in successful_caps]
@@ -962,7 +1059,23 @@ def build_group_today_report(group_name, countries_data, local_now: datetime):
             summary += f" {', '.join(rainy[:5])} 등에서는 비 소식이 있습니다."
         else:
             summary += " 대체로 비 소식 없이 맑은 날씨입니다."
-        summary += " 국가별 상세는 아래와 같습니다."
+
+    # ── 안전 안내 (뇌우/강풍/폭염) — 국가 단위 도시 전체를 훑는다 ──
+    thunder = [f"{cn}({city})" for cn, city, ic, info in all_valid if info.get("code") in (95, 96, 99)]
+    windy = [f"{cn}({city})" for cn, city, ic, info in all_valid if (info.get("wind_max") or 0) >= 40]
+    heat = [f"{cn}({city})" for cn, city, ic, info in all_valid if (info.get("tmax") or 0) >= 38 or (info.get("feels_max") or 0) >= 38]
+
+    safety_notes = []
+    if thunder:
+        safety_notes.append(f"{', '.join(thunder[:5])} 등에서는 돌풍과 천둥·번개를 동반한 뇌우가 예상되니 유의해야 합니다.")
+    if windy:
+        safety_notes.append(f"{', '.join(windy[:5])} 등은 최대풍속 40km/h 이상의 강풍이 예상됩니다.")
+    if heat:
+        safety_notes.append(f"{', '.join(heat[:5])} 등은 폭염 수준의 무더위가 예상됩니다.")
+    if safety_notes:
+        summary += " " + " ".join(safety_notes)
+
+    summary += "\n\n다음은 국가별·지역별 날씨 전망입니다."
 
     title = f"오늘의 {group_name} 날씨 ({local_now.strftime('%m월 %d일')}, 현지시간)"
     body = summary + "\n\n" + "\n\n".join(country_blocks)
@@ -1180,7 +1293,7 @@ def run():
         countries_data = []
         for ci, country_name in enumerate(gconf["countries"]):
             if ci > 0:
-                time.sleep(1)  # 국가 간 요청 몰림 방지
+                time.sleep(3)  # 국가 간 요청 몰림 방지
             _, _, cities = COUNTRIES[country_name]
             weather_list = fetch_cities_weather(cities)
             countries_data.append((country_name, weather_list))
