@@ -1170,6 +1170,194 @@ def build_korea_weekend_report_kma(cities: list, local_now: datetime):
     return title, body
 
 
+# ── 기상청(KMA) 중기예보 — 한국 "다음주(월~금) 예보" 전용 ──────────
+# 월~수(+1~+3일)는 단기예보, 목~금(+4~+5일)은 중기예보를 이어붙인다.
+
+KMA_MID_LAND_CODE = {
+    "서울": "11B00000", "부산": "11H20000", "대구": "11H10000",
+    "광주": "11F20000", "제주": "11G00000",
+}
+KMA_MID_TEMP_CODE = {
+    "서울": "11B10101", "부산": "11H20201", "대구": "11H10701",
+    "광주": "11F20501", "제주": "11G00201",
+}
+
+
+def _kma_mid_tmfc(local_now: datetime) -> str:
+    """중기예보 발표시각(06,18시) 중 지금 시점에서 가장 최근 발표를 고른다 (발표 후 30분 여유)"""
+    date = local_now.date()
+    hour, minute = local_now.hour, local_now.minute
+    if hour > 18 or (hour == 18 and minute >= 30):
+        chosen = 18
+    elif hour > 6 or (hour == 6 and minute >= 30):
+        chosen = 6
+    else:
+        date = date - timedelta(days=1)
+        chosen = 18
+    return f"{date.strftime('%Y%m%d')}{chosen:02d}00"
+
+
+def _fetch_kma_mid(endpoint: str, reg_id: str, tm_fc: str, retries: int = 3):
+    """중기육상예보/중기기온 공통 조회 로직. 실패 시 None."""
+    if not KMA_API_KEY:
+        return None
+    last_err = None
+    for attempt in range(retries):
+        try:
+            res = requests.get(
+                f"http://apis.data.go.kr/1360000/MidFcstInfoService/{endpoint}",
+                params={
+                    "serviceKey": KMA_API_KEY,
+                    "numOfRows": 10,
+                    "pageNo": 1,
+                    "dataType": "JSON",
+                    "regId": reg_id,
+                    "tmFc": tm_fc,
+                },
+                timeout=15,
+            )
+            if res.status_code == 200:
+                data = res.json()
+                header = data.get("response", {}).get("header", {})
+                if header.get("resultCode") == "00":
+                    items = data.get("response", {}).get("body", {}).get("items", {}).get("item", [])
+                    if items:
+                        return items[0]
+                    last_err = "empty items"
+                else:
+                    last_err = f"KMA {header.get('resultCode')}: {header.get('resultMsg')}"
+            else:
+                last_err = f"HTTP {res.status_code}"
+        except Exception as e:
+            last_err = str(e)
+        if attempt < retries - 1:
+            time.sleep(2)
+    print(f"  ⚠️ {endpoint} 조회 실패 ({reg_id}): {last_err}")
+    return None
+
+
+def format_kma_merged_line(label: str, entries: list) -> str:
+    """단기+중기를 이어붙인 도시당 한 줄 (요일약칭, {tmax,tmin,condition,precip_prob} or None)"""
+    chain_parts, tmax_list, tmin_list, rain_days = [], [], [], []
+    any_data = False
+    for wd, info in entries:
+        if not info:
+            chain_parts.append(f"{wd} 데이터없음")
+            continue
+        any_data = True
+        chain_parts.append(f"{wd} {info['condition']}({fmt_num(info['tmax'])}°/{fmt_num(info['tmin'])}°)")
+        tmax_list.append((info["tmax"], wd))
+        tmin_list.append((info["tmin"], wd))
+        if (info.get("precip_prob") or 0) >= 50:
+            rain_days.append(wd)
+
+    if not any_data:
+        return f"- {label}: 데이터 없음"
+
+    chain = " → ".join(chain_parts)
+    max_t, max_wd = max(tmax_list)
+    min_t, min_wd = min(tmin_list)
+    extra = f" 최고 {fmt_num(max_t)}°C({max_wd})·최저 {fmt_num(min_t)}°C({min_wd})"
+    if rain_days:
+        extra += f", {'·'.join(rain_days)}요일 비 소식"
+    return f"- {label}: {chain}.{extra}"
+
+
+def build_korea_weekly_report_kma(cities: list, local_now: datetime):
+    """
+    한국 전용 — 단기예보(월~수) + 중기예보(목~금)를 이어붙인 '다음주(월~금)' 예보.
+    일요일 아침 발행. tmFc 발표시각에 따라 날짜가 밀릴 수 있어, 목·금 실제 날짜 기준으로
+    "N일후" 오프셋을 동적으로 계산한다. 필요 데이터가 없으면 None 반환(호출부에서 Open-Meteo 대체).
+    """
+    today_str = local_now.strftime("%Y년 %m월 %d일") + f"({WEEKDAY_KO[local_now.weekday()]})"
+
+    tm_fc = _kma_mid_tmfc(local_now)
+    tm_fc_date = datetime.strptime(tm_fc[:8], "%Y%m%d").date()
+
+    mon_date = (local_now + timedelta(days=1)).date()
+    tue_date = (local_now + timedelta(days=2)).date()
+    wed_date = (local_now + timedelta(days=3)).date()
+    thu_date = (local_now + timedelta(days=4)).date()
+    fri_date = (local_now + timedelta(days=5)).date()
+
+    thu_offset = (thu_date - tm_fc_date).days
+    fri_offset = (fri_date - tm_fc_date).days
+    if not (4 <= thu_offset <= 10) or not (4 <= fri_offset <= 10):
+        print(f"  ⚠️ 중기예보 오프셋 범위 밖(목={thu_offset}, 금={fri_offset}) — Open-Meteo로 대체")
+        return None, None
+
+    lines = []
+    cap_entries = None
+    any_valid_city = False
+
+    for i, (name, lat, lon, is_capital) in enumerate(cities):
+        label = f"{name}(수도)" if is_capital else name
+
+        by_date = fetch_kma_vilage_fcst_all(name, lat, lon, local_now)  # 월~수(단기)
+        land = _fetch_kma_mid("getMidLandFcst", KMA_MID_LAND_CODE.get(name), tm_fc) if name in KMA_MID_LAND_CODE else None
+        ta = _fetch_kma_mid("getMidTa", KMA_MID_TEMP_CODE.get(name), tm_fc) if name in KMA_MID_TEMP_CODE else None
+        if i < len(cities) - 1:
+            time.sleep(1)
+
+        entries = []
+        for d, wd_label in [(mon_date, "월"), (tue_date, "화"), (wed_date, "수")]:
+            info = by_date.get(d.strftime("%Y%m%d")) if by_date else None
+            if info:
+                entries.append((wd_label, {
+                    "tmax": info["tmax"], "tmin": info["tmin"],
+                    "condition": info["pm_condition"], "precip_prob": info.get("pm_precip"),
+                }))
+            else:
+                entries.append((wd_label, None))
+
+        for offset, wd_label in [(thu_offset, "목"), (fri_offset, "금")]:
+            if land and ta:
+                tmax_v = ta.get(f"taMax{offset}")
+                tmin_v = ta.get(f"taMin{offset}")
+                cond = land.get(f"wf{offset}Pm") or land.get(f"wf{offset}Am") or land.get(f"wf{offset}")
+                precip = land.get(f"rnSt{offset}Pm") or land.get(f"rnSt{offset}")
+                if tmax_v is not None and tmin_v is not None:
+                    entries.append((wd_label, {
+                        "tmax": float(tmax_v), "tmin": float(tmin_v),
+                        "condition": cond or "-",
+                        "precip_prob": int(precip) if precip is not None else None,
+                    }))
+                else:
+                    entries.append((wd_label, None))
+            else:
+                entries.append((wd_label, None))
+
+        lines.append(format_kma_merged_line(label, entries))
+        if any(info is not None for _, info in entries):
+            any_valid_city = True
+        if is_capital:
+            cap_entries = entries
+
+    if not any_valid_city:
+        return None, None
+
+    summary = f"{today_str} 발표된 다음주(월~금) 전망입니다(기상청 단기·중기예보 기준)."
+    if cap_entries:
+        cap_valid = [(wd, info) for wd, info in cap_entries if info]
+        if cap_valid:
+            tmax_all = [info["tmax"] for _, info in cap_valid]
+            tmin_all = [info["tmin"] for _, info in cap_valid]
+            rain_days = [wd for wd, info in cap_valid if (info.get("precip_prob") or 0) >= 50]
+            rain_str = (
+                f"{'·'.join(rain_days)}요일 비 소식이 있으니 참고하시기 바랍니다."
+                if rain_days else "당분간 비 소식 없이 대체로 맑은 날씨가 이어질 전망입니다."
+            )
+            summary = (
+                f"{today_str} 발표된 다음주(월~금) 전망입니다(기상청 단기·중기예보 기준). "
+                f"한국의 수도는 이번 주 최고 {fmt_num(max(tmax_all))}°C, 최저 {fmt_num(min(tmin_all))}°C 사이를 오갈 것으로 보입니다. "
+                f"{rain_str}"
+            )
+
+    title = f"다음주 한국 날씨 예보 (월~금, {local_now.strftime('%m월 %d일')} 기상청 기준)"
+    body = summary + "\n\n다음은 지역별 날씨 전망입니다.\n\n" + "\n".join(lines)
+    return title, body
+
+
 def _find_capital(weather_list):
     for name, is_capital, w in weather_list:
         if is_capital:
@@ -1713,6 +1901,12 @@ def run():
             title, body = build_korea_weekend_report_kma(cities, local_now)
             if title:
                 print("  (기상청 단기예보 사용)")
+            else:
+                print("  ⚠️ 기상청 조회 실패 — Open-Meteo로 대체")
+        elif mode == "weekly" and KMA_API_KEY:
+            title, body = build_korea_weekly_report_kma(cities, local_now)
+            if title:
+                print("  (기상청 단기+중기예보 사용)")
             else:
                 print("  ⚠️ 기상청 조회 실패 — Open-Meteo로 대체")
 
