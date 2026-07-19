@@ -1,8 +1,9 @@
 name: NewsFinal - Auto Dedup
 
 on:
-  schedule:
-    - cron: '*/30 * * * *'    # 30분마다
+  workflow_run:
+    workflows: ["NewsFinal - Auto Run"]
+    types: [completed]
   workflow_dispatch:
 
 permissions:
@@ -15,6 +16,7 @@ concurrency:
 jobs:
   dedup:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: 코드 체크아웃
