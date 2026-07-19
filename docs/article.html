@@ -25,7 +25,7 @@
       var id = new URLSearchParams(location.search).get('id');
       if (id) {
         var link = document.querySelector('link[rel="canonical"]');
-        if link) link.setAttribute('href', 'https://newsfinal.co.kr/article?id=' + encodeURIComponent(id));
+        if (link) link.setAttribute('href', 'https://newsfinal.co.kr/article?id=' + encodeURIComponent(id));
       }
     })();
   </script>
@@ -435,6 +435,7 @@
           && !a.subcategory.startsWith('trend_')
           && !a.subcategory.startsWith('realtrend_')
           && !a.subcategory.startsWith('extrend_')
+          && !a.subcategory.startsWith('weather_')
           && !a.subcategory.endsWith('briefing')
           ? `<span class="tag">${a.subcategory}</span>` : ''}
         ${a.region ? `<span class="tag">${regionKo(a.region)}</span>` : ''}
