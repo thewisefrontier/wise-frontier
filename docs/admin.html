@@ -1439,12 +1439,8 @@
             <div style="font-size:11px;color:var(--muted);margin-bottom:2px;">#${pair.id_b} · ${pair.created_at_b} ${aIsLater ? earlierLabel : laterLabel}</div>
             <a href="/article?id=${pair.id_b}" target="_blank" style="color:var(--text);font-size:12px;">${pair.title_b}</a>
           </td>
-          <td style="width:8%;text-align:center;font-size:13px;font-weight:700;color:${scoreColor};">${Math.round(pair.score * 100)}%</td>
-          <td style="width:12%;text-align:center;">
-            <button class="btn btn-primary" style="font-size:11px;padding:4px 8px;"
-              onclick="mergeDuplicates(${pair.id_a}, ${pair.id_b}, '${pair.created_at_a}', '${pair.created_at_b}', this)">통합</button>
-          </td>
-          <td style="width:12%;text-align:center;">
+          <td style="width:12%;text-align:center;font-size:13px;font-weight:700;color:${scoreColor};">${Math.round(pair.score * 100)}%</td>
+          <td style="width:20%;text-align:center;">
             <button class="btn" style="font-size:11px;padding:4px 8px;background:var(--bg3);"
               onclick="restoreArticle(${laterId}, this)">복구(중복아님)</button>
           </td>
@@ -1454,15 +1450,14 @@
     document.getElementById('main-content').innerHTML = `
       <div style="padding:20px;">
         <div style="font-size:13px;font-weight:700;margin-bottom:8px;">중복기사 (최근 72시간 · 유사도 50% 이상) — ${data.length}쌍</div>
-        <div style="font-size:11px;color:var(--muted);margin-bottom:16px;">나중에 작성된 기사는 자동으로 미발행 처리됩니다. 실제 중복이 아니면 "복구"를, 통합하려면 "통합"을 누르세요.</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:16px;">나중에 작성된 기사는 자동으로 미발행 처리됩니다. 실제 중복이 아니면 "복구"를 누르세요.</div>
         <table style="width:100%;border-collapse:collapse;">
           <thead>
             <tr style="border-bottom:1px solid var(--border);">
               <th style="text-align:left;padding:8px 10px;font-size:11px;color:var(--muted);width:34%;">기사 A</th>
               <th style="text-align:left;padding:8px 10px;font-size:11px;color:var(--muted);width:34%;">기사 B</th>
-              <th style="text-align:center;padding:8px 10px;font-size:11px;color:var(--muted);width:8%;">유사도</th>
-              <th style="width:12%;"></th>
-              <th style="width:12%;"></th>
+              <th style="text-align:center;padding:8px 10px;font-size:11px;color:var(--muted);width:12%;">유사도</th>
+              <th style="width:20%;"></th>
             </tr>
           </thead>
           <tbody id="dup-tbody">${rows}</tbody>
@@ -1483,47 +1478,6 @@
       toast(`오류: ${e.message}`, 'error');
       btn.disabled = false;
       btn.textContent = '복구(중복아님)';
-    }
-  }
-
-  async function mergeDuplicates(id_a, id_b, created_at_a, created_at_b, btn) {
-    // created_at 이른 쪽이 id_keep (나중 기사는 이미 자동 미발행 상태)
-    const id_keep = created_at_a <= created_at_b ? id_a : id_b;
-    const id_remove = id_keep === id_a ? id_b : id_a;
-
-    if (!confirm(`통합하시겠습니까?\n유지: #${id_keep}\n미발행: #${id_remove}\n\nGemini가 두 기사를 합쳐 재작성합니다.`)) return;
-
-    btn.disabled = true;
-    btn.textContent = '처리 중...';
-
-    try {
-      const { data: { session } } = await sb.auth.getSession();
-      if (!session) { toast('로그인 세션이 없습니다', 'error'); btn.disabled = false; btn.textContent = '통합'; return; }
-
-      const res = await fetch(`${SUPABASE_URL}/functions/v1/merge-articles`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`
-        },
-        body: JSON.stringify({ id_keep, id_remove })
-      });
-
-      const result = await res.json();
-      if (!res.ok) throw new Error(`${result.error || res.statusText}${result.detail ? ' — ' + result.detail : ''}`);
-
-      await sb.from('articles').update({ dedup_reviewed: true }).eq('id', id_remove);
-
-      toast(`통합 완료: #${id_keep} 업데이트, #${id_remove} 미발행`, 'success');
-      const rowId = `dup-row-${Math.min(id_a,id_b)}-${Math.max(id_a,id_b)}`;
-      const row = document.getElementById(rowId);
-      if (row) row.remove();
-
-    } catch (e) {
-      toast(`오류: ${e.message}`, 'error');
-      alert(`통합 실패:\n${e.message}`);
-      btn.disabled = false;
-      btn.textContent = '통합';
     }
   }
 
