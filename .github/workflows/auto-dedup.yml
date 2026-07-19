@@ -1,0 +1,52 @@
+name: NewsFinal - Auto Dedup
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'    # 30분마다
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: newsfinal-auto-dedup
+  cancel-in-progress: false
+
+jobs:
+  dedup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v5
+
+      - name: Python 설정
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: 패키지 설치
+        run: pip install -r requirements.txt
+
+      - name: 중복기사 자동 미발행
+        run: python scripts/auto_dedup.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+
+      - name: 웹사이트 데이터 내보내기
+        run: python scripts/export_articles.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+
+      - name: 변경사항 커밋 및 푸시
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add -A
+          git diff --staged --quiet || git commit -m "Auto-unpublish duplicate articles"
+          git pull --rebase origin main
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
