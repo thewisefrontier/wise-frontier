@@ -2,15 +2,18 @@
 weather_report.py
 ------------------
 전세계 주요국 + 프론티어마켓 국가들의 날씨를 실시간 API(Open-Meteo, 무료·키 불필요)로
-조회해 국가별로 각각 별도의 기사를 생성한다. 각 기사는 수도를 포함해 그 나라의
-여러 지역(2~5개 도시) 날씨를 함께 다룬다. Gemini를 쓰지 않는다 — 실제 수치만 사용.
+조회한다. 한국을 제외한 국가들은 대륙 그룹(아프리카/동남아시아/중동/남아시아/중앙아시아/
+중남미/북미/동아시아/유럽/오세아니아, 총 10개)으로 묶어 각 그룹당 기사 하나를 생성하고,
+한국은 별도의 개별 기사로 발행한다. Gemini를 쓰지 않는다 — 실제 수치만 사용.
 
-- 각 국가의 "현지 아침"(06~09시) 시간대에 그 나라 리포트를 발행한다 (국가별 IANA 타임존 기준).
-- 현지 기준 평일(월~목): 오늘 날씨. 현지 기준 금요일 아침: 주말(토·일) 예보.
-- 현지 기준 월요일 아침에는 오늘 날씨에 더해 이번주(월~금) 예보도 함께 발행한다.
-- 현지 기준 토·일요일은 발행하지 않음 (금요일 아침에 이미 주말 예보 발행).
-- 워크플로우는 매시 정각에 실행되며, 이 스크립트가 국가별로 "지금이 그 나라 아침인지" 판단한다.
-- 국가별 대표 이미지는 Pixabay에서 조회해 자동 삽입한다 (태그 기반 검증 포함).
+- 각 그룹은 대표 국가의 "현지 아침"(06~09시) 시간대에 발행한다 (IANA 타임존 기준).
+- 현지 기준 월~목 아침: 오늘 날씨.
+- 현지 기준 금요일 아침: 주말(토·일) 예보.
+- 현지 기준 일요일 아침: 다음주(월~금) 예보.
+- 현지 기준 토요일은 발행하지 않음.
+- 모든 리포트는 요약 문단으로 시작한 뒤 국가별·지역별 상세 데이터가 이어진다.
+- 워크플로우는 매시 정각에 실행되며, 이 스크립트가 그룹별로 "지금이 발행 시점인지" 판단한다.
+- 대표 이미지는 Pixabay에서 조회해 자동 삽입한다 (태그 기반 검증 포함).
 
 실행: python scripts/weather_report.py
 """
@@ -348,6 +351,51 @@ COUNTRIES = {
     ]),
 }
 
+# ── 대륙 그룹 (한국 제외 — 한국은 별도 개별 기사) ──────────
+# group_name: {region, tz(대표 국가 타임존), primary(대표국·이미지용), countries(그룹 소속 국가명 리스트)}
+GROUPS = {
+    "아프리카": {
+        "region": "africa", "tz": "Africa/Lagos", "primary": "나이지리아",
+        "countries": ["나이지리아", "케냐", "남아공", "이집트", "모로코", "알제리", "에티오피아", "가나", "탄자니아", "앙골라"],
+    },
+    "동남아시아": {
+        "region": "southeast_asia", "tz": "Asia/Jakarta", "primary": "인도네시아",
+        "countries": ["베트남", "인도네시아", "태국", "필리핀", "미얀마", "캄보디아", "말레이시아", "싱가포르"],
+    },
+    "중동": {
+        "region": "middle_east", "tz": "Asia/Riyadh", "primary": "사우디아라비아",
+        "countries": ["사우디아라비아", "아랍에미리트", "튀르키예", "이스라엘", "이란", "이라크", "카타르", "요르단"],
+    },
+    "남아시아": {
+        "region": "south_asia", "tz": "Asia/Kolkata", "primary": "인도",
+        "countries": ["인도", "방글라데시", "파키스탄", "스리랑카", "네팔"],
+    },
+    "중앙아시아": {
+        "region": "central_asia", "tz": "Asia/Almaty", "primary": "카자흐스탄",
+        "countries": ["카자흐스탄", "우즈베키스탄", "키르기스스탄"],
+    },
+    "중남미": {
+        "region": "latin_america", "tz": "America/Sao_Paulo", "primary": "브라질",
+        "countries": ["브라질", "멕시코", "아르헨티나", "칠레", "콜롬비아", "페루", "쿠바", "도미니카공화국"],
+    },
+    "북미": {
+        "region": "north_america", "tz": "America/New_York", "primary": "미국",
+        "countries": ["미국", "캐나다"],
+    },
+    "동아시아": {
+        "region": "east_asia", "tz": "Asia/Shanghai", "primary": "중국",
+        "countries": ["일본", "중국", "몽골"],
+    },
+    "유럽": {
+        "region": "europe", "tz": "Europe/Berlin", "primary": "독일",
+        "countries": ["영국", "독일", "프랑스", "이탈리아", "스페인", "러시아", "폴란드", "우크라이나"],
+    },
+    "오세아니아": {
+        "region": "oceania", "tz": "Australia/Sydney", "primary": "호주",
+        "countries": ["호주", "뉴질랜드"],
+    },
+}
+
 # WMO 날씨 코드 → 한국어 설명
 WEATHER_CODE_KO = {
     0: "맑음", 1: "대체로 맑음", 2: "부분적으로 흐림", 3: "흐림",
@@ -374,21 +422,26 @@ def get_local_now(tz_name: str) -> datetime:
 
 def should_run_now(tz_name: str):
     """
-    이 국가를 지금 실행해야 하는지 판단.
-    반환: (실행여부: bool, weekend_mode: bool, local_now: datetime)
+    이 국가를 지금 실행해야 하는지, 어떤 리포트를 만들어야 하는지 판단.
+    반환: (mode, local_now)
+      mode: None(건너뜀) | 'today'(오늘 날씨, 월~목) | 'weekend'(주말예보, 금요일)
+            | 'weekly'(다음주 월~금 예보, 일요일)
+    현지 토요일은 아무것도 발행하지 않는다 (금요일에 주말예보, 일요일에 주간예보로 커버됨).
     """
     local_now = get_local_now(tz_name)
     hour = local_now.hour
     weekday = local_now.weekday()  # 0=월 ... 6=일
 
-    if weekday in (5, 6):  # 현지 토·일요일은 건너뜀 (금요일에 주말예보 이미 발행)
-        return False, False, local_now
-
     if not (MORNING_HOUR_START <= hour < MORNING_HOUR_END):
-        return False, False, local_now
+        return None, local_now
 
-    weekend_mode = (weekday == 4)  # 현지 금요일 아침 → 주말 예보
-    return True, weekend_mode, local_now
+    if weekday == 5:  # 토요일 — 발행 없음
+        return None, local_now
+    if weekday == 6:  # 일요일 아침 — 다음주(월~금) 예보
+        return "weekly", local_now
+    if weekday == 4:  # 금요일 아침 — 주말(토·일) 예보
+        return "weekend", local_now
+    return "today", local_now  # 월~목 — 오늘 날씨
 
 
 def fetch_full_weather(lat, lon):
@@ -600,6 +653,24 @@ def fetch_cities_weather(cities: list) -> list:
     return results
 
 
+def _describe_condition(precip_prob):
+    """강수확률 기반 간단 설명 문구"""
+    if precip_prob is None:
+        return ""
+    if precip_prob >= 60:
+        return " 비 소식이 있으니 우산을 챙기는 게 좋겠습니다."
+    if precip_prob >= 30:
+        return " 흐리거나 비가 오락가락할 수 있습니다."
+    return " 비 소식 없이 대체로 맑은 날씨가 예상됩니다."
+
+
+def _find_capital(weather_list):
+    for name, is_capital, w in weather_list:
+        if is_capital:
+            return name, w
+    return (weather_list[0][0], weather_list[0][2]) if weather_list else (None, None)
+
+
 def build_today_report(country_name, weather_list, local_now: datetime):
     today_str = local_now.strftime("%Y년 %m월 %d일") + f"({WEEKDAY_KO[local_now.weekday()]}, 현지시간)"
     lines = []
@@ -620,8 +691,26 @@ def build_today_report(country_name, weather_list, local_now: datetime):
     if not any_success:
         return None, None
 
+    # 수도 기준 설명 문단
+    cap_name, cap_w = _find_capital(weather_list)
+    summary = ""
+    if cap_w is not None:
+        dates = list(cap_w["daily"].keys())
+        cap_info = cap_w["daily"].get(dates[0]) if dates else None
+        if cap_info and cap_info.get("tmax") is not None:
+            condition = WEATHER_CODE_KO.get(cap_info["code"], "")
+            summary = (
+                f"{today_str}, {country_name}의 수도 {cap_name}은 {condition}이며 "
+                f"최고 {fmt_num(cap_info['tmax'])}°C, 최저 {fmt_num(cap_info['tmin'])}°C가 예상됩니다."
+                f"{_describe_condition(cap_info.get('precip_prob'))}"
+                f" 그 외 주요 지역 날씨는 아래와 같습니다."
+            )
+
+    if not summary:
+        summary = f"{today_str} 기준 {country_name} 주요 지역 실시간 날씨입니다."
+
     title = f"오늘의 {country_name} 날씨 ({local_now.strftime('%m월 %d일')}, 현지시간)"
-    body = f"{today_str} 기준 {country_name} 주요 지역 실시간 날씨입니다.\n\n" + "\n".join(lines)
+    body = summary + "\n\n" + "\n".join(lines)
     return title, body
 
 
@@ -647,13 +736,36 @@ def build_weekend_report(country_name, weather_list, local_now: datetime):
     if not any_success:
         return None, None
 
+    # 수도 기준 설명 문단
+    cap_name, cap_w = _find_capital(weather_list)
+    summary = ""
+    if cap_w is not None:
+        dates = list(cap_w["daily"].keys())
+        sat, sun = pick_weekend_dates(dates)
+        sat_info = cap_w["daily"].get(sat) if sat else None
+        sun_info = cap_w["daily"].get(sun) if sun else None
+        if sat_info and sun_info and sat_info.get("tmax") is not None and sun_info.get("tmax") is not None:
+            sat_cond = WEATHER_CODE_KO.get(sat_info["code"], "")
+            sun_cond = WEATHER_CODE_KO.get(sun_info["code"], "")
+            max_precip = max(sat_info.get("precip_prob") or 0, sun_info.get("precip_prob") or 0)
+            summary = (
+                f"이번 주말 {country_name}의 수도 {cap_name}은 토요일 {sat_cond}"
+                f"(최고 {fmt_num(sat_info['tmax'])}°C/최저 {fmt_num(sat_info['tmin'])}°C), "
+                f"일요일 {sun_cond}(최고 {fmt_num(sun_info['tmax'])}°C/최저 {fmt_num(sun_info['tmin'])}°C)로 예상됩니다."
+                f"{_describe_condition(max_precip)}"
+                f" 그 외 주요 지역 예보는 아래와 같습니다."
+            )
+
+    if not summary:
+        summary = f"{today_str} 발표된 {country_name} 주요 지역 주말(토·일) 날씨 예보입니다."
+
     title = f"주말 {country_name} 날씨 예보 ({local_now.strftime('%m월 %d일')} 현지 금요일 아침 발표)"
-    body = f"{today_str} 발표된 {country_name} 주요 지역 주말(토·일) 날씨 예보입니다.\n\n" + "\n".join(lines)
+    body = summary + "\n\n" + "\n".join(lines)
     return title, body
 
 
 def build_weekly_report(country_name, weather_list, local_now: datetime):
-    """월요일 아침 전용 — 이번주(월~금 5일) 예보"""
+    """일요일 아침 전용 — 다음주(월~금 5일) 예보"""
     today_str = local_now.strftime("%Y년 %m월 %d일") + f"({WEEKDAY_KO[local_now.weekday()]}, 현지시간)"
     lines = []
     any_success = False
@@ -663,7 +775,8 @@ def build_weekly_report(country_name, weather_list, local_now: datetime):
         if w is None:
             lines.append(f"- {label}: 데이터 없음")
             continue
-        dates = list(w["daily"].keys())[:5]  # 오늘(월)부터 금요일까지 5일
+        # 일요일에 조회하므로 dates[0]=오늘(일요일), dates[1:6]=다음주 월~금
+        dates = list(w["daily"].keys())[1:6]
         for d in dates:
             wd_ko = WEEKDAY_KO[datetime.strptime(d, "%Y-%m-%d").weekday()]
             lines.append(format_day_line(f"{label} {wd_ko}요일({d})", w["daily"].get(d)))
@@ -672,16 +785,219 @@ def build_weekly_report(country_name, weather_list, local_now: datetime):
     if not any_success:
         return None, None
 
-    title = f"이번주 {country_name} 날씨 예보 (월~금, {local_now.strftime('%m월 %d일')} 현지 월요일 아침 발표)"
-    body = f"{today_str} 발표된 {country_name} 주요 지역 이번주(월~금) 날씨 예보입니다.\n\n" + "\n".join(lines)
+    # 수도 기준 설명 문단 (5일 범위 요약)
+    cap_name, cap_w = _find_capital(weather_list)
+    summary = ""
+    if cap_w is not None:
+        cap_dates = list(cap_w["daily"].keys())[1:6]
+        cap_days = [cap_w["daily"].get(d) for d in cap_dates if cap_w["daily"].get(d, {}).get("tmax") is not None]
+        if cap_days:
+            tmax_all = [d["tmax"] for d in cap_days]
+            tmin_all = [d["tmin"] for d in cap_days]
+            rain_days = sum(1 for d in cap_days if (d.get("precip_prob") or 0) >= 50)
+            rain_str = (
+                f"5일 중 {rain_days}일 정도 비가 예상되니 참고하시기 바랍니다."
+                if rain_days > 0 else "당분간 비 소식 없이 대체로 맑은 날씨가 이어질 전망입니다."
+            )
+            summary = (
+                f"{today_str} 발표된 다음주(월~금) 전망입니다. {country_name}의 수도 {cap_name}은 "
+                f"이번 주 최고 {fmt_num(max(tmax_all))}°C, 최저 {fmt_num(min(tmin_all))}°C 사이를 오갈 것으로 보입니다. "
+                f"{rain_str} 그 외 주요 지역 예보는 아래와 같습니다."
+            )
+
+    if not summary:
+        summary = f"{today_str} 발표된 {country_name} 주요 지역 다음주(월~금) 날씨 예보입니다."
+
+    title = f"다음주 {country_name} 날씨 예보 (월~금, {local_now.strftime('%m월 %d일')} 현지 일요일 아침 발표)"
+    body = summary + "\n\n" + "\n".join(lines)
     return title, body
 
 
-def save_report(country_name, region, title, body, kind: str, local_now: datetime):
-    """kind: 'today' | 'weekend' | 'weekly' — DB 중복방지 태그 구분용"""
+def _capital_day_info(weather_list, date_key):
+    """weather_list에서 수도의 특정 날짜 day_info를 반환"""
+    cap_name, cap_w = _find_capital(weather_list)
+    if cap_w is None:
+        return cap_name, None
+    return cap_name, cap_w["daily"].get(date_key)
+
+
+def build_group_today_report(group_name, countries_data, local_now: datetime):
+    """countries_data: [(country_name, weather_list), ...] — 대륙 그룹 오늘 날씨"""
+    today_str = local_now.strftime("%Y년 %m월 %d일") + f"({WEEKDAY_KO[local_now.weekday()]}, 현지시간)"
+
+    capitals_info = []  # (country_name, capital_name, day_info)
+    country_blocks = []
+    any_success = False
+
+    for country_name, weather_list in countries_data:
+        lines = [f"[{country_name}]"]
+        cap_name, cap_w = _find_capital(weather_list)
+        cap_today = None
+        for name, is_capital, w in weather_list:
+            label = f"{name}(수도)" if is_capital else name
+            if w is None:
+                lines.append(f"- {label}: 데이터 없음")
+                continue
+            dates = list(w["daily"].keys())
+            today_key = dates[0] if dates else None
+            today_info = w["daily"].get(today_key) if today_key else None
+            current_temp = w["current"].get("temperature")
+            lines.append(format_day_line(label, today_info, include_current=current_temp))
+            if today_info and today_info.get("tmax") is not None:
+                any_success = True
+                if is_capital:
+                    cap_today = today_info
+        country_blocks.append("\n".join(lines))
+        capitals_info.append((country_name, cap_name, cap_today))
+
+    if not any_success:
+        return None, None
+
+    successful_caps = [c for c in capitals_info if c[2] is not None]
+    summary = f"{today_str} 기준 {group_name} 주요국 실시간 날씨입니다."
+    if successful_caps:
+        tmax_all = [c[2]["tmax"] for c in successful_caps]
+        tmin_all = [c[2]["tmin"] for c in successful_caps]
+        rainy = [c[0] for c in successful_caps if (c[2].get("precip_prob") or 0) >= 50]
+        summary = (
+            f"{today_str} 기준 {group_name} 주요국은 최저 {fmt_num(min(tmin_all))}°C에서 "
+            f"최고 {fmt_num(max(tmax_all))}°C 사이의 기온을 보이고 있습니다."
+        )
+        if rainy:
+            summary += f" {', '.join(rainy[:5])} 등에서는 비 소식이 있습니다."
+        else:
+            summary += " 대체로 비 소식 없이 맑은 날씨입니다."
+        summary += " 국가별 상세는 아래와 같습니다."
+
+    title = f"오늘의 {group_name} 날씨 ({local_now.strftime('%m월 %d일')}, 현지시간)"
+    body = summary + "\n\n" + "\n\n".join(country_blocks)
+    return title, body
+
+
+def build_group_weekend_report(group_name, countries_data, local_now: datetime):
+    """대륙 그룹 주말(토·일) 예보"""
+    today_str = local_now.strftime("%Y년 %m월 %d일") + f"({WEEKDAY_KO[local_now.weekday()]}, 현지시간)"
+
+    capitals_info = []
+    country_blocks = []
+    any_success = False
+
+    for country_name, weather_list in countries_data:
+        lines = [f"[{country_name}]"]
+        cap_name, cap_w = _find_capital(weather_list)
+        cap_sat = cap_sun = None
+        for name, is_capital, w in weather_list:
+            label = f"{name}(수도)" if is_capital else name
+            if w is None:
+                lines.append(f"- {label}: 데이터 없음")
+                continue
+            dates = list(w["daily"].keys())
+            sat, sun = pick_weekend_dates(dates)
+            if sat:
+                info = w["daily"].get(sat)
+                lines.append(format_day_line(f"{label} 토요일({sat})", info))
+                if info and info.get("tmax") is not None:
+                    any_success = True
+                    if is_capital:
+                        cap_sat = info
+            if sun:
+                info = w["daily"].get(sun)
+                lines.append(format_day_line(f"{label} 일요일({sun})", info))
+                if info and info.get("tmax") is not None:
+                    any_success = True
+                    if is_capital:
+                        cap_sun = info
+        country_blocks.append("\n".join(lines))
+        capitals_info.append((country_name, cap_sat, cap_sun))
+
+    if not any_success:
+        return None, None
+
+    successful = [c for c in capitals_info if c[1] and c[2]]
+    summary = f"{today_str} 발표된 {group_name} 주요국 주말(토·일) 날씨 예보입니다."
+    if successful:
+        all_tmax = [c[1]["tmax"] for c in successful] + [c[2]["tmax"] for c in successful]
+        all_tmin = [c[1]["tmin"] for c in successful] + [c[2]["tmin"] for c in successful]
+        rainy = [c[0] for c in successful if max(c[1].get("precip_prob") or 0, c[2].get("precip_prob") or 0) >= 50]
+        summary = (
+            f"이번 주말 {group_name} 주요국은 최저 {fmt_num(min(all_tmin))}°C에서 "
+            f"최고 {fmt_num(max(all_tmax))}°C 사이를 오갈 전망입니다."
+        )
+        if rainy:
+            summary += f" {', '.join(rainy[:5])} 등에서는 비 소식이 있습니다."
+        else:
+            summary += " 대체로 비 소식 없이 맑을 전망입니다."
+        summary += " 국가별 상세는 아래와 같습니다."
+
+    title = f"주말 {group_name} 날씨 예보 ({local_now.strftime('%m월 %d일')} 현지 금요일 아침 발표)"
+    body = summary + "\n\n" + "\n\n".join(country_blocks)
+    return title, body
+
+
+def build_group_weekly_report(group_name, countries_data, local_now: datetime):
+    """대륙 그룹 다음주(월~금) 예보 — 일요일 아침 전용"""
+    today_str = local_now.strftime("%Y년 %m월 %d일") + f"({WEEKDAY_KO[local_now.weekday()]}, 현지시간)"
+
+    capitals_ranges = []  # (country_name, [day_info,...])
+    country_blocks = []
+    any_success = False
+
+    for country_name, weather_list in countries_data:
+        lines = [f"[{country_name}]"]
+        cap_name, cap_w = _find_capital(weather_list)
+        cap_days = []
+        for name, is_capital, w in weather_list:
+            label = f"{name}(수도)" if is_capital else name
+            if w is None:
+                lines.append(f"- {label}: 데이터 없음")
+                continue
+            dates = list(w["daily"].keys())[1:6]
+            for d in dates:
+                info = w["daily"].get(d)
+                wd_ko = WEEKDAY_KO[datetime.strptime(d, "%Y-%m-%d").weekday()]
+                lines.append(format_day_line(f"{label} {wd_ko}요일({d})", info))
+                if info and info.get("tmax") is not None:
+                    any_success = True
+                    if is_capital:
+                        cap_days.append(info)
+        country_blocks.append("\n".join(lines))
+        capitals_ranges.append((country_name, cap_days))
+
+    if not any_success:
+        return None, None
+
+    successful = [c for c in capitals_ranges if c[1]]
+    summary = f"{today_str} 발표된 {group_name} 주요국 다음주(월~금) 날씨 예보입니다."
+    if successful:
+        all_tmax = [d["tmax"] for c in successful for d in c[1]]
+        all_tmin = [d["tmin"] for c in successful for d in c[1]]
+        rainy = [c[0] for c in successful if any((d.get("precip_prob") or 0) >= 50 for d in c[1])]
+        summary = (
+            f"{today_str} 발표된 다음주(월~금) 전망입니다. {group_name} 주요국은 최저 {fmt_num(min(all_tmin))}°C에서 "
+            f"최고 {fmt_num(max(all_tmax))}°C 사이를 오갈 것으로 보입니다."
+        )
+        if rainy:
+            summary += f" {', '.join(rainy[:5])} 등에서는 비 소식이 있는 날이 있으니 참고하시기 바랍니다."
+        else:
+            summary += " 당분간 비 소식 없이 대체로 맑은 날씨가 이어질 전망입니다."
+        summary += " 국가별 상세는 아래와 같습니다."
+
+    title = f"다음주 {group_name} 날씨 예보 (월~금, {local_now.strftime('%m월 %d일')} 현지 일요일 아침 발표)"
+    body = summary + "\n\n" + "\n\n".join(country_blocks)
+    return title, body
+
+
+def save_report(name, region, title, body, kind: str, local_now: datetime, countries: list, image_country: str, key: str):
+    """
+    name: 표시용 이름(국가명 또는 대륙 그룹명) — country 필드와 위젯 표시에 사용
+    key: subcategory에 쓸 고유 키(국가명 또는 'group_아프리카' 등, 다른 종류끼리 충돌 방지)
+    countries: DB의 countries 배열에 넣을 국가명 리스트
+    image_country: Pixabay 이미지 검색에 사용할 국가명(그룹이면 대표국)
+    kind: 'today' | 'weekend' | 'weekly' — DB 중복방지 태그 구분용
+    """
     now_str_kst = now_kst().strftime("%Y-%m-%d %H:%M")  # DB created_at은 사이트 표준(KST)으로 저장
     tag = f"{kind}{local_now.strftime('%Y%m%d')}"
-    subcategory = f"weather_{country_name}_{tag}"
+    subcategory = f"weather_{key}_{tag}"
 
     check = requests.get(
         _sb_url(),
@@ -695,10 +1011,10 @@ def save_report(country_name, region, title, body, kind: str, local_now: datetim
         timeout=15,
     )
     if check.status_code in (200, 206) and check.json():
-        print(f"  [SKIP] {country_name}({kind}) 리포트 이미 존재 (현지 {local_now.strftime('%Y-%m-%d %H:%M')})")
+        print(f"  [SKIP] {name}({kind}) 리포트 이미 존재 (현지 {local_now.strftime('%Y-%m-%d %H:%M')})")
         return
 
-    image_url = fetch_country_image(country_name)
+    image_url = fetch_country_image(image_country)
 
     payload = {
         "title_en": title,
@@ -710,9 +1026,9 @@ def save_report(country_name, region, title, body, kind: str, local_now: datetim
         "category": "날씨",
         "subcategory": subcategory,
         "region": region,
-        "country": country_name,
+        "country": name,
         "country_flag": "",
-        "countries": [country_name],
+        "countries": countries,
         "image_url": image_url,
         "score": 1,
         "created_at": now_str_kst,
@@ -728,9 +1044,9 @@ def save_report(country_name, region, title, body, kind: str, local_now: datetim
     if res.status_code in (200, 201):
         data = res.json()
         art_id = data[0].get("id", -1) if data else -1
-        print(f"  ✅ {country_name}({kind}) 저장 완료 (id={art_id}, 현지 {local_now.strftime('%H:%M')})")
+        print(f"  ✅ {name}({kind}) 저장 완료 (id={art_id}, 현지 {local_now.strftime('%H:%M')})")
     else:
-        print(f"  ❌ {country_name}({kind}) 저장 실패: HTTP {res.status_code} - {res.text[:200]}")
+        print(f"  ❌ {name}({kind}) 저장 실패: HTTP {res.status_code} - {res.text[:200]}")
 
 
 def run():
@@ -738,40 +1054,62 @@ def run():
         print("[SKIP] SUPABASE 환경변수 없음")
         return
 
-    print(f"[날씨] {len(COUNTRIES)}개국 점검 — 현재 UTC {datetime.now(timezone.utc).strftime('%H:%M')}")
+    print(f"[날씨] 대륙그룹 {len(GROUPS)}개 + 한국 점검 — 현재 UTC {datetime.now(timezone.utc).strftime('%H:%M')}")
+
+    GROUP_BUILDERS = {
+        "today": build_group_today_report,
+        "weekend": build_group_weekend_report,
+        "weekly": build_group_weekly_report,
+    }
+    COUNTRY_BUILDERS = {
+        "today": build_today_report,
+        "weekend": build_weekend_report,
+        "weekly": build_weekly_report,
+    }
+    MODE_LABEL = {"today": "오늘날씨", "weekend": "주말예보", "weekly": "다음주예보"}
 
     ran = 0
-    for country_name, (region, tz_name, cities) in COUNTRIES.items():
-        do_run, weekend_mode, local_now = should_run_now(tz_name)
-        if not do_run:
+
+    # ── 대륙 그룹 처리 ──
+    for group_name, gconf in GROUPS.items():
+        mode, local_now = should_run_now(gconf["tz"])
+        if mode is None:
             continue
 
-        is_monday = (local_now.weekday() == 0)
-        mode_label = "주말예보" if weekend_mode else ("오늘날씨+주간예보" if is_monday else "오늘날씨")
-        print(f"→ {country_name} (현지 {local_now.strftime('%H:%M')}, {mode_label})")
+        print(f"→ [그룹] {group_name} (현지 {local_now.strftime('%H:%M')}, {MODE_LABEL[mode]})")
 
-        weather_list = fetch_cities_weather(cities)
+        countries_data = []
+        for country_name in gconf["countries"]:
+            _, _, cities = COUNTRIES[country_name]
+            weather_list = fetch_cities_weather(cities)
+            countries_data.append((country_name, weather_list))
 
-        if weekend_mode:
-            title, body = build_weekend_report(country_name, weather_list, local_now)
-            if title:
-                save_report(country_name, region, title, body, "weekend", local_now)
-                ran += 1
-            else:
-                print(f"  ❌ {country_name} 모든 도시 조회 실패 — 건너뜀")
+        title, body = GROUP_BUILDERS[mode](group_name, countries_data, local_now)
+        if title:
+            save_report(
+                group_name, gconf["region"], title, body, mode, local_now,
+                countries=gconf["countries"], image_country=gconf["primary"],
+                key=f"group_{group_name}",
+            )
+            ran += 1
         else:
-            title, body = build_today_report(country_name, weather_list, local_now)
-            if title:
-                save_report(country_name, region, title, body, "today", local_now)
-                ran += 1
-            else:
-                print(f"  ❌ {country_name} 모든 도시 조회 실패 — 건너뜀")
+            print(f"  ❌ {group_name} 모든 국가 조회 실패 — 건너뜀")
 
-            if is_monday:
-                wtitle, wbody = build_weekly_report(country_name, weather_list, local_now)
-                if wtitle:
-                    save_report(country_name, region, wtitle, wbody, "weekly", local_now)
-                    ran += 1
+    # ── 한국은 별도 개별 기사 ──
+    region, tz_name, cities = COUNTRIES["한국"]
+    mode, local_now = should_run_now(tz_name)
+    if mode is not None:
+        print(f"→ 한국 (현지 {local_now.strftime('%H:%M')}, {MODE_LABEL[mode]})")
+        weather_list = fetch_cities_weather(cities)
+        title, body = COUNTRY_BUILDERS[mode]("한국", weather_list, local_now)
+        if title:
+            save_report(
+                "한국", region, title, body, mode, local_now,
+                countries=["한국"], image_country="한국", key="한국",
+            )
+            ran += 1
+        else:
+            print(f"  ❌ 한국 모든 도시 조회 실패 — 건너뜀")
 
     print(f"[날씨] 완료 — 이번 실행에서 {ran}건 처리")
 
