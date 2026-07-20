@@ -1019,7 +1019,7 @@ def fetch_kma_vilage_fcst_all(name: str, lat: float, lon: float, local_now: date
 
 
 def format_kma_line(label: str, kma: dict) -> str:
-    """기상청 단기예보 데이터를 연합뉴스 스타일 한 줄로"""
+    """기상청 단기예보 데이터를 뉴스 스타일 한 줄로"""
     if not kma:
         return f"▲ {label} : 데이터 없음"
     am_p = kma["am_precip"] if kma["am_precip"] is not None else "-"
@@ -1044,7 +1044,7 @@ def _kma_fetch_cities(cities: list, local_now: datetime) -> list:
 
 
 def build_korea_today_report_kma(cities: list, local_now: datetime):
-    """한국 전용 — 기상청 단기예보 기반 '오늘 날씨' (연합뉴스 스타일)"""
+    """한국 전용 — 기상청 단기예보 기반 뉴스 스타일 '오늘 날씨' 기사 생성"""
     today_str = local_now.strftime("%Y년 %m월 %d일") + f"({WEEKDAY_KO[local_now.weekday()]})"
     target_date = local_now.strftime("%Y%m%d")
     lines = []
@@ -1094,8 +1094,7 @@ def build_korea_today_report_kma(cities: list, local_now: datetime):
     lede += f" 전국적으로는 최저 {fmt_num(min(tmin_all))}°C에서 최고 {fmt_num(max(tmax_all))}°C의 분포를 보일 전망이다."
 
     max_temp = fmt_num(max([k["tmax"] for _, _, k in valid]))
-    main_feature = "맑음" if "맑" in lede else ("비" if "비" in lede else "흐림")
-    title = f"한국 날씨, 최고 {max_temp}°C…{main_feature}"
+    title = f"한국, {_weather_phrase(lede, max_temp)}"
     legend = "[지역별 날씨 전망] [오전/오후](최저∼최고기온) | 강수확률"
     body = lede + "\n\n" + legend + "\n\n" + "\n".join(lines)
     return title, body
@@ -1169,7 +1168,7 @@ def build_korea_weekend_report_kma(cities: list, local_now: datetime):
 
     sat_f = "맑음" if "맑" in lines[0] else ("비" if "비" in lines[0] else "흐림")
     sun_f = "맑음" if "맑" in lines[1] else ("비" if "비" in lines[1] else "흐림")
-    title = f"주말 한국 날씨, 토요일 {sat_f}…일요일 {sun_f}"
+    title = f"주말 한국, {_weekend_phrase(sat_f, sun_f)}"
     legend = "다음은 지역별 주말 날씨 전망입니다.\n[토요일, 일요일](최저∼최고기온) <오전 강수확률, 오후 강수확률>"
     body = lede + "\n\n" + legend + "\n\n" + "\n".join(lines)
     return title, body
@@ -1358,11 +1357,73 @@ def build_korea_weekly_report_kma(cities: list, local_now: datetime):
                 f"{rain_str}"
             )
 
-    main_pattern = "고기압" if "고기압" in lede else ("저기압" if "저기압" in lede else "변덕스러운 날씨")
-    title = f"다음주 한국 날씨, {main_pattern} 영향…최고 32°C"
+    _kw_tmax_all = [d["tmax"] for c in [c for c in capitals_ranges if c[1]] for d in c[1]]
+    _kw_max = fmt_num(max(_kw_tmax_all)) if _kw_tmax_all else "?"
+    title = f"다음주 한국, {_weekly_phrase(summary, _kw_max)}"
     body = summary + "\n\n다음은 지역별 날씨 전망입니다.\n\n" + "\n".join(lines)
     return title, body
 
+
+
+def _weather_phrase(lede: str, max_temp_str: str, min_temp_str: str = "") -> str:
+    """lede에서 핵심 날씨 상황을 짧은 구로 추출."""
+    # 특이 기상 우선
+    if "폭염" in lede or "폭서" in lede:
+        return f"최고 {max_temp_str}°C…폭염 기승"
+    if "열대야" in lede:
+        return f"최고 {max_temp_str}°C…열대야 주의"
+    if "태풍" in lede:
+        return f"최고 {max_temp_str}°C…태풍 영향"
+    if "특보" in lede and "비" in lede:
+        return f"최고 {max_temp_str}°C…호우 특보"
+    if "폭설" in lede or "대설" in lede:
+        return f"최고 {max_temp_str}°C…대설 특보"
+    # 강수 여부
+    if "뇌우" in lede or "천둥" in lede:
+        return f"최고 {max_temp_str}°C…곳곳 뇌우"
+    if "소나기" in lede:
+        return f"최고 {max_temp_str}°C…오후 소나기"
+    if "비" in lede and "강풍" in lede:
+        return f"최고 {max_temp_str}°C…비·강풍"
+    if "비" in lede:
+        return f"최고 {max_temp_str}°C…비 소식"
+    if "흐림" in lede or "구름" in lede:
+        return f"최고 {max_temp_str}°C…흐리고 습해"
+    # 맑음 계열
+    try:
+        t = float(max_temp_str)
+        if t >= 35:
+            return f"최고 {max_temp_str}°C…폭염 수준"
+        if t >= 30:
+            return f"최고 {max_temp_str}°C…무더운 날씨"
+        if t <= 5:
+            return f"최고 {max_temp_str}°C…쌀쌀한 날씨"
+        if t <= 0:
+            return f"최고 {max_temp_str}°C…강추위"
+    except (ValueError, TypeError):
+        pass
+    return f"최고 {max_temp_str}°C…맑고 더운 날씨" if "맑" in lede else f"최고 {max_temp_str}°C…대체로 맑아"
+
+
+def _weekend_phrase(sat_f: str, sun_f: str) -> str:
+    """주말 날씨 제목용 요약구."""
+    if sat_f == sun_f:
+        cond = "맑은 날씨" if sat_f == "맑음" else ("비 소식" if sat_f == "비" else "흐린 날씨")
+        return f"토·일 {cond}"
+    sat_ko = "맑음" if sat_f == "맑음" else ("비" if sat_f == "비" else "흐림")
+    sun_ko = "맑음" if sun_f == "맑음" else ("비" if sun_f == "비" else "흐림")
+    return f"토요일 {sat_ko}…일요일 {sun_ko}"
+
+
+def _weekly_phrase(lede_or_summary: str, max_temp_str: str) -> str:
+    """다음주 날씨 제목용 요약구."""
+    if "비" in lede_or_summary and "맑" in lede_or_summary:
+        return f"비 소식 뒤 맑아져…최고 {max_temp_str}°C"
+    if "비" in lede_or_summary:
+        return f"비 오는 날 포함…최고 {max_temp_str}°C"
+    if "폭염" in lede_or_summary:
+        return f"폭염 지속…최고 {max_temp_str}°C"
+    return f"대체로 맑아…최고 {max_temp_str}°C"
 
 def _find_capital(weather_list):
     for name, is_capital, w in weather_list:
@@ -1373,7 +1434,7 @@ def _find_capital(weather_list):
 
 def format_ampm_line(label: str, today_info: dict, ampm: dict) -> str:
     """
-    연합뉴스 지역별 날씨 전망 스타일: "▲ 도시 : [오전 상태, 오후 상태] (최저∼최고) <오전 강수확률, 오후 강수확률>"
+    뉴스 스타일 형식: "▲ 도시 : [오전 상태, 오후 상태] (최저∼최고) <오전 강수확률, 오후 강수확률>"
     체감온도·최대풍속도 덧붙인다.
     """
     if not today_info or today_info.get("tmax") is None:
@@ -1403,7 +1464,7 @@ def format_ampm_line(label: str, today_info: dict, ampm: dict) -> str:
 
 
 def build_today_report(country_name, weather_list, local_now: datetime):
-    """연합뉴스 지역별 날씨 전망 스타일 — 서두 설명 + 강수량 범위 + 안전 안내 + 도시별 상세"""
+    """뉴스 스타일 날씨 기사 — 서두 설명 + 강수량 범위 + 안전 안내 + 도시별 상세"""
     today_str = local_now.strftime("%Y년 %m월 %d일") + f"({WEEKDAY_KO[local_now.weekday()]}, 현지시간)"
     lines = []
     valid = []  # (name, is_capital, today_info)
@@ -1474,8 +1535,7 @@ def build_today_report(country_name, weather_list, local_now: datetime):
     summary = lede + precip_note + safety_text + temp_note + "\n\n다음은 지역별 날씨 전망입니다."
 
     max_temp = fmt_num(max([k["tmax"] for _, _, k in valid]))
-    main_feature = "맑음" if "맑" in lede else ("비" if "비" in lede else "흐림")
-    title = f"{country_name} 날씨, 최고 {max_temp}°C…{main_feature}"
+    title = f"{country_name}, {_weather_phrase(lede, max_temp)}"
     body = summary + "\n\n" + "\n".join(lines)
     return title, body
 
@@ -1528,7 +1588,7 @@ def build_weekend_report(country_name, weather_list, local_now: datetime):
 
     sat_f = "맑음" if "맑" in lines[0] else ("비" if "비" in lines[0] else "흐림")
     sun_f = "맑음" if "맑" in lines[1] else ("비" if "비" in lines[1] else "흐림")
-    title = f"주말 {country_name} 날씨, 토요일 {sat_f}…일요일 {sun_f}"
+    title = f"주말 {country_name}, {_weekend_phrase(sat_f, sun_f)}"
     body = summary + "\n\n" + "\n".join(lines)
     return title, body
 
@@ -1581,7 +1641,9 @@ def build_weekly_report(country_name, weather_list, local_now: datetime):
     if not summary:
         summary = f"{today_str} 발표된 {country_name} 주요 지역 다음주(월~금) 날씨 예보입니다."
 
-    title = f"다음주 {country_name} 날씨, 변화 예상…최고 28°C"
+    _cw_tmax_list = [d["tmax"] for c in capitals_ranges if c[1] for d in c[1]]
+    _cw_max = fmt_num(max(_cw_tmax_list)) if _cw_tmax_list else "?"
+    title = f"다음주 {country_name}, {_weekly_phrase(summary, _cw_max)}"
     body = summary + "\n\n" + "\n".join(lines)
     return title, body
 
@@ -1663,8 +1725,7 @@ def build_group_today_report(group_name, countries_data, local_now: datetime):
     summary += "\n\n다음은 국가별·지역별 날씨 전망입니다."
 
     max_temp = fmt_num(max([k["tmax"] for _, _, k in valid]))
-    main_feature = "맑음" if "맑" in lede else ("비" if "비" in lede else "흐림")
-    title = f"{group_name} 날씨, 최고 {max_temp}°C…{main_feature}"
+    title = f"{group_name}, {_weather_phrase(lede, max_temp)}"
     body = summary + "\n\n" + "\n\n".join(country_blocks)
     return title, body
 
@@ -1728,7 +1789,7 @@ def build_group_weekend_report(group_name, countries_data, local_now: datetime):
 
     sat_f = "맑음" if "맑" in lines[0] else ("비" if "비" in lines[0] else "흐림")
     sun_f = "맑음" if "맑" in lines[1] else ("비" if "비" in lines[1] else "흐림")
-    title = f"주말 {group_name} 날씨, 토요일 {sat_f}…일요일 {sun_f}"
+    title = f"주말 {group_name}, {_weekend_phrase(sat_f, sun_f)}"
     body = summary + "\n\n" + "\n\n".join(country_blocks)
     return title, body
 
@@ -1783,7 +1844,9 @@ def build_group_weekly_report(group_name, countries_data, local_now: datetime):
             summary += " 당분간 비 소식 없이 대체로 맑은 날씨가 이어질 전망입니다."
         summary += " 국가별 상세는 아래와 같습니다."
 
-    title = f"다음주 {group_name} 날씨, 변화 예상…최고 28°C"
+    _gw_tmax_list = [d["tmax"] for c in successful for d in c[1]]
+    _gw_max = fmt_num(max(_gw_tmax_list)) if _gw_tmax_list else "?"
+    title = f"다음주 {group_name}, {_weekly_phrase(summary, _gw_max)}"
     body = summary + "\n\n" + "\n\n".join(country_blocks)
     return title, body
 
