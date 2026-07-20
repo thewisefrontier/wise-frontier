@@ -10,7 +10,6 @@
   <link rel="shortcut icon" href="/favicon.ico">
   <meta name="description" content="NewsFinal 세계 날씨 — 프론티어마켓 및 주요국 실시간 날씨와 주말·주간 예보">
   <title>세계의 날씨 — NewsFinal</title>
-  <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7TKGYEM467"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -63,48 +62,87 @@
     nav.page-nav a:first-child { border-left: 1px solid var(--border); }
     nav.page-nav a:hover, nav.page-nav a.active { color: var(--accent2); background: var(--bg2); }
 
-    .weather-hero { background: var(--text); color: var(--bg); padding: 28px 20px; text-align: center; }
-    .weather-title { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 900; }
-    .weather-sub { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #c8a060; margin-top: 6px; letter-spacing: 0.05em; }
+    /* 메인과 동일한 레이아웃 */
+    .container {
+      max-width: 1400px; margin: 0 auto; padding: 24px;
+      display: grid; grid-template-columns: 1fr 300px; gap: 24px;
+    }
 
-    .page-container { max-width: 900px; margin: 0 auto; padding: 28px 24px 60px; }
+    .feed-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--text);
+    }
+    .feed-title { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 1px; }
+    .feed-count { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); }
 
-    .filter-tabs { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
+    /* 필터 탭 */
+    .filter-tabs { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
     .filter-tab {
-      padding: 6px 14px; font-size: 11px; font-family: 'IBM Plex Mono', monospace;
+      padding: 5px 12px; font-size: 11px; font-family: 'IBM Plex Mono', monospace;
       border: 1px solid var(--border); background: var(--bg2); color: var(--muted);
       cursor: pointer; transition: color 0.2s, background 0.2s;
     }
     .filter-tab:hover { color: var(--accent2); }
     .filter-tab.active { background: var(--accent2); color: #fff; border-color: var(--accent2); }
 
-    .weather-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+    /* 날씨 카드 — index.html article-card 스타일 */
     .weather-card {
       background: var(--bg2); border: 1px solid var(--border);
-      border-left: 3px solid var(--accent2); padding: 14px 16px;
-      cursor: pointer; transition: background 0.2s, border-left-color 0.2s;
+      border-left: 3px solid var(--border); padding: 14px 16px;
+      cursor: pointer; margin-bottom: 8px;
+      transition: border-left-color 0.2s, background 0.2s;
     }
-    .weather-card:hover { background: var(--bg3); }
-    .weather-card-country { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--accent2); font-weight: 700; margin-bottom: 6px; }
-    .weather-card-title { font-size: 13px; font-weight: 700; line-height: 1.4; margin-bottom: 6px; }
-    .weather-card-meta { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); }
+    .weather-card:hover { border-left-color: var(--accent2); background: var(--bg3); }
+    .weather-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; gap: 8px; }
+    .weather-card-country { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--accent2); font-weight: 700; padding: 2px 7px; border: 1px solid var(--accent2); background: var(--bg3); }
+    .weather-card-time { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); white-space: nowrap; }
+    .weather-card-title { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.4; }
 
-    .empty { text-align: center; padding: 40px 20px; color: var(--muted); font-family: 'IBM Plex Mono', monospace; font-size: 12px; }
-
-    footer {
-      border-top: 1px solid var(--border); background: var(--bg2);
-      padding: 24px; text-align: center; font-family: 'IBM Plex Mono', monospace;
-      font-size: 11px; color: var(--muted); margin-top: 0;
+    /* 사이드바 */
+    .sidebar { display: flex; flex-direction: column; gap: 16px; }
+    .widget { background: var(--bg2); border: 1px solid var(--border); }
+    .widget-header {
+      padding: 10px 14px; border-bottom: 2px solid var(--text);
+      font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text);
+      letter-spacing: 1px; text-transform: uppercase; display: flex; justify-content: space-between; font-weight: 500;
     }
+    .cal-item {
+      padding: 9px 14px; border-bottom: 1px solid var(--border);
+      font-size: 12px; display: flex; gap: 8px; align-items: flex-start;
+    }
+    .cal-item:last-child { border-bottom: none; }
+    .cal-dot { width: 7px; height: 7px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+    .cal-dot.high { background: #c0392b; }
+    .cal-dot.medium { background: #c8a060; }
+    .cal-dot.low { background: var(--muted); }
+    .cal-meta { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); margin-bottom: 2px; }
+    .cal-title { color: var(--text); line-height: 1.4; }
+
+    .briefing-item { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+    .briefing-item:last-child { border-bottom: none; }
+    .briefing-region { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--accent); margin-bottom: 4px; }
+    .briefing-title { font-size: 12px; color: var(--text); line-height: 1.5; cursor: pointer; }
+    .briefing-title:hover { color: var(--accent); }
+
+    .empty { padding: 30px; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); }
+
+    footer { border-top: 2px solid var(--text); background: var(--bg2); padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 40px; }
     footer a { color: var(--muted); text-decoration: none; }
     footer a:hover { color: var(--accent); }
 
-    @media (max-width: 600px) {
-      header { padding: 0 14px; }
-      .header-top { margin: 0 -14px; padding: 8px 14px; }
+    @media (max-width: 1024px) { .container { grid-template-columns: 1fr 260px; } }
+    @media (max-width: 768px) {
+      .container { grid-template-columns: 1fr; padding: 16px; }
+      .sidebar { display: none; }
+      header { padding: 0 16px; }
+      .header-top { margin: 0 -16px; padding: 5px 16px; }
       .logo { font-size: 24px; }
-      .page-container { padding: 20px 16px 40px; }
-      .weather-grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 8px; text-align: center; padding: 16px; }
+    }
+    @media (max-width: 480px) {
+      .logo { font-size: 20px; }
+      header { padding: 0 12px; }
+      .container { padding: 12px; }
     }
   </style>
 </head>
@@ -139,19 +177,37 @@
   </nav>
 </header>
 
-<div class="weather-hero">
-  <div class="weather-title">세계의 날씨</div>
-  <div class="weather-sub" id="weather-updated">WEATHER HUB</div>
-</div>
+<div class="container">
+  <main>
+    <div class="feed-header">
+      <span class="feed-title">● 세계의 날씨</span>
+      <span class="feed-count" id="weather-count">로딩 중...</span>
+    </div>
+    <div class="filter-tabs" id="filter-tabs"></div>
+    <div id="weather-container"><div class="empty">날씨 데이터 로딩 중</div></div>
+  </main>
 
-<div class="page-container">
-  <div class="filter-tabs" id="filter-tabs"></div>
-  <div class="weather-grid" id="weather-container"><div class="empty">날씨 데이터 로딩 중</div></div>
+  <aside class="sidebar">
+    <div class="widget">
+      <div class="widget-header">
+        <span>예정 일정</span>
+        <a href="/calendar.html" style="font-size:10px;color:var(--accent2);text-decoration:none;">전체 →</a>
+      </div>
+      <div id="calendar-widget"><div class="empty">데이터 준비 중</div></div>
+    </div>
+    <div class="widget">
+      <div class="widget-header">
+        <span>오늘의 브리핑</span>
+        <a href="/" style="font-size:10px;color:var(--accent2);text-decoration:none;">전체 →</a>
+      </div>
+      <div id="briefing-widget"><div class="empty">데이터 준비 중</div></div>
+    </div>
+  </aside>
 </div>
 
 <footer>
   <div>NEWSFINAL © 2026</div>
-  <div style="margin-top:6px;">
+  <div>
     <a href="/about.html">소개</a> ·
     <a href="/privacy.html">개인정보처리방침</a> ·
     <a href="/terms.html">이용약관</a>
@@ -191,7 +247,7 @@
   function renderFilters() {
     const counts = { all: allWeather.length, today: 0, weekend: 0, weekly: 0 };
     allWeather.forEach(a => counts[classify(a)]++);
-    const labels = { all: '전체', today: '오늘', weekend: '주말예보', weekly: '다음주예보' };
+    const labels = { all: '전체', today: '오늘', weekend: '주말 예보', weekly: '다음주 예보' };
     document.getElementById('filter-tabs').innerHTML = Object.keys(labels).map(key =>
       `<div class="filter-tab ${currentFilter===key?'active':''}" onclick="setFilter('${key}')">${labels[key]} (${counts[key]})</div>`
     ).join('');
@@ -208,6 +264,8 @@
     let items = currentFilter === 'all' ? allWeather : allWeather.filter(a => classify(a) === currentFilter);
     items = [...items].sort((a, b) => (a.country || '').localeCompare(b.country || '', 'ko'));
 
+    document.getElementById('weather-count').textContent = `${items.length}건`;
+
     if (!items.length) {
       container.innerHTML = '<div class="empty">해당 리포트가 없습니다.</div>';
       return;
@@ -217,9 +275,13 @@
       const title = a.title_ko || a.title_en || '';
       return `
         <div class="weather-card" onclick="location.href='article?id=${a.id}'">
-          <div class="weather-card-country">🌍 ${a.country || '기타'}</div>
+          <div class="weather-card-header">
+            <div style="display:flex;gap:6px;align-items:center;">
+              <span class="weather-card-country">${a.country || '기타'}</span>
+            </div>
+            <span class="weather-card-time">${formatTime(a.created_at)}</span>
+          </div>
           <div class="weather-card-title">${title}</div>
-          <div class="weather-card-meta">${formatTime(a.created_at)}</div>
         </div>`;
     }).join('');
   }
@@ -229,11 +291,11 @@
       const res = await fetch('data/articles.json');
       if (!res.ok) throw new Error();
       const raw = await res.json();
-      allWeather = raw.filter(a => a.category === '날씨');
+      const weatherAll = raw.filter(a => a.category === '날씨');
 
       // 국가/그룹별 최신 1건만
       const byCountry = {};
-      allWeather.forEach(a => {
+      weatherAll.forEach(a => {
         const c = a.country || '기타';
         if (!byCountry[c] || (a.created_at || '') > (byCountry[c].created_at || '')) {
           byCountry[c] = a;
@@ -241,15 +303,69 @@
       });
       allWeather = Object.values(byCountry);
 
-      if (allWeather.length) {
-        document.getElementById('weather-updated').textContent =
-          `최근 업데이트 ${formatTime(allWeather[0].created_at)}`;
-      }
-
       renderFilters();
       renderWeather();
+
+      // 브리핑 위젯: 오늘 뉴스파이널 자체 기사
+      renderBriefing(raw.filter(a => a.category !== '날씨'));
     } catch (e) {
       document.getElementById('weather-container').innerHTML = '<div class="empty">날씨 데이터를 불러올 수 없습니다.</div>';
+    }
+  }
+
+  function renderBriefing(articles) {
+    const container = document.getElementById('briefing-widget');
+    const now = nowKST();
+    const today = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
+    const todayArticles = articles.filter(a =>
+      a.source === 'NewsFinal' && a.country &&
+      !(a.subcategory || '').startsWith('cluster_') &&
+      (a.created_at || '').startsWith(today)
+    );
+    const byCountry = {};
+    todayArticles.forEach(a => {
+      const c = a.country;
+      if (!byCountry[c]) byCountry[c] = [];
+      if (byCountry[c].length < 2) byCountry[c].push(a);
+    });
+    if (!Object.keys(byCountry).length) {
+      container.innerHTML = '<div class="empty">오늘 브리핑 준비 중</div>';
+      return;
+    }
+    container.innerHTML = Object.entries(byCountry).slice(0, 8).map(([country, items]) => `
+      <div class="briefing-item">
+        <div class="briefing-region">${country}</div>
+        ${items.map(a => `<div class="briefing-title" onclick="location.href='article?id=${a.id}'">· ${a.title_ko || a.title_en}</div>`).join('')}
+      </div>`).join('');
+  }
+
+  async function loadCalendarWidget() {
+    const container = document.getElementById('calendar-widget');
+    try {
+      const SUPABASE_URL = 'https://fotdngseksqaghvtcvqh.supabase.co';
+      const SUPABASE_ANON_KEY = 'sb_publishable_rT3kSEAAdM0DJlDW5fEWww_M37h6dDW';
+      const now = nowKST();
+      const today = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/econ_events?select=*&event_date=gte.${today}&is_verified=eq.true&order=event_date.asc,event_time.asc&limit=6`,
+        { headers: { 'apikey': SUPABASE_ANON_KEY } }
+      );
+      if (!res.ok) throw new Error();
+      const events = await res.json();
+      if (!events.length) { container.innerHTML = '<div class="empty">예정된 일정이 없습니다</div>'; return; }
+      container.innerHTML = events.map(ev => {
+        const d = new Date(ev.event_date + 'T00:00:00');
+        const dateStr = `${d.getMonth()+1}/${d.getDate()}`;
+        return `<div class="cal-item">
+          <div class="cal-dot ${ev.importance || 'medium'}"></div>
+          <div>
+            <div class="cal-meta">${dateStr}${ev.event_time ? ' ' + ev.event_time : ''} ${ev.country_flag || ''} ${ev.country || ''}</div>
+            <div class="cal-title">${ev.title}</div>
+          </div>
+        </div>`;
+      }).join('');
+    } catch(e) {
+      container.innerHTML = '<div class="empty">일정을 불러올 수 없습니다</div>';
     }
   }
 
@@ -273,6 +389,7 @@
 
   loadMarketData();
   loadWeather();
+  loadCalendarWidget();
 </script>
 </body>
 </html>
