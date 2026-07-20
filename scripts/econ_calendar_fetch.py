@@ -38,6 +38,29 @@ HEADERS_HTML = {
     "Accept": "text/html,application/xhtml+xml",
 }
 
+# ── 국가별 발표 시각 매핑 ────────────────────────────────────────────
+# event_time: 발표 현지시간 HH:MM
+# timezone: IANA 타임존
+# announcement_offset_hours: event_date 기준 발표일 오프셋(일). 당일=0, 2일차=1, 3일차=2
+COUNTRY_ANNOUNCEMENT_META = {
+    "나이지리아": {"event_time": "15:00", "timezone": "Africa/Lagos",        "announcement_offset_hours": 1},
+    "케냐":       {"event_time": "12:00", "timezone": "Africa/Nairobi",       "announcement_offset_hours": 0},
+    "인도네시아": {"event_time": "14:00", "timezone": "Asia/Jakarta",         "announcement_offset_hours": 0},
+    "태국":       {"event_time": "14:00", "timezone": "Asia/Bangkok",         "announcement_offset_hours": 0},
+    "필리핀":     {"event_time": "14:30", "timezone": "Asia/Manila",          "announcement_offset_hours": 0},
+    "남아공":     {"event_time": "14:00", "timezone": "Africa/Johannesburg",  "announcement_offset_hours": 2},
+    "이집트":     {"event_time": "13:00", "timezone": "Africa/Cairo",         "announcement_offset_hours": 0},
+}
+
+def _apply_announcement_meta(ev: dict) -> dict:
+    """이벤트 딕셔너리에 국가별 발표 시각 메타 자동 주입"""
+    meta = COUNTRY_ANNOUNCEMENT_META.get(ev.get("country", ""))
+    if meta:
+        ev["event_time"] = meta["event_time"]
+        ev["timezone"] = meta["timezone"]
+        ev["announcement_offset_hours"] = meta["announcement_offset_hours"]
+    return ev
+
 # ── 크롤링 불가 기관 — 공식 확인된 연간 일정 (태국·필리핀·남아공·이집트·IMF·WB)
 # ⚠️ 새해 초(1월)에 각국 공식 사이트 확인 후 업데이트
 # 형식: (날짜, 국가코드, 국기, 국가명, 제목, 설명, 출처URL)
@@ -101,7 +124,7 @@ def fetch_cbn_nigeria() -> list:
         day2_dates = dates[1::2] if len(dates) > 1 else dates
 
         for date_str in day2_dates:
-            events.append({
+            events.append(_apply_announcement_meta({
                 "event_date": date_str,
                 "event_time": None,
                 "country": "나이지리아",
@@ -112,7 +135,7 @@ def fetch_cbn_nigeria() -> list:
                 "source_url": url,
                 "is_verified": True,
                 "source": "official_crawl",
-            })
+            }))
         print(f"  ✅ CBN(나이지리아): {len(events)}건 파싱")
     except Exception as e:
         print(f"  ⚠️ CBN 크롤링 예외: {e}")
@@ -151,7 +174,7 @@ def fetch_cbk_kenya() -> list:
             event_date = datetime.strptime(date_str, "%Y-%m-%d").date()
             if event_date >= today and date_str not in found:
                 found.add(date_str)
-                events.append({
+                events.append(_apply_announcement_meta({
                     "event_date": date_str,
                     "event_time": None,
                     "country": "케냐",
@@ -162,7 +185,7 @@ def fetch_cbk_kenya() -> list:
                     "source_url": "https://www.centralbank.go.ke/mpc/",
                     "is_verified": True,
                     "source": "official_crawl",
-                })
+                }))
         print(f"  ✅ CBK(케냐): {len(events)}건 파싱")
     except Exception as e:
         print(f"  ⚠️ CBK 크롤링 예외: {e}")
@@ -202,7 +225,7 @@ def fetch_bi_indonesia() -> list:
             event_date = datetime.strptime(date_str, "%Y-%m-%d").date()
             if event_date >= today and date_str not in found:
                 found.add(date_str)
-                events.append({
+                events.append(_apply_announcement_meta({
                     "event_date": date_str,
                     "event_time": None,
                     "country": "인도네시아",
@@ -213,7 +236,7 @@ def fetch_bi_indonesia() -> list:
                     "source_url": url,
                     "is_verified": True,
                     "source": "official_crawl",
-                })
+                }))
         print(f"  ✅ BI(인도네시아): {len(events)}건 파싱")
     except Exception as e:
         print(f"  ⚠️ BI 크롤링 예외: {e}")
@@ -233,7 +256,7 @@ def build_static_events() -> list:
             continue
         if event_date < today or event_date > cutoff:
             continue
-        events.append({
+        events.append(_apply_announcement_meta({
             "event_date": date_str,
             "event_time": None,
             "country": country,
@@ -244,7 +267,7 @@ def build_static_events() -> list:
             "source_url": source_url,
             "is_verified": True,
             "source": "official_static",
-        })
+        }))
     return events
 
 
