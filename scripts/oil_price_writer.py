@@ -22,7 +22,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # ── 설정 ────────────────────────────────────────────────────
-GEMINI_MODEL         = "gemini-2.5-flash"
+GEMINI_MODEL         = "gemini-3.1-flash-lite"
 SUPABASE_URL         = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 EIA_API_KEY          = os.getenv("EIA_API_KEY", "")  # https://www.eia.gov/opendata/ 무료 등록
