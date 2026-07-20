@@ -293,42 +293,50 @@ def call_gemini(prompt: str, max_tokens: int = 1500, use_search: bool = False) -
 def build_article_prompt(prices: dict) -> str:
     wti   = prices["wti"]
     brent = prices["brent"]
-    pdate = prices["date"]  # date 객체
+    pdate = prices["date"]
     src   = prices["source"]
 
     wti_dir   = "상승" if wti["change"]   > 0 else ("하락" if wti["change"]   < 0 else "보합")
     brent_dir = "상승" if brent["change"] > 0 else ("하락" if brent["change"] < 0 else "보합")
 
-    return f"""당신은 프론티어 마켓 전문 에너지·원자재 뉴스 기자입니다.
-아래 국제유가 데이터를 바탕으로 한국어 스트레이트 뉴스 기사를 작성하세요.
+    # 제목용 반올림 달러 (소수점 없이)
+    wti_dollar   = int(round(wti["price"]))
+    brent_dollar = int(round(brent["price"]))
 
-[유가 데이터] (출처: {src}/에너지정보청)
-- 기준일: {pdate.strftime('%Y년 %m월 %d일')} (뉴욕 현지시간)
-- WTI 유가: 배럴당 ${wti['price']:.2f} ({wti_dir} ${abs(wti['change']):.2f} / {wti['pct']:+.2f}%)
-- Brent 유가: 배럴당 ${brent['price']:.2f} ({brent_dir} ${abs(brent['change']):.2f} / {brent['pct']:+.2f}%)
-- WTI 전일 종가: ${wti['prev']:.2f}
-- Brent 전일 종가: ${brent['prev']:.2f}
+    return f"""당신은 연합뉴스 에너지·원자재 담당 기자입니다.
+먼저 google_search 도구로 "{pdate.day}일 국제유가 WTI Brent" 또는 "oil price {pdate.strftime('%B %d')} WTI Brent" 를 검색하여 당일 시장 동향을 파악한 뒤, 아래 데이터와 결합해 기사를 작성하세요.
 
-[작성 규칙]
-1. 제목(TITLE)과 본문(BODY)을 아래 형식으로 출력:
-   TITLE: <제목>
-   BODY: <본문>
+[유가 데이터] (출처: {src} / 에너지정보청(EIA))
+- 기준일: {pdate.day}일(현지시간) — 뉴욕상업거래소(NYMEX) 종가
+- WTI 원유: 배럴당 ${wti['price']:.2f} (전일比 {wti['pct']:+.2f}%, {'+' if wti['change']>0 else ''}{wti['change']:.2f}달러)
+- 브렌트유: 배럴당 ${brent['price']:.2f} (전일比 {brent['pct']:+.2f}%, {'+' if brent['change']>0 else ''}{brent['change']:.2f}달러)
+- WTI 전일 종가: ${wti['prev']:.2f} / 브렌트 전일 종가: ${brent['prev']:.2f}
 
-2. 제목 형식 예시 (연합뉴스 스타일):
-   "국제유가, WTI 배럴당 78달러…{wti_dir}세 지속" 또는
-   "국제유가 일제히 {wti_dir}…원유 수급 불균형 반영"
-   - 달러 수치를 반드시 포함, 간결하게 (50자 이내)
+[출력 형식] — 반드시 이 형식 그대로:
+TITLE: <제목>
+BODY: <본문>
 
-3. 본문: 700자 이상, 스트레이트 뉴스 문체 ("-다" 종결어미)
-   - 첫 문장: WTI·Brent 현재가와 전일 대비 변화량 명시
-   - 날짜: "{pdate.day}일(현지시간)" 형식. "오늘", "현재", 절대연도 금지
-   - 출처 표기: "에너지정보청(EIA)에 따르면" 또는 "뉴욕상업거래소(NYMEX)에서"
-   - 유가 변동 배경: 수급 동향, OPEC+ 동향, 달러 강세/약세, 지정학 요인 등 맥락
-   - 신흥시장·원유 수출국 영향 간략 언급 (나이지리아, 사우디아라비아, 러시아 등)
-   - 논평/칼럼 문체 금지: '주목됩니다', '기대됩니다', '보여줍니다' 등 사용 금지
-   - 비라틴 문자 국가명·지명은 반드시 한국어 음역
+[제목 작성 규칙]
+- 패턴: "국제유가, WTI 배럴당 {wti_dollar}달러…<핵심 동인 3~8자>" 형태
+- 예시: "국제유가, WTI 배럴당 78달러…OPEC+ 감산 기대 반영"
+        "국제유가 하락, 브렌트 배럴당 81달러…달러 강세·수요 우려"
+        "국제유가 이틀째 {wti_dir}…WTI 배럴당 {wti_dollar}달러대"
+- 줄임표(…) 뒤에 핵심 원인 한 가지를 간결하게 명시
+- 50자 이내, 숫자는 반드시 포함
 
-4. google_search 도구로 최신 시장 동향을 검색해 맥락을 보강하세요.
+[본문 작성 규칙]
+1. 문체: 연합뉴스 스트레이트 뉴스. 모든 문장 "-다" 종결. 감정·논평 표현 전면 금지.
+   금지어: '주목됩니다', '기대됩니다', '보여줍니다', '시사합니다', '중요합니다', '~것으로 보인다'(단독 논평 시)
+2. 구조 (역피라미드):
+   ① 리드(1~2문장): "국제유가가 {pdate.day}일(현지시간) {wti_dir}했다. WTI 원유 선물은 뉴욕상업거래소(NYMEX)에서 배럴당 {wti['price']:.2f}달러에 거래를 마쳤다." 형태로 시작
+   ② 브렌트유 가격 및 전일 대비 수치 명시
+   ③ 변동 원인(검색 결과 기반): OPEC+ 동향, 미국 원유 재고, 달러 지수, 지정학 리스크 등 구체적 사실
+   ④ 원유 수출국·신흥시장 영향: 사우디아라비아, 나이지리아, 러시아 등 최소 1개국 언급
+   ⑤ 향후 시장 주시 요인(사실 기반, 논평 아님)
+3. 날짜: "{pdate.day}일(현지시간)" 형식만 허용. "오늘", "현재", 절대연도(예: 2025년) 금지.
+4. 출처: 첫 단락 또는 두 번째 단락에 "에너지정보청(EIA)에 따르면" 또는 "뉴욕상업거래소(NYMEX)에서" 반드시 포함.
+5. 비라틴 문자 국가명·지명은 한국어 음역 필수.
+6. 분량: 700자 이상.
 """
 
 
