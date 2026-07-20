@@ -25,7 +25,7 @@ def now_kst() -> datetime:
     return datetime.now(timezone.utc).astimezone(KST)
 
 # ── 설정 ────────────────────────────────────────────────────
-GEMINI_MODEL         = "gemini-2.5-flash"
+GEMINI_MODEL         = "gemini-3.1-flash-lite"
 SUPABASE_URL         = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 
@@ -80,7 +80,6 @@ def announcement_has_passed(event: dict) -> bool:
     offset_d = event.get("announcement_offset_hours") or 0  # 발표일 오프셋(일)
 
     if not tz_str or not ev_time or not ev_date:
-        # 정보 없으면 허용 (보수적)
         return True
 
     try:
@@ -88,10 +87,8 @@ def announcement_has_passed(event: dict) -> bool:
         base_date = date.fromisoformat(ev_date)
         ann_date  = base_date + timedelta(days=offset_d)
         hh, mm    = map(int, ev_time.split(":"))
-        # 발표 예정 현지시각
         ann_local = datetime(ann_date.year, ann_date.month, ann_date.day,
                              hh, mm, tzinfo=tz)
-        # 버퍼 추가
         ann_with_buffer = ann_local + timedelta(minutes=ANNOUNCEMENT_BUFFER_MINUTES)
         return datetime.now(timezone.utc) >= ann_with_buffer.astimezone(timezone.utc)
     except Exception as e:
@@ -125,7 +122,6 @@ def get_pending_events() -> list:
         return []
 
     all_events = res.json()
-    # 발표 시각이 이미 지난 것만 반환
     passed  = [e for e in all_events if announcement_has_passed(e)]
     skipped = len(all_events) - len(passed)
     if skipped:
@@ -263,7 +259,7 @@ def build_article_prompt(event: dict, actual_value: str) -> str:
         direction = "결정"
 
     return f"""당신은 프론티어 마켓 전문 경제 뉴스 기자입니다.
-아래 정보를 바탕으로 한국어 스트레이트 뉴스 기사를 작성하세요.
+아래 정보를 바탕으로 한국어 뉴스 스타일 기사를 작성하세요.
 
 [이벤트 정보]
 - 이벤트명: {title}
