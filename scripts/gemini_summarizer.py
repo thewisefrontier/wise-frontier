@@ -432,14 +432,16 @@ def find_similar_trend(title: str, country: str | None = None,
 
 def _summarize_delta(root_summary: str, new_title: str, new_body: str) -> str:
     """루트 기사에 없는 '새 전개'만 1~3문장으로 요약. 새 사실 없으면 '없음'."""
+    # [업데이트 이력] 이전 원본 본문만 비교 기준으로 사용 (기존 delta 제외)
+    base_summary = root_summary.split("────────\n[업데이트 이력]")[0].strip()
     prompt = f"""아래는 진행 중인 사건의 기존 정리 기사와, 방금 수집된 새 기사입니다.
 기존 기사에 '없는 새로운 사실'만 1~3문장으로 요약하세요.
-- 날짜는 사건 현지시간 "N일(현지시간)" 형식으로, 소스에 나온 날짜만. "오늘"·절대날짜 금지, 모르면 생략.
+- 날짜는 반드시 소스에 명시된 "N일(현지시간)" 형식만 사용. "오늘", "어제", "화요일", "월요일" 등 요일·상대적 표현 금지. 날짜 정보가 없으면 생략.
 - 새로운 사실이 없으면 정확히 "없음" 한 단어만 출력.
 - 논평·마크다운·헤더 금지, 사실 서술형 한국어로만.
 
 [기존 정리 기사]
-{root_summary[:1500]}
+{base_summary[:1500]}
 
 [새 기사] {new_title}
 {new_body[:1200]}
@@ -481,7 +483,7 @@ def merge_trend_article(existing: dict, new_title: str, new_body: str, note: str
             headers=_sb_headers(),
             json={
                 "summary_ko": new_summary,
-                "created_at": now_str,
+                # created_at은 최초 게시일 보호 — 업데이트 시 변경 금지
                 "update_log": new_log,
             },
             timeout=15
