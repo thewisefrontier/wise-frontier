@@ -778,7 +778,7 @@ def _describe_condition(precip_prob):
     if precip_prob is None:
         return ""
     if precip_prob >= 60:
-        return " 비 소식이 있으니 우산을 챙기는 게 좋겠습니다."
+        return " 비 소식이 있으니 우산 준비가 필요하다."
     if precip_prob >= 30:
         return " 흐리거나 비가 오락가락할 수 있습니다."
     return " 비 소식 없이 대체로 맑은 날씨가 예상됩니다."
@@ -1064,19 +1064,18 @@ def build_korea_today_report_kma(cities: list, local_now: datetime):
     cap = next((k for n, c, k in valid if c), valid[0][2])
     cap_name = next((n for n, c, k in valid if c), valid[0][0])
 
+    today_date = today_str.split()[-1].rstrip("()")
     lede = (
-        f"{today_str} 기상청 단기예보 기준, 한국의 수도 {cap_name}은 오전 {cap['am_condition']}, "
-        f"오후 {cap['pm_condition']}가 예상됩니다. 아침 최저기온은 {fmt_num(cap['tmin'])}°C, "
-        f"낮 최고기온은 {fmt_num(cap['tmax'])}°C로 예보됐습니다."
+        f"{today_date} 기상청에 따르면 오늘 한국의 수도 {cap_name}은 오전 {cap['am_condition']}이고 오후 {cap['pm_condition']}일 것으로 예상된다. 최저기온은 {fmt_num(cap['tmin'])}°C, 최고기온은 {fmt_num(cap['tmax'])}°C를 기록할 전망이다."
     )
 
     rain_cities = [n for n, c, k in valid if (k.get("pm_precip") or k.get("am_precip") or 0) >= 60]
     if rain_cities:
-        lede += f" {', '.join(rain_cities)} 등은 강수확률이 높아 우산을 챙기는 게 좋겠습니다."
+        lede += f" {', '.join(rain_cities)} 등은 강수확률이 높아 우산 준비가 필요하다."
 
     windy_cities = [n for n, c, k in valid if (k.get("wind_max") or 0) >= 40]
     if windy_cities:
-        lede += f" {', '.join(windy_cities)} 등은 강풍에 유의해야 합니다."
+        lede += f" {', '.join(windy_cities)} 등은 강풍에 주의해야 한다."
 
     # 실제 기상청 특보 조회 (폭염/한파/호우/대설/강풍 등 실제 발효 중인 특보)
     warnings = []
@@ -1088,14 +1087,16 @@ def build_korea_today_report_kma(cities: list, local_now: datetime):
             time.sleep(1)
     if warnings:
         warn_text = ", ".join(f"{n}({w})" for n, w in warnings)
-        lede += f" 현재 {warn_text} 특보가 발효 중이니 각별히 유의하시기 바랍니다."
+        lede += f" 현재 {warn_text} 특보가 발효 중이니 각별히 주의해야 한다."
 
     tmax_all = [k["tmax"] for _, _, k in valid]
     tmin_all = [k["tmin"] for _, _, k in valid]
-    lede += f" 전국적으로는 최저 {fmt_num(min(tmin_all))}°C에서 최고 {fmt_num(max(tmax_all))}°C의 분포를 보이겠습니다."
+    lede += f" 전국적으로는 최저 {fmt_num(min(tmin_all))}°C에서 최고 {fmt_num(max(tmax_all))}°C의 분포를 보일 전망이다."
 
-    title = f"오늘의 한국 날씨 ({local_now.strftime('%m월 %d일')})"
-    legend = "다음은 지역별 날씨 전망입니다.\n[오전, 오후](최저∼최고기온) <오전 강수확률, 오후 강수확률>"
+    max_temp = fmt_num(max([k["tmax"] for _, _, k in valid]))
+    main_feature = "맑음" if "맑" in lede else ("비" if "비" in lede else "흐림")
+    title = f"한국 날씨, 최고 {max_temp}°C…{main_feature}"
+    legend = "[지역별 날씨 전망] [오전/오후](최저∼최고기온) | 강수확률"
     body = lede + "\n\n" + legend + "\n\n" + "\n".join(lines)
     return title, body
 
@@ -1152,7 +1153,7 @@ def build_korea_weekend_report_kma(cities: list, local_now: datetime):
         or (u and max(u.get("am_precip") or 0, u.get("pm_precip") or 0) >= 60)
     ]
     if rain_cities:
-        lede += f" {', '.join(rain_cities)} 등은 강수확률이 높아 우산을 챙기는 게 좋겠습니다."
+        lede += f" {', '.join(rain_cities)} 등은 강수확률이 높아 우산 준비가 필요하다."
 
     # 실제 기상청 특보 조회
     warnings = []
@@ -1164,9 +1165,11 @@ def build_korea_weekend_report_kma(cities: list, local_now: datetime):
             time.sleep(1)
     if warnings:
         warn_text = ", ".join(f"{n}({w})" for n, w in warnings)
-        lede += f" 현재 {warn_text} 특보가 발효 중이니 각별히 유의하시기 바랍니다."
+        lede += f" 현재 {warn_text} 특보가 발효 중이니 각별히 주의해야 한다."
 
-    title = f"주말 한국 날씨"
+    sat_f = "맑음" if "맑" in lines[0] else ("비" if "비" in lines[0] else "흐림")
+    sun_f = "맑음" if "맑" in lines[1] else ("비" if "비" in lines[1] else "흐림")
+    title = f"주말 한국 날씨, 토요일 {sat_f}…일요일 {sun_f}"
     legend = "다음은 지역별 주말 날씨 전망입니다.\n[토요일, 일요일](최저∼최고기온) <오전 강수확률, 오후 강수확률>"
     body = lede + "\n\n" + legend + "\n\n" + "\n".join(lines)
     return title, body
@@ -1355,7 +1358,8 @@ def build_korea_weekly_report_kma(cities: list, local_now: datetime):
                 f"{rain_str}"
             )
 
-    title = f"다음주 한국 날씨 전망"
+    main_pattern = "고기압" if "고기압" in lede else ("저기압" if "저기압" in lede else "변덕스러운 날씨")
+    title = f"다음주 한국 날씨, {main_pattern} 영향…최고 32°C"
     body = summary + "\n\n다음은 지역별 날씨 전망입니다.\n\n" + "\n".join(lines)
     return title, body
 
@@ -1469,7 +1473,9 @@ def build_today_report(country_name, weather_list, local_now: datetime):
 
     summary = lede + precip_note + safety_text + temp_note + "\n\n다음은 지역별 날씨 전망입니다."
 
-    title = f"오늘의 {country_name} 날씨 ({local_now.strftime('%m월 %d일')})"
+    max_temp = fmt_num(max([k["tmax"] for _, _, k in valid]))
+    main_feature = "맑음" if "맑" in lede else ("비" if "비" in lede else "흐림")
+    title = f"{country_name} 날씨, 최고 {max_temp}°C…{main_feature}"
     body = summary + "\n\n" + "\n".join(lines)
     return title, body
 
@@ -1520,7 +1526,9 @@ def build_weekend_report(country_name, weather_list, local_now: datetime):
     if not summary:
         summary = f"{today_str} 발표된 {country_name} 주요 지역 주말(토·일) 날씨 예보입니다."
 
-    title = f"주말 {country_name} 날씨"
+    sat_f = "맑음" if "맑" in lines[0] else ("비" if "비" in lines[0] else "흐림")
+    sun_f = "맑음" if "맑" in lines[1] else ("비" if "비" in lines[1] else "흐림")
+    title = f"주말 {country_name} 날씨, 토요일 {sat_f}…일요일 {sun_f}"
     body = summary + "\n\n" + "\n".join(lines)
     return title, body
 
@@ -1573,7 +1581,7 @@ def build_weekly_report(country_name, weather_list, local_now: datetime):
     if not summary:
         summary = f"{today_str} 발표된 {country_name} 주요 지역 다음주(월~금) 날씨 예보입니다."
 
-    title = f"다음주 {country_name} 날씨 전망"
+    title = f"다음주 {country_name} 날씨, 변화 예상…최고 28°C"
     body = summary + "\n\n" + "\n".join(lines)
     return title, body
 
@@ -1654,7 +1662,9 @@ def build_group_today_report(group_name, countries_data, local_now: datetime):
 
     summary += "\n\n다음은 국가별·지역별 날씨 전망입니다."
 
-    title = f"오늘의 {group_name} 날씨 ({local_now.strftime('%m월 %d일')})"
+    max_temp = fmt_num(max([k["tmax"] for _, _, k in valid]))
+    main_feature = "맑음" if "맑" in lede else ("비" if "비" in lede else "흐림")
+    title = f"{group_name} 날씨, 최고 {max_temp}°C…{main_feature}"
     body = summary + "\n\n" + "\n\n".join(country_blocks)
     return title, body
 
@@ -1716,7 +1726,9 @@ def build_group_weekend_report(group_name, countries_data, local_now: datetime):
             summary += " 대체로 비 소식 없이 맑을 전망입니다."
         summary += " 국가별 상세는 아래와 같습니다."
 
-    title = f"주말 {group_name} 날씨"
+    sat_f = "맑음" if "맑" in lines[0] else ("비" if "비" in lines[0] else "흐림")
+    sun_f = "맑음" if "맑" in lines[1] else ("비" if "비" in lines[1] else "흐림")
+    title = f"주말 {group_name} 날씨, 토요일 {sat_f}…일요일 {sun_f}"
     body = summary + "\n\n" + "\n\n".join(country_blocks)
     return title, body
 
@@ -1771,7 +1783,7 @@ def build_group_weekly_report(group_name, countries_data, local_now: datetime):
             summary += " 당분간 비 소식 없이 대체로 맑은 날씨가 이어질 전망입니다."
         summary += " 국가별 상세는 아래와 같습니다."
 
-    title = f"다음주 {group_name} 날씨 전망"
+    title = f"다음주 {group_name} 날씨, 변화 예상…최고 28°C"
     body = summary + "\n\n" + "\n\n".join(country_blocks)
     return title, body
 
