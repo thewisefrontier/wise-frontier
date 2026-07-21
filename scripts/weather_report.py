@@ -1023,10 +1023,31 @@ def fetch_kma_vilage_fcst_all(name: str, lat: float, lon: float, local_now: date
                             if it["category"] == "TMX" and d not in tmx_by_date:
                                 tmx_by_date[d] = float(it["fcstValue"])
 
+                        # TMP(3시간 기온) 기반 fallback — TMN/TMX가 없는 날짜(주로 발표 당일)를 위한 보조 최저·최고
+                        tmp_min_by_date, tmp_max_by_date = {}, {}
+                        for d, by_time in by_date_time.items():
+                            tmp_vals = [
+                                float(by_time[t]["TMP"])
+                                for t in by_time
+                                if "TMP" in by_time[t]
+                            ]
+                            if tmp_vals:
+                                tmp_min_by_date[d] = min(tmp_vals)
+                                tmp_max_by_date[d] = max(tmp_vals)
+
                         result = {}
                         for d, by_time in by_date_time.items():
-                            if d not in tmn_by_date or d not in tmx_by_date:
-                                continue
+                            tmin_v = tmn_by_date.get(d)
+                            tmax_v = tmx_by_date.get(d)
+                            used_fallback = False
+                            if tmin_v is None or tmax_v is None:
+                                # TMN/TMX 누락 시 TMP 최소·최대로 대체 (발표 당일에 흔함)
+                                if d in tmp_min_by_date and d in tmp_max_by_date:
+                                    tmin_v = tmp_min_by_date[d] if tmin_v is None else tmin_v
+                                    tmax_v = tmp_max_by_date[d] if tmax_v is None else tmax_v
+                                    used_fallback = True
+                                else:
+                                    continue
 
                             def cat_at(t, cat):
                                 return by_time.get(t, {}).get(cat)
@@ -1037,19 +1058,26 @@ def fetch_kma_vilage_fcst_all(name: str, lat: float, lon: float, local_now: date
                             pm_pops = [int(by_time[t]["POP"]) for t in by_time if "1200" <= t <= "1800" and "POP" in by_time[t]]
                             wsd_all = [float(by_time[t]["WSD"]) for t in by_time if "WSD" in by_time[t]]
 
+                            # 오늘(발표 당일)처럼 오전 시간대가 이미 지난 경우 오전 카테고리가 없을 수 있음 → 있는 시간대 중 아무거나로 대체
+                            if am_sky is None and am_pty is None:
+                                any_time = next(iter(sorted(by_time.keys())), None)
+                                if any_time:
+                                    am_sky, am_pty = cat_at(any_time, "SKY"), cat_at(any_time, "PTY")
+
                             result[d] = {
-                                "tmin": tmn_by_date[d],
-                                "tmax": tmx_by_date[d],
+                                "tmin": tmin_v,
+                                "tmax": tmax_v,
                                 "am_condition": _kma_condition(am_sky, am_pty),
                                 "pm_condition": _kma_condition(pm_sky, pm_pty),
                                 "am_precip": max(am_pops) if am_pops else None,
                                 "pm_precip": max(pm_pops) if pm_pops else None,
                                 "wind_max": max(wsd_all) * 3.6 if wsd_all else None,
+                                "tmp_fallback": used_fallback,
                             }
 
                         if result:
                             return result
-                        last_err = f"TMN/TMX 없음(발표시각 범위 밖) base={base_date} {base_time}, nx={nx} ny={ny}, 원본항목수={len(items)}"
+                        last_err = f"TMN/TMX/TMP 데이터 없음 base={base_date} {base_time}, nx={nx} ny={ny}, 원본항목수={len(items)}"
         except Exception as e:
             last_err = f"{type(e).__name__}: {e}"
 
