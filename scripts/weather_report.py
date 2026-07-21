@@ -34,6 +34,80 @@ SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 PIXABAY_API_KEY = os.getenv("PIXABAY_API_KEY", "")
 KMA_API_KEY = os.getenv("KMA_API_KEY", "")
 
+# ── Gemini 설정 ──────────────────────────────────────────────
+GEMINI_MODEL = "gemini-2.0-flash-lite"
+GEMINI_API_KEYS = [k for k in [
+    os.getenv("GEMINI_API_KEY"),
+    os.getenv("GEMINI_API_KEY_2"),
+    os.getenv("GEMINI_API_KEY_3"),
+    os.getenv("GEMINI_API_KEY_4"),
+    os.getenv("GEMINI_API_KEY_5"),
+] if k]
+
+_current_key_idx = 0
+_exhausted_keys: set = set()
+
+
+def call_gemini_weather(prompt: str, max_tokens: int = 1200) -> str | None:
+    """날씨 기사 본문 생성용 Gemini 호출 (키 로테이션)."""
+    global _current_key_idx, _exhausted_keys
+
+    if not GEMINI_API_KEYS:
+        print("[ERROR] GEMINI_API_KEY 없음")
+        return None
+
+    payload = {
+        "contents": [{"parts": [{"text": prompt}]}],
+        "generationConfig": {
+            "temperature": 0.4,
+            "maxOutputTokens": max_tokens,
+        },
+    }
+
+    n = len(GEMINI_API_KEYS)
+    available = [i for i in range(n) if i not in _exhausted_keys]
+    if not available:
+        print("[ERROR] 모든 Gemini 키 RPD 소진")
+        return None
+
+    ordered = sorted(available, key=lambda i: (i - _current_key_idx) % n)
+
+    for idx in ordered:
+        api_key = GEMINI_API_KEYS[idx]
+        url = (
+            f"https://generativelanguage.googleapis.com/v1beta/models/"
+            f"{GEMINI_MODEL}:generateContent?key={api_key}"
+        )
+        try:
+            res = requests.post(url, json=payload, timeout=(10, 60))
+            if res.status_code == 200:
+                _current_key_idx = (idx + 1) % n
+                cands = res.json().get("candidates", [])
+                if not cands:
+                    return None
+                parts = cands[0].get("content", {}).get("parts", [])
+                text = "".join(p.get("text", "") for p in parts).strip()
+                return text if text else None
+            elif res.status_code == 429:
+                print(f"  [429] 키 {idx+1} RPD 소진 — 블랙리스트")
+                _exhausted_keys.add(idx)
+                continue
+            elif res.status_code == 503:
+                print(f"  [503] 키 {idx+1} 과부하 → 다음 키")
+                continue
+            else:
+                print(f"[ERROR] Gemini {res.status_code}: {res.text[:200]}")
+                return None
+        except requests.exceptions.Timeout:
+            print(f"  [TIMEOUT] 키 {idx+1} → 다음 키")
+            continue
+        except Exception as e:
+            print(f"[ERROR] {e}")
+            return None
+
+    print("[ERROR] 모든 Gemini 키 소진 또는 응답 없음")
+    return None
+
 def _sb_headers():
     return {
         "apikey": SUPABASE_SERVICE_KEY,
@@ -1064,19 +1138,6 @@ def build_korea_today_report_kma(cities: list, local_now: datetime):
     cap = next((k for n, c, k in valid if c), valid[0][2])
     cap_name = next((n for n, c, k in valid if c), valid[0][0])
 
-    today_date = today_str.split()[-1].rstrip("()")
-    lede = (
-        f"{today_date} 기상청에 따르면 오늘 한국의 수도 {cap_name}은 오전 {cap['am_condition']}이고 오후 {cap['pm_condition']}일 것으로 예상된다. 최저기온은 {fmt_num(cap['tmin'])}°C, 최고기온은 {fmt_num(cap['tmax'])}°C를 기록할 전망이다."
-    )
-
-    rain_cities = [n for n, c, k in valid if (k.get("pm_precip") or k.get("am_precip") or 0) >= 60]
-    if rain_cities:
-        lede += f" {', '.join(rain_cities)} 등은 강수확률이 높아 우산 준비가 필요하다."
-
-    windy_cities = [n for n, c, k in valid if (k.get("wind_max") or 0) >= 40]
-    if windy_cities:
-        lede += f" {', '.join(windy_cities)} 등은 강풍에 주의해야 한다."
-
     # 실제 기상청 특보 조회 (폭염/한파/호우/대설/강풍 등 실제 발효 중인 특보)
     warnings = []
     for i, (n, c, k) in enumerate(valid):
@@ -1085,13 +1146,48 @@ def build_korea_today_report_kma(cities: list, local_now: datetime):
             warnings.append((n, w))
         if i < len(valid) - 1:
             time.sleep(1)
-    if warnings:
-        warn_text = ", ".join(f"{n}({w})" for n, w in warnings)
-        lede += f" 현재 {warn_text} 특보가 발효 중이니 각별히 주의해야 한다."
 
     tmax_all = [k["tmax"] for _, _, k in valid]
     tmin_all = [k["tmin"] for _, _, k in valid]
-    lede += f" 전국적으로는 최저 {fmt_num(min(tmin_all))}°C에서 최고 {fmt_num(max(tmax_all))}°C의 분포를 보일 전망이다."
+    rain_cities = [n for n, c, k in valid if (k.get("pm_precip") or k.get("am_precip") or 0) >= 60]
+    windy_cities = [n for n, c, k in valid if (k.get("wind_max") or 0) >= 40]
+    warn_text = ", ".join(f"{n}({w})" for n, w in warnings) if warnings else ""
+
+    city_data_lines = []
+    for n, c, k in valid:
+        city_data_lines.append(
+            f"- {n}{'(수도)' if c else ''}: 오전 {k.get('am_condition','-')}, 오후 {k.get('pm_condition','-')}, "
+            f"최저 {fmt_num(k['tmin'])}°C, 최고 {fmt_num(k['tmax'])}°C, "
+            f"오전 강수확률 {fmt_num(k.get('am_precip') or 0)}%, 오후 강수확률 {fmt_num(k.get('pm_precip') or 0)}%"
+            + (f", 최대풍속 {fmt_num(k['wind_max'])}km/h" if k.get("wind_max") else "")
+        )
+
+    gemini_prompt = f"""다음은 한국 기상청 단기예보 자료다. 이를 바탕으로 뉴스 기사 본문(서두 문단)을 작성하라.
+
+[날씨 데이터]
+전국 최저기온: {fmt_num(min(tmin_all))}°C / 최고기온: {fmt_num(max(tmax_all))}°C
+수도 {cap_name}: 오전 {cap['am_condition']}, 오후 {cap['pm_condition']}, 최저 {fmt_num(cap['tmin'])}°C, 최고 {fmt_num(cap['tmax'])}°C
+강수확률 높은 지역(60% 이상): {', '.join(rain_cities) if rain_cities else '없음'}
+강풍 예상 지역(40km/h 이상): {', '.join(windy_cities) if windy_cities else '없음'}
+기상 특보 발효: {warn_text if warn_text else '없음'}
+지역별 상세:
+{chr(10).join(city_data_lines)}
+
+[작성 규칙]
+- 뉴스 기사 서두 문단 형식. 종결어미는 반드시 "-다" 체
+- 날짜 표기: "N일(현지시간)" 형식만 허용. "오늘", 절대연도(2026년 등) 절대 금지
+- 700자 이상 작성
+- "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
+- 타 매체명 언급 금지
+- 수도 날씨를 중심으로 서술하되, 특이기상(강수·강풍·특보)은 구체적으로 언급
+- 전국 기온 범위로 마무리
+- 본문만 출력(제목·소제목 불필요)"""
+
+    lede = call_gemini_weather(gemini_prompt) or (
+        f"기상청에 따르면 한국의 수도 {cap_name}은 오전 {cap['am_condition']}이고 오후 {cap['pm_condition']}일 것으로 예상된다. "
+        f"최저기온은 {fmt_num(cap['tmin'])}°C, 최고기온은 {fmt_num(cap['tmax'])}°C를 기록할 전망이다. "
+        f"전국적으로는 최저 {fmt_num(min(tmin_all))}°C에서 최고 {fmt_num(max(tmax_all))}°C의 분포를 보일 전망이다."
+    )
 
     max_temp = fmt_num(max([k["tmax"] for _, _, k in valid]))
     title = f"한국, {_weather_phrase(lede, max_temp)}"
@@ -1137,23 +1233,6 @@ def build_korea_weekend_report_kma(cities: list, local_now: datetime):
     cap_name = next((n for n, c, s, u in valid if c), valid[0][0])
     cap_sat, cap_sun = cap
 
-    lede = f"{today_str} 기상청 단기예보 기준 이번 주말 한국의 수도 {cap_name} 전망입니다."
-    if cap_sat and cap_sun:
-        lede += (
-            f" 토요일은 {cap_sat['am_condition']}·{cap_sat['pm_condition']} "
-            f"({fmt_num(cap_sat['tmin'])}∼{fmt_num(cap_sat['tmax'])}°C), "
-            f"일요일은 {cap_sun['am_condition']}·{cap_sun['pm_condition']} "
-            f"({fmt_num(cap_sun['tmin'])}∼{fmt_num(cap_sun['tmax'])}°C)가 예상됩니다."
-        )
-
-    rain_cities = [
-        n for n, c, s, u in valid
-        if (s and max(s.get("am_precip") or 0, s.get("pm_precip") or 0) >= 60)
-        or (u and max(u.get("am_precip") or 0, u.get("pm_precip") or 0) >= 60)
-    ]
-    if rain_cities:
-        lede += f" {', '.join(rain_cities)} 등은 강수확률이 높아 우산 준비가 필요하다."
-
     # 실제 기상청 특보 조회
     warnings = []
     for i, (n, c, s, u) in enumerate(valid):
@@ -1162,12 +1241,48 @@ def build_korea_weekend_report_kma(cities: list, local_now: datetime):
             warnings.append((n, w))
         if i < len(valid) - 1:
             time.sleep(1)
-    if warnings:
-        warn_text = ", ".join(f"{n}({w})" for n, w in warnings)
-        lede += f" 현재 {warn_text} 특보가 발효 중이니 각별히 주의해야 한다."
 
-    sat_f = "맑음" if "맑" in lines[0] else ("비" if "비" in lines[0] else "흐림")
-    sun_f = "맑음" if "맑" in lines[1] else ("비" if "비" in lines[1] else "흐림")
+    rain_cities = [
+        n for n, c, s, u in valid
+        if (s and max(s.get("am_precip") or 0, s.get("pm_precip") or 0) >= 60)
+        or (u and max(u.get("am_precip") or 0, u.get("pm_precip") or 0) >= 60)
+    ]
+    warn_text = ", ".join(f"{n}({w})" for n, w in warnings) if warnings else ""
+
+    sat_desc = (
+        f"오전 {cap_sat['am_condition']}, 오후 {cap_sat['pm_condition']}, "
+        f"최저 {fmt_num(cap_sat['tmin'])}°C, 최고 {fmt_num(cap_sat['tmax'])}°C"
+    ) if cap_sat else "데이터 없음"
+    sun_desc = (
+        f"오전 {cap_sun['am_condition']}, 오후 {cap_sun['pm_condition']}, "
+        f"최저 {fmt_num(cap_sun['tmin'])}°C, 최고 {fmt_num(cap_sun['tmax'])}°C"
+    ) if cap_sun else "데이터 없음"
+
+    gemini_prompt = f"""다음은 한국 기상청 단기예보 주말 자료다. 이를 바탕으로 뉴스 기사 본문(서두 문단)을 작성하라.
+
+[날씨 데이터]
+수도 {cap_name} 토요일: {sat_desc}
+수도 {cap_name} 일요일: {sun_desc}
+강수확률 높은 지역(60% 이상, 토·일 중 하루라도): {', '.join(rain_cities) if rain_cities else '없음'}
+기상 특보 발효: {warn_text if warn_text else '없음'}
+
+[작성 규칙]
+- 뉴스 기사 서두 문단 형식. 종결어미는 반드시 "-다" 체
+- 날짜 표기: "N일(현지시간)" 형식만 허용. "오늘", "이번 주말", 절대연도 절대 금지
+- 700자 이상 작성
+- "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
+- 타 매체명 언급 금지
+- 토요일·일요일 날씨를 구분해 서술하되, 특이기상(강수·특보)은 구체적으로 언급
+- 본문만 출력(제목·소제목 불필요)"""
+
+    lede = call_gemini_weather(gemini_prompt) or (
+        f"기상청 단기예보에 따르면 이번 주말 한국의 수도 {cap_name}은 "
+        f"토요일 {sat_desc}, 일요일 {sun_desc}이 예상된다."
+        + (f" {', '.join(rain_cities)} 등은 강수확률이 높아 우산 준비가 필요하다." if rain_cities else "")
+    )
+
+    sat_f = "맑음" if cap_sat and "맑" in (cap_sat.get("am_condition") or "") else ("비" if cap_sat and "비" in (cap_sat.get("am_condition") or "") else "흐림")
+    sun_f = "맑음" if cap_sun and "맑" in (cap_sun.get("am_condition") or "") else ("비" if cap_sun and "비" in (cap_sun.get("am_condition") or "") else "흐림")
     title = f"주말 한국, {_weekend_phrase(sat_f, sun_f)}"
     legend = "다음은 지역별 주말 날씨 전망입니다.\n[토요일, 일요일](최저∼최고기온) <오전 강수확률, 오후 강수확률>"
     body = lede + "\n\n" + legend + "\n\n" + "\n".join(lines)
@@ -1340,22 +1455,38 @@ def build_korea_weekly_report_kma(cities: list, local_now: datetime):
     if not any_valid_city:
         return None, None
 
-    summary = f"{today_str} 발표된 다음주(월~금) 전망입니다(기상청 단기·중기예보 기준)."
-    if cap_entries:
-        cap_valid = [(wd, info) for wd, info in cap_entries if info]
-        if cap_valid:
-            tmax_all = [info["tmax"] for _, info in cap_valid]
-            tmin_all = [info["tmin"] for _, info in cap_valid]
-            rain_days = [wd for wd, info in cap_valid if (info.get("precip_prob") or 0) >= 50]
-            rain_str = (
-                f"{'·'.join(rain_days)}요일 비 소식이 있으니 참고하시기 바랍니다."
-                if rain_days else "당분간 비 소식 없이 대체로 맑은 날씨가 이어질 전망입니다."
-            )
-            summary = (
-                f"{today_str} 발표된 다음주(월~금) 전망입니다(기상청 단기·중기예보 기준). "
-                f"한국의 수도는 이번 주 최고 {fmt_num(max(tmax_all))}°C, 최저 {fmt_num(min(tmin_all))}°C 사이를 오갈 것으로 보입니다. "
-                f"{rain_str}"
-            )
+    cap_valid = [(wd, info) for wd, info in cap_entries if info] if cap_entries else []
+    tmax_all = [info["tmax"] for _, info in cap_valid]
+    tmin_all = [info["tmin"] for _, info in cap_valid]
+    rain_days = [wd for wd, info in cap_valid if (info.get("precip_prob") or 0) >= 50]
+    day_by_day = ", ".join(
+        f"{wd}요일 {info['condition']} {fmt_num(info['tmax'])}°C/{fmt_num(info['tmin'])}°C"
+        for wd, info in cap_valid
+    )
+
+    gemini_prompt = f"""다음은 한국 기상청 단기·중기예보 기반 다음주(월~금) 날씨 자료다. 이를 바탕으로 뉴스 기사 본문(서두 문단)을 작성하라.
+
+[날씨 데이터]
+수도 서울 다음주 예보: {day_by_day if day_by_day else '데이터 없음'}
+수도 최고기온 범위: {fmt_num(max(tmax_all)) if tmax_all else '?'}°C
+수도 최저기온 범위: {fmt_num(min(tmin_all)) if tmin_all else '?'}°C
+비 소식 있는 요일: {', '.join(rain_days) + '요일' if rain_days else '없음'}
+
+[작성 규칙]
+- 뉴스 기사 서두 문단 형식. 종결어미는 반드시 "-다" 체
+- 날짜 표기: "N일(현지시간)" 형식만 허용. "이번 주", "다음주", 절대연도 절대 금지
+- 700자 이상 작성
+- "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
+- 타 매체명 언급 금지
+- 요일별 날씨 흐름을 순서대로 서술하고, 비 소식·기온 특이사항 강조
+- 본문만 출력(제목·소제목 불필요)"""
+
+    summary = call_gemini_weather(gemini_prompt) or (
+        f"기상청 단기·중기예보에 따르면 다음주(월~금) 한국의 날씨는 "
+        f"최고 {fmt_num(max(tmax_all)) if tmax_all else '?'}°C, "
+        f"최저 {fmt_num(min(tmin_all)) if tmin_all else '?'}°C 사이를 오갈 전망이다."
+        + (f" {'·'.join(rain_days)}요일에 비 소식이 있다." if rain_days else " 당분간 비 소식은 없을 전망이다.")
+    )
 
     _kw_tmax_all = [d["tmax"] for c in [c for c in capitals_ranges if c[1]] for d in c[1]]
     _kw_max = fmt_num(max(_kw_tmax_all)) if _kw_tmax_all else "?"
@@ -1487,55 +1618,54 @@ def build_today_report(country_name, weather_list, local_now: datetime):
     if not any_success:
         return None, None
 
-    # ── 서두 문단: 전국(전 도시) 개관 ──
+    # ── 수도·전국 통계 산출 ──
     cap_name, cap_w = _find_capital(weather_list)
     cap_today = next((info for n, c, info in valid if c), None)
 
-    lede = f"{today_str} {country_name} 주요 지역은 대체로 흐리거나 비가 오는 곳이 있는 가운데 지역별로 날씨 차이가 크겠습니다."
-    if cap_today:
-        cap_condition = WEATHER_CODE_KO.get(cap_today["code"], "")
-        lede = (
-            f"{today_str}, {country_name}의 수도 {cap_name}은 {cap_condition}이며 "
-            f"최고 {fmt_num(cap_today['tmax'])}°C, 최저 {fmt_num(cap_today['tmin'])}°C가 예상됩니다."
-            f"{_describe_condition(cap_today.get('precip_prob'))}"
-        )
-
-    # ── 지역별 예상 강수량 범위 ──
+    tmax_all = [info["tmax"] for _, _, info in valid]
+    tmin_all = [info["tmin"] for _, _, info in valid]
+    feels_all = [info["feels_max"] for _, _, info in valid if info.get("feels_max") is not None]
     rain_cities = [(n, info) for n, c, info in valid if (info.get("precip") or 0) > 0]
-    precip_note = ""
-    if rain_cities:
-        amounts = [info["precip"] for _, info in rain_cities]
-        precip_note = (
-            f" 비가 예상되는 지역의 강수량은 {fmt_num(min(amounts), 1)}~{fmt_num(max(amounts), 1)}mm 수준이며, "
-            f"{', '.join(n for n, _ in rain_cities[:6])} 등에서 비 소식이 있습니다."
-        )
-
-    # ── 안전 안내 (뇌우/돌풍/폭염) ──
     thunder_cities = [n for n, c, info in valid if info.get("code") in (95, 96, 99)]
     windy_cities = [n for n, c, info in valid if (info.get("wind_max") or 0) >= 40]
     heat_cities = [n for n, c, info in valid if (info.get("tmax") or 0) >= 33 or (info.get("feels_max") or 0) >= 33]
 
-    safety_notes = []
-    if thunder_cities:
-        safety_notes.append(f"{', '.join(thunder_cities[:5])} 등에서는 돌풍과 천둥·번개를 동반한 뇌우가 예상되니 외출과 교통 안전에 유의해야 합니다.")
-    if windy_cities:
-        safety_notes.append(f"{', '.join(windy_cities[:5])} 등은 최대풍속 40km/h 이상의 강풍이 예상됩니다.")
-    if heat_cities:
-        safety_notes.append(f"{', '.join(heat_cities[:5])} 등은 체감온도 33°C 안팎의 무더위가 예상되니 온열질환에 유의해야 합니다.")
-    safety_text = (" " + " ".join(safety_notes)) if safety_notes else ""
+    cap_desc = ""
+    if cap_today:
+        cap_condition = WEATHER_CODE_KO.get(cap_today["code"], "")
+        cap_desc = (
+            f"{cap_condition}, 최고 {fmt_num(cap_today['tmax'])}°C, 최저 {fmt_num(cap_today['tmin'])}°C, "
+            f"강수확률 {fmt_num(cap_today.get('precip_prob') or 0)}%"
+        )
 
-    # ── 전체 기온·체감 범위 ──
-    tmax_all = [info["tmax"] for _, _, info in valid]
-    tmin_all = [info["tmin"] for _, _, info in valid]
-    feels_all = [info["feels_max"] for _, _, info in valid if info.get("feels_max") is not None]
-    temp_note = f" 이날 아침 최저기온은 {fmt_num(min(tmin_all))}°C, 낮 최고기온은 {fmt_num(max(tmax_all))}°C 수준으로 예보됐습니다."
-    if feels_all:
-        temp_note += f" 체감온도는 최고 {fmt_num(max(feels_all))}°C까지 오르는 곳이 있겠습니다."
+    gemini_prompt = f"""다음은 {country_name} 주요 도시 날씨 데이터다. 이를 바탕으로 뉴스 기사 본문(서두 문단)을 작성하라.
 
-    summary = lede + precip_note + safety_text + temp_note + "\n\n다음은 지역별 날씨 전망입니다."
+[날씨 데이터]
+수도 {cap_name}: {cap_desc if cap_desc else '데이터 없음'}
+전국 최저기온: {fmt_num(min(tmin_all))}°C / 최고기온: {fmt_num(max(tmax_all))}°C
+체감 최고기온: {fmt_num(max(feels_all))}°C {'(온열질환 주의)' if feels_all and max(feels_all) >= 33 else ''}
+강수 예상 지역: {', '.join(f"{n}({fmt_num(info['precip'],1)}mm)" for n, info in rain_cities[:6]) if rain_cities else '없음'}
+뇌우 예상 지역: {', '.join(thunder_cities[:5]) if thunder_cities else '없음'}
+강풍 예상 지역(40km/h↑): {', '.join(windy_cities[:5]) if windy_cities else '없음'}
+폭염 지역(체감 33°C↑): {', '.join(heat_cities[:5]) if heat_cities else '없음'}
+
+[작성 규칙]
+- 뉴스 기사 서두 문단 형식. 종결어미는 반드시 "-다" 체
+- 날짜 표기: "N일(현지시간)" 형식만 허용. "오늘", 절대연도 절대 금지
+- 700자 이상 작성
+- "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
+- 타 매체명 언급 금지
+- 수도 날씨 서술 후 특이기상(뇌우·강풍·폭염·강수) 언급, 전국 기온 범위로 마무리
+- 본문만 출력(제목·소제목 불필요)"""
+
+    summary = call_gemini_weather(gemini_prompt) or (
+        f"{today_str}, {country_name}의 수도 {cap_name}은 {cap_desc}이 예상된다. "
+        f"전국적으로는 최저 {fmt_num(min(tmin_all))}°C에서 최고 {fmt_num(max(tmax_all))}°C 분포를 보일 전망이다."
+    )
+    summary += "\n\n다음은 지역별 날씨 전망입니다."
 
     max_temp = fmt_num(max([k["tmax"] for _, _, k in valid]))
-    title = f"{country_name}, {_weather_phrase(lede, max_temp)}"
+    title = f"{country_name}, {_weather_phrase(summary, max_temp)}"
     body = summary + "\n\n" + "\n".join(lines)
     return title, body
 
@@ -1563,31 +1693,49 @@ def build_weekend_report(country_name, weather_list, local_now: datetime):
     if not any_success:
         return None, None
 
-    # 수도 기준 설명 문단
+    # 수도 기준 데이터 산출
     cap_name, cap_w = _find_capital(weather_list)
-    summary = ""
+    sat_info = sun_info = None
+    sat_cond = sun_cond = ""
     if cap_w is not None:
         dates = list(cap_w["daily"].keys())
         sat, sun = pick_weekend_dates(dates)
         sat_info = cap_w["daily"].get(sat) if sat else None
         sun_info = cap_w["daily"].get(sun) if sun else None
-        if sat_info and sun_info and sat_info.get("tmax") is not None and sun_info.get("tmax") is not None:
-            sat_cond = WEATHER_CODE_KO.get(sat_info["code"], "")
-            sun_cond = WEATHER_CODE_KO.get(sun_info["code"], "")
-            max_precip = max(sat_info.get("precip_prob") or 0, sun_info.get("precip_prob") or 0)
-            summary = (
-                f"이번 주말 {country_name}의 수도 {cap_name}은 토요일 {sat_cond}"
-                f"(최고 {fmt_num(sat_info['tmax'])}°C/최저 {fmt_num(sat_info['tmin'])}°C), "
-                f"일요일 {sun_cond}(최고 {fmt_num(sun_info['tmax'])}°C/최저 {fmt_num(sun_info['tmin'])}°C)로 예상됩니다."
-                f"{_describe_condition(max_precip)}"
-                f" 그 외 주요 지역 예보는 아래와 같습니다."
-            )
+        sat_cond = WEATHER_CODE_KO.get(sat_info["code"], "") if sat_info else ""
+        sun_cond = WEATHER_CODE_KO.get(sun_info["code"], "") if sun_info else ""
 
-    if not summary:
-        summary = f"{today_str} 발표된 {country_name} 주요 지역 주말(토·일) 날씨 예보입니다."
+    sat_desc = (
+        f"{sat_cond}, 최고 {fmt_num(sat_info['tmax'])}°C, 최저 {fmt_num(sat_info['tmin'])}°C, "
+        f"강수확률 {fmt_num(sat_info.get('precip_prob') or 0)}%"
+    ) if sat_info else "데이터 없음"
+    sun_desc = (
+        f"{sun_cond}, 최고 {fmt_num(sun_info['tmax'])}°C, 최저 {fmt_num(sun_info['tmin'])}°C, "
+        f"강수확률 {fmt_num(sun_info.get('precip_prob') or 0)}%"
+    ) if sun_info else "데이터 없음"
 
-    sat_f = "맑음" if "맑" in lines[0] else ("비" if "비" in lines[0] else "흐림")
-    sun_f = "맑음" if "맑" in lines[1] else ("비" if "비" in lines[1] else "흐림")
+    gemini_prompt = f"""다음은 {country_name} 주요 도시 주말 날씨 데이터다. 이를 바탕으로 뉴스 기사 본문(서두 문단)을 작성하라.
+
+[날씨 데이터]
+수도 {cap_name} 토요일: {sat_desc}
+수도 {cap_name} 일요일: {sun_desc}
+
+[작성 규칙]
+- 뉴스 기사 서두 문단 형식. 종결어미는 반드시 "-다" 체
+- 날짜 표기: "N일(현지시간)" 형식만 허용. "이번 주말", 절대연도 절대 금지
+- 700자 이상 작성
+- "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
+- 타 매체명 언급 금지
+- 토요일·일요일을 구분해 수도 날씨를 서술하고, 특이기상(강수·강풍 등) 언급
+- 본문만 출력(제목·소제목 불필요)"""
+
+    summary = call_gemini_weather(gemini_prompt) or (
+        f"{today_str} 기준 {country_name}의 수도 {cap_name}은 토요일 {sat_desc}, 일요일 {sun_desc}이 예상된다. "
+        f"그 외 주요 지역 예보는 아래와 같다."
+    )
+
+    sat_f = "맑음" if sat_info and WEATHER_CODE_KO.get(sat_info.get("code"), "") in ("맑음", "구름조금") else ("비" if sat_info and sat_info.get("precip_prob", 0) >= 50 else "흐림")
+    sun_f = "맑음" if sun_info and WEATHER_CODE_KO.get(sun_info.get("code"), "") in ("맑음", "구름조금") else ("비" if sun_info and sun_info.get("precip_prob", 0) >= 50 else "흐림")
     title = f"주말 {country_name}, {_weekend_phrase(sat_f, sun_f)}"
     body = summary + "\n\n" + "\n".join(lines)
     return title, body
@@ -1613,33 +1761,47 @@ def build_weekly_report(country_name, weather_list, local_now: datetime):
     if not any_success:
         return None, None
 
-    # 수도 기준 설명 문단 (5일 범위 요약 + 요일별 흐름)
+    # 수도 기준 데이터 산출
     cap_name, cap_w = _find_capital(weather_list)
-    summary = ""
+    cap_entries = []
+    tmax_all_cap = tmin_all_cap = []
+    rain_days_cap = []
+    day_by_day_cap = ""
     if cap_w is not None:
         cap_dates = list(cap_w["daily"].keys())[1:6]
         cap_entries = [(WEEKDAY_KO[datetime.strptime(d, "%Y-%m-%d").weekday()], cap_w["daily"].get(d)) for d in cap_dates]
         cap_days = [info for _, info in cap_entries if info and info.get("tmax") is not None]
         if cap_days:
-            tmax_all = [d["tmax"] for d in cap_days]
-            tmin_all = [d["tmin"] for d in cap_days]
-            rain_days = sum(1 for d in cap_days if (d.get("precip_prob") or 0) >= 50)
-            rain_str = (
-                f"5일 중 {rain_days}일 정도 비가 예상되니 참고하시기 바랍니다."
-                if rain_days > 0 else "당분간 비 소식 없이 대체로 맑은 날씨가 이어질 전망입니다."
-            )
-            day_by_day = ", ".join(
-                f"{wd} {WEATHER_CODE_KO.get(info['code'], '')} {fmt_num(info['tmax'])}°/{fmt_num(info['tmin'])}°"
+            tmax_all_cap = [d["tmax"] for d in cap_days]
+            tmin_all_cap = [d["tmin"] for d in cap_days]
+            rain_days_cap = [wd for wd, info in cap_entries if info and (info.get("precip_prob") or 0) >= 50]
+            day_by_day_cap = ", ".join(
+                f"{wd}요일 {WEATHER_CODE_KO.get(info['code'], '')} {fmt_num(info['tmax'])}°C/{fmt_num(info['tmin'])}°C"
                 for wd, info in cap_entries if info and info.get("tmax") is not None
             )
-            summary = (
-                f"{today_str} 발표된 다음주(월~금) 전망입니다. {country_name}의 수도 {cap_name}은 "
-                f"이번 주 최고 {fmt_num(max(tmax_all))}°C, 최저 {fmt_num(min(tmin_all))}°C 사이를 오갈 것으로 보입니다. "
-                f"{rain_str} 요일별로는 {day_by_day} 순으로 예상됩니다. 그 외 주요 지역 예보는 아래와 같습니다."
-            )
 
-    if not summary:
-        summary = f"{today_str} 발표된 {country_name} 주요 지역 다음주(월~금) 날씨 예보입니다."
+    gemini_prompt = f"""다음은 {country_name} 다음주(월~금) 날씨 예보 데이터다. 이를 바탕으로 뉴스 기사 본문(서두 문단)을 작성하라.
+
+[날씨 데이터]
+수도 {cap_name} 요일별 예보: {day_by_day_cap if day_by_day_cap else '데이터 없음'}
+수도 주간 최고기온: {fmt_num(max(tmax_all_cap)) if tmax_all_cap else '?'}°C
+수도 주간 최저기온: {fmt_num(min(tmin_all_cap)) if tmin_all_cap else '?'}°C
+비 소식 요일: {', '.join(rain_days_cap) + '요일' if rain_days_cap else '없음'}
+
+[작성 규칙]
+- 뉴스 기사 서두 문단 형식. 종결어미는 반드시 "-다" 체
+- 날짜 표기: "N일(현지시간)" 형식만 허용. "다음주", 절대연도 절대 금지
+- 700자 이상 작성
+- "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
+- 타 매체명 언급 금지
+- 요일별 날씨 흐름을 순서대로 서술하고, 비 소식·기온 특이사항 강조
+- 본문만 출력(제목·소제목 불필요)"""
+
+    summary = call_gemini_weather(gemini_prompt) or (
+        f"{today_str} 발표된 {country_name} 주요 지역 다음주(월~금) 날씨 예보다. "
+        f"수도 {cap_name}은 최고 {fmt_num(max(tmax_all_cap)) if tmax_all_cap else '?'}°C, "
+        f"최저 {fmt_num(min(tmin_all_cap)) if tmin_all_cap else '?'}°C 사이를 오갈 전망이다."
+    )
 
     _cw_tmax_list = [d["tmax"] for c in capitals_ranges if c[1] for d in c[1]]
     _cw_max = fmt_num(max(_cw_tmax_list)) if _cw_tmax_list else "?"
@@ -1692,36 +1854,45 @@ def build_group_today_report(group_name, countries_data, local_now: datetime):
 
     successful_caps = [c for c in capitals_info if c[2] is not None]
 
-    # ── 서두 개관 ──
-    summary = f"{today_str} 기준 {group_name} 주요국 날씨입니다."
-    if successful_caps:
-        tmax_all = [c[2]["tmax"] for c in successful_caps]
-        tmin_all = [c[2]["tmin"] for c in successful_caps]
-        rainy = [c[0] for c in successful_caps if (c[2].get("precip_prob") or 0) >= 50]
-        summary = (
-            f"{today_str} 기준 {group_name} 주요국은 최저 {fmt_num(min(tmin_all))}°C에서 "
-            f"최고 {fmt_num(max(tmax_all))}°C 사이의 기온을 보이고 있습니다."
-        )
-        if rainy:
-            summary += f" {', '.join(rainy[:5])} 등에서는 비 소식이 있습니다."
-        else:
-            summary += " 대체로 비 소식 없이 맑은 날씨입니다."
-
-    # ── 안전 안내 (뇌우/강풍/폭염) — 국가 단위 도시 전체를 훑는다 ──
+    # ── 통계 산출 ──
+    tmax_all = [c[2]["tmax"] for c in successful_caps] if successful_caps else []
+    tmin_all = [c[2]["tmin"] for c in successful_caps] if successful_caps else []
+    rainy = [c[0] for c in successful_caps if (c[2].get("precip_prob") or 0) >= 50]
     thunder = [f"{cn}({city})" for cn, city, ic, info in all_valid if info.get("code") in (95, 96, 99)]
     windy = [f"{cn}({city})" for cn, city, ic, info in all_valid if (info.get("wind_max") or 0) >= 40]
     heat = [f"{cn}({city})" for cn, city, ic, info in all_valid if (info.get("tmax") or 0) >= 38 or (info.get("feels_max") or 0) >= 38]
 
-    safety_notes = []
-    if thunder:
-        safety_notes.append(f"{', '.join(thunder[:5])} 등에서는 돌풍과 천둥·번개를 동반한 뇌우가 예상되니 유의해야 합니다.")
-    if windy:
-        safety_notes.append(f"{', '.join(windy[:5])} 등은 최대풍속 40km/h 이상의 강풍이 예상됩니다.")
-    if heat:
-        safety_notes.append(f"{', '.join(heat[:5])} 등은 폭염 수준의 무더위가 예상됩니다.")
-    if safety_notes:
-        summary += " " + " ".join(safety_notes)
+    cap_summary_lines = "\n".join(
+        f"- {cn}({cap}): 최고 {fmt_num(info['tmax'])}°C, 최저 {fmt_num(info['tmin'])}°C, "
+        f"날씨 {WEATHER_CODE_KO.get(info.get('code'), '-')}, 강수확률 {fmt_num(info.get('precip_prob') or 0)}%"
+        for cn, cap, info in successful_caps
+    )
 
+    gemini_prompt = f"""다음은 {group_name} 주요국 수도 날씨 데이터다. 이를 바탕으로 뉴스 기사 본문(서두 문단)을 작성하라.
+
+[날씨 데이터]
+지역 최저기온: {fmt_num(min(tmin_all)) if tmin_all else '?'}°C / 최고기온: {fmt_num(max(tmax_all)) if tmax_all else '?'}°C
+비 소식 국가: {', '.join(rainy[:6]) if rainy else '없음'}
+뇌우 지역: {', '.join(thunder[:5]) if thunder else '없음'}
+강풍 지역(40km/h↑): {', '.join(windy[:5]) if windy else '없음'}
+폭염 지역(38°C↑): {', '.join(heat[:5]) if heat else '없음'}
+국가별 수도 날씨:
+{cap_summary_lines}
+
+[작성 규칙]
+- 뉴스 기사 서두 문단 형식. 종결어미는 반드시 "-다" 체
+- 날짜 표기: "N일(현지시간)" 형식만 허용. "오늘", 절대연도 절대 금지
+- 700자 이상 작성
+- "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
+- 타 매체명 언급 금지
+- 지역 전체 기온 범위로 시작해 특이기상(뇌우·강풍·폭염·강수) 국가를 구체적으로 언급
+- 본문만 출력(제목·소제목 불필요)"""
+
+    summary = call_gemini_weather(gemini_prompt) or (
+        f"{today_str} 기준 {group_name} 주요국은 최저 {fmt_num(min(tmin_all)) if tmin_all else '?'}°C에서 "
+        f"최고 {fmt_num(max(tmax_all)) if tmax_all else '?'}°C 사이의 기온을 보인다."
+        + (f" {', '.join(rainy[:5])} 등에서 비 소식이 있다." if rainy else " 대체로 비 소식 없이 맑은 날씨다.")
+    )
     summary += "\n\n다음은 국가별·지역별 날씨 전망입니다."
 
     _g_tmax_list = [c[2]["tmax"] for c in successful_caps if c[2] and c[2].get("tmax") is not None]
@@ -1773,23 +1944,45 @@ def build_group_weekend_report(group_name, countries_data, local_now: datetime):
         return None, None
 
     successful = [c for c in capitals_info if c[1] and c[2]]
-    summary = f"{today_str} 발표된 {group_name} 주요국 주말(토·일) 날씨 예보입니다."
-    if successful:
-        all_tmax = [c[1]["tmax"] for c in successful] + [c[2]["tmax"] for c in successful]
-        all_tmin = [c[1]["tmin"] for c in successful] + [c[2]["tmin"] for c in successful]
-        rainy = [c[0] for c in successful if max(c[1].get("precip_prob") or 0, c[2].get("precip_prob") or 0) >= 50]
-        summary = (
-            f"이번 주말 {group_name} 주요국은 최저 {fmt_num(min(all_tmin))}°C에서 "
-            f"최고 {fmt_num(max(all_tmax))}°C 사이를 오갈 전망입니다."
-        )
-        if rainy:
-            summary += f" {', '.join(rainy[:5])} 등에서는 비 소식이 있습니다."
-        else:
-            summary += " 대체로 비 소식 없이 맑을 전망입니다."
-        summary += " 국가별 상세는 아래와 같습니다."
 
-    sat_f = "맑음" if "맑" in lines[0] else ("비" if "비" in lines[0] else "흐림")
-    sun_f = "맑음" if "맑" in lines[1] else ("비" if "비" in lines[1] else "흐림")
+    all_tmax = ([c[1]["tmax"] for c in successful] + [c[2]["tmax"] for c in successful]) if successful else []
+    all_tmin = ([c[1]["tmin"] for c in successful] + [c[2]["tmin"] for c in successful]) if successful else []
+    rainy = [c[0] for c in successful if max(c[1].get("precip_prob") or 0, c[2].get("precip_prob") or 0) >= 50]
+
+    cap_weekend_lines = "\n".join(
+        f"- {cn}: 토요일 {WEATHER_CODE_KO.get(sat.get('code'), '-')} "
+        f"최고{fmt_num(sat['tmax'])}°C/최저{fmt_num(sat['tmin'])}°C 강수{fmt_num(sat.get('precip_prob') or 0)}%, "
+        f"일요일 {WEATHER_CODE_KO.get(sun.get('code'), '-')} "
+        f"최고{fmt_num(sun['tmax'])}°C/최저{fmt_num(sun['tmin'])}°C 강수{fmt_num(sun.get('precip_prob') or 0)}%"
+        for cn, sat, sun in successful
+    )
+
+    gemini_prompt = f"""다음은 {group_name} 주요국 주말 날씨 데이터다. 이를 바탕으로 뉴스 기사 본문(서두 문단)을 작성하라.
+
+[날씨 데이터]
+지역 최저기온: {fmt_num(min(all_tmin)) if all_tmin else '?'}°C / 최고기온: {fmt_num(max(all_tmax)) if all_tmax else '?'}°C
+비 소식 국가: {', '.join(rainy[:6]) if rainy else '없음'}
+국가별 수도 주말 예보:
+{cap_weekend_lines}
+
+[작성 규칙]
+- 뉴스 기사 서두 문단 형식. 종결어미는 반드시 "-다" 체
+- 날짜 표기: "N일(현지시간)" 형식만 허용. "이번 주말", 절대연도 절대 금지
+- 700자 이상 작성
+- "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
+- 타 매체명 언급 금지
+- 토요일·일요일로 구분해 주요국 날씨 흐름 서술, 특이기상 강조
+- 본문만 출력(제목·소제목 불필요)"""
+
+    summary = call_gemini_weather(gemini_prompt) or (
+        f"{group_name} 주요국은 이번 주말 최저 {fmt_num(min(all_tmin)) if all_tmin else '?'}°C에서 "
+        f"최고 {fmt_num(max(all_tmax)) if all_tmax else '?'}°C 사이를 오갈 전망이다."
+        + (f" {', '.join(rainy[:5])} 등에서는 비 소식이 있다." if rainy else " 대체로 비 소식 없이 맑을 전망이다.")
+    )
+
+    # 제목용 sat_f/sun_f: 비 소식 국가 과반 여부로 판정
+    sat_f = "비" if sum(1 for _, s, _ in successful if (s.get("precip_prob") or 0) >= 50) > len(successful) / 2 else "맑음"
+    sun_f = "비" if sum(1 for _, _, u in successful if (u.get("precip_prob") or 0) >= 50) > len(successful) / 2 else "맑음"
     title = f"주말 {group_name}, {_weekend_phrase(sat_f, sun_f)}"
     body = summary + "\n\n" + "\n\n".join(country_blocks)
     return title, body
@@ -1830,20 +2023,40 @@ def build_group_weekly_report(group_name, countries_data, local_now: datetime):
         return None, None
 
     successful = [c for c in capitals_ranges if c[1]]
-    summary = f"{today_str} 발표된 {group_name} 주요국 다음주(월~금) 날씨 예보입니다."
-    if successful:
-        all_tmax = [d["tmax"] for c in successful for d in c[1]]
-        all_tmin = [d["tmin"] for c in successful for d in c[1]]
-        rainy = [c[0] for c in successful if any((d.get("precip_prob") or 0) >= 50 for d in c[1])]
-        summary = (
-            f"{today_str} 발표된 다음주(월~금) 전망입니다. {group_name} 주요국은 최저 {fmt_num(min(all_tmin))}°C에서 "
-            f"최고 {fmt_num(max(all_tmax))}°C 사이를 오갈 것으로 보입니다."
-        )
-        if rainy:
-            summary += f" {', '.join(rainy[:5])} 등에서는 비 소식이 있는 날이 있으니 참고하시기 바랍니다."
-        else:
-            summary += " 당분간 비 소식 없이 대체로 맑은 날씨가 이어질 전망입니다."
-        summary += " 국가별 상세는 아래와 같습니다."
+
+    all_tmax = [d["tmax"] for c in successful for d in c[1]] if successful else []
+    all_tmin = [d["tmin"] for c in successful for d in c[1]] if successful else []
+    rainy = [c[0] for c in successful if any((d.get("precip_prob") or 0) >= 50 for d in c[1])]
+
+    cap_weekly_lines = "\n".join(
+        f"- {cn}: 주간 최고 {fmt_num(max(d['tmax'] for d in days))}°C/"
+        f"최저 {fmt_num(min(d['tmin'] for d in days))}°C"
+        + (f", 비 소식 있음" if any((d.get('precip_prob') or 0) >= 50 for d in days) else "")
+        for cn, days in successful
+    )
+
+    gemini_prompt = f"""다음은 {group_name} 주요국 다음주(월~금) 날씨 예보 데이터다. 이를 바탕으로 뉴스 기사 본문(서두 문단)을 작성하라.
+
+[날씨 데이터]
+지역 최저기온: {fmt_num(min(all_tmin)) if all_tmin else '?'}°C / 최고기온: {fmt_num(max(all_tmax)) if all_tmax else '?'}°C
+비 소식 있는 국가: {', '.join(rainy[:6]) if rainy else '없음'}
+국가별 주간 요약:
+{cap_weekly_lines}
+
+[작성 규칙]
+- 뉴스 기사 서두 문단 형식. 종결어미는 반드시 "-다" 체
+- 날짜 표기: "N일(현지시간)" 형식만 허용. "다음주", 절대연도 절대 금지
+- 700자 이상 작성
+- "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
+- 타 매체명 언급 금지
+- 지역 전체 기온 범위로 시작해 비 소식 국가와 특이기상을 구체적으로 언급
+- 본문만 출력(제목·소제목 불필요)"""
+
+    summary = call_gemini_weather(gemini_prompt) or (
+        f"{today_str} 발표된 다음주(월~금) 전망이다. {group_name} 주요국은 최저 {fmt_num(min(all_tmin)) if all_tmin else '?'}°C에서 "
+        f"최고 {fmt_num(max(all_tmax)) if all_tmax else '?'}°C 사이를 오갈 것으로 보인다."
+        + (f" {', '.join(rainy[:5])} 등에서는 비 소식이 있다." if rainy else " 당분간 비 소식 없이 대체로 맑은 날씨가 이어질 전망이다.")
+    )
 
     _gw_tmax_list = [d["tmax"] for c in successful for d in c[1]]
     _gw_max = fmt_num(max(_gw_tmax_list)) if _gw_tmax_list else "?"
