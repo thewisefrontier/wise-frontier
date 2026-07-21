@@ -1181,16 +1181,27 @@ def build_korea_today_report_kma(cities: list, local_now: datetime):
 - 타 매체명 언급 금지
 - 수도 날씨를 중심으로 서술하되, 특이기상(강수·강풍·특보)은 구체적으로 언급
 - 전국 기온 범위로 마무리
-- 본문만 출력(제목·소제목 불필요)"""
+- 본문만 출력(제목·소제목 불필요)
 
-    lede = call_gemini_weather(gemini_prompt) or (
-        f"기상청에 따르면 한국의 수도 {cap_name}은 오전 {cap['am_condition']}이고 오후 {cap['pm_condition']}일 것으로 예상된다. "
-        f"최저기온은 {fmt_num(cap['tmin'])}°C, 최고기온은 {fmt_num(cap['tmax'])}°C를 기록할 전망이다. "
-        f"전국적으로는 최저 {fmt_num(min(tmin_all))}°C에서 최고 {fmt_num(max(tmax_all))}°C의 분포를 보일 전망이다."
-    )
+응답은 반드시 아래 JSON 형식으로만 출력하라 (마크다운 코드블록 없이):
+{"title": "제목", "body": "본문..."}
+
+제목 작성 규칙:
+- 20자 내외. 지역명은 앞에 붙이지 말 것(본문에서 유추 가능)
+- 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
+- "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
+
+    _raw_kma_today = call_gemini_weather(gemini_prompt)
+    _title_kma_today, lede = _parse_gemini_weather_response(_raw_kma_today)
+    if not lede:
+        lede = (
+            f"기상청에 따르면 한국의 수도 {cap_name}은 오전 {cap['am_condition']}이고 오후 {cap['pm_condition']}일 것으로 예상된다. "
+            f"최저기온은 {fmt_num(cap['tmin'])}°C, 최고기온은 {fmt_num(cap['tmax'])}°C를 기록할 전망이다. "
+            f"전국적으로는 최저 {fmt_num(min(tmin_all))}°C에서 최고 {fmt_num(max(tmax_all))}°C의 분포를 보일 전망이다."
+        )
 
     max_temp = fmt_num(max([k["tmax"] for _, _, k in valid]))
-    title = f"한국, {_weather_phrase(lede, max_temp)}"
+    title = _title_kma_today if _title_kma_today else f"한국, {_weather_phrase(lede, max_temp)}"
     legend = "[지역별 날씨 전망] [오전/오후](최저∼최고기온) | 강수확률"
     body = lede + "\n\n" + legend + "\n\n" + "\n".join(lines)
     return title, body
@@ -1273,17 +1284,28 @@ def build_korea_weekend_report_kma(cities: list, local_now: datetime):
 - "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
 - 타 매체명 언급 금지
 - 토요일·일요일 날씨를 구분해 서술하되, 특이기상(강수·특보)은 구체적으로 언급
-- 본문만 출력(제목·소제목 불필요)"""
+- 본문만 출력(제목·소제목 불필요)
 
-    lede = call_gemini_weather(gemini_prompt) or (
-        f"기상청 단기예보에 따르면 이번 주말 한국의 수도 {cap_name}은 "
-        f"토요일 {sat_desc}, 일요일 {sun_desc}이 예상된다."
-        + (f" {', '.join(rain_cities)} 등은 강수확률이 높아 우산 준비가 필요하다." if rain_cities else "")
-    )
+응답은 반드시 아래 JSON 형식으로만 출력하라 (마크다운 코드블록 없이):
+{"title": "제목", "body": "본문..."}
+
+제목 작성 규칙:
+- 20자 내외. 지역명은 앞에 붙이지 말 것(본문에서 유추 가능)
+- 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
+- "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
+
+    _raw_kma_wknd = call_gemini_weather(gemini_prompt)
+    _title_kma_wknd, lede = _parse_gemini_weather_response(_raw_kma_wknd)
+    if not lede:
+        lede = (
+            f"기상청 단기예보에 따르면 이번 주말 한국의 수도 {cap_name}은 "
+            f"토요일 {sat_desc}, 일요일 {sun_desc}이 예상된다."
+            + (f" {', '.join(rain_cities)} 등은 강수확률이 높아 우산 준비가 필요하다." if rain_cities else "")
+        )
 
     sat_f = "맑음" if cap_sat and "맑" in (cap_sat.get("am_condition") or "") else ("비" if cap_sat and "비" in (cap_sat.get("am_condition") or "") else "흐림")
     sun_f = "맑음" if cap_sun and "맑" in (cap_sun.get("am_condition") or "") else ("비" if cap_sun and "비" in (cap_sun.get("am_condition") or "") else "흐림")
-    title = f"주말 한국, {_weekend_phrase(sat_f, sun_f)}"
+    title = _title_kma_wknd if _title_kma_wknd else f"주말 한국, {_weekend_phrase(sat_f, sun_f)}"
     legend = "다음은 지역별 주말 날씨 전망입니다.\n[토요일, 일요일](최저∼최고기온) <오전 강수확률, 오후 강수확률>"
     body = lede + "\n\n" + legend + "\n\n" + "\n".join(lines)
     return title, body
@@ -1479,22 +1501,50 @@ def build_korea_weekly_report_kma(cities: list, local_now: datetime):
 - "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
 - 타 매체명 언급 금지
 - 요일별 날씨 흐름을 순서대로 서술하고, 비 소식·기온 특이사항 강조
-- 본문만 출력(제목·소제목 불필요)"""
+- 본문만 출력(제목·소제목 불필요)
 
-    summary = call_gemini_weather(gemini_prompt) or (
-        f"기상청 단기·중기예보에 따르면 다음주(월~금) 한국의 날씨는 "
-        f"최고 {fmt_num(max(tmax_all)) if tmax_all else '?'}°C, "
-        f"최저 {fmt_num(min(tmin_all)) if tmin_all else '?'}°C 사이를 오갈 전망이다."
-        + (f" {'·'.join(rain_days)}요일에 비 소식이 있다." if rain_days else " 당분간 비 소식은 없을 전망이다.")
-    )
+응답은 반드시 아래 JSON 형식으로만 출력하라 (마크다운 코드블록 없이):
+{"title": "제목", "body": "본문..."}
+
+제목 작성 규칙:
+- 20자 내외. 지역명은 앞에 붙이지 말 것(본문에서 유추 가능)
+- 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
+- "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
+
+    _raw_kma_wkly = call_gemini_weather(gemini_prompt)
+    _title_kma_wkly, summary = _parse_gemini_weather_response(_raw_kma_wkly)
+    if not summary:
+        summary = (
+            f"기상청 단기·중기예보에 따르면 다음주(월~금) 한국의 날씨는 "
+            f"최고 {fmt_num(max(tmax_all)) if tmax_all else '?'}°C, "
+            f"최저 {fmt_num(min(tmin_all)) if tmin_all else '?'}°C 사이를 오갈 전망이다."
+            + (f" {'·'.join(rain_days)}요일에 비 소식이 있다." if rain_days else " 당분간 비 소식은 없을 전망이다.")
+        )
 
     _kw_tmax_all = [d["tmax"] for c in [c for c in capitals_ranges if c[1]] for d in c[1]]
     _kw_max = fmt_num(max(_kw_tmax_all)) if _kw_tmax_all else "?"
-    title = f"다음주 한국, {_weekly_phrase(summary, _kw_max)}"
+    title = _title_kma_wkly if _title_kma_wkly else f"다음주 한국, {_weekly_phrase(summary, _kw_max)}"
     body = summary + "\n\n다음은 지역별 날씨 전망입니다.\n\n" + "\n".join(lines)
     return title, body
 
 
+
+
+def _parse_gemini_weather_response(raw: str | None) -> tuple[str, str]:
+    """Gemini 응답(JSON)에서 title·body 분리. 실패 시 ("", raw)."""
+    if not raw:
+        return "", ""
+    try:
+        import json as _json
+        # 마크다운 코드블록 제거 후 파싱
+        cleaned = raw.strip()
+        if cleaned.startswith("```"):
+            cleaned = re.sub(r"^```[a-z]*\n?", "", cleaned)
+            cleaned = re.sub(r"\n?```$", "", cleaned.strip())
+        parsed = _json.loads(cleaned)
+        return parsed.get("title", ""), parsed.get("body", "")
+    except Exception:
+        return "", raw  # fallback: 본문 전체를 body로
 
 def _weather_phrase(lede: str, max_temp_str: str, min_temp_str: str = "") -> str:
     """lede에서 핵심 날씨 상황을 짧은 구로 추출."""
@@ -1656,16 +1706,27 @@ def build_today_report(country_name, weather_list, local_now: datetime):
 - "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
 - 타 매체명 언급 금지
 - 수도 날씨 서술 후 특이기상(뇌우·강풍·폭염·강수) 언급, 전국 기온 범위로 마무리
-- 본문만 출력(제목·소제목 불필요)"""
+- 본문만 출력(제목·소제목 불필요)
 
-    summary = call_gemini_weather(gemini_prompt) or (
-        f"{today_str}, {country_name}의 수도 {cap_name}은 {cap_desc}이 예상된다. "
-        f"전국적으로는 최저 {fmt_num(min(tmin_all))}°C에서 최고 {fmt_num(max(tmax_all))}°C 분포를 보일 전망이다."
-    )
+응답은 반드시 아래 JSON 형식으로만 출력하라 (마크다운 코드블록 없이):
+{"title": "제목", "body": "본문..."}
+
+제목 작성 규칙:
+- 20자 내외. 지역명은 앞에 붙이지 말 것(본문에서 유추 가능)
+- 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
+- "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
+
+    _raw_today = call_gemini_weather(gemini_prompt)
+    _title_today, summary = _parse_gemini_weather_response(_raw_today)
+    if not summary:
+        summary = (
+            f"{today_str}, {country_name}의 수도 {cap_name}은 {cap_desc}이 예상된다. "
+            f"전국적으로는 최저 {fmt_num(min(tmin_all))}°C에서 최고 {fmt_num(max(tmax_all))}°C 분포를 보일 전망이다."
+        )
     summary += "\n\n다음은 지역별 날씨 전망입니다."
 
     max_temp = fmt_num(max([k["tmax"] for _, _, k in valid]))
-    title = f"{country_name}, {_weather_phrase(summary, max_temp)}"
+    title = _title_today if _title_today else f"{country_name}, {_weather_phrase(summary, max_temp)}"
     body = summary + "\n\n" + "\n".join(lines)
     return title, body
 
@@ -1727,16 +1788,27 @@ def build_weekend_report(country_name, weather_list, local_now: datetime):
 - "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
 - 타 매체명 언급 금지
 - 토요일·일요일을 구분해 수도 날씨를 서술하고, 특이기상(강수·강풍 등) 언급
-- 본문만 출력(제목·소제목 불필요)"""
+- 본문만 출력(제목·소제목 불필요)
 
-    summary = call_gemini_weather(gemini_prompt) or (
-        f"{today_str} 기준 {country_name}의 수도 {cap_name}은 토요일 {sat_desc}, 일요일 {sun_desc}이 예상된다. "
-        f"그 외 주요 지역 예보는 아래와 같다."
-    )
+응답은 반드시 아래 JSON 형식으로만 출력하라 (마크다운 코드블록 없이):
+{"title": "제목", "body": "본문..."}
+
+제목 작성 규칙:
+- 20자 내외. 지역명은 앞에 붙이지 말 것(본문에서 유추 가능)
+- 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
+- "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
+
+    _raw_wknd = call_gemini_weather(gemini_prompt)
+    _title_wknd, summary = _parse_gemini_weather_response(_raw_wknd)
+    if not summary:
+        summary = (
+            f"{today_str} 기준 {country_name}의 수도 {cap_name}은 토요일 {sat_desc}, 일요일 {sun_desc}이 예상된다. "
+            f"그 외 주요 지역 예보는 아래와 같다."
+        )
 
     sat_f = "맑음" if sat_info and WEATHER_CODE_KO.get(sat_info.get("code"), "") in ("맑음", "구름조금") else ("비" if sat_info and sat_info.get("precip_prob", 0) >= 50 else "흐림")
     sun_f = "맑음" if sun_info and WEATHER_CODE_KO.get(sun_info.get("code"), "") in ("맑음", "구름조금") else ("비" if sun_info and sun_info.get("precip_prob", 0) >= 50 else "흐림")
-    title = f"주말 {country_name}, {_weekend_phrase(sat_f, sun_f)}"
+    title = _title_wknd if _title_wknd else f"주말 {country_name}, {_weekend_phrase(sat_f, sun_f)}"
     body = summary + "\n\n" + "\n".join(lines)
     return title, body
 
@@ -1795,17 +1867,28 @@ def build_weekly_report(country_name, weather_list, local_now: datetime):
 - "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
 - 타 매체명 언급 금지
 - 요일별 날씨 흐름을 순서대로 서술하고, 비 소식·기온 특이사항 강조
-- 본문만 출력(제목·소제목 불필요)"""
+- 본문만 출력(제목·소제목 불필요)
 
-    summary = call_gemini_weather(gemini_prompt) or (
-        f"{today_str} 발표된 {country_name} 주요 지역 다음주(월~금) 날씨 예보다. "
-        f"수도 {cap_name}은 최고 {fmt_num(max(tmax_all_cap)) if tmax_all_cap else '?'}°C, "
-        f"최저 {fmt_num(min(tmin_all_cap)) if tmin_all_cap else '?'}°C 사이를 오갈 전망이다."
-    )
+응답은 반드시 아래 JSON 형식으로만 출력하라 (마크다운 코드블록 없이):
+{"title": "제목", "body": "본문..."}
+
+제목 작성 규칙:
+- 20자 내외. 지역명은 앞에 붙이지 말 것(본문에서 유추 가능)
+- 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
+- "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
+
+    _raw_wkly = call_gemini_weather(gemini_prompt)
+    _title_wkly, summary = _parse_gemini_weather_response(_raw_wkly)
+    if not summary:
+        summary = (
+            f"{today_str} 발표된 {country_name} 주요 지역 다음주(월~금) 날씨 예보다. "
+            f"수도 {cap_name}은 최고 {fmt_num(max(tmax_all_cap)) if tmax_all_cap else '?'}°C, "
+            f"최저 {fmt_num(min(tmin_all_cap)) if tmin_all_cap else '?'}°C 사이를 오갈 전망이다."
+        )
 
     _cw_tmax_list = [d["tmax"] for c in capitals_ranges if c[1] for d in c[1]]
     _cw_max = fmt_num(max(_cw_tmax_list)) if _cw_tmax_list else "?"
-    title = f"다음주 {country_name}, {_weekly_phrase(summary, _cw_max)}"
+    title = _title_wkly if _title_wkly else f"다음주 {country_name}, {_weekly_phrase(summary, _cw_max)}"
     body = summary + "\n\n" + "\n".join(lines)
     return title, body
 
@@ -1886,18 +1969,29 @@ def build_group_today_report(group_name, countries_data, local_now: datetime):
 - "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
 - 타 매체명 언급 금지
 - 지역 전체 기온 범위로 시작해 특이기상(뇌우·강풍·폭염·강수) 국가를 구체적으로 언급
-- 본문만 출력(제목·소제목 불필요)"""
+- 본문만 출력(제목·소제목 불필요)
 
-    summary = call_gemini_weather(gemini_prompt) or (
-        f"{today_str} 기준 {group_name} 주요국은 최저 {fmt_num(min(tmin_all)) if tmin_all else '?'}°C에서 "
-        f"최고 {fmt_num(max(tmax_all)) if tmax_all else '?'}°C 사이의 기온을 보인다."
-        + (f" {', '.join(rainy[:5])} 등에서 비 소식이 있다." if rainy else " 대체로 비 소식 없이 맑은 날씨다.")
-    )
+응답은 반드시 아래 JSON 형식으로만 출력하라 (마크다운 코드블록 없이):
+{"title": "제목", "body": "본문..."}
+
+제목 작성 규칙:
+- 20자 내외. 지역명은 앞에 붙이지 말 것(본문에서 유추 가능)
+- 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
+- "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
+
+    _raw_grp_today = call_gemini_weather(gemini_prompt)
+    _title_grp_today, summary = _parse_gemini_weather_response(_raw_grp_today)
+    if not summary:
+        summary = (
+            f"{today_str} 기준 {group_name} 주요국은 최저 {fmt_num(min(tmin_all)) if tmin_all else '?'}°C에서 "
+            f"최고 {fmt_num(max(tmax_all)) if tmax_all else '?'}°C 사이의 기온을 보인다."
+            + (f" {', '.join(rainy[:5])} 등에서 비 소식이 있다." if rainy else " 대체로 비 소식 없이 맑은 날씨다.")
+        )
     summary += "\n\n다음은 국가별·지역별 날씨 전망입니다."
 
     _g_tmax_list = [c[2]["tmax"] for c in successful_caps if c[2] and c[2].get("tmax") is not None]
     max_temp = fmt_num(max(_g_tmax_list)) if _g_tmax_list else "?"
-    title = f"{group_name}, {_weather_phrase(summary, max_temp)}"
+    title = _title_grp_today if _title_grp_today else f"{group_name}, {_weather_phrase(summary, max_temp)}"
     body = summary + "\n\n" + "\n\n".join(country_blocks)
     return title, body
 
@@ -1972,18 +2066,29 @@ def build_group_weekend_report(group_name, countries_data, local_now: datetime):
 - "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
 - 타 매체명 언급 금지
 - 토요일·일요일로 구분해 주요국 날씨 흐름 서술, 특이기상 강조
-- 본문만 출력(제목·소제목 불필요)"""
+- 본문만 출력(제목·소제목 불필요)
 
-    summary = call_gemini_weather(gemini_prompt) or (
-        f"{group_name} 주요국은 이번 주말 최저 {fmt_num(min(all_tmin)) if all_tmin else '?'}°C에서 "
-        f"최고 {fmt_num(max(all_tmax)) if all_tmax else '?'}°C 사이를 오갈 전망이다."
-        + (f" {', '.join(rainy[:5])} 등에서는 비 소식이 있다." if rainy else " 대체로 비 소식 없이 맑을 전망이다.")
-    )
+응답은 반드시 아래 JSON 형식으로만 출력하라 (마크다운 코드블록 없이):
+{"title": "제목", "body": "본문..."}
+
+제목 작성 규칙:
+- 20자 내외. 지역명은 앞에 붙이지 말 것(본문에서 유추 가능)
+- 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
+- "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
+
+    _raw_grp_wknd = call_gemini_weather(gemini_prompt)
+    _title_grp_wknd, summary = _parse_gemini_weather_response(_raw_grp_wknd)
+    if not summary:
+        summary = (
+            f"{group_name} 주요국은 이번 주말 최저 {fmt_num(min(all_tmin)) if all_tmin else '?'}°C에서 "
+            f"최고 {fmt_num(max(all_tmax)) if all_tmax else '?'}°C 사이를 오갈 전망이다."
+            + (f" {', '.join(rainy[:5])} 등에서는 비 소식이 있다." if rainy else " 대체로 비 소식 없이 맑을 전망이다.")
+        )
 
     # 제목용 sat_f/sun_f: 비 소식 국가 과반 여부로 판정
     sat_f = "비" if sum(1 for _, s, _ in successful if (s.get("precip_prob") or 0) >= 50) > len(successful) / 2 else "맑음"
     sun_f = "비" if sum(1 for _, _, u in successful if (u.get("precip_prob") or 0) >= 50) > len(successful) / 2 else "맑음"
-    title = f"주말 {group_name}, {_weekend_phrase(sat_f, sun_f)}"
+    title = _title_grp_wknd if _title_grp_wknd else f"주말 {group_name}, {_weekend_phrase(sat_f, sun_f)}"
     body = summary + "\n\n" + "\n\n".join(country_blocks)
     return title, body
 
@@ -2050,17 +2155,28 @@ def build_group_weekly_report(group_name, countries_data, local_now: datetime):
 - "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
 - 타 매체명 언급 금지
 - 지역 전체 기온 범위로 시작해 비 소식 국가와 특이기상을 구체적으로 언급
-- 본문만 출력(제목·소제목 불필요)"""
+- 본문만 출력(제목·소제목 불필요)
 
-    summary = call_gemini_weather(gemini_prompt) or (
-        f"{today_str} 발표된 다음주(월~금) 전망이다. {group_name} 주요국은 최저 {fmt_num(min(all_tmin)) if all_tmin else '?'}°C에서 "
-        f"최고 {fmt_num(max(all_tmax)) if all_tmax else '?'}°C 사이를 오갈 것으로 보인다."
-        + (f" {', '.join(rainy[:5])} 등에서는 비 소식이 있다." if rainy else " 당분간 비 소식 없이 대체로 맑은 날씨가 이어질 전망이다.")
-    )
+응답은 반드시 아래 JSON 형식으로만 출력하라 (마크다운 코드블록 없이):
+{"title": "제목", "body": "본문..."}
+
+제목 작성 규칙:
+- 20자 내외. 지역명은 앞에 붙이지 말 것(본문에서 유추 가능)
+- 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
+- "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
+
+    _raw_grp_wkly = call_gemini_weather(gemini_prompt)
+    _title_grp_wkly, summary = _parse_gemini_weather_response(_raw_grp_wkly)
+    if not summary:
+        summary = (
+            f"{today_str} 발표된 다음주(월~금) 전망이다. {group_name} 주요국은 최저 {fmt_num(min(all_tmin)) if all_tmin else '?'}°C에서 "
+            f"최고 {fmt_num(max(all_tmax)) if all_tmax else '?'}°C 사이를 오갈 것으로 보인다."
+            + (f" {', '.join(rainy[:5])} 등에서는 비 소식이 있다." if rainy else " 당분간 비 소식 없이 대체로 맑은 날씨가 이어질 전망이다.")
+        )
 
     _gw_tmax_list = [d["tmax"] for c in successful for d in c[1]]
     _gw_max = fmt_num(max(_gw_tmax_list)) if _gw_tmax_list else "?"
-    title = f"다음주 {group_name}, {_weekly_phrase(summary, _gw_max)}"
+    title = _title_grp_wkly if _title_grp_wkly else f"다음주 {group_name}, {_weekly_phrase(summary, _gw_max)}"
     body = summary + "\n\n" + "\n\n".join(country_blocks)
     return title, body
 
