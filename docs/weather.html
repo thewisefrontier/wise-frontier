@@ -262,7 +262,7 @@
   function renderWeather() {
     const container = document.getElementById('weather-container');
     let items = currentFilter === 'all' ? allWeather : allWeather.filter(a => classify(a) === currentFilter);
-    items = [...items].sort((a, b) => (a.country || '').localeCompare(b.country || '', 'ko'));
+    items = [...items].sort((a, b) => (b.created_at || '').localeCompare(a.created_at || ''));
 
     document.getElementById('weather-count').textContent = `${items.length}건`;
 
