@@ -1724,8 +1724,9 @@ def build_group_today_report(group_name, countries_data, local_now: datetime):
 
     summary += "\n\n다음은 국가별·지역별 날씨 전망입니다."
 
-    max_temp = fmt_num(max([k["tmax"] for _, _, k in valid]))
-    title = f"{group_name}, {_weather_phrase(lede, max_temp)}"
+    _g_tmax_list = [c[2]["tmax"] for c in successful_caps if c[2] and c[2].get("tmax") is not None]
+    max_temp = fmt_num(max(_g_tmax_list)) if _g_tmax_list else "?"
+    title = f"{group_name}, {_weather_phrase(summary, max_temp)}"
     body = summary + "\n\n" + "\n\n".join(country_blocks)
     return title, body
 
