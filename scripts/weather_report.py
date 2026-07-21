@@ -974,6 +974,7 @@ def _kma_condition(sky, pty) -> str:
 
 def fetch_kma_vilage_fcst_all(name: str, lat: float, lon: float, local_now: datetime, retries: int = 3):
     if not KMA_API_KEY:
+        print(f"  ⚠️ 기상청 조회 스킵 ({name}): KMA_API_KEY 없음")
         return None
 
     nx, ny = _kma_grid_for_city(name, lat, lon)
@@ -997,61 +998,65 @@ def fetch_kma_vilage_fcst_all(name: str, lat: float, lon: float, local_now: date
                 timeout=15,
             )
             if res.status_code != 200:
-                last_err = f"HTTP {res.status_code}"
+                last_err = f"HTTP {res.status_code} / body={res.text[:150]}"
             else:
-                data = res.json()
-                header = data.get("response", {}).get("header", {})
-                if header.get("resultCode") != "00":
-                    last_err = f"KMA {header.get('resultCode')}: {header.get('resultMsg')}"
+                content_type = res.headers.get("Content-Type", "")
+                if "json" not in content_type.lower():
+                    last_err = f"JSON 아닌 응답 (Content-Type={content_type}): {res.text[:150]}"
                 else:
-                    items = data.get("response", {}).get("body", {}).get("items", {}).get("item", [])
-                    by_date_time = {}
-                    for it in items:
-                        d = it.get("fcstDate")
-                        by_date_time.setdefault(d, {}).setdefault(it["fcstTime"], {})[it["category"]] = it["fcstValue"]
+                    data = res.json()
+                    header = data.get("response", {}).get("header", {})
+                    if header.get("resultCode") != "00":
+                        last_err = f"KMA {header.get('resultCode')}: {header.get('resultMsg')}"
+                    else:
+                        items = data.get("response", {}).get("body", {}).get("items", {}).get("item", [])
+                        by_date_time = {}
+                        for it in items:
+                            d = it.get("fcstDate")
+                            by_date_time.setdefault(d, {}).setdefault(it["fcstTime"], {})[it["category"]] = it["fcstValue"]
 
-                    tmn_by_date, tmx_by_date = {}, {}
-                    for it in items:
-                        d = it.get("fcstDate")
-                        if it["category"] == "TMN" and d not in tmn_by_date:
-                            tmn_by_date[d] = float(it["fcstValue"])
-                        if it["category"] == "TMX" and d not in tmx_by_date:
-                            tmx_by_date[d] = float(it["fcstValue"])
+                        tmn_by_date, tmx_by_date = {}, {}
+                        for it in items:
+                            d = it.get("fcstDate")
+                            if it["category"] == "TMN" and d not in tmn_by_date:
+                                tmn_by_date[d] = float(it["fcstValue"])
+                            if it["category"] == "TMX" and d not in tmx_by_date:
+                                tmx_by_date[d] = float(it["fcstValue"])
 
-                    result = {}
-                    for d, by_time in by_date_time.items():
-                        if d not in tmn_by_date or d not in tmx_by_date:
-                            continue
+                        result = {}
+                        for d, by_time in by_date_time.items():
+                            if d not in tmn_by_date or d not in tmx_by_date:
+                                continue
 
-                        def cat_at(t, cat):
-                            return by_time.get(t, {}).get(cat)
+                            def cat_at(t, cat):
+                                return by_time.get(t, {}).get(cat)
 
-                        am_sky, am_pty = cat_at("0900", "SKY"), cat_at("0900", "PTY")
-                        pm_sky, pm_pty = cat_at("1500", "SKY"), cat_at("1500", "PTY")
-                        am_pops = [int(by_time[t]["POP"]) for t in by_time if "0600" <= t <= "1100" and "POP" in by_time[t]]
-                        pm_pops = [int(by_time[t]["POP"]) for t in by_time if "1200" <= t <= "1800" and "POP" in by_time[t]]
-                        wsd_all = [float(by_time[t]["WSD"]) for t in by_time if "WSD" in by_time[t]]
+                            am_sky, am_pty = cat_at("0900", "SKY"), cat_at("0900", "PTY")
+                            pm_sky, pm_pty = cat_at("1500", "SKY"), cat_at("1500", "PTY")
+                            am_pops = [int(by_time[t]["POP"]) for t in by_time if "0600" <= t <= "1100" and "POP" in by_time[t]]
+                            pm_pops = [int(by_time[t]["POP"]) for t in by_time if "1200" <= t <= "1800" and "POP" in by_time[t]]
+                            wsd_all = [float(by_time[t]["WSD"]) for t in by_time if "WSD" in by_time[t]]
 
-                        result[d] = {
-                            "tmin": tmn_by_date[d],
-                            "tmax": tmx_by_date[d],
-                            "am_condition": _kma_condition(am_sky, am_pty),
-                            "pm_condition": _kma_condition(pm_sky, pm_pty),
-                            "am_precip": max(am_pops) if am_pops else None,
-                            "pm_precip": max(pm_pops) if pm_pops else None,
-                            "wind_max": max(wsd_all) * 3.6 if wsd_all else None,
-                        }
+                            result[d] = {
+                                "tmin": tmn_by_date[d],
+                                "tmax": tmx_by_date[d],
+                                "am_condition": _kma_condition(am_sky, am_pty),
+                                "pm_condition": _kma_condition(pm_sky, pm_pty),
+                                "am_precip": max(am_pops) if am_pops else None,
+                                "pm_precip": max(pm_pops) if pm_pops else None,
+                                "wind_max": max(wsd_all) * 3.6 if wsd_all else None,
+                            }
 
-                    if result:
-                        return result
-                    last_err = "TMN/TMX 없음(발표시각 범위 밖)"
+                        if result:
+                            return result
+                        last_err = f"TMN/TMX 없음(발표시각 범위 밖) base={base_date} {base_time}, nx={nx} ny={ny}, 원본항목수={len(items)}"
         except Exception as e:
-            last_err = str(e)
+            last_err = f"{type(e).__name__}: {e}"
 
         if attempt < retries - 1:
             time.sleep(2)
 
-    print(f"  ⚠️ 기상청 조회 실패 ({name}): {last_err}")
+    print(f"  ⚠️ 기상청 조회 실패 ({name}, nx={nx} ny={ny}, base={base_date} {base_time}): {last_err}")
     return None
 
 
@@ -2145,6 +2150,8 @@ def run():
         return
 
     print(f"[날씨] 대륙그룹 {len(GROUPS)}개 + 한국 점검 — 현재 UTC {datetime.now(timezone.utc).strftime('%H:%M')}")
+    print(f"[DEBUG] KMA_API_KEY: {'설정됨(길이=' + str(len(KMA_API_KEY)) + ')' if KMA_API_KEY else '없음'}")
+    print(f"[DEBUG] GEMINI 키 개수: {len(GEMINI_API_KEYS)}")
 
     GROUP_BUILDERS = {
         "today": build_group_today_report,
