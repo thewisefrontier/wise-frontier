@@ -19,6 +19,7 @@ weather_report.py
 """
 
 import os
+import re
 import time
 import requests
 from datetime import datetime, timedelta, timezone
@@ -107,6 +108,23 @@ def call_gemini_weather(prompt: str, max_tokens: int = 1200) -> str | None:
 
     print("[ERROR] 모든 Gemini 키 소진 또는 응답 없음")
     return None
+
+
+def _parse_gemini_weather_response(raw: str | None) -> tuple[str, str]:
+    """Gemini 응답(JSON)에서 title·body 분리. 실패 시 ("", raw)."""
+    if not raw:
+        return "", ""
+    try:
+        import json as _json
+        cleaned = raw.strip()
+        if cleaned.startswith("```"):
+            cleaned = re.sub(r"^```[a-z]*\n?", "", cleaned)
+            cleaned = re.sub(r"\n?```$", "", cleaned.strip())
+        parsed = _json.loads(cleaned)
+        return parsed.get("title", ""), parsed.get("body", "")
+    except Exception:
+        return "", raw  # fallback: 본문 전체를 body로
+
 
 def _sb_headers():
     return {
@@ -428,7 +446,6 @@ COUNTRIES = {
 }
 
 # ── 대륙 그룹 (한국 제외 — 한국은 별도 개별 기사) ──────────
-# group_name: {region, tz(대표 국가 타임존), primary(대표국·이미지용), countries(그룹 소속 국가명 리스트)}
 GROUPS = {
     "아프리카": {
         "region": "africa", "tz": "Africa/Lagos", "primary": "나이지리아",
@@ -489,7 +506,7 @@ WEATHER_CODE_KO = {
 WEEKDAY_KO = ["월", "화", "수", "목", "금", "토", "일"]
 
 MORNING_HOUR_START = 6
-MORNING_HOUR_END = 9  # [6,9) 시 사이에 그 나라 아침으로 판단
+MORNING_HOUR_END = 9
 
 
 def get_local_now(tz_name: str) -> datetime:
@@ -497,28 +514,21 @@ def get_local_now(tz_name: str) -> datetime:
 
 
 def should_run_now(tz_name: str):
-    """
-    이 국가를 지금 실행해야 하는지, 어떤 리포트를 만들어야 하는지 판단.
-    반환: (mode, local_now)
-      mode: 'today'(오늘 날씨, 월~금) | 'weekend'(주말예보, 토요일 아침)
-            | 'weekly'(다음주 월~금 예보, 일요일 아침)
-    """
     local_now = get_local_now(tz_name)
     hour = local_now.hour
-    weekday = local_now.weekday()  # 0=월 ... 6=일
+    weekday = local_now.weekday()
 
     if not (MORNING_HOUR_START <= hour < MORNING_HOUR_END):
         return None, local_now
 
-    if weekday == 6:  # 일요일 아침 — 다음주(월~금) 예보
+    if weekday == 6:
         return "weekly", local_now
-    if weekday == 5:  # 토요일 아침 — 주말(토·일) 예보
+    if weekday == 5:
         return "weekend", local_now
-    return "today", local_now  # 월~금 — 오늘 날씨
+    return "today", local_now
 
 
 def _summarize_ampm(hourly: dict) -> dict:
-    """오늘 하루(첫 24시간)의 오전(06~11시)/오후(12~18시) 대표 상태·최대강수확률 요약"""
     times = hourly.get("time", [])
     codes = hourly.get("weathercode", [])
     precip_probs = hourly.get("precipitation_probability", [])
@@ -544,7 +554,6 @@ def _summarize_ampm(hourly: dict) -> dict:
 
 
 def fetch_full_weather(lat, lon, retries: int = 3):
-    """Open-Meteo 현재 날씨 + 10일 일별 상세 예보 + 오늘 시간대별(오전/오후) 예보 조회 (일시적 오류 시 최대 3회 재시도)"""
     last_err = None
     for attempt in range(retries):
         try:
@@ -619,12 +628,10 @@ def fmt_num(v, digits=0):
 
 
 def format_day_line(label, day_info, include_current=None):
-    """하루치 날씨를 한 줄로 포맷"""
     if not day_info or day_info.get("tmax") is None:
         return f"- {label}: 데이터 없음"
 
     condition = WEATHER_CODE_KO.get(day_info["code"], f"코드{day_info['code']}")
-
     detail = (
         f"최고 {fmt_num(day_info['tmax'])}°C/최저 {fmt_num(day_info['tmin'])}°C "
         f"(체감 {fmt_num(day_info['feels_max'])}°C/{fmt_num(day_info['feels_min'])}°C), "
@@ -638,10 +645,6 @@ def format_day_line(label, day_info, include_current=None):
 
 
 def _describe_trend(day_entries_with_data: list) -> str:
-    """
-    day_entries_with_data: [(요일약칭, day_info), ...] (데이터 있는 것만)
-    기온 흐름 + 비 오는 시점을 짧은 문장으로 설명.
-    """
     if len(day_entries_with_data) < 2:
         return ""
 
@@ -649,7 +652,6 @@ def _describe_trend(day_entries_with_data: list) -> str:
     last_wd, last_info = day_entries_with_data[-1]
     n = len(day_entries_with_data)
 
-    # 기온 흐름 (첫날 대비 마지막날 최고기온 변화)
     diff = last_info["tmax"] - first_info["tmax"]
     if diff >= 3:
         temp_trend = f"{first_wd}요일 이후 점차 더워지는 흐름이며"
@@ -658,7 +660,6 @@ def _describe_trend(day_entries_with_data: list) -> str:
     else:
         temp_trend = "한 주 내내 비슷한 기온대를 유지하며"
 
-    # 비 오는 시점(초반/중반/후반)
     rain_positions = [i for i, (_, info) in enumerate(day_entries_with_data) if (info.get("precip_prob") or 0) >= 50]
     if not rain_positions:
         rain_part = "비 소식 없이 대체로 맑겠습니다"
@@ -675,14 +676,6 @@ def _describe_trend(day_entries_with_data: list) -> str:
 
 
 def format_multi_day_line(label: str, day_entries: list) -> str:
-    """
-    여러 날짜(주말 2일, 주간 5일 등)의 날씨를 도시당 한 줄로 정리.
-    앞에는 흐름을 설명하는 짧은 문장, 뒤에는 일자별 압축 데이터가 이어진다.
-    day_entries: [(요일약칭, day_info), ...]
-    예: "- 워싱턴DC(수도): 월요일 이후 점차 선선해지는 흐름이며 화요일 무렵 비 소식이 집중되겠습니다.
-         [월 흐림(34°/20°) → 화 소나기(35°/22°) → 수 이슬비(31°/21°) → 목 맑음(28°/17°) → 금 흐림(32°/19°)]
-         최고 35°C(화)·최저 17°C(목), 화·수요일 비 소식."
-    """
     chain_parts = []
     tmax_list = []
     tmin_list = []
@@ -720,10 +713,9 @@ def format_multi_day_line(label: str, day_entries: list) -> str:
 
 
 def pick_weekend_dates(dates: list) -> tuple:
-    """dates(YYYY-MM-DD 리스트)에서 가장 가까운 토요일·일요일 날짜를 찾는다"""
     sat = sun = None
     for d in dates:
-        wd = datetime.strptime(d, "%Y-%m-%d").weekday()  # 5=토, 6=일
+        wd = datetime.strptime(d, "%Y-%m-%d").weekday()
         if wd == 5 and sat is None:
             sat = d
         elif wd == 6 and sun is None:
@@ -733,7 +725,6 @@ def pick_weekend_dates(dates: list) -> tuple:
     return sat, sun
 
 
-# 국가명 → 이미지 검색용 영문명
 COUNTRY_EN = {
     "나이지리아": "Nigeria", "케냐": "Kenya", "남아공": "South Africa", "이집트": "Egypt",
     "모로코": "Morocco", "알제리": "Algeria", "에티오피아": "Ethiopia", "가나": "Ghana",
@@ -756,9 +747,8 @@ COUNTRY_EN = {
     "한국": "South Korea",
 }
 
-_image_cache = {}  # 국가별 이미지 URL 캐시 (같은 실행에서 today+weekly 재사용)
+_image_cache = {}
 
-# 이 태그가 있으면 제외 (인물/전쟁/지도/국기 등 날씨 기사와 안 맞는 이미지 배제)
 IMAGE_TAG_BLACKLIST = {
     "war", "military", "soldier", "weapon", "gun", "conflict", "protest", "riot",
     "flag", "map", "person", "people", "portrait", "face", "man", "woman",
@@ -766,7 +756,6 @@ IMAGE_TAG_BLACKLIST = {
     "corpse", "death", "blood", "nude", "naked", "sexy",
 }
 
-# 이 태그 중 하나라도 있으면 "도시/풍경" 이미지로 인정 (관련성 확인용)
 IMAGE_TAG_ALLOWLIST = {
     "city", "skyline", "cityscape", "building", "buildings", "architecture",
     "landmark", "tower", "downtown", "urban", "street", "landscape",
@@ -785,12 +774,6 @@ def _is_image_suitable(hit: dict, country_en: str) -> bool:
 
 
 def fetch_country_image(country_name: str) -> str:
-    """
-    Pixabay에서 국가 대표 이미지(스카이라인/랜드마크)를 조회.
-    카테고리를 'places'로 제한하고, 태그를 검사해 부적절하거나 무관한 이미지는 걸러낸다.
-    적합한 이미지가 없으면 빈 문자열(이미지 없음)을 반환 — 억지로 아무 이미지나 넣지 않는다.
-    실행 중 국가당 1회만 호출(캐싱).
-    """
     if country_name in _image_cache:
         return _image_cache[country_name]
 
@@ -836,19 +819,16 @@ def fetch_country_image(country_name: str) -> str:
 
 
 def fetch_cities_weather(cities: list) -> list:
-    """도시 목록에 대해 날씨를 한 번씩만 조회 (오늘/주말/주간 리포트가 이 결과를 공유해서 재사용).
-    API 호출이 몰리지 않도록 도시 사이에 짧은 텀을 둔다."""
     results = []
     for i, (name, lat, lon, is_capital) in enumerate(cities):
         if i > 0:
-            time.sleep(3)  # 요청 몰림 방지
+            time.sleep(3)
         w = fetch_full_weather(lat, lon)
         results.append((name, is_capital, w))
     return results
 
 
 def _describe_condition(precip_prob):
-    """강수확률 기반 간단 설명 문구"""
     if precip_prob is None:
         return ""
     if precip_prob >= 60:
@@ -858,31 +838,27 @@ def _describe_condition(precip_prob):
     return " 비 소식 없이 대체로 맑은 날씨가 예상됩니다."
 
 
-# ── 기상청(KMA) 단기예보 — 한국 "오늘 날씨"·"주말예보" 전용 ──────────
-# 오늘·주말·다음주(월~금) 예보 전부 기상청이 기본. 실패 시에만 Open-Meteo로 대체한다.
+# ── 기상청(KMA) 단기예보 ──────────────────────────────────────
 
-# 공식 격자좌표표(기상청41_단기예보 활용가이드 첨부, 2026.07 버전)에서 확인한 값.
-# LCC 공식 계산값과 대부분 일치하나, 확실성을 위해 5개 도시는 표 값을 그대로 사용.
 KMA_GRID_OVERRIDE = {
     "서울": (60, 127),
     "부산": (98, 76),
     "대구": (89, 90),
-    "광주": (60, 74),   # 전남광주통합특별시 동구 (2026.7.1 행정구역명 변경, 격자는 동일)
+    "광주": (60, 74),
     "제주": (52, 38),
 }
 
 
 def _latlon_to_kma_grid(lat: float, lon: float) -> tuple:
-    """위경도 → 기상청 격자좌표(nx, ny) 변환 (기상청 공식 LCC 도법 공식)"""
     import math
-    RE = 6371.00877  # 지도반경(km)
-    GRID = 5.0        # 격자간격(km)
+    RE = 6371.00877
+    GRID = 5.0
     SLAT1 = 30.0
     SLAT2 = 60.0
     OLON = 126.0
     OLAT = 38.0
-    XO = 43           # 기준점 X좌표
-    YO = 136           # 기준점 Y좌표
+    XO = 43
+    YO = 136
 
     DEGRAD = math.pi / 180.0
     re = RE / GRID
@@ -913,21 +889,15 @@ def _latlon_to_kma_grid(lat: float, lon: float) -> tuple:
 
 
 def _kma_grid_for_city(name: str, lat: float, lon: float) -> tuple:
-    """공식 표에 있는 도시는 표 값을, 없으면 LCC 계산값을 사용"""
     if name in KMA_GRID_OVERRIDE:
         return KMA_GRID_OVERRIDE[name]
     return _latlon_to_kma_grid(lat, lon)
 
 
-# 기상특보 지점코드 (ASOS 지점번호, getWthrWrnList의 stnId)
 KMA_WARNING_STN = {"서울": 108, "부산": 159, "대구": 143, "광주": 156, "제주": 184}
 
 
 def fetch_kma_warning_title(name: str, local_now: datetime, retries: int = 2):
-    """
-    기상청 기상특보목록조회(getWthrWrnList)로 오늘 발표된 해당 지점의 가장 최근 특보 제목을 가져온다.
-    "해제"가 포함된 제목(특보 해제)이거나 특보가 없으면 None을 반환.
-    """
     stn_id = KMA_WARNING_STN.get(name)
     if not stn_id or not KMA_API_KEY:
         return None
@@ -953,7 +923,7 @@ def fetch_kma_warning_title(name: str, local_now: datetime, retries: int = 2):
             data = res.json()
             header = data.get("response", {}).get("header", {})
             code = header.get("resultCode")
-            if code == "03":  # NODATA — 오늘 발표된 특보 없음 (정상)
+            if code == "03":
                 return None
             if code != "00":
                 continue
@@ -974,7 +944,6 @@ def fetch_kma_warning_title(name: str, local_now: datetime, retries: int = 2):
 
 
 def _kma_base_datetime(local_now: datetime) -> tuple:
-    """단기예보 발표시각(02,05,08,11,14,17,20,23시) 중 지금 시점에서 가장 최근 발표를 고른다 (발표 후 10분 여유)"""
     candidates = [2, 5, 8, 11, 14, 17, 20, 23]
     date = local_now.date()
     hour, minute = local_now.hour, local_now.minute
@@ -1004,12 +973,6 @@ def _kma_condition(sky, pty) -> str:
 
 
 def fetch_kma_vilage_fcst_all(name: str, lat: float, lon: float, local_now: datetime, retries: int = 3):
-    """
-    기상청 단기예보(getVilageFcst) 조회. 응답에 포함된 모든 날짜에 대해
-    오전/오후 상태·강수확률·최고최저기온·최대풍속을 날짜별로 반환한다.
-    (오늘/주말 리포트가 이 결과 하나로 API 호출을 공유해서 재사용)
-    실패하거나 KMA_API_KEY가 없으면 None (호출부에서 Open-Meteo로 대체).
-    """
     if not KMA_API_KEY:
         return None
 
@@ -1042,7 +1005,7 @@ def fetch_kma_vilage_fcst_all(name: str, lat: float, lon: float, local_now: date
                     last_err = f"KMA {header.get('resultCode')}: {header.get('resultMsg')}"
                 else:
                     items = data.get("response", {}).get("body", {}).get("items", {}).get("item", [])
-                    by_date_time = {}  # {date: {time: {cat: val}}}
+                    by_date_time = {}
                     for it in items:
                         d = it.get("fcstDate")
                         by_date_time.setdefault(d, {}).setdefault(it["fcstTime"], {})[it["category"]] = it["fcstValue"]
@@ -1076,7 +1039,7 @@ def fetch_kma_vilage_fcst_all(name: str, lat: float, lon: float, local_now: date
                             "pm_condition": _kma_condition(pm_sky, pm_pty),
                             "am_precip": max(am_pops) if am_pops else None,
                             "pm_precip": max(pm_pops) if pm_pops else None,
-                            "wind_max": max(wsd_all) * 3.6 if wsd_all else None,  # m/s → km/h
+                            "wind_max": max(wsd_all) * 3.6 if wsd_all else None,
                         }
 
                     if result:
@@ -1093,7 +1056,6 @@ def fetch_kma_vilage_fcst_all(name: str, lat: float, lon: float, local_now: date
 
 
 def format_kma_line(label: str, kma: dict) -> str:
-    """기상청 단기예보 데이터를 뉴스 스타일 한 줄로"""
     if not kma:
         return f"▲ {label} : 데이터 없음"
     am_p = kma["am_precip"] if kma["am_precip"] is not None else "-"
@@ -1107,8 +1069,7 @@ def format_kma_line(label: str, kma: dict) -> str:
 
 
 def _kma_fetch_cities(cities: list, local_now: datetime) -> list:
-    """도시 목록에 대해 단기예보 전체(날짜별)를 조회 (도시 사이 텀 포함)"""
-    out = []  # (name, is_capital, all_dates_dict_or_None)
+    out = []
     for i, (name, lat, lon, is_capital) in enumerate(cities):
         by_date = fetch_kma_vilage_fcst_all(name, lat, lon, local_now)
         out.append((name, is_capital, by_date))
@@ -1118,11 +1079,10 @@ def _kma_fetch_cities(cities: list, local_now: datetime) -> list:
 
 
 def build_korea_today_report_kma(cities: list, local_now: datetime):
-    """한국 전용 — 기상청 단기예보 기반 뉴스 스타일 '오늘 날씨' 기사 생성"""
     today_str = local_now.strftime("%Y년 %m월 %d일") + f"({WEEKDAY_KO[local_now.weekday()]})"
     target_date = local_now.strftime("%Y%m%d")
     lines = []
-    valid = []  # (name, is_capital, kma)
+    valid = []
 
     fetched = _kma_fetch_cities(cities, local_now)
     for name, is_capital, by_date in fetched:
@@ -1138,7 +1098,6 @@ def build_korea_today_report_kma(cities: list, local_now: datetime):
     cap = next((k for n, c, k in valid if c), valid[0][2])
     cap_name = next((n for n, c, k in valid if c), valid[0][0])
 
-    # 실제 기상청 특보 조회 (폭염/한파/호우/대설/강풍 등 실제 발효 중인 특보)
     warnings = []
     for i, (n, c, k) in enumerate(valid):
         w = fetch_kma_warning_title(n, local_now)
@@ -1184,7 +1143,7 @@ def build_korea_today_report_kma(cities: list, local_now: datetime):
 - 본문만 출력(제목·소제목 불필요)
 
 응답은 반드시 아래 JSON 형식으로만 출력하라 (마크다운 코드블록 없이):
-{"title": "제목", "body": "본문..."}
+{{"title": "제목", "body": "본문..."}}
 
 제목 작성 규칙:
 - 20자 내외. 지역명은 앞에 붙이지 말 것(본문에서 유추 가능)
@@ -1207,15 +1166,13 @@ def build_korea_today_report_kma(cities: list, local_now: datetime):
     return title, body
 
 
-
 def build_korea_weekend_report_kma(cities: list, local_now: datetime):
-    """한국 전용 — 기상청 단기예보 기반 '주말(토·일) 예보' (토요일 아침 발행)"""
     today_str = local_now.strftime("%Y년 %m월 %d일") + f"({WEEKDAY_KO[local_now.weekday()]})"
-    sat_date = local_now.strftime("%Y%m%d")  # 토요일 아침에 발행되므로 오늘=토요일
+    sat_date = local_now.strftime("%Y%m%d")
     sun_date = (local_now + timedelta(days=1)).strftime("%Y%m%d")
 
     lines = []
-    valid = []  # (name, is_capital, sat_kma, sun_kma)
+    valid = []
 
     fetched = _kma_fetch_cities(cities, local_now)
     for name, is_capital, by_date in fetched:
@@ -1244,7 +1201,6 @@ def build_korea_weekend_report_kma(cities: list, local_now: datetime):
     cap_name = next((n for n, c, s, u in valid if c), valid[0][0])
     cap_sat, cap_sun = cap
 
-    # 실제 기상청 특보 조회
     warnings = []
     for i, (n, c, s, u) in enumerate(valid):
         w = fetch_kma_warning_title(n, local_now)
@@ -1287,7 +1243,7 @@ def build_korea_weekend_report_kma(cities: list, local_now: datetime):
 - 본문만 출력(제목·소제목 불필요)
 
 응답은 반드시 아래 JSON 형식으로만 출력하라 (마크다운 코드블록 없이):
-{"title": "제목", "body": "본문..."}
+{{"title": "제목", "body": "본문..."}}
 
 제목 작성 규칙:
 - 20자 내외. 지역명은 앞에 붙이지 말 것(본문에서 유추 가능)
@@ -1311,8 +1267,7 @@ def build_korea_weekend_report_kma(cities: list, local_now: datetime):
     return title, body
 
 
-# ── 기상청(KMA) 중기예보 — 한국 "다음주(월~금) 예보" 전용 ──────────
-# 월~수(+1~+3일)는 단기예보, 목~금(+4~+5일)은 중기예보를 이어붙인다.
+# ── 기상청(KMA) 중기예보 ──────────────────────────────────────
 
 KMA_MID_LAND_CODE = {
     "서울": "11B00000", "부산": "11H20000", "대구": "11H10000",
@@ -1325,7 +1280,6 @@ KMA_MID_TEMP_CODE = {
 
 
 def _kma_mid_tmfc(local_now: datetime) -> str:
-    """중기예보 발표시각(06,18시) 중 지금 시점에서 가장 최근 발표를 고른다 (발표 후 30분 여유)"""
     date = local_now.date()
     hour, minute = local_now.hour, local_now.minute
     if hour > 18 or (hour == 18 and minute >= 30):
@@ -1339,7 +1293,6 @@ def _kma_mid_tmfc(local_now: datetime) -> str:
 
 
 def _fetch_kma_mid(endpoint: str, reg_id: str, tm_fc: str, retries: int = 3):
-    """중기육상예보/중기기온 공통 조회 로직. 실패 시 None."""
     if not KMA_API_KEY:
         return None
     last_err = None
@@ -1378,7 +1331,6 @@ def _fetch_kma_mid(endpoint: str, reg_id: str, tm_fc: str, retries: int = 3):
 
 
 def format_kma_merged_line(label: str, entries: list) -> str:
-    """단기+중기를 이어붙인 도시당 한 줄 (요일약칭, {tmax,tmin,condition,precip_prob} or None)"""
     chain_parts, tmax_list, tmin_list, rain_days = [], [], [], []
     any_data = False
     for wd, info in entries:
@@ -1405,11 +1357,6 @@ def format_kma_merged_line(label: str, entries: list) -> str:
 
 
 def build_korea_weekly_report_kma(cities: list, local_now: datetime):
-    """
-    한국 전용 — 단기예보(월~수) + 중기예보(목~금)를 이어붙인 '다음주(월~금)' 예보.
-    일요일 아침 발행. tmFc 발표시각에 따라 날짜가 밀릴 수 있어, 목·금 실제 날짜 기준으로
-    "N일후" 오프셋을 동적으로 계산한다. 필요 데이터가 없으면 None 반환(호출부에서 Open-Meteo 대체).
-    """
     today_str = local_now.strftime("%Y년 %m월 %d일") + f"({WEEKDAY_KO[local_now.weekday()]})"
 
     tm_fc = _kma_mid_tmfc(local_now)
@@ -1434,7 +1381,7 @@ def build_korea_weekly_report_kma(cities: list, local_now: datetime):
     for i, (name, lat, lon, is_capital) in enumerate(cities):
         label = f"{name}(수도)" if is_capital else name
 
-        by_date = fetch_kma_vilage_fcst_all(name, lat, lon, local_now)  # 월~수(단기)
+        by_date = fetch_kma_vilage_fcst_all(name, lat, lon, local_now)
         land = _fetch_kma_mid("getMidLandFcst", KMA_MID_LAND_CODE.get(name), tm_fc) if name in KMA_MID_LAND_CODE else None
         ta = _fetch_kma_mid("getMidTa", KMA_MID_TEMP_CODE.get(name), tm_fc) if name in KMA_MID_TEMP_CODE else None
         if i < len(cities) - 1:
@@ -1504,7 +1451,7 @@ def build_korea_weekly_report_kma(cities: list, local_now: datetime):
 - 본문만 출력(제목·소제목 불필요)
 
 응답은 반드시 아래 JSON 형식으로만 출력하라 (마크다운 코드블록 없이):
-{"title": "제목", "body": "본문..."}
+{{"title": "제목", "body": "본문..."}}
 
 제목 작성 규칙:
 - 20자 내외. 지역명은 앞에 붙이지 말 것(본문에서 유추 가능)
@@ -1521,34 +1468,12 @@ def build_korea_weekly_report_kma(cities: list, local_now: datetime):
             + (f" {'·'.join(rain_days)}요일에 비 소식이 있다." if rain_days else " 당분간 비 소식은 없을 전망이다.")
         )
 
-    _kw_tmax_all = [d["tmax"] for c in [c for c in capitals_ranges if c[1]] for d in c[1]]
-    _kw_max = fmt_num(max(_kw_tmax_all)) if _kw_tmax_all else "?"
-    title = _title_kma_wkly if _title_kma_wkly else f"다음주 한국, {_weekly_phrase(summary, _kw_max)}"
+    title = _title_kma_wkly if _title_kma_wkly else f"다음주 한국, {_weekly_phrase(summary, fmt_num(max(tmax_all)) if tmax_all else '?')}"
     body = summary + "\n\n다음은 지역별 날씨 전망입니다.\n\n" + "\n".join(lines)
     return title, body
 
 
-
-
-def _parse_gemini_weather_response(raw: str | None) -> tuple[str, str]:
-    """Gemini 응답(JSON)에서 title·body 분리. 실패 시 ("", raw)."""
-    if not raw:
-        return "", ""
-    try:
-        import json as _json
-        # 마크다운 코드블록 제거 후 파싱
-        cleaned = raw.strip()
-        if cleaned.startswith("```"):
-            cleaned = re.sub(r"^```[a-z]*\n?", "", cleaned)
-            cleaned = re.sub(r"\n?```$", "", cleaned.strip())
-        parsed = _json.loads(cleaned)
-        return parsed.get("title", ""), parsed.get("body", "")
-    except Exception:
-        return "", raw  # fallback: 본문 전체를 body로
-
 def _weather_phrase(lede: str, max_temp_str: str, min_temp_str: str = "") -> str:
-    """lede에서 핵심 날씨 상황을 짧은 구로 추출."""
-    # 특이 기상 우선
     if "폭염" in lede or "폭서" in lede:
         return f"최고 {max_temp_str}°C…폭염 기승"
     if "열대야" in lede:
@@ -1559,7 +1484,6 @@ def _weather_phrase(lede: str, max_temp_str: str, min_temp_str: str = "") -> str
         return f"최고 {max_temp_str}°C…호우 특보"
     if "폭설" in lede or "대설" in lede:
         return f"최고 {max_temp_str}°C…대설 특보"
-    # 강수 여부
     if "뇌우" in lede or "천둥" in lede:
         return f"최고 {max_temp_str}°C…곳곳 뇌우"
     if "소나기" in lede:
@@ -1570,7 +1494,6 @@ def _weather_phrase(lede: str, max_temp_str: str, min_temp_str: str = "") -> str
         return f"최고 {max_temp_str}°C…비 소식"
     if "흐림" in lede or "구름" in lede:
         return f"최고 {max_temp_str}°C…흐리고 습해"
-    # 맑음 계열
     try:
         t = float(max_temp_str)
         if t >= 35:
@@ -1587,7 +1510,6 @@ def _weather_phrase(lede: str, max_temp_str: str, min_temp_str: str = "") -> str
 
 
 def _weekend_phrase(sat_f: str, sun_f: str) -> str:
-    """주말 날씨 제목용 요약구."""
     if sat_f == sun_f:
         cond = "맑은 날씨" if sat_f == "맑음" else ("비 소식" if sat_f == "비" else "흐린 날씨")
         return f"토·일 {cond}"
@@ -1597,7 +1519,6 @@ def _weekend_phrase(sat_f: str, sun_f: str) -> str:
 
 
 def _weekly_phrase(lede_or_summary: str, max_temp_str: str) -> str:
-    """다음주 날씨 제목용 요약구."""
     if "비" in lede_or_summary and "맑" in lede_or_summary:
         return f"비 소식 뒤 맑아져…최고 {max_temp_str}°C"
     if "비" in lede_or_summary:
@@ -1605,6 +1526,7 @@ def _weekly_phrase(lede_or_summary: str, max_temp_str: str) -> str:
     if "폭염" in lede_or_summary:
         return f"폭염 지속…최고 {max_temp_str}°C"
     return f"대체로 맑아…최고 {max_temp_str}°C"
+
 
 def _find_capital(weather_list):
     for name, is_capital, w in weather_list:
@@ -1614,10 +1536,6 @@ def _find_capital(weather_list):
 
 
 def format_ampm_line(label: str, today_info: dict, ampm: dict) -> str:
-    """
-    뉴스 스타일 형식: "▲ 도시 : [오전 상태, 오후 상태] (최저∼최고) <오전 강수확률, 오후 강수확률>"
-    체감온도·최대풍속도 덧붙인다.
-    """
     if not today_info or today_info.get("tmax") is None:
         return f"▲ {label} : 데이터 없음"
 
@@ -1633,10 +1551,7 @@ def format_ampm_line(label: str, today_info: dict, ampm: dict) -> str:
     tmax = fmt_num(today_info["tmax"])
     am_p = fmt_num(am_precip) if am_precip is not None else "-"
     pm_p = fmt_num(pm_precip) if pm_precip is not None else "-"
-
-    extra = (
-        f" 체감 {fmt_num(today_info['feels_max'])}°C, 최대풍속 {fmt_num(today_info['wind_max'])}km/h"
-    )
+    extra = f" 체감 {fmt_num(today_info['feels_max'])}°C, 최대풍속 {fmt_num(today_info['wind_max'])}km/h"
 
     return (
         f"▲ {label} : [오전 {am_cond}, 오후 {pm_cond}] ({tmin}∼{tmax}) "
@@ -1645,10 +1560,9 @@ def format_ampm_line(label: str, today_info: dict, ampm: dict) -> str:
 
 
 def build_today_report(country_name, weather_list, local_now: datetime):
-    """뉴스 스타일 날씨 기사 — 서두 설명 + 강수량 범위 + 안전 안내 + 도시별 상세"""
     today_str = local_now.strftime("%Y년 %m월 %d일") + f"({WEEKDAY_KO[local_now.weekday()]}, 현지시간)"
     lines = []
-    valid = []  # (name, is_capital, today_info)
+    valid = []
     any_success = False
 
     for name, is_capital, w in weather_list:
@@ -1668,7 +1582,6 @@ def build_today_report(country_name, weather_list, local_now: datetime):
     if not any_success:
         return None, None
 
-    # ── 수도·전국 통계 산출 ──
     cap_name, cap_w = _find_capital(weather_list)
     cap_today = next((info for n, c, info in valid if c), None)
 
@@ -1709,7 +1622,7 @@ def build_today_report(country_name, weather_list, local_now: datetime):
 - 본문만 출력(제목·소제목 불필요)
 
 응답은 반드시 아래 JSON 형식으로만 출력하라 (마크다운 코드블록 없이):
-{"title": "제목", "body": "본문..."}
+{{"title": "제목", "body": "본문..."}}
 
 제목 작성 규칙:
 - 20자 내외. 지역명은 앞에 붙이지 말 것(본문에서 유추 가능)
@@ -1754,7 +1667,6 @@ def build_weekend_report(country_name, weather_list, local_now: datetime):
     if not any_success:
         return None, None
 
-    # 수도 기준 데이터 산출
     cap_name, cap_w = _find_capital(weather_list)
     sat_info = sun_info = None
     sat_cond = sun_cond = ""
@@ -1791,7 +1703,7 @@ def build_weekend_report(country_name, weather_list, local_now: datetime):
 - 본문만 출력(제목·소제목 불필요)
 
 응답은 반드시 아래 JSON 형식으로만 출력하라 (마크다운 코드블록 없이):
-{"title": "제목", "body": "본문..."}
+{{"title": "제목", "body": "본문..."}}
 
 제목 작성 규칙:
 - 20자 내외. 지역명은 앞에 붙이지 말 것(본문에서 유추 가능)
@@ -1814,7 +1726,6 @@ def build_weekend_report(country_name, weather_list, local_now: datetime):
 
 
 def build_weekly_report(country_name, weather_list, local_now: datetime):
-    """일요일 아침 전용 — 다음주(월~금 5일) 예보"""
     today_str = local_now.strftime("%Y년 %m월 %d일") + f"({WEEKDAY_KO[local_now.weekday()]}, 현지시간)"
     lines = []
     any_success = False
@@ -1824,7 +1735,6 @@ def build_weekly_report(country_name, weather_list, local_now: datetime):
         if w is None:
             lines.append(f"- {label}: 데이터 없음")
             continue
-        # 일요일에 조회하므로 dates[0]=오늘(일요일), dates[1:6]=다음주 월~금
         dates = list(w["daily"].keys())[1:6]
         entries = [(WEEKDAY_KO[datetime.strptime(d, "%Y-%m-%d").weekday()], w["daily"].get(d)) for d in dates]
         lines.append(format_multi_day_line(label, entries))
@@ -1833,10 +1743,10 @@ def build_weekly_report(country_name, weather_list, local_now: datetime):
     if not any_success:
         return None, None
 
-    # 수도 기준 데이터 산출
     cap_name, cap_w = _find_capital(weather_list)
     cap_entries = []
-    tmax_all_cap = tmin_all_cap = []
+    tmax_all_cap = []
+    tmin_all_cap = []
     rain_days_cap = []
     day_by_day_cap = ""
     if cap_w is not None:
@@ -1870,7 +1780,7 @@ def build_weekly_report(country_name, weather_list, local_now: datetime):
 - 본문만 출력(제목·소제목 불필요)
 
 응답은 반드시 아래 JSON 형식으로만 출력하라 (마크다운 코드블록 없이):
-{"title": "제목", "body": "본문..."}
+{{"title": "제목", "body": "본문..."}}
 
 제목 작성 규칙:
 - 20자 내외. 지역명은 앞에 붙이지 말 것(본문에서 유추 가능)
@@ -1886,15 +1796,13 @@ def build_weekly_report(country_name, weather_list, local_now: datetime):
             f"최저 {fmt_num(min(tmin_all_cap)) if tmin_all_cap else '?'}°C 사이를 오갈 전망이다."
         )
 
-    _cw_tmax_list = [d["tmax"] for c in capitals_ranges if c[1] for d in c[1]]
-    _cw_max = fmt_num(max(_cw_tmax_list)) if _cw_tmax_list else "?"
-    title = _title_wkly if _title_wkly else f"다음주 {country_name}, {_weekly_phrase(summary, _cw_max)}"
+    max_cap = fmt_num(max(tmax_all_cap)) if tmax_all_cap else "?"
+    title = _title_wkly if _title_wkly else f"다음주 {country_name}, {_weekly_phrase(summary, max_cap)}"
     body = summary + "\n\n" + "\n".join(lines)
     return title, body
 
 
 def _capital_day_info(weather_list, date_key):
-    """weather_list에서 수도의 특정 날짜 day_info를 반환"""
     cap_name, cap_w = _find_capital(weather_list)
     if cap_w is None:
         return cap_name, None
@@ -1902,12 +1810,11 @@ def _capital_day_info(weather_list, date_key):
 
 
 def build_group_today_report(group_name, countries_data, local_now: datetime):
-    """countries_data: [(country_name, weather_list), ...] — 대륙 그룹 오늘 날씨 (오전/오후 상세)"""
     today_str = local_now.strftime("%Y년 %m월 %d일") + f"({WEEKDAY_KO[local_now.weekday()]}, 현지시간)"
 
-    capitals_info = []  # (country_name, capital_name, day_info)
+    capitals_info = []
     country_blocks = []
-    all_valid = []  # (country_name, city_name, is_capital, today_info)
+    all_valid = []
     any_success = False
 
     for country_name, weather_list in countries_data:
@@ -1937,7 +1844,6 @@ def build_group_today_report(group_name, countries_data, local_now: datetime):
 
     successful_caps = [c for c in capitals_info if c[2] is not None]
 
-    # ── 통계 산출 ──
     tmax_all = [c[2]["tmax"] for c in successful_caps] if successful_caps else []
     tmin_all = [c[2]["tmin"] for c in successful_caps] if successful_caps else []
     rainy = [c[0] for c in successful_caps if (c[2].get("precip_prob") or 0) >= 50]
@@ -1972,7 +1878,7 @@ def build_group_today_report(group_name, countries_data, local_now: datetime):
 - 본문만 출력(제목·소제목 불필요)
 
 응답은 반드시 아래 JSON 형식으로만 출력하라 (마크다운 코드블록 없이):
-{"title": "제목", "body": "본문..."}
+{{"title": "제목", "body": "본문..."}}
 
 제목 작성 규칙:
 - 20자 내외. 지역명은 앞에 붙이지 말 것(본문에서 유추 가능)
@@ -1997,7 +1903,6 @@ def build_group_today_report(group_name, countries_data, local_now: datetime):
 
 
 def build_group_weekend_report(group_name, countries_data, local_now: datetime):
-    """대륙 그룹 주말(토·일) 예보"""
     today_str = local_now.strftime("%Y년 %m월 %d일") + f"({WEEKDAY_KO[local_now.weekday()]}, 현지시간)"
 
     capitals_info = []
@@ -2069,7 +1974,7 @@ def build_group_weekend_report(group_name, countries_data, local_now: datetime):
 - 본문만 출력(제목·소제목 불필요)
 
 응답은 반드시 아래 JSON 형식으로만 출력하라 (마크다운 코드블록 없이):
-{"title": "제목", "body": "본문..."}
+{{"title": "제목", "body": "본문..."}}
 
 제목 작성 규칙:
 - 20자 내외. 지역명은 앞에 붙이지 말 것(본문에서 유추 가능)
@@ -2085,7 +1990,6 @@ def build_group_weekend_report(group_name, countries_data, local_now: datetime):
             + (f" {', '.join(rainy[:5])} 등에서는 비 소식이 있다." if rainy else " 대체로 비 소식 없이 맑을 전망이다.")
         )
 
-    # 제목용 sat_f/sun_f: 비 소식 국가 과반 여부로 판정
     sat_f = "비" if sum(1 for _, s, _ in successful if (s.get("precip_prob") or 0) >= 50) > len(successful) / 2 else "맑음"
     sun_f = "비" if sum(1 for _, _, u in successful if (u.get("precip_prob") or 0) >= 50) > len(successful) / 2 else "맑음"
     title = _title_grp_wknd if _title_grp_wknd else f"주말 {group_name}, {_weekend_phrase(sat_f, sun_f)}"
@@ -2094,10 +1998,9 @@ def build_group_weekend_report(group_name, countries_data, local_now: datetime):
 
 
 def build_group_weekly_report(group_name, countries_data, local_now: datetime):
-    """대륙 그룹 다음주(월~금) 예보 — 일요일 아침 전용"""
     today_str = local_now.strftime("%Y년 %m월 %d일") + f"({WEEKDAY_KO[local_now.weekday()]}, 현지시간)"
 
-    capitals_ranges = []  # (country_name, [day_info,...])
+    capitals_ranges = []
     country_blocks = []
     any_success = False
 
@@ -2158,7 +2061,7 @@ def build_group_weekly_report(group_name, countries_data, local_now: datetime):
 - 본문만 출력(제목·소제목 불필요)
 
 응답은 반드시 아래 JSON 형식으로만 출력하라 (마크다운 코드블록 없이):
-{"title": "제목", "body": "본문..."}
+{{"title": "제목", "body": "본문..."}}
 
 제목 작성 규칙:
 - 20자 내외. 지역명은 앞에 붙이지 말 것(본문에서 유추 가능)
@@ -2182,14 +2085,7 @@ def build_group_weekly_report(group_name, countries_data, local_now: datetime):
 
 
 def save_report(name, region, title, body, kind: str, local_now: datetime, countries: list, image_country: str, key: str):
-    """
-    name: 표시용 이름(국가명 또는 대륙 그룹명) — country 필드와 위젯 표시에 사용
-    key: subcategory에 쓸 고유 키(국가명 또는 'group_아프리카' 등, 다른 종류끼리 충돌 방지)
-    countries: DB의 countries 배열에 넣을 국가명 리스트
-    image_country: Pixabay 이미지 검색에 사용할 국가명(그룹이면 대표국)
-    kind: 'today' | 'weekend' | 'weekly' — DB 중복방지 태그 구분용
-    """
-    now_str_kst = now_kst().strftime("%Y-%m-%d %H:%M")  # DB created_at은 사이트 표준(KST)으로 저장
+    now_str_kst = now_kst().strftime("%Y-%m-%d %H:%M")
     tag = f"{kind}{local_now.strftime('%Y%m%d')}"
     subcategory = f"weather_{key}_{tag}"
 
@@ -2264,7 +2160,6 @@ def run():
 
     ran = 0
 
-    # ── 대륙 그룹 처리 ──
     for group_name, gconf in GROUPS.items():
         mode, local_now = should_run_now(gconf["tz"])
         if mode is None:
@@ -2275,7 +2170,7 @@ def run():
         countries_data = []
         for ci, country_name in enumerate(gconf["countries"]):
             if ci > 0:
-                time.sleep(3)  # 국가 간 요청 몰림 방지
+                time.sleep(3)
             _, _, cities = COUNTRIES[country_name]
             weather_list = fetch_cities_weather(cities)
             countries_data.append((country_name, weather_list))
@@ -2291,7 +2186,6 @@ def run():
         else:
             print(f"  ❌ {group_name} 모든 국가 조회 실패 — 건너뜀")
 
-    # ── 한국은 별도 개별 기사 (오늘·주말 모드는 기상청 단기예보 우선, 실패 시 Open-Meteo로 대체) ──
     region, tz_name, cities = COUNTRIES["한국"]
     mode, local_now = should_run_now(tz_name)
     if mode is not None:
