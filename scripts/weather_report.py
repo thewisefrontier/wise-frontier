@@ -35,7 +35,7 @@ PIXABAY_API_KEY = os.getenv("PIXABAY_API_KEY", "")
 KMA_API_KEY = os.getenv("KMA_API_KEY", "")
 
 # ── Gemini 설정 ──────────────────────────────────────────────
-GEMINI_MODEL = "gemini-2.0-flash-lite"
+GEMINI_MODEL = "gemini-3.1-flash-lite"
 GEMINI_API_KEYS = [k for k in [
     os.getenv("GEMINI_API_KEY"),
     os.getenv("GEMINI_API_KEY_2"),
