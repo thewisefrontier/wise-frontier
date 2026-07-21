@@ -207,7 +207,7 @@ def _calc(today: float, prev: float) -> dict:
 
 
 # ── Gemini 호출 ──────────────────────────────────────────────
-def call_gemini(prompt: str, max_tokens: int = 1500, use_search: bool = False) -> str | None:
+def call_gemini(prompt: str, max_tokens: int = 1500) -> str | None:
     global _current_key_idx, _exhausted_keys
 
     if not GEMINI_API_KEYS:
@@ -221,13 +221,11 @@ def call_gemini(prompt: str, max_tokens: int = 1500, use_search: bool = False) -
             "maxOutputTokens": max_tokens,
         },
     }
-    if use_search:
-        payload["tools"] = [{"google_search": {}}]
 
     n         = len(GEMINI_API_KEYS)
     available = [i for i in range(n) if i not in _exhausted_keys]
     if not available:
-        print("[ERROR] 모든 키 RPD 소진")
+        print("[ERROR] 모든 키 소진")
         return None
 
     ordered = sorted(available, key=lambda i: (i - _current_key_idx) % n)
@@ -249,7 +247,7 @@ def call_gemini(prompt: str, max_tokens: int = 1500, use_search: bool = False) -
                 text  = "".join(p.get("text", "") for p in parts).strip()
                 return text if text else None
             elif res.status_code == 429:
-                print(f"  [429] 키 {idx+1} RPD 소진")
+                print(f"  [429] 키 {idx+1} 한도 초과 → 다음 키")
                 _exhausted_keys.add(idx)
                 continue
             elif res.status_code == 503:
@@ -276,12 +274,10 @@ def build_article_prompt(prices: dict) -> str:
     src   = prices["source"]
 
     wti_dir   = "상승" if wti["change"]   > 0 else ("하락" if wti["change"]   < 0 else "보합")
-    brent_dir = "상승" if brent["change"] > 0 else ("하락" if brent["change"] < 0 else "보합")
     wti_dollar   = int(round(wti["price"]))
-    brent_dollar = int(round(brent["price"]))
 
     return f"""당신은 에너지·원자재 전문 기자입니다.
-먼저 google_search 도구로 "{pdate.day}일 국제유가 WTI Brent" 또는 "oil price {pdate.strftime('%B %d')} WTI Brent"를 검색하여 당일 시장 동향을 파악한 뒤, 아래 데이터와 결합해 기사를 작성하세요.
+아래 유가 데이터를 바탕으로 뉴스 기사를 작성하세요.
 
 [유가 데이터] (출처: {src} / 에너지정보청(EIA))
 - 기준일: {pdate.day}일(현지시간) — 뉴욕상업거래소(NYMEX) 종가
@@ -304,7 +300,7 @@ BODY: <본문>
 2. 구조:
    ① 리드: "국제유가가 {pdate.day}일(현지시간) {wti_dir}했다. WTI 원유 선물은 뉴욕상업거래소(NYMEX)에서 배럴당 {wti['price']:.2f}달러에 마쳤다."
    ② 브렌트유 가격·전일 대비 수치
-   ③ 변동 배경: OPEC+ 동향, 미국 원유 재고, 달러 지수, 지정학 요인 등 (검색 결과 기반)
+   ③ 변동 배경: OPEC+ 동향, 미국 원유 재고, 달러 지수, 지정학 요인 등
    ④ 원유 수출국·신흥시장 영향 (사우디아라비아, 나이지리아, 러시아 등 최소 1개국)
    ⑤ 향후 주시 요인 (사실 기반)
 3. 날짜: "{pdate.day}일(현지시간)" 형식만. "오늘", "현재", 절대연도 금지.
@@ -390,7 +386,7 @@ def main():
 
     print("  → Gemini로 기사 생성 중...")
     prompt       = build_article_prompt(prices)
-    article_text = call_gemini(prompt, max_tokens=1500, use_search=True)
+    article_text = call_gemini(prompt, max_tokens=1500)
     time.sleep(8)
 
     if not article_text:
@@ -401,7 +397,7 @@ def main():
         print("  ⚠️ 논평체 감지 → 재생성")
         article_text = call_gemini(
             prompt + "\n\n[재작성 지시] 논평/칼럼 문체가 섞였습니다. 사실 전달 중심으로만 다시 작성하세요.",
-            max_tokens=1500, use_search=False
+            max_tokens=1500,
         ) or article_text
         time.sleep(5)
 
