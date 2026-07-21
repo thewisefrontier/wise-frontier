@@ -1096,6 +1096,8 @@ def build_korea_today_report_kma(cities: list, local_now: datetime):
         lines.append(format_kma_line(label, kma))
         if kma:
             valid.append((name, is_capital, kma))
+        elif by_date:
+            print(f"  ⚠️ {name}: 기상청 응답은 정상 수신했으나 대상일({target_date}) 데이터 없음. 응답 포함 날짜: {sorted(by_date.keys())}")
 
     if not valid:
         return None, None
@@ -1184,6 +1186,8 @@ def build_korea_weekend_report_kma(cities: list, local_now: datetime):
         label = f"{name}(수도)" if is_capital else name
         sat_kma = by_date.get(sat_date) if by_date else None
         sun_kma = by_date.get(sun_date) if by_date else None
+        if by_date and not (sat_kma or sun_kma):
+            print(f"  ⚠️ {name}: 기상청 응답은 정상 수신했으나 토({sat_date})·일({sun_date}) 데이터 없음. 응답 포함 날짜: {sorted(by_date.keys())}")
 
         parts = []
         if sat_kma:
