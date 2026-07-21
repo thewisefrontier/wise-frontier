@@ -43,8 +43,6 @@ EDT = ZoneInfo("America/New_York")  # 뉴욕 시장 기준
 
 # 뉴욕 시장 종가 기준: 현지 17:00 이후에만 실행
 MARKET_CLOSE_HOUR_LOCAL = 17   # 17:00 EDT/EST
-# 같은 날 기사 중복 방지를 위한 subcategory 접두어
-CLUSTER_KEY_PREFIX = "oil_price_"
 
 # Stooq 심볼
 STOOQ_SYMBOLS = {
@@ -105,12 +103,12 @@ def get_target_price_date() -> date:
     return prev.date()
 
 
-# ── 중복 기사 체크 ───────────────────────────────────────────
+# ── 중복 기사 체크 (url 기준) ────────────────────────────────
 def already_published(price_date: date) -> bool:
-    """해당 날짜 유가 기사가 이미 존재하는지 확인."""
-    cluster_key = f"{CLUSTER_KEY_PREFIX}{price_date.isoformat()}"
+    """해당 날짜 유가 기사가 이미 존재하는지 확인 (url 필드 기준)."""
+    internal_url = f"internal://oil_price_{price_date.isoformat()}"
     res = requests.get(
-        f"{_sb_articles_url()}?subcategory=eq.{cluster_key}&is_published=eq.true&select=id",
+        f"{_sb_articles_url()}?url=eq.{internal_url}&is_published=eq.true&select=id",
         headers=_sb_headers(),
         timeout=10,
     )
@@ -329,19 +327,19 @@ def has_column_style(text: str) -> bool:
 
 # ── 기사 삽입 ────────────────────────────────────────────────
 def insert_article(title_ko: str, summary_ko: str, prices: dict) -> int:
-    now_str     = now_kst().strftime("%Y-%m-%d %H:%M")
-    price_date  = prices["date"].isoformat()
-    cluster_key = f"{CLUSTER_KEY_PREFIX}{price_date}"
+    now_str    = now_kst().strftime("%Y-%m-%d %H:%M")
+    price_date = prices["date"].isoformat()
+    internal_url = f"internal://oil_price_{price_date}"
 
     payload = {
         "title_en":           title_ko,
         "title_ko":           title_ko,
         "summary_en":         "",
         "summary_ko":         summary_ko,
-        "url":                f"internal://{cluster_key}",
+        "url":                internal_url,
         "source":             "NewsFinal",
         "category":           "경제",
-        "subcategory":        cluster_key,
+        "subcategory":        "국제유가",
         "region":             "글로벌",
         "country":            "국제",
         "country_flag":       "🛢️",
