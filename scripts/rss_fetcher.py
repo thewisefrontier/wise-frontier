@@ -50,9 +50,10 @@ REGION_KEYWORDS = {
     "eastern_europe": ["emerging europe", "intellinews", "poland", "ukraine", "romania", "czechia", "kyiv", "warsaw", "caucasus", "azerbaijan"],
     "central_asia": ["kazakhstan", "uzbekistan", "kyrgyz", "tajik", "turkmen", "mongolia", "eurasianet", "caravanserai", "astana", "kun.uz", "kabar", "akipress"],
     "middle_east": ["iraq", "iran", "yemen", "syria", "jordan", "lebanon", "saudi", "qatar", "kuwait", "oman", "bahrain", "uae", "emirates", "al monitor", "middle east eye", "israel", "palestine", "ynet", "wafa", "globes", "israel21c", "haaretz", "jpost"],
-    "south_asia": ["pakistan", "bangladesh", "nepal", "sri lanka", "dawn", "himalayan", "daily star"],
-    "caribbean": ["haiti", "jamaica", "trinidad", "dominican", "caribbean", "haitian times", "loop caribbean"],
-    "latin_america": ["venezuela", "bolivia", "ecuador", "paraguay", "nicaragua", "salvador", "guatemala", "honduras", "news americas"]
+    "south_asia": ["pakistan", "bangladesh", "nepal", "sri lanka", "dawn", "himalayan", "daily star", "india", "hindu", "business today", "economic times", "deccan chronicle"],
+    "caribbean": ["haiti", "jamaica", "trinidad", "dominican", "caribbean", "haitian times", "loop caribbean", "jamaica gleaner", "caribbean news", "jamaica observer"],
+    "latin_america": ["venezuela", "bolivia", "ecuador", "paraguay", "nicaragua", "salvador", "guatemala", "honduras", "news americas", "alo clandestino", "bolivia express", "telesur", "costa rica", "diario"],
+    "oceania": ["australia", "new zealand", "abc news", "rnz", "stuff", "sydney", "auckland", "melbourne"]
 }
 
 def detect_region(source_name: str) -> str:
@@ -153,18 +154,14 @@ COUNTRY_INFO = {
     "el salvador": ("🇸🇻", "엘살바도르"),
     "guatemala": ("🇬🇹", "과테말라"),
     "honduras": ("🇭🇳", "온두라스"),
-    # 카리브해
-    "jamaica": ("🇯🇲", "자메이카"), "jamaican": ("🇯🇲", "자메이카"),
-    "trinidad": ("🇹🇹", "트리니다드"), "tobago": ("🇹🇹", "트리니다드"),
-    "barbados": ("🇧🇧", "바베이도스"), "bahamas": ("🇧🇸", "바하마"),
-    "haiti": ("🇭🇹", "아이티"), "haitian": ("🇭🇹", "아이티"),
-    "cuba": ("🇨🇺", "쿠바"), "cuban": ("🇨🇺", "쿠바"),
-    "dominican": ("🇩🇴", "도미니카공화국"),
-    "guyana": ("🇬🇾", "가이아나"), "suriname": ("🇸🇷", "수리남"),
     # 오세아니아
     "australia": ("🇦🇺", "호주"), "australian": ("🇦🇺", "호주"),
-    "new zealand": ("🇳🇿", "뉴질랜드"),
+    "new zealand": ("🇳🇿", "뉴질랜드"), "new zealander": ("🇳🇿", "뉴질랜드"),
     "timor": ("🇹🇱", "동티모르"),
+    # 카리브해 추가
+    "barbados": ("🇧🇧", "바베이도스"), "bahamas": ("🇧🇸", "바하마"),
+    "cuba": ("🇨🇺", "쿠바"), "cuban": ("🇨🇺", "쿠바"),
+    "guyana": ("🇬🇾", "가이아나"), "suriname": ("🇸🇷", "수리남"),
     # 아프리카 추가
     "burkina faso": ("🇧🇫", "부르키나파소"),
     "niger": ("🇳🇪", "니제르"),
@@ -259,6 +256,9 @@ COUNTRY_INFO = {
     "yerevan": ("🇦🇲", "아르메니아"), "armenia": ("🇦🇲", "아르메니아"),
     "baku": ("🇦🇿", "아제르바이잔"),
     "tbilisi": ("🇬🇪", "조지아"),
+    # ── 오세아니아 지명 ──
+    "sydney": ("🇦🇺", "호주"), "melbourne": ("🇦🇺", "호주"),
+    "auckland": ("🇳🇿", "뉴질랜드"), "wellington": ("🇳🇿", "뉴질랜드"),
 }
 
 # 주요국 — 글로벌 카테고리로 분류
@@ -535,10 +535,16 @@ SOURCE_COUNTRY_MAP = {
     # 필리핀
     "philippine star": ("🇵🇭", "필리핀"), "rappler": ("🇵🇭", "필리핀"),
     "philippine information agency": ("🇵🇭", "필리핀"),
+    # 인도
+    "the hindu": ("🇮🇳", "인도"), "hindu business": ("🇮🇳", "인도"),
+    "business today india": ("🇮🇳", "인도"), "economic times": ("🇮🇳", "인도"),
+    "deccan chronicle": ("🇮🇳", "인도"),
     # 자메이카
     "jamaica observer": ("🇯🇲", "자메이카"), "jamaica gleaner": ("🇯🇲", "자메이카"),
     "loop jamaica": ("🇯🇲", "자메이카"), "rjr news": ("🇯🇲", "자메이카"),
-    # 트리니다드
+    # 카리브해 일반
+    "caribbean news now": ("🇯🇲", "카리브해"),
+    # 카자흐스탄
     "astana times": ("🇰🇿", "카자흐스탄"), "kazinform": ("🇰🇿", "카자흐스탄"),
     "kazakhstan inform": ("🇰🇿", "카자흐스탄"),
     # 우즈베키스탄
@@ -562,6 +568,15 @@ SOURCE_COUNTRY_MAP = {
     "haaretz": ("🇮🇱", "이스라엘"), "times of israel": ("🇮🇱", "이스라엘"),
     # 팔레스타인
     "wafa": ("🇵🇸", "팔레스타인"), "palinfo": ("🇵🇸", "팔레스타인"),
+    "palestine chronicle": ("🇵🇸", "팔레스타인"), "palestine news": ("🇵🇸", "팔레스타인"),
+    # 오세아니아
+    "abc news australia": ("🇦🇺", "호주"), "stuff nz": ("🇳🇿", "뉴질랜드"),
+    "rnz": ("🇳🇿", "뉴질랜드"),
+    # 라틴아메리카
+    "alo clandestino": ("🇻🇪", "베네수엘라"),
+    "bolivia express": ("🇧🇴", "볼리비아"),
+    "telesur": ("🇻🇪", "베네수엘라"),
+    "diario": ("🇨🇷", "코스타리카"),
 }
 
 def get_source_country(source_name: str):
