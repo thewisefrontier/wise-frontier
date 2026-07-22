@@ -34,6 +34,7 @@ SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 PIXABAY_API_KEY = os.getenv("PIXABAY_API_KEY", "")
 KMA_API_KEY = os.getenv("KMA_API_KEY", "")
+KMA_BRIEFING_KEY = os.getenv("KMA_BRIEFING_KEY", "")
 
 # ── Gemini 설정 ──────────────────────────────────────────────
 GEMINI_MODEL = "gemini-3.1-flash-lite"
@@ -897,6 +898,59 @@ def _kma_grid_for_city(name: str, lat: float, lon: float) -> tuple:
 KMA_WARNING_STN = {"서울": 108, "부산": 159, "대구": 143, "광주": 156, "제주": 184}
 
 
+def fetch_kma_weather_briefing(stn_id: str = "108", retries: int = 2):
+    """
+    기상청 API허브 '동네예보 통보문 조회서비스' 중 getWthrSituation(기상개황) 호출.
+    예보관이 작성한 종합 해설문(wfSv1)을 반환. KMA_BRIEFING_KEY가 없거나 실패 시 None.
+    stn_id 기본값 108 = 전국 종합.
+    """
+    if not KMA_BRIEFING_KEY:
+        return None
+
+    last_err = None
+    for attempt in range(retries):
+        try:
+            res = requests.get(
+                "https://apihub.kma.go.kr/api/typ02/openApi/VilageFcstMsgService/getWthrSituation",
+                params={
+                    "authKey": KMA_BRIEFING_KEY,
+                    "numOfRows": 1,
+                    "pageNo": 1,
+                    "dataType": "JSON",
+                    "stnId": stn_id,
+                },
+                timeout=15,
+            )
+            if res.status_code != 200:
+                last_err = f"HTTP {res.status_code} / body={res.text[:150]}"
+            else:
+                content_type = res.headers.get("Content-Type", "")
+                if "json" not in content_type.lower():
+                    last_err = f"JSON 아닌 응답 (Content-Type={content_type}): {res.text[:150]}"
+                else:
+                    data = res.json()
+                    header = data.get("response", {}).get("header", {})
+                    if header.get("resultCode") != "00":
+                        last_err = f"KMA {header.get('resultCode')}: {header.get('resultMsg')}"
+                    else:
+                        items = data.get("response", {}).get("body", {}).get("items", {}).get("item", [])
+                        if isinstance(items, dict):
+                            items = [items]
+                        if not items:
+                            last_err = "items 비어있음"
+                        else:
+                            text = (items[0].get("wfSv1") or "").strip()
+                            return text if text else None
+        except Exception as e:
+            last_err = f"{type(e).__name__}: {e}"
+
+        if attempt < retries - 1:
+            time.sleep(2)
+
+    print(f"  ⚠️ 기상개황(예보관 해설) 조회 실패 (stnId={stn_id}): {last_err}")
+    return None
+
+
 def fetch_kma_warning_title(name: str, local_now: datetime, retries: int = 2):
     stn_id = KMA_WARNING_STN.get(name)
     if not stn_id or not KMA_API_KEY:
@@ -1156,6 +1210,9 @@ def build_korea_today_report_kma(cities: list, local_now: datetime):
             + (f", 최대풍속 {fmt_num(k['wind_max'])}km/h" if k.get("wind_max") else "")
         )
 
+    briefing = fetch_kma_weather_briefing("108")
+    briefing_block = f"\n[기상청 예보관 해설(참고용 — 사실 확인 및 문맥 보강에만 활용)]\n{briefing}\n" if briefing else ""
+
     gemini_prompt = f"""다음은 한국 기상청 단기예보 자료다. 이를 바탕으로 뉴스 기사 본문(서두 문단)을 작성하라.
 
 [날씨 데이터]
@@ -1166,7 +1223,7 @@ def build_korea_today_report_kma(cities: list, local_now: datetime):
 기상 특보 발효: {warn_text if warn_text else '없음'}
 지역별 상세:
 {chr(10).join(city_data_lines)}
-
+{briefing_block}
 [작성 규칙]
 - 뉴스 기사 서두 문단 형식. 종결어미는 반드시 "-다" 체
 - 날짜 표기: "N일(현지시간)" 형식만 허용. "오늘", 절대연도(2026년 등) 절대 금지
@@ -2183,6 +2240,7 @@ def run():
 
     print(f"[날씨] 대륙그룹 {len(GROUPS)}개 + 한국 점검 — 현재 UTC {datetime.now(timezone.utc).strftime('%H:%M')}")
     print(f"[DEBUG] KMA_API_KEY: {'설정됨(길이=' + str(len(KMA_API_KEY)) + ')' if KMA_API_KEY else '없음'}")
+    print(f"[DEBUG] KMA_BRIEFING_KEY: {'설정됨(길이=' + str(len(KMA_BRIEFING_KEY)) + ')' if KMA_BRIEFING_KEY else '없음'}")
     print(f"[DEBUG] GEMINI 키 개수: {len(GEMINI_API_KEYS)}")
 
     GROUP_BUILDERS = {
