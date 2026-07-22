@@ -1,24 +1,24 @@
 {
-  "updated_at": "2026-07-23 01:49",
+  "updated_at": "2026-07-23 01:50",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7521.98,
-      "change_pct": 1.06,
+      "price": 7521.38,
+      "change_pct": 1.05,
       "up": true
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 25801.81,
+      "price": 25800.18,
       "change_pct": 1.15,
       "up": true
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 52406.24,
+      "price": 52406.17,
       "change_pct": 1.09,
       "up": true
     },
@@ -89,7 +89,7 @@
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
       "price": 16.4,
-      "change_pct": -0.62,
+      "change_pct": -0.63,
       "up": false
     }
   ],
@@ -98,21 +98,21 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7521.98,
-        "change_pct": 1.06,
+        "price": 7521.38,
+        "change_pct": 1.05,
         "up": true
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 25801.81,
+        "price": 25800.18,
         "change_pct": 1.15,
         "up": true
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 52406.24,
+        "price": 52406.17,
         "change_pct": 1.09,
         "up": true
       }
@@ -189,7 +189,7 @@
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
         "price": 16.4,
-        "change_pct": -0.62,
+        "change_pct": -0.63,
         "up": false
       }
     ]
@@ -226,8 +226,8 @@
     "MELI": {
       "name": "MercadoLibre, Inc.",
       "symbol": "MELI",
-      "price": 1809.92,
-      "change_pct": -1.23,
+      "price": 1808.84,
+      "change_pct": -1.29,
       "up": false
     }
   }
