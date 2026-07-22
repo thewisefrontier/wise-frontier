@@ -1,25 +1,25 @@
 {
-  "updated_at": "2026-07-22 23:39",
+  "updated_at": "2026-07-23 00:38",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7498.36,
-      "change_pct": 0.74,
+      "price": 7515.34,
+      "change_pct": 0.97,
       "up": true
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 25716.49,
-      "change_pct": 0.82,
+      "price": 25807.32,
+      "change_pct": 1.17,
       "up": true
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 52302.55,
-      "change_pct": 0.89,
+      "price": 52360.99,
+      "change_pct": 1.01,
       "up": true
     },
     {
@@ -39,7 +39,7 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 109680.92,
+      "price": 109682.63,
       "change_pct": 0.64,
       "up": true
     },
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.42,
-      "change_pct": -0.51,
+      "price": 16.4,
+      "change_pct": -0.61,
       "up": false
     }
   ],
@@ -98,22 +98,22 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7498.36,
-        "change_pct": 0.74,
+        "price": 7515.34,
+        "change_pct": 0.97,
         "up": true
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 25716.49,
-        "change_pct": 0.82,
+        "price": 25807.32,
+        "change_pct": 1.17,
         "up": true
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 52302.55,
-        "change_pct": 0.89,
+        "price": 52360.99,
+        "change_pct": 1.01,
         "up": true
       }
     ],
@@ -137,7 +137,7 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 109680.92,
+        "price": 109682.63,
         "change_pct": 0.64,
         "up": true
       },
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.42,
-        "change_pct": -0.51,
+        "price": 16.4,
+        "change_pct": -0.61,
         "up": false
       }
     ]
@@ -226,8 +226,8 @@
     "MELI": {
       "name": "MercadoLibre, Inc.",
       "symbol": "MELI",
-      "price": 1798.77,
-      "change_pct": -1.84,
+      "price": 1806.15,
+      "change_pct": -1.43,
       "up": false
     }
   }
