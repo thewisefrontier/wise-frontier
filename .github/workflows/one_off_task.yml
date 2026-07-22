@@ -43,3 +43,5 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+          KMA_API_KEY: ${{ secrets.KMA_API_KEY }}
+          KMA_BRIEFING_KEY: ${{ secrets.KMA_BRIEFING_KEY }}
