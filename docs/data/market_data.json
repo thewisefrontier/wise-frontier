@@ -4,22 +4,22 @@
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7498.04,
+      "price": 7498.36,
       "change_pct": 0.74,
       "up": true
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 25718.93,
-      "change_pct": 0.83,
+      "price": 25716.49,
+      "change_pct": 0.82,
       "up": true
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 52296.79,
-      "change_pct": 0.88,
+      "price": 52302.55,
+      "change_pct": 0.89,
       "up": true
     },
     {
@@ -98,22 +98,22 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7498.04,
+        "price": 7498.36,
         "change_pct": 0.74,
         "up": true
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 25718.93,
-        "change_pct": 0.83,
+        "price": 25716.49,
+        "change_pct": 0.82,
         "up": true
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 52296.79,
-        "change_pct": 0.88,
+        "price": 52302.55,
+        "change_pct": 0.89,
         "up": true
       }
     ],
@@ -226,8 +226,8 @@
     "MELI": {
       "name": "MercadoLibre, Inc.",
       "symbol": "MELI",
-      "price": 1797.27,
-      "change_pct": -1.92,
+      "price": 1798.77,
+      "change_pct": -1.84,
       "up": false
     }
   }
