@@ -49,7 +49,7 @@ REGION_KEYWORDS = {
     "southeast_asia": ["asia", "krasia", "dealstreet", "techinasia", "vietnam", "indonesia", "thailand", "myanmar", "khmer", "malaysia", "philippine", "bangkok", "jakarta", "loop png", "pacific", "fiji", "solomon", "png"],
     "eastern_europe": ["emerging europe", "intellinews", "poland", "ukraine", "romania", "czechia", "kyiv", "warsaw", "caucasus", "azerbaijan"],
     "central_asia": ["kazakhstan", "uzbekistan", "kyrgyz", "tajik", "turkmen", "mongolia", "eurasianet", "caravanserai", "astana", "kun.uz", "kabar", "akipress"],
-    "middle_east": ["iraq", "iran", "yemen", "syria", "jordan", "lebanon", "saudi", "qatar", "kuwait", "oman", "bahrain", "uae", "emirates", "al monitor", "middle east eye"],
+    "middle_east": ["iraq", "iran", "yemen", "syria", "jordan", "lebanon", "saudi", "qatar", "kuwait", "oman", "bahrain", "uae", "emirates", "al monitor", "middle east eye", "israel", "palestine", "ynet", "wafa", "globes", "israel21c", "haaretz", "jpost"],
     "south_asia": ["pakistan", "bangladesh", "nepal", "sri lanka", "dawn", "himalayan", "daily star"],
     "caribbean": ["haiti", "jamaica", "trinidad", "dominican", "caribbean", "haitian times", "loop caribbean"],
     "latin_america": ["venezuela", "bolivia", "ecuador", "paraguay", "nicaragua", "salvador", "guatemala", "honduras", "news americas"]
@@ -128,6 +128,8 @@ COUNTRY_INFO = {
     "syria": ("🇸🇾", "시리아"), "syrian": ("🇸🇾", "시리아"),
     "jordan": ("🇯🇴", "요르단"), "jordanian": ("🇯🇴", "요르단"),
     "lebanon": ("🇱🇧", "레바논"), "lebanese": ("🇱🇧", "레바논"),
+    "israel": ("🇮🇱", "이스라엘"), "israeli": ("🇮🇱", "이스라엘"),
+    "palestine": ("🇵🇸", "팔레스타인"), "palestinian": ("🇵🇸", "팔레스타인"),
     # 카리브해
     "haiti": ("🇭🇹", "아이티"), "haitian": ("🇭🇹", "아이티"),
     "jamaica": ("🇯🇲", "자메이카"), "jamaican": ("🇯🇲", "자메이카"),
@@ -198,7 +200,6 @@ COUNTRY_INFO = {
     "argentina": ("🇦🇷", "아르헨티나"), "argentine": ("🇦🇷", "아르헨티나"),
     "chile": ("🇨🇱", "칠레"), "chilean": ("🇨🇱", "칠레"),
     "peru": ("🇵🇪", "페루"), "peruvian": ("🇵🇪", "페루"),
-    "israel": ("🇮🇱", "이스라엘"), "israeli": ("🇮🇱", "이스라엘"),
     "italy": ("🇮🇹", "이탈리아"), "italian": ("🇮🇹", "이탈리아"),
     "spain": ("🇪🇸", "스페인"), "spanish": ("🇪🇸", "스페인"),
     "netherlands": ("🇳🇱", "네덜란드"), "dutch": ("🇳🇱", "네덜란드"),
@@ -236,6 +237,7 @@ COUNTRY_INFO = {
     "amman": ("🇯🇴", "요르단"),
     "beirut": ("🇱🇧", "레바논"), "beyrouth": ("🇱🇧", "레바논"),
     "sanaa": ("🇾🇪", "예멘"),
+    "jerusalem": ("🇵🇸", "팔레스타인"), "tel aviv": ("🇮🇱", "이스라엘"),
     # ── 포르투갈어 지명 ──
     "luanda": ("🇦🇴", "앙골라"), "angolano": ("🇦🇴", "앙골라"),
     "maputo": ("🇲🇿", "모잠비크"), "moçambique": ("🇲🇿", "모잠비크"),
@@ -554,6 +556,12 @@ SOURCE_COUNTRY_MAP = {
     "saudi press agency": ("🇸🇦", "사우디아라비아"),
     # 카타르
     "qatar news agency": ("🇶🇦", "카타르"),
+    # 이스라엘
+    "ynet": ("🇮🇱", "이스라엘"), "israel21c": ("🇮🇱", "이스라엘"),
+    "globes": ("🇮🇱", "이스라엘"), "jpost": ("🇮🇱", "이스라엘"),
+    "haaretz": ("🇮🇱", "이스라엘"), "times of israel": ("🇮🇱", "이스라엘"),
+    # 팔레스타인
+    "wafa": ("🇵🇸", "팔레스타인"), "palinfo": ("🇵🇸", "팔레스타인"),
 }
 
 def get_source_country(source_name: str):
