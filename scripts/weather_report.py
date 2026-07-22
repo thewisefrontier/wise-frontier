@@ -1319,6 +1319,9 @@ def build_korea_weekend_report_kma(cities: list, local_now: datetime):
         f"최저 {fmt_num(cap_sun['tmin'])}°C, 최고 {fmt_num(cap_sun['tmax'])}°C"
     ) if cap_sun else "데이터 없음"
 
+    briefing = fetch_kma_weather_briefing("108")
+    briefing_block = f"\n[기상청 예보관 해설(참고용 — 사실 확인 및 문맥 보강에만 활용)]\n{briefing}\n" if briefing else ""
+
     gemini_prompt = f"""다음은 한국 기상청 단기예보 주말 자료다. 이를 바탕으로 뉴스 기사 본문(서두 문단)을 작성하라.
 
 [날씨 데이터]
@@ -1326,7 +1329,7 @@ def build_korea_weekend_report_kma(cities: list, local_now: datetime):
 수도 {cap_name} 일요일: {sun_desc}
 강수확률 높은 지역(60% 이상, 토·일 중 하루라도): {', '.join(rain_cities) if rain_cities else '없음'}
 기상 특보 발효: {warn_text if warn_text else '없음'}
-
+{briefing_block}
 [작성 규칙]
 - 뉴스 기사 서두 문단 형식. 종결어미는 반드시 "-다" 체
 - 날짜 표기: "N일(현지시간)" 형식만 허용. "오늘", "이번 주말", 절대연도 절대 금지
@@ -1527,6 +1530,9 @@ def build_korea_weekly_report_kma(cities: list, local_now: datetime):
         for wd, info in cap_valid
     )
 
+    briefing = fetch_kma_weather_briefing("108")
+    briefing_block = f"\n[기상청 예보관 해설(참고용 — 사실 확인 및 문맥 보강에만 활용)]\n{briefing}\n" if briefing else ""
+
     gemini_prompt = f"""다음은 한국 기상청 단기·중기예보 기반 다음주(월~금) 날씨 자료다. 이를 바탕으로 뉴스 기사 본문(서두 문단)을 작성하라.
 
 [날씨 데이터]
@@ -1534,7 +1540,7 @@ def build_korea_weekly_report_kma(cities: list, local_now: datetime):
 수도 최고기온 범위: {fmt_num(max(tmax_all)) if tmax_all else '?'}°C
 수도 최저기온 범위: {fmt_num(min(tmin_all)) if tmin_all else '?'}°C
 비 소식 있는 요일: {', '.join(rain_days) + '요일' if rain_days else '없음'}
-
+{briefing_block}
 [작성 규칙]
 - 뉴스 기사 서두 문단 형식. 종결어미는 반드시 "-다" 체
 - 날짜 표기: "N일(현지시간)" 형식만 허용. "이번 주", "다음주", 절대연도 절대 금지
