@@ -84,7 +84,9 @@ function buildWrapperHtml(a) {
   const body = cleanBody(a.summary_ko || a.summary_en || '');
 
   // "- " 시작 줄을 <ul><li>로 묶기 (renderArticle과 동일)
-  const bulletified = body.split('\n').reduce((acc, line) => {
+  // \n\n(단락 구분)을 먼저 플레이스홀더로 치환해 split('\n') 시 소실 방지
+  const bodyWithPlaceholder = body.replace(/\n\n/g, '\x00');
+  const bulletified = bodyWithPlaceholder.split('\n').reduce((acc, line) => {
     const trimmed = line.trim();
     if (trimmed.startsWith('- ')) {
       if (!acc.inList) { acc.html += '<ul>'; acc.inList = true; }
@@ -100,7 +102,7 @@ function buildWrapperHtml(a) {
   const bodyHtml = processedBody
     .replace(/!\[([^\]]*)\]\((https?:\/\/[^)\s]+)\)/g, '<img src="$2" alt="$1" loading="lazy" style="max-width:100%;border-radius:6px;margin:8px 0;display:block;">')
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\n\n/g, '</p><p>')
+    .replace(/\x00/g, '</p><p>')
     .replace(/\n/g, '<br>')
     .replace(/<br>(<ul>)/g, '$1')
     .replace(/(<\/ul>)<br>/g, '$1');
@@ -237,7 +239,7 @@ export async function onRequestGet(context) {
     const transformed = rewriter.transform(shell);
     const resp = new Response(transformed.body, transformed);
     resp.headers.set('content-type', 'text/html; charset=utf-8');
-    resp.headers.set('cache-control', 'public, max-age=300');
+    resp.headers.set('cache-control', 'no-store');
     return resp;
   } catch (e) {
     // 어떤 실패에도 백지 방지: 원본 셸(CSR)로 폴백 + 원인 헤더 노출

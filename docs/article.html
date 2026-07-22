@@ -378,7 +378,9 @@
     const title = a.title_ko || a.title_en || '';
     const body = cleanBody(a.summary_ko || a.summary_en || '');
 
-    const bulletified = body.split('\n').reduce((acc, line) => {
+    // \n\n(단락 구분)을 먼저 플레이스홀더로 치환해 split('\n') 시 소실 방지
+    const bodyWithPlaceholder = body.replace(/\n\n/g, '\x00');
+    const bulletified = bodyWithPlaceholder.split('\n').reduce((acc, line) => {
       const trimmed = line.trim();
       if (trimmed.startsWith('- ')) {
         if (!acc.inList) { acc.html += '<ul>'; acc.inList = true; }
@@ -394,7 +396,7 @@
     const bodyHtml = processedBody
       .replace(/!\[([^\]]*)\]\((https?:\/\/[^)\s]+)\)/g, '<img src="$2" alt="$1" loading="lazy" style="max-width:100%;border-radius:6px;margin:8px 0;display:block;">')
       .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\n\n/g, '</p><p>')
+      .replace(/\x00/g, '</p><p>')
       .replace(/\n/g, '<br>')
       .replace(/<br>(<ul>)/g, '$1')
       .replace(/(<\/ul>)<br>/g, '$1');
@@ -469,7 +471,7 @@
       ${a.image_url ? `<img class="article-hero" src="${a.image_url}" alt="${title.replace(/"/g,'&quot;')}" loading="lazy" style="width:100%;max-height:420px;object-fit:cover;border-radius:8px;margin:16px 0 8px;display:block;">` : ''}
 
       <div class="article-body">
-        <p>${bodyHtml}</p>
+        ${bodyHtml.includes('</p>') ? bodyHtml : '<p>' + bodyHtml + '</p>'}
       </div>
 
       <div class="source-link">ⓒ NewsFinal <button onclick="shareArticle()" style="float:right;background:none;border:1px solid var(--border);border-radius:6px;padding:4px 12px;cursor:pointer;color:var(--text);font-size:12px;">🔗 공유</button><br>뉴스파이널 편집국</div>
