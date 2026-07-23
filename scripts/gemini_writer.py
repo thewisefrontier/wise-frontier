@@ -335,7 +335,7 @@ def find_similar_article(title: str, own_articles: list, threshold: int = 70):
     return None, 0
 
 
-def save_article(title_ko, summary_ko, cluster_key, category, region, country="", article_count=0, published=True, countries=None, image_url=""):
+def save_article(title_ko, summary_ko, cluster_key, category, region, country="", article_count=0, published=True, countries=None, image_url="", is_travel=False):
     # 키릴 문자 감지 — 저장 차단
     if has_cyrillic(title_ko) or has_cyrillic(summary_ko):
         print(f"  ⚠️ [키릴 감지] 저장 차단: {title_ko[:60]}")
@@ -364,6 +364,7 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
         "sent_telegram": 0,
         "is_published": published,
         "posted_blog": 0,
+        "is_travel": bool(is_travel),
     }
     headers = {**_sb_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
     res = requests.post(_sb_url(), headers=headers, json=payload, timeout=15)
@@ -758,6 +759,7 @@ def build_issue_prompt(cluster, existing_summary=None):
 국가: (기사의 핵심 주체가 되는 국가 1개. 어느 나라 기업/정부/기관이 주체인가 기준. 글로벌 기업·국제기구가 주체면 "없음")
 관련국가: (기사에서 유의미하게 다뤄지는 국가들. 쉼표로 구분, 최대 4개. 없으면 "없음". 예: 인도, 나이지리아)
 분야: (경제/금융/자원·에너지/산업·기업/정치·외교/사회/IT·과학/글로벌 중 하나)
+여행: (이 기사가 해외여행자에게 실질적으로 유의미한 정보 — 여행경보·치안·시위·테러, 비자·입국규정, 항공노선·공항 운영, 관광지 개방/폐쇄, 감염병, 자연재해 등 — 를 담고 있으면 "예", 아니면 "아니오")
 본문: (기사 본문)"""
 
     rules = load_prompt("writer_rules", fallback=FALLBACK_RULES)
@@ -981,11 +983,12 @@ def update_article_fields(article_id: int, fields: dict):
 
 
 def parse_title_and_body(text):
-    """Gemini 응답에서 제목/본문/국가/관련국가/분야 분리"""
+    """Gemini 응답에서 제목/본문/국가/관련국가/분야/여행여부 분리"""
     title = ""
     country = ""
     countries = []
     category = ""
+    is_travel = False
     body = text
     lines = text.strip().split("\n")
     body_start = 0
@@ -1002,6 +1005,9 @@ def parse_title_and_body(text):
                 countries = [c.strip() for c in raw.split(",") if c.strip() and c.strip() not in ("없음", "-")]
         elif line.startswith("분야:"):
             category = line.replace("분야:", "").strip()
+        elif line.startswith("여행:"):
+            _tv = line.replace("여행:", "").strip()
+            is_travel = _tv.startswith("예") or _tv.lower().startswith("y") or _tv.lower() == "true"
         elif line.startswith("본문:"):
             body = "\n".join(lines[i:]).replace("본문:", "", 1).strip()
             body_start = i
@@ -1010,11 +1016,11 @@ def parse_title_and_body(text):
         idx = next((i for i, l in enumerate(lines) if l.startswith("제목:")), -1)
         if idx >= 0:
             body = "\n".join(lines[idx+1:]).strip()
-            body_lines = [l for l in body.split("\n") if not l.startswith("국가:") and not l.startswith("관련국가:") and not l.startswith("분야:")]
+            body_lines = [l for l in body.split("\n") if not l.startswith("국가:") and not l.startswith("관련국가:") and not l.startswith("분야:") and not l.startswith("여행:")]
             body = "\n".join(body_lines).strip()
             if body.startswith("본문:"):
                 body = body[3:].strip()
-    return title, body, country, category, countries
+    return title, body, country, category, countries, is_travel
 
 
 # ── 기업 자동 감지·등록 ────────────────────────────────────────────────
@@ -1491,12 +1497,12 @@ def run():
             content = call_gemini_article(prompt, max_tokens=4000 if has_full else 1500)
 
             if content:
-                gen_title, gen_body, gen_country, gen_category, gen_countries = parse_title_and_body(content)
+                gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel = parse_title_and_body(content)
                 new_title = gen_title if gen_title else titles[0][:50]
                 note = generate_update_note(existing["summary_ko"], gen_body or content)
                 update_article(existing["id"], new_title, gen_body or content, note=note, countries=gen_countries if gen_countries else None, country=gen_country or "")
                 update_article_count(existing["id"], prev_count + 1)
-                if gen_country or gen_category:
+                if gen_country or gen_category or gen_travel:
                     update_fields = {}
                     if gen_country:
                         norm_country = normalize_country(gen_country)
@@ -1506,6 +1512,8 @@ def run():
                         update_fields["category"] = gen_category
                         if gen_category == "글로벌":
                             update_fields["region"] = "global"
+                    if gen_travel:
+                        update_fields["is_travel"] = True
                     if update_fields:
                         update_article_fields(existing["id"], update_fields)
                 print(f"  ✅ 업데이트 완료: {new_title}\n")
@@ -1531,13 +1539,13 @@ def run():
                 content = call_gemini_article(prompt, max_tokens=4000 if has_full else 1500)
 
                 if content:
-                    gen_title, gen_body, gen_country, gen_category, gen_countries = parse_title_and_body(content)
+                    gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel = parse_title_and_body(content)
                     new_title = gen_title if gen_title else probe_title
                     note = generate_update_note(existing_summary, gen_body or content)
                     update_article(similar_existing["id"], new_title, gen_body or content, note=note, countries=gen_countries if gen_countries else None, country=gen_country or "")
                     prev_count = existing_full.get("score", 0) if existing_full else 0
                     update_article_count(similar_existing["id"], max(prev_count, cur_count) + 1)
-                    if gen_country or gen_category:
+                    if gen_country or gen_category or gen_travel:
                         update_fields = {}
                         if gen_country:
                             norm_country = normalize_country(gen_country)
@@ -1547,6 +1555,8 @@ def run():
                             update_fields["category"] = gen_category
                             if gen_category == "글로벌":
                                 update_fields["region"] = "global"
+                        if gen_travel:
+                            update_fields["is_travel"] = True
                         if update_fields:
                             update_article_fields(similar_existing["id"], update_fields)
                     print(f"  ✅ 병합 완료: {new_title}\n")
@@ -1564,7 +1574,7 @@ def run():
             content = call_gemini_article(prompt, max_tokens=4000 if has_full else 1500)
 
             if content:
-                gen_title, gen_body, gen_country, gen_category, gen_countries = parse_title_and_body(content)
+                gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel = parse_title_and_body(content)
                 full_title = gen_title if gen_title else titles[0][:50]
 
                 final_country = normalize_country(gen_country or country)
@@ -1598,6 +1608,7 @@ def run():
                     published     = published,
                     countries     = gen_countries,
                     image_url     = image_url,
+                    is_travel     = gen_travel,
                 )
                 if article_id > 0:
                     status = "✅ 저장 완료" if published else "📋 미발행 저장"
@@ -1664,6 +1675,7 @@ def run():
 국가: (기사의 핵심 주체가 되는 국가 1개)
 관련국가: (직접 당사국, 쉼표로 구분, 최대 4개. 없으면 "없음")
 분야: (경제/금융/자원·에너지/산업·기업/정치·외교/사회/IT·과학/글로벌 중 하나)
+여행: (이 기사가 해외여행자에게 실질적으로 유의미한 정보 — 여행경보·치안·시위·테러, 비자·입국규정, 항공노선·공항 운영, 관광지 개방/폐쇄, 감염병, 자연재해 등 — 를 담고 있으면 "예", 아니면 "아니오")
 본문: (기사 본문)""")
 
         similar_existing, pre_sim_score = find_similar_article(title, today_own_articles) if title else (None, 0)
@@ -1691,6 +1703,7 @@ def run():
 국가: (기사의 핵심 주체가 되는 국가 1개)
 관련국가: (직접 당사국, 쉼표로 구분, 최대 4개. 없으면 "없음")
 분야: (경제/금융/자원·에너지/산업·기업/정치·외교/사회/IT·과학/글로벌 중 하나)
+여행: (이 기사가 해외여행자에게 실질적으로 유의미한 정보 — 여행경보·치안·시위·테러, 비자·입국규정, 항공노선·공항 운영, 관광지 개방/폐쇄, 감염병, 자연재해 등 — 를 담고 있으면 "예", 아니면 "아니오")
 본문: (통합된 기사 본문)"""
 
             prompt = merge_template.format(
@@ -1703,14 +1716,14 @@ def run():
             content = call_gemini_article(prompt, max_tokens=4000)
 
             if content:
-                gen_title, gen_body, gen_country, gen_category, gen_countries = parse_title_and_body(content)
+                gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel = parse_title_and_body(content)
                 new_title = gen_title if gen_title else title[:50]
                 existing_sum = existing_full.get("summary_ko") if existing_full else None
                 note = generate_update_note(existing_sum, gen_body or content)
                 update_article(similar_existing["id"], new_title, gen_body or content, note=note, countries=gen_countries if gen_countries else None, country=gen_country or "")
                 prev_count = existing_full.get("score", 0) if existing_full else 0
                 update_article_count(similar_existing["id"], prev_count + 1)
-                if gen_country or gen_category:
+                if gen_country or gen_category or gen_travel:
                     update_fields = {}
                     if gen_country:
                         norm_country = normalize_country(gen_country)
@@ -1720,6 +1733,8 @@ def run():
                         update_fields["category"] = gen_category
                         if gen_category == "글로벌":
                             update_fields["region"] = "global"
+                    if gen_travel:
+                        update_fields["is_travel"] = True
                     if update_fields:
                         update_article_fields(similar_existing["id"], update_fields)
                 print(f"  ✅ 단독 병합 완료: {new_title}\n")
@@ -1752,7 +1767,7 @@ def run():
 
         content = call_gemini_article(prompt, max_tokens=4000)
         if content:
-            gen_title, gen_body, gen_country, gen_category, gen_countries = parse_title_and_body(content)
+            gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel = parse_title_and_body(content)
             full_title = gen_title if gen_title else title[:50]
 
             final_country = normalize_country(gen_country or a.get("country") or "")
@@ -1788,6 +1803,7 @@ def run():
                 published=published,
                 countries=gen_countries,
                 image_url=image_url,
+                is_travel=gen_travel,
             )
             if article_id > 0:
                 status = "✅ 단독 저장" if published else "📋 단독 미발행"
