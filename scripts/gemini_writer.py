@@ -11,6 +11,7 @@ gemini_writer.py
 import os
 import re
 import time
+import json
 import hashlib
 import requests
 from datetime import datetime, timedelta, timezone
@@ -721,6 +722,37 @@ def make_cluster_key(cluster):
 
 # ── 프롬프트 빌더 ─────────────────────────────────────────
 
+JSON_OUTPUT_SPEC = r"""[출력 형식]
+아래 JSON 객체 하나만 출력하세요. JSON 앞뒤에 설명·인사말·마크다운 코드펜스(```)를 절대 붙이지 마세요.
+{
+  "title": "핵심을 담은 제목",
+  "country": "기사의 핵심 주체가 되는 국가 1개. 어느 나라 기업/정부/기관이 주체인가 기준. 글로벌 기업·국제기구가 주체면 빈 문자열",
+  "countries": ["기사에서 직접 당사국으로 등장하는 국가들만. 본문에 단순 언급·비교 대상으로만 나오는 나라는 제외. 최대 3개. 없으면 빈 배열"],
+  "category": "경제 | 금융 | 자원·에너지 | 산업·기업 | 정치·외교 | 사회 | IT·과학 | 문화·예술 | 글로벌 중 하나",
+  "is_travel": false,
+  "body": "기사 본문"
+}
+[분야 선택 기준]
+- 경제: 거시경제, 무역, GDP, 통화정책, 인플레이션 등 국가 경제 전반
+- 금융: 은행, 증권, 투자, 환율, 핀테크
+- 자원·에너지: 광업, 채굴, 석유, 가스, 전력, 원자재, 재생에너지
+- 산업·기업: 제조업, 기업 실적, 산업 정책, 공급망
+- 정치·외교: 정부, 선거, 국제관계, 정책, 외교
+- 사회: 인프라, 교육, 보건, 노동, 인구
+- IT·과학: 기술, 통신, 연구개발, 우주산업
+- 문화·예술: 미술, 문학, 음악, 영화, 공연, 문화유산, 문화산업
+- 글로벌: 특정 국가에 국한되지 않는 세계적 이슈 (단, 위 카테고리로 분류 가능하면 해당 카테고리 우선)
+
+[is_travel 판단 기준]
+이 기사가 해외여행자에게 실질적으로 유의미한 정보 — 여행경보·치안·시위·테러, 비자·입국규정, 항공노선·공항 운영, 관광지 개방/폐쇄, 감염병, 자연재해 등 — 를 담고 있으면 true, 아니면 false. 단순 경제·산업 뉴스는 false.
+
+[JSON 작성 규칙]
+- body 안의 줄바꿈은 \n, 큰따옴표는 \" 로 이스케이프하세요.
+- 값이 없어도 키를 생략하지 말고 빈 문자열("") 또는 빈 배열([])을 쓰세요.
+- is_travel은 문자열이 아니라 boolean(true/false)로 쓰세요.
+- JSON 이외의 텍스트는 한 글자도 출력하지 마세요."""
+
+
 def build_issue_prompt(cluster, existing_summary=None):
     sorted_cluster = sorted(cluster, key=lambda a: bool(a.get("full_text")), reverse=True)
     main_articles = sorted_cluster[:5]
@@ -754,13 +786,7 @@ def build_issue_prompt(cluster, existing_summary=None):
 - "2026년 6월 24일 현재", "오늘", "현재" 등 절대 날짜를 본문에 쓰지 마세요. 소스 기사의 날짜 기준으로 "N일(현지시간)"으로만 표기하세요.
 - 기사 문체로 작성하세요. 논평/칼럼 문체는 금지입니다.
 - 모든 인명·지명은 반드시 한글로 음차하세요. 키릴 문자, 아랍 문자, 데바나가리 등 비라틴 문자를 그대로 쓰지 마세요.
-아래 형식으로 출력:
-제목: (핵심을 담은 제목)
-국가: (기사의 핵심 주체가 되는 국가 1개. 어느 나라 기업/정부/기관이 주체인가 기준. 글로벌 기업·국제기구가 주체면 "없음")
-관련국가: (기사에서 유의미하게 다뤄지는 국가들. 쉼표로 구분, 최대 4개. 없으면 "없음". 예: 인도, 나이지리아)
-분야: (경제/금융/자원·에너지/산업·기업/정치·외교/사회/IT·과학/글로벌 중 하나)
-여행: (이 기사가 해외여행자에게 실질적으로 유의미한 정보 — 여행경보·치안·시위·테러, 비자·입국규정, 항공노선·공항 운영, 관광지 개방/폐쇄, 감염병, 자연재해 등 — 를 담고 있으면 "예", 아니면 "아니오")
-본문: (기사 본문)"""
+""" + JSON_OUTPUT_SPEC
 
     rules = load_prompt("writer_rules", fallback=FALLBACK_RULES)
 
@@ -982,85 +1008,135 @@ def update_article_fields(article_id: int, fields: dict):
     )
 
 
-_LABEL_LINE_RE = re.compile(r'^[\*#>\s]*(제목|국가|관련국가|분야|여행|본문|내용)\s*[:：]\s*')
+_FENCE_RE = re.compile(r"```(?:json)?", re.I)
+_LABEL_LINE_RE = re.compile(
+    r"^[\s*#>\-]*\**\s*(제목|국가|관련\s*국가|분야|카테고리|여행|본문|내용|기사\s*본문)\s*\**\s*[:：]\s*(.*)$"
+)
+_NULLISH = ("없음", "-", "N/A", "n/a", "없다", "null", "None", "")
 
 
 def _strip_leaked_labels(text: str) -> str:
-    """파싱 실패로 라벨(제목:/국가:/관련국가:/분야:/여행:/본문:/내용:)이
-    본문 앞에 그대로 남는 경우를 걸러내는 최종 안전망.
-    Gemini가 지시된 '본문:' 대신 '내용:' 등으로 응답을 변형하거나
-    '**제목:' 처럼 마크다운을 섞어써도 선행 라벨 줄들을 제거한다."""
+    """파싱이 완전히 실패했을 때 응답에 남은 라벨 줄을 제거해 본문만 남긴다."""
     if not text:
-        return text
-    lines = text.split("\n")
+        return ""
+    raw = _FENCE_RE.sub("", text).strip()
     out = []
-    in_header = True
-    for line in lines:
-        if in_header:
-            stripped = line.strip()
-            m = _LABEL_LINE_RE.match(stripped)
-            if m:
-                rest = stripped[m.end():].strip()
-                if m.group(1) in ("본문", "내용"):
-                    in_header = False  # 본문 시작 라벨 — 이후는 그대로 보존
-                    if rest:
-                        out.append(rest)
-                    continue
-                else:
-                    continue  # 제목/국가/관련국가/분야/여행 라벨 줄은 통째로 제거
-            elif stripped == "":
-                continue  # 헤더 구간의 빈 줄은 건너뜀
-            else:
-                in_header = False  # 라벨 없는 텍스트 등장 — 헤더 탐색 종료
+    for line in raw.split("\n"):
+        m = _LABEL_LINE_RE.match(line)
+        if m:
+            key = m.group(1).replace(" ", "")
+            rest = (m.group(2) or "").strip()
+            if key in ("본문", "내용", "기사본문"):
+                if rest:
+                    out.append(rest)
+            continue
         out.append(line)
-    return "\n".join(out).strip()
+    cleaned = "\n".join(out).strip()
+    return cleaned or raw
+
+
+def _coerce_countries(val, limit: int = 4) -> list:
+    if val is None:
+        return []
+    if isinstance(val, (list, tuple)):
+        parts = [str(p).strip() for p in val]
+    else:
+        parts = [p.strip() for p in re.split(r"[,;/·]", str(val))]
+    return [p for p in parts if p and p not in _NULLISH][:limit]
+
+
+def _coerce_bool(val) -> bool:
+    if isinstance(val, bool):
+        return val
+    if val is None:
+        return False
+    s = str(val).strip().lower()
+    return s.startswith("예") or s.startswith("y") or s in ("true", "1")
+
+
+def _json_candidates(text: str):
+    raw = _FENCE_RE.sub("", text).strip()
+    yield raw
+    i, j = raw.find("{"), raw.rfind("}")
+    if i >= 0 and j > i and (i, j + 1) != (0, len(raw)):
+        yield raw[i:j + 1]
+
+
+def parse_json_response(text: str):
+    """Gemini JSON 응답 파싱. 성공 시 6-튜플, 실패 시 None."""
+    if not text:
+        return None
+    for cand in _json_candidates(text):
+        try:
+            data = json.loads(cand)
+        except Exception:
+            continue
+        if not isinstance(data, dict):
+            continue
+        body = str(data.get("body") or data.get("본문") or "").strip()
+        if not body:
+            continue
+        first = next((l for l in body.split("\n") if l.strip()), "")
+        if _LABEL_LINE_RE.match(first):
+            body = _strip_leaked_labels(body)
+        title = str(data.get("title") or data.get("제목") or "").strip()
+        country = str(data.get("country") or data.get("국가") or "").strip()
+        if country in _NULLISH or country == "글로벌":
+            country = ""
+        category = str(data.get("category") or data.get("분야") or "").strip()
+        if category in _NULLISH:
+            category = ""
+        raw_countries = data.get("countries")
+        if raw_countries is None:
+            raw_countries = data.get("관련국가")
+        countries = _coerce_countries(raw_countries)
+        raw_travel = data.get("is_travel")
+        if raw_travel is None:
+            raw_travel = data.get("여행")
+        return title, body, country, category, countries, _coerce_bool(raw_travel)
+    return None
+
+
+def _parse_labeled_response(text: str):
+    """레거시 라벨 형식(제목:/본문: 등) 폴백 파서."""
+    title = country = category = ""
+    countries = []
+    is_travel = False
+    raw = _FENCE_RE.sub("", text).strip()
+    lines = raw.split("\n")
+    body_lines = None
+    for i, line in enumerate(lines):
+        m = _LABEL_LINE_RE.match(line)
+        if not m:
+            continue
+        key = m.group(1).replace(" ", "")
+        val = (m.group(2) or "").strip()
+        if key == "제목":
+            title = val
+        elif key == "국가":
+            country = "" if (val in _NULLISH or val == "글로벌") else val
+        elif key == "관련국가":
+            countries = _coerce_countries(val)
+        elif key in ("분야", "카테고리"):
+            category = "" if val in _NULLISH else val
+        elif key == "여행":
+            is_travel = _coerce_bool(val)
+        elif key in ("본문", "내용", "기사본문"):
+            body_lines = ([val] if val else []) + lines[i + 1:]
+            break
+    body = "\n".join(body_lines).strip() if body_lines is not None else _strip_leaked_labels(raw)
+    return title, body, country, category, countries, is_travel
 
 
 def parse_title_and_body(text):
-    """Gemini 응답에서 제목/본문/국가/관련국가/분야/여행여부 분리"""
-    title = ""
-    country = ""
-    countries = []
-    category = ""
-    is_travel = False
-    body = text
-    lines = text.strip().split("\n")
-    body_start = 0
-    for i, line in enumerate(lines):
-        stripped = line.strip()
-        m = _LABEL_LINE_RE.match(stripped)
-        label = m.group(1) if m else None
-        rest = stripped[m.end():].strip() if m else None
-        if label == "제목":
-            title = rest
-        elif label == "국가":
-            country = rest
-            if country in ("없음", "글로벌", "-", "N/A", ""):
-                country = ""
-        elif label == "관련국가":
-            raw = rest
-            if raw not in ("없음", "-", "N/A", ""):
-                countries = [c.strip() for c in raw.split(",") if c.strip() and c.strip() not in ("없음", "-")]
-        elif label == "분야":
-            category = rest
-        elif label == "여행":
-            _tv = rest
-            is_travel = _tv.startswith("예") or _tv.lower().startswith("y") or _tv.lower() == "true"
-        elif label in ("본문", "내용"):
-            body = (rest + "\n" + "\n".join(lines[i+1:])).strip() if rest else "\n".join(lines[i+1:]).strip()
-            body_start = i
-            break
-    if not body_start and title:
-        idx = next((i for i, l in enumerate(lines) if l.startswith("제목:")), -1)
-        if idx >= 0:
-            body = "\n".join(lines[idx+1:]).strip()
-            body_lines = [l for l in body.split("\n") if not l.startswith("국가:") and not l.startswith("관련국가:") and not l.startswith("분야:") and not l.startswith("여행:")]
-            body = "\n".join(body_lines).strip()
-            if body.startswith("본문:") or body.startswith("내용:"):
-                body = body[3:].strip()
-    # 최종 안전망: 위 로직을 거치고도 라벨이 잔존하면(완전 실패 포함) 강제 제거
-    body = _strip_leaked_labels(body)
-    return title, body, country, category, countries, is_travel
+    """Gemini 응답 파싱. 1순위 JSON, 실패 시 레거시 라벨 파서로 폴백."""
+    if not text:
+        return "", "", "", "", [], False
+    parsed = parse_json_response(text)
+    if parsed:
+        return parsed
+    print("  ⚠️ JSON 파싱 실패 → 레거시 라벨 파서로 폴백")
+    return _parse_labeled_response(text)
 
 
 # ── 기업 자동 감지·등록 ────────────────────────────────────────────────
@@ -1539,8 +1615,8 @@ def run():
             if content:
                 gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel = parse_title_and_body(content)
                 new_title = gen_title if gen_title else titles[0][:50]
-                note = generate_update_note(existing["summary_ko"], (gen_body or _strip_leaked_labels(content)))
-                update_article(existing["id"], new_title, (gen_body or _strip_leaked_labels(content)), note=note, countries=gen_countries if gen_countries else None, country=gen_country or "")
+                note = generate_update_note(existing["summary_ko"], gen_body or _strip_leaked_labels(content))
+                update_article(existing["id"], new_title, gen_body or _strip_leaked_labels(content), note=note, countries=gen_countries if gen_countries else None, country=gen_country or "")
                 update_article_count(existing["id"], prev_count + 1)
                 if gen_country or gen_category or gen_travel:
                     update_fields = {}
@@ -1581,8 +1657,8 @@ def run():
                 if content:
                     gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel = parse_title_and_body(content)
                     new_title = gen_title if gen_title else probe_title
-                    note = generate_update_note(existing_summary, (gen_body or _strip_leaked_labels(content)))
-                    update_article(similar_existing["id"], new_title, (gen_body or _strip_leaked_labels(content)), note=note, countries=gen_countries if gen_countries else None, country=gen_country or "")
+                    note = generate_update_note(existing_summary, gen_body or _strip_leaked_labels(content))
+                    update_article(similar_existing["id"], new_title, gen_body or _strip_leaked_labels(content), note=note, countries=gen_countries if gen_countries else None, country=gen_country or "")
                     prev_count = existing_full.get("score", 0) if existing_full else 0
                     update_article_count(similar_existing["id"], max(prev_count, cur_count) + 1)
                     if gen_country or gen_category or gen_travel:
@@ -1601,7 +1677,7 @@ def run():
                             update_article_fields(similar_existing["id"], update_fields)
                     print(f"  ✅ 병합 완료: {new_title}\n")
                     updated += 1
-                    send_to_newsfinal_channel(similar_existing["id"], new_title, (gen_body or _strip_leaked_labels(content)), is_update=True)
+                    send_to_newsfinal_channel(similar_existing["id"], new_title, gen_body or _strip_leaked_labels(content), is_update=True)
                 else:
                     print(f"  ❌ 병합 실패\n")
                 time.sleep(CALL_INTERVAL)
@@ -1635,11 +1711,11 @@ def run():
                     print(f"  ⚠️ 유사 기사 재발견 (유사도 {sim_score}%) → 미발행으로 저장: {similar.get('title_ko','')[:40]}")
                     published = False
 
-                image_url = fetch_article_image(full_title, (gen_body or _strip_leaked_labels(content))) if published else ""
+                image_url = fetch_article_image(full_title, gen_body or _strip_leaked_labels(content)) if published else ""
 
                 article_id = save_article(
                     title_ko      = full_title,
-                    summary_ko    = (gen_body or _strip_leaked_labels(content)),
+                    summary_ko    = gen_body or _strip_leaked_labels(content),
                     cluster_key   = final_subcategory if 'final_subcategory' in dir() else cluster_key,
                     category      = final_category,
                     region        = final_region,
@@ -1656,8 +1732,8 @@ def run():
                     if published:
                         today_own_articles.append({"id": article_id, "title_ko": full_title})
                         generated += 1
-                        send_to_newsfinal_channel(article_id, full_title, (gen_body or _strip_leaked_labels(content)), is_update=False)
-                        detect_and_register_companies(full_title, (gen_body or _strip_leaked_labels(content)), final_country)
+                        send_to_newsfinal_channel(article_id, full_title, gen_body or _strip_leaked_labels(content), is_update=False)
+                        detect_and_register_companies(full_title, gen_body or _strip_leaked_labels(content), final_country)
                 else:
                     print(f"  ⚠️ 저장 실패\n")
             else:
@@ -1710,13 +1786,7 @@ def run():
 - "2026년 6월 24일 현재", "오늘", "현재" 등 절대 날짜를 본문에 쓰지 마세요.
 - 기사 문체로 작성하세요. 논평/칼럼 문체는 금지입니다.
 - 모든 인명·지명은 반드시 한글로 음차하세요. 키릴 문자, 아랍 문자 등 비라틴 문자를 그대로 쓰지 마세요.
-아래 형식으로 출력:
-제목: (핵심을 담은 제목)
-국가: (기사의 핵심 주체가 되는 국가 1개)
-관련국가: (직접 당사국, 쉼표로 구분, 최대 4개. 없으면 "없음")
-분야: (경제/금융/자원·에너지/산업·기업/정치·외교/사회/IT·과학/글로벌 중 하나)
-여행: (이 기사가 해외여행자에게 실질적으로 유의미한 정보 — 여행경보·치안·시위·테러, 비자·입국규정, 항공노선·공항 운영, 관광지 개방/폐쇄, 감염병, 자연재해 등 — 를 담고 있으면 "예", 아니면 "아니오")
-본문: (기사 본문)""")
+""" + JSON_OUTPUT_SPEC)
 
         similar_existing, pre_sim_score = find_similar_article(title, today_own_articles) if title else (None, 0)
 
@@ -1738,13 +1808,7 @@ def run():
 팩트(수치, 인명, 날짜, 기관명)를 최대한 살리고, 한국어로 작성하세요.
 {rules}
 
-아래 형식으로 출력:
-제목: (통합된 핵심을 담은 제목)
-국가: (기사의 핵심 주체가 되는 국가 1개)
-관련국가: (직접 당사국, 쉼표로 구분, 최대 4개. 없으면 "없음")
-분야: (경제/금융/자원·에너지/산업·기업/정치·외교/사회/IT·과학/글로벌 중 하나)
-여행: (이 기사가 해외여행자에게 실질적으로 유의미한 정보 — 여행경보·치안·시위·테러, 비자·입국규정, 항공노선·공항 운영, 관광지 개방/폐쇄, 감염병, 자연재해 등 — 를 담고 있으면 "예", 아니면 "아니오")
-본문: (통합된 기사 본문)"""
+{json_spec}"""
 
             prompt = merge_template.format(
                 today_str=now_kst().strftime('%Y년 %m월 %d일'),
@@ -1752,6 +1816,7 @@ def run():
                 source=a.get('source', ''),
                 full_text=a.get('full_text', ''),
                 rules=rules,
+                json_spec=JSON_OUTPUT_SPEC,
             )
             content = call_gemini_article(prompt, max_tokens=4000)
 
@@ -1759,8 +1824,8 @@ def run():
                 gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel = parse_title_and_body(content)
                 new_title = gen_title if gen_title else title[:50]
                 existing_sum = existing_full.get("summary_ko") if existing_full else None
-                note = generate_update_note(existing_sum, (gen_body or _strip_leaked_labels(content)))
-                update_article(similar_existing["id"], new_title, (gen_body or _strip_leaked_labels(content)), note=note, countries=gen_countries if gen_countries else None, country=gen_country or "")
+                note = generate_update_note(existing_sum, gen_body or _strip_leaked_labels(content))
+                update_article(similar_existing["id"], new_title, gen_body or _strip_leaked_labels(content), note=note, countries=gen_countries if gen_countries else None, country=gen_country or "")
                 prev_count = existing_full.get("score", 0) if existing_full else 0
                 update_article_count(similar_existing["id"], prev_count + 1)
                 if gen_country or gen_category or gen_travel:
@@ -1779,7 +1844,7 @@ def run():
                         update_article_fields(similar_existing["id"], update_fields)
                 print(f"  ✅ 단독 병합 완료: {new_title}\n")
                 updated += 1
-                send_to_newsfinal_channel(similar_existing["id"], new_title, (gen_body or _strip_leaked_labels(content)), is_update=True)
+                send_to_newsfinal_channel(similar_existing["id"], new_title, gen_body or _strip_leaked_labels(content), is_update=True)
             else:
                 print(f"  ❌ 단독 병합 실패\n")
             time.sleep(CALL_INTERVAL)
@@ -1816,9 +1881,9 @@ def run():
             if final_category == "글로벌":
                 final_region = "global"
 
-            if not verify_single_topic(full_title, (gen_body or _strip_leaked_labels(content))):
+            if not verify_single_topic(full_title, gen_body or _strip_leaked_labels(content)):
                 print(f"  ❌ 검수 실패 (복수 토픽) — 파킹: {full_title[:50]}")
-                park_multi_topic_articles([{"title_en": full_title, "full_text": (gen_body or _strip_leaked_labels(content)),
+                park_multi_topic_articles([{"title_en": full_title, "full_text": gen_body or _strip_leaked_labels(content),
                     "country": final_country, "category": final_category, "region": final_region}])
                 time.sleep(CALL_INTERVAL)
                 continue
@@ -1830,11 +1895,11 @@ def run():
             else:
                 published = True
 
-            image_url = fetch_article_image(full_title, (gen_body or _strip_leaked_labels(content))) if published else ""
+            image_url = fetch_article_image(full_title, gen_body or _strip_leaked_labels(content)) if published else ""
 
             article_id = save_article(
                 title_ko=full_title,
-                summary_ko=(gen_body or _strip_leaked_labels(content)),
+                summary_ko=gen_body or _strip_leaked_labels(content),
                 cluster_key=cluster_key,
                 category=final_category,
                 region=final_region,
@@ -1851,8 +1916,8 @@ def run():
                 if published:
                     today_own_articles.append({"id": article_id, "title_ko": full_title})
                     solo_generated += 1
-                    send_to_newsfinal_channel(article_id, full_title, (gen_body or _strip_leaked_labels(content)), is_update=False)
-                    detect_and_register_companies(full_title, (gen_body or _strip_leaked_labels(content)), final_country)
+                    send_to_newsfinal_channel(article_id, full_title, gen_body or _strip_leaked_labels(content), is_update=False)
+                    detect_and_register_companies(full_title, gen_body or _strip_leaked_labels(content), final_country)
         time.sleep(CALL_INTERVAL)
 
     print(f"✅ 완료 — 클러스터 {generated}건 생성 / {updated}건 업데이트 / 단독 {solo_generated}건 생성")
