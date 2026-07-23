@@ -1693,7 +1693,7 @@ def format_ampm_line(label: str, today_info: dict, ampm: dict) -> str:
 
 
 def build_today_report(country_name, weather_list, local_now: datetime):
-    today_str = local_now.strftime("%Y년 %m월 %d일") + f"({WEEKDAY_KO[local_now.weekday()]}, 현지시간)"
+    today_str = f"{local_now.day}일(현지시간)"  # 절대날짜(년/월/요일) 금지 규칙 준수
     lines = []
     valid = []
     any_success = False
@@ -1780,7 +1780,7 @@ def build_today_report(country_name, weather_list, local_now: datetime):
 
 
 def build_weekend_report(country_name, weather_list, local_now: datetime):
-    today_str = local_now.strftime("%Y년 %m월 %d일") + f"({WEEKDAY_KO[local_now.weekday()]}, 현지시간)"
+    today_str = f"{local_now.day}일(현지시간)"  # 절대날짜(년/월/요일) 금지 규칙 준수
     lines = []
     any_success = False
 
@@ -1863,7 +1863,7 @@ def build_weekend_report(country_name, weather_list, local_now: datetime):
 
 
 def build_weekly_report(country_name, weather_list, local_now: datetime):
-    today_str = local_now.strftime("%Y년 %m월 %d일") + f"({WEEKDAY_KO[local_now.weekday()]}, 현지시간)"
+    today_str = f"{local_now.day}일(현지시간)"  # 절대날짜(년/월/요일) 금지 규칙 준수
     lines = []
     any_success = False
 
@@ -1949,7 +1949,7 @@ def _capital_day_info(weather_list, date_key):
 
 
 def build_group_today_report(group_name, countries_data, local_now: datetime):
-    today_str = local_now.strftime("%Y년 %m월 %d일") + f"({WEEKDAY_KO[local_now.weekday()]}, 현지시간)"
+    today_str = f"{local_now.day}일(현지시간)"  # 절대날짜(년/월/요일) 금지 규칙 준수
 
     capitals_info = []
     country_blocks = []
@@ -2044,7 +2044,7 @@ def build_group_today_report(group_name, countries_data, local_now: datetime):
 
 
 def build_group_weekend_report(group_name, countries_data, local_now: datetime):
-    today_str = local_now.strftime("%Y년 %m월 %d일") + f"({WEEKDAY_KO[local_now.weekday()]}, 현지시간)"
+    today_str = f"{local_now.day}일(현지시간)"  # 절대날짜(년/월/요일) 금지 규칙 준수
 
     capitals_info = []
     country_blocks = []
@@ -2141,7 +2141,7 @@ def build_group_weekend_report(group_name, countries_data, local_now: datetime):
 
 
 def build_group_weekly_report(group_name, countries_data, local_now: datetime):
-    today_str = local_now.strftime("%Y년 %m월 %d일") + f"({WEEKDAY_KO[local_now.weekday()]}, 현지시간)"
+    today_str = f"{local_now.day}일(현지시간)"  # 절대날짜(년/월/요일) 금지 규칙 준수
 
     capitals_ranges = []
     country_blocks = []
