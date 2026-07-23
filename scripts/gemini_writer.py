@@ -982,6 +982,40 @@ def update_article_fields(article_id: int, fields: dict):
     )
 
 
+_LABEL_LINE_RE = re.compile(r'^[\*#>\s]*(제목|국가|관련국가|분야|여행|본문|내용)\s*[:：]\s*')
+
+
+def _strip_leaked_labels(text: str) -> str:
+    """파싱 실패로 라벨(제목:/국가:/관련국가:/분야:/여행:/본문:/내용:)이
+    본문 앞에 그대로 남는 경우를 걸러내는 최종 안전망.
+    Gemini가 지시된 '본문:' 대신 '내용:' 등으로 응답을 변형하거나
+    '**제목:' 처럼 마크다운을 섞어써도 선행 라벨 줄들을 제거한다."""
+    if not text:
+        return text
+    lines = text.split("\n")
+    out = []
+    in_header = True
+    for line in lines:
+        if in_header:
+            stripped = line.strip()
+            m = _LABEL_LINE_RE.match(stripped)
+            if m:
+                rest = stripped[m.end():].strip()
+                if m.group(1) in ("본문", "내용"):
+                    in_header = False  # 본문 시작 라벨 — 이후는 그대로 보존
+                    if rest:
+                        out.append(rest)
+                    continue
+                else:
+                    continue  # 제목/국가/관련국가/분야/여행 라벨 줄은 통째로 제거
+            elif stripped == "":
+                continue  # 헤더 구간의 빈 줄은 건너뜀
+            else:
+                in_header = False  # 라벨 없는 텍스트 등장 — 헤더 탐색 종료
+        out.append(line)
+    return "\n".join(out).strip()
+
+
 def parse_title_and_body(text):
     """Gemini 응답에서 제목/본문/국가/관련국가/분야/여행여부 분리"""
     title = ""
@@ -993,23 +1027,27 @@ def parse_title_and_body(text):
     lines = text.strip().split("\n")
     body_start = 0
     for i, line in enumerate(lines):
-        if line.startswith("제목:"):
-            title = line.replace("제목:", "").strip()
-        elif line.startswith("국가:"):
-            country = line.replace("국가:", "").strip()
+        stripped = line.strip()
+        m = _LABEL_LINE_RE.match(stripped)
+        label = m.group(1) if m else None
+        rest = stripped[m.end():].strip() if m else None
+        if label == "제목":
+            title = rest
+        elif label == "국가":
+            country = rest
             if country in ("없음", "글로벌", "-", "N/A", ""):
                 country = ""
-        elif line.startswith("관련국가:"):
-            raw = line.replace("관련국가:", "").strip()
+        elif label == "관련국가":
+            raw = rest
             if raw not in ("없음", "-", "N/A", ""):
                 countries = [c.strip() for c in raw.split(",") if c.strip() and c.strip() not in ("없음", "-")]
-        elif line.startswith("분야:"):
-            category = line.replace("분야:", "").strip()
-        elif line.startswith("여행:"):
-            _tv = line.replace("여행:", "").strip()
+        elif label == "분야":
+            category = rest
+        elif label == "여행":
+            _tv = rest
             is_travel = _tv.startswith("예") or _tv.lower().startswith("y") or _tv.lower() == "true"
-        elif line.startswith("본문:"):
-            body = "\n".join(lines[i:]).replace("본문:", "", 1).strip()
+        elif label in ("본문", "내용"):
+            body = (rest + "\n" + "\n".join(lines[i+1:])).strip() if rest else "\n".join(lines[i+1:]).strip()
             body_start = i
             break
     if not body_start and title:
@@ -1018,8 +1056,10 @@ def parse_title_and_body(text):
             body = "\n".join(lines[idx+1:]).strip()
             body_lines = [l for l in body.split("\n") if not l.startswith("국가:") and not l.startswith("관련국가:") and not l.startswith("분야:") and not l.startswith("여행:")]
             body = "\n".join(body_lines).strip()
-            if body.startswith("본문:"):
+            if body.startswith("본문:") or body.startswith("내용:"):
                 body = body[3:].strip()
+    # 최종 안전망: 위 로직을 거치고도 라벨이 잔존하면(완전 실패 포함) 강제 제거
+    body = _strip_leaked_labels(body)
     return title, body, country, category, countries, is_travel
 
 
@@ -1499,8 +1539,8 @@ def run():
             if content:
                 gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel = parse_title_and_body(content)
                 new_title = gen_title if gen_title else titles[0][:50]
-                note = generate_update_note(existing["summary_ko"], gen_body or content)
-                update_article(existing["id"], new_title, gen_body or content, note=note, countries=gen_countries if gen_countries else None, country=gen_country or "")
+                note = generate_update_note(existing["summary_ko"], (gen_body or _strip_leaked_labels(content)))
+                update_article(existing["id"], new_title, (gen_body or _strip_leaked_labels(content)), note=note, countries=gen_countries if gen_countries else None, country=gen_country or "")
                 update_article_count(existing["id"], prev_count + 1)
                 if gen_country or gen_category or gen_travel:
                     update_fields = {}
@@ -1541,8 +1581,8 @@ def run():
                 if content:
                     gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel = parse_title_and_body(content)
                     new_title = gen_title if gen_title else probe_title
-                    note = generate_update_note(existing_summary, gen_body or content)
-                    update_article(similar_existing["id"], new_title, gen_body or content, note=note, countries=gen_countries if gen_countries else None, country=gen_country or "")
+                    note = generate_update_note(existing_summary, (gen_body or _strip_leaked_labels(content)))
+                    update_article(similar_existing["id"], new_title, (gen_body or _strip_leaked_labels(content)), note=note, countries=gen_countries if gen_countries else None, country=gen_country or "")
                     prev_count = existing_full.get("score", 0) if existing_full else 0
                     update_article_count(similar_existing["id"], max(prev_count, cur_count) + 1)
                     if gen_country or gen_category or gen_travel:
@@ -1561,7 +1601,7 @@ def run():
                             update_article_fields(similar_existing["id"], update_fields)
                     print(f"  ✅ 병합 완료: {new_title}\n")
                     updated += 1
-                    send_to_newsfinal_channel(similar_existing["id"], new_title, gen_body or content, is_update=True)
+                    send_to_newsfinal_channel(similar_existing["id"], new_title, (gen_body or _strip_leaked_labels(content)), is_update=True)
                 else:
                     print(f"  ❌ 병합 실패\n")
                 time.sleep(CALL_INTERVAL)
@@ -1595,11 +1635,11 @@ def run():
                     print(f"  ⚠️ 유사 기사 재발견 (유사도 {sim_score}%) → 미발행으로 저장: {similar.get('title_ko','')[:40]}")
                     published = False
 
-                image_url = fetch_article_image(full_title, gen_body or content) if published else ""
+                image_url = fetch_article_image(full_title, (gen_body or _strip_leaked_labels(content))) if published else ""
 
                 article_id = save_article(
                     title_ko      = full_title,
-                    summary_ko    = gen_body or content,
+                    summary_ko    = (gen_body or _strip_leaked_labels(content)),
                     cluster_key   = final_subcategory if 'final_subcategory' in dir() else cluster_key,
                     category      = final_category,
                     region        = final_region,
@@ -1616,8 +1656,8 @@ def run():
                     if published:
                         today_own_articles.append({"id": article_id, "title_ko": full_title})
                         generated += 1
-                        send_to_newsfinal_channel(article_id, full_title, gen_body or content, is_update=False)
-                        detect_and_register_companies(full_title, gen_body or content, final_country)
+                        send_to_newsfinal_channel(article_id, full_title, (gen_body or _strip_leaked_labels(content)), is_update=False)
+                        detect_and_register_companies(full_title, (gen_body or _strip_leaked_labels(content)), final_country)
                 else:
                     print(f"  ⚠️ 저장 실패\n")
             else:
@@ -1719,8 +1759,8 @@ def run():
                 gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel = parse_title_and_body(content)
                 new_title = gen_title if gen_title else title[:50]
                 existing_sum = existing_full.get("summary_ko") if existing_full else None
-                note = generate_update_note(existing_sum, gen_body or content)
-                update_article(similar_existing["id"], new_title, gen_body or content, note=note, countries=gen_countries if gen_countries else None, country=gen_country or "")
+                note = generate_update_note(existing_sum, (gen_body or _strip_leaked_labels(content)))
+                update_article(similar_existing["id"], new_title, (gen_body or _strip_leaked_labels(content)), note=note, countries=gen_countries if gen_countries else None, country=gen_country or "")
                 prev_count = existing_full.get("score", 0) if existing_full else 0
                 update_article_count(similar_existing["id"], prev_count + 1)
                 if gen_country or gen_category or gen_travel:
@@ -1739,7 +1779,7 @@ def run():
                         update_article_fields(similar_existing["id"], update_fields)
                 print(f"  ✅ 단독 병합 완료: {new_title}\n")
                 updated += 1
-                send_to_newsfinal_channel(similar_existing["id"], new_title, gen_body or content, is_update=True)
+                send_to_newsfinal_channel(similar_existing["id"], new_title, (gen_body or _strip_leaked_labels(content)), is_update=True)
             else:
                 print(f"  ❌ 단독 병합 실패\n")
             time.sleep(CALL_INTERVAL)
@@ -1776,9 +1816,9 @@ def run():
             if final_category == "글로벌":
                 final_region = "global"
 
-            if not verify_single_topic(full_title, gen_body or content):
+            if not verify_single_topic(full_title, (gen_body or _strip_leaked_labels(content))):
                 print(f"  ❌ 검수 실패 (복수 토픽) — 파킹: {full_title[:50]}")
-                park_multi_topic_articles([{"title_en": full_title, "full_text": gen_body or content,
+                park_multi_topic_articles([{"title_en": full_title, "full_text": (gen_body or _strip_leaked_labels(content)),
                     "country": final_country, "category": final_category, "region": final_region}])
                 time.sleep(CALL_INTERVAL)
                 continue
@@ -1790,11 +1830,11 @@ def run():
             else:
                 published = True
 
-            image_url = fetch_article_image(full_title, gen_body or content) if published else ""
+            image_url = fetch_article_image(full_title, (gen_body or _strip_leaked_labels(content))) if published else ""
 
             article_id = save_article(
                 title_ko=full_title,
-                summary_ko=gen_body or content,
+                summary_ko=(gen_body or _strip_leaked_labels(content)),
                 cluster_key=cluster_key,
                 category=final_category,
                 region=final_region,
@@ -1811,8 +1851,8 @@ def run():
                 if published:
                     today_own_articles.append({"id": article_id, "title_ko": full_title})
                     solo_generated += 1
-                    send_to_newsfinal_channel(article_id, full_title, gen_body or content, is_update=False)
-                    detect_and_register_companies(full_title, gen_body or content, final_country)
+                    send_to_newsfinal_channel(article_id, full_title, (gen_body or _strip_leaked_labels(content)), is_update=False)
+                    detect_and_register_companies(full_title, (gen_body or _strip_leaked_labels(content)), final_country)
         time.sleep(CALL_INTERVAL)
 
     print(f"✅ 완료 — 클러스터 {generated}건 생성 / {updated}건 업데이트 / 단독 {solo_generated}건 생성")
