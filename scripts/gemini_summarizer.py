@@ -29,7 +29,8 @@ def now_kst() -> datetime:
     """GitHub Actions 러너(UTC)와 무관하게 정확한 KST 현재시각 반환"""
     return datetime.now(timezone.utc).astimezone(KST)
 
-GEMINI_MODEL = "gemini-3.1-flash-lite"
+GEMINI_MODEL_PRIMARY  = "gemini-3.5-flash-lite"
+GEMINI_MODEL_FALLBACK = "gemini-3.1-flash-lite"
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 
@@ -45,7 +46,8 @@ TELEGRAM_TOKEN    = os.getenv("TELEGRAM_TOKEN", "")
 NEWSFINAL_CHANNEL = "@newsfinal"
 
 _current_key_idx = 0
-_exhausted_keys = set()
+_exhausted_keys_primary  = set()  # RPD 소진 키 (3.5)
+_exhausted_keys_fallback = set()  # RPD 소진 키 (3.1)
 MAX_ARTICLES = 20
 CALL_INTERVAL = 10
 
@@ -234,7 +236,7 @@ def build_prompt(article: dict) -> str:
 
 
 def call_gemini(prompt: str, retry: int = 2, max_tokens: int = 500) -> str | None:
-    global _current_key_idx, _exhausted_keys
+    global _current_key_idx, _exhausted_keys_primary, _exhausted_keys_fallback
     if not GEMINI_API_KEYS:
         print("[ERROR] GEMINI_API_KEY 없음")
         return None
@@ -248,42 +250,48 @@ def call_gemini(prompt: str, retry: int = 2, max_tokens: int = 500) -> str | Non
     }
 
     n = len(GEMINI_API_KEYS)
-    available = [i for i in range(n) if i not in _exhausted_keys]
-    if not available:
-        print("[ERROR] 모든 키 RPD 소진")
-        return None
+    model_stages = [
+        (GEMINI_MODEL_PRIMARY,  _exhausted_keys_primary),
+        (GEMINI_MODEL_FALLBACK, _exhausted_keys_fallback),
+    ]
 
-    ordered = sorted(available, key=lambda i: (i - _current_key_idx) % n)
-
-    for idx in ordered:
-        api_key = GEMINI_API_KEYS[idx]
-        url = (
-            f"https://generativelanguage.googleapis.com/v1beta/models/"
-            f"{GEMINI_MODEL}:generateContent?key={api_key}"
-        )
-        try:
-            res = requests.post(url, json=payload, timeout=(10, 30))
-            if res.status_code == 200:
-                _current_key_idx = (idx + 1) % n
-                return res.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
-            elif res.status_code == 429:
-                print(f"  [429] 키 {idx+1} RPD 소진 — 블랙리스트 추가")
-                _exhausted_keys.add(idx)
-                continue
-            elif res.status_code == 503:
-                print(f"  [503] 키 {idx+1} 과부하 → 다음 키로")
-                continue
-            else:
-                print(f"[ERROR] Gemini {res.status_code}: {res.text[:200]}")
-                return None
-        except requests.exceptions.Timeout:
-            print(f"  [TIMEOUT] 키 {idx+1} — 다음 키로")
+    for model, exhausted in model_stages:
+        available = [i for i in range(n) if i not in exhausted]
+        if not available:
+            print(f"  [{model}] 모든 키 RPD 소진 → 다음 모델로")
             continue
-        except Exception as e:
-            print(f"[ERROR] {e}")
-            return None
 
-    print("[ERROR] 모든 키 소진 또는 응답 없음")
+        ordered = sorted(available, key=lambda i: (i - _current_key_idx) % n)
+
+        for idx in ordered:
+            api_key = GEMINI_API_KEYS[idx]
+            url = (
+                f"https://generativelanguage.googleapis.com/v1beta/models/"
+                f"{model}:generateContent?key={api_key}"
+            )
+            try:
+                res = requests.post(url, json=payload, timeout=(10, 30))
+                if res.status_code == 200:
+                    _current_key_idx = (idx + 1) % n
+                    return res.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
+                elif res.status_code == 429:
+                    print(f"  [429] {model} 키 {idx+1} RPD 소진 — 블랙리스트 추가")
+                    exhausted.add(idx)
+                    continue
+                elif res.status_code == 503:
+                    print(f"  [503] {model} 키 {idx+1} 과부하 → 다음 키로")
+                    continue
+                else:
+                    print(f"[ERROR] Gemini {res.status_code}: {res.text[:200]}")
+                    return None
+            except requests.exceptions.Timeout:
+                print(f"  [TIMEOUT] {model} 키 {idx+1} — 다음 키로")
+                continue
+            except Exception as e:
+                print(f"[ERROR] {e}")
+                return None
+
+    print("[ERROR] 모든 모델/키 소진 또는 응답 없음")
     return None
 
 
