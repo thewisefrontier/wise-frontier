@@ -23,7 +23,8 @@ def now_kst() -> datetime:
     """GitHub Actions 러너(UTC)와 무관하게 정확한 KST 현재시각 반환"""
     return datetime.now(timezone.utc).astimezone(KST)
 
-GEMINI_MODEL = "gemini-3.1-flash-lite"
+GEMINI_MODEL_PRIMARY  = "gemini-3.5-flash-lite"
+GEMINI_MODEL_FALLBACK = "gemini-3.1-flash-lite"
 
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
@@ -35,6 +36,8 @@ GEMINI_API_KEYS = [k for k in [
 ] if k]
 
 _current_key_idx = 0
+_exhausted_keys_primary  = set()  # RPD 소진 키 (3.5)
+_exhausted_keys_fallback = set()  # RPD 소진 키 (3.1)
 
 
 def _sb_headers():
@@ -112,7 +115,7 @@ def digest_exists_for_today() -> bool:
 
 
 def call_gemini(prompt, max_tokens=3000):
-    global _current_key_idx
+    global _current_key_idx, _exhausted_keys_primary, _exhausted_keys_fallback
     if not GEMINI_API_KEYS:
         print("[ERROR] GEMINI_API_KEY 없음")
         return None
@@ -122,30 +125,46 @@ def call_gemini(prompt, max_tokens=3000):
         "generationConfig": {"temperature": 0.5, "maxOutputTokens": max_tokens},
     }
 
-    while _current_key_idx < len(GEMINI_API_KEYS):
-        api_key = GEMINI_API_KEYS[_current_key_idx]
-        url = (
-            f"https://generativelanguage.googleapis.com/v1beta/models/"
-            f"{GEMINI_MODEL}:generateContent?key={api_key}"
-        )
-        try:
-            res = requests.post(url, json=payload, timeout=(10, 45))
-            if res.status_code == 200:
-                return res.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
-            elif res.status_code == 429:
-                print(f"  [429] 키 {_current_key_idx+1} 한도 초과 → 키 {_current_key_idx+2}로 전환")
-                _current_key_idx += 1
-            else:
-                print(f"[ERROR] Gemini {res.status_code}: {res.text[:200]}")
-                return None
-        except requests.exceptions.Timeout:
-            print(f"  [TIMEOUT] 키 {_current_key_idx+1}")
-            return None
-        except Exception as e:
-            print(f"[ERROR] {e}")
-            return None
+    n = len(GEMINI_API_KEYS)
+    model_stages = [
+        (GEMINI_MODEL_PRIMARY,  _exhausted_keys_primary),
+        (GEMINI_MODEL_FALLBACK, _exhausted_keys_fallback),
+    ]
 
-    print("[ERROR] 모든 키 소진")
+    for model, exhausted in model_stages:
+        available = [i for i in range(n) if i not in exhausted]
+        if not available:
+            print(f"  [{model}] 모든 키 RPD 소진 → 다음 모델로")
+            continue
+
+        ordered = sorted(available, key=lambda i: (i - _current_key_idx) % n)
+
+        for idx in ordered:
+            api_key = GEMINI_API_KEYS[idx]
+            url = (
+                f"https://generativelanguage.googleapis.com/v1beta/models/"
+                f"{model}:generateContent?key={api_key}"
+            )
+            try:
+                res = requests.post(url, json=payload, timeout=(10, 45))
+                if res.status_code == 200:
+                    _current_key_idx = (idx + 1) % n
+                    return res.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
+                elif res.status_code == 429:
+                    print(f"  [429] {model} 키 {idx+1} 한도 초과 → 다음 키")
+                    exhausted.add(idx)
+                    continue
+                else:
+                    print(f"[ERROR] Gemini {res.status_code}: {res.text[:200]}")
+                    return None
+            except requests.exceptions.Timeout:
+                print(f"  [TIMEOUT] {model} 키 {idx+1}")
+                return None
+            except Exception as e:
+                print(f"[ERROR] {e}")
+                return None
+
+    print("[ERROR] 모든 모델/키 소진")
     return None
 
 

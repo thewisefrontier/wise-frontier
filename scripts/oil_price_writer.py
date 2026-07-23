@@ -22,7 +22,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # ── 설정 ────────────────────────────────────────────────────
-GEMINI_MODEL         = "gemini-3.1-flash-lite"
+GEMINI_MODEL_PRIMARY  = "gemini-3.5-flash-lite"
+GEMINI_MODEL_FALLBACK = "gemini-3.1-flash-lite"
 SUPABASE_URL         = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 EIA_API_KEY          = os.getenv("EIA_API_KEY", "")  # https://www.eia.gov/opendata/ 무료 등록
@@ -36,7 +37,8 @@ GEMINI_API_KEYS = [k for k in [
 ] if k]
 
 _current_key_idx = 0
-_exhausted_keys: set = set()
+_exhausted_keys_primary  = set()  # RPD 소진 키 (3.5)
+_exhausted_keys_fallback = set()  # RPD 소진 키 (3.1)
 
 KST = timezone(timedelta(hours=9))
 EDT = ZoneInfo("America/New_York")  # 뉴욕 시장 기준
@@ -206,7 +208,7 @@ def _calc(today: float, prev: float) -> dict:
 
 # ── Gemini 호출 ──────────────────────────────────────────────
 def call_gemini(prompt: str, max_tokens: int = 1500) -> str | None:
-    global _current_key_idx, _exhausted_keys
+    global _current_key_idx, _exhausted_keys_primary, _exhausted_keys_fallback
 
     if not GEMINI_API_KEYS:
         print("[ERROR] GEMINI_API_KEY 없음")
@@ -220,47 +222,54 @@ def call_gemini(prompt: str, max_tokens: int = 1500) -> str | None:
         },
     }
 
-    n         = len(GEMINI_API_KEYS)
-    available = [i for i in range(n) if i not in _exhausted_keys]
-    if not available:
-        print("[ERROR] 모든 키 소진")
-        return None
+    n = len(GEMINI_API_KEYS)
+    model_stages = [
+        (GEMINI_MODEL_PRIMARY,  _exhausted_keys_primary),
+        (GEMINI_MODEL_FALLBACK, _exhausted_keys_fallback),
+    ]
 
-    ordered = sorted(available, key=lambda i: (i - _current_key_idx) % n)
-
-    for idx in ordered:
-        api_key = GEMINI_API_KEYS[idx]
-        url = (
-            f"https://generativelanguage.googleapis.com/v1beta/models/"
-            f"{GEMINI_MODEL}:generateContent?key={api_key}"
-        )
-        try:
-            res = requests.post(url, json=payload, timeout=(10, 60))
-            if res.status_code == 200:
-                _current_key_idx = (idx + 1) % n
-                cands = res.json().get("candidates", [])
-                if not cands:
-                    return None
-                parts = cands[0].get("content", {}).get("parts", [])
-                text  = "".join(p.get("text", "") for p in parts).strip()
-                return text if text else None
-            elif res.status_code == 429:
-                print(f"  [429] 키 {idx+1} 한도 초과 → 다음 키")
-                _exhausted_keys.add(idx)
-                continue
-            elif res.status_code == 503:
-                print(f"  [503] 키 {idx+1} 과부하 → 다음 키")
-                continue
-            else:
-                print(f"[ERROR] Gemini {res.status_code}: {res.text[:200]}")
-                return None
-        except requests.exceptions.Timeout:
-            print(f"  [TIMEOUT] 키 {idx+1}")
+    for model, exhausted in model_stages:
+        available = [i for i in range(n) if i not in exhausted]
+        if not available:
+            print(f"  [{model}] 모든 키 소진 → 다음 모델로")
             continue
-        except Exception as e:
-            print(f"[ERROR] {e}")
-            return None
 
+        ordered = sorted(available, key=lambda i: (i - _current_key_idx) % n)
+
+        for idx in ordered:
+            api_key = GEMINI_API_KEYS[idx]
+            url = (
+                f"https://generativelanguage.googleapis.com/v1beta/models/"
+                f"{model}:generateContent?key={api_key}"
+            )
+            try:
+                res = requests.post(url, json=payload, timeout=(10, 60))
+                if res.status_code == 200:
+                    _current_key_idx = (idx + 1) % n
+                    cands = res.json().get("candidates", [])
+                    if not cands:
+                        return None
+                    parts = cands[0].get("content", {}).get("parts", [])
+                    text  = "".join(p.get("text", "") for p in parts).strip()
+                    return text if text else None
+                elif res.status_code == 429:
+                    print(f"  [429] {model} 키 {idx+1} 한도 초과 → 다음 키")
+                    exhausted.add(idx)
+                    continue
+                elif res.status_code == 503:
+                    print(f"  [503] {model} 키 {idx+1} 과부하 → 다음 키")
+                    continue
+                else:
+                    print(f"[ERROR] Gemini {res.status_code}: {res.text[:200]}")
+                    return None
+            except requests.exceptions.Timeout:
+                print(f"  [TIMEOUT] {model} 키 {idx+1}")
+                continue
+            except Exception as e:
+                print(f"[ERROR] {e}")
+                return None
+
+    print("[ERROR] 모든 모델/키 소진 또는 응답 없음")
     return None
 
 
