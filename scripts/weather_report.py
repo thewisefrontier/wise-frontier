@@ -18,6 +18,7 @@ weather_report.py
 실행: python scripts/weather_report.py
 """
 
+import math
 import os
 import re
 import time
@@ -119,6 +120,24 @@ def call_gemini_weather(prompt: str, max_tokens: int = 1200) -> str | None:
     return None
 
 
+def _ensure_paragraphs(text: str, target: int = 3) -> str:
+    """Gemini가 프롬프트의 '2~3개 문단으로 나누어 작성' 지시를 어기고
+    \\n\\n 없이 한 덩어리로 응답하는 경우가 있어(강제성 없는 지시라 준수율이
+    들쭉날쭉함), 코드 단에서 문장(-다.) 단위로 강제 분할하는 안전장치.
+    이미 \\n\\n이 있으면(모델이 지시를 따른 경우) 손대지 않고 그대로 반환."""
+    if not text or "\n\n" in text:
+        return text
+    # "-다." 체 종결(전 프롬프트에서 강제)을 문장 경계로 사용 —
+    # 소수점(예: 2.5mm) 등 다른 마침표와 섞이지 않아 안전.
+    sentences = [s.strip() for s in re.split(r"(?<=다\.)\s+", text.strip()) if s.strip()]
+    if len(sentences) < target + 1:
+        return text  # 문장 수가 적으면 분할하지 않고 그대로 둠
+    n = len(sentences)
+    size = math.ceil(n / target)
+    groups = [sentences[i:i + size] for i in range(0, n, size)]
+    return "\n\n".join(" ".join(g) for g in groups)
+
+
 def _parse_gemini_weather_response(raw: str | None) -> tuple[str, str]:
     """Gemini 응답(JSON)에서 title·body 분리. 실패 시 ("", raw)."""
     if not raw:
@@ -130,9 +149,9 @@ def _parse_gemini_weather_response(raw: str | None) -> tuple[str, str]:
             cleaned = re.sub(r"^```[a-z]*\n?", "", cleaned)
             cleaned = re.sub(r"\n?```$", "", cleaned.strip())
         parsed = _json.loads(cleaned)
-        return parsed.get("title", ""), parsed.get("body", "")
+        return parsed.get("title", ""), _ensure_paragraphs(parsed.get("body", ""))
     except Exception:
-        return "", raw  # fallback: 본문 전체를 body로
+        return "", _ensure_paragraphs(raw)  # fallback: 본문 전체를 body로
 
 
 def _sb_headers():
