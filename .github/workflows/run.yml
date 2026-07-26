@@ -2,7 +2,7 @@ name: NewsFinal - Auto Run
 
 on:
   schedule:
-    - cron: '15 * * * *'   # 1시간마다 (매시 15분 — weather.yml 정각, oil_price.yml 30분/정각과 겹치지 않게 오프셋)
+    - cron: '0 * * * *'   # 1시간마다
   workflow_dispatch:
 
 permissions:
