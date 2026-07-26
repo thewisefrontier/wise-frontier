@@ -9,6 +9,7 @@ Gemini Flash로 고품질 한국어 요약을 재생성합니다.
 
 import os
 import re
+import math
 import time
 import requests
 from datetime import datetime, timedelta, timezone
@@ -337,6 +338,22 @@ def call_gemini_article(prompt, max_tokens=2000, style_retries=1):
 
 # ── 장기 이슈 트래커 ────────────────────────────────────────
 
+def _ensure_paragraphs(text: str, target: int = 3) -> str:
+    """Gemini가 프롬프트의 '문단으로 나누어 작성' 지시를 어기고
+    \\n\\n 없이 한 덩어리로 응답하는 경우가 있어(강제성 없는 지시라 준수율이
+    들쭉날쭉함), 코드 단에서 문장(-다.) 단위로 강제 분할하는 안전장치.
+    이미 \\n\\n이 있으면(모델이 지시를 따른 경우) 손대지 않고 그대로 반환."""
+    if not text or "\n\n" in text:
+        return text
+    sentences = [s.strip() for s in re.split(r"(?<=다\.)\s+", text.strip()) if s.strip()]
+    if len(sentences) < target + 1:
+        return text  # 문장 수가 적으면 분할하지 않고 그대로 둠
+    n = len(sentences)
+    size = math.ceil(n / target)
+    groups = [sentences[i:i + size] for i in range(0, n, size)]
+    return "\n\n".join(" ".join(g) for g in groups)
+
+
 # 추적할 키워드 그룹 — (그룹명, 카테고리, [키워드 목록])
 TREND_KEYWORDS = [
     ("에볼라",       "사회",    ["ebola", "에볼라", "hemorrhagic fever", "출혈열", "MVD", "marburg"]),
@@ -348,7 +365,7 @@ TREND_KEYWORDS = [
     ("미얀마",       "정치·외교", ["myanmar", "미얀마", "junta", "군부", "NUG"]),
     ("아이티",       "사회",    ["haiti", "아이티", "gang", "갱단"]),
     ("사헬 쿠데타",  "정치·외교", ["sahel", "사헬", "mali", "말리", "niger", "burkina", "부르키나"]),
-    ("중앙아프리카",  "정치·외교", ["central african", "중앙아프리카", "CAR", "bangui"]),
+    ("중앙아프리카",  "정치·외교", ["central african", "중앙아프리카", "bangui"]),
 ]
 
 # 추적 윈도우: 7일간 기사에서 키워드 빈도 분석
@@ -599,6 +616,8 @@ def run_trend_tracker():
 
 이 기사들을 종합해 현재 진행 중인 상황을 정리하는 추적 기사를 작성하세요.
 - 현재 상황이 어떻게 전개되고 있는지 시간 순으로 정리하세요.
+- 본문은 최소 5~6문장, 600자 이상으로 작성하세요. 각 사건마다 한 문장으로 끝내지 말고, 배경·경위·현재 상황을 구체적으로 풀어서 서술하세요. 서로 다른 사건이 섞여 있으면 각각을 문단으로 나누어 충분히 설명하세요.
+- 문단을 나눌 때는 반드시 빈 줄(줄바꿈 2번)로 구분하세요. 한 문단에 모든 문장을 붙여 쓰지 마세요.
 - 모든 날짜는 사건이 일어난 현지시간 기준으로만 표기하세요. 한국 시간(KST)이나 UTC로 환산·계산하지 말고, 소스 기사에 나온 날짜를 하루도 앞뒤로 옮기지 말고 그대로 "N일(현지시간)" 형식으로 쓰세요. "2026년 7월 15일", "오늘", "현재" 같은 절대 날짜나 오늘 날짜는 쓰지 말고, 날짜를 알 수 없으면 쓰지 마세요.
 - 수치, 인명, 날짜, 기관명 등 구체적 팩트를 최대한 살리세요.
 - 한국 투자자/독자 관점에서 왜 중요한지 한 문단으로 마무리하되, 사실 서술형으로만 쓰세요.
@@ -635,7 +654,7 @@ def run_trend_tracker():
                 gen_category = line.replace("분야:", "").strip() or category
             elif line.startswith("본문:"):
                 idx = content.find("본문:")
-                body = content[idx + 3:].strip()
+                body = _ensure_paragraphs(content[idx + 3:].strip())
                 break
 
         if not title:
@@ -1001,6 +1020,8 @@ JSON 배열로만 응답하세요 (마크다운 없이):
 
 이 기사들을 종합해 완성도 높은 한국어 기사를 작성하세요.
 - 반드시 하나의 토픽만 다루세요.
+- 본문은 최소 4~5문장, 500자 이상 3개 문단 이상으로 충분히 작성하세요. 배경·경과·전망(또는 파급 효과)을 각각 다루어 분량을 채우세요. 관련 기사에 나온 내용이 부족하면 배경 설명이나 맥락으로 보완하세요.
+- 문단을 나눌 때는 반드시 빈 줄(줄바꿈 2번)로 구분하세요. 한 문단에 모든 문장을 붙여 쓰지 마세요.
 - 수치, 인명, 날짜, 기관명 등 구체적 팩트를 최대한 살리세요.
 - 왜 지금 이 이슈가 중요한지 맥락을 담되, 사실 서술형으로만 쓰세요.
 - 모든 날짜는 사건이 일어난 현지시간 기준으로만 표기하세요. 한국 시간(KST)이나 UTC로 환산·계산하지 말고, 소스 기사에 나온 날짜를 하루도 앞뒤로 옮기지 말고 그대로 "N일(현지시간)" 형식으로 쓰세요. "2026년 7월 15일", "오늘", "현재" 같은 절대 날짜나 오늘 날짜는 쓰지 말고, 날짜를 알 수 없으면 쓰지 마세요.
@@ -1035,7 +1056,7 @@ JSON 배열로만 응답하세요 (마크다운 없이):
                     art_countries = [x.strip() for x in raw2.split(",") if x.strip()]
             elif line.startswith("본문:"):
                 idx = content_text.find("본문:")
-                body = content_text[idx + 3:].strip()
+                body = _ensure_paragraphs(content_text[idx + 3:].strip())
                 break
 
         if not title:
@@ -1235,6 +1256,8 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
 
 이 이슈에 대해 한국 투자자/독자를 위한 완성도 높은 기사를 작성하세요.
 - 이슈의 배경, 현재 상황, 의미를 사실 서술형으로 담으세요.
+- 본문은 최소 4~5문장, 500자 이상 3개 문단 이상으로 작성하세요. 배경·경과·의미(또는 파급 효과)를 각각 풀어서 서술하세요.
+- 문단을 나눌 때는 반드시 빈 줄(줄바꿈 2번)로 구분하세요. 한 문단에 모든 문장을 붙여 쓰지 마세요.
 - 확인된 팩트 중심으로, 추측은 최소화하세요.
 - 모든 날짜는 사건이 일어난 현지시간 기준으로만 표기하세요. 한국 시간(KST)이나 UTC로 환산·계산하지 말고, 소스 기사에 나온 날짜를 하루도 앞뒤로 옮기지 말고 그대로 "N일(현지시간)" 형식으로 쓰세요. "2026년 7월 15일", "오늘", "현재" 같은 절대 날짜나 오늘 날짜는 쓰지 말고, 날짜를 알 수 없으면 쓰지 마세요.
 - 반드시 하나의 토픽만 다루세요.
@@ -1270,7 +1293,7 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
                     art_countries = [x.strip() for x in raw2.split(",") if x.strip()]
             elif line.startswith("본문:"):
                 idx = content_text.find("본문:")
-                body = content_text[idx + 3:].strip()
+                body = _ensure_paragraphs(content_text[idx + 3:].strip())
                 break
 
         if not title:
