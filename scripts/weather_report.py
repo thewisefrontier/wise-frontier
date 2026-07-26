@@ -120,6 +120,21 @@ def call_gemini_weather(prompt: str, max_tokens: int = 1200) -> str | None:
     return None
 
 
+def _strip_local_time_kr(text: str) -> str:
+    """한국 날씨 기사 전용 후처리. Gemini가 지시를 어기고 날짜 뒤에
+    "(현지시간)"을 붙이는 경우가 있어(강제성 없는 프롬프트 지시라 준수율이
+    들쭉날쭉함), 코드 단에서 강제 제거. 한국 기사는 KST 기준이라
+    "(현지시간)" 표기가 불필요·부적절하다. 국가·괄호 표기 변형까지 흡수.
+    예: "15일(현지시간)" → "15일", "15일 (현지 시간)" → "15일"."""
+    if not text:
+        return text
+    # 날짜(N일) 직후에 오는 (현지시간)/(현지 시간) 및 앞 공백 제거
+    text = re.sub(r"(\d{1,2}\s*일)\s*[（(]\s*현지\s*시간\s*[)）]", r"\1", text)
+    # 날짜와 무관하게 남은 (현지시간) 표기도 제거(공백 정리 포함)
+    text = re.sub(r"\s*[（(]\s*현지\s*시간\s*[)）]", "", text)
+    return text
+
+
 def _ensure_paragraphs(text: str, target: int = 3) -> str:
     """Gemini가 프롬프트의 '2~3개 문단으로 나누어 작성' 지시를 어기고
     \\n\\n 없이 한 덩어리로 응답하는 경우가 있어(강제성 없는 지시라 준수율이
@@ -1253,7 +1268,7 @@ def build_korea_today_report_kma(cities: list, local_now: datetime):
 {briefing_block}
 [작성 규칙]
 - 뉴스 기사 형식. 종결어미는 반드시 "-다" 체
-- 날짜 표기: 오늘은 {local_now.day}일이다. 본문은 반드시 "{local_now.day}일(현지시간)"으로 시작할 것(다른 숫자 사용 금지). "오늘", 절대연도(2026년 등) 절대 금지
+- 날짜 표기: 오늘은 {local_now.day}일이다. 본문은 반드시 "{local_now.day}일"로 시작할 것(다른 숫자 사용 금지, "(현지시간)" 붙이지 말 것). "오늘", 절대연도(2026년 등) 절대 금지
 - 700자 이상 작성
 - 본문은 2~3개 문단으로 나누어 작성. JSON body 값에서 문단 구분은 반드시 \\n\\n(개행 두 번)으로 표시
 - "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
@@ -1280,6 +1295,7 @@ def build_korea_today_report_kma(cities: list, local_now: datetime):
             f"전국적으로는 최저 {fmt_num(min(tmin_all))}°C에서 최고 {fmt_num(max(tmax_all))}°C의 분포를 보일 전망이다."
         )
 
+    lede = _strip_local_time_kr(lede)
     max_temp = fmt_num(max([k["tmax"] for _, _, k in valid]))
     title = _title_kma_today if _title_kma_today else f"한국, {_weather_phrase(lede, max_temp)}"
     legend = "[지역별 날씨 전망] [오전/오후](최저∼최고기온) | 강수확률"
@@ -1362,7 +1378,7 @@ def build_korea_weekend_report_kma(cities: list, local_now: datetime):
 [작성 규칙]
 - 뉴스 기사 형식. 종결어미는 반드시 "-다" 체
 - 본문은 2~3개 문단으로 나누어 작성. JSON body 값에서 문단 구분은 반드시 \\n\\n(개행 두 번)으로 표시
-- 날짜 표기: 오늘은 {local_now.day}일이다. 본문은 반드시 "{local_now.day}일(현지시간)"으로 시작할 것(다른 숫자 사용 금지). "오늘", "이번 주말", 절대연도 절대 금지
+- 날짜 표기: 오늘은 {local_now.day}일이다. 본문은 반드시 "{local_now.day}일"로 시작할 것(다른 숫자 사용 금지, "(현지시간)" 붙이지 말 것). "오늘", "이번 주말", 절대연도 절대 금지
 - 700자 이상 작성
 - "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
 - 타 매체명 언급 금지
@@ -1387,6 +1403,7 @@ def build_korea_weekend_report_kma(cities: list, local_now: datetime):
             + (f" {', '.join(rain_cities)} 등은 강수확률이 높아 우산 준비가 필요하다." if rain_cities else "")
         )
 
+    lede = _strip_local_time_kr(lede)
     sat_f = "맑음" if cap_sat and "맑" in (cap_sat.get("am_condition") or "") else ("비" if cap_sat and "비" in (cap_sat.get("am_condition") or "") else "흐림")
     sun_f = "맑음" if cap_sun and "맑" in (cap_sun.get("am_condition") or "") else ("비" if cap_sun and "비" in (cap_sun.get("am_condition") or "") else "흐림")
     title = _title_kma_wknd if _title_kma_wknd else f"주말 한국, {_weekend_phrase(sat_f, sun_f)}"
@@ -1575,7 +1592,7 @@ def build_korea_weekly_report_kma(cities: list, local_now: datetime):
 [작성 규칙]
 - 뉴스 기사 형식. 종결어미는 반드시 "-다" 체
 - 본문은 2~3개 문단으로 나누어 작성. JSON body 값에서 문단 구분은 반드시 \\n\\n(개행 두 번)으로 표시
-- 날짜 표기: 오늘은 {local_now.day}일이다. 본문은 반드시 "{local_now.day}일(현지시간)"으로 시작할 것(다른 숫자 사용 금지). "이번 주", "다음주", 절대연도 절대 금지
+- 날짜 표기: 오늘은 {local_now.day}일이다. 본문은 반드시 "{local_now.day}일"로 시작할 것(다른 숫자 사용 금지, "(현지시간)" 붙이지 말 것). "이번 주", "다음주", 절대연도 절대 금지
 - 700자 이상 작성
 - "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
 - 타 매체명 언급 금지
@@ -1601,6 +1618,7 @@ def build_korea_weekly_report_kma(cities: list, local_now: datetime):
             + (f" {'·'.join(rain_days)}요일에 비 소식이 있다." if rain_days else " 당분간 비 소식은 없을 전망이다.")
         )
 
+    summary = _strip_local_time_kr(summary)
     title = _title_kma_wkly if _title_kma_wkly else f"다음주 한국, {_weekly_phrase(summary, fmt_num(max(tmax_all)) if tmax_all else '?')}"
     body = summary + "\n\n다음은 지역별 날씨 전망입니다.\n\n" + "\n".join(lines)
     return title, body
