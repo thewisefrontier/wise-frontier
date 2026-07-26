@@ -1,1 +1,60 @@
-IyBOZXdzRmluYWwgcm9ib3RzLnR4dAoKIyDqsoDsg4kt7JeU7KGwIO2VmOyaqQpVc2VyLWFnZW50OiBHb29nbGVib3QKQWxsb3c6IC8KClVzZXItYWdlbnQ6IEJpbmdib3QKQWxsb3c6IC8KClVzZXItYWdlbnQ6IFlldGkKQWxsb3c6IC8KCiMgQUkg7ZWZ7IutIO4BgOugkuunkOydtCDssKjri6QKVXNlci1hZ2VudDogR1BUQm90CkRpc2FsbG93OiAvCgpVc2VyLWFnZW50OiBDaGF0R1BULVVzZXIKRGlzYWxsb3c6IC8KClVzZXItYWdlbnQ6IENsYXVkZS1XZWIKRGlzYWxsb3c6IC8KClVzZXItYWdlbnQ6IGFudGhyb3BpYy1haQpEaXNhbGxvdzogLwoKVXNlci1hZ2VudDogQ0NCb3QKRGlzYWxsb3c6IC8KClVzZXItYWdlbnQ6IEdvb2dsZS1FeHRlbmRlZApEaXNhbGxvdzogLwoKVXNlci1hZ2VudDogRmFjZWJvb2tCb3QKRGlzYWxsb3c6IC8KClVzZXItYWdlbnQ6IE9tZ2lsaWJvdApEaXNhbGxvdzogLwoKVXNlci1hZ2VudDogRGlmZmJvdApEaXNhbGxvdzogLwoKVXNlci1hZ2VudDogQnl0ZXNwaWRlcgpEaXNhbGxvdzogLwoKVXNlci1hZ2VudDogUGV0YWxCb3QKRGlzYWxsb3c6IC8KClVzZXItYWdlbnQ6IGNvaGVyZS1haQpEaXNhbGxvdzogLwoKVXNlci1hZ2VudDogUGVycGxleGl0eUJvdApEaXNhbGxvdzogLwoKIyDsnbzrsJgg7YOA65Cs66as7Iy1IOq4sOuztCDtl4jsmqkKVXNlci1hZ2VudDogKgpBbGxvdzogLwpEaXNhbGxvdzogL2FkbWluLmh0bWwKClNpdGVtYXA6IGh0dHBzOi8vbmV3c2ZpbmFsLmNvLmtyL3NpdGVtYXAueG1sCgojRGF1bVdlYk1hc3RlclRvb2w6YTJjZjg1ZDI5NjU2ZjkyMDI3ZmE5YWFmOGMzODcwNmRlZjE3M2Q4NWQ4NTEyMmEyMWNhNDk5YTQxN2JjNzI5NjE6WndoZk5XbVdhaGtPbS9VSjBNSE9PZz09Cg==
+# NewsFinal robots.txt
+
+# 검색엔진 허용
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Yeti
+Allow: /
+
+# AI 학습 크롤러 차단
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: FacebookBot
+Disallow: /
+
+User-agent: Omgilibot
+Disallow: /
+
+User-agent: Diffbot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: PetalBot
+Disallow: /
+
+User-agent: cohere-ai
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+# 일반 크롤러 기본 허용
+User-agent: *
+Allow: /
+Disallow: /admin.html
+
+Sitemap: https://newsfinal.co.kr/sitemap.xml
+
+#DaumWebMasterTool:a2cf85d29656f92027fa9aaf8c38706def6d173d85122a21ca499a417bc72961:ZwhfNWmWahkOm/UJ0MHOOg==
