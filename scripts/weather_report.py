@@ -1246,7 +1246,7 @@ def build_korea_today_report_kma(cities: list, local_now: datetime):
     city_data_lines = []
     for n, c, k in valid:
         city_data_lines.append(
-            f"- {n}{'(수도)' if c else ''}: 오전 {k.get('am_condition','-')}, 오후 {k.get('pm_condition','-')}, "
+            f"- {n}: 오전 {k.get('am_condition','-')}, 오후 {k.get('pm_condition','-')}, "
             f"최저 {fmt_num(k['tmin'])}°C, 최고 {fmt_num(k['tmax'])}°C, "
             f"오전 강수확률 {fmt_num(k.get('am_precip') or 0)}%, 오후 강수확률 {fmt_num(k.get('pm_precip') or 0)}%"
             + (f", 최대풍속 {fmt_num(k['wind_max'])}km/h" if k.get("wind_max") else "")
@@ -1259,7 +1259,7 @@ def build_korea_today_report_kma(cities: list, local_now: datetime):
 
 [날씨 데이터]
 전국 최저기온: {fmt_num(min(tmin_all))}°C / 최고기온: {fmt_num(max(tmax_all))}°C
-수도 {cap_name}: 오전 {cap['am_condition']}, 오후 {cap['pm_condition']}, 최저 {fmt_num(cap['tmin'])}°C, 최고 {fmt_num(cap['tmax'])}°C
+{cap_name}: 오전 {cap['am_condition']}, 오후 {cap['pm_condition']}, 최저 {fmt_num(cap['tmin'])}°C, 최고 {fmt_num(cap['tmax'])}°C
 강수확률 높은 지역(60% 이상): {', '.join(rain_cities) if rain_cities else '없음'}
 강풍 예상 지역(40km/h 이상): {', '.join(windy_cities) if windy_cities else '없음'}
 기상 특보 발효: {warn_text if warn_text else '없음'}
@@ -1271,10 +1271,11 @@ def build_korea_today_report_kma(cities: list, local_now: datetime):
 - 날짜 표기: 오늘은 {local_now.day}일이다. 본문은 반드시 "{local_now.day}일"로 시작할 것(다른 숫자 사용 금지, "(현지시간)" 붙이지 말 것). "오늘", 절대연도(2026년 등) 절대 금지
 - 700자 이상 작성
 - 본문은 2~3개 문단으로 나누어 작성. JSON body 값에서 문단 구분은 반드시 \\n\\n(개행 두 번)으로 표시
+- 첫 문장은 반드시 "{local_now.day}일 한국의 날씨는"으로 시작해 전국 기상을 한 문장으로 개관한 뒤, 이어서 {cap_name} 등 지역별 상세로 들어갈 것. {cap_name}을 "수도"로 지칭하지 말 것(예: "수도 {cap_name}" 금지, 그냥 "{cap_name}"만 사용)
 - "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
 - 타 매체명 언급 금지
 - 제공된 날씨 수치 데이터에만 근거해 작성할 것. 지정학적 상황·분쟁·외교·경제·유가·증시 등 날씨 외 내용 추가 절대 금지
-- 수도 날씨를 중심으로 서술하되, 특이기상(강수·강풍·특보)은 구체적으로 언급
+- {cap_name} 날씨를 중심으로 서술하되, 특이기상(강수·강풍·특보)은 구체적으로 언급
 - 전국 기온 범위로 마무리
 - 본문만 출력(제목·소제목 불필요)
 
@@ -1290,8 +1291,8 @@ def build_korea_today_report_kma(cities: list, local_now: datetime):
     _title_kma_today, lede = _parse_gemini_weather_response(_raw_kma_today)
     if not lede:
         lede = (
-            f"기상청에 따르면 한국의 수도 {cap_name}은 오전 {cap['am_condition']}이고 오후 {cap['pm_condition']}일 것으로 예상된다. "
-            f"최저기온은 {fmt_num(cap['tmin'])}°C, 최고기온은 {fmt_num(cap['tmax'])}°C를 기록할 전망이다. "
+            f"{local_now.day}일 한국의 날씨는 지역별로 편차를 보이겠다. 기상청에 따르면 {cap_name}은 오전 {cap['am_condition']}이고 오후 {cap['pm_condition']}일 것으로 예상된다. "
+            f"{cap_name}의 최저기온은 {fmt_num(cap['tmin'])}°C, 최고기온은 {fmt_num(cap['tmax'])}°C를 기록할 전망이다. "
             f"전국적으로는 최저 {fmt_num(min(tmin_all))}°C에서 최고 {fmt_num(max(tmax_all))}°C의 분포를 보일 전망이다."
         )
 
@@ -1370,8 +1371,8 @@ def build_korea_weekend_report_kma(cities: list, local_now: datetime):
     gemini_prompt = f"""다음은 한국 기상청 단기예보 주말 자료다. 이를 바탕으로 뉴스 기사 본문(서두 문단)을 작성하라.
 
 [날씨 데이터]
-수도 {cap_name} 토요일: {sat_desc}
-수도 {cap_name} 일요일: {sun_desc}
+{cap_name} 토요일: {sat_desc}
+{cap_name} 일요일: {sun_desc}
 강수확률 높은 지역(60% 이상, 토·일 중 하루라도): {', '.join(rain_cities) if rain_cities else '없음'}
 기상 특보 발효: {warn_text if warn_text else '없음'}
 {briefing_block}
@@ -1380,6 +1381,7 @@ def build_korea_weekend_report_kma(cities: list, local_now: datetime):
 - 본문은 2~3개 문단으로 나누어 작성. JSON body 값에서 문단 구분은 반드시 \\n\\n(개행 두 번)으로 표시
 - 날짜 표기: 오늘은 {local_now.day}일이다. 본문은 반드시 "{local_now.day}일"로 시작할 것(다른 숫자 사용 금지, "(현지시간)" 붙이지 말 것). "오늘", "이번 주말", 절대연도 절대 금지
 - 700자 이상 작성
+- 첫 문장은 반드시 "{local_now.day}일 이번 주말 한국의 날씨는"으로 시작해 전국 기상을 한 문장으로 개관한 뒤, 이어서 {cap_name} 등 지역별 상세로 들어갈 것. {cap_name}을 "수도"로 지칭하지 말 것(예: "수도 {cap_name}" 금지, 그냥 "{cap_name}"만 사용)
 - "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
 - 타 매체명 언급 금지
 - 제공된 날씨 수치 데이터에만 근거해 작성할 것. 지정학적 상황·분쟁·외교·경제·유가·증시 등 날씨 외 내용 추가 절대 금지
@@ -1398,7 +1400,7 @@ def build_korea_weekend_report_kma(cities: list, local_now: datetime):
     _title_kma_wknd, lede = _parse_gemini_weather_response(_raw_kma_wknd)
     if not lede:
         lede = (
-            f"기상청 단기예보에 따르면 이번 주말 한국의 수도 {cap_name}은 "
+            f"{local_now.day}일 이번 주말 한국의 날씨는 지역별로 편차를 보이겠다. 기상청 단기예보에 따르면 {cap_name}은 "
             f"토요일 {sat_desc}, 일요일 {sun_desc}이 예상된다."
             + (f" {', '.join(rain_cities)} 등은 강수확률이 높아 우산 준비가 필요하다." if rain_cities else "")
         )
@@ -1584,9 +1586,9 @@ def build_korea_weekly_report_kma(cities: list, local_now: datetime):
     gemini_prompt = f"""다음은 한국 기상청 단기·중기예보 기반 다음주(월~금) 날씨 자료다. 이를 바탕으로 뉴스 기사 본문(서두 문단)을 작성하라.
 
 [날씨 데이터]
-수도 서울 다음주 예보: {day_by_day if day_by_day else '데이터 없음'}
-수도 최고기온 범위: {fmt_num(max(tmax_all)) if tmax_all else '?'}°C
-수도 최저기온 범위: {fmt_num(min(tmin_all)) if tmin_all else '?'}°C
+서울 다음주 예보: {day_by_day if day_by_day else '데이터 없음'}
+서울 최고기온 범위: {fmt_num(max(tmax_all)) if tmax_all else '?'}°C
+서울 최저기온 범위: {fmt_num(min(tmin_all)) if tmin_all else '?'}°C
 비 소식 있는 요일: {', '.join(rain_days) + '요일' if rain_days else '없음'}
 {briefing_block}
 [작성 규칙]
@@ -1594,6 +1596,7 @@ def build_korea_weekly_report_kma(cities: list, local_now: datetime):
 - 본문은 2~3개 문단으로 나누어 작성. JSON body 값에서 문단 구분은 반드시 \\n\\n(개행 두 번)으로 표시
 - 날짜 표기: 오늘은 {local_now.day}일이다. 본문은 반드시 "{local_now.day}일"로 시작할 것(다른 숫자 사용 금지, "(현지시간)" 붙이지 말 것). "이번 주", "다음주", 절대연도 절대 금지
 - 700자 이상 작성
+- 첫 문장은 반드시 "{local_now.day}일 기준 다음 주 한국의 날씨는"으로 시작해 전체 흐름을 한 문장으로 개관한 뒤, 이어서 서울 등 요일별 상세로 들어갈 것. 서울을 "수도"로 지칭하지 말 것(예: "수도 서울" 금지, 그냥 "서울"만 사용)
 - "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
 - 타 매체명 언급 금지
 - 제공된 날씨 수치 데이터에만 근거해 작성할 것. 지정학적 상황·분쟁·외교·경제·유가·증시 등 날씨 외 내용 추가 절대 금지
@@ -1612,7 +1615,7 @@ def build_korea_weekly_report_kma(cities: list, local_now: datetime):
     _title_kma_wkly, summary = _parse_gemini_weather_response(_raw_kma_wkly)
     if not summary:
         summary = (
-            f"기상청 단기·중기예보에 따르면 다음주(월~금) 한국의 날씨는 "
+            f"{local_now.day}일 기준 다음 주 한국의 날씨는 "
             f"최고 {fmt_num(max(tmax_all)) if tmax_all else '?'}°C, "
             f"최저 {fmt_num(min(tmin_all)) if tmin_all else '?'}°C 사이를 오갈 전망이다."
             + (f" {'·'.join(rain_days)}요일에 비 소식이 있다." if rain_days else " 당분간 비 소식은 없을 전망이다.")
