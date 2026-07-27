@@ -359,12 +359,12 @@ TREND_KEYWORDS = [
     ("에볼라",       "사회",    ["ebola", "에볼라", "hemorrhagic fever", "출혈열", "MVD", "marburg"]),
     ("mpox",        "사회",    ["mpox", "monkeypox", "원숭이두창"]),
     ("콜레라",       "사회",    ["cholera", "콜레라"]),
-    ("수단 분쟁",    "정치·외교", ["sudan", "RSF", "수단", "다르푸르", "darfur", "khartoum"]),
+    ("수단 분쟁",    "정치·외교", ["sudan", "rapid support forces", "수단", "다르푸르", "darfur", "khartoum", "신속지원군"]),
     ("DRC 분쟁",    "정치·외교", ["DRC", "congo", "콩고", "M23", "키부", "kivu"]),
     ("소말리아",     "정치·외교", ["somalia", "소말리아", "al-shabaab", "알샤바브"]),
     ("미얀마",       "정치·외교", ["myanmar", "미얀마", "junta", "군부", "NUG"]),
     ("아이티",       "사회",    ["haiti", "아이티", "gang", "갱단"]),
-    ("사헬 쿠데타",  "정치·외교", ["sahel", "사헬", "mali", "말리", "niger", "burkina", "부르키나"]),
+    ("사헬 쿠데타",  "정치·외교", ["sahel", "사헬", "mali", "말리", "burkina", "부르키나", "니제르"]),
     ("중앙아프리카",  "정치·외교", ["central african", "중앙아프리카", "bangui"]),
 ]
 
