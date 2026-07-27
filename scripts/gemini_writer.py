@@ -336,7 +336,7 @@ def find_similar_article(title: str, own_articles: list, threshold: int = 70):
     return None, 0
 
 
-def save_article(title_ko, summary_ko, cluster_key, category, region, country="", article_count=0, published=True, countries=None, image_url="", is_travel=False):
+def save_article(title_ko, summary_ko, cluster_key, category, region, country="", article_count=0, published=True, countries=None, image_url="", is_travel=False, summary_3lines="", investment_idea=""):
     # 키릴 문자 감지 — 저장 차단
     if has_cyrillic(title_ko) or has_cyrillic(summary_ko):
         print(f"  ⚠️ [키릴 감지] 저장 차단: {title_ko[:60]}")
@@ -366,6 +366,8 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
         "is_published": published,
         "posted_blog": 0,
         "is_travel": bool(is_travel),
+        "summary_3lines": summary_3lines,
+        "investment_idea": investment_idea,
     }
     headers = {**_sb_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
     res = requests.post(_sb_url(), headers=headers, json=payload, timeout=15)
@@ -375,7 +377,7 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
     return -1
 
 
-def update_article(article_id, title_ko, summary_ko, note: str = "업데이트", countries=None, country=""):
+def update_article(article_id, title_ko, summary_ko, note: str = "업데이트", countries=None, country="", summary_3lines=None, investment_idea=None):
     """기사 갱신(병합 업데이트) — update_log에 업데이트 기록 추가"""
     # 키릴 문자 감지 — 업데이트 차단
     if has_cyrillic(title_ko) or has_cyrillic(summary_ko):
@@ -413,6 +415,8 @@ def update_article(article_id, title_ko, summary_ko, note: str = "업데이트",
             "created_at": now_str,
             "update_log": new_log,
             **( {"countries": merged_countries} if merged_countries else {} ),
+            **( {"summary_3lines": summary_3lines} if summary_3lines is not None else {} ),
+            **( {"investment_idea": investment_idea} if investment_idea is not None else {} ),
         },
         timeout=15
     )
@@ -1093,7 +1097,9 @@ def parse_json_response(text: str):
         raw_travel = data.get("is_travel")
         if raw_travel is None:
             raw_travel = data.get("여행")
-        return title, body, country, category, countries, _coerce_bool(raw_travel)
+        summary_3lines = str(data.get("summary_3lines") or data.get("3줄요약") or "").strip()
+        investment_idea = str(data.get("investment_idea") or data.get("투자아이디어") or "").strip()
+        return title, body, country, category, countries, _coerce_bool(raw_travel), summary_3lines, investment_idea
     return None
 
 
@@ -1125,13 +1131,13 @@ def _parse_labeled_response(text: str):
             body_lines = ([val] if val else []) + lines[i + 1:]
             break
     body = "\n".join(body_lines).strip() if body_lines is not None else _strip_leaked_labels(raw)
-    return title, body, country, category, countries, is_travel
+    return title, body, country, category, countries, is_travel, "", ""
 
 
 def parse_title_and_body(text):
     """Gemini 응답 파싱. 1순위 JSON, 실패 시 레거시 라벨 파서로 폴백."""
     if not text:
-        return "", "", "", "", [], False
+        return "", "", "", "", [], False, "", ""
     parsed = parse_json_response(text)
     if parsed:
         return parsed
@@ -1613,10 +1619,10 @@ def run():
             content = call_gemini_article(prompt, max_tokens=4000 if has_full else 1500)
 
             if content:
-                gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel = parse_title_and_body(content)
+                gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel, gen_summary3, gen_investment = parse_title_and_body(content)
                 new_title = gen_title if gen_title else titles[0][:50]
                 note = generate_update_note(existing["summary_ko"], gen_body or _strip_leaked_labels(content))
-                update_article(existing["id"], new_title, gen_body or _strip_leaked_labels(content), note=note, countries=gen_countries if gen_countries else None, country=gen_country or "")
+                update_article(existing["id"], new_title, gen_body or _strip_leaked_labels(content), note=note, countries=gen_countries if gen_countries else None, country=gen_country or "", summary_3lines=gen_summary3 or None, investment_idea=gen_investment or None)
                 update_article_count(existing["id"], prev_count + 1)
                 if gen_country or gen_category or gen_travel:
                     update_fields = {}
@@ -1655,10 +1661,10 @@ def run():
                 content = call_gemini_article(prompt, max_tokens=4000 if has_full else 1500)
 
                 if content:
-                    gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel = parse_title_and_body(content)
+                    gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel, gen_summary3, gen_investment = parse_title_and_body(content)
                     new_title = gen_title if gen_title else probe_title
                     note = generate_update_note(existing_summary, gen_body or _strip_leaked_labels(content))
-                    update_article(similar_existing["id"], new_title, gen_body or _strip_leaked_labels(content), note=note, countries=gen_countries if gen_countries else None, country=gen_country or "")
+                    update_article(similar_existing["id"], new_title, gen_body or _strip_leaked_labels(content), note=note, countries=gen_countries if gen_countries else None, country=gen_country or "", summary_3lines=gen_summary3 or None, investment_idea=gen_investment or None)
                     prev_count = existing_full.get("score", 0) if existing_full else 0
                     update_article_count(similar_existing["id"], max(prev_count, cur_count) + 1)
                     if gen_country or gen_category or gen_travel:
@@ -1690,7 +1696,7 @@ def run():
             content = call_gemini_article(prompt, max_tokens=4000 if has_full else 1500)
 
             if content:
-                gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel = parse_title_and_body(content)
+                gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel, gen_summary3, gen_investment = parse_title_and_body(content)
                 full_title = gen_title if gen_title else titles[0][:50]
 
                 final_country = normalize_country(gen_country or country)
@@ -1720,6 +1726,8 @@ def run():
                     category      = final_category,
                     region        = final_region,
                     country       = final_country,
+                    summary_3lines = gen_summary3,
+                    investment_idea = gen_investment,
                     article_count = cur_count,
                     published     = published,
                     countries     = gen_countries,
@@ -1821,11 +1829,11 @@ def run():
             content = call_gemini_article(prompt, max_tokens=4000)
 
             if content:
-                gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel = parse_title_and_body(content)
+                gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel, gen_summary3, gen_investment = parse_title_and_body(content)
                 new_title = gen_title if gen_title else title[:50]
                 existing_sum = existing_full.get("summary_ko") if existing_full else None
                 note = generate_update_note(existing_sum, gen_body or _strip_leaked_labels(content))
-                update_article(similar_existing["id"], new_title, gen_body or _strip_leaked_labels(content), note=note, countries=gen_countries if gen_countries else None, country=gen_country or "")
+                update_article(similar_existing["id"], new_title, gen_body or _strip_leaked_labels(content), note=note, countries=gen_countries if gen_countries else None, country=gen_country or "", summary_3lines=gen_summary3 or None, investment_idea=gen_investment or None)
                 prev_count = existing_full.get("score", 0) if existing_full else 0
                 update_article_count(similar_existing["id"], prev_count + 1)
                 if gen_country or gen_category or gen_travel:
@@ -1872,7 +1880,7 @@ def run():
 
         content = call_gemini_article(prompt, max_tokens=4000)
         if content:
-            gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel = parse_title_and_body(content)
+            gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel, gen_summary3, gen_investment = parse_title_and_body(content)
             full_title = gen_title if gen_title else title[:50]
 
             final_country = normalize_country(gen_country or a.get("country") or "")
@@ -1904,6 +1912,8 @@ def run():
                 category=final_category,
                 region=final_region,
                 country=final_country,
+                summary_3lines=gen_summary3,
+                investment_idea=gen_investment,
                 article_count=1,
                 published=published,
                 countries=gen_countries,
