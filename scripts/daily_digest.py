@@ -28,6 +28,7 @@ GEMINI_MODEL_FALLBACK = "gemini-3.1-flash-lite"
 
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
+PIXABAY_API_KEY = os.getenv("PIXABAY_API_KEY", "")
 
 GEMINI_API_KEYS = [k for k in [
     os.getenv("GEMINI_API_KEY"),
@@ -274,7 +275,45 @@ def parse_title_and_body(text):
     return title, body
 
 
-def save_digest(title, body, article_count):
+def fetch_article_image(title: str, body: str) -> str:
+    if not PIXABAY_API_KEY:
+        return ""
+    prompt = f"""아래는 여러 뉴스를 종합한 다이제스트 기사입니다. 이미지 검색용 영문 키워드를 2~3개 추출하세요.
+일반적인 시각 소재 위주로 (예: stock market, world map, container port, business meeting).
+인명·기업명·구체적 지명은 제외. 쉼표 구분, 키워드만 출력.
+
+제목: {title}
+본문 앞부분: {body[:300]}"""
+    kw = call_gemini(prompt, max_tokens=30)
+    if not kw:
+        return ""
+    query = kw.strip().replace(",", " ").split("\n")[0][:100]
+    if not query:
+        return ""
+    try:
+        res = requests.get(
+            "https://pixabay.com/api/",
+            params={
+                "key": PIXABAY_API_KEY,
+                "q": query,
+                "image_type": "photo",
+                "safesearch": "true",
+                "per_page": 3,
+            },
+            timeout=15
+        )
+        if res.status_code == 200:
+            hits = res.json().get("hits", [])
+            if hits:
+                return hits[0].get("largeImageURL", "")
+        else:
+            print(f"  ⚠️ Pixabay {res.status_code}: {res.text[:100]}")
+    except Exception as e:
+        print(f"  ⚠️ Pixabay 실패: {e}")
+    return ""
+
+
+def save_digest(title, body, article_count, image_url=""):
     today_key = f"digest_{now_kst().strftime('%Y%m%d')}"
     payload = {
         "title_en": title,
@@ -288,6 +327,7 @@ def save_digest(title, body, article_count):
         "region": "global",
         "country": "",
         "country_flag": "",
+        "image_url": image_url,
         "score": article_count,
         "created_at": now_kst().strftime("%Y-%m-%d %H:%M"),  # 실제 발행 시각(오늘 새벽) — 홈 노출 판단 기준
         "sent_telegram": 0,
@@ -332,7 +372,9 @@ def run():
     if not title:
         title = "[프론티어마켓 데일리 다이제스트] 주요 동향"
 
-    article_id = save_digest(title, body or content, len(articles))
+    image_url = fetch_article_image(title, body or content)
+
+    article_id = save_digest(title, body or content, len(articles), image_url=image_url)
     if article_id > 0:
         print(f"✅ 다이제스트 저장 완료 (id={article_id}): {title}")
     else:
