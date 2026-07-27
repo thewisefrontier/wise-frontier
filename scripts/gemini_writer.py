@@ -1138,14 +1138,17 @@ def _parse_labeled_response(text: str):
 def _ensure_paragraphs(text: str, target: int = 3) -> str:
     """Gemini가 문단 구분(\n\n) 지시를 어기고 한 덩어리로 응답하는 경우가 있어
     (강제성 없는 프롬프트 지시라 준수율이 들쭉날쭉함), 코드 단에서 문장(-다.)
-    단위로 강제 분할하는 안전장치. 이미 \n\n이 있으면 그대로 반환."""
+    단위로 강제 분할하는 안전장치. 이미 \n\n이 있으면 그대로 반환.
+    문장이 2개 이상이면 항상 최소 2개 문단으로 분할한다(짧은 리드 문단도 포함)."""
     if not text or "\n\n" in text:
         return text
     sentences = [s.strip() for s in re.split(r"(?<=다\.)\s+", text.strip()) if s.strip()]
-    if len(sentences) < target + 1:
-        return text
+    if len(sentences) < 2:
+        return text  # 문장이 1개뿐이면 분할 불가
+    actual_target = min(target, len(sentences) - 1)
+    actual_target = max(actual_target, 2)
     n = len(sentences)
-    size = math.ceil(n / target)
+    size = math.ceil(n / actual_target)
     groups = [sentences[i:i + size] for i in range(0, n, size)]
     return "\n\n".join(" ".join(g) for g in groups)
 
