@@ -1215,17 +1215,18 @@ def run_external_trend_articles(signals: list):
         src_str = "+".join(s["sources"])
         countries = ", ".join(list(s["countries"])[:3])
         titles_str = " / ".join(s["titles"][:2])
-        topic_list += f"{i}. [{s['score']}pt/{src_str}] {s['topic']} ({countries})\n   예시: {titles_str}\n"
+        is_global_major = "gdelt_global" in s["sources"]
+        tag = "[초대형·국가무관] " if is_global_major else ""
+        topic_list += f"{i}. {tag}[{s['score']}pt/{src_str}] {s['topic']} ({countries})\n   예시: {titles_str}\n"
 
     screen_prompt = f"""당신은 프론티어 마켓 전문 에디터입니다. ({today_str})
-아래는 Google Trends, Reddit, GDELT에서 수집한 프론티어 마켓 트렌드 신호입니다.
+아래는 Google Trends, Reddit, GDELT에서 수집한 트렌드 신호입니다. 대부분 프론티어 마켓(아프리카·동남아시아 등) 신호지만, "[초대형·국가무관]" 태그가 붙은 항목은 프론티어 여부와 무관하게 전 세계에서 동시다발적으로 크게 보도되는 진짜 초대형 이슈(대형 재난·다수 사망·비상사태 선포 등)를 별도로 감지한 것입니다.
 
 {topic_list}
 
-위 신호들 중 NewsFinal 독자(한국인 프론티어 마켓 투자자)에게 실제로 의미 있는 이슈 최대 {EXT_MAX_ARTICLES}개를 선별하세요.
-- 단순 스포츠/연예/날씨/로또는 제외
-- 경제·금융·정치·사회 분야 실질적 사건이나 정책 변화 우선
-- 여러 소스에서 동시에 잡힌 토픽 우선
+위 신호들 중 최대 {EXT_MAX_ARTICLES}개를 선별하세요.
+- "[초대형·국가무관]" 태그가 붙은 항목은 설령 선진국(유럽·미국·일본 등) 이슈라도, 실제로 대규모 인명·재산 피해나 국제적 파급력이 있는 진짜 초대형 사안이면 프론티어 마켓 여부와 무관하게 우선 선별하세요. 이미 국내 언론이 다룰 정도로 크다는 것 자체가 배제 사유가 아닙니다.
+- 그 외 일반 신호는 기존대로 단순 스포츠/연예/날씨/로또는 제외, 경제·금융·정치·사회 분야 실질적 사건이나 정책 변화 우선, 여러 소스에서 동시에 잡힌 토픽 우선으로 선별하세요.
 
 JSON 배열로만 응답 (마크다운 없이):
 [
@@ -1234,7 +1235,7 @@ JSON 배열로만 응답 (마크다운 없이):
     "issue_ko": "한 줄 설명",
     "category": "경제/금융/자원·에너지/산업·기업/정치·외교/사회/IT·과학 중 하나",
     "countries": ["국가1", "국가2"],
-    "region": "africa/southeast_asia/central_asia/middle_east/south_asia/caribbean/global 중 하나"
+    "region": "africa/southeast_asia/central_asia/middle_east/south_asia/caribbean/europe/east_asia/north_america/latin_america/oceania/global 중 하나 (해당 국가의 실제 지역으로, global은 특정 지역에 국한 안 될 때만)"
   }}
 ]
 선별할 이슈 없으면 []"""
