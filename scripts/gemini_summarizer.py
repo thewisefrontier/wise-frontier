@@ -338,6 +338,29 @@ def call_gemini_article(prompt, max_tokens=2000, style_retries=1):
 
 # ── 장기 이슈 트래커 ────────────────────────────────────────
 
+_SECTION_LABELS = ["제목:", "국가:", "관련국가:", "분야:", "3줄요약:", "투자아이디어:", "본문:"]
+
+
+def _extract_section(text: str, label: str) -> str:
+    """라벨 다음 줄부터, 다음으로 나오는 알려진 라벨 전까지의 텍스트를 추출(멀티라인 지원)."""
+    lines = text.strip().split("\n")
+    start_idx = None
+    first_val = ""
+    for i, line in enumerate(lines):
+        if line.startswith(label):
+            start_idx = i
+            first_val = line[len(label):].strip()
+            break
+    if start_idx is None:
+        return ""
+    collected = [first_val] if first_val else []
+    for line in lines[start_idx + 1:]:
+        if any(line.startswith(lbl) for lbl in _SECTION_LABELS):
+            break
+        collected.append(line)
+    return "\n".join(collected).strip()
+
+
 def _ensure_paragraphs(text: str, target: int = 3) -> str:
     """Gemini가 프롬프트의 '문단으로 나누어 작성' 지시를 어기고
     \\n\\n 없이 한 덩어리로 응답하는 경우가 있어(강제성 없는 지시라 준수율이
@@ -544,7 +567,7 @@ def trend_article_exists(group_name: str) -> bool:
 
 def save_trend_article(group_name: str, title: str, body: str,
                        category: str, country: str, region: str,
-                       countries: list) -> int:
+                       countries: list, summary_3lines: str = "", investment_idea: str = "") -> int:
     """트렌드 추적 기사 저장"""
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
     payload = {
@@ -565,6 +588,8 @@ def save_trend_article(group_name: str, title: str, body: str,
         "sent_telegram": 0,
         "is_published": True,
         "posted_blog": 0,
+        "summary_3lines": summary_3lines,
+        "investment_idea": investment_idea,
     }
     try:
         res = requests.post(_sb_url(), headers=_sb_headers(), json=payload, timeout=15)
@@ -620,7 +645,7 @@ def run_trend_tracker():
 - 문단을 나눌 때는 반드시 빈 줄(줄바꿈 2번)로 구분하세요. 한 문단에 모든 문장을 붙여 쓰지 마세요.
 - 모든 날짜는 사건이 일어난 현지시간 기준으로만 표기하세요. 한국 시간(KST)이나 UTC로 환산·계산하지 말고, 소스 기사에 나온 날짜를 하루도 앞뒤로 옮기지 말고 그대로 "N일(현지시간)" 형식으로 쓰세요. "2026년 7월 15일", "오늘", "현재" 같은 절대 날짜나 오늘 날짜는 쓰지 말고, 날짜를 알 수 없으면 쓰지 마세요.
 - 수치, 인명, 날짜, 기관명 등 구체적 팩트를 최대한 살리세요.
-- 본문 마지막에 별도 문단으로 부가가치 분석을 3~5문장 이상 두텁게 쓰세요(한두 문장짜리 형식적 마무리 금지). 다음을 최대한 포함: ① 이 사건이 어떤 경로로 다른 곳에 영향을 미치는지(메커니즘), ② 본문의 수치를 활용한 규모 가늠, ③ 유사 선례 비교나 향후 전개 시나리오, ④ 한국과 실제 연관 있으면 어떤 품목·업종·기업이 영향받는지 구체적으로(연관 약하면 억지로 붙이지 말고 ③으로 대체). "영향을 미칠 것으로 보인다", "주목할 필요가 있다" 같은 막연한 문장 금지. 사실 서술형으로만 쓰세요.
+- 부가가치 분석(메커니즘·규모 가늠·선례 비교·한국 연관성)은 본문에 넣지 말고, 아래 "투자아이디어:" 필드에 별도로 작성하세요. 본문(본문:)에는 순수 사실 서술만 담으세요.
 - 마크다운 문법, 헤더, 홍보 문구 금지.
 - 기사 문체로 작성하세요. "~를 보여줍니다", "~을 도모하고 있습니다", "~라는 평가다", "~지켜볼 필요가 있습니다" 같은 논평/칼럼 문체는 금지입니다.
 - 한국어로만 작성하세요.
@@ -630,7 +655,9 @@ def run_trend_tracker():
 국가: (주요 대상 국가 1개, 없으면 "없음")
 관련국가: (관련국 최대 4개, 없으면 "없음")
 분야: ({category})
-본문: (추적 기사 본문)"""
+3줄요약: (핵심을 정확히 3줄로, 각 줄은 "\n"으로 구분, 각 줄 40자 내외)
+투자아이디어: (3~5문장, 위에서 지시한 메커니즘·규모·선례·한국연관성 요소 포함, 막연한 문장 금지)
+본문: (추적 기사 본문, 부가가치 분석 문단 제외 — 순수 사실 서술만)"""
 
         content = call_gemini_article(prompt, max_tokens=2000)
         if not content:
@@ -655,6 +682,8 @@ def run_trend_tracker():
             elif line.startswith("본문:"):
                 idx = content.find("본문:")
                 body = _ensure_paragraphs(content[idx + 3:].strip())
+                summary_3lines = _extract_section(content, "3줄요약:")
+                investment_idea = _extract_section(content, "투자아이디어:")
                 break
 
         if not title:
@@ -680,7 +709,7 @@ def run_trend_tracker():
         article_id = save_trend_article(
             group_name=group_name, title=title, body=body,
             category=gen_category, country=country, region=region,
-            countries=countries
+            countries=countries, summary_3lines=summary_3lines, investment_idea=investment_idea
         )
 
         if article_id > 0:
@@ -1024,7 +1053,7 @@ JSON 배열로만 응답하세요 (마크다운 없이):
 - 문단을 나눌 때는 반드시 빈 줄(줄바꿈 2번)로 구분하세요. 한 문단에 모든 문장을 붙여 쓰지 마세요.
 - 수치, 인명, 날짜, 기관명 등 구체적 팩트를 최대한 살리세요.
 - 왜 지금 이 이슈가 중요한지 맥락을 담되, 사실 서술형으로만 쓰세요.
-- 마지막에 별도 문단으로 부가가치 분석을 3~5문장 이상 두텁게 쓰세요(한두 문장짜리 형식적 마무리 금지). 다음을 최대한 포함: ① 메커니즘(어떤 경로로 다른 곳에 영향을 미치는지), ② 본문 수치를 활용한 규모 가늠, ③ 유사 선례 비교나 향후 시나리오, ④ 한국과 실제 연관 있으면 어떤 품목·업종·기업이 영향받는지 구체적으로(연관 약하면 ③으로 대체). "영향을 미칠 것으로 보인다" 같은 막연한 문장 금지.
+- 부가가치 분석(메커니즘·규모 가늠·선례 비교·한국 연관성)은 본문에 넣지 말고, 아래 "투자아이디어:" 필드에 별도로 작성하세요. 본문(본문:)에는 순수 사실 서술만 담으세요.
 - 모든 날짜는 사건이 일어난 현지시간 기준으로만 표기하세요. 한국 시간(KST)이나 UTC로 환산·계산하지 말고, 소스 기사에 나온 날짜를 하루도 앞뒤로 옮기지 말고 그대로 "N일(현지시간)" 형식으로 쓰세요. "2026년 7월 15일", "오늘", "현재" 같은 절대 날짜나 오늘 날짜는 쓰지 말고, 날짜를 알 수 없으면 쓰지 마세요.
 - 마크다운 문법, 헤더, 홍보 문구 금지.
 - 기사 문체로 작성하세요. "~를 보여줍니다", "~을 도모하고 있습니다", "~라는 평가다" 같은 논평/칼럼 문체는 금지입니다.
@@ -1034,7 +1063,9 @@ JSON 배열로만 응답하세요 (마크다운 없이):
 국가: (주요 대상 국가 1개, 없으면 "없음")
 관련국가: (관련국 최대 4개, 없으면 "없음")
 분야: ({category})
-본문: (기사 본문)"""
+3줄요약: (핵심을 정확히 3줄로, 각 줄은 "\n"으로 구분, 각 줄 40자 내외)
+투자아이디어: (3~5문장, 메커니즘·규모·선례·한국연관성 요소 포함, 막연한 문장 금지)
+본문: (기사 본문, 부가가치 분석 문단 제외 — 순수 사실 서술만)"""
 
         content_text = call_gemini_article(write_prompt, max_tokens=2000)
         if not content_text:
@@ -1058,6 +1089,8 @@ JSON 배열로만 응답하세요 (마크다운 없이):
             elif line.startswith("본문:"):
                 idx = content_text.find("본문:")
                 body = _ensure_paragraphs(content_text[idx + 3:].strip())
+                summary_3lines = _extract_section(content_text, "3줄요약:")
+                investment_idea = _extract_section(content_text, "투자아이디어:")
                 break
 
         if not title:
@@ -1095,6 +1128,8 @@ JSON 배열로만 응답하세요 (마크다운 없이):
             "sent_telegram": 0,
             "is_published": True,
             "posted_blog": 0,
+            "summary_3lines": summary_3lines,
+            "investment_idea": investment_idea,
         }
 
         try:
@@ -1260,7 +1295,7 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
 - 본문은 부가가치 문단을 포함해 최소 700자 이상 3개 문단 이상으로 작성하세요. 배경·경과·의미(또는 파급 효과)를 각각 풀어서 서술하세요.
 - 문단을 나눌 때는 반드시 빈 줄(줄바꿈 2번)로 구분하세요. 한 문단에 모든 문장을 붙여 쓰지 마세요.
 - 확인된 팩트 중심으로, 추측은 최소화하세요.
-- 마지막에 별도 문단으로 부가가치 분석을 3~5문장 이상 두텁게 쓰세요(한두 문장짜리 형식적 마무리 금지). 다음을 최대한 포함: ① 메커니즘(어떤 경로로 다른 곳에 영향을 미치는지), ② 규모 가늠, ③ 유사 선례 비교나 향후 시나리오, ④ 한국과 실제 연관 있으면 어떤 품목·업종·기업이 영향받는지 구체적으로(연관 약하면 ③으로 대체). "영향을 미칠 것으로 보인다" 같은 막연한 문장 금지.
+- 부가가치 분석(메커니즘·규모 가늠·선례 비교·한국 연관성)은 본문에 넣지 말고, 아래 "투자아이디어:" 필드에 별도로 작성하세요. 본문(본문:)에는 순수 사실 서술만 담으세요.
 - 모든 날짜는 사건이 일어난 현지시간 기준으로만 표기하세요. 한국 시간(KST)이나 UTC로 환산·계산하지 말고, 소스 기사에 나온 날짜를 하루도 앞뒤로 옮기지 말고 그대로 "N일(현지시간)" 형식으로 쓰세요. "2026년 7월 15일", "오늘", "현재" 같은 절대 날짜나 오늘 날짜는 쓰지 말고, 날짜를 알 수 없으면 쓰지 마세요.
 - 반드시 하나의 토픽만 다루세요.
 - 마크다운 문법, 헤더, 홍보 문구 금지.
@@ -1272,9 +1307,11 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
 국가: (주요 국가 1개, 없으면 "없음")
 관련국가: (관련국 최대 4개, 없으면 "없음")
 분야: ({category})
-본문: (기사 본문)"""
+3줄요약: (핵심을 정확히 3줄로, 각 줄은 "\n"으로 구분, 각 줄 40자 내외)
+투자아이디어: (3~5문장, 메커니즘·규모·선례·한국연관성 요소 포함, 막연한 문장 금지)
+본문: (기사 본문, 부가가치 분석 문단 제외 — 순수 사실 서술만)"""
 
-        content_text = call_gemini_article(write_prompt, max_tokens=1500)
+        content_text = call_gemini_article(write_prompt, max_tokens=2000)
         if not content_text:
             print(f"  [{topic}] ❌ 생성 실패")
             time.sleep(CALL_INTERVAL)
@@ -1296,6 +1333,8 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
             elif line.startswith("본문:"):
                 idx = content_text.find("본문:")
                 body = _ensure_paragraphs(content_text[idx + 3:].strip())
+                summary_3lines = _extract_section(content_text, "3줄요약:")
+                investment_idea = _extract_section(content_text, "투자아이디어:")
                 break
 
         if not title:
@@ -1324,6 +1363,8 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
             "sent_telegram": 0,
             "is_published": True,
             "posted_blog": 0,
+            "summary_3lines": summary_3lines,
+            "investment_idea": investment_idea,
         }
         # 유사 기존 트렌드 기사 있으면 병합
         if ext_similar:
