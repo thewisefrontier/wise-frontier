@@ -1,25 +1,25 @@
 {
-  "updated_at": "2026-07-28 03:49",
+  "updated_at": "2026-07-28 05:00",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7400.31,
-      "change_pct": -0.11,
-      "up": false
+      "price": 7413.24,
+      "change_pct": 0.07,
+      "up": true
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 24874.25,
-      "change_pct": -1.05,
+      "price": 24932.08,
+      "change_pct": -0.82,
       "up": false
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 52077.5,
-      "change_pct": 0.71,
+      "price": 52209.69,
+      "change_pct": 0.96,
       "up": true
     },
     {
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.76,
-      "change_pct": -0.32,
+      "price": 16.75,
+      "change_pct": -0.4,
       "up": false
     }
   ],
@@ -98,22 +98,22 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7400.31,
-        "change_pct": -0.11,
-        "up": false
+        "price": 7413.24,
+        "change_pct": 0.07,
+        "up": true
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 24874.25,
-        "change_pct": -1.05,
+        "price": 24932.08,
+        "change_pct": -0.82,
         "up": false
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 52077.5,
-        "change_pct": 0.71,
+        "price": 52209.69,
+        "change_pct": 0.96,
         "up": true
       }
     ],
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.76,
-        "change_pct": -0.32,
+        "price": 16.75,
+        "change_pct": -0.4,
         "up": false
       }
     ]
@@ -212,8 +212,8 @@
     "XOM": {
       "name": "Exxon Mobil Corporation",
       "symbol": "XOM",
-      "price": 154.7,
-      "change_pct": -1.4,
+      "price": 154.9,
+      "change_pct": -1.27,
       "up": false
     },
     "FDH": {
