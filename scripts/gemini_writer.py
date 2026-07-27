@@ -10,6 +10,7 @@ gemini_writer.py
 
 import os
 import re
+import math
 import time
 import json
 import hashlib
@@ -1134,6 +1135,21 @@ def _parse_labeled_response(text: str):
     return title, body, country, category, countries, is_travel, "", ""
 
 
+def _ensure_paragraphs(text: str, target: int = 3) -> str:
+    """Gemini가 문단 구분(\n\n) 지시를 어기고 한 덩어리로 응답하는 경우가 있어
+    (강제성 없는 프롬프트 지시라 준수율이 들쭉날쭉함), 코드 단에서 문장(-다.)
+    단위로 강제 분할하는 안전장치. 이미 \n\n이 있으면 그대로 반환."""
+    if not text or "\n\n" in text:
+        return text
+    sentences = [s.strip() for s in re.split(r"(?<=다\.)\s+", text.strip()) if s.strip()]
+    if len(sentences) < target + 1:
+        return text
+    n = len(sentences)
+    size = math.ceil(n / target)
+    groups = [sentences[i:i + size] for i in range(0, n, size)]
+    return "\n\n".join(" ".join(g) for g in groups)
+
+
 def parse_title_and_body(text):
     """Gemini 응답 파싱. 1순위 JSON, 실패 시 레거시 라벨 파서로 폴백."""
     if not text:
@@ -1620,6 +1636,7 @@ def run():
 
             if content:
                 gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel, gen_summary3, gen_investment = parse_title_and_body(content)
+                gen_body = _ensure_paragraphs(gen_body)
                 new_title = gen_title if gen_title else titles[0][:50]
                 note = generate_update_note(existing["summary_ko"], gen_body or _strip_leaked_labels(content))
                 update_article(existing["id"], new_title, gen_body or _strip_leaked_labels(content), note=note, countries=gen_countries if gen_countries else None, country=gen_country or "", summary_3lines=gen_summary3 or None, investment_idea=gen_investment or None)
@@ -1662,6 +1679,7 @@ def run():
 
                 if content:
                     gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel, gen_summary3, gen_investment = parse_title_and_body(content)
+                    gen_body = _ensure_paragraphs(gen_body)
                     new_title = gen_title if gen_title else probe_title
                     note = generate_update_note(existing_summary, gen_body or _strip_leaked_labels(content))
                     update_article(similar_existing["id"], new_title, gen_body or _strip_leaked_labels(content), note=note, countries=gen_countries if gen_countries else None, country=gen_country or "", summary_3lines=gen_summary3 or None, investment_idea=gen_investment or None)
@@ -1697,6 +1715,7 @@ def run():
 
             if content:
                 gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel, gen_summary3, gen_investment = parse_title_and_body(content)
+                gen_body = _ensure_paragraphs(gen_body)
                 full_title = gen_title if gen_title else titles[0][:50]
 
                 final_country = normalize_country(gen_country or country)
@@ -1830,6 +1849,7 @@ def run():
 
             if content:
                 gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel, gen_summary3, gen_investment = parse_title_and_body(content)
+                gen_body = _ensure_paragraphs(gen_body)
                 new_title = gen_title if gen_title else title[:50]
                 existing_sum = existing_full.get("summary_ko") if existing_full else None
                 note = generate_update_note(existing_sum, gen_body or _strip_leaked_labels(content))
@@ -1881,6 +1901,7 @@ def run():
         content = call_gemini_article(prompt, max_tokens=4000)
         if content:
             gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel, gen_summary3, gen_investment = parse_title_and_body(content)
+            gen_body = _ensure_paragraphs(gen_body)
             full_title = gen_title if gen_title else title[:50]
 
             final_country = normalize_country(gen_country or a.get("country") or "")
