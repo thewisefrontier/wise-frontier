@@ -1,0 +1,228 @@
+"""
+scripts/backfill_value_add.py
+------------------------------
+기존 발행 기사 중 summary_3lines/investment_idea가 비어있는 기사에
+Gemini로 "3줄 요약"과 "투자 아이디어"만 새로 생성해 채워 넣는 백필 스크립트.
+본문(summary_ko)은 건드리지 않고, 기존 제목·본문을 근거로만 생성.
+
+실행: python scripts/backfill_value_add.py
+"""
+
+import os
+import time
+import requests
+from datetime import datetime, timedelta, timezone
+
+GEMINI_MODEL_PRIMARY = "gemini-3.5-flash-lite"
+GEMINI_MODEL_FALLBACK = "gemini-3.1-flash-lite"
+
+GEMINI_API_KEYS = [k for k in [
+    os.getenv("GEMINI_API_KEY"),
+    os.getenv("GEMINI_API_KEY_2"),
+    os.getenv("GEMINI_API_KEY_3"),
+    os.getenv("GEMINI_API_KEY_4"),
+    os.getenv("GEMINI_API_KEY_5"),
+] if k]
+
+SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
+SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
+
+BATCH_SIZE = 60      # 1회 실행당 처리 건수 (API 부하·실행시간 고려)
+CALL_INTERVAL = 2    # 호출 간 대기(초)
+MAX_BODY_CHARS = 3000  # 본문이 너무 길면 토큰 절약을 위해 앞부분만 사용
+
+KST = timezone(timedelta(hours=9))
+
+_current_key_idx = 0
+_exhausted_primary = set()
+_exhausted_fallback = set()
+
+
+def now_kst() -> datetime:
+    return datetime.now(timezone.utc).astimezone(KST)
+
+
+def _sb_headers():
+    return {
+        "apikey": SUPABASE_SERVICE_KEY,
+        "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
+        "Content-Type": "application/json",
+    }
+
+
+def _sb_url():
+    return f"{SUPABASE_URL}/rest/v1/articles"
+
+
+def call_gemini(prompt: str, max_tokens: int = 500):
+    """gemini_summarizer.py의 call_gemini()와 동일한 키 로테이션·폴백 구조."""
+    global _current_key_idx
+    if not GEMINI_API_KEYS:
+        return None
+
+    payload = {
+        "contents": [{"parts": [{"text": prompt}]}],
+        "generationConfig": {"temperature": 0.4, "maxOutputTokens": max_tokens},
+    }
+    n = len(GEMINI_API_KEYS)
+    stages = [
+        (GEMINI_MODEL_PRIMARY, _exhausted_primary),
+        (GEMINI_MODEL_FALLBACK, _exhausted_fallback),
+    ]
+
+    for model, exhausted in stages:
+        available = [i for i in range(n) if i not in exhausted]
+        if not available:
+            continue
+        ordered = sorted(available, key=lambda i: (i - _current_key_idx) % n)
+        for idx in ordered:
+            api_key = GEMINI_API_KEYS[idx]
+            url = (
+                f"https://generativelanguage.googleapis.com/v1beta/models/"
+                f"{model}:generateContent?key={api_key}"
+            )
+            try:
+                res = requests.post(url, json=payload, timeout=(10, 30))
+                if res.status_code == 200:
+                    _current_key_idx = (idx + 1) % n
+                    return res.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
+                elif res.status_code == 429:
+                    print(f"  [429] {model} 키 {idx+1} RPD 소진")
+                    exhausted.add(idx)
+                    continue
+                elif res.status_code == 503:
+                    continue
+                else:
+                    print(f"[ERROR] Gemini {res.status_code}: {res.text[:200]}")
+                    return None
+            except Exception as e:
+                print(f"[ERROR] 호출 실패: {e}")
+                continue
+    return None
+
+
+def fetch_batch() -> list:
+    try:
+        res = requests.get(
+            _sb_url(),
+            headers=_sb_headers(),
+            params={
+                "select": "id,title_ko,summary_ko",
+                "source": "eq.NewsFinal",
+                "is_published": "eq.true",
+                "or": "(summary_3lines.is.null,summary_3lines.eq.)",
+                "order": "id.desc",
+                "limit": str(BATCH_SIZE),
+            },
+            timeout=20,
+        )
+        if res.status_code in (200, 206):
+            return res.json()
+    except Exception as e:
+        print(f"[ERROR] 대상 조회 실패: {e}")
+    return []
+
+
+def build_prompt(title: str, body: str) -> str:
+    return f"""아래는 이미 작성·발행된 기사입니다. 본문은 절대 수정하지 말고, 이 기사를 위한 "3줄 요약"과 "투자 아이디어"만 새로 작성하세요.
+
+제목: {title}
+
+본문:
+{body}
+
+[3줄요약 작성 규칙]
+기사 핵심을 정확히 3줄로 요약하세요. 각 줄은 "\\n"으로 구분된 완결된 문장이며, 각 줄은 40자 내외로 간결하게 쓰세요.
+
+[투자아이디어 작성 규칙]
+"투자 아이디어"라는 이름이지만 매수/매도를 권유하는 게 아니라, 이 사안이 시장·산업에 미치는 함의를 분석하는 글입니다. 3~5문장으로 작성하세요. 다음 요소를 최대한 포함하되 실제 근거 있는 것만 쓰세요:
+1. 메커니즘: 이 사건이 구체적으로 어떤 경로를 거쳐 다른 곳(시장·산업·공급망)에 영향을 미치는지
+2. 규모 가늠: 본문에 나온 수치나 비율을 활용해 이 사안의 크기·비중을 가늠하게 하세요
+3. 선례 비교 또는 시나리오: 과거 유사 사례의 전개·결과, 혹은 향후 전개 시나리오
+4. 한국 연관성: 한국과 실제 연관(무역·공급망·원자재·환율·한국 기업 진출 등)이 있으면 어떤 품목·업종·기업이 영향받는지 구체적으로. 연관이 약하면 억지로 갖다 붙이지 말고 3번으로 대체하세요.
+"~에 영향을 미칠 것으로 보인다", "주목할 필요가 있다" 같은 막연한 상투 문구는 절대 금지 — 구체적 인과관계·수치·비교를 담으세요.
+
+아래 형식으로만 출력하세요(다른 텍스트·설명·마크다운 금지):
+3줄요약: (내용)
+투자아이디어: (내용)"""
+
+
+_LABELS = ["3줄요약:", "투자아이디어:"]
+
+
+def _extract(text: str, label: str) -> str:
+    lines = text.strip().split("\n")
+    start_idx = None
+    first_val = ""
+    for i, line in enumerate(lines):
+        if line.startswith(label):
+            start_idx = i
+            first_val = line[len(label):].strip()
+            break
+    if start_idx is None:
+        return ""
+    collected = [first_val] if first_val else []
+    for line in lines[start_idx + 1:]:
+        if any(line.startswith(lbl) for lbl in _LABELS):
+            break
+        collected.append(line)
+    return "\n".join(collected).strip()
+
+
+def parse_response(text: str):
+    return _extract(text, "3줄요약:"), _extract(text, "투자아이디어:")
+
+
+def update_article(article_id: int, summary_3lines: str, investment_idea: str) -> bool:
+    try:
+        res = requests.patch(
+            f"{_sb_url()}?id=eq.{article_id}",
+            headers=_sb_headers(),
+            json={"summary_3lines": summary_3lines, "investment_idea": investment_idea},
+            timeout=15,
+        )
+        return res.status_code in (200, 204)
+    except Exception as e:
+        print(f"[ERROR] id={article_id} 업데이트 실패: {e}")
+        return False
+
+
+def run():
+    if not SUPABASE_URL or not SUPABASE_SERVICE_KEY:
+        print("[SKIP] Supabase 설정 없음")
+        return
+    if not GEMINI_API_KEYS:
+        print("[SKIP] Gemini API 키 없음")
+        return
+
+    batch = fetch_batch()
+    print(f"[백필] 이번 회차 대상 {len(batch)}건")
+
+    done = 0
+    for a in batch:
+        title = a.get("title_ko") or ""
+        body = (a.get("summary_ko") or "")[:MAX_BODY_CHARS]
+        if not title or not body:
+            continue
+
+        content = call_gemini(build_prompt(title, body), max_tokens=500)
+        if not content:
+            print(f"  ⚠️ id={a['id']} 생성 실패")
+            continue
+
+        s3, inv = parse_response(content)
+        if not s3 and not inv:
+            print(f"  ⚠️ id={a['id']} 파싱 실패")
+            continue
+
+        if update_article(a["id"], s3, inv):
+            done += 1
+            print(f"  ✅ id={a['id']} 백필 완료")
+
+        time.sleep(CALL_INTERVAL)
+
+    print(f"[백필] 완료 — {done}/{len(batch)}건 처리")
+
+
+if __name__ == "__main__":
+    run()
