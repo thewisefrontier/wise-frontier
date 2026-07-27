@@ -217,18 +217,101 @@ def fetch_gdelt(timeout: int = 12) -> list:
     return results
 
 
+# ── GDELT (국가 무관, 전 세계 초대형 이슈) ──────────────────────
+# 프론티어 마켓이 핵심이지만, 국내 언론이 이미 다루는 톱뉴스라는 이유만으로
+# 진짜 초대형 이슈(대형 재난·사망자 다수 발생 등)를 배제하지는 않는다는 방침에 따라
+# 국가 제한 없이 전 세계를 대상으로 별도 감지.
+GDELT_GLOBAL_DISASTER_QUERY = "wildfire OR earthquake OR flood OR hurricane OR typhoon OR (state of emergency)"
+
+_DISASTER_TYPE_KEYWORDS = {
+    "wildfire": ["wildfire", "forest fire", "bushfire"],
+    "earthquake": ["earthquake", "quake", "tremor"],
+    "flood": ["flood", "flooding"],
+    "hurricane": ["hurricane"],
+    "typhoon": ["typhoon", "cyclone"],
+    "emergency": ["state of emergency"],
+}
+
+# 클러스터링용 주요 국가명(영문) — 전 세계 대상이라 프론티어에 국한하지 않고 폭넓게 포함
+_MAJOR_COUNTRY_NAMES = [
+    "france", "spain", "portugal", "italy", "greece", "germany", "uk", "britain",
+    "united kingdom", "ireland", "netherlands", "belgium", "switzerland", "austria",
+    "poland", "sweden", "norway", "finland", "denmark", "turkey", "russia", "ukraine",
+    "united states", "usa", "canada", "mexico", "brazil", "argentina", "chile",
+    "japan", "china", "south korea", "north korea", "india", "australia", "new zealand",
+    "indonesia", "philippines", "vietnam", "thailand", "malaysia", "singapore",
+    "nigeria", "kenya", "south africa", "egypt", "ethiopia", "morocco", "algeria",
+    "israel", "iran", "iraq", "saudi arabia", "pakistan", "bangladesh", "myanmar",
+    "sudan", "somalia", "haiti", "colombia", "peru", "venezuela",
+]
+
+
+def _extract_disaster_cluster_key(title: str) -> str:
+    """제목에서 재난유형+국가명을 추출해 정규화된 클러스터 키를 만든다.
+    언론사마다 헤드라인 표현이 달라도(예: "France wildfire" vs "Wildfires force
+    evacuation in France") 같은 사건이면 같은 키로 묶여 점수가 합산되도록 함.
+    매칭 실패 시 원래 방식(제목 앞 40자)으로 폴백."""
+    lower = title.lower()
+    disaster_type = None
+    for dtype, keywords in _DISASTER_TYPE_KEYWORDS.items():
+        if any(kw in lower for kw in keywords):
+            disaster_type = dtype
+            break
+    if not disaster_type:
+        return title[:40]
+    country = next((c for c in _MAJOR_COUNTRY_NAMES if c in lower), None)
+    if not country:
+        return title[:40]
+    return f"{disaster_type}|{country}"
+
+
+def fetch_gdelt_global_major(timeout: int = 15) -> list:
+    """
+    국가 제한 없이 전 세계 초대형 재난/위기성 이슈를 GDELT에서 감지.
+    반환: [{"title": str, "url": str, "country": "", "region": "global_major", "source": "gdelt_global"}]
+    """
+    results = []
+    try:
+        url = (
+            f"https://api.gdeltproject.org/api/v2/doc/doc"
+            f"?query={requests.utils.quote(GDELT_GLOBAL_DISASTER_QUERY)}"
+            f"&mode=artlist&maxrecords=50&timespan=1d"
+            f"&sort=datedesc&format=json"
+        )
+        res = requests.get(url, headers=HEADERS, timeout=timeout)
+        if res.status_code == 200:
+            data = res.json()
+            for a in data.get("articles", []):
+                title = a.get("title", "").strip()
+                if not title or len(title) < 10:
+                    continue
+                results.append({
+                    "title": title,
+                    "url": a.get("url", ""),
+                    "country": "",
+                    "region": "global_major",
+                    "source": "gdelt_global",
+                    "seendate": a.get("seendate", ""),
+                })
+    except Exception as e:
+        print(f"  [GDELT-Global] 수집 실패: {e}")
+    return results
+
+
 # ── 신호 합산 ────────────────────────────────────────────────
 
 def aggregate_signals(
     gtrends: list,
     reddit: list,
     gdelt: list,
+    gdelt_global: list = None,
 ) -> list:
     """
-    세 소스의 신호를 합산해 주목도 높은 토픽 목록 반환.
+    세 소스(+전 세계 초대형 이슈 감지)의 신호를 합산해 주목도 높은 토픽 목록 반환.
     같은 키워드/토픽이 여러 소스에서 나올수록 점수 높음.
     반환: [{"topic": str, "score": int, "sources": list, "countries": list, "region": str, "titles": list}]
     """
+    gdelt_global = gdelt_global or []
     topic_data = {}  # topic_key → {score, sources, countries, region, titles}
 
     def add_signal(key, score_add, source, country, region, title):
@@ -272,7 +355,7 @@ def aggregate_signals(
             title=r["title"],
         )
 
-    # GDELT — 여러 나라에서 같은 이슈 = 강한 신호
+    # GDELT (국가별) — 여러 나라에서 같은 이슈 = 강한 신호
     gdelt_title_counter = Counter(
         a["title"][:40].lower() for a in gdelt
     )
@@ -284,6 +367,25 @@ def aggregate_signals(
             source="gdelt",
             country=a["country"],
             region=a["region"],
+            title=a["title"],
+        )
+
+    # GDELT-Global (국가 무관, 전 세계 초대형 이슈) — 짧은 시간에 유사 사건 기사가
+    # 많이 몰릴수록 전 세계적으로 크게 다뤄지는 진짜 초대형 이슈라고 판단해 가중치를 크게 줌.
+    # 언론사마다 헤드라인 표현이 달라 제목 앞 40자만으로 묶으면 같은 사건이 여러 키로
+    # 쪼개져 점수가 분산되는 문제가 있어(예: 프랑스 산불 관련 기사 다수가 서로 다른
+    # 헤드라인으로 흩어짐), 국가+재난유형 정규화 키(_extract_disaster_cluster_key)로 클러스터링.
+    gdelt_global_key_counter = Counter(
+        _extract_disaster_cluster_key(a["title"]) for a in gdelt_global
+    )
+    for a in gdelt_global:
+        key = _extract_disaster_cluster_key(a["title"])
+        freq_bonus = gdelt_global_key_counter.get(key, 1)
+        add_signal(
+            key, score_add=6 + freq_bonus,  # 단일 언급도 EXT_MIN_SCORE(5pt) 통과하도록 기본 점수 상향
+            source="gdelt_global",
+            country="",
+            region="global_major",
             title=a["title"],
         )
 
@@ -325,7 +427,11 @@ def collect_external_trends(verbose: bool = True) -> list:
     if verbose:
         print(f"  GDELT: {len(gdelt)}개 기사")
 
-    signals = aggregate_signals(gtrends, reddit, gdelt)
+    gdelt_global = fetch_gdelt_global_major()
+    if verbose:
+        print(f"  GDELT-Global(초대형 이슈): {len(gdelt_global)}개 기사")
+
+    signals = aggregate_signals(gtrends, reddit, gdelt, gdelt_global)
     if verbose:
         print(f"  합산 신호: {len(signals)}개 토픽")
         for s in signals[:10]:
