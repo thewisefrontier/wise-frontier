@@ -1,32 +1,32 @@
 {
-  "updated_at": "2026-07-28 23:40",
+  "updated_at": "2026-07-29 00:46",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7398.99,
-      "change_pct": -0.19,
-      "up": false
+      "price": 7444.98,
+      "change_pct": 0.45,
+      "up": true
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 24670.01,
-      "change_pct": -1.05,
+      "price": 24952.96,
+      "change_pct": -0.09,
       "up": false
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 52549.17,
-      "change_pct": 0.65,
+      "price": 52836.36,
+      "change_pct": 1.71,
       "up": true
     },
     {
       "name": "코스피",
       "symbol": "^KS11",
       "price": 6023.66,
-      "change_pct": -10.84,
+      "change_pct": -9.97,
       "up": false
     },
     {
@@ -39,8 +39,8 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 109725.59,
-      "change_pct": -0.35,
+      "price": 109904.12,
+      "change_pct": -0.19,
       "up": false
     },
     {
@@ -88,9 +88,9 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.74,
-      "change_pct": 0.2,
-      "up": true
+      "price": 16.66,
+      "change_pct": -0.31,
+      "up": false
     }
   ],
   "groups": {
@@ -98,22 +98,22 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7398.99,
-        "change_pct": -0.19,
-        "up": false
+        "price": 7444.98,
+        "change_pct": 0.45,
+        "up": true
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 24670.01,
-        "change_pct": -1.05,
+        "price": 24952.96,
+        "change_pct": -0.09,
         "up": false
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 52549.17,
-        "change_pct": 0.65,
+        "price": 52836.36,
+        "change_pct": 1.71,
         "up": true
       }
     ],
@@ -122,7 +122,7 @@
         "name": "코스피",
         "symbol": "^KS11",
         "price": 6023.66,
-        "change_pct": -10.84,
+        "change_pct": -9.97,
         "up": false
       },
       {
@@ -137,8 +137,8 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 109725.59,
-        "change_pct": -0.35,
+        "price": 109904.12,
+        "change_pct": -0.19,
         "up": false
       },
       {
@@ -188,9 +188,9 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.74,
-        "change_pct": 0.2,
-        "up": true
+        "price": 16.66,
+        "change_pct": -0.31,
+        "up": false
       }
     ]
   },
@@ -212,8 +212,8 @@
     "XOM": {
       "name": "Exxon Mobil Corporation",
       "symbol": "XOM",
-      "price": 156.0,
-      "change_pct": -0.6,
+      "price": 153.09,
+      "change_pct": -2.45,
       "up": false
     },
     "FDH": {
