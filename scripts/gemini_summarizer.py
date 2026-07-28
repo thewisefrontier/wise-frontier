@@ -325,13 +325,47 @@ def has_column_style(text: str) -> bool:
 
 # 문장 종결부의 "-습니다/-입니다/-됩니다"(합쇼체)만 탐지 — 인용문 안 발언은
 # 대개 뒤에 '라고/이라고' 등이 붙어 문장이 안 끝나므로 오탐이 적다.
-_POLITE_ENDING_RE = re.compile(r'(?:습니다|입니다|됩니다)[")\u2018\u2019\u201c\u201d]*(?=[.!?\n]|$)')
+_SENT_END_LA = r'(?=[.!?\n]|$)'  # 문장 종결 위치 (인용문 내부 제외용)
+_POLITE_ENDING_RE = re.compile(r'(?:습니다|입니다|됩니다)[")\u2018\u2019\u201c\u201d]*' + _SENT_END_LA)
 
 
 def has_polite_ending(text: str) -> bool:
     if not text:
         return False
     return bool(_POLITE_ENDING_RE.search(text))
+
+
+# ── 합쇼체 → 해라체 결정론적 변환 (재생성까지 실패했을 때의 최종 안전장치) ──
+# 문장 종결부에만 적용하므로 인용문 안의 발언("문제없습니다"라고)은 보존된다.
+_JONG_B, _JONG_N = 17, 4  # 종성 ㅂ, ㄴ
+
+_POLITE_CONV_RULES = [
+    (re.compile(r'아닙니다' + _SENT_END_LA), '아니다'),
+    (re.compile(r'입니다' + _SENT_END_LA), '이다'),
+    (re.compile(r'습니다' + _SENT_END_LA), '다'),
+]
+_BNIDA_RE = re.compile(r'([가-힣])니다' + _SENT_END_LA)
+
+
+def _bnida_to_nda(m) -> str:
+    """'합니다'→'한다', '됩니다'→'된다' 등 종성 ㅂ + 니다 → 종성 ㄴ + 다."""
+    ch = m.group(1)
+    code = ord(ch) - 0xAC00
+    if not (0 <= code < 11172):
+        return m.group(0)
+    cho, jung, jong = code // 588, (code % 588) // 28, code % 28
+    if jong != _JONG_B:
+        return m.group(0)
+    return chr(0xAC00 + cho * 588 + jung * 28 + _JONG_N) + '다'
+
+
+def to_plain_style(text: str) -> str:
+    """문장 종결부의 합쇼체를 해라체(-다)로 변환."""
+    if not text:
+        return text
+    for rx, rep in _POLITE_CONV_RULES:
+        text = rx.sub(rep, text)
+    return _BNIDA_RE.sub(_bnida_to_nda, text)
 
 
 def call_gemini_article(prompt, max_tokens=2000, style_retries=1):
@@ -352,8 +386,13 @@ def call_gemini_article(prompt, max_tokens=2000, style_retries=1):
         retried = call_gemini(retry_prompt, max_tokens=max_tokens)
         if retried:
             content = retried
+    if content and has_polite_ending(content):
+        converted = to_plain_style(content)
+        if converted != content:
+            print("  🔧 재생성 실패 → 합쇼체 자동 변환 적용(-습니다 → -다)")
+            content = converted
     if content and (has_column_style(content) or has_polite_ending(content)):
-        print("  ⚠️ 재생성 후에도 논평체/합쇼체 패턴이 남아있음 (그대로 진행)")
+        print("  ⚠️ 재생성/변환 후에도 논평체·합쇼체 패턴이 남아있음 (그대로 진행)")
     return content
 
 
