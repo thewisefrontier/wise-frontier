@@ -124,6 +124,18 @@
     .briefing-title { font-size: 12px; color: var(--text); line-height: 1.5; cursor: pointer; }
     .briefing-title:hover { color: var(--accent); }
 
+    /* 페이지네이션 */
+    .pagination { display: flex; gap: 4px; justify-content: center; align-items: center; margin-top: 18px; flex-wrap: wrap; }
+    .pagination button {
+      min-width: 30px; padding: 5px 9px; font-size: 11px; font-family: 'IBM Plex Mono', monospace;
+      border: 1px solid var(--border); background: var(--bg2); color: var(--muted); cursor: pointer;
+      transition: color 0.2s, background 0.2s;
+    }
+    .pagination button:hover:not(:disabled) { color: var(--accent2); background: var(--bg3); }
+    .pagination button.active { background: var(--accent2); color: #fff; border-color: var(--accent2); }
+    .pagination button:disabled { opacity: 0.35; cursor: default; }
+    .pagination .ellipsis { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); padding: 0 4px; }
+
     .empty { padding: 30px; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); }
 
     footer { border-top: 2px solid var(--text); background: var(--bg2); padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 40px; }
@@ -185,6 +197,7 @@
     </div>
     <div class="filter-tabs" id="filter-tabs"></div>
     <div id="weather-container"><div class="empty">날씨 데이터 로딩 중</div></div>
+    <div class="pagination" id="pagination"></div>
   </main>
 
   <aside class="sidebar">
@@ -232,6 +245,8 @@
 
   let allWeather = [];
   let currentFilter = 'all';
+  let currentPage = 1;
+  const PAGE_SIZE = 20;
 
   function formatTime(dateStr) {
     if (!dateStr) return '';
@@ -258,8 +273,43 @@
 
   function setFilter(key) {
     currentFilter = key;
+    currentPage = 1;
     renderFilters();
     renderWeather();
+  }
+
+  function goPage(n) {
+    currentPage = n;
+    renderWeather();
+    const main = document.querySelector('.feed-header');
+    if (main) main.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function renderPagination(totalPages) {
+    const box = document.getElementById('pagination');
+    if (!box) return;
+    if (totalPages <= 1) { box.innerHTML = ''; return; }
+
+    const parts = [];
+    parts.push(`<button onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`);
+
+    const push = n => parts.push(`<button class="${n===currentPage?'active':''}" onclick="goPage(${n})">${n}</button>`);
+    const ell = () => parts.push('<span class="ellipsis">…</span>');
+
+    if (totalPages <= 7) {
+      for (let i = 1; i <= totalPages; i++) push(i);
+    } else {
+      push(1);
+      if (currentPage > 4) ell();
+      const start = Math.max(2, currentPage - 1);
+      const end = Math.min(totalPages - 1, currentPage + 1);
+      for (let i = start; i <= end; i++) push(i);
+      if (currentPage < totalPages - 3) ell();
+      push(totalPages);
+    }
+
+    parts.push(`<button onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`);
+    box.innerHTML = parts.join('');
   }
 
   function renderWeather() {
@@ -267,14 +317,24 @@
     let items = currentFilter === 'all' ? allWeather : allWeather.filter(a => classify(a) === currentFilter);
     items = [...items].sort((a, b) => (b.created_at || '').localeCompare(a.created_at || ''));
 
-    document.getElementById('weather-count').textContent = `${items.length}건`;
+    const total = items.length;
+    const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
 
-    if (!items.length) {
+    if (!total) {
+      document.getElementById('weather-count').textContent = '0건';
       container.innerHTML = '<div class="empty">해당 리포트가 없습니다.</div>';
+      renderPagination(1);
       return;
     }
 
-    container.innerHTML = items.map(a => {
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const pageItems = items.slice(start, start + PAGE_SIZE);
+    document.getElementById('weather-count').textContent =
+      `${total}건 중 ${start + 1}\u2013${start + pageItems.length}`;
+
+    container.innerHTML = pageItems.map(a => {
       const title = a.title_ko || a.title_en || '';
       return `
         <div class="weather-card" onclick="location.href='article?id=${a.id}'">
@@ -287,6 +347,8 @@
           <div class="weather-card-title">${title}</div>
         </div>`;
     }).join('');
+
+    renderPagination(totalPages);
   }
 
   async function loadWeather() {
