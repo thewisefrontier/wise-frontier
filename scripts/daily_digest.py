@@ -257,7 +257,7 @@ def build_digest_prompt(articles):
 {rules}
 
 아래 형식으로 출력:
-제목: [프론티어마켓 데일리 다이제스트] 뒤에 오늘 핵심 테마를 담은 부제목을 붙이세요. 예: "[프론티어마켓 데일리 다이제스트] 글로벌 규제 재편과 지정학적 리스크 확산"
+제목: [데일리 다이제스트] 뒤에 오늘 핵심 테마를 담은 부제목을 붙이세요. 예: "[데일리 다이제스트] 글로벌 규제 재편과 지정학적 리스크 확산"
 본문: (다이제스트 본문)"""
 
 
@@ -370,7 +370,7 @@ def run():
 
     title, body = parse_title_and_body(content)
     if not title:
-        title = "[프론티어마켓 데일리 다이제스트] 주요 동향"
+        title = "[데일리 다이제스트] 주요 동향"
 
     image_url = fetch_article_image(title, body or content)
 
