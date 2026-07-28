@@ -1,0 +1,31 @@
+name: NewsFinal - Article Review
+
+on:
+  schedule:
+    - cron: '0 22 * * *'   # UTC 22:00 = KST 07:00, 하루 1회 (음역 점검 06:00 다음)
+  workflow_dispatch:
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v5
+
+      - name: Python 설정
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: 패키지 설치
+        run: pip install -r requirements.txt
+
+      - name: 기사 검수 (합쇼체 자동 변환 + 위반 플래그)
+        run: python scripts/article_reviewer.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
+          REVIEW_WINDOW_HOURS: '48'
