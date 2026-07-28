@@ -1,32 +1,32 @@
 {
-  "updated_at": "2026-07-29 02:58",
+  "updated_at": "2026-07-29 03:47",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7432.4,
-      "change_pct": 0.26,
+      "price": 7437.24,
+      "change_pct": 0.34,
       "up": true
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 24895.82,
-      "change_pct": -0.15,
+      "price": 24909.22,
+      "change_pct": -0.27,
       "up": false
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 52795.77,
-      "change_pct": 1.12,
+      "price": 52823.84,
+      "change_pct": 1.69,
       "up": true
     },
     {
       "name": "코스피",
       "symbol": "^KS11",
       "price": 6023.66,
-      "change_pct": -10.84,
+      "change_pct": -9.97,
       "up": false
     },
     {
@@ -98,22 +98,22 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7432.4,
-        "change_pct": 0.26,
+        "price": 7437.24,
+        "change_pct": 0.34,
         "up": true
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 24895.82,
-        "change_pct": -0.15,
+        "price": 24909.22,
+        "change_pct": -0.27,
         "up": false
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 52795.77,
-        "change_pct": 1.12,
+        "price": 52823.84,
+        "change_pct": 1.69,
         "up": true
       }
     ],
@@ -122,7 +122,7 @@
         "name": "코스피",
         "symbol": "^KS11",
         "price": 6023.66,
-        "change_pct": -10.84,
+        "change_pct": -9.97,
         "up": false
       },
       {
@@ -212,8 +212,8 @@
     "XOM": {
       "name": "Exxon Mobil Corporation",
       "symbol": "XOM",
-      "price": 153.37,
-      "change_pct": -2.27,
+      "price": 153.5,
+      "change_pct": -2.19,
       "up": false
     },
     "FDH": {
