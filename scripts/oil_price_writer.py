@@ -297,9 +297,10 @@ TITLE: <제목>
 BODY: <본문>
 
 [제목]
-- "국제유가, WTI 배럴당 {wti_dollar}달러…<핵심 동인>" 형태, 50자 이내
-- 예: "국제유가, WTI 배럴당 78달러…OPEC+ 감산 기대"
-      "국제유가 이틀째 {wti_dir}…WTI 배럴당 {wti_dollar}달러대"
+- 반드시 "[국제유가] "로 시작. 대괄호 포함 그대로 출력.
+- "[국제유가] WTI 배럴당 {wti_dollar}달러…<핵심 동인>" 형태, 대괄호 포함 50자 이내
+- 예: "[국제유가] WTI 배럴당 78달러…OPEC+ 감산 기대"
+      "[국제유가] 이틀째 {wti_dir}…WTI 배럴당 {wti_dollar}달러대"
 
 [본문]
 1. 뉴스 스타일. 모든 문장 "-다" 종결. 감정·논평 표현 금지.
@@ -318,6 +319,28 @@ BODY: <본문>
 
 
 # ── 파싱 ─────────────────────────────────────────────────────
+TITLE_PREFIX = "[국제유가]"
+
+
+def enforce_title_prefix(title: str) -> str:
+    """제목 앞에 [국제유가] 태그를 강제 부착. 중복 부착 방지."""
+    t = (title or "").strip()
+    if not t:
+        return t
+    # 이미 붙어 있으면(공백 유무 무관) 정규화만
+    m = re.match(r"^\s*\[\s*국제\s*유가\s*\]\s*(.*)$", t)
+    if m:
+        t = m.group(1).strip()
+    else:
+        # "국제유가, ..." / "국제유가 이틀째 ..." 등 기존 형태의 접두 표현 제거
+        m2 = re.match(r"^국제유가(?:가|는)?\s*[,·]?\s+(.+)$", t)
+        if m2 and m2.group(1)[:1] not in ("와", "과", "및"):
+            t = m2.group(1).strip()
+        else:
+            t = re.sub(r"^국제유가\s*[,·]\s*", "", t).strip()
+    return f"{TITLE_PREFIX} {t}" if t else TITLE_PREFIX
+
+
 def parse_article_output(text: str) -> tuple[str, str]:
     title, body = "", ""
     m_title = re.search(r"TITLE:\s*(.+?)(?:\n|$)", text)
@@ -409,6 +432,7 @@ def main():
         time.sleep(5)
 
     art_title, art_body = parse_article_output(article_text)
+    art_title = enforce_title_prefix(art_title)
 
     if not art_title or not art_body:
         print(f"  [ERROR] TITLE/BODY 파싱 실패\n{article_text[:300]}")
