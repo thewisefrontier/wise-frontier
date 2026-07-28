@@ -477,7 +477,7 @@
             </div>`).join('')}
         </div>` : ''}
 
-      ${a.image_url ? `<img class="article-hero" src="${a.image_url}" alt="${title.replace(/"/g,'&quot;')}" loading="lazy" style="width:100%;max-height:420px;object-fit:cover;border-radius:8px;margin:16px 0 8px;display:block;">` : ''}
+      ${a.image_url ? `<img class="article-hero" src="${a.image_url}" alt="${title.replace(/"/g,'&quot;')}" loading="lazy" style="width:100%;max-height:420px;object-fit:cover;border-radius:8px;margin:16px 0 8px;display:block;">`+ (String(a.image_url).includes('pixabay') ? `<div style="font-size:12px;color:#888;margin:0 0 12px;text-align:right;">이미지 출처: Pixabay</div>` : '') : ''}
 
       <div class="article-body">
         ${bodyHtml.includes('</p>') ? bodyHtml : '<p>' + bodyHtml + '</p>'}

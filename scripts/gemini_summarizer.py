@@ -442,6 +442,12 @@ def get_trend_articles(keywords: list, days: int = 7) -> list:
 
 
 
+# find_similar_trend 2차(본문 리드) 경로 임계값 — 표본 측정 기반(2026-07-28)
+LEAD_TITLE_MIN = 44    # 제목 token_sort_ratio 최소
+LEAD_SIM_MIN = 40      # 본문 리드 300자 token_sort_ratio 최소
+LEAD_JAC_MIN = 0.12    # 본문 리드 키워드 Jaccard 최소
+
+
 def _title_keywords(t: str) -> set:
     """제목에서 의미 키워드 추출(2자 이상 토큰, 불용어 제외)."""
     import re
@@ -449,8 +455,20 @@ def _title_keywords(t: str) -> set:
     return {w for w in toks if len(w) >= 2 and w not in FREQ_STOPWORDS}
 
 
+def _lead_metrics(a: str, b: str, n: int = 300):
+    """본문 리드(앞 n자) 기준 유사도 지표: (token_sort_ratio, 키워드 Jaccard)."""
+    from rapidfuzz import fuzz
+    a = (a or "")[:n].lower(); b = (b or "")[:n].lower()
+    if not a or not b:
+        return 0.0, 0.0
+    ka, kb = _title_keywords(a), _title_keywords(b)
+    jac = (len(ka & kb) / len(ka | kb)) if (ka and kb) else 0.0
+    return fuzz.token_sort_ratio(a, b), jac
+
+
 def find_similar_trend(title: str, country: str | None = None,
-                       days: int = 14, sim_threshold: int = 60) -> dict | None:
+                       days: int = 14, sim_threshold: int = 60,
+                       body: str | None = None) -> dict | None:
     """
     최근 N일 내 트렌드 기사 중 동일 사건의 '루트(최초 발행=최소 id)' 반환. 없으면 None.
     매칭: country 지정 시 country 일치 필수 + 제목 token_sort_ratio>=sim_threshold + 공유 키워드>=1.
@@ -481,8 +499,19 @@ def find_similar_trend(title: str, country: str | None = None,
             sim = fuzz.token_sort_ratio(title.lower(), existing_title.lower())
             shared = new_kw & _title_keywords(existing_title)
             if sim >= sim_threshold and (not country or len(shared) >= 1):
-                print(f"    → 유사 트렌드 루트 발견 (id={a['id']}, 유사도 {sim}%, 공유KW {len(shared)}): {existing_title[:40]}")
+                print(f"    → 유사 트렌드 루트 발견 (id={a['id']}, 제목유사도 {sim:.0f}%, 공유KW {len(shared)}): {existing_title[:40]}")
                 return a
+            # 2차 경로: 제목 표현이 달라 1차를 통과하지 못한 동일 사건 탐지
+            # (country 일치 + 제목 44%↑ + 본문 리드 40%↑ + 리드 Jaccard 0.12↑)
+            # 임계 근거: 실제 중복 5쌍 / 비중복 12쌍 표본 측정(2026-07-28)
+            #   중복 최소값  (제목 45.8 / 리드 40.8 / Jac 0.122)
+            #   비중복 최대값 (제목 41.6 / 리드 43.1 / Jac 0.146)
+            if country and body and len(shared) >= 1 and sim >= LEAD_TITLE_MIN:
+                lead_sim, lead_jac = _lead_metrics(body, a.get("summary_ko") or "")
+                if lead_sim >= LEAD_SIM_MIN and lead_jac >= LEAD_JAC_MIN:
+                    print(f"    → 유사 트렌드 루트 발견[본문리드] (id={a['id']}, "
+                          f"제목 {sim:.0f}% / 리드 {lead_sim:.0f}% / Jac {lead_jac:.2f}): {existing_title[:40]}")
+                    return a
     except Exception as e:
         print(f"    → 유사도 체크 실패: {e}")
     return None
@@ -654,6 +683,8 @@ def run_trend_tracker():
 - 본문은 부가가치 문단을 포함해 최소 800자 이상으로 작성하세요. 각 사건마다 한 문장으로 끝내지 말고, 배경·경위·현재 상황을 구체적으로 풀어서 서술하세요. 서로 다른 사건이 섞여 있으면 각각을 문단으로 나누어 충분히 설명하세요.
 - 문단을 나눌 때는 반드시 빈 줄(줄바꿈 2번)로 구분하세요. 한 문단에 모든 문장을 붙여 쓰지 마세요.
 - 모든 날짜는 사건이 일어난 현지시간 기준으로만 표기하세요. 한국 시간(KST)이나 UTC로 환산·계산하지 말고, 소스 기사에 나온 날짜를 하루도 앞뒤로 옮기지 말고 그대로 "N일(현지시간)" 형식으로 쓰세요. "2026년 7월 15일", "오늘", "현재" 같은 절대 날짜나 오늘 날짜는 쓰지 말고, 날짜를 알 수 없으면 쓰지 마세요.
+- "현지시각 기준으로", "현재 시점", "현 시점 기준", "최근 들어" 같은 모호한 시간 표현으로 날짜를 대체하지 마세요. 이런 표현은 금지어입니다. 구체적 날짜를 모르면 시간 표현 자체를 아예 쓰지 말고 사실만 서술하세요.
+- 기념일·회고형 소재(집권 N주년, 사건 N년 등)처럼 특정 뉴스 발생일이 없는 경우에는 "N일(현지시간)"을 억지로 만들지 말고, 과거 사건은 연도만("2023년") 표기하세요.
 - 수치, 인명, 날짜, 기관명 등 구체적 팩트를 최대한 살리세요.
 - 부가가치 분석(메커니즘·규모 가늠·선례 비교·한국 연관성)은 본문에 넣지 말고, 아래 "투자아이디어:" 필드에 별도로 작성하세요. 본문(본문:)에는 순수 사실 서술만 담으세요.
 - 본문 마지막 문장을 "~라는 분석이 나온다", "~전망이다", "~지속될 전망입니다", "~귀추가 주목된다" 같은 화자 없는 전망·분석형 문장으로 마무리하지 마세요. 그런 문장은 부가가치 분석이므로 위 규칙대로 "투자아이디어:" 필드로 옮기고, 본문은 마지막까지 구체적 사실(누가, 무엇을, 언제)로 끝내세요.
@@ -711,7 +742,7 @@ def run_trend_tracker():
         region = region_map.get(country, "africa")
 
         # 동일 사건 루트 있으면 신규 생성 대신 append 병합(리빙 아티클)
-        root = find_similar_trend(title, country=country, days=14)
+        root = find_similar_trend(title, country=country, days=14, body=body)
         if root:
             if merge_trend_article(root, title, body, f"트렌드 추적 업데이트 ({group_name})"):
                 print(f"  [{group_name}] ✅ 기존 루트에 병합 (id={root['id']}): {title}")
@@ -1069,6 +1100,8 @@ JSON 배열로만 응답하세요 (마크다운 없이):
 - 본문 마지막 문장을 "~라는 분석이 나온다", "~전망이다", "~지속될 전망입니다", "~귀추가 주목된다" 같은 화자 없는 전망·분석형 문장으로 마무리하지 마세요. 그런 문장은 부가가치 분석이므로 위 규칙대로 "투자아이디어:" 필드로 옮기고, 본문은 마지막까지 구체적 사실(누가, 무엇을, 언제)로 끝내세요.
 - 여러 국가·사건을 다룰 때 각 문단을 "~격동 속에서 위축된 상태입니다", "~전술적 변화가 감지되었습니다", "~목소리가 이어지고 있습니다" 같은 화자 없는 추상적 개관 문장으로 시작하지 마세요. 이런 문장으로 문을 열고 뒤에 구체적 사실을 붙이는 구조는 분석·피처 기사 문체이지 스트레이트 뉴스가 아닙니다. 각 문단을 곧바로 구체적 사실(누가, 언제, 무엇을 했는지)로 시작하세요.
 - 모든 날짜는 사건이 일어난 현지시간 기준으로만 표기하세요. 한국 시간(KST)이나 UTC로 환산·계산하지 말고, 소스 기사에 나온 날짜를 하루도 앞뒤로 옮기지 말고 그대로 "N일(현지시간)" 형식으로 쓰세요. "2026년 7월 15일", "오늘", "현재" 같은 절대 날짜나 오늘 날짜는 쓰지 말고, 날짜를 알 수 없으면 쓰지 마세요.
+- "현지시각 기준으로", "현재 시점", "현 시점 기준", "최근 들어" 같은 모호한 시간 표현으로 날짜를 대체하지 마세요. 이런 표현은 금지어입니다. 구체적 날짜를 모르면 시간 표현 자체를 아예 쓰지 말고 사실만 서술하세요.
+- 기념일·회고형 소재(집권 N주년, 사건 N년 등)처럼 특정 뉴스 발생일이 없는 경우에는 "N일(현지시간)"을 억지로 만들지 말고, 과거 사건은 연도만("2023년") 표기하세요.
 - 마크다운 문법, 헤더, 홍보 문구 금지.
 - 기사 문체로 작성하세요. "~를 보여줍니다", "~을 도모하고 있습니다", "~라는 평가다" 같은 논평/칼럼 문체는 금지입니다.
 
@@ -1111,7 +1144,7 @@ JSON 배열로만 응답하세요 (마크다운 없이):
             title = f"{issue_ko} — {today_str}"
 
         # 생성된 실제 제목+국가로 동일 사건 루트 재확인 (우선)
-        similar = find_similar_trend(title, country=art_country, days=14)
+        similar = find_similar_trend(title, country=art_country, days=14, body=body)
 
         # 유사 기존 트렌드 기사 있으면 병합
         if similar:
@@ -1321,6 +1354,8 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
 - 본문 마지막 문장을 "~라는 분석이 나온다", "~전망이다", "~지속될 전망입니다", "~귀추가 주목된다" 같은 화자 없는 전망·분석형 문장으로 마무리하지 마세요. 그런 문장은 부가가치 분석이므로 위 규칙대로 "투자아이디어:" 필드로 옮기고, 본문은 마지막까지 구체적 사실(누가, 무엇을, 언제)로 끝내세요.
 - 여러 국가·사건을 다룰 때 각 문단을 "~격동 속에서 위축된 상태입니다", "~전술적 변화가 감지되었습니다", "~목소리가 이어지고 있습니다" 같은 화자 없는 추상적 개관 문장으로 시작하지 마세요. 이런 문장으로 문을 열고 뒤에 구체적 사실을 붙이는 구조는 분석·피처 기사 문체이지 스트레이트 뉴스가 아닙니다. 각 문단을 곧바로 구체적 사실(누가, 언제, 무엇을 했는지)로 시작하세요.
 - 모든 날짜는 사건이 일어난 현지시간 기준으로만 표기하세요. 한국 시간(KST)이나 UTC로 환산·계산하지 말고, 소스 기사에 나온 날짜를 하루도 앞뒤로 옮기지 말고 그대로 "N일(현지시간)" 형식으로 쓰세요. "2026년 7월 15일", "오늘", "현재" 같은 절대 날짜나 오늘 날짜는 쓰지 말고, 날짜를 알 수 없으면 쓰지 마세요.
+- "현지시각 기준으로", "현재 시점", "현 시점 기준", "최근 들어" 같은 모호한 시간 표현으로 날짜를 대체하지 마세요. 이런 표현은 금지어입니다. 구체적 날짜를 모르면 시간 표현 자체를 아예 쓰지 말고 사실만 서술하세요.
+- 기념일·회고형 소재(집권 N주년, 사건 N년 등)처럼 특정 뉴스 발생일이 없는 경우에는 "N일(현지시간)"을 억지로 만들지 말고, 과거 사건은 연도만("2023년") 표기하세요.
 - 반드시 하나의 토픽만 다루세요.
 - 마크다운 문법, 헤더, 홍보 문구 금지.
 - 기사 문체로 작성하세요. "~를 보여줍니다", "~을 도모하고 있습니다", "~라는 평가다" 같은 논평/칼럼 문체는 금지입니다.
@@ -1365,7 +1400,7 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
             title = f"{issue_ko} — {today_str}"
 
         # 생성된 실제 제목+국가로 동일 사건 루트 재확인 (우선)
-        ext_similar = find_similar_trend(title, country=art_country, days=14)
+        ext_similar = find_similar_trend(title, country=art_country, days=14, body=body)
 
         now_str = now_kst().strftime("%Y-%m-%d %H:%M")
         payload = {

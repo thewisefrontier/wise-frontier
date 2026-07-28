@@ -154,7 +154,7 @@ function buildWrapperHtml(a) {
       </div>` : '';
 
   const heroHtml = a.image_url
-    ? `<img class="article-hero" src="${esc(a.image_url)}" alt="${esc(title)}" loading="lazy" style="width:100%;max-height:420px;object-fit:cover;border-radius:8px;margin:16px 0 8px;display:block;">`
+    ? `<img class="article-hero" src="${esc(a.image_url)}" alt="${esc(title)}" loading="lazy" style="width:100%;max-height:420px;object-fit:cover;border-radius:8px;margin:16px 0 8px;display:block;">` + (String(a.image_url).includes('pixabay') ? `<div style="font-size:12px;color:#888;margin:0 0 12px;text-align:right;">이미지 출처: Pixabay</div>` : '')
     : '';
 
   return `
