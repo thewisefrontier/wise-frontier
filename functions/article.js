@@ -153,6 +153,20 @@ function buildWrapperHtml(a) {
           </div>`).join('')}
       </div>` : '';
 
+  const s3Html = a.summary_3lines ? `
+      <div style="margin:16px 0;padding:14px 16px;background:rgba(26,95,168,0.06);border-radius:8px;border-left:3px solid var(--accent2);">
+        <div style="font-weight:700;color:var(--accent2);font-size:13px;margin-bottom:8px;">📌 3줄 요약</div>
+        <ul style="margin:0;padding-left:18px;">
+          ${String(a.summary_3lines).split(/\\n|\n/).filter((l) => l.trim()).map((l) => `<li style="margin-bottom:4px;font-size:14px;line-height:1.6;">${esc(l.trim().replace(/^[*\-•]\s*/, ''))}</li>`).join('')}
+        </ul>
+      </div>` : '';
+
+  const investHtml = a.investment_idea ? `
+      <div style="margin:24px 0;padding:16px 18px;background:rgba(200,140,20,0.07);border-radius:8px;border-left:3px solid #c88c14;">
+        <div style="font-weight:700;color:#c88c14;font-size:13px;margin-bottom:8px;">💡 투자 아이디어</div>
+        <div style="font-size:14px;line-height:1.8;color:var(--text);">${esc(String(a.investment_idea)).replace(/\\n|\n/g, '<br>')}</div>
+      </div>` : '';
+
   const heroHtml = a.image_url
     ? `<img class="article-hero" src="${esc(a.image_url)}" alt="${esc(title)}" loading="lazy" style="width:100%;max-height:420px;object-fit:cover;border-radius:8px;margin:16px 0 8px;display:block;">` + (String(a.image_url).includes('pixabay') ? `<div style="font-size:12px;color:#888;margin:0 0 12px;text-align:right;">이미지 출처: Pixabay</div>` : '')
     : '';
@@ -165,12 +179,14 @@ ${tagsHtml}
 
       <h1 class="article-title">${esc(title)}</h1>
 ${metaHtml}
+${s3Html}
 ${updateLogHtml}
       ${heroHtml}
 
       <div class="article-body">
         <p>${bodyHtml}</p>
       </div>
+${investHtml}
 
       <div class="source-link">ⓒ NewsFinal <button onclick="shareArticle()" style="float:right;background:none;border:1px solid var(--border);border-radius:6px;padding:4px 12px;cursor:pointer;color:var(--text);font-size:12px;">🔗 공유</button><br>뉴스파이널 편집국</div>`;
 }
