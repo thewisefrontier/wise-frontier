@@ -933,24 +933,74 @@ def has_column_style(text: str) -> bool:
     return any(re.search(p, text) for p in BANNED_STYLE_PATTERNS)
 
 
+# ── 합쇼체(-습니다/-입니다) 탐지·변환 ────────────────────────────────
+# gemini_summarizer.py와 동일 로직. 문장 종결부만 대상으로 하므로
+# 인용문 내부 발언("문제없습니다"라고 말했다)은 보존된다.
+_SENT_END_LA = r'(?=[.!?\n]|$)'  # 문장 종결 위치 (인용문 내부 제외용)
+_POLITE_ENDING_RE = re.compile(r'(?:습니다|입니다|됩니다)[")\u2018\u2019\u201c\u201d]*' + _SENT_END_LA)
+
+
+def has_polite_ending(text: str) -> bool:
+    """합쇼체 종결이 있는지 검사.
+    변환기(to_plain_style)가 실제로 고칠 수 있는 패턴과 정확히 일치시킨다.
+    (구 버전은 습니다/입니다/됩니다만 탐지해 '개최합니다.'·'아닙니다.'를 놓쳤음)"""
+    if not text:
+        return False
+    return to_plain_style(text) != text
+
+
+_JONG_B, _JONG_N = 17, 4  # 종성 ㅂ, ㄴ
+
+_POLITE_CONV_RULES = [
+    (re.compile(r'아닙니다' + _SENT_END_LA), '아니다'),
+    (re.compile(r'입니다' + _SENT_END_LA), '이다'),
+    (re.compile(r'습니다' + _SENT_END_LA), '다'),
+]
+_BNIDA_RE = re.compile(r'([가-힣])니다' + _SENT_END_LA)
+
+
+def _bnida_to_nda(m) -> str:
+    """'합니다'→'한다', '됩니다'→'된다' 등 종성 ㅂ + 니다 → 종성 ㄴ + 다."""
+    ch = m.group(1)
+    code = ord(ch) - 0xAC00
+    if not (0 <= code < 11172):
+        return m.group(0)
+    cho, jung, jong = code // 588, (code % 588) // 28, code % 28
+    if jong != _JONG_B:
+        return m.group(0)
+    return chr(0xAC00 + cho * 588 + jung * 28 + _JONG_N) + '다'
+
+
+def to_plain_style(text: str) -> str:
+    """문장 종결부의 합쇼체를 해라체(-다)로 변환."""
+    if not text:
+        return text
+    for rx, rep in _POLITE_CONV_RULES:
+        text = rx.sub(rep, text)
+    return _BNIDA_RE.sub(_bnida_to_nda, text)
+
+
 def call_gemini_article(prompt, max_tokens=1500, style_retries=1):
-    """기사 본문 생성 전용 호출. 논평/칼럼체 감지 시 최대 style_retries회 재생성."""
+    """기사 본문 생성 전용 호출. 논평/칼럼체·합쇼체 감지 시 최대 style_retries회 재생성."""
     content = call_gemini(prompt, max_tokens=max_tokens)
     attempt = 0
-    while content and has_column_style(content) and attempt < style_retries:
+    while content and (has_column_style(content) or has_polite_ending(content)) and attempt < style_retries:
         attempt += 1
-        print(f"  ⚠️ 논평/칼럼체 감지 → 재생성 시도 ({attempt}/{style_retries})")
+        reason = "논평/칼럼체" if has_column_style(content) else "합쇼체(-습니다/-입니다)"
+        print(f"  ⚠️ {reason} 감지 → 재생성 시도 ({attempt}/{style_retries})")
         retry_prompt = (
             prompt
             + "\n\n[재작성 지시] 방금 작성한 결과에 논평/칼럼 문체(예: '~를 보여줍니다', "
-              "'~을 도모하고 있습니다', '~라는 평가다', '~지켜볼 필요가 있습니다' 등)가 섞여 있었습니다. "
-              "감정·의견이 섞인 표현을 모두 배제하고, 사실 전달 중심의 스트레이트 뉴스 문체로만 다시 작성하세요."
+              "'~을 도모하고 있습니다', '~라는 평가다', '~지켜볼 필요가 있습니다' 등)이거나, "
+              "'-습니다'/'-입니다' 같은 정중체(합쇼체) 종결이 섞여 있었습니다. "
+              "감정·의견이 섞인 표현을 모두 배제하고, 모든 문장을 '-다'로 종결하는 "
+              "스트레이트 뉴스 문체로만 다시 작성하세요."
         )
         retried = call_gemini(retry_prompt, max_tokens=max_tokens)
         if retried:
             content = retried
-    if content and has_column_style(content):
-        print("  ⚠️ 재생성 후에도 논평체 패턴이 남아있음 (그대로 진행)")
+    if content and (has_column_style(content) or has_polite_ending(content)):
+        print("  ⚠️ 재생성 후에도 논평체·합쇼체 패턴이 남아있음 (파싱 단계에서 변환)")
     return content
 
 
@@ -1160,15 +1210,28 @@ def _ensure_paragraphs(text: str, target: int = 3) -> str:
     return "\n\n".join(" ".join(g) for g in groups)
 
 
+def _plainify_parsed(parsed):
+    """파싱 결과의 텍스트 필드에 합쇼체 → 해라체 변환을 강제 적용.
+    프롬프트 지시·재생성이 모두 실패해도 DB에는 '-다' 체만 저장되도록 하는 최종 안전장치."""
+    title, body, country, category, countries, is_travel, summary3, investment = parsed
+    if any(has_polite_ending(t) for t in (title, body, summary3, investment)):
+        print("  🔧 합쇼체 감지 → 자동 변환 적용(-습니다 → -다)")
+        title = to_plain_style(title)
+        body = to_plain_style(body)
+        summary3 = to_plain_style(summary3)
+        investment = to_plain_style(investment)
+    return title, body, country, category, countries, is_travel, summary3, investment
+
+
 def parse_title_and_body(text):
     """Gemini 응답 파싱. 1순위 JSON, 실패 시 레거시 라벨 파서로 폴백."""
     if not text:
         return "", "", "", "", [], False, "", ""
     parsed = parse_json_response(text)
     if parsed:
-        return parsed
+        return _plainify_parsed(parsed)
     print("  ⚠️ JSON 파싱 실패 → 레거시 라벨 파서로 폴백")
-    return _parse_labeled_response(text)
+    return _plainify_parsed(_parse_labeled_response(text))
 
 
 # ── 기업 자동 감지·등록 ────────────────────────────────────────────────
@@ -1590,6 +1653,10 @@ def update_live_articles():
             elif line.startswith("본문:"):
                 new_body = result[result.find("본문:")+3:].strip()
                 break
+
+        if has_polite_ending(new_body):
+            print("     🔧 합쇼체 감지 → 자동 변환 적용")
+            new_body = to_plain_style(new_body)
 
         if update_article(art_id, title, new_body, note=note):
             update_article_count(art_id, 2)

@@ -330,9 +330,12 @@ _POLITE_ENDING_RE = re.compile(r'(?:습니다|입니다|됩니다)[")\u2018\u201
 
 
 def has_polite_ending(text: str) -> bool:
+    """합쇼체 종결이 있는지 검사.
+    변환기(to_plain_style)가 실제로 고칠 수 있는 패턴과 정확히 일치시킨다.
+    (구 버전은 습니다/입니다/됩니다만 탐지해 '개최합니다.'·'아닙니다.'를 놓쳤음)"""
     if not text:
         return False
-    return bool(_POLITE_ENDING_RE.search(text))
+    return to_plain_style(text) != text
 
 
 # ── 합쇼체 → 해라체 결정론적 변환 (재생성까지 실패했을 때의 최종 안전장치) ──
