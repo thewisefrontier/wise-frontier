@@ -4,6 +4,7 @@ import os
 import json
 import hashlib
 import time
+import calendar
 import re
 import sys
 from urllib.parse import urlparse, urlunparse
@@ -30,6 +31,11 @@ TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 CHAT_ID = "@TheWiseFrontier"
 
 STATE_FILE = "data/state.json"
+
+# RSS 발행일 필터 — 이 일수를 초과한 기사는 수집하지 않음
+MAX_AGE_DAYS = float(os.getenv("MAX_ARTICLE_AGE_DAYS", "3"))
+# 소스당 1회 수집 상한 (발행일 필터 통과분 기준)
+MAX_ENTRIES_PER_SOURCE = int(os.getenv("MAX_ENTRIES_PER_SOURCE", "5"))
 
 # =========================
 # EMOJI MAP
@@ -672,8 +678,21 @@ def save_state():
 # RSS 수집 함수 (병렬 처리용)
 # =========================
 
+def entry_age_days(entry):
+    """RSS 항목의 발행 경과일수 반환. 날짜 필드가 없으면 None."""
+    for key in ("published_parsed", "updated_parsed", "created_parsed"):
+        tt = entry.get(key)
+        if not tt:
+            continue
+        try:
+            return (time.time() - calendar.timegm(tt)) / 86400.0
+        except Exception:
+            continue
+    return None
+
+
 def fetch_source(s):
-    """단일 소스에서 최신 기사 수집"""
+    """단일 소스에서 최근 기사 다건 수집 (발행일 필터 적용)"""
     import socket
     name = s["name"]
     try:
@@ -682,15 +701,35 @@ def fetch_source(s):
         feed = feedparser.parse(s["url"], request_headers={"User-Agent": "Mozilla/5.0"})
         socket.setdefaulttimeout(old_timeout)
         if not feed.entries:
-            return None, name, "no_entries"
-        latest = feed.entries[0]
-        title = clean_text(latest.get("title", ""))
-        link  = normalize_url(latest.get("link", ""))
-        if not title or not link:
-            return None, name, "no_title_link"
-        return {"title": title, "link": link, "entry": latest, "source": s}, name, "ok"
+            return [], name, "no_entries"
+
+        items = []
+        too_old = 0
+        no_date = 0
+        # 상한의 4배까지만 훑음 (오래된 항목이 앞쪽에 몰린 피드 대비)
+        for entry in feed.entries[: MAX_ENTRIES_PER_SOURCE * 4]:
+            if len(items) >= MAX_ENTRIES_PER_SOURCE:
+                break
+            age = entry_age_days(entry)
+            if age is not None and age > MAX_AGE_DAYS:
+                too_old += 1
+                continue
+            if age is None:
+                no_date += 1
+            title = clean_text(entry.get("title", ""))
+            link  = normalize_url(entry.get("link", ""))
+            if not title or not link:
+                continue
+            items.append({"title": title, "link": link, "entry": entry, "source": s})
+
+        if not items:
+            # 전부 기간 초과인 경우는 소스 장애가 아니므로 별도 상태로 구분
+            return [], name, ("too_old" if too_old else "no_title_link")
+        if no_date:
+            print(f"[날짜없음] {name} — {no_date}건 (필터 미적용 통과)")
+        return items, name, "ok"
     except Exception as e:
-        return None, name, f"error: {e}"
+        return [], name, f"error: {e}"
 
 # =========================
 # MAIN
@@ -709,7 +748,11 @@ with ThreadPoolExecutor(max_workers=20) as executor:
         if name not in rss_health:
             rss_health[name] = {"ok": 0, "fail": 0, "status": "active"}
         if status == "ok" and data:
-            results.append(data)
+            results.extend(data)
+        elif status == "too_old":
+            # 발행일 초과로 수집 대상이 없는 정상 상태 — 소스 장애로 집계하지 않음
+            rss_health[name]["too_old"] = rss_health[name].get("too_old", 0) + 1
+            print(f"[SKIP] 발행일 초과 — {name}")
         else:
             rss_health[name]["fail"] += 1
 
