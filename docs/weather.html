@@ -227,6 +227,9 @@
   updateTime();
   setInterval(updateTime, 60000);
 
+  const SUPABASE_URL = 'https://fotdngseksqaghvtcvqh.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_rT3kSEAAdM0DJlDW5fEWww_M37h6dDW';
+
   let allWeather = [];
   let currentFilter = 'all';
 
@@ -288,28 +291,34 @@
 
   async function loadWeather() {
     try {
-      const res = await fetch('data/articles.json');
-      if (!res.ok) throw new Error();
-      const raw = await res.json();
-      const weatherAll = raw.filter(a => a.category === '날씨');
+      const params = new URLSearchParams();
+      params.set('select', 'id,title_ko,title_en,country,created_at');
+      params.set('category', 'eq.날씨');
+      params.set('is_published', 'eq.true');
+      params.set('order', 'created_at.desc');
+      params.set('limit', '1000');
 
-      // 국가/그룹별 최신 1건만
-      const byCountry = {};
-      weatherAll.forEach(a => {
-        const c = a.country || '기타';
-        if (!byCountry[c] || (a.created_at || '') > (byCountry[c].created_at || '')) {
-          byCountry[c] = a;
-        }
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/articles?${params.toString()}`, {
+        headers: { 'apikey': SUPABASE_ANON_KEY }
       });
-      allWeather = Object.values(byCountry);
+      if (!res.ok) throw new Error();
+      allWeather = await res.json();
 
       renderFilters();
       renderWeather();
-
-      // 브리핑 위젯: 오늘 뉴스파이널 자체 기사
-      renderBriefing(raw.filter(a => a.category !== '날씨'));
     } catch (e) {
       document.getElementById('weather-container').innerHTML = '<div class="empty">날씨 데이터를 불러올 수 없습니다.</div>';
+    }
+  }
+
+  async function loadBriefing() {
+    try {
+      const res = await fetch('data/articles.json');
+      if (!res.ok) throw new Error();
+      const raw = await res.json();
+      renderBriefing(raw.filter(a => a.category !== '날씨'));
+    } catch (e) {
+      document.getElementById('briefing-widget').innerHTML = '<div class="empty">데이터를 불러올 수 없습니다</div>';
     }
   }
 
@@ -342,8 +351,6 @@
   async function loadCalendarWidget() {
     const container = document.getElementById('calendar-widget');
     try {
-      const SUPABASE_URL = 'https://fotdngseksqaghvtcvqh.supabase.co';
-      const SUPABASE_ANON_KEY = 'sb_publishable_rT3kSEAAdM0DJlDW5fEWww_M37h6dDW';
       const now = nowKST();
       const today = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
       const res = await fetch(
@@ -389,6 +396,7 @@
 
   loadMarketData();
   loadWeather();
+  loadBriefing();
   loadCalendarWidget();
 </script>
 </body>
