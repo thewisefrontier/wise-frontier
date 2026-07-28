@@ -1,32 +1,32 @@
 {
-  "updated_at": "2026-07-29 00:46",
+  "updated_at": "2026-07-29 00:47",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7444.98,
+      "price": 7446.64,
       "change_pct": 0.45,
       "up": true
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 24952.96,
-      "change_pct": -0.09,
-      "up": false
+      "price": 24961.55,
+      "change_pct": 0.12,
+      "up": true
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 52836.36,
-      "change_pct": 1.71,
+      "price": 52847.93,
+      "change_pct": 1.22,
       "up": true
     },
     {
       "name": "코스피",
       "symbol": "^KS11",
       "price": 6023.66,
-      "change_pct": -9.97,
+      "change_pct": -10.84,
       "up": false
     },
     {
@@ -89,7 +89,7 @@
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
       "price": 16.66,
-      "change_pct": -0.31,
+      "change_pct": -0.27,
       "up": false
     }
   ],
@@ -98,22 +98,22 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7444.98,
+        "price": 7446.64,
         "change_pct": 0.45,
         "up": true
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 24952.96,
-        "change_pct": -0.09,
-        "up": false
+        "price": 24961.55,
+        "change_pct": 0.12,
+        "up": true
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 52836.36,
-        "change_pct": 1.71,
+        "price": 52847.93,
+        "change_pct": 1.22,
         "up": true
       }
     ],
@@ -122,7 +122,7 @@
         "name": "코스피",
         "symbol": "^KS11",
         "price": 6023.66,
-        "change_pct": -9.97,
+        "change_pct": -10.84,
         "up": false
       },
       {
@@ -189,7 +189,7 @@
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
         "price": 16.66,
-        "change_pct": -0.31,
+        "change_pct": -0.27,
         "up": false
       }
     ]
@@ -212,8 +212,8 @@
     "XOM": {
       "name": "Exxon Mobil Corporation",
       "symbol": "XOM",
-      "price": 153.09,
-      "change_pct": -2.45,
+      "price": 153.06,
+      "change_pct": -2.48,
       "up": false
     },
     "FDH": {
