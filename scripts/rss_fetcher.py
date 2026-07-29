@@ -626,9 +626,27 @@ SOFT_NOISE_KEYWORDS = [
     "federal reserve", "us federal", "fed rate",
 ]
 
+def _compile_keywords(words):
+    """키워드 목록을 단어경계 정규식으로 컴파일.
+
+    단순 `in` 부분일치는 다른 단어 속에 묻힌 키워드까지 잡아 심각한 오탐을 낳았다.
+    실측(2026-07-29): "actor"가 f[actor]ies·re[actor]s에 걸려 나이지리아 섬유공장,
+    모로코 배터리 기가팩토리, MIT 원자로 기사가 전부 차단되고 있었다.
+    → 앞뒤 단어경계를 강제하고 단순 복수형(-s)만 허용한다.
+      "factories"는 안 걸리고 "films"는 걸린다.
+      단, "churches"처럼 -es 복수는 매칭되지 않으니 필요하면 목록에 따로 넣을 것.
+    """
+    return re.compile(
+        r"\b(?:" + "|".join(re.escape(w) for w in words) + r")s?\b",
+        re.IGNORECASE,
+    )
+
+
+_NOISE_RE = _compile_keywords(NOISE_KEYWORDS)
+
+
 def is_noise(title: str) -> bool:
-    t = title.lower()
-    return any(n in t for n in NOISE_KEYWORDS)
+    return bool(_NOISE_RE.search(title or ""))
 
 # 관찰용(2026-07-29~) — 원래 하드 차단이던 문화·사회 키워드를 임시로 여기로 옮겼다.
 # 목적: 하드 차단은 DB에 흔적이 안 남아 "무엇을 버려왔는지" 측정이 불가능했다.
@@ -638,20 +656,28 @@ def is_noise(title: str) -> bool:
 # 판단이 끝나면 이 목록은 비우고, 남길 것만 NOISE_KEYWORDS로 되돌린다.
 OBSERVE_KEYWORDS = [
     # 연예/문화
-    "celebrity", "music", "wedding", "entertainment", "fashion", "movie",
-    "film", "actor", "actress", "singer", "concert", "album",
+    # ⚠️ 제거됨(2026-07-29 관찰 1일차): "actor" "film" "movie" "palace"
+    #   - "actor" → f[actor]ies / re[actor]s 오염. 제조업·원자력 기사가 통째로 차단됨
+    #   - "film"  → [film]ed 오염 (범죄 촬영 사건기사)
+    #   - "palace" → 필리핀 대통령궁(Malacanang Palace) 등 정치 기사 오염
+    #   - "movie" → 영화 사칭 피싱 등 보안 기사 오염
+    #   단어경계 매칭 도입으로 actor/film은 완화되나, 실익 대비 오탐이 커 제거 유지.
+    "celebrity", "music", "wedding", "entertainment", "fashion",
+    "actress", "singer", "concert", "album",
     # 문화유산/종교/왕실
     # ※ "royal"은 Royal Dutch Shell 등 기업명에도 걸린다 — 해제 판단 시 확인할 것
-    "palace", "museum", "royal", "heritage site", "archaeological",
+    "museum", "royal", "heritage site", "archaeological",
     "church", "pastor", "bishop", "prayer", "sermon",
     "festival", "leisure",
 ]
 
 
+_SOFT_NOISE_RE = _compile_keywords(SOFT_NOISE_KEYWORDS + OBSERVE_KEYWORDS)
+
+
 def is_soft_noise(title: str) -> bool:
     """수집은 하되 텔레그램/홈페이지 발송 안 할 기사"""
-    t = title.lower()
-    return any(n in t for n in SOFT_NOISE_KEYWORDS) or any(n in t for n in OBSERVE_KEYWORDS)
+    return bool(_SOFT_NOISE_RE.search(title or ""))
 
 # =========================
 # TELEGRAM
