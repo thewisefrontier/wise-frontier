@@ -503,12 +503,31 @@ LEAD_TITLE_MIN = 44    # 제목 token_sort_ratio 최소
 LEAD_SIM_MIN = 40      # 본문 리드 300자 token_sort_ratio 최소
 LEAD_JAC_MIN = 0.12    # 본문 리드 키워드 Jaccard 최소
 
+# 3차 경로(제목 게이트 없음): 한글 음차 vs 영문 원문처럼 제목이 전혀 안 겹치는
+# 동일 사건 탐지용. 제목 게이트를 빼는 대신 시간창을 좁히고 리드 임계를 올린다.
+# 임계 근거: 2026-07-15~29 트렌드 기사 414건 전수 페어 실측(2026-07-29)
+#   리드>=47 & Jac>=0.20 만 적용 시 신규탐지 31쌍(주간 종합형 오탐 다수)
+#   + 시간차 <=6h 조건 추가 시 신규탐지 2쌍, 둘 다 실제 중복(오탐 0)
+LEAD2_SIM_MIN = 47     # 본문 리드 token_sort_ratio 최소
+LEAD2_JAC_MIN = 0.20   # 본문 리드 키워드 Jaccard 최소
+LEAD2_MAX_HOURS = 6    # 기존 기사와의 최대 시간차(시간)
+
 
 def _title_keywords(t: str) -> set:
     """제목에서 의미 키워드 추출(2자 이상 토큰, 불용어 제외)."""
     import re
     toks = re.findall(r"[가-힣A-Za-z0-9]+", (t or "").lower())
     return {w for w in toks if len(w) >= 2 and w not in FREQ_STOPWORDS}
+
+
+def _hours_since(created_at: str) -> float:
+    """created_at(16자 KST 텍스트 'YYYY-MM-DD HH:MM') 기준 경과 시간(시간).
+    파싱 실패 시 무한대를 반환해 시간창 조건을 통과하지 못하게 한다."""
+    try:
+        dt = datetime.strptime((created_at or "")[:16], "%Y-%m-%d %H:%M")
+        return abs((now_kst().replace(tzinfo=None) - dt).total_seconds()) / 3600.0
+    except Exception:
+        return float("inf")
 
 
 def _lead_metrics(a: str, b: str, n: int = 300):
@@ -534,7 +553,7 @@ def find_similar_trend(title: str, country: str | None = None,
     from rapidfuzz import fuzz
     since = (now_kst() - timedelta(days=days)).strftime("%Y-%m-%d %H:%M")
     params = {
-        "select": "id,title_ko,summary_ko,update_log,country",
+        "select": "id,title_ko,summary_ko,update_log,country,created_at",
         "source": "eq.NewsFinal",
         "or": "(subcategory.like.trend_*,subcategory.like.realtrend_*,subcategory.like.extrend_*)",
         "created_at": f"gte.{since}",
@@ -568,6 +587,15 @@ def find_similar_trend(title: str, country: str | None = None,
                     print(f"    → 유사 트렌드 루트 발견[본문리드] (id={a['id']}, "
                           f"제목 {sim:.0f}% / 리드 {lead_sim:.0f}% / Jac {lead_jac:.2f}): {existing_title[:40]}")
                     return a
+            # 3차 경로: 제목 표기 체계가 달라(한글 음차 vs 영문 원문) 제목 유사도가
+            # 바닥인 동일 사건 탐지. 제목 게이트 없이 시간창 6h + 높은 리드 임계로 방어.
+            if country and body and len(shared) >= 1 and sim < LEAD_TITLE_MIN:
+                if _hours_since(a.get("created_at")) <= LEAD2_MAX_HOURS:
+                    lead_sim, lead_jac = _lead_metrics(body, a.get("summary_ko") or "")
+                    if lead_sim >= LEAD2_SIM_MIN and lead_jac >= LEAD2_JAC_MIN:
+                        print(f"    → 유사 트렌드 루트 발견[표기불일치] (id={a['id']}, "
+                              f"제목 {sim:.0f}% / 리드 {lead_sim:.0f}% / Jac {lead_jac:.2f}): {existing_title[:40]}")
+                        return a
     except Exception as e:
         print(f"    → 유사도 체크 실패: {e}")
     return None
@@ -749,6 +777,8 @@ def run_trend_tracker():
 - 마크다운 문법, 헤더, 홍보 문구 금지.
 - 모든 문장을 "-다"로 종결하세요(예: "발표했다", "밝혔다", "나타났다"). "-습니다", "-입니다", "-됩니다" 같은 정중체(합쇼체)는 절대 쓰지 마세요. 단, 인용문 안의 발언 자체(따옴표로 감싼 발언)는 예외로 원문 어투를 유지할 수 있습니다.
 - 기사 문체로 작성하세요. "~를 보여줍니다", "~을 도모하고 있습니다", "~라는 평가다", "~지켜볼 필요가 있습니다" 같은 논평/칼럼 문체는 금지입니다.
+- 인명·기업명·기관명·지명 등 고유명사는 반드시 한글로 음차해 표기하세요(예: Zedcrest Group → 제드크레스트 그룹, Leatherback → 레더백). 영문 원문을 그대로 쓰지 마세요. 첫 등장 시에만 괄호로 원문을 병기할 수 있습니다(예: 제드크레스트 그룹(Zedcrest Group)).
+- 단, 다음 두 가지는 음차하지 말고 원문 그대로 쓰세요: ① 영문+숫자로 된 코드·규격·모델명(H-1B, 5G, F-35, GPT-5, 통화코드 등) ② 한국 기업 그룹명 약칭(SK, LG, GS, KT, CJ, DL, HD 등).
 - 한국어로만 작성하세요.
 
 아래 형식으로 출력:
@@ -956,25 +986,49 @@ def detect_surging_keywords(now_articles: list, prev_articles: list) -> list:
     return surging
 
 
+def _topic_tokens(t: str) -> set:
+    """토픽 문자열에서 식별력 있는 토큰 추출(2자 이상, 불용어 제외).
+    subcategory에는 토픽 원형(영문/한글)이 그대로 저장되므로 표기 불일치에 강함."""
+    import re
+    toks = re.findall(r"[가-힣A-Za-z0-9]+", (t or "").lower())
+    return {w for w in toks if len(w) >= 2 and w not in FREQ_STOPWORDS}
+
+
 def realtime_trend_article_exists(keyword: str) -> bool:
-    """최근 N시간 내 같은 키워드로 생성된 실시간 트렌드 기사가 있는지 확인"""
+    """최근 N시간 내 같은 토픽으로 생성된 실시간 트렌드 기사가 있는지 확인.
+
+    기존엔 title_ko ilike '*keyword*' 만 검사해, 영문 토픽 vs 한글 음차 제목이면
+    전혀 매칭되지 않아 중복 생성을 허용했다(실사고: Zedcrest/제드크레스트).
+    subcategory(=realtrend_{topic[:20]})에는 토픽 원형이 남으므로 이를 함께 대조한다.
+    """
     since = (now_kst() - timedelta(hours=RT_CHECK_HOURS)).strftime("%Y-%m-%d %H:%M")
+    kw_tokens = _topic_tokens(keyword)
+    if not kw_tokens:
+        return False
     try:
         res = requests.get(
             _sb_url(),
             headers=_sb_headers(),
             params={
-                "select": "id",
+                "select": "id,title_ko,subcategory",
                 "source": "eq.NewsFinal",
                 "subcategory": "like.realtrend_%",
-                "title_ko": f"ilike.*{keyword[:10]}*",
                 "created_at": f"gte.{since}",
-                "limit": "1",
+                "limit": "100",
             },
             timeout=10
         )
-        if res.status_code in (200, 206):
-            return len(res.json()) > 0
+        if res.status_code not in (200, 206):
+            return False
+        for a in res.json():
+            sub = (a.get("subcategory") or "")
+            if sub.startswith("realtrend_"):
+                sub = sub[len("realtrend_"):]
+            existing = _topic_tokens(sub) | _topic_tokens(a.get("title_ko") or "")
+            if kw_tokens & existing:
+                print(f"    → 최근 {RT_CHECK_HOURS}h 내 동일 토픽 기사 존재 "
+                      f"(id={a.get('id')}, 공유토큰 {sorted(kw_tokens & existing)[:3]})")
+                return True
     except Exception:
         pass
     return False
@@ -1163,6 +1217,8 @@ JSON 배열로만 응답하세요 (마크다운 없이):
 - 마크다운 문법, 헤더, 홍보 문구 금지.
 - 모든 문장을 "-다"로 종결하세요(예: "발표했다", "밝혔다", "나타났다"). "-습니다", "-입니다", "-됩니다" 같은 정중체(합쇼체)는 절대 쓰지 마세요. 단, 인용문 안의 발언 자체(따옴표로 감싼 발언)는 예외로 원문 어투를 유지할 수 있습니다.
 - 기사 문체로 작성하세요. "~를 보여줍니다", "~을 도모하고 있습니다", "~라는 평가다" 같은 논평/칼럼 문체는 금지입니다.
+- 인명·기업명·기관명·지명 등 고유명사는 반드시 한글로 음차해 표기하세요(예: Zedcrest Group → 제드크레스트 그룹, Leatherback → 레더백). 영문 원문을 그대로 쓰지 마세요. 첫 등장 시에만 괄호로 원문을 병기할 수 있습니다(예: 제드크레스트 그룹(Zedcrest Group)).
+- 단, 다음 두 가지는 음차하지 말고 원문 그대로 쓰세요: ① 영문+숫자로 된 코드·규격·모델명(H-1B, 5G, F-35, GPT-5, 통화코드 등) ② 한국 기업 그룹명 약칭(SK, LG, GS, KT, CJ, DL, HD 등).
 
 아래 형식으로 출력:
 제목: (핵심을 담은 제목)
@@ -1419,6 +1475,8 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
 - 마크다운 문법, 헤더, 홍보 문구 금지.
 - 모든 문장을 "-다"로 종결하세요(예: "발표했다", "밝혔다", "나타났다"). "-습니다", "-입니다", "-됩니다" 같은 정중체(합쇼체)는 절대 쓰지 마세요. 단, 인용문 안의 발언 자체(따옴표로 감싼 발언)는 예외로 원문 어투를 유지할 수 있습니다.
 - 기사 문체로 작성하세요. "~를 보여줍니다", "~을 도모하고 있습니다", "~라는 평가다" 같은 논평/칼럼 문체는 금지입니다.
+- 인명·기업명·기관명·지명 등 고유명사는 반드시 한글로 음차해 표기하세요(예: Zedcrest Group → 제드크레스트 그룹, Leatherback → 레더백). 영문 원문을 그대로 쓰지 마세요. 첫 등장 시에만 괄호로 원문을 병기할 수 있습니다(예: 제드크레스트 그룹(Zedcrest Group)).
+- 단, 다음 두 가지는 음차하지 말고 원문 그대로 쓰세요: ① 영문+숫자로 된 코드·규격·모델명(H-1B, 5G, F-35, GPT-5, 통화코드 등) ② 한국 기업 그룹명 약칭(SK, LG, GS, KT, CJ, DL, HD 등).
 - 한국어로만 작성하세요.
 
 아래 형식으로 출력:
