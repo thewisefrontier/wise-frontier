@@ -1186,8 +1186,16 @@
     }
   }
 
+  function applyUrlRegion() {
+    const r = new URLSearchParams(location.search).get('region');
+    if (!r) return;
+    const el = Array.from(document.querySelectorAll('#region-menu a'))
+      .find(a => a.textContent.trim() === r);
+    if (el) setRegion(r, el, r);
+  }
+
   loadMarketData();
-  loadArticles();
+  loadArticles().then(applyUrlRegion);
   loadCalendarWidget();
 </script>
 </body>
