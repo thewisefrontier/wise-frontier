@@ -1801,6 +1801,10 @@ def run():
                 if final_category == "글로벌":
                     final_region = "global"
 
+                # published 기본값. 아래 조건들이 하나도 걸리지 않는 정상 경로에서
+                # 미정의 상태가 되어 UnboundLocalError가 나던 버그를 막는다.
+                published = True
+
                 needs_review = any(a.get("__needs_review__") for a in cluster)
                 if needs_review:
                     published = False
