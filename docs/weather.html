@@ -26,9 +26,9 @@
       --accent: #8b5e2a; --accent2: #1a5fa8; --red: #c0392b; --green: #1a7a3c;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-size: 14px; line-height: 1.6; }
+    body { background: var(--bg2); color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-size: 14px; line-height: 1.6; }
 
-    header { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 0 24px; }
+    header { background: var(--bg2); padding: 0 24px; }
     .header-top {
       display: flex; justify-content: space-between; align-items: center;
       border-bottom: 1px solid var(--border); font-family: 'IBM Plex Mono', monospace;
@@ -117,7 +117,7 @@
 
     /* 메인과 동일한 레이아웃 */
     .container {
-      max-width: 1400px; margin: 0 auto; padding: 24px;
+      max-width: 1448px; margin: 0 auto; padding: 24px 48px;
       display: grid; grid-template-columns: 1fr 300px; gap: 24px;
     }
 
@@ -216,7 +216,7 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     .empty { padding: 30px; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); }
 
-    footer { border-top: 2px solid var(--text); background: var(--bg2); padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 40px; }
+    footer { border-top: 2px solid var(--text); background: var(--bg2); padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); margin: 40px 24px 0; }
 
     @media (max-width: 1024px) {
       .container { grid-template-columns: 1fr 260px; }
@@ -232,11 +232,11 @@
       .header-top { padding: 6px 16px; }
       .ticker-strip { gap: 12px; }
       header { padding: 0 16px; }
-      .container { padding: 0; }
+      .container { padding: 0 16px; }
       .main-feed { padding: 0; }
       .feed-header { padding: 10px 14px; }
       .filter-tabs { padding: 0 14px; }
-      footer { flex-direction: column; gap: 8px; text-align: center; padding: 16px; }
+      footer { flex-direction: column; gap: 8px; text-align: center; padding: 16px; margin: 40px 16px 0; }
       .sector-dropdown { flex: 0 0 auto; }
       .sector-btn { display: flex; }
       .nav-sector {
@@ -256,6 +256,8 @@
       .article-card { padding: 12px 14px; }
       .article-title { font-size: 13px; }
       header { padding: 0 12px; }
+      .container { padding: 0 12px; }
+      footer { margin: 40px 12px 0; }
       .header-top { padding: 5px 12px; }
     }
   </style>
