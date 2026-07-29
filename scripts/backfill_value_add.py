@@ -39,8 +39,8 @@ GEMINI_API_KEYS = [k for k in [
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 
-BATCH_SIZE = 60      # 1회 실행당 처리 건수 (API 부하·실행시간 고려)
-CALL_INTERVAL = 2    # 호출 간 대기(초)
+BATCH_SIZE = 200     # 1회 실행당 처리 건수 (Actions 스케줄 스킵 보완용 상향, 2026-07-30)
+CALL_INTERVAL = 1    # 호출 간 대기(초)
 MAX_BODY_CHARS = 3000  # 본문이 너무 길면 토큰 절약을 위해 앞부분만 사용
 
 KST = timezone(timedelta(hours=9))
