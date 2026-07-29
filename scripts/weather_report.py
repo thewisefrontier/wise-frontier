@@ -34,6 +34,14 @@ def now_kst() -> datetime:
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 PIXABAY_API_KEY = os.getenv("PIXABAY_API_KEY", "")
+
+# Pixabay largeImageURL은 약 24시간짜리 임시 URL이라 그대로 저장하면 이미지가 사라진다.
+# 받아서 R2에 영구 저장한 뒤 그 URL을 쓴다. (scripts/image_store.py)
+try:
+    from image_store import store_image
+except Exception:  # 모듈 없거나 import 실패해도 날씨 발행 자체는 계속돼야 한다
+    def store_image(src_url, key_hint="", timeout=30):
+        return src_url
 KMA_API_KEY = os.getenv("KMA_API_KEY", "")
 KMA_BRIEFING_KEY = os.getenv("KMA_BRIEFING_KEY", "")
 
@@ -850,7 +858,10 @@ def fetch_country_image(country_name: str) -> str:
             hits = res.json().get("hits", [])
             for hit in hits:
                 if _is_image_suitable(hit, country_en):
-                    image_url = hit.get("largeImageURL", "")
+                    raw_url = hit.get("largeImageURL", "")
+                    if raw_url:
+                        # 임시 URL → R2 영구 URL. 실패 시 원본을 그대로 돌려받는다.
+                        image_url = store_image(raw_url, key_hint=f"weather_{country_en}")
                     break
             if not image_url:
                 print(f"  ⚠️ {country_name}: 적합한 이미지 없음 — 이미지 없이 발행")

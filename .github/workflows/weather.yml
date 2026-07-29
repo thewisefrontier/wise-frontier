@@ -34,6 +34,8 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
+          UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
           KMA_API_KEY: ${{ secrets.KMA_API_KEY }}
           KMA_BRIEFING_KEY: ${{ secrets.KMA_BRIEFING_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}

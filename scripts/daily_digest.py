@@ -30,6 +30,14 @@ SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 PIXABAY_API_KEY = os.getenv("PIXABAY_API_KEY", "")
 
+# Pixabay largeImageURL은 약 24시간짜리 임시 URL이라 그대로 저장하면 이미지가 사라진다.
+# 받아서 R2에 영구 저장한 뒤 그 URL을 쓴다. (scripts/image_store.py)
+try:
+    from image_store import store_image
+except Exception:  # 모듈 없거나 import 실패해도 다이제스트 발행 자체는 계속돼야 한다
+    def store_image(src_url, key_hint="", timeout=30):
+        return src_url
+
 GEMINI_API_KEYS = [k for k in [
     os.getenv("GEMINI_API_KEY"),
     os.getenv("GEMINI_API_KEY_2"),
@@ -305,7 +313,14 @@ def fetch_article_image(title: str, body: str) -> str:
         if res.status_code == 200:
             hits = res.json().get("hits", [])
             if hits:
-                return hits[0].get("largeImageURL", "")
+                raw_url = hits[0].get("largeImageURL", "")
+                if raw_url:
+                    # 임시 URL → R2 영구 URL. 실패 시 원본을 그대로 돌려받는다.
+                    return store_image(
+                        raw_url,
+                        key_hint=f"digest_{now_kst().strftime('%Y%m%d')}",
+                    )
+                return ""
         else:
             print(f"  ⚠️ Pixabay {res.status_code}: {res.text[:100]}")
     except Exception as e:
