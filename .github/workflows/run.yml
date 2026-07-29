@@ -2,7 +2,11 @@ name: NewsFinal - Auto Run
 
 on:
   schedule:
-    - cron: '0 * * * *'   # 1시간마다
+    # 매시 47분. 정각(0분)은 전 세계 저장소가 몰려 GitHub이 예약 실행을
+    # 지연·누락시키는 구간이라 옮김(2026-07-29: 14개 시간대 중 8회만 실행,
+    # 08:27~12:21 4시간 공백 실측). 다른 워크플로우와도 분 단위로 분리:
+    #   :10/:40 backfill, :20 weather, :30 oil_price → :47 사용
+    - cron: '47 * * * *'   # 1시간마다
   workflow_dispatch:
 
 permissions:
