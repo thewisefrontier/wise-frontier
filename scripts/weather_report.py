@@ -849,20 +849,30 @@ def fetch_country_image(country_name: str) -> str:
                 "safesearch": "true",
                 "orientation": "horizontal",
                 "min_width": 640,
-                "per_page": 10,
+                "per_page": 30,
             },
             timeout=15,
         )
         image_url = ""
         if res.status_code == 200:
             hits = res.json().get("hits", [])
-            for hit in hits:
-                if _is_image_suitable(hit, country_en):
-                    raw_url = hit.get("largeImageURL", "")
-                    if raw_url:
-                        # 임시 URL → R2 영구 URL. 실패 시 원본을 그대로 돌려받는다.
-                        image_url = store_image(raw_url, key_hint=f"weather_{country_en}")
-                    break
+            # 적합한 후보를 모두 모은 뒤 날짜 기반으로 회전 선택한다.
+            # (첫 hit 고정 선택 시 매일 같은 사진이 반복되는 문제 방지)
+            candidates = [
+                h.get("largeImageURL", "")
+                for h in hits
+                if _is_image_suitable(h, country_en) and h.get("largeImageURL")
+            ]
+            if candidates:
+                today = now_kst()
+                idx = (today.toordinal() + len(country_en)) % len(candidates)
+                raw_url = candidates[idx]
+                # 임시 URL → R2 영구 URL. 실패 시 원본을 그대로 돌려받는다.
+                # 키에 날짜를 포함해야 어제 기사 이미지를 덮어쓰지 않는다.
+                image_url = store_image(
+                    raw_url,
+                    key_hint=f"weather_{country_en}_{today.strftime('%Y%m%d')}",
+                )
             if not image_url:
                 print(f"  ⚠️ {country_name}: 적합한 이미지 없음 — 이미지 없이 발행")
         else:
