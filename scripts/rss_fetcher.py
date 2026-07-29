@@ -609,7 +609,14 @@ NOISE_KEYWORDS = [
     "lottery", "powerball", "lotto", "flag day", "national anthem",
     "palace", "museum", "zapping", "podcast", "5 ways", "how to celebrate",
     "royal", "heritage site", "archaeological", "co-owner", "ownership stake",
-    "church", "pastor", "bishop", "prayer", "sermon", "national sound"
+    "church", "pastor", "bishop", "prayer", "sermon", "national sound",
+    # 일일 시세표 — 매일 같은 형태로 반복 생성되는 저가치 콘텐츠.
+    # ⚠️ "gold" / "gold price" 처럼 넓게 잡으면 금 산업·시장 분석 기사까지
+    #    날아간다(Mining.com "Goldman cuts gold price forecast",
+    #    Joy Business Ghana "export earnings hit $11.1bn on surging gold prices" 등).
+    #    시세표 제목에만 나타나는 표현으로 좁힐 것.
+    "per tola", "check opening rates", "check new rates",
+    "opening rates on", "currency exchange rates in",
 ]
 
 # 소프트 노이즈 — 수집은 하되 텔레그램/홈페이지 발송 안 함
