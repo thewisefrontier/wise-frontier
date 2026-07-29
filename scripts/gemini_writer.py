@@ -1526,16 +1526,19 @@ def get_stale_live_articles() -> list:
         res = requests.get(
             _sb_url(),
             headers=_sb_headers(),
-            params={
-                "select": "id,title_ko,summary_ko,country,category,score",
-                "source": "eq.NewsFinal",
-                "is_published": "eq.true",
-                "score": "eq.1",
-                "created_at": f"gte.{since}",
-                "created_at": f"lte.{not_after}",
-                "order": "created_at.desc",
-                "limit": "20",
-            },
+            # dict를 쓰면 같은 키("created_at")가 뒤엣것으로 덮어써져 48시간 하한이
+            # 통째로 사라진다. 튜플 리스트로 보내야 PostgREST가 두 조건을 AND로 묶는다.
+            # select에 subcategory를 포함해야 아래 digest_ 필터가 실제로 동작한다.
+            params=[
+                ("select", "id,title_ko,summary_ko,country,category,score,subcategory"),
+                ("source", "eq.NewsFinal"),
+                ("is_published", "eq.true"),
+                ("score", "eq.1"),
+                ("created_at", f"gte.{since}"),
+                ("created_at", f"lte.{not_after}"),
+                ("order", "created_at.desc"),
+                ("limit", "20"),
+            ],
             timeout=15
         )
         if res.status_code in (200, 206):
