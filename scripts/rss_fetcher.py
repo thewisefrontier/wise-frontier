@@ -599,17 +599,16 @@ NOISE_KEYWORDS = [
     "golf", "athletics", "olympics", "match", "league", "tournament",
     "coach", "player", "transfer", "goal", "squad", "fixture", "champion",
     "premier league", "champions league", "world cup", "cup final",
-    # 연예/문화
-    "celebrity", "music", "wedding", "entertainment", "fashion", "movie",
-    "film", "actor", "actress", "singer", "concert", "album",
+    # ※ 연예/문화 키워드는 OBSERVE_KEYWORDS(관찰용 소프트 노이즈)로 이관됨
     # 기타 노이즈
-    "e-edition", "edition", "travel", "tourism", "leisure", "sumo",
-    "festival", "horoscope", "obituary", "recipe", "weather forecast",
+    # "travel", "tourism" 제거(2026-07-29): 여행 정보 기능(is_travel/travel_guides)과
+    # 정면 충돌. 실제로 여행 기사 36건 중 영문 제목에 travel/tourism이 든 건 0건이었다.
+    "e-edition", "edition", "sumo",
+    "horoscope", "obituary", "recipe", "weather forecast",
     "eurovision", "beauty pageant", "miss world", "miss universe",
     "lottery", "powerball", "lotto", "flag day", "national anthem",
-    "palace", "museum", "zapping", "podcast", "5 ways", "how to celebrate",
-    "royal", "heritage site", "archaeological", "co-owner", "ownership stake",
-    "church", "pastor", "bishop", "prayer", "sermon", "national sound",
+    "zapping", "podcast", "5 ways", "how to celebrate",
+    "co-owner", "ownership stake", "national sound",
     # 일일 시세표 — 매일 같은 형태로 반복 생성되는 저가치 콘텐츠.
     # ⚠️ "gold" / "gold price" 처럼 넓게 잡으면 금 산업·시장 분석 기사까지
     #    날아간다(Mining.com "Goldman cuts gold price forecast",
@@ -631,10 +630,28 @@ def is_noise(title: str) -> bool:
     t = title.lower()
     return any(n in t for n in NOISE_KEYWORDS)
 
+# 관찰용(2026-07-29~) — 원래 하드 차단이던 문화·사회 키워드를 임시로 여기로 옮겼다.
+# 목적: 하드 차단은 DB에 흔적이 안 남아 "무엇을 버려왔는지" 측정이 불가능했다.
+# 소프트 노이즈는 수집·번역만 하고 발행은 안 하므로, 며칠 쌓아 실제 제목을 보고
+# 어떤 키워드를 영구 해제할지 판단한다.
+#   비용: 번역은 GoogleTranslator(무료), sent_telegram=0이라 기사 생성 단계 진입 안 함.
+# 판단이 끝나면 이 목록은 비우고, 남길 것만 NOISE_KEYWORDS로 되돌린다.
+OBSERVE_KEYWORDS = [
+    # 연예/문화
+    "celebrity", "music", "wedding", "entertainment", "fashion", "movie",
+    "film", "actor", "actress", "singer", "concert", "album",
+    # 문화유산/종교/왕실
+    # ※ "royal"은 Royal Dutch Shell 등 기업명에도 걸린다 — 해제 판단 시 확인할 것
+    "palace", "museum", "royal", "heritage site", "archaeological",
+    "church", "pastor", "bishop", "prayer", "sermon",
+    "festival", "leisure",
+]
+
+
 def is_soft_noise(title: str) -> bool:
     """수집은 하되 텔레그램/홈페이지 발송 안 할 기사"""
     t = title.lower()
-    return any(n in t for n in SOFT_NOISE_KEYWORDS)
+    return any(n in t for n in SOFT_NOISE_KEYWORDS) or any(n in t for n in OBSERVE_KEYWORDS)
 
 # =========================
 # TELEGRAM
