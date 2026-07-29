@@ -31,7 +31,7 @@
       --up: var(--red); --down: var(--accent2);
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-size: 14px; line-height: 1.6; }
+    body { background: var(--bg2); color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-size: 14px; line-height: 1.6; }
 
     header { background: var(--bg2); padding: 0 24px; }
     .header-top {
@@ -58,14 +58,49 @@
     .logo span { color: var(--accent); }
     .header-meta { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); text-align: right; }
 
-    nav.page-nav { display: flex; gap: 0; overflow-x: auto; background: var(--bg3); border-bottom: 1px solid var(--border); }
-    nav.page-nav a {
+    .nav-wrap { display: flex; align-items: stretch; border-bottom: 1px solid var(--border); background: var(--bg2); }
+    .region-dropdown { position: relative; flex-shrink: 0; }
+    .region-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 9px 14px; font-size: 12px; font-weight: 500; color: var(--muted);
+      font-family: 'IBM Plex Mono', monospace; background: var(--bg3);
+      border: none; border-right: 1px solid var(--border); cursor: pointer;
+      white-space: nowrap; height: 100%; transition: color 0.2s;
+    }
+    .region-btn:hover, .region-btn.active { color: var(--accent); }
+    .region-btn .arrow { font-size: 9px; transition: transform 0.2s; }
+    .region-btn.open .arrow { transform: rotate(180deg); }
+    .region-menu {
+      display: none; position: absolute; top: 100%; left: 0; z-index: 200;
+      background: var(--bg2); border: 1px solid var(--border); border-top: none;
+      min-width: 140px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    .region-menu.open { display: block; }
+    .region-menu a {
+      display: block; padding: 8px 14px; font-size: 12px; font-weight: 500;
+      color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--border);
+      white-space: nowrap; transition: color 0.2s, background 0.2s;
+    }
+    .region-menu a:last-child { border-bottom: none; }
+    .region-menu a:hover, .region-menu a.active { color: var(--accent); background: var(--bg3); }
+    .sector-dropdown { display: flex; flex: 1; position: relative; }
+    .sector-btn {
+      display: none; align-items: center; gap: 6px;
+      padding: 9px 14px; font-size: 12px; font-weight: 500; color: var(--muted);
+      font-family: 'IBM Plex Mono', monospace; background: var(--bg3);
+      border: none; border-right: 1px solid var(--border); cursor: pointer;
+      white-space: nowrap; transition: color 0.2s;
+    }
+    .sector-btn:hover, .sector-btn.active { color: var(--accent2); }
+    .sector-btn .arrow { font-size: 9px; transition: transform 0.2s; }
+    .sector-btn.open .arrow { transform: rotate(180deg); }
+    .nav-sector { background: var(--bg3); border-bottom: 1px solid var(--border); display: flex; flex: 1; overflow-x: auto; }
+    .nav-sector a {
       padding: 9px 14px; font-size: 12px; font-weight: 500; color: var(--muted);
       text-decoration: none; border-right: 1px solid var(--border); white-space: nowrap;
       transition: color 0.2s, background 0.2s;
     }
-    nav.page-nav a:first-child { border-left: 1px solid var(--border); }
-    nav.page-nav a:hover, nav.page-nav a.active { color: var(--accent2); background: var(--bg2); }
+    .nav-sector a:hover, .nav-sector a.active { color: var(--accent2); background: var(--bg2); }
 
     .page-container { max-width: 800px; margin: 0 auto; padding: 28px 24px 60px; }
     h1.page-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; margin-bottom: 6px; color: var(--text); }
@@ -123,6 +158,18 @@
     @media (max-width: 600px) {
       header { padding: 0 14px; }
       footer { margin: 0 14px; }
+      .sector-dropdown { flex: 0 0 auto; }
+      .sector-btn { display: flex; }
+      .nav-sector {
+        display: none; position: absolute; top: 100%; left: 0; z-index: 200;
+        min-width: 140px; flex-direction: column; overflow-x: visible;
+        background: var(--bg2); border: 1px solid var(--border); border-top: none;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      }
+      .nav-sector.open { display: flex; }
+      .nav-sector a { border-right: none; border-bottom: 1px solid var(--border); width: 100%; }
+      .nav-sector a { padding: 8px 10px; font-size: 11px; }
+      .region-btn, .sector-btn { padding: 8px 10px; font-size: 11px; }
       .header-top { margin: 0 -14px; padding: 8px 14px; }
       .logo { font-size: 24px; }
       .page-container { padding: 20px 16px 40px; }
@@ -181,22 +228,48 @@
     <a href="/" class="logo">News<span>Final</span></a>
     <div class="header-meta">프론티어 미디어</div>
   </div>
-  <nav class="page-nav">
-    <a href="/">홈</a>
-    <a href="/live.html">트렌드</a>
-    <a href="/?category=경제">경제</a>
-    <a href="/?category=금융">금융</a>
-    <a href="/?category=자원·에너지">자원·에너지</a>
-    <a href="/?category=산업·기업">산업·기업</a>
-    <a href="/?category=정치·외교">정치·외교</a>
-    <a href="/?category=사회">사회</a>
-    <a href="/?category=IT·과학">IT·과학</a>
-    <a href="/archive.html">아카이브</a>
-    <a href="/calendar.html">경제 일정</a>
-    <a href="/markets.html" class="active">마켓</a>
-    <a href="/country.html">국가별</a>
-    <a href="/weather.html">날씨</a>
-  </nav>
+  <div class="nav-wrap" id="nav-tabs">
+    <div class="region-dropdown" id="region-dropdown">
+      <button class="region-btn" id="region-btn" onclick="toggleRegionMenu()">
+        <span id="region-label">전체 지역</span>
+        <span class="arrow">▼</span>
+      </button>
+      <div class="region-menu" id="region-menu">
+      <a href="/">전체 지역</a>
+      <a href="/?region=아프리카">아프리카</a>
+      <a href="/?region=동남아시아">동남아시아</a>
+      <a href="/?region=동유럽">동유럽</a>
+      <a href="/?region=중동">중동</a>
+      <a href="/?region=중앙아시아">중앙아시아</a>
+      <a href="/?region=남아시아">남아시아</a>
+      <a href="/?region=카리브해">카리브해</a>
+      <a href="/?region=라틴아메리카">라틴아메리카</a>
+      <a href="/?region=오세아니아">오세아니아</a>
+      </div>
+    </div>
+    <div class="sector-dropdown" id="sector-dropdown">
+      <button class="sector-btn" id="sector-btn" onclick="toggleSectorMenu()">
+        <span>마켓</span>
+        <span class="arrow">▼</span>
+      </button>
+      <nav class="nav-sector" id="nav-sector">
+      <a href="/live.html" style="color:var(--accent2);font-weight:700;">트렌드</a>
+      <a href="/">전체</a>
+      <a href="/?category=경제">경제</a>
+      <a href="/?category=금융">금융</a>
+      <a href="/?category=자원·에너지">자원·에너지</a>
+      <a href="/?category=산업·기업">산업·기업</a>
+      <a href="/?category=정치·외교">정치·외교</a>
+      <a href="/?category=사회">사회</a>
+      <a href="/?category=IT·과학">IT·과학</a>
+      <a href="/archive.html">아카이브</a>
+      <a href="/calendar.html">경제 일정</a>
+      <a href="/markets.html" class="active">마켓</a>
+      <a href="/country.html">국가별</a>
+      <a href="/weather.html">날씨</a>
+      </nav>
+    </div>
+  </div>
 </header>
 
 <div class="page-container">
@@ -302,6 +375,27 @@
 </footer>
 
 <script>
+  function toggleRegionMenu() {
+    document.getElementById('region-menu').classList.toggle('open');
+    document.getElementById('region-btn').classList.toggle('open');
+  }
+  function toggleSectorMenu() {
+    document.getElementById('nav-sector').classList.toggle('open');
+    document.getElementById('sector-btn').classList.toggle('open');
+  }
+  document.addEventListener('click', e => {
+    const rd = document.getElementById('region-dropdown');
+    if (rd && !rd.contains(e.target)) {
+      document.getElementById('region-menu').classList.remove('open');
+      document.getElementById('region-btn').classList.remove('open');
+    }
+    const dd = document.getElementById('sector-dropdown');
+    if (dd && !dd.contains(e.target)) {
+      document.getElementById('nav-sector').classList.remove('open');
+      document.getElementById('sector-btn').classList.remove('open');
+    }
+  });
+
   function pad(n) { return String(n).padStart(2, '0'); }
   function nowKST() {
     return new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
