@@ -13,6 +13,18 @@ import time
 import requests
 from datetime import datetime, timedelta, timezone
 
+# 합쇼체 방어 — gemini_writer의 변환기를 재사용한다(패턴 A).
+# 이 스크립트에는 방어가 없어 백필된 summary_3lines/investment_idea에
+# "-습니다" 체가 그대로 쌓이고 있었다(2026-07-29 실측).
+try:
+    from gemini_writer import has_polite_ending, to_plain_style
+except Exception:  # import 실패해도 백필 자체는 계속돼야 한다
+    def has_polite_ending(t):
+        return False
+
+    def to_plain_style(t):
+        return t
+
 GEMINI_MODEL_PRIMARY = "gemini-3.5-flash-lite"
 GEMINI_MODEL_FALLBACK = "gemini-3.1-flash-lite"
 
@@ -174,6 +186,11 @@ def parse_response(text: str):
 
 
 def update_article(article_id: int, summary_3lines: str, investment_idea: str) -> bool:
+    # 저장 직전 최종 방어. 프롬프트가 지켜지지 않아도 DB에는 '-다' 체만 들어간다.
+    if has_polite_ending(summary_3lines) or has_polite_ending(investment_idea):
+        print(f"  🔧 id={article_id} 합쇼체 감지 → 자동 변환")
+        summary_3lines = to_plain_style(summary_3lines)
+        investment_idea = to_plain_style(investment_idea)
     try:
         res = requests.patch(
             f"{_sb_url()}?id=eq.{article_id}",
