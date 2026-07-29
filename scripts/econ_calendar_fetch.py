@@ -50,6 +50,10 @@ COUNTRY_ANNOUNCEMENT_META = {
     "필리핀":     {"event_time": "14:30", "timezone": "Asia/Manila",          "announcement_offset_hours": 0},
     "남아공":     {"event_time": "14:00", "timezone": "Africa/Johannesburg",  "announcement_offset_hours": 2},
     "이집트":     {"event_time": "13:00", "timezone": "Africa/Cairo",         "announcement_offset_hours": 0},
+    "미국":       {"event_time": "14:00", "timezone": "America/New_York",    "announcement_offset_hours": 1},
+    "유로존":     {"event_time": "14:15", "timezone": "Europe/Berlin",       "announcement_offset_hours": 1},
+    "일본":       {"event_time": "15:00", "timezone": "Asia/Tokyo",          "announcement_offset_hours": 1},
+    "영국":       {"event_time": "12:00", "timezone": "Europe/London",       "announcement_offset_hours": 0},
 }
 
 def _apply_announcement_meta(ev: dict) -> dict:
@@ -61,7 +65,8 @@ def _apply_announcement_meta(ev: dict) -> dict:
         ev["announcement_offset_hours"] = meta["announcement_offset_hours"]
     return ev
 
-# ── 크롤링 불가 기관 — 공식 확인된 연간 일정 (태국·필리핀·남아공·이집트·IMF·WB)
+# ── 크롤링 불가 기관 — 공식 확인된 연간 일정
+# (태국·필리핀·남아공·이집트 + 선진국 Fed·ECB·BOJ·BOE + IMF·WB)
 # ⚠️ 새해 초(1월)에 각국 공식 사이트 확인 후 업데이트
 # 형식: (날짜, 국가코드, 국기, 국가명, 제목, 설명, 출처URL)
 STATIC_EVENTS = [
@@ -84,6 +89,30 @@ STATIC_EVENTS = [
     ("2026-07-24", "🇪🇬", "이집트", "이집트 중앙은행(CBE) 통화정책위원회 금리결정", "2026년 CBE MPC 회의", "https://www.cbe.org.eg/en/monetary-policy", "high"),
     ("2026-09-25", "🇪🇬", "이집트", "이집트 중앙은행(CBE) 통화정책위원회 금리결정", "2026년 CBE MPC 회의", "https://www.cbe.org.eg/en/monetary-policy", "high"),
     ("2026-11-26", "🇪🇬", "이집트", "이집트 중앙은행(CBE) 통화정책위원회 금리결정", "2026년 CBE MPC 회의", "https://www.cbe.org.eg/en/monetary-policy", "high"),
+
+    # ── 미국 FOMC (출처: federalreserve.gov/monetarypolicy/fomccalendars.htm)
+    # 2일 회의 — event_date는 1일차, 성명 발표는 2일차 14:00 ET(offset=1)
+    ("2026-09-15", "🇺🇸", "미국", "미국 연방준비제도(Fed) FOMC 금리결정", "9월 15~16일 FOMC 정례회의. 경제전망요약(SEP)·점도표 포함.", "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm", "high"),
+    ("2026-10-27", "🇺🇸", "미국", "미국 연방준비제도(Fed) FOMC 금리결정", "10월 27~28일 FOMC 정례회의.", "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm", "high"),
+    ("2026-12-08", "🇺🇸", "미국", "미국 연방준비제도(Fed) FOMC 금리결정", "12월 8~9일 FOMC 정례회의. 경제전망요약(SEP)·점도표 포함.", "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm", "high"),
+
+    # ── 유로존 ECB 통화정책회의 (출처: ecb.europa.eu 공식 캘린더)
+    # 2일 회의 — event_date는 1일차, 결정 발표는 2일차 14:15 CET(offset=1)
+    ("2026-09-09", "🇪🇺", "유로존", "유럽중앙은행(ECB) 통화정책회의 금리결정", "9월 9~10일 정례 통화정책회의. 유로시스템 거시경제 전망 포함.", "https://www.ecb.europa.eu/press/calendars/mgcgc/html/index.en.html", "high"),
+    ("2026-10-28", "🇪🇺", "유로존", "유럽중앙은행(ECB) 통화정책회의 금리결정", "10월 28~29일 정례 통화정책회의.", "https://www.ecb.europa.eu/press/calendars/mgcgc/html/index.en.html", "high"),
+    ("2026-12-16", "🇪🇺", "유로존", "유럽중앙은행(ECB) 통화정책회의 금리결정", "12월 16~17일 정례 통화정책회의. 유로시스템 거시경제 전망 포함.", "https://www.ecb.europa.eu/press/calendars/mgcgc/html/index.en.html", "high"),
+
+    # ── 일본 BOJ 금융정책결정회의 (출처: boj.or.jp 2026년 개최일정)
+    # 2일 회의 — event_date는 1일차, 결정 발표는 2일차 오후(offset=1). 발표 시각 미고지라 15:00 기준
+    ("2026-09-17", "🇯🇵", "일본", "일본은행(BOJ) 금융정책결정회의 금리결정", "9월 17~18일 금융정책결정회의.", "https://www.boj.or.jp/en/mopo/mpmsche_minu/index.htm", "high"),
+    ("2026-10-29", "🇯🇵", "일본", "일본은행(BOJ) 금융정책결정회의 금리결정", "10월 29~30일 금융정책결정회의. 경제·물가정세 전망(전망 리포트) 포함.", "https://www.boj.or.jp/en/mopo/mpmsche_minu/index.htm", "high"),
+    ("2026-12-17", "🇯🇵", "일본", "일본은행(BOJ) 금융정책결정회의 금리결정", "12월 17~18일 금융정책결정회의.", "https://www.boj.or.jp/en/mopo/mpmsche_minu/index.htm", "high"),
+
+    # ── 영국 BOE 통화정책위원회 (출처: bankofengland.co.uk 2026 MPC dates)
+    # 발표일 당일 12:00 런던시간 공표(offset=0)
+    ("2026-09-17", "🇬🇧", "영국", "영국 영란은행(BOE) 통화정책위원회 금리결정", "9월 MPC 성명·의사록 공표.", "https://www.bankofengland.co.uk/monetary-policy/upcoming-mpc-dates", "high"),
+    ("2026-11-05", "🇬🇧", "영국", "영국 영란은행(BOE) 통화정책위원회 금리결정", "11월 MPC 성명·통화정책보고서(MPR) 동시 공표.", "https://www.bankofengland.co.uk/monetary-policy/upcoming-mpc-dates", "high"),
+    ("2026-12-17", "🇬🇧", "영국", "영국 영란은행(BOE) 통화정책위원회 금리결정", "12월 MPC 성명·의사록 공표.", "https://www.bankofengland.co.uk/monetary-policy/upcoming-mpc-dates", "high"),
 
     # ── IMF WEO (매년 4월·10월 고정)
     ("2026-10-01", "🌐", "글로벌", "IMF 세계경제전망(WEO) 가을 보고서 발표", "Annual Meetings 계기. 프론티어 마켓 성장률 전망 포함.", "https://www.imf.org/en/Publications/WEO", "high"),
