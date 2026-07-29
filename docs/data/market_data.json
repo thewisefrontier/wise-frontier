@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-29 12:51",
+  "updated_at": "2026-07-29 12:59",
   "indices": [
     {
       "name": "S&P 500",
@@ -25,8 +25,8 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 5527.24,
-      "change_pct": -18.18,
+      "price": 5531.56,
+      "change_pct": -18.12,
       "up": false
     },
     {
@@ -60,15 +60,15 @@
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 6066.71,
-      "change_pct": -1.04,
+      "price": 6062.65,
+      "change_pct": -1.11,
       "up": false
     },
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 6396.87,
-      "change_pct": 1.47,
+      "price": 6398.72,
+      "change_pct": 1.5,
       "up": true
     },
     {
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.73,
-      "change_pct": -0.3,
+      "price": 16.74,
+      "change_pct": -0.25,
       "up": false
     }
   ],
@@ -121,8 +121,8 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 5527.24,
-        "change_pct": -18.18,
+        "price": 5531.56,
+        "change_pct": -18.12,
         "up": false
       },
       {
@@ -158,15 +158,15 @@
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 6066.71,
-        "change_pct": -1.04,
+        "price": 6062.65,
+        "change_pct": -1.11,
         "up": false
       },
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 6396.87,
-        "change_pct": 1.47,
+        "price": 6398.72,
+        "change_pct": 1.5,
         "up": true
       }
     ],
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.73,
-        "change_pct": -0.3,
+        "price": 16.74,
+        "change_pct": -0.25,
         "up": false
       }
     ]
@@ -198,8 +198,8 @@
     "ANTM": {
       "name": "Aneka Tambang Tbk",
       "symbol": "ANTM.JK",
-      "price": 2830.0,
-      "change_pct": -2.08,
+      "price": 2810.0,
+      "change_pct": -2.77,
       "up": false
     },
     "ACB": {
