@@ -5,6 +5,10 @@ on:
     - cron: '10,40 * * * *'   # 매시 10분·40분 (run.yml 정각, weather.yml 20분과 겹치지 않게 오프셋)
   workflow_dispatch:
 
+concurrency:
+  group: backfill-value-add
+  cancel-in-progress: false
+
 jobs:
   backfill:
     runs-on: ubuntu-latest
