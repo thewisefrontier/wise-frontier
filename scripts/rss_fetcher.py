@@ -657,20 +657,25 @@ def is_noise(title: str) -> bool:
 #   비용: 번역은 GoogleTranslator(무료), sent_telegram=0이라 기사 생성 단계 진입 안 함.
 # 판단이 끝나면 이 목록은 비우고, 남길 것만 NOISE_KEYWORDS로 되돌린다.
 OBSERVE_KEYWORDS = [
-    # 연예/문화
     # ⚠️ 제거됨(2026-07-29 관찰 1일차): "actor" "film" "movie" "palace"
     #   - "actor" → f[actor]ies / re[actor]s 오염. 제조업·원자력 기사가 통째로 차단됨
     #   - "film"  → [film]ed 오염 (범죄 촬영 사건기사)
     #   - "palace" → 필리핀 대통령궁(Malacanang Palace) 등 정치 기사 오염
     #   - "movie" → 영화 사칭 피싱 등 보안 기사 오염
-    #   단어경계 매칭 도입으로 actor/film은 완화되나, 실익 대비 오탐이 커 제거 유지.
-    "celebrity", "music", "wedding", "entertainment", "fashion",
-    "actress", "singer", "concert", "album",
-    # 문화유산/종교/왕실
-    # ※ "royal"은 Royal Dutch Shell 등 기업명에도 걸린다 — 해제 판단 시 확인할 것
-    "museum", "royal", "heritage site", "archaeological",
-    "church", "pastor", "bishop", "prayer", "sermon",
-    "festival", "leisure",
+    #
+    # ⚠️ 영구 해제됨(2026-07-29 관찰 결과): 연예/문화 9개 + 문화유산/종교/왕실 11개
+    #   ("celebrity" "music" "wedding" "entertainment" "fashion" "actress"
+    #    "singer" "concert" "album" / "museum" "royal" "heritage site"
+    #    "archaeological" "church" "pastor" "bishop" "prayer" "sermon"
+    #    "festival" "leisure")
+    #   실측: 관찰 기사 중 이 그룹에 걸린 11건 가운데 5건이 일반 뉴스 오탐이었다.
+    #     - "festival" → 헝가리 축제 칼부림(사건사고), 홍콩 쇼핑페스티벌 아세안 확장(경제)
+    #     - "pastor"   → 목사 로맨스 사기(범죄)
+    #     - "concert"  → 퀸 1986 부다페스트 공연과 소련 블록(역사·정치)
+    #     - "heritage site" → 남수단 첫 유네스코 등재(국가 뉴스)
+    #   나머지 6건도 순수 문화 기사이나, 편집 방향상 프론티어 지역 사회·문화는
+    #   차별화 자산이라 차단 대상이 아니다(문화·예술 비중 1.4%로 오히려 부족).
+    #   → 되돌리지 말 것.
     # 스포츠에서 이관(2026-07-29) — 일반명사와 의미가 겹쳐 오탐 우려가 큰 것들.
     #   transfer → 기술이전·정권이양·송금
     #   goal     → 감축목표·생산목표
