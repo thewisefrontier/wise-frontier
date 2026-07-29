@@ -1200,6 +1200,22 @@
     "updated_at": "2026-07-19 01:21"
   },
   {
+    "id": "hindustan_univerell",
+    "name": "Hindustan Univerell",
+    "name_ko": "힌두스탄 유니버렐",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "제조업",
+    "description": "인도의 니프티 500 지수에 포함된 상장 기업이다. 최근 거래 데이터에서 주가가 VWAP를 하회하며 매도 압력이 우세한 흐름을 보였다.",
+    "founded_year": null,
+    "headquarters": "인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-29 13:26"
+  },
+  {
     "id": "icici_bank",
     "name": "ICICI Bank Limited",
     "name_ko": "ICICI 은행",
@@ -1248,6 +1264,22 @@
     "updated_at": "2026-07-22 01:58"
   },
   {
+    "id": "radico_khaitan",
+    "name": "Radico Khaitan",
+    "name_ko": "라디코 카이탄",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "주류",
+    "description": "인도의 대표적인 주류 제조 및 판매 기업이다. 최근 종가가 거래량 가중 평균 가격(VWAP)을 웃돌며 강세 전환 가능성을 나타냈다.",
+    "founded_year": 1943,
+    "headquarters": "뉴델리, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-29 13:26"
+  },
+  {
     "id": "reliance_industries",
     "name": "Reliance Industries Limited",
     "name_ko": "릴라이언스 인더스트리스",
@@ -1294,6 +1326,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-19 01:21"
+  },
+  {
+    "id": "tvs_motor",
+    "name": "TVS Motor Company",
+    "name_ko": "티브이에스 모터",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "자동차",
+    "description": "인도를 대표하는 대형 이륜차 및 삼륜차 제조 기업이다. 강력한 매수세를 뜻하는 화이트 마루보주 패턴을 기록하며 상승 모멘텀을 보였다.",
+    "founded_year": 1978,
+    "headquarters": "첸나이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-29 13:26"
   },
   {
     "id": "united_breweries",
@@ -1454,6 +1502,38 @@
     "website": null,
     "is_published": true,
     "updated_at": null
+  },
+  {
+    "id": "kyushu_electric_power",
+    "name": "Kyushu Electric Power Company, Incorporated",
+    "name_ko": "규슈전력",
+    "country": "일본",
+    "country_flag": "🌍",
+    "exchange": "TYO",
+    "ticker": "9508",
+    "sector": "유틸리티",
+    "description": "1951년에 설립된 일본의 주요 전력회사로, 규슈 지역에 전력을 공급합니다. 원자력 및 화력, 재생에너지 등 다양한 발전 포트폴리오를 운영하고 있습니다. 지역 경제의 핵심 기반 시설을 담당하는 대형 유틸리티 기업입니다.",
+    "founded_year": 1951,
+    "headquarters": "후쿠오카, 일본",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-29 13:26"
+  },
+  {
+    "id": "jr_kyushu",
+    "name": "Kyushu Railway Company",
+    "name_ko": "JR 규슈",
+    "country": "일본",
+    "country_flag": "🌍",
+    "exchange": "TYO",
+    "ticker": "9142",
+    "sector": "운송",
+    "description": "1987년 국철 민영화 과정에서 설립되어 규슈 지역의 철도 운송 및 관련 사업을 영위합니다. 신칸센을 포함한 광범위한 철도망과 함께 부동산 개발, 호텔 등 다양한 생활 서비스 사업을 전개합니다. 규슈 지역 교통의 핵심 역할을 담당하는 상장 기업입니다.",
+    "founded_year": 1987,
+    "headquarters": "후쿠오카, 일본",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-29 13:26"
   },
   {
     "id": "confecoes_alves_monteiro",
