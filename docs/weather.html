@@ -53,8 +53,49 @@
     .logo span { color: var(--accent); }
     .header-meta { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); text-align: right; }
 
+    /* 검색 — index.html과 동일 */
+    .search-input {
+      width: 200px; padding: 5px 10px;
+      border: 1px solid var(--border); background: var(--bg3);
+      font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text);
+      outline: none; transition: border-color 0.2s, width 0.3s;
+    }
+    .search-input:focus { border-color: var(--accent); width: 260px; }
+    .search-input::placeholder { color: var(--muted); }
+    .search-clear {
+      font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+      color: var(--muted); cursor: pointer; display: none;
+      background: none; border: 1px solid var(--border); padding: 5px 8px;
+    }
+    .search-clear:hover { color: var(--accent); border-color: var(--accent); }
+    .search-result-info { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); white-space: nowrap; }
+
     /* 네비게이션 — index.html과 동일 */
     .nav-wrap { display: flex; align-items: stretch; border-bottom: 1px solid var(--border); background: var(--bg2); }
+    .region-dropdown { position: relative; flex-shrink: 0; }
+    .region-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 9px 14px; font-size: 12px; font-weight: 500; color: var(--muted);
+      font-family: 'IBM Plex Mono', monospace; background: var(--bg3);
+      border: none; border-right: 1px solid var(--border); cursor: pointer;
+      white-space: nowrap; height: 100%; transition: color 0.2s;
+    }
+    .region-btn:hover, .region-btn.active { color: var(--accent); }
+    .region-btn .arrow { font-size: 9px; transition: transform 0.2s; }
+    .region-btn.open .arrow { transform: rotate(180deg); }
+    .region-menu {
+      display: none; position: absolute; top: 100%; left: 0; z-index: 200;
+      background: var(--bg2); border: 1px solid var(--border); border-top: none;
+      min-width: 140px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    .region-menu.open { display: block; }
+    .region-menu a {
+      display: block; padding: 8px 14px; font-size: 12px; font-weight: 500;
+      color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--border);
+      white-space: nowrap; transition: color 0.2s, background 0.2s;
+    }
+    .region-menu a:last-child { border-bottom: none; }
+    .region-menu a:hover, .region-menu a.active { color: var(--accent); background: var(--bg3); }
     .sector-dropdown { display: flex; flex: 1; position: relative; }
     .sector-btn {
       display: none; align-items: center; gap: 6px;
@@ -66,13 +107,12 @@
     .sector-btn:hover, .sector-btn.active { color: var(--accent2); }
     .sector-btn .arrow { font-size: 9px; transition: transform 0.2s; }
     .sector-btn.open .arrow { transform: rotate(180deg); }
-    .nav-sector { display: flex; flex: 1; overflow-x: auto; }
+    .nav-sector { background: var(--bg3); border-bottom: 1px solid var(--border); display: flex; flex: 1; overflow-x: auto; }
     .nav-sector a {
       padding: 9px 14px; font-size: 12px; font-weight: 500; color: var(--muted);
       text-decoration: none; border-right: 1px solid var(--border); white-space: nowrap;
       transition: color 0.2s, background 0.2s;
     }
-    .nav-sector a:first-child { border-left: 1px solid var(--border); }
     .nav-sector a:hover, .nav-sector a.active { color: var(--accent2); background: var(--bg2); }
 
     /* 메인과 동일한 레이아웃 */
@@ -111,7 +151,17 @@
     .tag { font-family: 'IBM Plex Mono', monospace; font-size: 10px; padding: 2px 7px; border: 1px solid var(--border); color: var(--muted); background: var(--bg3); white-space: nowrap; }
     .tag.country { border-color: var(--accent); color: var(--accent); }
     .article-time { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
-    .article-title { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.4; }
+    .article-card.standalone {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-left: 3px solid var(--border); margin-bottom: 10px;
+    }
+    .article-card.standalone:hover { border-left-color: var(--accent); }
+    .article-title { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.4; margin-bottom: 5px; }
+    .article-summary { font-size: 12px; color: var(--muted); line-height: 1.5; margin-bottom: 7px; }
+    .article-footer { display: flex; justify-content: space-between; align-items: center; }
+    .article-source { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); }
+    .article-link { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--accent2); text-decoration: none; }
+    .article-link:hover { text-decoration: underline; }
 
     /* 사이드바 */
     .sidebar { display: flex; flex-direction: column; gap: 16px; }
@@ -133,10 +183,21 @@
     .cal-meta { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); margin-bottom: 2px; }
     .cal-title { color: var(--text); line-height: 1.4; }
 
+    /* 날씨 위젯 — index.html과 동일 */
+    .weather-item {
+      padding: 8px 14px; border-bottom: 1px solid var(--border);
+      cursor: pointer; transition: background 0.2s;
+      display: flex; align-items: baseline; gap: 6px;
+    }
+    .weather-item:hover { background: var(--bg3); }
+    .weather-item:last-child { border-bottom: none; }
+    .weather-country { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--accent2); font-weight: 700; white-space: nowrap; }
+    .weather-desc { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
     .briefing-item { padding: 10px 14px; border-bottom: 1px solid var(--border); }
     .briefing-item:last-child { border-bottom: none; }
     .briefing-region { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--accent); margin-bottom: 4px; }
-    .briefing-title { font-size: 12px; color: var(--text); line-height: 1.5; cursor: pointer; }
+    .briefing-title { font-size: 12px; color: var(--text); line-height: 1.5; margin-bottom: 2px; cursor: pointer; }
     .briefing-title:hover { color: var(--accent); }
 
     /* 페이지네이션 — index.html과 동일 */
@@ -156,8 +217,6 @@
     .empty { padding: 30px; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); }
 
     footer { border-top: 2px solid var(--text); background: var(--bg2); padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 40px; }
-    footer a { color: var(--muted); text-decoration: none; }
-    footer a:hover { color: var(--accent); }
 
     @media (max-width: 1024px) {
       .container { grid-template-columns: 1fr 260px; }
@@ -168,10 +227,13 @@
       .header-main { padding: 12px 0; }
       .logo { font-size: 24px; }
       .header-meta { display: none; }
+      .search-input { width: 140px; }
+      .search-input:focus { width: 180px; }
       .header-top { padding: 6px 16px; }
       .ticker-strip { gap: 12px; }
       header { padding: 0 16px; }
       .container { padding: 0; }
+      .main-feed { padding: 0; }
       .feed-header { padding: 10px 14px; }
       .filter-tabs { padding: 0 14px; }
       footer { flex-direction: column; gap: 8px; text-align: center; padding: 16px; }
@@ -188,8 +250,9 @@
     }
     @media (max-width: 480px) {
       .logo { font-size: 20px; }
+      .search-input { width: 120px; font-size: 11px; }
       .nav-sector a { padding: 8px 10px; font-size: 11px; }
-      .sector-btn { padding: 8px 10px; font-size: 11px; }
+      .region-btn, .sector-btn { padding: 8px 10px; font-size: 11px; }
       .article-card { padding: 12px 14px; }
       .article-title { font-size: 13px; }
       header { padding: 0 12px; }
@@ -210,11 +273,35 @@
     <a href="/" class="logo">News<span>Final</span></a>
     <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
       <div class="header-meta">프론티어 미디어</div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <input class="search-input" id="search-input" type="text" placeholder="🔍 기사 검색..." autocomplete="off" oninput="onSearch(this.value)" onkeydown="if(event.key==='Escape'){clearSearch();}" />
+        <button class="search-clear" id="search-clear" onclick="clearSearch()">✕</button>
+        <span class="search-result-info" id="search-info"></span>
+      </div>
     </div>
   </div>
 </header>
 
 <div class="nav-wrap" id="nav-tabs">
+  <div class="region-dropdown" id="region-dropdown">
+    <button class="region-btn" id="region-btn" onclick="toggleRegionMenu()">
+      <span id="region-label">전체 지역</span>
+      <span class="arrow">▼</span>
+    </button>
+    <div class="region-menu" id="region-menu">
+      <a href="#" class="active" onclick="setRegion('all',this,'전체 지역');return false;">전체 지역</a>
+      <a href="#" onclick="setRegion('아프리카',this,'아프리카');return false;">아프리카</a>
+      <a href="#" onclick="setRegion('동남아시아',this,'동남아시아');return false;">동남아시아</a>
+      <a href="#" onclick="setRegion('남아시아',this,'남아시아');return false;">남아시아</a>
+      <a href="#" onclick="setRegion('동아시아',this,'동아시아');return false;">동아시아</a>
+      <a href="#" onclick="setRegion('중동',this,'중동');return false;">중동</a>
+      <a href="#" onclick="setRegion('중앙아시아',this,'중앙아시아');return false;">중앙아시아</a>
+      <a href="#" onclick="setRegion('유럽',this,'유럽');return false;">유럽</a>
+      <a href="#" onclick="setRegion('중남미',this,'중남미');return false;">중남미</a>
+      <a href="#" onclick="setRegion('북미',this,'북미');return false;">북미</a>
+      <a href="#" onclick="setRegion('오세아니아',this,'오세아니아');return false;">오세아니아</a>
+    </div>
+  </div>
   <div class="sector-dropdown" id="sector-dropdown">
     <button class="sector-btn" id="sector-btn" onclick="toggleSectorMenu()">
       <span>날씨</span>
@@ -222,7 +309,7 @@
     </button>
     <nav class="nav-sector" id="nav-sector">
       <a href="/live.html" style="color:var(--accent2);font-weight:700;">트렌드</a>
-      <a href="/">홈</a>
+      <a href="/">전체</a>
       <a href="/?category=경제">경제</a>
       <a href="/?category=금융">금융</a>
       <a href="/?category=자원·에너지">자원·에너지</a>
@@ -242,7 +329,7 @@
 <div class="container">
   <main>
     <div class="feed-header">
-      <span class="feed-title">● 세계의 날씨</span>
+      <span class="feed-title" id="feed-title">● 세계의 날씨</span>
       <span class="feed-count" id="weather-count">로딩 중...</span>
     </div>
     <div class="filter-tabs" id="filter-tabs"></div>
@@ -260,8 +347,16 @@
     </div>
     <div class="widget">
       <div class="widget-header">
+        <span>세계의 날씨</span>
+        <a href="/weather.html" style="font-size:10px;color:var(--accent2);text-decoration:none;font-family:'IBM Plex Mono',monospace;" id="weather-date">전체 →</a>
+      </div>
+      <div id="weather-widget"><div class="empty">데이터 준비 중</div></div>
+    </div>
+
+    <div class="widget">
+      <div class="widget-header">
         <span>오늘의 브리핑</span>
-        <a href="/" style="font-size:10px;color:var(--accent2);text-decoration:none;font-family:'IBM Plex Mono',monospace;">전체 →</a>
+        <span id="briefing-date"></span>
       </div>
       <div id="briefing-widget"><div class="empty">데이터 준비 중</div></div>
     </div>
@@ -290,11 +385,65 @@
   updateTime();
   setInterval(updateTime, 60000);
 
+  function matchQuery(a) {
+    if (!currentQuery) return true;
+    const q = currentQuery.toLowerCase();
+    return ((a.title_ko || '') + (a.title_en || '') + (a.summary_ko || '')).toLowerCase().includes(q);
+  }
+
+  function baseTitle() {
+    return currentRegion === 'all' ? '● 세계의 날씨' : `● ${currentRegion} 날씨`;
+  }
+
+  function onSearch(val) {
+    currentQuery = val.trim();
+    document.getElementById('search-clear').style.display = currentQuery ? 'inline-block' : 'none';
+    document.getElementById('feed-title').textContent = currentQuery ? `🔍 ${currentQuery}` : baseTitle();
+    currentPage = 1;
+    renderFilters();
+    renderWeather();
+    const n = allWeather.filter(a => inRegion(a) && matchQuery(a)).length;
+    document.getElementById('search-info').textContent = currentQuery ? `${n}건` : '';
+  }
+
+  function clearSearch() {
+    document.getElementById('search-input').value = '';
+    currentQuery = '';
+    document.getElementById('search-clear').style.display = 'none';
+    document.getElementById('search-info').textContent = '';
+    document.getElementById('feed-title').textContent = baseTitle();
+    currentPage = 1;
+    renderFilters();
+    renderWeather();
+  }
+
+  function toggleRegionMenu() {
+    document.getElementById('region-menu').classList.toggle('open');
+    document.getElementById('region-btn').classList.toggle('open');
+  }
+  function setRegion(region, el, label) {
+    document.querySelectorAll('#region-menu a').forEach(a => a.classList.remove('active'));
+    if (el) el.classList.add('active');
+    document.getElementById('region-label').textContent = label || '전체 지역';
+    document.getElementById('region-btn').classList.toggle('active', region !== 'all');
+    document.getElementById('region-menu').classList.remove('open');
+    document.getElementById('region-btn').classList.remove('open');
+    currentRegion = region;
+    currentPage = 1;
+    document.getElementById('feed-title').textContent = currentQuery ? `🔍 ${currentQuery}` : (region === 'all' ? '● 세계의 날씨' : `● ${label} 날씨`);
+    renderFilters();
+    renderWeather();
+  }
   function toggleSectorMenu() {
     document.getElementById('nav-sector').classList.toggle('open');
     document.getElementById('sector-btn').classList.toggle('open');
   }
   document.addEventListener('click', e => {
+    const rd = document.getElementById('region-dropdown');
+    if (rd && !rd.contains(e.target)) {
+      document.getElementById('region-menu').classList.remove('open');
+      document.getElementById('region-btn').classList.remove('open');
+    }
     const dd = document.getElementById('sector-dropdown');
     if (dd && !dd.contains(e.target)) {
       document.getElementById('nav-sector').classList.remove('open');
@@ -307,6 +456,8 @@
 
   let allWeather = [];
   let currentFilter = 'all';
+  let currentRegion = 'all';
+  let currentQuery = '';
   let currentPage = 1;
   const PAGE_SIZE = 20;
 
@@ -317,6 +468,26 @@
     return `${pad(d.getMonth()+1)}/${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
   }
 
+  function cleanBody(text) {
+    if (!text) return '';
+    text = text
+      .replace(/\*\*(.+?)\*\*/g, '$1')
+      .replace(/\*(.+?)\*/g, '$1')
+      .replace(/^#{1,6}\s+/gm, '')
+      .replace(/\[.{1,20}=.{1,30}\]/g, '')
+      .replace(/^\[.{1,30}\]\s*/gm, '');
+    const promoPatterns = [
+      /[^.]*텔레그램 채널[^.]*\./g,
+      /[^.]*구독[^.]*프리미엄[^.]*\./g,
+      /[^.]*ET Prime[^.]*\./g,
+      /[^.]*뉴스레터[^.]*구독[^.]*\./g,
+      /[^.]*앱[^.]*다운로드[^.]*\./g,
+      /[^.]*더 많은 정보[^.]*방문[^.]*\./g,
+    ];
+    promoPatterns.forEach(p => { text = text.replace(p, ''); });
+    return text.trim();
+  }
+
   function classify(a) {
     const t = a.title_ko || a.title_en || '';
     if (t.includes('주말')) return 'weekend';
@@ -324,9 +495,15 @@
     return 'today';
   }
 
+  function inRegion(a) {
+    if (currentRegion === 'all') return true;
+    return (a.subcategory || '').includes(currentRegion);
+  }
+
   function renderFilters() {
-    const counts = { all: allWeather.length, today: 0, weekend: 0, weekly: 0 };
-    allWeather.forEach(a => counts[classify(a)]++);
+    const base = allWeather.filter(a => inRegion(a) && matchQuery(a));
+    const counts = { all: base.length, today: 0, weekend: 0, weekly: 0 };
+    base.forEach(a => counts[classify(a)]++);
     const labels = { all: '전체', today: '오늘', weekend: '주말 예보', weekly: '다음주 예보' };
     document.getElementById('filter-tabs').innerHTML = Object.keys(labels).map(key =>
       `<div class="filter-tab ${currentFilter===key?'active':''}" onclick="setFilter('${key}')">${labels[key]} (${counts[key]})</div>`
@@ -376,7 +553,7 @@
 
   function renderWeather() {
     const container = document.getElementById('weather-container');
-    let items = currentFilter === 'all' ? allWeather : allWeather.filter(a => classify(a) === currentFilter);
+    let items = allWeather.filter(a => inRegion(a) && matchQuery(a) && (currentFilter === 'all' || classify(a) === currentFilter));
     items = [...items].sort((a, b) => (b.created_at || '').localeCompare(a.created_at || ''));
 
     const total = items.length;
@@ -398,16 +575,26 @@
 
     container.innerHTML = pageItems.map(a => {
       const title = a.title_ko || a.title_en || '';
+      const catTag = a.category ? `<span class="tag">${a.category}</span>` : '';
+      const countryTag = a.country ? `<span class="tag country">${a.country}</span>` : '';
       return `
         <div class="article-card" onclick="location.href='article?id=${a.id}'">
           <div class="article-header">
             <div class="article-tags">
-              <span class="tag country">${a.country || '기타'}</span>
-              <span class="tag">날씨</span>
+              ${catTag}${countryTag}
             </div>
             <span class="article-time">${formatTime(a.created_at)}</span>
           </div>
-          <div class="article-title">${title}</div>
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="flex:1;min-width:0;">
+              <div class="article-title">${title}</div>
+              ${a.summary_ko ? `<div class="article-summary">${cleanBody(a.summary_ko).slice(0,120)}${a.summary_ko.length>120?'…':''}</div>` : ''}
+            </div>
+            ${a.image_url ? `<img src="${a.image_url}" alt="" loading="lazy" style="width:88px;height:66px;object-fit:cover;border-radius:6px;flex-shrink:0;">` : ''}
+          </div>
+          <div class="article-footer">
+            <span class="article-source">ⓒ NewsFinal · ${a.byline || '뉴스파이널 편집국'}</span>
+          </div>
         </div>`;
     }).join('');
 
@@ -417,7 +604,7 @@
   async function loadWeather() {
     try {
       const params = new URLSearchParams();
-      params.set('select', 'id,title_ko,title_en,country,created_at');
+      params.set('select', 'id,title_ko,title_en,country,subcategory,summary_ko,image_url,byline,category,created_at');
       params.set('category', 'eq.날씨');
       params.set('is_published', 'eq.true');
       params.set('order', 'created_at.desc');
@@ -431,9 +618,40 @@
 
       renderFilters();
       renderWeather();
+      renderWeatherWidget(allWeather);
     } catch (e) {
       document.getElementById('weather-container').innerHTML = '<div class="empty">날씨 데이터를 불러올 수 없습니다.</div>';
     }
+  }
+
+  function renderWeatherWidget(weatherArticles) {
+    const container = document.getElementById('weather-widget');
+    if (!weatherArticles || !weatherArticles.length) {
+      container.innerHTML = '<div class="empty">날씨 데이터 준비 중</div>';
+      return;
+    }
+    const byCountry = {};
+    weatherArticles.forEach(a => {
+      const c = a.country || '기타';
+      if (!byCountry[c] || (a.created_at || '') > (byCountry[c].created_at || '')) {
+        byCountry[c] = a;
+      }
+    });
+    const items = Object.values(byCountry).sort((a, b) =>
+      (a.country || '').localeCompare(b.country || '', 'ko')
+    );
+    container.innerHTML = items.map(a => {
+      const title = a.title_ko || a.title_en || '';
+      const desc = title
+        .replace(/^(주말\s*)?/, '')
+        .replace(new RegExp(`^${a.country}[,\\s]*`), '')
+        .replace(/^\s*날씨[,\\s]*/, '')
+        .trim();
+      return `<div class="weather-item" onclick="location.href='article?id=${a.id}'">
+        <span class="weather-country">${a.country || '기타'}</span>
+        <span class="weather-desc">${desc || title}</span>
+      </div>`;
+    }).join('');
   }
 
   async function loadBriefing() {
