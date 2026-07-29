@@ -1,25 +1,25 @@
 {
-  "updated_at": "2026-07-29 23:08",
+  "updated_at": "2026-07-29 23:09",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7391.48,
-      "change_pct": -0.29,
+      "price": 7393.93,
+      "change_pct": -0.26,
       "up": false
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 24728.64,
-      "change_pct": -0.82,
+      "price": 24741.13,
+      "change_pct": -0.77,
       "up": false
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 52031.01,
-      "change_pct": -0.34,
+      "price": 52048.86,
+      "change_pct": -0.31,
       "up": false
     },
     {
@@ -39,8 +39,8 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 110654.2,
-      "change_pct": 0.68,
+      "price": 110684.97,
+      "change_pct": 0.71,
       "up": true
     },
     {
@@ -98,22 +98,22 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7391.48,
-        "change_pct": -0.29,
+        "price": 7393.93,
+        "change_pct": -0.26,
         "up": false
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 24728.64,
-        "change_pct": -0.82,
+        "price": 24741.13,
+        "change_pct": -0.77,
         "up": false
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 52031.01,
-        "change_pct": -0.34,
+        "price": 52048.86,
+        "change_pct": -0.31,
         "up": false
       }
     ],
@@ -137,8 +137,8 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 110654.2,
-        "change_pct": 0.68,
+        "price": 110684.97,
+        "change_pct": 0.71,
         "up": true
       },
       {
@@ -212,8 +212,8 @@
     "XOM": {
       "name": "Exxon Mobil Corporation",
       "symbol": "XOM",
-      "price": 157.46,
-      "change_pct": 1.74,
+      "price": 157.31,
+      "change_pct": 1.64,
       "up": true
     },
     "FDH": {
