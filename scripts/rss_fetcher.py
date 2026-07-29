@@ -594,10 +594,12 @@ def get_source_country(source_name: str):
     return None, None
 
 NOISE_KEYWORDS = [
-    # 스포츠
+    # 스포츠 — 종목명·대회명처럼 스포츠 외 의미가 거의 없는 것만 하드 차단.
+    # ⚠️ 일반명사와 겹치는 8개("match" "league" "coach" "player" "transfer"
+    #    "goal" "squad" "champion")는 OBSERVE_KEYWORDS로 이관됨(2026-07-29).
+    #    단어경계로도 해결이 안 되는 '의미 충돌'이라 관찰 후 판단한다.
     "football", "soccer", "cricket", "basketball", "rugby", "tennis",
-    "golf", "athletics", "olympics", "match", "league", "tournament",
-    "coach", "player", "transfer", "goal", "squad", "fixture", "champion",
+    "golf", "athletics", "olympics", "tournament", "fixture",
     "premier league", "champions league", "world cup", "cup final",
     # ※ 연예/문화 키워드는 OBSERVE_KEYWORDS(관찰용 소프트 노이즈)로 이관됨
     # 기타 노이즈
@@ -669,6 +671,16 @@ OBSERVE_KEYWORDS = [
     "museum", "royal", "heritage site", "archaeological",
     "church", "pastor", "bishop", "prayer", "sermon",
     "festival", "leisure",
+    # 스포츠에서 이관(2026-07-29) — 일반명사와 의미가 겹쳐 오탐 우려가 큰 것들.
+    #   transfer → 기술이전·정권이양·송금
+    #   goal     → 감축목표·생산목표
+    #   player   → 시장의 주요 플레이어
+    #   champion → (정책을) 옹호하다
+    #   league   → 아랍연맹(Arab League)
+    #   squad    → 암살조(death squad) 등 분쟁 보도
+    #   match / coach → mismatch, 상용차 coach 등
+    # 관찰 후 스포츠 전용 표현만 NOISE로 되돌릴 것.
+    "match", "league", "coach", "player", "transfer", "goal", "squad", "champion",
 ]
 
 
