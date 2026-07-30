@@ -2353,7 +2353,17 @@ def run():
 
     ran = 0
 
-    for group_name, gconf in GROUPS.items():
+    # 창(현지 06~09시) 종료가 임박한 그룹부터 처리한다.
+    # 선언 순서대로 돌면 앞 그룹의 처리 시간(국가당 sleep 3초 + Gemini 호출) 때문에
+    # 뒤 그룹이 창을 벗어나 누락된다. 실제 사례: 남아시아(콜카타 UTC+5:30)가
+    # 중동(리야드 UTC+3) 처리 17분에 밀려 UTC 03:20 실행에서 매일 스킵됨.
+    def _window_left_min(tz_name: str) -> int:
+        ln = get_local_now(tz_name)
+        return (MORNING_HOUR_END - ln.hour) * 60 - ln.minute
+
+    group_order = sorted(GROUPS.items(), key=lambda kv: _window_left_min(kv[1]["tz"]))
+
+    for group_name, gconf in group_order:
         mode, local_now = should_run_now(gconf["tz"])
         if mode is None:
             continue
