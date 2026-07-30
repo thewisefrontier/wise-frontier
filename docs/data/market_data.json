@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-31 08:18",
+  "updated_at": "2026-07-31 08:41",
   "indices": [
     {
       "name": "S&P 500",
@@ -81,15 +81,15 @@
     {
       "name": "USD/KES",
       "symbol": "USDKES=X",
-      "price": 129.2,
-      "change_pct": 0.63,
+      "price": 129.25,
+      "change_pct": 0.67,
       "up": true
     },
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
       "price": 16.5,
-      "change_pct": -0.96,
+      "change_pct": -0.98,
       "up": false
     }
   ],
@@ -181,15 +181,15 @@
       {
         "name": "USD/KES",
         "symbol": "USDKES=X",
-        "price": 129.2,
-        "change_pct": 0.63,
+        "price": 129.25,
+        "change_pct": 0.67,
         "up": true
       },
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
         "price": 16.5,
-        "change_pct": -0.96,
+        "change_pct": -0.98,
         "up": false
       }
     ]
