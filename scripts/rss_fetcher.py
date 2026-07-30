@@ -454,6 +454,82 @@ def extract_summary(entry):
     return clean_text(summary)
 
 
+# ── 사진 캡션·크레딧 제거 ─────────────────────────────────────────────
+# 원문 <p>에 섞여 들어오는 사진 캡션은 "설명문 + 날짜 + © + 크레딧" 구조가 흔하다.
+# 자료사진이면 캡션 날짜가 사건 날짜와 수개월씩 벌어진다.
+# 실사고(2026-07-30): France 24 기사(7/29 발행)의 캡션
+#   "Afghan Taliban soldiers look toward the Pakistani border, 27 February 2026. © Wahidullah Kakar, AP"
+# 를 Gemini가 보도 시점으로 오인해 "2026년 2월(현지시간) 보도했다"로 기사화(id=38770).
+# ⚠️ 날짜는 © '앞' 문장에 있다 → ©부터 잘라내면 소용없고, © 직전 문장까지 함께 제거해야 한다.
+_CREDIT_MARK_RE = re.compile(r'&copy;|\(c\)\s|©', re.IGNORECASE)
+
+# 캡션 전용 조각(접두로 시작) — 통째로 버린다
+_CAPTION_PREFIX_RE = re.compile(
+    r'^\s*(?:Photos?|Images?|Pictured?|Caption|Credits?|Cover image|File photo|Handout|'
+    r'Foto|Légende|Legende)\s*[:\-\u2013\u2014|]',
+    re.IGNORECASE,
+)
+
+# 문장 경계 (© 직전 캡션 문장의 시작점을 찾는 데 사용)
+_SENT_END_RE = re.compile(r'[.!?][\"\'\)\]]?\s')
+
+# © 뒤 크레딧 표기 — 대문자 시작 토큰·연도·연결어의 짧은 연속으로 본다.
+# 소문자 일반명사가 나오면 본문 시작으로 판단해 멈춘다.
+_CREDIT_TAIL_RE = re.compile(
+    r'^[\s:\-\u2013\u2014|]*'
+    r'(?:[A-Z\u00c0-\u00dc][\w.\u2019\'\-]*|\d{1,4}(?:\s*[-\u2013]\s*\d{2,4})?|and|de|du|des|ve|par|via)'
+    r'(?:[\s,\-\u2013\u2014/&]+'
+    r'(?:[A-Z\u00c0-\u00dc][\w.\u2019\'\-]*|\d{1,4}(?:\s*[-\u2013]\s*\d{2,4})?|and|de|du|des|ve|par|via)'
+    r'){0,5}'
+)
+
+CAPTION_LEAD_MAX = 220   # © 앞을 캡션 설명문으로 보고 제거할 최대 길이(초과 시 본문으로 판단해 보존)
+CREDIT_TAIL_MAX = 50     # © 뒤 크레딧으로 보고 제거할 최대 길이
+CAPTION_KEEP_MIN = 100   # 제거 후 남은 길이가 이보다 짧으면 조각 전체를 버린다
+
+
+def strip_photo_credits(text: str) -> str:
+    """단락에서 사진 캡션·저작권 크레딧을 제거한다.
+
+    - 캡션 접두로 시작하는 단락은 통째로 버린다.
+    - © 표기가 있으면 '직전 문장 + © + 직후 크레딧'을 제거하고 나머지는 살린다.
+    - 제거 결과가 CAPTION_KEEP_MIN 미만이면 단락 전체를 버린다.
+    """
+    if not text:
+        return ""
+    if _CAPTION_PREFIX_RE.match(text):
+        return ""
+
+    out = text
+    for _ in range(4):  # 한 단락에 크레딧이 여러 번 나올 수 있다
+        m = _CREDIT_MARK_RE.search(out)
+        if not m:
+            break
+        start, end = m.start(), m.end()
+
+        # ① © 앞: 캡션 설명문을 문장 단위로 제거
+        # ⚠️ ©가 문장 끝 바로 뒤에 오는 경우(캡션이 온전한 한 문장인 전형적 형태)
+        #    마지막 경계를 쓰면 캡션이 그대로 남는다 → 그 앞 경계(=캡션 문장의 시작)를 써야 한다.
+        bounds = [b.end() for b in _SENT_END_RE.finditer(out[:start])]
+        if bounds and start - bounds[-1] <= 3:
+            cut_from = bounds[-2] if len(bounds) >= 2 else 0
+        else:
+            cut_from = bounds[-1] if bounds else 0
+        if start - cut_from > CAPTION_LEAD_MAX:
+            cut_from = start  # 너무 길면 본문일 가능성 → 앞부분 보존
+
+        # ② © 뒤: 크레딧 표기만 상한 내에서 제거
+        tm = _CREDIT_TAIL_RE.match(out[end:end + CREDIT_TAIL_MAX])
+        cut_to = end + (tm.end() if tm else 0)
+
+        out = (out[:cut_from] + " " + out[cut_to:]).strip()
+
+    out = re.sub(r'\s+', ' ', out).strip()
+    if len(out) < CAPTION_KEEP_MIN:
+        return ""
+    return out
+
+
 # 원문 크롤링 불필요 사이트 (이미 RSS에 전문 제공)
 SKIP_CRAWL_DOMAINS = {
     "allafrica.com", "africa-newsroom.com", "afdb.org",
@@ -499,7 +575,10 @@ def crawl_full_text(url: str, timeout: int = 10) -> str:
         for p in paragraphs:
             t = re.sub(r'<[^>]+>', '', p).strip()
             t = re.sub(r'\s+', ' ', t)
-            if len(t) > 50:  # 너무 짧은 문장 제외
+            if len(t) <= 50:  # 너무 짧은 문장 제외
+                continue
+            t = strip_photo_credits(t)  # 사진 캡션·크레딧 제거(캡션 날짜 오인 방지)
+            if t:
                 texts.append(t)
 
         full_text = ' '.join(texts)

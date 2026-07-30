@@ -51,6 +51,20 @@ DATE_EXEMPT_CATEGORIES = {"다이제스트", "브리핑"}
 # 절대날짜: "2026년 7월 15일" 형식. 날짜는 "N일(현지시간)"으로만 표기해야 한다.
 ABS_DATE_RE = re.compile(r"\d{4}\s*년\s*\d{1,2}\s*월\s*\d{1,2}\s*일")
 
+# 절대날짜 + "(현지시간)" 조합. "N일(현지시간)"이 들어갈 자리에 연·월이 들어간 경우로
+# 원문 사진 캡션의 날짜를 보도 시점으로 오인한 사고에서 발견됐다(id=38770, "2026년 2월(현지시간)").
+# 일(日)이 없으면 ABS_DATE_RE에 걸리지 않아 별도 패턴이 필요하다.
+ABS_DATE_LOCALTIME_RE = re.compile(
+    r"\d{4}\s*년\s*\d{1,2}\s*월(?:\s*\d{1,2}\s*일)?\s*\(\s*현지시간\s*\)"
+)
+
+# 보도 시점을 절대날짜로 표기한 경우. "2026년 7월 현재", "2026년 6월 말 … 보도했다" 등.
+# ⚠️ 연·월 단독("2022년 11월 평화 협정")은 과거 사건 시점 특정이라 정상이므로
+#    보도 동사·"현재"가 근접한 경우만 위반으로 본다(실데이터 검증: 연월 단독 497건 중 대부분 정상).
+REPORTING_ABS_DATE_RE = re.compile(
+    r"\d{4}\s*년\s*\d{1,2}\s*월[^0-9일\n]{0,12}(?:현재|보도|밝혔|전했)"
+)
+
 # 타 매체명 언급 금지
 MEDIA_NAMES = [
     "로이터", "AFP", "AP통신", "블룸버그", "신화통신", "타스통신", "타스",
@@ -102,9 +116,17 @@ def detect_flags(title: str, body: str, category: str) -> list:
     flags = []
     joined = f"{title}\n{body}"
 
-    if ABS_DATE_RE.search(joined):
+    m = ABS_DATE_LOCALTIME_RE.search(joined)
+    if m:
+        # 가장 확실한 위반 유형이라 별도 라벨로 구분해 알림 우선순위를 높인다.
+        flags.append(f"절대날짜+현지시간({m.group(0)})")
+    elif ABS_DATE_RE.search(joined):
         m = ABS_DATE_RE.search(joined)
         flags.append(f"절대날짜({m.group(0)})")
+
+    m = REPORTING_ABS_DATE_RE.search(joined)
+    if m:
+        flags.append(f"보도시점 절대날짜({m.group(0)[:24]})")
 
     m = MEDIA_RE.search(joined)
     if m:
