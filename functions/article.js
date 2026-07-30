@@ -207,7 +207,7 @@ ${updateLogHtml}
       </div>
 ${investHtml}
 
-      <div class="source-link">ⓒ NewsFinal <button onclick="shareArticle()" style="float:right;background:none;border:1px solid var(--border);border-radius:6px;padding:4px 12px;cursor:pointer;color:var(--text);font-size:12px;">🔗 공유</button><br>뉴스파이널 편집국</div>`;
+      <div class="source-link">ⓒ NewsFinal <button onclick="shareArticle()" style="float:right;background:none;border:1px solid var(--border);border-radius:6px;padding:4px 12px;cursor:pointer;color:var(--text);font-size:12px;">🔗 공유</button></div>`;
 }
 
 export async function onRequestGet(context) {
