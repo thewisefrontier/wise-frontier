@@ -336,6 +336,22 @@
     "updated_at": null
   },
   {
+    "id": "efko_group",
+    "name": "Efko Group",
+    "name_ko": "에프코 그룹",
+    "country": "러시아",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "식음료",
+    "description": "러시아의 대형 농업 및 소비재 식품 그룹으로, 마요네즈, 케첩, 해바라기유 등 대중적인 브랜드를 소유하고 있습니다. 슬로보다와 알테로 같은 유명 브랜드를 통해 러시아 식품 시장에서 강력한 입지를 구축하고 있습니다. 최근 경영진의 사기 혐의 연루 및 계열 분사 기업 관련 수사로 주목받고 있습니다.",
+    "founded_year": 1994,
+    "headquarters": "모스크바, 러시아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-31 00:33"
+  },
+  {
     "id": "roscosmos",
     "name": "Roscosmos",
     "name_ko": "로스코스모스",
@@ -350,6 +366,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-15 12:38"
+  },
+  {
+    "id": "transportation_of_the_future",
+    "name": "Transportation of the Future",
+    "name_ko": "트랜스포테이션 오브 더 퓨처",
+    "country": "러시아",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "항공우주/드론",
+    "description": "무인 항공 시스템 및 드론을 개발하는 러시아의 기술 기업으로, 에프코 그룹의 사내 벤처로 출발하여 독립 법인으로 분사했습니다. 드론 및 관련 로봇 공학 기술 연구와 상용화를 추진하고 있습니다. 최근 전직 대표가 사기 혐의로 구속되는 등 법적 조사를 받고 있습니다.",
+    "founded_year": 2022,
+    "headquarters": "벨고로드, 러시아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-31 00:33"
   },
   {
     "id": "ahl_tobacco_sales",
@@ -1008,22 +1040,6 @@
     "updated_at": "2026-07-30 17:02"
   },
   {
-    "id": "stoneco",
-    "name": "StoneCo Ltd.",
-    "name_ko": "스톤코",
-    "country": "브라질",
-    "country_flag": "🌍",
-    "exchange": "NASDAQ",
-    "ticker": "STNE",
-    "sector": "핀테크",
-    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
-    "founded_year": 2012,
-    "headquarters": "상파울루, 브라질",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-29 20:49"
-  },
-  {
     "id": "stone_co",
     "name": "StoneCo Ltd.",
     "name_ko": "스톤",
@@ -1038,6 +1054,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-22 23:37"
+  },
+  {
+    "id": "stoneco",
+    "name": "StoneCo Ltd.",
+    "name_ko": "스톤코",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "NASDAQ",
+    "ticker": "STNE",
+    "sector": "핀테크",
+    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
+    "founded_year": 2012,
+    "headquarters": "상파울루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-29 20:49"
   },
   {
     "id": "xp_inc",
@@ -1454,6 +1486,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-22 01:58"
+  },
+  {
+    "id": "moonshot_ai",
+    "name": "Moonshot AI",
+    "name_ko": "문샷 AI",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "인공지능",
+    "description": "2023년에 설립된 중국의 인공지능 스타트업으로 대규모 언어 모델 개발을 주력으로 한다. 알리바바 등의 지원을 받아 급성장하며 고성능 챗봇인 Kimi 시리즈를 선보였다. 중국 내에서 생성형 AI 분야의 주요 주자로 자리매김하고 있다.",
+    "founded_year": 2023,
+    "headquarters": "베이징, 중국",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-31 00:32"
   },
   {
     "id": "radico_khaitan",
