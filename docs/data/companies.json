@@ -1,5 +1,21 @@
 [
   {
+    "id": "perenco",
+    "name": "Perenco",
+    "name_ko": "페렝코",
+    "country": "DRC",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "페렝코는 영국의 민간 석유 및 가스 기업으로, 주로 성숙기에 접어든 유전 및 가스전의 개발과 운영에 주력하고 있습니다. 아프리카, 라틴 아메리카, 유럽 등 프론티어 및 신흥 시장에서 활발한 자원 개발 프로젝트를 수행하며 지역 에너지 공급에 기여하고 있습니다. 비상장 대형 민간 기업으로 현지 사회 공헌과 자원 개발을 동시에 추진하고 있습니다.",
+    "founded_year": 1975,
+    "headquarters": "런던, 영국",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-30 21:55"
+  },
+  {
     "id": "zeepay_ghana",
     "name": "Zeepay Ghana Limited",
     "name_ko": "지페이 가나",
@@ -944,6 +960,22 @@
     "updated_at": "2026-07-22 18:03"
   },
   {
+    "id": "nubank",
+    "name": "Nu Holdings Ltd.",
+    "name_ko": "누뱅크",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "NYSE",
+    "ticker": "NU",
+    "sector": "핀테크/디지털 은행",
+    "description": "2013년에 설립된 브라질의 대표적인 디지털 전문 은행이자 핀테크 유니콘입니다. 전통적인 은행 서비스의 높은 수수료와 복잡한 절차를 혁신하며 브라질을 비롯해 멕시코, 콜롬비아 등지에서 빠르게 고객 기반을 넓혔습니다. 현재 라틴아메리카에서 가장 가치 있는 금융 플랫폼 중 하나로 자리 잡고 있습니다.",
+    "founded_year": 2013,
+    "headquarters": "상파울루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-30 21:55"
+  },
+  {
     "id": "pagseguro_digital",
     "name": "PagBank (PagSeguro)",
     "name_ko": "파그뱅크",
@@ -1486,6 +1518,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-30 02:48"
+  },
+  {
+    "id": "sail",
+    "name": "Steel Authority of India Limited",
+    "name_ko": "인도철강공사",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "SAIL",
+    "sector": "철강",
+    "description": "1954년에 설립된 인도 국영 철강회사로, 인도 내 주요 철강 생산 업체 중 하나입니다. 고로 기반의 대규모 철강 생산 설비를 갖추고 완제품 및 부가가치 철강을 공급합니다. 국내 철광석 자급률을 높이고 원가 경쟁력을 강화하며 인도 인프라 성장의 수혜를 받고 있습니다.",
+    "founded_year": 1954,
+    "headquarters": "뉴델리, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-30 21:54"
   },
   {
     "id": "tata_consultancy_services",
