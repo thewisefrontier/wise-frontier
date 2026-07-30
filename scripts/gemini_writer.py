@@ -1210,10 +1210,66 @@ def _ensure_paragraphs(text: str, target: int = 3) -> str:
     return "\n\n".join(" ".join(g) for g in groups)
 
 
+# ── 절대날짜 후처리 ─────────────────────────────────────────────────────
+# 원칙: 모든 날짜는 사건 발생지 현지시간 기준 "N일(현지시간)".
+# 프롬프트 지시(writer_rules)만으론 준수율이 낮아 "2026년 7월 29일 보도했다" 형태가
+# 계속 새어나오므로 코드 단에서 최종 차단한다.
+#
+# ⚠️ 무조건 변환은 금지. 실측(2026-07-30, 발행 자체기사 중 연월일 표기 830건 전수):
+#     보도일 기준 0~3일 전 : 606건 → 전부 위반 (보도 시점을 절대날짜로 쓴 것)
+#     미래(예정일)         :  54건 → 전부 정당 (배당 지급일·결선 투표일·행사 기간)
+#     4일 이상 과거        : 170건 → 전부 정당 (과거 사건 시점 특정. "2015년 7월 18일 구속")
+#   따라서 "보도 시점 근처"만 변환하고 과거·미래는 손대지 않는다.
+#   창을 넓히면 과거 사건 시점이 소실돼 기사가 망가진다.
+_ABS_DATE_RE = re.compile(r"(?<![0-9])(\d{4})\s*년\s*(\d{1,2})\s*월\s*(\d{1,2})\s*일")
+ABS_DATE_WINDOW_DAYS = int(os.getenv("ABS_DATE_WINDOW_DAYS", "3"))
+
+
+def _normalize_recent_abs_dates(text: str, base=None, window_days: int = None,
+                                add_local_time: bool = True) -> str:
+    """보도 시점 근처(0~window_days일 전)의 절대날짜만 "N일(현지시간)"으로 축약."""
+    if not text or "년" not in text:
+        return text
+    if window_days is None:
+        window_days = ABS_DATE_WINDOW_DAYS
+    if window_days < 0:
+        return text
+    base_date = (base or now_kst()).date()
+    # "(현지시간)"은 관례상 한 필드 내 첫 언급에만 붙인다.
+    # 이미 본문 어딘가에 표기가 있으면 새로 붙이지 않는다(검수 통과 조건도 충족).
+    state = {"marked": "(현지시간)" in text}
+
+    def _sub(m):
+        try:
+            d = datetime(int(m.group(1)), int(m.group(2)), int(m.group(3))).date()
+        except ValueError:
+            return m.group(0)          # 2월 30일 등 비정상 날짜는 원문 유지
+        delta = (base_date - d).days
+        if delta < 0 or delta > window_days:
+            return m.group(0)          # 미래 예정일·과거 사건은 그대로 둔다
+        # 뒤에 이미 "(현지시간)"이 붙어 있으면 중복 삽입하지 않는다.
+        tail = text[m.end():m.end() + 6]
+        if tail.startswith("(현지시간)") or state["marked"] or not add_local_time:
+            suffix = ""
+        else:
+            suffix = "(현지시간)"
+            state["marked"] = True
+        return f"{d.day}일{suffix}"
+
+    return _ABS_DATE_RE.sub(_sub, text)
+
+
 def _plainify_parsed(parsed):
     """파싱 결과의 텍스트 필드에 합쇼체 → 해라체 변환을 강제 적용.
     프롬프트 지시·재생성이 모두 실패해도 DB에는 '-다' 체만 저장되도록 하는 최종 안전장치."""
     title, body, country, category, countries, is_travel, summary3, investment = parsed
+
+    # 보도 시점 절대날짜 → "N일(현지시간)" 축약 (과거·미래 날짜는 불변)
+    _before = (title, body, summary3, investment)
+    title, body, summary3, investment = (_normalize_recent_abs_dates(t) for t in _before)
+    if (title, body, summary3, investment) != _before:
+        print("  🔧 보도 시점 절대날짜 감지 → 'N일(현지시간)' 축약 적용")
+
     if any(has_polite_ending(t) for t in (title, body, summary3, investment)):
         print("  🔧 합쇼체 감지 → 자동 변환 적용(-습니다 → -다)")
         title = to_plain_style(title)
