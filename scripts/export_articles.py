@@ -44,6 +44,19 @@ def _export_from_sqlite(limit=9999):
 # articles.json은 공개 배포되므로 원문을 담으면 누구나 열어볼 수 있다.
 # → 첫 항목은 "최초 게시", 이후는 화이트리스트 통과분만 "내용 업데이트"로 일반화해 내보낸다.
 #   원문은 DB에 그대로 남으며 admin.html 기사 편집 화면에서 확인한다.
+# 공개 JSON에서 제외할 내부 전용 컬럼.
+# articles는 select=* 로 조회하므로 컬럼을 새로 만들면 자동으로 공개 배포된다.
+# 프론트가 쓰지 않는 내부 필드는 여기에 등록해 유출을 막을 것.
+# ⚠️ full_text는 타 매체 원문 전문이 들어갈 수 있어 반드시 제외한다(저작권·용량).
+EXPORT_EXCLUDE_FIELDS = (
+    "full_text",
+    "summary_en",
+    "sent_telegram",
+    "posted_blog",
+    "company_scanned",
+    "dedup_reviewed",
+)
+
 PUBLIC_UPDATE_NOTE_RE = re.compile(r"트렌드 추적 업데이트|내용 보강|본문 보강|기사 병합|속보")
 
 
@@ -107,10 +120,12 @@ def export_articles(limit=9999):
     # 최신순 정렬
     all_articles.sort(key=lambda a: a.get("created_at", ""), reverse=True)
 
-    # 내부 운영 기록이 공개 JSON으로 새어나가지 않도록 정화
+    # 내부 운영 기록·내부 전용 컬럼이 공개 JSON으로 새어나가지 않도록 정화
     for a in all_articles:
         if "update_log" in a:
             a["update_log"] = sanitize_update_log(a.get("update_log"))
+        for k in EXPORT_EXCLUDE_FIELDS:
+            a.pop(k, None)
 
     final = all_articles
 
