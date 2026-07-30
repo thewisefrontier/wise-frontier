@@ -976,22 +976,6 @@
     "updated_at": "2026-07-30 17:02"
   },
   {
-    "id": "stone_co",
-    "name": "StoneCo Ltd.",
-    "name_ko": "스톤",
-    "country": "브라질",
-    "country_flag": "🌍",
-    "exchange": "NASDAQ",
-    "ticker": "STNE",
-    "sector": "핀테크",
-    "description": "2012년에 설립된 브라질의 대표적인 핀테크 기업으로, 소상공인을 위한 결제 처리 및 금융 관리 소프트웨어를 제공합니다. 결제 단말기뿐만 아니라 가맹점 관리 시스템과 금융 서비스를 통합하여 중소기업의 디지털 전환을 지원합니다. 브라질 결제 시장에서 혁신적인 기술력과 서비스로 강력한 점유율을 확보하고 있습니다.",
-    "founded_year": 2012,
-    "headquarters": "상파울루, 브라질",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-22 23:37"
-  },
-  {
     "id": "stoneco",
     "name": "StoneCo Ltd.",
     "name_ko": "스톤코",
@@ -1006,6 +990,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-29 20:49"
+  },
+  {
+    "id": "stone_co",
+    "name": "StoneCo Ltd.",
+    "name_ko": "스톤",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "NASDAQ",
+    "ticker": "STNE",
+    "sector": "핀테크",
+    "description": "2012년에 설립된 브라질의 대표적인 핀테크 기업으로, 소상공인을 위한 결제 처리 및 금융 관리 소프트웨어를 제공합니다. 결제 단말기뿐만 아니라 가맹점 관리 시스템과 금융 서비스를 통합하여 중소기업의 디지털 전환을 지원합니다. 브라질 결제 시장에서 혁신적인 기술력과 서비스로 강력한 점유율을 확보하고 있습니다.",
+    "founded_year": 2012,
+    "headquarters": "상파울루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-22 23:37"
   },
   {
     "id": "xp_inc",
@@ -1278,6 +1278,38 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-29 23:02"
+  },
+  {
+    "id": "andrew_yule_and_company",
+    "name": "Andrew Yule & Company Limited",
+    "name_ko": "앤드류 율 컴퍼니",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "ANDREWYUL",
+    "sector": "복합기업",
+    "description": "1919년에 설립된 인도 콜카타 기반의 공공 기업으로, 차(Tea), 엔지니어링, 전기 등 다양한 사업을 영위하고 있습니다. 인도 정부 산하의 공기업으로 오랜 역사와 전통을 가지고 있습니다. 인도 북동부 지역 경제와 고용 창출에 기여하고 있습니다.",
+    "founded_year": 1919,
+    "headquarters": "콜카타, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-30 19:43"
+  },
+  {
+    "id": "bajaj_auto",
+    "name": "Bajaj Auto Limited",
+    "name_ko": "바자 오토",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "BAJAJ-AUTO",
+    "sector": "자동차",
+    "description": "1945년에 설립된 바자 오토는 인도 푸네에 본사를 둔 세계적인 이륜차 및 삼륜차 제조업체입니다. 다양한 오토바이와 상용차를 생산 및 판매하며 인도 시장에서 선도적인 입지를 확보하고 있습니다. 최근에는 전기 이동성(EV) 분야로 사업 영역을 적극적으로 확장하고 있습니다.",
+    "founded_year": 1945,
+    "headquarters": "푸네, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-30 19:47"
   },
   {
     "id": "gamerskraft",
