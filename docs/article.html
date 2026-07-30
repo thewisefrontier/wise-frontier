@@ -300,6 +300,24 @@
     } catch(e) { return null; }
   }
 
+
+  // 업데이트 기록 공개 필터 — 내부 운영 기록(트렌드 감지 경로, 이미지 처리, 표기·문체 교정
+  // 사유 등)은 독자에게 노출하지 않는다. 첫 항목은 '최초 게시', 이후는 화이트리스트 통과분만
+  // '내용 업데이트'로 일반화해 표시한다. 원문 전체는 admin.html 기사 편집 화면에서 확인한다.
+  // ※ articles.json은 export_articles.py에서 이미 정화되지만, Supabase 직접 조회 경로가
+  //   원문을 그대로 받으므로 렌더 단계에도 같은 필터를 둔다.
+  var PUBLIC_UPDATE_RE = /트렌드 추적 업데이트|내용 보강|본문 보강|기사 병합|속보/;
+  function publicUpdateLog(log) {
+    if (!Array.isArray(log)) return [];
+    var out = [];
+    for (var i = 0; i < log.length; i++) {
+      var l = log[i] || {};
+      if (i === 0) out.push({ timestamp: l.timestamp, note: '최초 게시' });
+      else if (PUBLIC_UPDATE_RE.test(String(l.note || ''))) out.push({ timestamp: l.timestamp, note: '내용 업데이트' });
+    }
+    return out;
+  }
+
   async function loadArticle() {
     const params = new URLSearchParams(location.search);
     const id = params.get('id');
@@ -467,10 +485,10 @@
           </ul>
         </div>` : ''}
 
-      ${Array.isArray(a.update_log) && a.update_log.length > 0 ? `
+      ${publicUpdateLog(a.update_log).length > 0 ? `
         <div style="margin:12px 0;border-left:3px solid var(--accent2);font-family:'IBM Plex Mono',monospace;font-size:11px;">
           <div style="padding:6px 10px;font-weight:700;color:var(--accent2);border-bottom:1px solid var(--border);">업데이트 기록</div>
-          ${[...a.update_log].reverse().map((l, i) => `
+          ${publicUpdateLog(a.update_log).reverse().map((l, i) => `
             <div style="display:flex;gap:10px;padding:4px 10px;${i===0?'background:rgba(26,95,168,0.06);color:var(--text);font-weight:600;':'color:var(--muted);'}">
               <span style="min-width:78px;flex-shrink:0;">${formatUpdateTime(l.timestamp)}</span>
               <span>${l.note || '업데이트'}</span>

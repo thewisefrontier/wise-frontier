@@ -184,6 +184,24 @@
 </footer>
 
 <script>
+
+  // 업데이트 기록 공개 필터 — 내부 운영 기록(트렌드 감지 경로, 이미지 처리, 표기·문체 교정
+  // 사유 등)은 독자에게 노출하지 않는다. 첫 항목은 '최초 게시', 이후는 화이트리스트 통과분만
+  // '내용 업데이트'로 일반화해 표시한다. 원문 전체는 admin.html 기사 편집 화면에서 확인한다.
+  // ※ articles.json은 export_articles.py에서 이미 정화되지만, Supabase 직접 조회 경로가
+  //   원문을 그대로 받으므로 렌더 단계에도 같은 필터를 둔다.
+  var PUBLIC_UPDATE_RE = /트렌드 추적 업데이트|내용 보강|본문 보강|기사 병합|속보/;
+  function publicUpdateLog(log) {
+    if (!Array.isArray(log)) return [];
+    var out = [];
+    for (var i = 0; i < log.length; i++) {
+      var l = log[i] || {};
+      if (i === 0) out.push({ timestamp: l.timestamp, note: '최초 게시' });
+      else if (PUBLIC_UPDATE_RE.test(String(l.note || ''))) out.push({ timestamp: l.timestamp, note: '내용 업데이트' });
+    }
+    return out;
+  }
+
   function pad(n) { return String(n).padStart(2, '0'); }
   function nowKST() {
     return new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
@@ -310,12 +328,11 @@
 
       const firstPub = a.first_published_at ? formatDateTime(a.first_published_at) : formatDateTime(a.created_at);
       const lastUpdate = formatDateTime(a.created_at);
-      const updateCount = Array.isArray(a.update_log) ? a.update_log.length : (a.score || 1);
+      const pubLog = publicUpdateLog(a.update_log);
+      const updateCount = pubLog.length || (a.score || 1);
 
       // 업데이트 로그 (최신순, 최대 5개)
-      const logs = Array.isArray(a.update_log) && a.update_log.length > 0
-        ? [...a.update_log].reverse().slice(0, 5)
-        : [];
+      const logs = pubLog.length > 0 ? [...pubLog].reverse().slice(0, 5) : [];
       const logHtml = logs.length > 0 ? `
         <div class="update-log">
           ${logs.map((l, i) => `

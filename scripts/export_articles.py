@@ -1,5 +1,6 @@
 import os
 import json
+import re
 import requests
 from datetime import datetime, timedelta, timezone
 
@@ -36,6 +37,31 @@ def _export_from_sqlite(limit=9999):
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         json.dump(rows, f, ensure_ascii=False, indent=2)
     print(f"[EXPORT] SQLite 폴백: {len(rows)}개 기사 → {OUTPUT_FILE}")
+
+
+# ── update_log 공개 필터 ──────────────────────────────────────────────
+# update_log에는 내부 운영 기록이 쌓인다(트렌드 감지 경로·이미지 처리·표기/문체 교정 사유 등).
+# articles.json은 공개 배포되므로 원문을 담으면 누구나 열어볼 수 있다.
+# → 첫 항목은 "최초 게시", 이후는 화이트리스트 통과분만 "내용 업데이트"로 일반화해 내보낸다.
+#   원문은 DB에 그대로 남으며 admin.html 기사 편집 화면에서 확인한다.
+PUBLIC_UPDATE_NOTE_RE = re.compile(r"트렌드 추적 업데이트|내용 보강|본문 보강|기사 병합|속보")
+
+
+def sanitize_update_log(log):
+    if not isinstance(log, list):
+        return []
+    out = []
+    for i, item in enumerate(log):
+        if not isinstance(item, dict):
+            continue
+        if i == 0:
+            label = "최초 게시"
+        elif PUBLIC_UPDATE_NOTE_RE.search(str(item.get("note") or "")):
+            label = "내용 업데이트"
+        else:
+            continue
+        out.append({"timestamp": item.get("timestamp"), "note": label})
+    return out
 
 
 def export_articles(limit=9999):
@@ -80,6 +106,12 @@ def export_articles(limit=9999):
 
     # 최신순 정렬
     all_articles.sort(key=lambda a: a.get("created_at", ""), reverse=True)
+
+    # 내부 운영 기록이 공개 JSON으로 새어나가지 않도록 정화
+    for a in all_articles:
+        if "update_log" in a:
+            a["update_log"] = sanitize_update_log(a.get("update_log"))
+
     final = all_articles
 
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:

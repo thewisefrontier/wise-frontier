@@ -222,6 +222,10 @@
         <div class="field-label">본문</div>
         <textarea class="field-textarea" id="edit-summary-ko" placeholder="기사 본문..."></textarea>
       </div>
+      <div>
+        <div class="field-label">업데이트 기록 <span style="color:var(--danger);font-weight:400;">(내부 전용 · 독자 화면 비공개)</span></div>
+        <div id="edit-update-log" style="font-family:'IBM Plex Mono',monospace;font-size:11px;line-height:1.5;max-height:180px;overflow-y:auto;border:1px solid var(--border);border-radius:6px;padding:8px 10px;background:var(--bg2);color:var(--muted);"></div>
+      </div>
       <div class="field-row">
         <div>
           <div class="field-label">카테고리</div>
@@ -540,14 +544,32 @@
     const isInternal = (data.url || '').startsWith('internal://');
     document.getElementById('url-field').style.display = isInternal ? 'none' : 'block';
 
+    renderAdminUpdateLog(data.update_log);
+
     document.getElementById('edit-panel').classList.add('open');
     document.getElementById('overlay').classList.add('open');
+  }
+
+  // 업데이트 기록 원문. 공개 페이지(article.html/live.html/article.js)와 공개 JSON
+  // (export_articles.py)은 "최초 게시"·"내용 업데이트"로 일반화된 문구만 노출하므로,
+  // 실제 정정 사유·내부 처리 이력은 이 화면에서만 확인할 수 있다.
+  function renderAdminUpdateLog(log) {
+    const el = document.getElementById('edit-update-log');
+    if (!el) return;
+    if (!Array.isArray(log) || log.length === 0) { el.textContent = '기록 없음'; return; }
+    el.innerHTML = [...log].reverse().map(l => {
+      const ts = String((l && l.timestamp) || '').slice(0, 16);
+      const note = String((l && l.note) || '업데이트')
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      return `<div style="padding:2px 0;"><span style="color:var(--accent2);">${ts}</span> &nbsp;${note}</div>`;
+    }).join('');
   }
 
   function openNew() {
     isNew = true;
     document.getElementById('edit-panel-title').textContent = '새 기사 작성';
     ['edit-id','edit-title-ko','edit-summary-ko','edit-country','edit-url'].forEach(id => document.getElementById(id).value = '');
+    renderAdminUpdateLog(null);
     document.getElementById('edit-category').value = '';
     document.getElementById('edit-region').value = '';
     document.getElementById('edit-source').value = 'NewsFinal';
