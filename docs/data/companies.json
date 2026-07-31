@@ -16,6 +16,22 @@
     "updated_at": "2026-07-30 21:55"
   },
   {
+    "id": "clydestone",
+    "name": "Clydestone (Ghana) PLC",
+    "name_ko": "클라이드스톤",
+    "country": "가나",
+    "country_flag": "🇬🇭",
+    "exchange": "GSE",
+    "ticker": "CLYD",
+    "sector": "핀테크",
+    "description": "1989년에 설립된 가나의 대표적인 현지 핀테크 및 IT 솔루션 기업이다. 결제 시스템, 전자 금융 인프라, 기술 컨설팅 등의 서비스를 제공하며 가나 금융 시장에서 기술력을 다져왔다. 최근 이동통신사를 상대로 모바일 머니 지식재산권 소송을 제기하며 업계의 주목을 받고 있다.",
+    "founded_year": 1989,
+    "headquarters": "아크라, 가나",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-01 07:12"
+  },
+  {
     "id": "zeepay_ghana",
     "name": "Zeepay Ghana Limited",
     "name_ko": "지페이 가나",
@@ -1040,22 +1056,6 @@
     "updated_at": "2026-07-30 17:02"
   },
   {
-    "id": "stoneco",
-    "name": "StoneCo Ltd.",
-    "name_ko": "스톤코",
-    "country": "브라질",
-    "country_flag": "🌍",
-    "exchange": "NASDAQ",
-    "ticker": "STNE",
-    "sector": "핀테크",
-    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
-    "founded_year": 2012,
-    "headquarters": "상파울루, 브라질",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-29 20:49"
-  },
-  {
     "id": "stone_co",
     "name": "StoneCo Ltd.",
     "name_ko": "스톤",
@@ -1070,6 +1070,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-22 23:37"
+  },
+  {
+    "id": "stoneco",
+    "name": "StoneCo Ltd.",
+    "name_ko": "스톤코",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "NASDAQ",
+    "ticker": "STNE",
+    "sector": "핀테크",
+    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
+    "founded_year": 2012,
+    "headquarters": "상파울루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-29 20:49"
   },
   {
     "id": "xp_inc",
