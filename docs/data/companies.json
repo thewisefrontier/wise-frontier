@@ -128,6 +128,54 @@
     "updated_at": "2026-07-30 14:17"
   },
   {
+    "id": "deorsa",
+    "name": "Distribuidora de Electricidad de Occidente, S.A.",
+    "name_ko": "데오르사",
+    "country": "과테말라",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "유틸리티",
+    "description": "데오르사는 과테말라 서부 지역의 전력 배급을 담당하는 주요 전력 기업입니다. 현지 가정 및 기업 고객을 대상으로 안정적인 전력 공급 서비스를 제공하고 있습니다. 과테말라 전력 규제 당국의 요금 정책 및 관리 체계의 영향을 받습니다.",
+    "founded_year": null,
+    "headquarters": "과테말라시티, 과테말라",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-02 01:13"
+  },
+  {
+    "id": "deoxa",
+    "name": "Distribuidora de Electricidad de Oriente, S.A.",
+    "name_ko": "데옥사",
+    "country": "과테말라",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "유틸리티",
+    "description": "데옥사는 과테말라 동부 지역을 중심으로 전력을 배급하는 핵심 전력 유틸리티 기업입니다. 지역 주민과 산업체에 필수적인 전력 인프라를 운영하고 있습니다. 정부의 에너지 요금 안정화 정책과 연계되어 전력 서비스를 공급합니다.",
+    "founded_year": null,
+    "headquarters": "과테말라시티, 과테말라",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-02 01:13"
+  },
+  {
+    "id": "eegsa",
+    "name": "Empresa Eléctrica de Guatemala, S.A.",
+    "name_ko": "이이에스지이에",
+    "country": "과테말라",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "유틸리티",
+    "description": "이이에스지이에(EEGSA)는 과테말라 수도권을 포함한 주요 경제 중심지에 전력을 공급하는 최대 규모의 전력 배급 회사입니다. 오랜 역사 동안 과테말라의 전력망 확충과 안정적인 에너지 공급에 기여해 왔습니다. 현지 전력 시장에서 높은 시장 점유율과 중요한 위상을 차지하고 있습니다.",
+    "founded_year": 1894,
+    "headquarters": "과테말라시티, 과테말라",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-02 01:13"
+  },
+  {
     "id": "uno_guatemala",
     "name": "Uno Guatemala",
     "name_ko": "우노 과테말라",
@@ -1056,22 +1104,6 @@
     "updated_at": "2026-07-30 17:02"
   },
   {
-    "id": "stoneco",
-    "name": "StoneCo Ltd.",
-    "name_ko": "스톤코",
-    "country": "브라질",
-    "country_flag": "🌍",
-    "exchange": "NASDAQ",
-    "ticker": "STNE",
-    "sector": "핀테크",
-    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
-    "founded_year": 2012,
-    "headquarters": "상파울루, 브라질",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-29 20:49"
-  },
-  {
     "id": "stone_co",
     "name": "StoneCo Ltd.",
     "name_ko": "스톤",
@@ -1086,6 +1118,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-22 23:37"
+  },
+  {
+    "id": "stoneco",
+    "name": "StoneCo Ltd.",
+    "name_ko": "스톤코",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "NASDAQ",
+    "ticker": "STNE",
+    "sector": "핀테크",
+    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
+    "founded_year": 2012,
+    "headquarters": "상파울루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-29 20:49"
   },
   {
     "id": "xp_inc",
@@ -1582,6 +1630,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-29 13:26"
+  },
+  {
+    "id": "reliance_capital",
+    "name": "Reliance Capital Limited",
+    "name_ko": "릴라이언스 캐피털 리미티드",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "RELCAPITAL",
+    "sector": "금융",
+    "description": "2006년에 설립된 인도의 주요 금융 서비스 기업으로 자산 관리, 생명 및 손해보험, 상업 금융 등을 영위했습니다. 과거 인도 재벌 그룹인 릴라이언스 ADA 그룹의 핵심 계열사였으나, 부실 및 사기 혐의로 인도 당국의 조사를 받았습니다. 현재는 인도중앙은행이 임명한 관리인 하에 구조조정 및 매각 절차가 진행 중입니다.",
+    "founded_year": 2006,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-02 01:11"
   },
   {
     "id": "reliance_industries",
