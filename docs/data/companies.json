@@ -192,6 +192,22 @@
     "updated_at": "2026-07-29 20:54"
   },
   {
+    "id": "aa_rano",
+    "name": "A.A. Rano Nigeria Limited",
+    "name_ko": "AA 라노",
+    "country": "나이지리아",
+    "country_flag": "🇳🇬",
+    "exchange": "",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "나이지리아의 대표적인 민간 에너지 및 석유류 유통 기업 중 하나입니다. 전국적으로 주유소 체인과 물류 인프라를 확장하며 연료 소매 시장에서 입지를 다지고 있습니다. 공격적인 가격 정책과 서비스로 현지 운전자들에게 주요 에너지 공급원으로 자리 잡고 있습니다.",
+    "founded_year": 1994,
+    "headquarters": "카노, 나이지리아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-03 02:01"
+  },
+  {
     "id": "airtel_africa",
     "name": "Airtel Africa",
     "name_ko": null,
@@ -256,6 +272,22 @@
     "updated_at": "2026-07-19 07:11"
   },
   {
+    "id": "mrs_oil_nigeria",
+    "name": "MRS Oil Nigeria",
+    "name_ko": "MRS 오일 나이지리아",
+    "country": "나이지리아",
+    "country_flag": "🇳🇬",
+    "exchange": "NGX",
+    "ticker": "MRS",
+    "sector": "에너지",
+    "description": "나이지리아에 본사를 둔 주요 석유 및 가스 유통 기업으로 소매 주유소 체인을 운영하고 있습니다. 석유제품의 마케팅과 유통을 핵심 사업으로 영위하며 현지 시장에서 높은 인지도와 넓은 네트워크를 보유하고 있습니다. 민간 주유소 체인으로서 시장 가격 경쟁에 적극적으로 참여하고 있습니다.",
+    "founded_year": 1969,
+    "headquarters": "라고스, 나이지리아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-03 02:01"
+  },
+  {
     "id": "mtn_nigeria",
     "name": "MTN Nigeria",
     "name_ko": null,
@@ -286,6 +318,22 @@
     "website": null,
     "is_published": true,
     "updated_at": null
+  },
+  {
+    "id": "nnpc",
+    "name": "Nigerian National Petroleum Corporation",
+    "name_ko": "나이지리아 국영석유공사",
+    "country": "나이지리아",
+    "country_flag": "🇳🇬",
+    "exchange": "NGX",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "1977년에 설립된 나이지리아의 국영 석유회사로, 원유 탐사부터 정유, 유통까지 석유 산업 전반을 아우르는 핵심 국영 기업입니다. 나이지리아 에너지 시장에서 독보적인 인프라와 영향력을 행사하며 국내 연료 수급과 가격 안정화에 중요한 역할을 담당합니다. 정부 정책에 발맞추어 전국적인 주유소망을 통해 석유제품을 공급하고 있습니다.",
+    "founded_year": 1977,
+    "headquarters": "아부다지, 나이지리아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-03 02:01"
   },
   {
     "id": "zenith_bank",
@@ -1104,22 +1152,6 @@
     "updated_at": "2026-07-30 17:02"
   },
   {
-    "id": "stone_co",
-    "name": "StoneCo Ltd.",
-    "name_ko": "스톤",
-    "country": "브라질",
-    "country_flag": "🌍",
-    "exchange": "NASDAQ",
-    "ticker": "STNE",
-    "sector": "핀테크",
-    "description": "2012년에 설립된 브라질의 대표적인 핀테크 기업으로, 소상공인을 위한 결제 처리 및 금융 관리 소프트웨어를 제공합니다. 결제 단말기뿐만 아니라 가맹점 관리 시스템과 금융 서비스를 통합하여 중소기업의 디지털 전환을 지원합니다. 브라질 결제 시장에서 혁신적인 기술력과 서비스로 강력한 점유율을 확보하고 있습니다.",
-    "founded_year": 2012,
-    "headquarters": "상파울루, 브라질",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-22 23:37"
-  },
-  {
     "id": "stoneco",
     "name": "StoneCo Ltd.",
     "name_ko": "스톤코",
@@ -1134,6 +1166,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-29 20:49"
+  },
+  {
+    "id": "stone_co",
+    "name": "StoneCo Ltd.",
+    "name_ko": "스톤",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "NASDAQ",
+    "ticker": "STNE",
+    "sector": "핀테크",
+    "description": "2012년에 설립된 브라질의 대표적인 핀테크 기업으로, 소상공인을 위한 결제 처리 및 금융 관리 소프트웨어를 제공합니다. 결제 단말기뿐만 아니라 가맹점 관리 시스템과 금융 서비스를 통합하여 중소기업의 디지털 전환을 지원합니다. 브라질 결제 시장에서 혁신적인 기술력과 서비스로 강력한 점유율을 확보하고 있습니다.",
+    "founded_year": 2012,
+    "headquarters": "상파울루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-22 23:37"
   },
   {
     "id": "xp_inc",
@@ -1920,22 +1968,6 @@
     "updated_at": "2026-08-02 21:12"
   },
   {
-    "id": "tcs",
-    "name": "Tata Consultancy Services Limited",
-    "name_ko": "타타 컨설턴시 서비시스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "TCS",
-    "sector": "IT 서비스",
-    "description": "1968년에 설립된 인도 타타 그룹 산하의 세계적인 IT 서비스 및 컨설팅 기업입니다. 전 세계 기업들을 상대로 디지털 전환, 소프트웨어 개발 및 아웃소싱 서비스를 제공합니다.",
-    "founded_year": 1968,
-    "headquarters": "뭄바이, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-02 17:22"
-  },
-  {
     "id": "tata_consultancy_services",
     "name": "Tata Consultancy Services Limited",
     "name_ko": "타타 컨설턴시 서비스",
@@ -1950,6 +1982,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-19 01:21"
+  },
+  {
+    "id": "tcs",
+    "name": "Tata Consultancy Services Limited",
+    "name_ko": "타타 컨설턴시 서비시스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "TCS",
+    "sector": "IT 서비스",
+    "description": "1968년에 설립된 인도 타타 그룹 산하의 세계적인 IT 서비스 및 컨설팅 기업입니다. 전 세계 기업들을 상대로 디지털 전환, 소프트웨어 개발 및 아웃소싱 서비스를 제공합니다.",
+    "founded_year": 1968,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-02 17:22"
   },
   {
     "id": "tata_motors",
@@ -2606,6 +2654,38 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-18 08:34"
+  },
+  {
+    "id": "banco_de_bogota",
+    "name": "Banco de Bogotá",
+    "name_ko": "방코 데 보고타",
+    "country": "콜롬비아",
+    "country_flag": "🌍",
+    "exchange": "BVC",
+    "ticker": "BOGOTA",
+    "sector": "은행",
+    "description": "방코 데 보고타는 1870년에 설립된 콜롬비아에서 가장 오래된 은행 중 하나입니다. 그루포 아발의 핵심 자회사로 개인 및 기업 고객을 대상으로 예금, 대출, 자산관리 등 종합적인 상업 은행업을 영위합니다. 콜롬비아 및 파나마 등 중남미 지역에서 강력한 영업망을 보유하고 있습니다.",
+    "founded_year": 1870,
+    "headquarters": "보고타, 콜롬비아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-03 02:02"
+  },
+  {
+    "id": "grupo_aval",
+    "name": "Grupo Aval Acciones y Valores S.A.",
+    "name_ko": "그루포 아발",
+    "country": "콜롬비아",
+    "country_flag": "🌍",
+    "exchange": "BVC",
+    "ticker": "GRUPOSVAL",
+    "sector": "금융",
+    "description": "그루포 아발은 1994년에 설립된 콜롬비아 최대의 금융지주사입니다. 여러 은행과 연금 자산운용사를 자회사로 두고 콜롬비아 및 중앙아메리카 지역에서 광범위한 금융 서비스를 제공합니다. 현지 금융 시장에서 지배적인 시장 지위와 높은 자산 규모를 자랑합니다.",
+    "founded_year": 1994,
+    "headquarters": "보고타, 콜롬비아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-03 02:01"
   },
   {
     "id": "airports_of_thailand",
