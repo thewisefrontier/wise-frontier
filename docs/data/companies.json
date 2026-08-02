@@ -1808,20 +1808,20 @@
     "updated_at": "2026-07-30 21:54"
   },
   {
-    "id": "tcs",
-    "name": "Tata Consultancy Services Limited",
-    "name_ko": "타타 컨설턴시 서비시스",
+    "id": "surya_pharma",
+    "name": "Surya Pharma",
+    "name_ko": "수리아 파마",
     "country": "인도",
     "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "TCS",
-    "sector": "IT 서비스",
-    "description": "1968년에 설립된 인도 타타 그룹 산하의 세계적인 IT 서비스 및 컨설팅 기업입니다. 전 세계 기업들을 상대로 디지털 전환, 소프트웨어 개발 및 아웃소싱 서비스를 제공합니다.",
-    "founded_year": 1968,
-    "headquarters": "뭄바이, 인도",
+    "exchange": "",
+    "ticker": "",
+    "sector": "제약",
+    "description": "인도에 본사를 둔 제약 및 의약품 관련 기업이다. 기사 내용에 따르면 코데인 성분이 포함된 기침약 등의 유통 및 관리와 연관되어 조사를 받고 있다. 상세한 설립 연도와 시장 내 정확한 재무적 위상은 공개된 정보가 제한적이다.",
+    "founded_year": null,
+    "headquarters": "뉴델리, 인도",
     "website": null,
     "is_published": true,
-    "updated_at": "2026-08-02 17:22"
+    "updated_at": "2026-08-02 21:12"
   },
   {
     "id": "tata_consultancy_services",
@@ -1838,6 +1838,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-19 01:21"
+  },
+  {
+    "id": "tcs",
+    "name": "Tata Consultancy Services Limited",
+    "name_ko": "타타 컨설턴시 서비시스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "TCS",
+    "sector": "IT 서비스",
+    "description": "1968년에 설립된 인도 타타 그룹 산하의 세계적인 IT 서비스 및 컨설팅 기업입니다. 전 세계 기업들을 상대로 디지털 전환, 소프트웨어 개발 및 아웃소싱 서비스를 제공합니다.",
+    "founded_year": 1968,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-02 17:22"
   },
   {
     "id": "tata_motors",
