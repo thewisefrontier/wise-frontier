@@ -837,6 +837,30 @@ def entry_age_days(entry):
     return None
 
 
+def entry_published_iso(entry):
+    """RSS 항목의 원문 발행일을 ISO8601(UTC) 문자열로 반환. 없으면 None.
+
+    entry_age_days()와 같은 필드를 같은 우선순위로 본다.
+    미래 날짜나 20년 이상 과거는 피드 오류로 보고 버린다.
+    """
+    for key in ("published_parsed", "updated_parsed", "created_parsed"):
+        tt = entry.get(key)
+        if not tt:
+            continue
+        try:
+            ts = calendar.timegm(tt)
+        except Exception:
+            continue
+        now_ts = time.time()
+        if ts > now_ts + 86400 or ts < now_ts - 86400 * 365 * 20:
+            continue
+        try:
+            return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(ts))
+        except Exception:
+            continue
+    return None
+
+
 def fetch_source(s):
     """단일 소스에서 최근 기사 다건 수집 (발행일 필터 적용)"""
     import socket
@@ -914,6 +938,7 @@ for data in results:
     title       = data["title"]
     link        = data["link"]
     latest      = data["entry"]
+    src_published = entry_published_iso(latest)
 
     fp = fingerprint(title, name)
 
@@ -1017,6 +1042,7 @@ for data in results:
             score=0, full_text=full_text,
             countries=country_names,
             is_published=False,
+            source_published_at=src_published,
         )
         print(f"[SOFT] [{category}] [{country_name}] {title_ko[:50]}")
         continue
@@ -1037,6 +1063,7 @@ for data in results:
             score=0, full_text=full_text,
             countries=country_names,
             is_published=False,
+            source_published_at=src_published,
         )
         if article_id > 0:
             mark_sent_telegram(article_id)
