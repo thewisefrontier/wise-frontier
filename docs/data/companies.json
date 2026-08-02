@@ -1168,22 +1168,6 @@
     "updated_at": "2026-07-30 17:02"
   },
   {
-    "id": "stoneco",
-    "name": "StoneCo Ltd.",
-    "name_ko": "스톤코",
-    "country": "브라질",
-    "country_flag": "🌍",
-    "exchange": "NASDAQ",
-    "ticker": "STNE",
-    "sector": "핀테크",
-    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
-    "founded_year": 2012,
-    "headquarters": "상파울루, 브라질",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-29 20:49"
-  },
-  {
     "id": "stone_co",
     "name": "StoneCo Ltd.",
     "name_ko": "스톤",
@@ -1198,6 +1182,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-22 23:37"
+  },
+  {
+    "id": "stoneco",
+    "name": "StoneCo Ltd.",
+    "name_ko": "스톤코",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "NASDAQ",
+    "ticker": "STNE",
+    "sector": "핀테크",
+    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
+    "founded_year": 2012,
+    "headquarters": "상파울루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-29 20:49"
   },
   {
     "id": "xp_inc",
@@ -2542,6 +2542,38 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-02 03:05"
+  },
+  {
+    "id": "codelco",
+    "name": "Corporacion Nacional del Cobre de Chile",
+    "name_ko": "코델코",
+    "country": "칠레",
+    "country_flag": "🌍",
+    "exchange": null,
+    "ticker": "",
+    "sector": "광업",
+    "description": "1976년에 설립된 칠레의 국영 구리 채굴 기업입니다. 세계 최대의 구리 생산량을 자랑하는 국유기업으로 국가 경제에 핵심적인 역할을 담당합니다. 최근에는 리튬 산업으로 사업 영역을 확장하며 국영 자원 개발을 주도하고 있습니다.",
+    "founded_year": 1976,
+    "headquarters": "산티아고, 칠레",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-03 07:01"
+  },
+  {
+    "id": "sqm",
+    "name": "Sociedad Quimica y Minera de Chile S.A.",
+    "name_ko": "SQM",
+    "country": "칠레",
+    "country_flag": "🌍",
+    "exchange": "NYSE",
+    "ticker": "SQM",
+    "sector": "소재",
+    "description": "1968년에 설립된 칠레의 대표적인 리튬 및 비료 생산 기업입니다. 세계 최대 규모의 리튬 생산 능력을 갖추고 있으며, 아타카마 염호에서 리튬과 칼륨 등을 채굴합니다. 글로벌 전기차 배터리 공급망에서 중요한 위치를 차지하고 있습니다.",
+    "founded_year": 1968,
+    "headquarters": "산티아고, 칠레",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-03 07:01"
   },
   {
     "id": "confecoes_alves_monteiro",
