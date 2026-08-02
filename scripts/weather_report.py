@@ -559,8 +559,12 @@ WEATHER_CODE_KO = {
 
 WEEKDAY_KO = ["월", "화", "수", "목", "금", "토", "일"]
 
-MORNING_HOUR_START = 6
-MORNING_HOUR_END = 9
+# 발행 창(현지시간). 06~09시(3h)였으나 GitHub Actions 스케줄이 상습적으로
+# 30분가량 지연돼 창이 짧은 그룹이 통째로 누락됐다.
+# 실사고: 남아시아(콜카타 UTC+5:30 → 창 UTC 00:30~03:30)가 7/27~8/02 전량 누락.
+# 05~10시(5h)로 확대. save_report()의 subcategory 중복 체크가 있어 하루 1건은 유지된다.
+MORNING_HOUR_START = 5
+MORNING_HOUR_END = 10
 
 
 def get_local_now(tz_name: str) -> datetime:

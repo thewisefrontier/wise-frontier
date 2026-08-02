@@ -2,7 +2,7 @@ name: NewsFinal - Daily Weather
 
 on:
   schedule:
-    - cron: '20 * * * *'    # 매시 20분 (UTC) — run.yml 정각, oil_price.yml 30분/정각과 겹치지 않게 오프셋. 스크립트가 국가별 현지 아침 시간을 자체 판단
+    - cron: '20,50 * * * *'    # 매시 20분·50분 (UTC) — run.yml 정각, oil_price.yml 30분/정각과 겹치지 않게 오프셋. 스크립트가 국가별 현지 아침 시간을 자체 판단
   workflow_dispatch:
 
 permissions:
