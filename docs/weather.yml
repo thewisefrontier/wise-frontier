@@ -1,0 +1,62 @@
+name: NewsFinal - Daily Weather
+
+on:
+  schedule:
+    - cron: '20,50 * * * *'    # 매시 20분·50분 (UTC) — run.yml 정각, oil_price.yml 30분/정각과 겹치지 않게 오프셋. 스크립트가 국가별 현지 아침 시간을 자체 판단
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: newsfinal-weather
+  cancel-in-progress: false
+
+jobs:
+  weather:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v5
+
+      - name: Python 설정
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: 패키지 설치
+        run: pip install -r requirements.txt
+
+      - name: 날씨 리포트 생성 (국가별 현지 아침 시간에만 발행, 한국은 기상청 단기예보 우선)
+        run: python scripts/weather_report.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
+          UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
+          KMA_API_KEY: ${{ secrets.KMA_API_KEY }}
+          KMA_BRIEFING_KEY: ${{ secrets.KMA_BRIEFING_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
+          GEMINI_API_KEY_4: ${{ secrets.GEMINI_API_KEY_4 }}
+          GEMINI_API_KEY_5: ${{ secrets.GEMINI_API_KEY_5 }}
+
+      - name: 웹사이트 데이터 내보내기
+        run: python scripts/export_articles.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+
+      - name: 변경사항 커밋 및 푸시
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add -A
+          git diff --staged --quiet || git commit -m "Update weather reports"
+          git pull origin main -X ours --no-rebase
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

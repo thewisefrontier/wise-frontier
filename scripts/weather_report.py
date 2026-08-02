@@ -567,6 +567,34 @@ MORNING_HOUR_START = 5
 MORNING_HOUR_END = 10
 
 
+# 제목 지역명 별칭 — 약칭만 쓴 제목에 정식 명칭이 중복으로 붙는 것을 막는다
+_REGION_ALIASES = {
+    "동남아시아": ("동남아시아", "동남아"),
+    "중앙아시아": ("중앙아시아", "중앙아"),
+    "중남미": ("중남미", "라틴아메리카"),
+    "북미": ("북미", "북아메리카"),
+    "한국": ("한국", "국내"),
+}
+
+
+def _ensure_region_prefix(title: str, region: str, prefix_word: str = "") -> str:
+    """제목 맨 앞에 지역명을 보장한다.
+
+    프롬프트로 지시하지만 Gemini가 누락하는 경우가 잦아 후처리로 확정한다.
+    이미 지역명(약칭 포함)이 들어 있으면 그대로 둔다.
+    """
+    t = (title or "").strip()
+    if not t or not region:
+        return t
+    for alias in _REGION_ALIASES.get(region, (region,)):
+        if alias in t:
+            return t
+    label = region
+    if prefix_word and prefix_word not in t:
+        label = f"{prefix_word} {region}"
+    return f"{label}, {t}"
+
+
 def get_local_now(tz_name: str) -> datetime:
     return datetime.now(timezone.utc).astimezone(ZoneInfo(tz_name))
 
@@ -1311,7 +1339,8 @@ def build_korea_today_report_kma(cities: list, local_now: datetime):
 {{"title": "제목", "body": "본문..."}}
 
 제목 작성 규칙:
-- 20자 내외. 지역명은 앞에 붙이지 말 것(본문에서 유추 가능)
+- 지역명을 맨 앞에 붙이고 쉼표로 구분할 것 (예: "유럽, 최고 37도 폭염 속 곳곳 장맛비")
+- 지역명을 제외한 나머지는 20자 내외
 - 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
 - "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
 
@@ -1327,6 +1356,7 @@ def build_korea_today_report_kma(cities: list, local_now: datetime):
     lede = _strip_local_time_kr(lede)
     max_temp = fmt_num(max([k["tmax"] for _, _, k in valid]))
     title = _title_kma_today if _title_kma_today else f"한국, {_weather_phrase(lede, max_temp)}"
+    title = _ensure_region_prefix(title, "한국")
     legend = "[지역별 날씨 전망] [오전/오후](최저∼최고기온) | 강수확률"
     body = lede + "\n\n" + legend + "\n\n" + "\n".join(lines)
     return title, body
@@ -1420,7 +1450,8 @@ def build_korea_weekend_report_kma(cities: list, local_now: datetime):
 {{"title": "제목", "body": "본문..."}}
 
 제목 작성 규칙:
-- 20자 내외. 지역명은 앞에 붙이지 말 것(본문에서 유추 가능)
+- 지역명을 맨 앞에 붙이고 쉼표로 구분할 것 (예: "유럽, 최고 37도 폭염 속 곳곳 장맛비")
+- 지역명을 제외한 나머지는 20자 내외
 - 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
 - "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
 
@@ -1437,6 +1468,7 @@ def build_korea_weekend_report_kma(cities: list, local_now: datetime):
     sat_f = "맑음" if cap_sat and "맑" in (cap_sat.get("am_condition") or "") else ("비" if cap_sat and "비" in (cap_sat.get("am_condition") or "") else "흐림")
     sun_f = "맑음" if cap_sun and "맑" in (cap_sun.get("am_condition") or "") else ("비" if cap_sun and "비" in (cap_sun.get("am_condition") or "") else "흐림")
     title = _title_kma_wknd if _title_kma_wknd else f"주말 한국, {_weekend_phrase(sat_f, sun_f)}"
+    title = _ensure_region_prefix(title, "한국", "주말")
     legend = "다음은 지역별 주말 날씨 전망입니다.\n[토요일, 일요일](최저∼최고기온) <오전 강수확률, 오후 강수확률>"
     body = lede + "\n\n" + legend + "\n\n" + "\n".join(lines)
     return title, body
@@ -1635,7 +1667,8 @@ def build_korea_weekly_report_kma(cities: list, local_now: datetime):
 {{"title": "제목", "body": "본문..."}}
 
 제목 작성 규칙:
-- 20자 내외. 지역명은 앞에 붙이지 말 것(본문에서 유추 가능)
+- 지역명을 맨 앞에 붙이고 쉼표로 구분할 것 (예: "유럽, 최고 37도 폭염 속 곳곳 장맛비")
+- 지역명을 제외한 나머지는 20자 내외
 - 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
 - "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
 
@@ -1651,6 +1684,7 @@ def build_korea_weekly_report_kma(cities: list, local_now: datetime):
 
     summary = _strip_local_time_kr(summary)
     title = _title_kma_wkly if _title_kma_wkly else f"다음주 한국, {_weekly_phrase(summary, fmt_num(max(tmax_all)) if tmax_all else '?')}"
+    title = _ensure_region_prefix(title, "한국", "다음주")
     body = summary + "\n\n다음은 지역별 날씨 전망입니다.\n\n" + "\n".join(lines)
     return title, body
 
@@ -1809,7 +1843,8 @@ def build_today_report(country_name, weather_list, local_now: datetime):
 {{"title": "제목", "body": "본문..."}}
 
 제목 작성 규칙:
-- 20자 내외. 지역명은 앞에 붙이지 말 것(본문에서 유추 가능)
+- 지역명을 맨 앞에 붙이고 쉼표로 구분할 것 (예: "유럽, 최고 37도 폭염 속 곳곳 장맛비")
+- 지역명을 제외한 나머지는 20자 내외
 - 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
 - "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
 
@@ -1824,6 +1859,7 @@ def build_today_report(country_name, weather_list, local_now: datetime):
 
     max_temp = fmt_num(max([k["tmax"] for _, _, k in valid]))
     title = _title_today if _title_today else f"{country_name}, {_weather_phrase(summary, max_temp)}"
+    title = _ensure_region_prefix(title, country_name)
     body = summary + "\n\n" + "\n".join(lines)
     return title, body
 
@@ -1892,7 +1928,8 @@ def build_weekend_report(country_name, weather_list, local_now: datetime):
 {{"title": "제목", "body": "본문..."}}
 
 제목 작성 규칙:
-- 20자 내외. 지역명은 앞에 붙이지 말 것(본문에서 유추 가능)
+- 지역명을 맨 앞에 붙이고 쉼표로 구분할 것 (예: "유럽, 최고 37도 폭염 속 곳곳 장맛비")
+- 지역명을 제외한 나머지는 20자 내외
 - 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
 - "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
 
@@ -1907,6 +1944,7 @@ def build_weekend_report(country_name, weather_list, local_now: datetime):
     sat_f = "맑음" if sat_info and WEATHER_CODE_KO.get(sat_info.get("code"), "") in ("맑음", "구름조금") else ("비" if sat_info and sat_info.get("precip_prob", 0) >= 50 else "흐림")
     sun_f = "맑음" if sun_info and WEATHER_CODE_KO.get(sun_info.get("code"), "") in ("맑음", "구름조금") else ("비" if sun_info and sun_info.get("precip_prob", 0) >= 50 else "흐림")
     title = _title_wknd if _title_wknd else f"주말 {country_name}, {_weekend_phrase(sat_f, sun_f)}"
+    title = _ensure_region_prefix(title, country_name, "주말")
     body = summary + "\n\n" + "\n".join(lines)
     return title, body
 
@@ -1971,7 +2009,8 @@ def build_weekly_report(country_name, weather_list, local_now: datetime):
 {{"title": "제목", "body": "본문..."}}
 
 제목 작성 규칙:
-- 20자 내외. 지역명은 앞에 붙이지 말 것(본문에서 유추 가능)
+- 지역명을 맨 앞에 붙이고 쉼표로 구분할 것 (예: "유럽, 최고 37도 폭염 속 곳곳 장맛비")
+- 지역명을 제외한 나머지는 20자 내외
 - 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
 - "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
 
@@ -1986,6 +2025,7 @@ def build_weekly_report(country_name, weather_list, local_now: datetime):
 
     max_cap = fmt_num(max(tmax_all_cap)) if tmax_all_cap else "?"
     title = _title_wkly if _title_wkly else f"다음주 {country_name}, {_weekly_phrase(summary, max_cap)}"
+    title = _ensure_region_prefix(title, country_name, "다음주")
     body = summary + "\n\n" + "\n".join(lines)
     return title, body
 
@@ -2071,7 +2111,8 @@ def build_group_today_report(group_name, countries_data, local_now: datetime):
 {{"title": "제목", "body": "본문..."}}
 
 제목 작성 규칙:
-- 20자 내외. 지역명은 앞에 붙이지 말 것(본문에서 유추 가능)
+- 지역명을 맨 앞에 붙이고 쉼표로 구분할 것 (예: "유럽, 최고 37도 폭염 속 곳곳 장맛비")
+- 지역명을 제외한 나머지는 20자 내외
 - 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
 - "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
 
@@ -2088,6 +2129,7 @@ def build_group_today_report(group_name, countries_data, local_now: datetime):
     _g_tmax_list = [c[2]["tmax"] for c in successful_caps if c[2] and c[2].get("tmax") is not None]
     max_temp = fmt_num(max(_g_tmax_list)) if _g_tmax_list else "?"
     title = _title_grp_today if _title_grp_today else f"{group_name}, {_weather_phrase(summary, max_temp)}"
+    title = _ensure_region_prefix(title, group_name)
     body = summary + "\n\n" + "\n\n".join(country_blocks)
     return title, body
 
@@ -2169,7 +2211,8 @@ def build_group_weekend_report(group_name, countries_data, local_now: datetime):
 {{"title": "제목", "body": "본문..."}}
 
 제목 작성 규칙:
-- 20자 내외. 지역명은 앞에 붙이지 말 것(본문에서 유추 가능)
+- 지역명을 맨 앞에 붙이고 쉼표로 구분할 것 (예: "유럽, 최고 37도 폭염 속 곳곳 장맛비")
+- 지역명을 제외한 나머지는 20자 내외
 - 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
 - "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
 
@@ -2185,6 +2228,7 @@ def build_group_weekend_report(group_name, countries_data, local_now: datetime):
     sat_f = "비" if sum(1 for _, s, _ in successful if (s.get("precip_prob") or 0) >= 50) > len(successful) / 2 else "맑음"
     sun_f = "비" if sum(1 for _, _, u in successful if (u.get("precip_prob") or 0) >= 50) > len(successful) / 2 else "맑음"
     title = _title_grp_wknd if _title_grp_wknd else f"주말 {group_name}, {_weekend_phrase(sat_f, sun_f)}"
+    title = _ensure_region_prefix(title, group_name, "주말")
     body = summary + "\n\n" + "\n\n".join(country_blocks)
     return title, body
 
@@ -2258,7 +2302,8 @@ def build_group_weekly_report(group_name, countries_data, local_now: datetime):
 {{"title": "제목", "body": "본문..."}}
 
 제목 작성 규칙:
-- 20자 내외. 지역명은 앞에 붙이지 말 것(본문에서 유추 가능)
+- 지역명을 맨 앞에 붙이고 쉼표로 구분할 것 (예: "유럽, 최고 37도 폭염 속 곳곳 장맛비")
+- 지역명을 제외한 나머지는 20자 내외
 - 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
 - "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
 
@@ -2274,6 +2319,7 @@ def build_group_weekly_report(group_name, countries_data, local_now: datetime):
     _gw_tmax_list = [d["tmax"] for c in successful for d in c[1]]
     _gw_max = fmt_num(max(_gw_tmax_list)) if _gw_tmax_list else "?"
     title = _title_grp_wkly if _title_grp_wkly else f"다음주 {group_name}, {_weekly_phrase(summary, _gw_max)}"
+    title = _ensure_region_prefix(title, group_name, "다음주")
     body = summary + "\n\n" + "\n\n".join(country_blocks)
     return title, body
 
