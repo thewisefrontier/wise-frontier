@@ -1,8 +1,10 @@
 name: NewsFinal - Backfill Value-Add
 
 on:
-  schedule:
-    - cron: '10,40 * * * *'   # 매시 10분·40분 (run.yml 정각, weather.yml 20분과 겹치지 않게 오프셋)
+  # 2026-08-03: 백필 100% 완료(4,275/4,275)로 cron 비활성화.
+  # 재개가 필요하면 아래 2줄의 주석을 해제할 것.
+  # schedule:
+  #   - cron: '10,40 * * * *'   # 매시 10분·40분 (run.yml 47분, weather.yml 20,50분과 겹치지 않게 오프셋)
   workflow_dispatch:
 
 concurrency:
