@@ -22,6 +22,13 @@ try:
 except ImportError:
     EXTERNAL_TRENDS_AVAILABLE = False
 
+# 날짜 환각 판정 공통 모듈. import 실패해도 본 기능이 죽지 않도록 폴백을 둔다.
+try:
+    from date_guard import check_date_hallucination
+except Exception:
+    def check_date_hallucination(body, sources, base_date=None):
+        return False, ""
+
 load_dotenv()
 
 KST = timezone(timedelta(hours=9))
@@ -463,6 +470,37 @@ TREND_MIN_ARTICLES = 3   # 최소 N건 이상 등장해야 트렌드로 판단
 TREND_CHECK_HOURS  = 12  # 마지막 추적기사 생성 후 N시간 이내면 스킵
 
 
+def _fetch_source_details(rows: list) -> list:
+    """날짜 판정에 필요한 컬럼(full_text/source_published_at)을 id로 보강 조회한다.
+
+    trend/realtrend 경로의 소스 조회 select에는 full_text·source_published_at이
+    없다(전량 조회 시 응답이 폭증하므로 일부러 뺀 것). 저장 직전 소수 건에 대해서만
+    보강한다. 실패하면 원본을 그대로 돌려주어 date_guard가 '판정 불가 → 통과'로
+    떨어지게 한다(정상 기사를 기술적 실패로 버리지 않는다).
+    """
+    ids = [str(r.get("id")) for r in (rows or []) if r.get("id")]
+    if not ids:
+        return rows or []
+    try:
+        res = requests.get(
+            _sb_url(),
+            headers=_sb_headers(),
+            params={
+                "select": "id,full_text,title_en,summary_en,source_published_at",
+                "id": f"in.({','.join(ids)})",
+                "limit": str(len(ids)),
+            },
+            timeout=15,
+        )
+        if res.status_code in (200, 206):
+            got = res.json()
+            if got:
+                return got
+    except Exception as e:
+        print(f"  ⚠️ 소스 상세 조회 실패(날짜 판정 축소): {e}")
+    return rows or []
+
+
 def get_trend_articles(keywords: list, days: int = 7) -> list:
     """지난 N일간 특정 키워드가 포함된 수집 기사 반환"""
     since = (now_kst() - timedelta(days=days)).strftime("%Y-%m-%d %H:%M")
@@ -691,7 +729,8 @@ def trend_article_exists(group_name: str) -> bool:
 
 def save_trend_article(group_name: str, title: str, body: str,
                        category: str, country: str, region: str,
-                       countries: list, summary_3lines: str = "", investment_idea: str = "") -> int:
+                       countries: list, summary_3lines: str = "", investment_idea: str = "",
+                       published: bool = True, guard_note: str = "") -> int:
     """트렌드 추적 기사 저장"""
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
     payload = {
@@ -708,9 +747,10 @@ def save_trend_article(group_name: str, title: str, body: str,
         "score": 2,  # 라이브 탭에 바로 표시
         "created_at": now_str,
         "first_published_at": now_str,
-        "update_log": [{"timestamp": now_str, "note": "트렌드 추적 최초 게시"}],
+        "update_log": [{"timestamp": now_str,
+                        "note": guard_note or "트렌드 추적 최초 게시"}],
         "sent_telegram": 0,
-        "is_published": True,
+        "is_published": published,
         "posted_blog": 0,
         "summary_3lines": summary_3lines,
         "investment_idea": investment_idea,
@@ -837,10 +877,19 @@ def run_trend_tracker():
                 time.sleep(CALL_INTERVAL)
                 continue
 
+        # 날짜 환각 판정 — 원문에 근거 없는 "N일(현지시간)"이면 미발행
+        _dg_bad, _dg_reason = check_date_hallucination(
+            body, _fetch_source_details(top), base_date=now_kst().date()
+        )
+        if _dg_bad:
+            print(f"  [{group_name}] ⛔ 날짜 환각 의심 → 미발행: {_dg_reason}")
+
         article_id = save_trend_article(
             group_name=group_name, title=title, body=body,
             category=gen_category, country=country, region=region,
-            countries=countries, summary_3lines=summary_3lines, investment_idea=investment_idea
+            countries=countries, summary_3lines=summary_3lines, investment_idea=investment_idea,
+            published=not _dg_bad,
+            guard_note=(f"날짜 환각 의심 미발행 — {_dg_reason}" if _dg_bad else ""),
         )
 
         if article_id > 0:
@@ -1272,6 +1321,14 @@ JSON 배열로만 응답하세요 (마크다운 없이):
             continue
 
         now_str = now_kst().strftime("%Y-%m-%d %H:%M")
+
+        # 날짜 환각 판정 — 원문에 근거 없는 "N일(현지시간)"이면 미발행
+        _dg_bad, _dg_reason = check_date_hallucination(
+            body, _fetch_source_details(related), base_date=now_kst().date()
+        )
+        if _dg_bad:
+            print(f"  [{topic}] ⛔ 날짜 환각 의심 → 미발행: {_dg_reason}")
+
         payload = {
             "title_en": title, "title_ko": title,
             "summary_en": "", "summary_ko": body,
@@ -1286,9 +1343,11 @@ JSON 배열로만 응답하세요 (마크다운 없이):
             "score": 2,
             "created_at": now_str,
             "first_published_at": now_str,
-            "update_log": [{"timestamp": now_str, "note": f"실시간 트렌드 감지 ({topic}, {urgency})"}],
+            "update_log": [{"timestamp": now_str,
+                            "note": (f"날짜 환각 의심 미발행 — {_dg_reason}" if _dg_bad
+                                     else f"실시간 트렌드 감지 ({topic}, {urgency})")}],
             "sent_telegram": 0,
-            "is_published": True,
+            "is_published": not _dg_bad,
             "posted_blog": 0,
             "summary_3lines": summary_3lines,
             "investment_idea": investment_idea,

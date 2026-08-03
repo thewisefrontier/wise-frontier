@@ -15,6 +15,13 @@ import requests
 from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
 
+# 날짜 환각 판정 공통 모듈. import 실패해도 본 기능이 죽지 않도록 폴백을 둔다.
+try:
+    from date_guard import check_date_hallucination
+except Exception:
+    def check_date_hallucination(body, sources, base_date=None):
+        return False, ""
+
 load_dotenv()
 
 KST = timezone(timedelta(hours=9))
@@ -328,7 +335,26 @@ def fetch_article_image(title: str, body: str) -> str:
     return ""
 
 
-def save_digest(title, body, article_count, image_url=""):
+def _digest_sources(articles: list) -> list:
+    """다이제스트의 '원문'은 어제자 자체 발행 기사다.
+
+    date_guard는 소스 dict의 full_text/title_en/summary_en에서 날짜 근거를 찾으므로,
+    자체 기사의 summary_ko/title_ko를 그 자리에 매핑해 넘긴다. 다이제스트 본문의
+    "N일(현지시간)"이 원기사 어디에도 없으면 요약 과정에서 지어낸 것이다.
+    """
+    out = []
+    for a in (articles or []):
+        out.append({
+            "id": a.get("id"),
+            "full_text": a.get("summary_ko") or "",
+            "title_en": a.get("title_ko") or "",
+            "summary_en": "",
+            "source_published_at": a.get("created_at") or "",
+        })
+    return out
+
+
+def save_digest(title, body, article_count, image_url="", published=True, guard_note=""):
     today_key = f"digest_{now_kst().strftime('%Y%m%d')}"
     payload = {
         "title_en": title,
@@ -346,9 +372,12 @@ def save_digest(title, body, article_count, image_url=""):
         "score": article_count,
         "created_at": now_kst().strftime("%Y-%m-%d %H:%M"),  # 실제 발행 시각(오늘 새벽) — 홈 노출 판단 기준
         "sent_telegram": 0,
-        "is_published": True,
+        "is_published": published,
         "posted_blog": 0,
     }
+    if guard_note:
+        payload["update_log"] = [{"timestamp": now_kst().strftime("%Y-%m-%d %H:%M"),
+                                  "note": guard_note}]
     res = requests.post(_sb_url(), headers=_sb_headers(), json=payload, timeout=15)
     if res.status_code in (200, 201):
         data = res.json()
@@ -389,7 +418,18 @@ def run():
 
     image_url = fetch_article_image(title, body or content)
 
-    article_id = save_digest(title, body or content, len(articles), image_url=image_url)
+    # 날짜 환각 판정 — 원기사에 근거 없는 "N일(현지시간)"이면 미발행
+    _dg_bad, _dg_reason = check_date_hallucination(
+        body or content, _digest_sources(articles), base_date=now_kst().date()
+    )
+    if _dg_bad:
+        print(f"⛔ 날짜 환각 의심 → 미발행: {_dg_reason}")
+
+    article_id = save_digest(
+        title, body or content, len(articles), image_url=image_url,
+        published=not _dg_bad,
+        guard_note=(f"날짜 환각 의심 미발행 — {_dg_reason}" if _dg_bad else ""),
+    )
     if article_id > 0:
         print(f"✅ 다이제스트 저장 완료 (id={article_id}): {title}")
     else:
