@@ -1120,6 +1120,22 @@
     "updated_at": "2026-07-29 20:50"
   },
   {
+    "id": "compania_de_minas_buenaventura",
+    "name": "Compañía de Minas Buenaventura S.A.A.",
+    "name_ko": "부에나벤투라",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "NYSE",
+    "ticker": "BVN",
+    "sector": "광업",
+    "description": "부에나벤투라는 페루 최대 규모의 공개 상장 귀금속 및 비철금속 광업 기업입니다. 금, 은, 구리, 아연 등의 탐사 및 개발을 주력으로 하며 페루 경제에서 중요한 위상을 차지하고 있습니다. 다수의 광산 프로젝트를 통해 안데스 지역의 광업 성장을 이끌어왔습니다.",
+    "founded_year": 1953,
+    "headquarters": "리마, 페루",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-03 14:55"
+  },
+  {
     "id": "davita_bank",
     "name": "Daycoval Bank",
     "name_ko": "데이비체은행",
@@ -1198,6 +1214,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-22 18:03"
+  },
+  {
+    "id": "nexa_resources",
+    "name": "Nexa Resources S.A.",
+    "name_ko": "넥사 리소스",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "NYSE",
+    "ticker": "NEXA",
+    "sector": "광업",
+    "description": "넥사 리소스는 브라질에 본사를 둔 대형 광업 및 제련 기업으로 주로 아연을 생산합니다. 라틴 아메리카 지역에서 다수의 광산과 제련소를 운영하며 글로벌 금속 시장에 공급을 담당하고 있습니다. 건설 및 인프라 부문의 수요 변동에 큰 영향을 받는 대표적인 비철금속 기업입니다.",
+    "founded_year": 1956,
+    "headquarters": "룩셈부르크, 룩셈부르크 (브라질 상파울루 운영 본사)",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-03 14:55"
   },
   {
     "id": "nubank",
@@ -1808,6 +1840,22 @@
     "updated_at": "2026-08-02 17:22"
   },
   {
+    "id": "bookmyshow",
+    "name": "BookMyShow",
+    "name_ko": "북마이쇼",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "엔터테인먼트/플랫폼",
+    "description": "2007년에 설립된 인도의 대표적인 온라인 티켓 예매 및 엔터테인먼트 플랫폼입니다. 영화, 공연, 스포츠 경기 등 다양한 문화·여가 행사의 티켓팅 서비스를 제공하며 인도 시장 내 독보적인 지위를 확보하고 있습니다. 현지 디지털 소비 성장과 함께 빠르게 성장해 온 비상장 대형 민간 기업입니다.",
+    "founded_year": 2007,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-03 14:57"
+  },
+  {
     "id": "daimler_india_commercial_vehicles",
     "name": "Daimler India Commercial Vehicles",
     "name_ko": "다임러 버스 인도",
@@ -2128,22 +2176,6 @@
     "updated_at": "2026-08-02 21:12"
   },
   {
-    "id": "tata_consultancy_services",
-    "name": "Tata Consultancy Services Limited",
-    "name_ko": "타타 컨설턴시 서비스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "TCS",
-    "sector": "IT 서비스",
-    "description": "1968년 설립된 글로벌 IT 서비스 및 컨설팅 기업으로 타타 그룹의 핵심 계열사입니다. 전 세계 기업들을 대상으로 소프트웨어 개발, 비즈니스 솔루션, IT 아웃소싱 서비스를 제공합니다. 인도 IT 산업의 선구자이자 세계적인 수준의 기술력을 보유한 기업으로 평가받습니다.",
-    "founded_year": 1968,
-    "headquarters": "뭄바이, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-19 01:21"
-  },
-  {
     "id": "tcs",
     "name": "Tata Consultancy Services Limited",
     "name_ko": "타타 컨설턴시 서비시스",
@@ -2158,6 +2190,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-02 17:22"
+  },
+  {
+    "id": "tata_consultancy_services",
+    "name": "Tata Consultancy Services Limited",
+    "name_ko": "타타 컨설턴시 서비스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "TCS",
+    "sector": "IT 서비스",
+    "description": "1968년 설립된 글로벌 IT 서비스 및 컨설팅 기업으로 타타 그룹의 핵심 계열사입니다. 전 세계 기업들을 대상으로 소프트웨어 개발, 비즈니스 솔루션, IT 아웃소싱 서비스를 제공합니다. 인도 IT 산업의 선구자이자 세계적인 수준의 기술력을 보유한 기업으로 평가받습니다.",
+    "founded_year": 1968,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-19 01:21"
   },
   {
     "id": "tata_motors",
@@ -3070,6 +3118,22 @@
     "website": null,
     "is_published": true,
     "updated_at": null
+  },
+  {
+    "id": "gcash_gxchange",
+    "name": "GXChange Inc.",
+    "name_ko": "지엑스체인지 (지캐시 운영사)",
+    "country": "필리핀",
+    "country_flag": "🇵🇭",
+    "exchange": "PSE",
+    "ticker": "",
+    "sector": "핀테크",
+    "description": "2015년에 설립된 필리핀의 대표적인 금융 슈퍼앱 지캐시(GCash)의 운영사입니다. 모바일 지갑 및 디지털 결제 서비스를 제공하며 필리핀 핀테크 시장에서 독보적인 선두 지위를 차지하고 있습니다. 필리핀의 금융 포용성 확대와 현금 없는 사회 전환을 주도하고 있습니다.",
+    "founded_year": 2015,
+    "headquarters": "타기그, 필리핀",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-03 14:55"
   },
   {
     "id": "international_container_terminal_services",
