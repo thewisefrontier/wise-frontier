@@ -158,6 +158,22 @@ def _koreanize_fallback(text: str) -> str:
     return text
 
 
+def _ensure_kma_attribution(text: str) -> str:
+    """기상청 단기·중기예보 기반 기사에 출처 표기를 보장한다.
+
+    프롬프트로 지시해도 Gemini가 누락하는 경우가 있어(강제성 없는 지시라
+    준수율이 들쭉날쭉함) 코드 단에서 확정한다. 이미 "기상청"이 들어 있으면
+    손대지 않는다. 삽입 위치는 첫 문장 다음 문장의 첫머리.
+    """
+    if not text or "기상청" in text:
+        return text
+    m = re.search(r"다\.\s*", text)
+    if not m or m.end() >= len(text):
+        return text
+    i = m.end()  # 공백·개행을 건너뛴 지점 = 둘째 문장 시작(문단 구분 보존)
+    return text[:i] + "기상청에 따르면 " + text[i:]
+
+
 def _is_last_chance(local_now: datetime) -> bool:
     """현지 아침 창(05~09시)의 마지막 시간대인지 판정한다.
 
@@ -1420,6 +1436,7 @@ def build_korea_today_report_kma(cities: list, local_now: datetime):
 - 700자 이상 작성
 - 본문은 2~3개 문단으로 나누어 작성. JSON body 값에서 문단 구분은 반드시 \\n\\n(개행 두 번)으로 표시
 - 첫 문장은 반드시 "{local_now.day}일 한국의 날씨는"으로 시작해 전국 기상을 한 문장으로 개관한 뒤, 이어서 {cap_name} 등 지역별 상세로 들어갈 것. {cap_name}을 "수도"로 지칭하지 말 것(예: "수도 {cap_name}" 금지, 그냥 "{cap_name}"만 사용)
+- 자료 출처는 한국 기상청이다. 본문에 "기상청에 따르면" 또는 "기상청은 ~ 예보했다" 형태의 출처 표기를 한 번 포함할 것(두 번 이상 반복 금지)
 - "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
 - 타 매체명 언급 금지
 - 제공된 날씨 수치 데이터에만 근거해 작성할 것. 지정학적 상황·분쟁·외교·경제·유가·증시 등 날씨 외 내용 추가 절대 금지
@@ -1448,7 +1465,7 @@ def build_korea_today_report_kma(cities: list, local_now: datetime):
             f"전국적으로는 최저 {fmt_num(min(tmin_all))}°C에서 최고 {fmt_num(max(tmax_all))}°C의 분포를 보일 전망이다."
         )
 
-    lede = _strip_local_time_kr(lede)
+    lede = _ensure_kma_attribution(_strip_local_time_kr(lede))
     max_temp = fmt_num(max([k["tmax"] for _, _, k in valid]))
     title = _title_kma_today if _title_kma_today else f"한국, {_weather_phrase(lede, max_temp)}"
     title = _ensure_region_prefix(title, "한국")
@@ -1535,6 +1552,7 @@ def build_korea_weekend_report_kma(cities: list, local_now: datetime):
 - 날짜 표기: 오늘은 {local_now.day}일이다. 본문은 반드시 "{local_now.day}일"로 시작할 것(다른 숫자 사용 금지, "(현지시간)" 붙이지 말 것). "오늘", "이번 주말", 절대연도 절대 금지
 - 700자 이상 작성
 - 첫 문장은 반드시 "{local_now.day}일 이번 주말 한국의 날씨는"으로 시작해 전국 기상을 한 문장으로 개관한 뒤, 이어서 {cap_name} 등 지역별 상세로 들어갈 것. {cap_name}을 "수도"로 지칭하지 말 것(예: "수도 {cap_name}" 금지, 그냥 "{cap_name}"만 사용)
+- 자료 출처는 한국 기상청이다. 본문에 "기상청에 따르면" 또는 "기상청은 ~ 예보했다" 형태의 출처 표기를 한 번 포함할 것(두 번 이상 반복 금지)
 - "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
 - 타 매체명 언급 금지
 - 제공된 날씨 수치 데이터에만 근거해 작성할 것. 지정학적 상황·분쟁·외교·경제·유가·증시 등 날씨 외 내용 추가 절대 금지
@@ -1562,7 +1580,7 @@ def build_korea_weekend_report_kma(cities: list, local_now: datetime):
             + (f" {', '.join(rain_cities)} 등은 강수확률이 높아 우산 준비가 필요하다." if rain_cities else "")
         )
 
-    lede = _strip_local_time_kr(lede)
+    lede = _ensure_kma_attribution(_strip_local_time_kr(lede))
     sat_f = "맑음" if cap_sat and "맑" in (cap_sat.get("am_condition") or "") else ("비" if cap_sat and "비" in (cap_sat.get("am_condition") or "") else "흐림")
     sun_f = "맑음" if cap_sun and "맑" in (cap_sun.get("am_condition") or "") else ("비" if cap_sun and "비" in (cap_sun.get("am_condition") or "") else "흐림")
     title = _title_kma_wknd if _title_kma_wknd else f"주말 한국, {_weekend_phrase(sat_f, sun_f)}"
@@ -1755,6 +1773,7 @@ def build_korea_weekly_report_kma(cities: list, local_now: datetime):
 - 날짜 표기: 오늘은 {local_now.day}일이다. 본문은 반드시 "{local_now.day}일"로 시작할 것(다른 숫자 사용 금지, "(현지시간)" 붙이지 말 것). "이번 주", "다음주", 절대연도 절대 금지
 - 700자 이상 작성
 - 첫 문장은 반드시 "{local_now.day}일 기준 다음 주 한국의 날씨는"으로 시작해 전체 흐름을 한 문장으로 개관한 뒤, 이어서 서울 등 요일별 상세로 들어갈 것. 서울을 "수도"로 지칭하지 말 것(예: "수도 서울" 금지, 그냥 "서울"만 사용)
+- 자료 출처는 한국 기상청이다. 본문에 "기상청에 따르면" 또는 "기상청은 ~ 예보했다" 형태의 출처 표기를 한 번 포함할 것(두 번 이상 반복 금지)
 - "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
 - 타 매체명 언급 금지
 - 제공된 날씨 수치 데이터에만 근거해 작성할 것. 지정학적 상황·분쟁·외교·경제·유가·증시 등 날씨 외 내용 추가 절대 금지
@@ -1783,7 +1802,7 @@ def build_korea_weekly_report_kma(cities: list, local_now: datetime):
             + (f" {'·'.join(rain_days)}요일에 비 소식이 있다." if rain_days else " 당분간 비 소식은 없을 전망이다.")
         )
 
-    summary = _strip_local_time_kr(summary)
+    summary = _ensure_kma_attribution(_strip_local_time_kr(summary))
     title = _title_kma_wkly if _title_kma_wkly else f"다음주 한국, {_weekly_phrase(summary, fmt_num(max(tmax_all)) if tmax_all else '?')}"
     title = _ensure_region_prefix(title, "한국", "다음주")
     body = summary + "\n\n다음은 지역별 날씨 전망입니다.\n\n" + "\n".join(lines)
