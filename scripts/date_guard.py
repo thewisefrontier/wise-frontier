@@ -16,6 +16,9 @@ import 실패에도 본 기능이 죽지 않도록 소비자 쪽에서 try/excep
 
 판정 규칙 (2026-08-03 실데이터 337표기 검증 기반)
   1. 원문(full_text/title_en/summary_en/source_published_at)에 그 일자 근거가 있으면 통과
+     ⚠️ 근거는 월+일을 함께 대조한다. 기준일에서 EVIDENCE_WINDOW_DAYS(31일)를 벗어난
+        날짜는 근거로 인정하지 않는다. (일만 대조하면 4개월 전 논문의 '19 Apr'이
+        8월 기사의 '19일(현지시간)' 근거가 된다 — 실사례 id=48644)
   2. 과거명시어(앞서/지난/이미/당시) 또는 미래신호어(오는/예정/부터) 근접 시 통과
   3. 판정 불가(원문 텍스트 빈약 + 발행일 없음) 시 통과 — full_text 확보율 69%
   4. 과거 방향 갭 <= 3일 → 통과 (정상 범위)
@@ -35,6 +38,11 @@ __all__ = ["check_date_hallucination", "extract_local_time_marks"]
 GAP_THRESHOLD = 3          # 이 일수 이내면 정상으로 본다
 MIN_SOURCE_TEXT = 200      # 원문 텍스트가 이보다 짧으면 판정 불가 → 통과
 UPDATE_LOG_SEP = "[업데이트 이력]"
+
+# 원문 날짜 근거의 유효 범위(일). 기준일에서 이보다 멀면 근거로 인정하지 않는다.
+# ⚠️ 일(day)만 대조하면 "19 Apr"이 8월 기사의 "19일(현지시간)" 근거로 잘못 인정된다.
+#    (실사례: arXiv 피드가 4개월 전 논문을 재발행 — id=48644)
+EVIDENCE_WINDOW_DAYS = 31
 
 # 표기 추출: 앞 20자는 숫자를 포함하지 않아야 한다.
 # ⚠️ .{0,20} 을 쓰면 앞자리 숫자를 먹어 d가 깨진다 (실측으로 확인된 함정)
@@ -56,13 +64,41 @@ _PAST_TENSE_RE = re.compile(
 _MON = (r"(?:jan|feb|fev|f[e\u00e9]v|mar|apr|abr|may|mai|jun|jul|jui|ago|aug|"
         r"sep|set|oct|out|nov|dec|dez|d[e\u00e9]c|ene|dic|ao[u\u00fb]t)[a-z]*")
 
-_DATE_PATTERNS = (
-    re.compile(_MON + r"\.?\s+([0-9]{1,2})(?![0-9])", re.I),                    # July 29 / julio 29
-    re.compile(r"([0-9]{1,2})(?:st|nd|rd|th)?\s+(?:de\s+)?" + _MON, re.I),      # 29 July / 29 de julio
-    re.compile(r"[0-9]{4}-[0-9]{1,2}-([0-9]{1,2})"),                            # ISO
-    re.compile(r"[0-9]{1,2}/([0-9]{1,2})/[0-9]{4}"),                            # 유럽식 d/m/Y
-    re.compile(r"([0-9]{1,2})/[0-9]{1,2}/[0-9]{4}"),                            # 미국식 m/d/Y (양쪽 다 후보)
+# 월+일을 함께 캡처한다. 일만 뽑으면 다른 달의 같은 일자를 근거로 오인한다.
+_PAT_MON_DAY = re.compile(r"(?P<mon>" + _MON + r")\.?\s+(?P<day>[0-9]{1,2})(?![0-9])", re.I)
+_PAT_DAY_MON = re.compile(r"(?P<day>[0-9]{1,2})(?:st|nd|rd|th)?\s+(?:de\s+)?(?P<mon>" + _MON + r")", re.I)
+_PAT_ISO     = re.compile(r"(?P<y>[0-9]{4})-(?P<m>[0-9]{1,2})-(?P<day>[0-9]{1,2})(?![0-9])")
+_PAT_SLASH   = re.compile(r"(?P<a>[0-9]{1,2})/(?P<b>[0-9]{1,2})/(?P<y>[0-9]{4})")  # d/m/Y·m/d/Y 양쪽 후보
+
+# 다국어 월명 → 월 번호. 앞자리 우선순위 주의(juil=7 / juin=6)
+_MON_PREFIX = (
+    ("juil", 7), ("juin", 6), ("jan", 1), ("ene", 1), ("feb", 2), ("fev", 2), ("f\u00e9v", 2),
+    ("mar", 3), ("apr", 4), ("abr", 4), ("may", 5), ("mai", 5), ("jun", 6), ("jul", 7),
+    ("aug", 8), ("ago", 8), ("ao\u00fb", 8), ("aou", 8), ("sep", 9), ("set", 9),
+    ("oct", 10), ("out", 10), ("nov", 11), ("dec", 12), ("dez", 12), ("d\u00e9c", 12), ("dic", 12),
 )
+
+
+def _mon_num(token):
+    """월명 문자열 → 월 번호. 판별 불가면 None."""
+    t = (token or "").lower()
+    for pre, num in _MON_PREFIX:
+        if t.startswith(pre):
+            return num
+    return None
+
+
+def _pick_year(base_date, m, d):
+    """연도가 없는 표기의 연도를 기준일에 가장 가까운 쪽으로 추정."""
+    best = None
+    for y in (base_date.year - 1, base_date.year, base_date.year + 1):
+        try:
+            cand = date(y, m, d)
+        except ValueError:
+            continue
+        if best is None or abs((cand - base_date).days) < abs((best - base_date).days):
+            best = cand
+    return best
 
 # 상대 표현 → 기준일 하루 전까지 근거로 인정
 _REL_YESTERDAY_RE = re.compile(
@@ -90,6 +126,42 @@ def _sentence_after(body: str, pos: int, limit: int = 120) -> str:
     return tail[:m.end()] if m else tail
 
 
+def _iter_source_dates(txt, base_date):
+    """원문 텍스트에서 (월, 일)을 함께 읽어 date 객체로 복원한다."""
+    if not base_date:
+        return
+    for pat in (_PAT_MON_DAY, _PAT_DAY_MON):
+        for m in pat.finditer(txt):
+            mn = _mon_num(m.group("mon"))
+            try:
+                dd = int(m.group("day"))
+            except (ValueError, TypeError):
+                continue
+            if not mn or not (1 <= dd <= 31):
+                continue
+            cand = _pick_year(base_date, mn, dd)
+            if cand:
+                yield cand
+
+    for m in _PAT_ISO.finditer(txt):
+        try:
+            cand = date(int(m.group("y")), int(m.group("m")), int(m.group("day")))
+        except (ValueError, TypeError):
+            continue
+        yield cand
+
+    for m in _PAT_SLASH.finditer(txt):
+        try:
+            a, b, y = int(m.group("a")), int(m.group("b")), int(m.group("y"))
+        except (ValueError, TypeError):
+            continue
+        for mm, dd in ((b, a), (a, b)):        # d/m/Y·m/d/Y 양쪽 후보
+            try:
+                yield date(y, mm, dd)
+            except ValueError:
+                continue
+
+
 def _source_days(sources, base_date):
     """원문에서 날짜 근거가 되는 '일(day)' 집합과 원문 텍스트 총 길이를 반환."""
     days = set()
@@ -104,7 +176,7 @@ def _source_days(sources, base_date):
         raw_pub = s.get("source_published_at")
         if raw_pub:
             d = _parse_pub_date(raw_pub)
-            if d:
+            if d and not (base_date and abs((d - base_date).days) > EVIDENCE_WINDOW_DAYS):
                 has_pubdate = True
                 # 발행일 당일과 전날(전날 사건을 다음날 보도하는 경우가 흔하다)
                 days.add(d.day)
@@ -116,14 +188,11 @@ def _source_days(sources, base_date):
         total_len += len(txt)
         txt = txt[:20000]
 
-        for pat in _DATE_PATTERNS:
-            for m in pat.finditer(txt):
-                try:
-                    v = int(m.group(1))
-                except (ValueError, IndexError):
-                    continue
-                if 1 <= v <= 31:
-                    days.add(v)
+        # 월+일을 함께 읽어 완전한 date로 복원한 뒤, 기준일에서 먼 날짜는 버린다.
+        for cand in _iter_source_dates(txt, base_date):
+            if base_date and abs((cand - base_date).days) > EVIDENCE_WINDOW_DAYS:
+                continue
+            days.add(cand.day)
 
         if base_date:
             if _REL_TODAY_RE.search(txt):
