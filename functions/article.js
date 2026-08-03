@@ -129,8 +129,8 @@ function buildWrapperHtml(a) {
         ${showSub ? `<span class="tag">${esc(a.subcategory)}</span>` : ''}
         ${a.region ? `<span class="tag">${esc(regionKo(a.region))}</span>` : ''}
         ${countries.length > 0
-          ? countries.map((c) => `<a class="tag" href="/?country=${encodeURIComponent(c)}">${esc(c)}</a>`).join('')
-          : (a.country ? `<a class="tag" href="/?country=${encodeURIComponent(a.country)}">${esc(a.country)}</a>` : '')}
+          ? countries.map((c) => `<a class="tag" href="/country.html?name=${encodeURIComponent(c)}">${esc(c)}</a>`).join('')
+          : (a.country ? `<a class="tag" href="/country.html?name=${encodeURIComponent(a.country)}">${esc(a.country)}</a>` : '')}
       </div>`;
 
   const metaHtml = `

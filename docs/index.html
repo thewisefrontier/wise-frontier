@@ -1186,16 +1186,37 @@
     }
   }
 
-  function applyUrlRegion() {
-    const r = new URLSearchParams(location.search).get('region');
-    if (!r) return;
-    const el = Array.from(document.querySelectorAll('#region-menu a'))
-      .find(a => a.textContent.trim() === r);
-    if (el) setRegion(r, el, r);
+  function applyUrlParams() {
+    const p = new URLSearchParams(location.search);
+
+    const r = p.get('region');
+    if (r) {
+      const el = Array.from(document.querySelectorAll('#region-menu a'))
+        .find(a => a.textContent.trim() === r);
+      if (el) { setRegion(r, el, r); return; }
+    }
+
+    // 기사 페이지의 카테고리 태그(/?category=X)
+    // 네비 탭이 없는 카테고리(글로벌·문화·예술·스포츠 등)도 필터는 적용된다
+    const c = p.get('category');
+    if (c) {
+      const el = Array.from(document.querySelectorAll('#nav-sector a[data-sector]'))
+        .find(a => a.textContent.trim() === c);
+      setSector(c, el || null);
+      return;
+    }
+
+    // 국가 태그는 country.html로 보내지만, 기존 링크·색인 호환을 위해 검색으로 처리
+    const co = p.get('country');
+    if (co) {
+      const input = document.getElementById('search-input');
+      if (input) input.value = co;
+      onSearch(co);
+    }
   }
 
   loadMarketData();
-  loadArticles().then(applyUrlRegion);
+  loadArticles().then(applyUrlParams);
   loadCalendarWidget();
 </script>
 </body>
