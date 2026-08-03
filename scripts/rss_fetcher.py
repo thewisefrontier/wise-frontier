@@ -537,6 +537,87 @@ SKIP_CRAWL_DOMAINS = {
     "unctad.org", "ifc.org", "asean.org", "adb.org",
 }
 
+# ── arXiv 전용 처리 ────────────────────────────────────────
+# 문제 2건이 겹쳐 있다:
+#   ① arxiv.org/abs 페이지의 <p> 태그에는 초록이 없다. 초록은 <blockquote>에 있고
+#      <p>에는 "BibTeX 인용 정보", "14,508 KB" 같은 UI 안내문뿐이라 그게 본문으로 수집됐다.
+#   ② 피드가 수개월 전 논문을 재발행한다(실측: 8/3 수집분에 4월 논문 3건).
+#      RSS의 published는 목록 갱신일이라 실제 제출일과 다르다.
+# → 공식 Atom API로 초록(<summary>)과 최초 제출일(<published>)을 직접 받는다.
+#   API 스펙: arXiv API User's Manual 3.3.2.1 / rate limit 3req/s
+ARXIV_API = "http://export.arxiv.org/api/query?id_list="
+ARXIV_MAX_AGE_DAYS = 30          # 제출일이 이보다 오래되면 수집하지 않는다
+ARXIV_MIN_ABSTRACT = 100         # 초록이 이보다 짧으면 확보 실패로 본다
+ARXIV_CALL_INTERVAL = 3.0        # 매뉴얼 권고 최소 간격(초)
+
+_ARXIV_ID_RE = re.compile(
+    r"arxiv\.org/(?:abs|pdf)/"
+    r"([0-9]{4}\.[0-9]{4,5}|[a-z\-]+(?:\.[A-Za-z]{2})?/[0-9]{7})"
+    r"(?:v[0-9]+)?", re.I
+)
+
+_arxiv_last_call = [0.0]
+
+
+def arxiv_id_from_url(url):
+    """arXiv 논문 URL에서 식별자를 뽑는다. arXiv가 아니면 None."""
+    if not url:
+        return None
+    m = _ARXIV_ID_RE.search(str(url))
+    return m.group(1) if m else None
+
+
+def _iso_age_days(iso_str):
+    """ISO8601(UTC) 문자열의 경과일수. 파싱 실패 시 None."""
+    try:
+        tt = time.strptime(str(iso_str)[:19], "%Y-%m-%dT%H:%M:%S")
+        return (time.time() - calendar.timegm(tt)) / 86400.0
+    except Exception:
+        return None
+
+
+def fetch_arxiv_meta(arxiv_id, timeout=12):
+    """arXiv Atom API에서 (초록, 최초제출일ISO)를 가져온다. 실패 시 (None, None)."""
+    import xml.etree.ElementTree as ET
+    try:
+        wait = ARXIV_CALL_INTERVAL - (time.time() - _arxiv_last_call[0])
+        if wait > 0:
+            time.sleep(wait)
+        _arxiv_last_call[0] = time.time()
+
+        res = requests.get(ARXIV_API + arxiv_id,
+                           headers={"User-Agent": "NewsFinalBot/1.0"},
+                           timeout=timeout)
+        if res.status_code != 200:
+            return None, None
+
+        ns = {"a": "http://www.w3.org/2005/Atom"}
+        entry = ET.fromstring(res.content).find("a:entry", ns)
+        if entry is None:
+            return None, None
+
+        # 없는 ID를 요청하면 id가 .../api/errors 인 엔트리가 돌아온다
+        eid = entry.find("a:id", ns)
+        if eid is not None and eid.text and "/api/errors" in eid.text:
+            return None, None
+
+        node = entry.find("a:summary", ns)
+        abstract = ""
+        if node is not None and node.text:
+            abstract = clean_text(re.sub(r"\s+", " ", node.text).strip())
+        if len(abstract) < ARXIV_MIN_ABSTRACT:
+            abstract = ""
+
+        node = entry.find("a:published", ns)
+        published = node.text.strip() if (node is not None and node.text) else ""
+        if not re.match(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}", published):
+            published = ""
+
+        return (abstract or None), (published or None)
+    except Exception:
+        return None, None
+
+
 def crawl_full_text(url: str, timeout: int = 10) -> str:
     """원문 URL에서 본문 텍스트 추출"""
     try:
@@ -940,6 +1021,23 @@ for data in results:
     latest      = data["entry"]
     src_published = entry_published_iso(latest)
 
+    # arXiv는 페이지 크롤링 대신 공식 API로 초록·제출일을 받는다(위 주석 참조)
+    arxiv_abstract = ""
+    _axid = arxiv_id_from_url(link)
+    if _axid:
+        _abs, _pub = fetch_arxiv_meta(_axid)
+        if _pub:
+            src_published = _pub
+            _age = _iso_age_days(_pub)
+            if _age is not None and _age > ARXIV_MAX_AGE_DAYS:
+                print(f"[SKIP] arXiv 제출 {_age:.0f}일 경과 — {title[:50]}")
+                continue
+        if not _abs:
+            # 초록이 없으면 본문이 페이지 UI 안내문으로 채워진다 → 수집하지 않는다
+            print(f"[SKIP] arXiv 초록 확보 실패 — {title[:50]}")
+            continue
+        arxiv_abstract = _abs
+
     fp = fingerprint(title, name)
 
     if is_url_exists(link):
@@ -978,8 +1076,8 @@ for data in results:
 
     src_lang = detect_lang(title + " " + (summary_en or ""))
 
-    # 원문 크롤링 (타임아웃 8초, 실패해도 계속)
-    full_text = crawl_full_text(link, timeout=8)
+    # 원문 크롤링 (타임아웃 8초, 실패해도 계속) — arXiv는 API 초록을 그대로 쓴다
+    full_text = arxiv_abstract or crawl_full_text(link, timeout=8)
     if full_text:
         print(f"  [크롤링] {len(full_text)}자 추출")
 
