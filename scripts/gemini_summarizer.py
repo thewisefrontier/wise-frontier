@@ -727,6 +727,31 @@ def trend_article_exists(group_name: str) -> bool:
     return False
 
 
+def verify_single_topic(title: str, body: str) -> bool:
+    """하나의 토픽만 다루는지 Gemini로 검수. 판정 실패 시 True(통과)."""
+    if not title or not body:
+        return True
+
+    prompt = f"""아래 기사가 하나의 명확한 토픽(사건/이슈/기업/정책)만 다루는지 판단하세요.
+서로 다른 국가나 전혀 관련 없는 사건 여러 개를 한 기사에 묶은 경우 "NO"라고만 답하세요.
+특히 기사 뒷부분 문단에 제목·앞문단과 무관한 다른 사건이 붙어 있으면(예: 영화 흥행 기사 뒤에 스포츠 경기 내용) 반드시 "NO"라고 답하세요.
+하나의 토픽이면 "YES"라고만 답하세요.
+
+제목: {title}
+본문 전체:
+{body[:2500]}
+
+답변 (YES 또는 NO만):"""
+
+    result = call_gemini(prompt, max_tokens=5)
+    if not result:
+        return True
+    return "YES" in result.upper()
+
+
+MULTI_TOPIC_NOTE = "복수 토픽 혼입 — 무관한 사건이 한 기사에 묶임"
+
+
 def save_trend_article(group_name: str, title: str, body: str,
                        category: str, country: str, region: str,
                        countries: list, summary_3lines: str = "", investment_idea: str = "",
@@ -869,27 +894,35 @@ def run_trend_tracker():
         }
         region = region_map.get(country, "africa")
 
+        # 단일 토픽 검수 — 무관한 사건이 묶였으면 병합·발행 모두 차단
+        _mt_bad = not verify_single_topic(title, body)
+        if _mt_bad:
+            print(f"  [{group_name}] ⛔ 복수 토픽 혼입 → 미발행: {title[:50]}")
+
         # 동일 사건 루트 있으면 신규 생성 대신 append 병합(리빙 아티클)
         root = find_similar_trend(title, country=country, days=14, body=body)
-        if root:
+        if root and not _mt_bad:
             if merge_trend_article(root, title, body, f"트렌드 추적 업데이트 ({group_name})"):
                 print(f"  [{group_name}] ✅ 기존 루트에 병합 (id={root['id']}): {title}")
                 time.sleep(CALL_INTERVAL)
                 continue
 
         # 날짜 환각 판정 — 원문에 근거 없는 "N일(현지시간)"이면 미발행
-        _dg_bad, _dg_reason = check_date_hallucination(
-            body, _fetch_source_details(top), base_date=now_kst().date()
-        )
-        if _dg_bad:
-            print(f"  [{group_name}] ⛔ 날짜 환각 의심 → 미발행: {_dg_reason}")
+        _dg_bad, _dg_reason = (False, "")
+        if not _mt_bad:
+            _dg_bad, _dg_reason = check_date_hallucination(
+                body, _fetch_source_details(top), base_date=now_kst().date()
+            )
+            if _dg_bad:
+                print(f"  [{group_name}] ⛔ 날짜 환각 의심 → 미발행: {_dg_reason}")
 
         article_id = save_trend_article(
             group_name=group_name, title=title, body=body,
             category=gen_category, country=country, region=region,
             countries=countries, summary_3lines=summary_3lines, investment_idea=investment_idea,
-            published=not _dg_bad,
-            guard_note=(f"날짜 환각 의심 미발행 — {_dg_reason}" if _dg_bad else ""),
+            published=not (_mt_bad or _dg_bad),
+            guard_note=(MULTI_TOPIC_NOTE if _mt_bad
+                        else (f"날짜 환각 의심 미발행 — {_dg_reason}" if _dg_bad else "")),
         )
 
         if article_id > 0:
@@ -1310,8 +1343,13 @@ JSON 배열로만 응답하세요 (마크다운 없이):
         # 생성된 실제 제목+국가로 동일 사건 루트 재확인 (우선)
         similar = find_similar_trend(title, country=art_country, days=14, body=body)
 
+        # 단일 토픽 검수 — 무관한 사건이 묶였으면 병합·발행 모두 차단
+        _mt_bad = not verify_single_topic(title, body)
+        if _mt_bad:
+            print(f"  [{topic}] ⛔ 복수 토픽 혼입 → 미발행: {title[:50]}")
+
         # 유사 기존 트렌드 기사 있으면 병합
-        if similar:
+        if similar and not _mt_bad:
             note = f"추가 정보 업데이트 ({topic})"
             ok = merge_trend_article(similar, title, body, note)
             if ok:
@@ -1323,11 +1361,13 @@ JSON 배열로만 응답하세요 (마크다운 없이):
         now_str = now_kst().strftime("%Y-%m-%d %H:%M")
 
         # 날짜 환각 판정 — 원문에 근거 없는 "N일(현지시간)"이면 미발행
-        _dg_bad, _dg_reason = check_date_hallucination(
-            body, _fetch_source_details(related), base_date=now_kst().date()
-        )
-        if _dg_bad:
-            print(f"  [{topic}] ⛔ 날짜 환각 의심 → 미발행: {_dg_reason}")
+        _dg_bad, _dg_reason = (False, "")
+        if not _mt_bad:
+            _dg_bad, _dg_reason = check_date_hallucination(
+                body, _fetch_source_details(related), base_date=now_kst().date()
+            )
+            if _dg_bad:
+                print(f"  [{topic}] ⛔ 날짜 환각 의심 → 미발행: {_dg_reason}")
 
         payload = {
             "title_en": title, "title_ko": title,
@@ -1344,10 +1384,11 @@ JSON 배열로만 응답하세요 (마크다운 없이):
             "created_at": now_str,
             "first_published_at": now_str,
             "update_log": [{"timestamp": now_str,
-                            "note": (f"날짜 환각 의심 미발행 — {_dg_reason}" if _dg_bad
-                                     else f"실시간 트렌드 감지 ({topic}, {urgency})")}],
+                            "note": (MULTI_TOPIC_NOTE if _mt_bad
+                                     else (f"날짜 환각 의심 미발행 — {_dg_reason}" if _dg_bad
+                                           else f"실시간 트렌드 감지 ({topic}, {urgency})"))}],
             "sent_telegram": 0,
-            "is_published": not _dg_bad,
+            "is_published": not (_mt_bad or _dg_bad),
             "posted_blog": 0,
             "summary_3lines": summary_3lines,
             "investment_idea": investment_idea,
@@ -1589,6 +1630,11 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
         # 생성된 실제 제목+국가로 동일 사건 루트 재확인 (우선)
         ext_similar = find_similar_trend(title, country=art_country, days=14, body=body)
 
+        # 단일 토픽 검수 — 무관한 사건이 묶였으면 병합·발행 모두 차단
+        _mt_bad = not verify_single_topic(title, body)
+        if _mt_bad:
+            print(f"  [{topic}] ⛔ 복수 토픽 혼입 → 미발행: {title[:50]}")
+
         now_str = now_kst().strftime("%Y-%m-%d %H:%M")
         payload = {
             "title_en": title, "title_ko": title,
@@ -1605,15 +1651,16 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
             "created_at": now_str,
             "first_published_at": now_str,
             "update_log": [{"timestamp": now_str,
-                            "note": f"외부 트렌드 감지 (Google Trends+Reddit+GDELT)"}],
+                            "note": (MULTI_TOPIC_NOTE if _mt_bad
+                                     else "외부 트렌드 감지 (Google Trends+Reddit+GDELT)")}],
             "sent_telegram": 0,
-            "is_published": True,
+            "is_published": not _mt_bad,
             "posted_blog": 0,
             "summary_3lines": summary_3lines,
             "investment_idea": investment_idea,
         }
         # 유사 기존 트렌드 기사 있으면 병합
-        if ext_similar:
+        if ext_similar and not _mt_bad:
             note = f"외부 트렌드 추가 정보 ({topic})"
             ok = merge_trend_article(ext_similar, title, body, note)
             if ok:
