@@ -25,6 +25,13 @@ except Exception:
     def check_date_hallucination(body, sources, base_date=None):
         return False, ""   # 폴백 — 판정 없이 통과
 
+# 카테고리 정규화 공통 모듈. import 실패해도 본 기능이 죽지 않도록 폴백을 둔다.
+try:
+    from category_guard import normalize_category
+except Exception:
+    def normalize_category(raw, default="글로벌"):
+        return "" if raw is None else str(raw).strip()
+
 KST = timezone(timedelta(hours=9))
 
 def now_kst() -> datetime:
@@ -1188,7 +1195,7 @@ def _parse_labeled_response(text: str):
         elif key == "관련국가":
             countries = _coerce_countries(val)
         elif key in ("분야", "카테고리"):
-            category = "" if val in _NULLISH else val
+            category = "" if val in _NULLISH else normalize_category(val)
         elif key == "여행":
             is_travel = _coerce_bool(val)
         elif key in ("본문", "내용", "기사본문"):

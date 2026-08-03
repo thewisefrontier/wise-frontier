@@ -29,6 +29,13 @@ except Exception:
     def check_date_hallucination(body, sources, base_date=None):
         return False, ""
 
+# 카테고리 정규화 공통 모듈. import 실패해도 본 기능이 죽지 않도록 폴백을 둔다.
+try:
+    from category_guard import normalize_category
+except Exception:
+    def normalize_category(raw, default="글로벌"):
+        return "" if raw is None else str(raw).strip()
+
 load_dotenv()
 
 KST = timezone(timedelta(hours=9))
@@ -874,7 +881,7 @@ def run_trend_tracker():
                 if raw not in ("없음", "-", ""):
                     countries = [x.strip() for x in raw.split(",") if x.strip()]
             elif line.startswith("분야:"):
-                gen_category = line.replace("분야:", "").strip() or category
+                gen_category = normalize_category(line.replace("분야:", "").strip()) or category
             elif line.startswith("본문:"):
                 idx = content.find("본문:")
                 body = _ensure_paragraphs(content[idx + 3:].strip())
@@ -1191,7 +1198,7 @@ JSON 배열로만 응답하세요 (마크다운 없이):
   {{
     "topic": "이슈 핵심 키워드 (영문 또는 한글)",
     "issue_ko": "이슈 한 줄 설명 (한국어)",
-    "category": "경제/금융/자원·에너지/산업·기업/정치·외교/사회/IT·과학 중 하나",
+    "category": "경제 | 금융 | 자원·에너지 | 산업·기업 | 정치·외교 | 사회 | IT·과학 중 정확히 하나. 여러 개를 나열하지 마세요.",
     "urgency": "high/medium/low"
   }}
 ]
@@ -1229,7 +1236,7 @@ JSON 배열로만 응답하세요 (마크다운 없이):
 
         topic     = topic_info.get("topic", "")
         issue_ko  = topic_info.get("issue_ko", "")
-        category  = topic_info.get("category", "사회")
+        category  = normalize_category(topic_info.get("category", ""), default="사회") or "사회"
         urgency   = topic_info.get("urgency", "medium")
 
         if not topic or urgency == "low":
@@ -1495,7 +1502,7 @@ JSON 배열로만 응답 (마크다운 없이):
   {{
     "topic": "토픽 키워드",
     "issue_ko": "한 줄 설명",
-    "category": "경제/금융/자원·에너지/산업·기업/정치·외교/사회/IT·과학 중 하나",
+    "category": "경제 | 금융 | 자원·에너지 | 산업·기업 | 정치·외교 | 사회 | IT·과학 중 정확히 하나. 여러 개를 나열하지 마세요.",
     "countries": ["국가1", "국가2"],
     "region": "africa/southeast_asia/central_asia/middle_east/south_asia/caribbean/europe/east_asia/north_america/latin_america/oceania/global 중 하나 (해당 국가의 실제 지역으로, global은 특정 지역에 국한 안 될 때만)"
   }}
@@ -1528,7 +1535,7 @@ JSON 배열로만 응답 (마크다운 없이):
 
         topic    = item.get("topic", "")
         issue_ko = item.get("issue_ko", "")
-        category = item.get("category", "경제")
+        category = normalize_category(item.get("category", ""), default="경제") or "경제"
         countries_list = item.get("countries", [])
         region   = item.get("region", "global")
         country  = countries_list[0] if countries_list else ""
