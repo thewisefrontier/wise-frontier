@@ -19,6 +19,12 @@ from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
 from rapidfuzz import fuzz
 
+try:
+    from date_guard import check_date_hallucination
+except Exception:
+    def check_date_hallucination(body, sources, base_date=None):
+        return False, ""   # 폴백 — 판정 없이 통과
+
 KST = timezone(timedelta(hours=9))
 
 def now_kst() -> datetime:
@@ -151,7 +157,7 @@ def get_today_articles(limit=300):
             _sb_url(),
             headers={**_sb_headers(), "Range": f"{offset}-{offset+batch-1}"},
             params={
-                "select": "id,title_ko,title_en,summary_ko,summary_en,source,category,subcategory,country,region,url,created_at,score,full_text",
+                "select": "id,title_ko,title_en,summary_ko,summary_en,source,category,subcategory,country,region,url,created_at,score,full_text,source_published_at",
                 "sent_telegram": "eq.1",
                 "source": "neq.NewsFinal",
                 "created_at": f"gte.{since}",
@@ -175,7 +181,7 @@ def get_today_articles(limit=300):
             _sb_url(),
             headers=_sb_headers(),
             params={
-                "select": "id,title_ko,title_en,summary_ko,summary_en,source,category,subcategory,country,region,url,created_at,score,full_text",
+                "select": "id,title_ko,title_en,summary_ko,summary_en,source,category,subcategory,country,region,url,created_at,score,full_text,source_published_at",
                 "subcategory": "eq.parked_topic",
                 "created_at": f"gte.{since}",
                 "order": "created_at.desc",
@@ -337,7 +343,7 @@ def find_similar_article(title: str, own_articles: list, threshold: int = 70):
     return None, 0
 
 
-def save_article(title_ko, summary_ko, cluster_key, category, region, country="", article_count=0, published=True, countries=None, image_url="", is_travel=False, summary_3lines="", investment_idea=""):
+def save_article(title_ko, summary_ko, cluster_key, category, region, country="", article_count=0, published=True, countries=None, image_url="", is_travel=False, summary_3lines="", investment_idea="", unpub_reason=""):
     # 키릴 문자 감지 — 저장 차단
     if has_cyrillic(title_ko) or has_cyrillic(summary_ko):
         print(f"  ⚠️ [키릴 감지] 저장 차단: {title_ko[:60]}")
@@ -362,7 +368,7 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
         "score": 1,  # 최초 게시는 항상 1, 업데이트마다 +1
         "created_at": now_str,
         "first_published_at": now_str,
-        "update_log": [{"timestamp": now_str, "note": "최초 게시"}],
+        "update_log": [{"timestamp": now_str, "note": unpub_reason or "최초 게시"}],
         "sent_telegram": 0,
         "is_published": published,
         "posted_blog": 0,
@@ -1876,9 +1882,18 @@ def run():
                     print(f"  ⚠️ 유사 기사 재발견 (유사도 {sim_score}%) → 미발행으로 저장: {similar.get('title_ko','')[:40]}")
                     published = False
 
+                _dg_reason = ""
+                if published:
+                    _dg_bad, _dg_reason = check_date_hallucination(
+                        gen_body or _strip_leaked_labels(content), cluster, now_kst().date())
+                    if _dg_bad:
+                        print(f"  ⚠️ [{_dg_reason}] → 미발행으로 저장")
+                        published = False
+
                 image_url = fetch_article_image(full_title, gen_body or _strip_leaked_labels(content)) if published else ""
 
                 article_id = save_article(
+                    unpub_reason  = _dg_reason,
                     title_ko      = full_title,
                     summary_ko    = gen_body or _strip_leaked_labels(content),
                     cluster_key   = final_subcategory if 'final_subcategory' in dir() else cluster_key,
@@ -2064,9 +2079,18 @@ def run():
             else:
                 published = True
 
+            _dg_reason = ""
+            if published:
+                _dg_bad, _dg_reason = check_date_hallucination(
+                    gen_body or _strip_leaked_labels(content), [a], now_kst().date())
+                if _dg_bad:
+                    print(f"  ⚠️ [{_dg_reason}] → 미발행으로 저장")
+                    published = False
+
             image_url = fetch_article_image(full_title, gen_body or _strip_leaked_labels(content)) if published else ""
 
             article_id = save_article(
+                unpub_reason=_dg_reason,
                 title_ko=full_title,
                 summary_ko=gen_body or _strip_leaked_labels(content),
                 cluster_key=cluster_key,
