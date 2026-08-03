@@ -60,6 +60,17 @@ EIA_SERIES = {
 
 
 # ── 헬퍼 ────────────────────────────────────────────────────
+PIXABAY_API_KEY = os.getenv("PIXABAY_API_KEY", "")
+
+# Pixabay 이미지 URL은 임시라 시간이 지나면 깨진다. R2에 영구 저장한 뒤 그 URL을 쓴다.
+# import 실패에도 본 기능(유가 기사 생성)이 죽지 않도록 폴백을 둔다.
+try:
+    from image_store import store_image
+except Exception:
+    def store_image(src_url, key_hint="", timeout=30):
+        return src_url   # 원본 그대로 반환 = 이미지 없이 동작
+
+
 def now_kst() -> datetime:
     return datetime.now(timezone.utc).astimezone(KST)
 
@@ -357,8 +368,61 @@ def has_column_style(text: str) -> bool:
     return any(p in text for p in patterns)
 
 
+# ── 대표 이미지 ──────────────────────────────────────────────
+# 유가 기사는 주제가 매일 동일해서 Gemini로 키워드를 뽑을 이유가 없다.
+# 고정 키워드 풀을 가격일 기준으로 회전시켜 API 호출 없이 매일 다른 사진을 쓴다.
+_OIL_IMAGE_KEYWORDS = [
+    "oil refinery",
+    "crude oil barrel",
+    "oil pump jack",
+    "offshore oil rig",
+    "petroleum industry",
+    "oil tanker ship",
+    "oil pipeline",
+    "gas station fuel",
+]
+
+
+def fetch_oil_image(price_date: date) -> str:
+    """Pixabay에서 유가 기사용 대표 이미지를 받아 R2에 영구 저장한다.
+    실패 시 빈 문자열(이미지 없이 발행)."""
+    if not PIXABAY_API_KEY:
+        return ""
+    seed = price_date.toordinal()
+    query = _OIL_IMAGE_KEYWORDS[seed % len(_OIL_IMAGE_KEYWORDS)]
+    try:
+        res = requests.get(
+            "https://pixabay.com/api/",
+            params={
+                "key": PIXABAY_API_KEY,
+                "q": query,
+                "image_type": "photo",
+                "safesearch": "true",
+                "per_page": 10,
+            },
+            timeout=15,
+        )
+        if res.status_code != 200:
+            print(f"  ⚠️ Pixabay {res.status_code}: {res.text[:100]}")
+            return ""
+        hits = res.json().get("hits", [])
+        if not hits:
+            print(f"  ⚠️ Pixabay 결과 없음: {query}")
+            return ""
+        hit = hits[seed % len(hits)]
+        raw_url = hit.get("largeImageURL", "")
+        if not raw_url:
+            return ""
+        url = store_image(raw_url, key_hint=f"oil_{price_date.isoformat()}")
+        print(f"  🖼️ 이미지: {query} → {url[:70]}")
+        return url or ""
+    except Exception as e:
+        print(f"  ⚠️ Pixabay 실패: {e}")
+    return ""
+
+
 # ── 기사 삽입 ────────────────────────────────────────────────
-def insert_article(title_ko: str, summary_ko: str, prices: dict) -> int:
+def insert_article(title_ko: str, summary_ko: str, prices: dict, image_url: str = "") -> int:
     now_str    = now_kst().strftime("%Y-%m-%d %H:%M")
     price_date = prices["date"].isoformat()
     internal_url = f"internal://oil_price_{price_date}"
@@ -375,6 +439,7 @@ def insert_article(title_ko: str, summary_ko: str, prices: dict) -> int:
         "region":             "글로벌",
         "country":            "국제",
         "country_flag":       "🛢️",
+        "image_url":          image_url,
         "countries":          ["미국", "사우디아라비아", "러시아"],
         "score":              1,
         "created_at":         now_str,
@@ -445,7 +510,9 @@ def main():
     print(f"  → 제목: {art_title}")
     print(f"  → 본문 {len(art_body)}자")
 
-    art_id = insert_article(art_title, art_body, prices)
+    image_url = fetch_oil_image(prices["date"])
+
+    art_id = insert_article(art_title, art_body, prices, image_url)
     if art_id > 0:
         print(f"  ✓ 기사 삽입 완료 (articles.id={art_id})")
     else:
