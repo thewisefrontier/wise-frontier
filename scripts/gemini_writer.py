@@ -1489,10 +1489,12 @@ def verify_single_topic(title: str, body: str) -> bool:
 
     prompt = f"""아래 기사가 하나의 명확한 토픽(사건/이슈/기업/정책)만 다루는지 판단하세요.
 서로 다른 국가나 전혀 관련 없는 사건 여러 개를 한 기사에 묶은 경우 "NO"라고만 답하세요.
+특히 기사 뒷부분 문단에 제목·앞문단과 무관한 다른 사건이 붙어 있으면(예: 영화 흥행 기사 뒤에 스포츠 경기 내용) 반드시 "NO"라고 답하세요.
 하나의 토픽이면 "YES"라고만 답하세요.
 
 제목: {title}
-본문 앞부분: {body[:400]}
+본문 전체:
+{body[:2500]}
 
 답변 (YES 또는 NO만):"""
 
@@ -1883,6 +1885,11 @@ def run():
                     published = False
 
                 _dg_reason = ""
+                if published and not verify_single_topic(full_title, gen_body or _strip_leaked_labels(content)):
+                    print(f"  ❌ 검수 실패 (복수 토픽) → 미발행으로 저장: {full_title[:50]}")
+                    published = False
+                    _dg_reason = "복수 토픽 혼입 — 무관한 사건이 한 기사에 묶임"
+
                 if published:
                     _dg_bad, _dg_reason = check_date_hallucination(
                         gen_body or _strip_leaked_labels(content), cluster, now_kst().date())
