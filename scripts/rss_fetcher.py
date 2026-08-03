@@ -408,6 +408,27 @@ def is_duplicate(title, seen_titles):
             return True
     return False
 
+# 번역 API가 예외 대신 에러 페이지 본문을 문자열로 반환하는 경우가 있다.
+# (deep_translator GoogleTranslator, 500/429 응답 시) 검증 없이 저장하면 제목이 오염된다.
+_TRANS_ERR_MARKS = (
+    "That's an error",
+    "That's all we know",
+    "Server Error",
+    "Error 500",
+    "Error 502",
+    "Error 503",
+    "unusual traffic from your computer network",
+    "Our systems have detected",
+)
+
+
+def _is_bad_translation(t) -> bool:
+    """번역 결과가 실제 번역문이 아니라 에러 페이지인지 판정."""
+    if not t or not isinstance(t, str):
+        return True
+    return any(m in t for m in _TRANS_ERR_MARKS)
+
+
 def clean_text(text):
     if not text:
         return ""
@@ -1109,6 +1130,9 @@ for data in results:
     try:
         title_ko = GoogleTranslator(source="auto", target="ko").translate(title[:500])
         title_ko = clean_text(title_ko)
+        if _is_bad_translation(title_ko):
+            print(f"[번역실패] 원문 유지 — {title[:50]}")
+            title_ko = title
     except Exception:
         title_ko = title
 
@@ -1118,6 +1142,8 @@ for data in results:
         try:
             summary_ko = GoogleTranslator(source="auto", target="ko").translate(summary_en[:300])
             summary_ko = clean_text(summary_ko)
+            if _is_bad_translation(summary_ko):
+                summary_ko = ""
         except Exception:
             summary_ko = ""
 
