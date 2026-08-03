@@ -164,6 +164,41 @@ def _ensure_paragraphs(text: str, target: int = 3) -> str:
     return "\n\n".join(" ".join(g) for g in groups)
 
 
+_LABEL_TITLE_RE = re.compile(r"^\s*(?:제목|title)\s*[:：]\s*(.*)$", re.IGNORECASE)
+_LABEL_BODY_RE = re.compile(r"^\s*(?:내용|본문|body)\s*[:：]\s*", re.IGNORECASE)
+
+
+def _strip_label_prefix(title: str, body: str) -> tuple[str, str]:
+    """본문 선두에 남은 "제목: … / 내용: …" 라벨을 제거한다.
+
+    Gemini가 JSON으로 응답하면서도 body 값 안에 라벨 구조를 한 번 더
+    넣거나(실사고 id=47879), JSON 대신 라벨 형식으로만 응답하는 경우가
+    있다. 라벨이 그대로 기사 본문 첫 줄로 발행되므로 코드 단에서 제거한다.
+    title이 비어 있으면 라벨에서 뽑은 제목으로 채운다.
+    """
+    text = (body or "").lstrip()
+    if not text:
+        return title, body
+    lines = text.split("\n")
+    found_title = ""
+    idx = 0
+    m = _LABEL_TITLE_RE.match(lines[0])
+    if m:
+        found_title = m.group(1).strip()
+        idx = 1
+    while idx < len(lines) and not lines[idx].strip():
+        idx += 1
+    has_body_label = idx < len(lines) and _LABEL_BODY_RE.match(lines[idx])
+    if has_body_label:
+        lines[idx] = _LABEL_BODY_RE.sub("", lines[idx], count=1)
+    elif not found_title:
+        return title, body  # 라벨 없음 — 원본 유지
+    new_body = "\n".join(lines[idx:]).strip()
+    if not new_body:
+        return title, body  # 라벨만 있고 본문이 없으면 원본 유지
+    return ((title or "").strip() or found_title), new_body
+
+
 def _parse_gemini_weather_response(raw: str | None) -> tuple[str, str]:
     """Gemini 응답(JSON)에서 title·body 분리. 실패 시 ("", raw)."""
     if not raw:
@@ -175,9 +210,11 @@ def _parse_gemini_weather_response(raw: str | None) -> tuple[str, str]:
             cleaned = re.sub(r"^```[a-z]*\n?", "", cleaned)
             cleaned = re.sub(r"\n?```$", "", cleaned.strip())
         parsed = _json.loads(cleaned)
-        return parsed.get("title", ""), _ensure_paragraphs(parsed.get("body", ""))
+        _t, _b = _strip_label_prefix(parsed.get("title", ""), parsed.get("body", ""))
+        return _t, _ensure_paragraphs(_b)
     except Exception:
-        return "", _ensure_paragraphs(raw)  # fallback: 본문 전체를 body로
+        _t, _b = _strip_label_prefix("", raw)  # fallback: 본문 전체를 body로
+        return _t, _ensure_paragraphs(_b)
 
 
 def _sb_headers():
