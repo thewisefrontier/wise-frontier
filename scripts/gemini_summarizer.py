@@ -906,15 +906,9 @@ def run_trend_tracker():
         if _mt_bad:
             print(f"  [{group_name}] ⛔ 복수 토픽 혼입 → 미발행: {title[:50]}")
 
-        # 동일 사건 루트 있으면 신규 생성 대신 append 병합(리빙 아티클)
-        root = find_similar_trend(title, country=country, days=14, body=body)
-        if root and not _mt_bad:
-            if merge_trend_article(root, title, body, f"트렌드 추적 업데이트 ({group_name})"):
-                print(f"  [{group_name}] ✅ 기존 루트에 병합 (id={root['id']}): {title}")
-                time.sleep(CALL_INTERVAL)
-                continue
-
         # 날짜 환각 판정 — 원문에 근거 없는 "N일(현지시간)"이면 미발행
+        # ⚠️ 병합 분기보다 반드시 앞에 둘 것. 뒤에 두면 병합 경로가 가드를 통째로
+        #    우회해 환각 날짜가 이미 발행된 기사에 append된다(별도 기사보다 나쁨).
         _dg_bad, _dg_reason = (False, "")
         if not _mt_bad:
             _dg_bad, _dg_reason = check_date_hallucination(
@@ -922,6 +916,14 @@ def run_trend_tracker():
             )
             if _dg_bad:
                 print(f"  [{group_name}] ⛔ 날짜 환각 의심 → 미발행: {_dg_reason}")
+
+        # 동일 사건 루트 있으면 신규 생성 대신 append 병합(리빙 아티클)
+        root = find_similar_trend(title, country=country, days=14, body=body)
+        if root and not (_mt_bad or _dg_bad):
+            if merge_trend_article(root, title, body, f"트렌드 추적 업데이트 ({group_name})"):
+                print(f"  [{group_name}] ✅ 기존 루트에 병합 (id={root['id']}): {title}")
+                time.sleep(CALL_INTERVAL)
+                continue
 
         article_id = save_trend_article(
             group_name=group_name, title=title, body=body,
@@ -1355,8 +1357,19 @@ JSON 배열로만 응답하세요 (마크다운 없이):
         if _mt_bad:
             print(f"  [{topic}] ⛔ 복수 토픽 혼입 → 미발행: {title[:50]}")
 
+        # 날짜 환각 판정 — 원문에 근거 없는 "N일(현지시간)"이면 미발행
+        # ⚠️ 병합 분기보다 반드시 앞에 둘 것. 뒤에 두면 병합 경로가 가드를 통째로
+        #    우회해 환각 날짜가 이미 발행된 기사에 append된다(별도 기사보다 나쁨).
+        _dg_bad, _dg_reason = (False, "")
+        if not _mt_bad:
+            _dg_bad, _dg_reason = check_date_hallucination(
+                body, _fetch_source_details(related), base_date=now_kst().date()
+            )
+            if _dg_bad:
+                print(f"  [{topic}] ⛔ 날짜 환각 의심 → 미발행: {_dg_reason}")
+
         # 유사 기존 트렌드 기사 있으면 병합
-        if similar and not _mt_bad:
+        if similar and not (_mt_bad or _dg_bad):
             note = f"추가 정보 업데이트 ({topic})"
             ok = merge_trend_article(similar, title, body, note)
             if ok:
@@ -1366,15 +1379,6 @@ JSON 배열로만 응답하세요 (마크다운 없이):
             continue
 
         now_str = now_kst().strftime("%Y-%m-%d %H:%M")
-
-        # 날짜 환각 판정 — 원문에 근거 없는 "N일(현지시간)"이면 미발행
-        _dg_bad, _dg_reason = (False, "")
-        if not _mt_bad:
-            _dg_bad, _dg_reason = check_date_hallucination(
-                body, _fetch_source_details(related), base_date=now_kst().date()
-            )
-            if _dg_bad:
-                print(f"  [{topic}] ⛔ 날짜 환각 의심 → 미발행: {_dg_reason}")
 
         payload = {
             "title_en": title, "title_ko": title,
