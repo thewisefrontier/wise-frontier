@@ -350,11 +350,55 @@ def find_similar_article(title: str, own_articles: list, threshold: int = 70):
     return None, 0
 
 
+# ── raw JSON 본문 차단 ──────────────────────────────────────────────────
+# ⚠️ 2026-08-04 사고: Gemini가 JSON 응답의 body 필드 "안에" JSON 전문을 다시
+#   써넣는 중첩 출력을 하는 경우가 있다(12건, 발행 8건). 바깥 JSON은 문법이
+#   정상이라 parse_json_response()를 그대로 통과해 본문이 JSON 덩어리가 됐다.
+#   ① 파싱 단계에서 언랩 시도 ② 저장/갱신 관문에서 최종 차단(키릴 차단과 동일 계열).
+_JSON_BODY_KEY_RE = re.compile(r'"(?:body|\ubcf8\ubb38)"\s*:\s*"')
+
+
+def _unwrap_json_body(text):
+    """\ubcf8\ubb38\uc774 raw JSON\uc774\uba74 \ub0b4\ubd80 body\ub97c \uaebc\ub0b8\ub2e4.
+    \ubc18\ud658: None=\uc815\uc0c1 \ubcf8\ubb38(\ubcc0\uacbd \ubd88\ud544\uc694) / str=\ubcf5\uad6c\ub41c \ubcf8\ubb38 / ""=JSON\uc774\uc9c0\ub9cc \ubcf5\uad6c \uc2e4\ud328"""
+    if not text:
+        return None
+    s = str(text).strip()
+    if not s.startswith("{"):
+        return None
+    head = s[:800]
+    if not (_JSON_BODY_KEY_RE.search(head) or '"title"' in head or '"\uc81c\ubaa9"' in head):
+        return None
+    j = s.rfind("}")
+    for cand in (s, s[:j + 1] if j > 0 else ""):
+        if not cand:
+            continue
+        try:
+            data = json.loads(cand)
+        except Exception:
+            continue
+        if isinstance(data, dict):
+            inner = str(data.get("body") or data.get("\ubcf8\ubb38") or "").strip()
+            if inner and not inner.startswith("{"):
+                return inner
+    return ""
+
+
 def save_article(title_ko, summary_ko, cluster_key, category, region, country="", article_count=0, published=True, countries=None, image_url="", is_travel=False, summary_3lines="", investment_idea="", unpub_reason=""):
     # 키릴 문자 감지 — 저장 차단
     if has_cyrillic(title_ko) or has_cyrillic(summary_ko):
         print(f"  ⚠️ [키릴 감지] 저장 차단: {title_ko[:60]}")
         return -1
+
+    # raw JSON 본문 차단 (2026-08-04 중첩 JSON 사고)
+    _unwrapped = _unwrap_json_body(summary_ko)
+    if _unwrapped is not None:
+        if _unwrapped:
+            print("  🔧 [raw JSON 본문] 내부 body 추출 → 복구")
+            summary_ko = _unwrapped
+        else:
+            print(f"  ⛔ [raw JSON 본문] 저장 차단: {str(title_ko)[:60]}")
+            return -1
 
     url = f"internal://{cluster_key}"
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
@@ -397,6 +441,16 @@ def update_article(article_id, title_ko, summary_ko, note: str = "업데이트",
     if has_cyrillic(title_ko) or has_cyrillic(summary_ko):
         print(f"  ⚠️ [키릴 감지] 업데이트 차단: {title_ko[:60]}")
         return False
+
+    # raw JSON 본문 차단 (2026-08-04 중첩 JSON 사고)
+    _unwrapped = _unwrap_json_body(summary_ko)
+    if _unwrapped is not None:
+        if _unwrapped:
+            print("  🔧 [raw JSON 본문] 내부 body 추출 → 복구")
+            summary_ko = _unwrapped
+        else:
+            print(f"  ⛔ [raw JSON 본문] 업데이트 차단: {str(title_ko)[:60]}")
+            return False
 
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
 
@@ -1149,6 +1203,11 @@ def parse_json_response(text: str):
         if not isinstance(data, dict):
             continue
         body = str(data.get("body") or data.get("본문") or "").strip()
+        # body 필드 안에 JSON 전문이 중첩 출력되는 사고가 있어 먼저 언랩한다.
+        _inner_body = _unwrap_json_body(body)
+        if _inner_body:
+            print("  🔧 body 중첩 JSON 감지 → 내부 본문 추출")
+            body = _inner_body
         if not body:
             continue
         first = next((l for l in body.split("\n") if l.strip()), "")
