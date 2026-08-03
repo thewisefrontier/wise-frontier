@@ -577,6 +577,29 @@ _REGION_ALIASES = {
 }
 
 
+_PLACE_NAMES_CACHE = set()
+
+
+def _limit_commas(title: str) -> str:
+    """제목의 쉼표는 지역 구분용 1개만 허용. 그 뒤 쉼표는 가운뎃점으로 바꾼다."""
+    parts = (title or "").split(",")
+    if len(parts) <= 2:
+        return title
+    return parts[0] + ", " + "·".join(x.strip() for x in parts[1:] if x.strip())
+
+
+def _place_names() -> set:
+    """COUNTRIES에 등재된 국가명·도시명 전체. 제목 앞 지명 라벨 판정에 쓴다."""
+    global _PLACE_NAMES_CACHE
+    if not _PLACE_NAMES_CACHE:
+        names = set(COUNTRIES.keys()) | set(GROUPS.keys()) | {"한국"}
+        for _c, _tz, _cities in COUNTRIES.values():
+            for _city in _cities:
+                names.add(_city[0])
+        _PLACE_NAMES_CACHE = names
+    return _PLACE_NAMES_CACHE
+
+
 def _ensure_region_prefix(title: str, region: str, prefix_word: str = "") -> str:
     """제목 맨 앞에 지역명을 보장한다.
 
@@ -588,11 +611,18 @@ def _ensure_region_prefix(title: str, region: str, prefix_word: str = "") -> str
         return t
     for alias in _REGION_ALIASES.get(region, (region,)):
         if alias in t:
-            return t
+            return _limit_commas(t)
+    # 이미 "서울, ..." 처럼 지명 라벨로 시작하면 덧붙이지 않는다.
+    # (실사고: Gemini가 "서울, 체감 44도…"로 생성 → "한국, 서울, 체감 44도…" 중복)
+    head = t.split(",", 1)[0].strip()
+    if head and head in _place_names():
+        return _limit_commas(t)
     label = region
     if prefix_word and prefix_word not in t:
         label = f"{prefix_word} {region}"
-    return f"{label}, {t}"
+    # 지역명 앞에 붙이기 전, 본문 쉼표를 가운뎃점으로 바꿔 쉼표 1개를 유지한다
+    body = "·".join(x.strip() for x in t.split(",") if x.strip())
+    return f"{label}, {body}"
 
 
 def get_local_now(tz_name: str) -> datetime:
@@ -1341,6 +1371,7 @@ def build_korea_today_report_kma(cities: list, local_now: datetime):
 제목 작성 규칙:
 - 지역명을 맨 앞에 붙이고 쉼표로 구분할 것 (예: "유럽, 최고 37도 폭염 속 곳곳 장맛비")
 - 지역명을 제외한 나머지는 20자 내외
+- 쉼표(,)는 지역명 뒤 1개만. 그 외 나열은 가운뎃점(·)이나 말줄임표(…)를 쓸 것
 - 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
 - "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
 
@@ -1452,6 +1483,7 @@ def build_korea_weekend_report_kma(cities: list, local_now: datetime):
 제목 작성 규칙:
 - 지역명을 맨 앞에 붙이고 쉼표로 구분할 것 (예: "유럽, 최고 37도 폭염 속 곳곳 장맛비")
 - 지역명을 제외한 나머지는 20자 내외
+- 쉼표(,)는 지역명 뒤 1개만. 그 외 나열은 가운뎃점(·)이나 말줄임표(…)를 쓸 것
 - 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
 - "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
 
@@ -1669,6 +1701,7 @@ def build_korea_weekly_report_kma(cities: list, local_now: datetime):
 제목 작성 규칙:
 - 지역명을 맨 앞에 붙이고 쉼표로 구분할 것 (예: "유럽, 최고 37도 폭염 속 곳곳 장맛비")
 - 지역명을 제외한 나머지는 20자 내외
+- 쉼표(,)는 지역명 뒤 1개만. 그 외 나열은 가운뎃점(·)이나 말줄임표(…)를 쓸 것
 - 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
 - "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
 
@@ -1845,6 +1878,7 @@ def build_today_report(country_name, weather_list, local_now: datetime):
 제목 작성 규칙:
 - 지역명을 맨 앞에 붙이고 쉼표로 구분할 것 (예: "유럽, 최고 37도 폭염 속 곳곳 장맛비")
 - 지역명을 제외한 나머지는 20자 내외
+- 쉼표(,)는 지역명 뒤 1개만. 그 외 나열은 가운뎃점(·)이나 말줄임표(…)를 쓸 것
 - 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
 - "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
 
@@ -1930,6 +1964,7 @@ def build_weekend_report(country_name, weather_list, local_now: datetime):
 제목 작성 규칙:
 - 지역명을 맨 앞에 붙이고 쉼표로 구분할 것 (예: "유럽, 최고 37도 폭염 속 곳곳 장맛비")
 - 지역명을 제외한 나머지는 20자 내외
+- 쉼표(,)는 지역명 뒤 1개만. 그 외 나열은 가운뎃점(·)이나 말줄임표(…)를 쓸 것
 - 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
 - "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
 
@@ -2011,6 +2046,7 @@ def build_weekly_report(country_name, weather_list, local_now: datetime):
 제목 작성 규칙:
 - 지역명을 맨 앞에 붙이고 쉼표로 구분할 것 (예: "유럽, 최고 37도 폭염 속 곳곳 장맛비")
 - 지역명을 제외한 나머지는 20자 내외
+- 쉼표(,)는 지역명 뒤 1개만. 그 외 나열은 가운뎃점(·)이나 말줄임표(…)를 쓸 것
 - 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
 - "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
 
@@ -2113,6 +2149,7 @@ def build_group_today_report(group_name, countries_data, local_now: datetime):
 제목 작성 규칙:
 - 지역명을 맨 앞에 붙이고 쉼표로 구분할 것 (예: "유럽, 최고 37도 폭염 속 곳곳 장맛비")
 - 지역명을 제외한 나머지는 20자 내외
+- 쉼표(,)는 지역명 뒤 1개만. 그 외 나열은 가운뎃점(·)이나 말줄임표(…)를 쓸 것
 - 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
 - "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
 
@@ -2213,6 +2250,7 @@ def build_group_weekend_report(group_name, countries_data, local_now: datetime):
 제목 작성 규칙:
 - 지역명을 맨 앞에 붙이고 쉼표로 구분할 것 (예: "유럽, 최고 37도 폭염 속 곳곳 장맛비")
 - 지역명을 제외한 나머지는 20자 내외
+- 쉼표(,)는 지역명 뒤 1개만. 그 외 나열은 가운뎃점(·)이나 말줄임표(…)를 쓸 것
 - 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
 - "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
 
@@ -2304,6 +2342,7 @@ def build_group_weekly_report(group_name, countries_data, local_now: datetime):
 제목 작성 규칙:
 - 지역명을 맨 앞에 붙이고 쉼표로 구분할 것 (예: "유럽, 최고 37도 폭염 속 곳곳 장맛비")
 - 지역명을 제외한 나머지는 20자 내외
+- 쉼표(,)는 지역명 뒤 1개만. 그 외 나열은 가운뎃점(·)이나 말줄임표(…)를 쓸 것
 - 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
 - "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
 
