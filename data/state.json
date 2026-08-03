@@ -154,12 +154,12 @@
     },
     "Vanguard Energy": {
       "ok": 0,
-      "fail": 8,
+      "fail": 9,
       "status": "active",
       "too_old": 68
     },
     "Vanguard Business": {
-      "ok": 58,
+      "ok": 59,
       "fail": 6,
       "status": "active"
     },
@@ -224,7 +224,7 @@
       "status": "active"
     },
     "Joy Business Ghana": {
-      "ok": 246,
+      "ok": 248,
       "fail": 0,
       "status": "active"
     },
@@ -292,7 +292,7 @@
     },
     "Moneycontrol India": {
       "ok": 0,
-      "fail": 191,
+      "fail": 192,
       "status": "active",
       "too_old": 35
     },
@@ -312,7 +312,7 @@
       "status": "active"
     },
     "Economic Times Markets": {
-      "ok": 366,
+      "ok": 364,
       "fail": 0,
       "status": "active"
     },
@@ -386,7 +386,8 @@
     "WeeTracker": {
       "ok": 43,
       "fail": 19,
-      "status": "active"
+      "status": "active",
+      "too_old": 1
     },
     "Dawn Pakistan Business": {
       "ok": 0,
@@ -415,7 +416,7 @@
       "status": "active"
     },
     "Daily Star Bangladesh Business": {
-      "ok": 230,
+      "ok": 231,
       "fail": 2,
       "status": "active"
     },
@@ -435,7 +436,7 @@
       "status": "active"
     },
     "Haitian Times": {
-      "ok": 57,
+      "ok": 58,
       "fail": 1,
       "status": "active"
     },
@@ -455,7 +456,7 @@
       "status": "active"
     },
     "AllAfrica Ghana": {
-      "ok": 69,
+      "ok": 66,
       "fail": 0,
       "status": "active"
     },
@@ -465,12 +466,12 @@
       "status": "active"
     },
     "AllAfrica Ethiopia": {
-      "ok": 56,
+      "ok": 57,
       "fail": 0,
       "status": "active"
     },
     "Jamaica Observer Business": {
-      "ok": 115,
+      "ok": 116,
       "fail": 29,
       "status": "active"
     },
@@ -495,7 +496,7 @@
       "status": "active"
     },
     "AllAfrica South Africa": {
-      "ok": 70,
+      "ok": 71,
       "fail": 0,
       "status": "active"
     },
@@ -559,13 +560,13 @@
       "status": "active"
     },
     "AllAfrica Cameroon": {
-      "ok": 12,
+      "ok": 14,
       "fail": 1,
       "status": "active",
       "too_old": 30
     },
     "AllAfrica Morocco": {
-      "ok": 21,
+      "ok": 23,
       "fail": 0,
       "status": "active"
     },
@@ -576,7 +577,7 @@
       "too_old": 68
     },
     "AllAfrica Sudan": {
-      "ok": 39,
+      "ok": 37,
       "fail": 0,
       "status": "active"
     },
@@ -823,7 +824,7 @@
       "status": "active"
     },
     "Punch Business": {
-      "ok": 549,
+      "ok": 548,
       "fail": 28,
       "status": "active"
     },
@@ -909,7 +910,7 @@
       "status": "active"
     },
     "Burkina24": {
-      "ok": 219,
+      "ok": 220,
       "fail": 1,
       "status": "active"
     },
@@ -950,7 +951,7 @@
       "too_old": 65
     },
     "Radio Okapi DRC": {
-      "ok": 297,
+      "ok": 296,
       "fail": 0,
       "status": "active"
     },
@@ -995,8 +996,8 @@
       "status": "active"
     },
     "Myanmar Now": {
-      "ok": 49,
-      "fail": 59,
+      "ok": 50,
+      "fail": 58,
       "status": "active"
     },
     "VnExpress Business": {
@@ -1081,7 +1082,7 @@
       "status": "active"
     },
     "Trend News Azerbaijan": {
-      "ok": 515,
+      "ok": 514,
       "fail": 0,
       "status": "active"
     },
@@ -1234,7 +1235,7 @@
       "status": "active"
     },
     "24.kg Kyrgyzstan": {
-      "ok": 182,
+      "ok": 183,
       "fail": 3,
       "status": "active"
     },
@@ -1290,7 +1291,7 @@
       "status": "active"
     },
     "Mada Masr Egypt": {
-      "ok": 33,
+      "ok": 34,
       "fail": 0,
       "status": "active"
     },
@@ -1310,7 +1311,7 @@
       "status": "active"
     },
     "Hespress Morocco": {
-      "ok": 292,
+      "ok": 291,
       "fail": 0,
       "status": "active"
     },
@@ -1320,7 +1321,7 @@
       "status": "active"
     },
     "Bénin Web TV": {
-      "ok": 401,
+      "ok": 398,
       "fail": 5,
       "status": "active"
     },
@@ -1365,7 +1366,7 @@
       "status": "active"
     },
     "Guinee Conakry Info": {
-      "ok": 294,
+      "ok": 292,
       "fail": 15,
       "status": "active"
     },
@@ -1400,7 +1401,7 @@
       "status": "active"
     },
     "La Presse Tunisie": {
-      "ok": 384,
+      "ok": 381,
       "fail": 2,
       "status": "active"
     },
@@ -1435,7 +1436,7 @@
       "status": "active"
     },
     "Republika Ekonomi": {
-      "ok": 365,
+      "ok": 362,
       "fail": 1,
       "status": "active"
     },
@@ -1460,8 +1461,8 @@
       "status": "active"
     },
     "Detik Finance": {
-      "ok": 369,
-      "fail": 14,
+      "ok": 374,
+      "fail": 13,
       "status": "active"
     },
     "Prachachat Business": {
@@ -1485,7 +1486,7 @@
       "status": "active"
     },
     "Interfax Ukraine": {
-      "ok": 109,
+      "ok": 110,
       "fail": 2,
       "status": "active"
     },
@@ -1505,12 +1506,12 @@
       "status": "active"
     },
     "Rappler Business": {
-      "ok": 84,
-      "fail": 55,
+      "ok": 85,
+      "fail": 54,
       "status": "active"
     },
     "Sputnik Kazakhstan": {
-      "ok": 375,
+      "ok": 372,
       "fail": 4,
       "status": "active"
     },
@@ -1545,7 +1546,7 @@
       "status": "active"
     },
     "Sputnik Uzbekistan": {
-      "ok": 229,
+      "ok": 226,
       "fail": 0,
       "status": "active"
     },
@@ -1581,7 +1582,7 @@
       "status": "active"
     },
     "Capital Ethiopia": {
-      "ok": 53,
+      "ok": 56,
       "fail": 9,
       "status": "active"
     },
@@ -1591,12 +1592,12 @@
       "status": "active"
     },
     "Namibian": {
-      "ok": 249,
+      "ok": 254,
       "fail": 25,
       "status": "active"
     },
     "Daily News Tanzania": {
-      "ok": 197,
+      "ok": 195,
       "fail": 109,
       "status": "active"
     },
@@ -1798,7 +1799,7 @@
       "status": "active"
     },
     "VietnamNet Economy": {
-      "ok": 277,
+      "ok": 280,
       "fail": 0,
       "status": "active"
     },
@@ -1813,12 +1814,12 @@
       "status": "active"
     },
     "Eye Radio South Sudan": {
-      "ok": 176,
-      "fail": 40,
+      "ok": 180,
+      "fail": 39,
       "status": "active"
     },
     "Fana Broadcasting Ethiopia": {
-      "ok": 193,
+      "ok": 189,
       "fail": 3,
       "status": "active"
     },
@@ -1996,7 +1997,7 @@
       "status": "active"
     },
     "Meduza English": {
-      "ok": 117,
+      "ok": 114,
       "fail": 0,
       "status": "active"
     },
@@ -2007,7 +2008,7 @@
       "too_old": 68
     },
     "Daily News Hungary": {
-      "ok": 123,
+      "ok": 121,
       "fail": 0,
       "status": "active"
     },
@@ -2047,7 +2048,7 @@
       "status": "active"
     },
     "The Hindu Business": {
-      "ok": 151,
+      "ok": 152,
       "fail": 0,
       "status": "active"
     },
@@ -2062,8 +2063,8 @@
       "status": "active"
     },
     "Daily Sabah Economy": {
-      "ok": 186,
-      "fail": 4,
+      "ok": 191,
+      "fail": 3,
       "status": "active"
     },
     "Pakistan Observer Economy": {
@@ -2139,8 +2140,8 @@
       "status": "active"
     },
     "Colombia Reports": {
-      "ok": 8,
-      "fail": 18,
+      "ok": 9,
+      "fail": 17,
       "status": "active"
     },
     "Salween News": {
@@ -2189,7 +2190,7 @@
       "status": "active"
     },
     "Legit Nigeria": {
-      "ok": 298,
+      "ok": 299,
       "fail": 0,
       "status": "active"
     },
@@ -2229,7 +2230,7 @@
       "status": "active"
     },
     "Rio Times Online": {
-      "ok": 193,
+      "ok": 190,
       "fail": 4,
       "status": "active"
     },
@@ -2272,7 +2273,7 @@
       "ok": 2,
       "fail": 18,
       "status": "active",
-      "too_old": 58
+      "too_old": 59
     },
     "Sunday Times South Africa": {
       "ok": 0,
@@ -2300,13 +2301,13 @@
       "status": "active"
     },
     "NewZimbabwe": {
-      "ok": 55,
-      "fail": 55,
+      "ok": 59,
+      "fail": 54,
       "status": "active"
     },
     "Eritrea Daily": {
-      "ok": 31,
-      "fail": 58,
+      "ok": 32,
+      "fail": 57,
       "status": "active"
     },
     "Malawi 24": {
@@ -2352,7 +2353,7 @@
       "status": "active"
     },
     "ynet_news": {
-      "ok": 262,
+      "ok": 258,
       "fail": 0,
       "status": "active"
     },
@@ -2432,7 +2433,7 @@
       "status": "active"
     },
     "telesur_venezuela": {
-      "ok": 229,
+      "ok": 231,
       "fail": 3,
       "status": "active"
     },
@@ -2452,7 +2453,7 @@
       "status": "active"
     },
     "Post Courier PNG": {
-      "ok": 137,
+      "ok": 138,
       "fail": 0,
       "status": "active"
     },
@@ -2467,7 +2468,7 @@
       "status": "active"
     },
     "FBC News Fiji": {
-      "ok": 145,
+      "ok": 147,
       "fail": 2,
       "status": "active"
     },
@@ -2513,7 +2514,7 @@
       "status": "active"
     },
     "Channel News Asia": {
-      "ok": 277,
+      "ok": 276,
       "fail": 0,
       "status": "active"
     },
@@ -2583,7 +2584,7 @@
       "status": "active"
     },
     "deccan_chronicle_india": {
-      "ok": 332,
+      "ok": 331,
       "fail": 1,
       "status": "active"
     },
@@ -2640,7 +2641,7 @@
       "status": "active"
     },
     "Times of Oman": {
-      "ok": 150,
+      "ok": 148,
       "fail": 0,
       "status": "active"
     },
@@ -2655,7 +2656,7 @@
       "status": "active"
     },
     "Dnevnik Bulgaria": {
-      "ok": 232,
+      "ok": 230,
       "fail": 0,
       "status": "active"
     },
@@ -2665,7 +2666,7 @@
       "status": "active"
     },
     "RTS Serbia": {
-      "ok": 181,
+      "ok": 178,
       "fail": 9,
       "status": "active"
     },
@@ -2685,7 +2686,7 @@
       "status": "active"
     },
     "SCMP China Economy": {
-      "ok": 40,
+      "ok": 41,
       "fail": 0,
       "status": "active"
     },
@@ -2695,7 +2696,7 @@
       "status": "active"
     },
     "Northeast Now India": {
-      "ok": 129,
+      "ok": 128,
       "fail": 30,
       "status": "active"
     },
@@ -2731,7 +2732,7 @@
       "status": "active"
     },
     "Telangana Today": {
-      "ok": 223,
+      "ok": 221,
       "fail": 0,
       "status": "active"
     },
@@ -2746,17 +2747,17 @@
       "status": "active"
     },
     "France 24 English": {
-      "ok": 139,
+      "ok": 136,
       "fail": 16,
       "status": "active"
     },
     "Euronews": {
-      "ok": 153,
+      "ok": 150,
       "fail": 7,
       "status": "active"
     },
     "RFI English International": {
-      "ok": 19,
+      "ok": 20,
       "fail": 0,
       "status": "active"
     },
@@ -2797,6 +2798,6 @@
       "status": "active"
     }
   },
-  "daily_count": 1755,
+  "daily_count": 1621,
   "last_reset": "2026-08-03"
 }
