@@ -1056,6 +1056,38 @@
     "updated_at": "2026-07-22 01:57"
   },
   {
+    "id": "brb_banco_de_brasilia",
+    "name": "Banco de Brasilia SA",
+    "name_ko": "브라질리아 은행",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "B3",
+    "ticker": "BSLI3",
+    "sector": "은행",
+    "description": "1964년에 설립된 브라질 연방지구 정부 산하의 상업 은행이다. 주로 브라질리아 및 중서부 지역을 중심으로 소매 및 기업 금융 서비스를 제공하며 지역 경제에서 중요한 금융 역할을 담당하고 있다. 최근 정부 주도의 자본 확충을 통해 재정 건전성 강화와 리스크 관리를 추진 중이다.",
+    "founded_year": 1964,
+    "headquarters": "브라질리아, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-03 09:04"
+  },
+  {
+    "id": "banco_master",
+    "name": "Banco Master",
+    "name_ko": "마스터 은행",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "은행",
+    "description": "브라질에 본사를 둔 중견 민간 상업 은행이다. 자산운용, 신용대출, 투자 은행 업무 등 다양한 금융 서비스를 제공해 왔다. 최근 브라질리아 은행(BRB)과의 합병이 무산되는 등 사업 재편 과정을 거치고 있다.",
+    "founded_year": 1971,
+    "headquarters": "상파울루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-03 09:04"
+  },
+  {
     "id": "santander_brasil",
     "name": "Banco Santander (Brasil) S.A.",
     "name_ko": "산탄데르 브라질",
@@ -1086,6 +1118,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-29 20:50"
+  },
+  {
+    "id": "davita_bank",
+    "name": "Daycoval Bank",
+    "name_ko": "데이비체은행",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "은행",
+    "description": "1970년에 설립된 브라질의 중견 민간 상업 은행이다. 기업 금융, 중소기업 대출, 개인 신용 및 투자 관리 분야에 전문성을 가지고 있다. 브라질 금융 시장에서 안정적인 법적 분쟁 및 파생상품 계약 관련 이슈의 당사자로 언급된다.",
+    "founded_year": 1970,
+    "headquarters": "상파울루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-03 09:04"
   },
   {
     "id": "gol_linhas_aereas",
@@ -1422,6 +1470,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-27 07:21"
+  },
+  {
+    "id": "csn",
+    "name": "Companhia Siderúrgica Nacional",
+    "name_ko": "CSN",
+    "country": "아르헨티나",
+    "country_flag": "🌍",
+    "exchange": "BVMF",
+    "ticker": "CSNA3",
+    "sector": "철강 및 광업",
+    "description": "1941년에 설립된 브라질의 대표적인 철강 및 광업 그룹입니다. 철강 생산뿐만 아니라 광산, 물류, 에너지, 시멘트 등 다각화된 사업을 영위하고 있습니다. 브라질 내에서 강력한 산업 인프라를 보유한 대형 민간 기업입니다.",
+    "founded_year": 1941,
+    "headquarters": "상파울루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-03 09:03"
   },
   {
     "id": "ethiopian_airlines",
@@ -2832,6 +2896,22 @@
     "updated_at": "2026-08-03 02:01"
   },
   {
+    "id": "patria_investments",
+    "name": "Patria Investments Limited",
+    "name_ko": "파트리아 인베스트먼트",
+    "country": "콜롬비아",
+    "country_flag": "🌍",
+    "exchange": "NASDAQ",
+    "ticker": "PAX",
+    "sector": "금융/대체자산운용",
+    "description": "파트리아 인베스트먼트는 라틴 아메리카를 중심으로 활동하는 대형 대체자산 운용사입니다. 사모펀드, 인프라, 부동산 등 다양한 부문에 걸쳐 자금을 운용하며 남미 시장에서 강력한 입지를 다지고 있습니다. 라틴 아메리카 프론티어 및 신흥 시장 투자의 핵심 플레이어로 평가받고 있습니다.",
+    "founded_year": 1988,
+    "headquarters": "조지타운, 케이맨 제도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-03 09:05"
+  },
+  {
     "id": "airports_of_thailand",
     "name": "Airports of Thailand (AOT)",
     "name_ko": null,
@@ -3198,5 +3278,21 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-24 17:59"
+  },
+  {
+    "id": "iluka_resources",
+    "name": "Iluka Resources Limited",
+    "name_ko": "일루카 리소시스",
+    "country": "호주",
+    "country_flag": "🌍",
+    "exchange": "ASX",
+    "ticker": "ILU",
+    "sector": "광업",
+    "description": "일루카 리소시스는 1954년에 설립된 호주의 대표적인 광물 채굴 및 가공 기업으로, 주력 사업인 광석 및 지르콘·루틸 생산 외에도 미래 성장 동력으로 희토류 제련 사업에 대규모 투자를 진행하고 있습니다. 특히 서호주주 에네아바에 희토류 제련소를 건설하며 글로벌 공급망 다변화의 핵심 주자로 자리매김하고 있습니다. 호주 증권거래소(ASX)에 상장되어 있습니다.",
+    "founded_year": 1954,
+    "headquarters": "퍼스, 호주",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-03 09:07"
   }
 ]
