@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-04 13:13",
+  "updated_at": "2026-08-04 13:14",
   "indices": [
     {
       "name": "S&P 500",
@@ -25,15 +25,15 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 6194.54,
-      "change_pct": -6.08,
+      "price": 6186.88,
+      "change_pct": -6.19,
       "up": false
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 774.37,
-      "change_pct": 7.59,
+      "price": 774.1,
+      "change_pct": 7.55,
       "up": true
     },
     {
@@ -53,22 +53,22 @@
     {
       "name": "SET (태국)",
       "symbol": "^SET.BK",
-      "price": 1623.87,
-      "change_pct": 0.12,
+      "price": 1625.27,
+      "change_pct": 0.21,
       "up": true
     },
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 6270.39,
-      "change_pct": 0.58,
+      "price": 6273.82,
+      "change_pct": 0.63,
       "up": true
     },
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 6312.41,
-      "change_pct": -0.35,
+      "price": 6308.62,
+      "change_pct": -0.41,
       "up": false
     },
     {
@@ -121,15 +121,15 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 6194.54,
-        "change_pct": -6.08,
+        "price": 6186.88,
+        "change_pct": -6.19,
         "up": false
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 774.37,
-        "change_pct": 7.59,
+        "price": 774.1,
+        "change_pct": 7.55,
         "up": true
       }
     ],
@@ -151,22 +151,22 @@
       {
         "name": "SET (태국)",
         "symbol": "^SET.BK",
-        "price": 1623.87,
-        "change_pct": 0.12,
+        "price": 1625.27,
+        "change_pct": 0.21,
         "up": true
       },
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 6270.39,
-        "change_pct": 0.58,
+        "price": 6273.82,
+        "change_pct": 0.63,
         "up": true
       },
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 6312.41,
-        "change_pct": -0.35,
+        "price": 6308.62,
+        "change_pct": -0.41,
         "up": false
       }
     ],
