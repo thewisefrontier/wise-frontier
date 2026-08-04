@@ -70,6 +70,20 @@ _PAT_DAY_MON = re.compile(r"(?P<day>[0-9]{1,2})(?:st|nd|rd|th)?\s+(?:de\s+)?(?P<
 _PAT_ISO     = re.compile(r"(?P<y>[0-9]{4})-(?P<m>[0-9]{1,2})-(?P<day>[0-9]{1,2})(?![0-9])")
 _PAT_SLASH   = re.compile(r"(?P<a>[0-9]{1,2})/(?P<b>[0-9]{1,2})/(?P<y>[0-9]{4})")  # d/m/Y·m/d/Y 양쪽 후보
 
+# 한국어 날짜 — 소스가 자체 한국어 기사인 경로(다이제스트)에서 필수다.
+# ⚠️ 이게 없으면 원기사에 "31일(현지시간)"이 그대로 있어도 근거로 인정하지 못해
+#    정상 다이제스트가 매일 미발행된다 (실사례: id=50788 ← id=48206, 2026-08-04)
+_PAT_KO_MD  = re.compile(r"(?P<m>[0-9]{1,2})\s*월\s*(?P<day>[0-9]{1,2})\s*일")
+# 월+일 표기는 _PAT_KO_MD가 정확히 복원하므로 여기서는 제외한다.
+_PAT_KO_DAY = re.compile(r"(?<![0-9])(?<!월)(?<!월 )(?P<day>[0-9]{1,2})일\(현지시간\)")
+
+# "N일(현지시간)" 단독 표기는 월 정보가 없어 완전한 date로 복원할 수 없다.
+# 소스 발행일 기준 이 창 안에서만 근거로 인정한다.
+# 실측(2026-08-04, 07-25 이후 발행 자체기사 424표기): 과거 0~3일이 312건(73.6%).
+# 창을 넓히면 31일 중 상당수 day가 무조건 통과해 가드가 무력화된다.
+KO_DAY_BACK = 7   # 과거 방향 허용 일수
+KO_DAY_FWD  = 3   # 미래 방향 허용 일수
+
 # 다국어 월명 → 월 번호. 앞자리 우선순위 주의(juil=7 / juin=6)
 _MON_PREFIX = (
     ("juil", 7), ("juin", 6), ("jan", 1), ("ene", 1), ("feb", 2), ("fev", 2), ("f\u00e9v", 2),
@@ -143,6 +157,17 @@ def _iter_source_dates(txt, base_date):
             if cand:
                 yield cand
 
+    for m in _PAT_KO_MD.finditer(txt):
+        try:
+            mn, dd = int(m.group("m")), int(m.group("day"))
+        except (ValueError, TypeError):
+            continue
+        if not (1 <= mn <= 12 and 1 <= dd <= 31):
+            continue
+        cand = _pick_year(base_date, mn, dd)
+        if cand:
+            yield cand
+
     for m in _PAT_ISO.finditer(txt):
         try:
             cand = date(int(m.group("y")), int(m.group("m")), int(m.group("day")))
@@ -174,10 +199,12 @@ def _source_days(sources, base_date):
 
         # 1) 원문 발행일 — 가장 신뢰도 높은 근거
         raw_pub = s.get("source_published_at")
+        pub_d = None
         if raw_pub:
             d = _parse_pub_date(raw_pub)
             if d and not (base_date and abs((d - base_date).days) > EVIDENCE_WINDOW_DAYS):
                 has_pubdate = True
+                pub_d = d
                 # 발행일 당일과 전날(전날 사건을 다음날 보도하는 경우가 흔하다)
                 days.add(d.day)
                 days.add((d - timedelta(days=1)).day)
@@ -193,6 +220,22 @@ def _source_days(sources, base_date):
             if base_date and abs((cand - base_date).days) > EVIDENCE_WINDOW_DAYS:
                 continue
             days.add(cand.day)
+
+        # 한국어 "N일(현지시간)" 단독 표기 — 월이 없어 완전 복원이 불가능하므로
+        # 소스 발행일(없으면 기준일) 주변 창 안에 해당 일자가 실재할 때만 인정한다.
+        ref = pub_d or base_date
+        if ref:
+            for m in _PAT_KO_DAY.finditer(txt):
+                try:
+                    dd = int(m.group("day"))
+                except (ValueError, TypeError):
+                    continue
+                if not (1 <= dd <= 31):
+                    continue
+                for off in range(-KO_DAY_BACK, KO_DAY_FWD + 1):
+                    if (ref + timedelta(days=off)).day == dd:
+                        days.add(dd)
+                        break
 
         if base_date:
             if _REL_TODAY_RE.search(txt):
