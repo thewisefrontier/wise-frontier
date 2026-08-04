@@ -1302,13 +1302,18 @@ def _ensure_paragraphs(text: str, target: int = 3) -> str:
 #   따라서 "보도 시점 근처"만 변환하고 과거·미래는 손대지 않는다.
 #   창을 넓히면 과거 사건 시점이 소실돼 기사가 망가진다.
 _ABS_DATE_RE = re.compile(r"(?<![0-9])(\d{4})\s*년\s*(\d{1,2})\s*월\s*(\d{1,2})\s*일")
+# 연도 없는 "8월 3일" 형태. 연도는 기사 기준일의 연도로 가정한다.
+# 연말·연초 경계에서는 gap이 음수(미래)로 나와 자동으로 축약 대상에서 빠진다.
+_ABS_MD_RE = re.compile(r"(?<![0-9])(?<!년)(?<!년 )(\d{1,2})\s*월\s*(\d{1,2})\s*일")
+# "8월 4일 12:31" = 라이브 업데이트 스탬프(_update_stamp). 절대 축약하지 않는다.
+_TIME_TAIL_RE = re.compile(r"^\s*\d{1,2}:\d{2}")
 ABS_DATE_WINDOW_DAYS = int(os.getenv("ABS_DATE_WINDOW_DAYS", "3"))
 
 
 def _normalize_recent_abs_dates(text: str, base=None, window_days: int = None,
                                 add_local_time: bool = True) -> str:
     """보도 시점 근처(0~window_days일 전)의 절대날짜만 "N일(현지시간)"으로 축약."""
-    if not text or "년" not in text:
+    if not text or ("년" not in text and "월" not in text):
         return text
     if window_days is None:
         window_days = ABS_DATE_WINDOW_DAYS
@@ -1336,7 +1341,28 @@ def _normalize_recent_abs_dates(text: str, base=None, window_days: int = None,
             state["marked"] = True
         return f"{d.day}일{suffix}"
 
-    return _ABS_DATE_RE.sub(_sub, text)
+    out = _ABS_DATE_RE.sub(_sub, text)
+
+    def _sub_md(m):
+        """연도 없는 "N월 N일" → 보도 시점 근처면 "N일(현지시간)"."""
+        try:
+            d = datetime(base_date.year, int(m.group(1)), int(m.group(2))).date()
+        except ValueError:
+            return m.group(0)
+        tail = out[m.end():m.end() + 8]
+        if _TIME_TAIL_RE.match(tail):
+            return m.group(0)      # 업데이트 스탬프는 손대지 않는다
+        delta = (base_date - d).days
+        if delta < 0 or delta > window_days:
+            return m.group(0)      # 미래·과거 사건 시점은 월 정보가 필요하다
+        if tail.startswith("(현지시간)") or state["marked"] or not add_local_time:
+            suffix = ""
+        else:
+            suffix = "(현지시간)"
+            state["marked"] = True
+        return f"{d.day}일{suffix}"
+
+    return _ABS_MD_RE.sub(_sub_md, out)
 
 
 def _plainify_parsed(parsed):
@@ -1952,6 +1978,7 @@ def update_live_articles():
         if delta.startswith("새로 확인된 내용:"):
             delta = delta.split(":", 1)[1].strip()
         delta = _strip_leaked_labels(delta)
+        delta = _normalize_recent_abs_dates(delta)
         if has_polite_ending(delta):
             print("     🔧 합쇼체 감지 → 자동 변환 적용")
             delta = to_plain_style(delta)
