@@ -42,8 +42,17 @@ try:
 except Exception:  # 모듈 없거나 import 실패해도 날씨 발행 자체는 계속돼야 한다
     def store_image(src_url, key_hint="", timeout=30):
         return src_url
+# 기상청 자료는 기상청 API허브(apihub.kma.go.kr)에서만 받는다. 파라미터는 authKey.
+# 공공데이터포털(apis.data.go.kr) 경로는 2026-08-05 제거했다 — 그쪽에는 날씨 API
+# 활용신청이 없어 호출해도 자료가 오지 않는다(사용자 확인).
+# 이 잘못된 경로 때문에 2026-08-03·08-04 한국 날씨가 Open-Meteo 폴백으로 발행됐다
+# (실측: 08-04 기사 본문이 format_kma_line이 아닌 폴백 포맷).
+# 인증키는 허브 계정당 1개이므로 통보문용 KMA_BRIEFING_KEY를 공용으로 쓴다.
 KMA_API_KEY = os.getenv("KMA_API_KEY", "")
 KMA_BRIEFING_KEY = os.getenv("KMA_BRIEFING_KEY", "")
+KMA_HUB_KEY = KMA_BRIEFING_KEY or KMA_API_KEY    # 기상청 API허브 authKey
+# 코드 여러 곳의 게이트가 `if not KMA_API_KEY`로 되어 있어 허브 키 기준으로 재정의한다.
+KMA_API_KEY = KMA_HUB_KEY
 
 # ── Gemini 설정 ──────────────────────────────────────────────
 GEMINI_MODEL_PRIMARY  = "gemini-3.5-flash-lite"
@@ -1110,6 +1119,21 @@ def _kma_grid_for_city(name: str, lat: float, lon: float) -> tuple:
 KMA_WARNING_STN = {"서울": 108, "부산": 159, "대구": 143, "광주": 156, "제주": 184}
 
 
+def _kma_endpoints(path: str) -> list:
+    """기상청 호출 정보를 반환한다. → [(URL, 키파라미터명, 키값)]
+
+    기상청 API허브(apihub.kma.go.kr)만 사용한다. 응답 스키마
+    (response/header/resultCode + body/items/item)는 통보문
+    fetch_kma_weather_briefing()이 이미 허브에서 쓰고 있는 것과 같다.
+
+    ⚠️ 공공데이터포털(apis.data.go.kr) 폴백은 제거했다(2026-08-05, 사용자 확인).
+       포털 쪽에는 날씨 API 활용신청이 없어 폴백해봐야 실패만 반복하고
+       재시도 회차를 소모하며, 실패 원인 판별도 흐려진다.
+       인증키는 API허브 계정당 1개이므로 KMA_BRIEFING_KEY를 공용으로 쓴다.
+    """
+    return [(f"https://apihub.kma.go.kr/api/typ02/openApi/{path}", "authKey", KMA_HUB_KEY)]
+
+
 def fetch_kma_weather_briefing(stn_id: str = "108", retries: int = 2):
     """
     기상청 API허브 '동네예보 통보문 조회서비스' 중 getWthrSituation(기상개황) 호출.
@@ -1169,12 +1193,14 @@ def fetch_kma_warning_title(name: str, local_now: datetime, retries: int = 2):
         return None
 
     date_str = local_now.strftime("%Y%m%d")
-    for attempt in range(retries):
+    endpoints = _kma_endpoints("WthrWrnInfoService/getWthrWrnList")
+    for attempt in range(max(retries, len(endpoints))):
+        url, key_name, key_val = endpoints[attempt % len(endpoints)]
         try:
             res = requests.get(
-                "http://apis.data.go.kr/1360000/WthrWrnInfoService/getWthrWrnList",
+                url,
                 params={
-                    "serviceKey": KMA_API_KEY,
+                    key_name: key_val,
                     "numOfRows": 20,
                     "pageNo": 1,
                     "dataType": "JSON",
@@ -1246,13 +1272,16 @@ def fetch_kma_vilage_fcst_all(name: str, lat: float, lon: float, local_now: date
     nx, ny = _kma_grid_for_city(name, lat, lon)
     base_date, base_time = _kma_base_datetime(local_now)
 
+    endpoints = _kma_endpoints("VilageFcstInfoService_2.0/getVilageFcst")
     last_err = None
-    for attempt in range(retries):
+    for attempt in range(max(retries, len(endpoints))):
+        url, key_name, key_val = endpoints[attempt % len(endpoints)]
+        src = "허브" if "apihub" in url else "포털"
         try:
             res = requests.get(
-                "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst",
+                url,
                 params={
-                    "serviceKey": KMA_API_KEY,
+                    key_name: key_val,
                     "numOfRows": 1000,
                     "pageNo": 1,
                     "dataType": "JSON",
@@ -1273,7 +1302,7 @@ def fetch_kma_vilage_fcst_all(name: str, lat: float, lon: float, local_now: date
                     data = res.json()
                     header = data.get("response", {}).get("header", {})
                     if header.get("resultCode") != "00":
-                        last_err = f"KMA {header.get('resultCode')}: {header.get('resultMsg')}"
+                        last_err = f"[{src}] KMA {header.get('resultCode')}: {header.get('resultMsg')}"
                     else:
                         items = data.get("response", {}).get("body", {}).get("items", {}).get("item", [])
                         by_date_time = {}
@@ -1624,13 +1653,15 @@ def _kma_mid_tmfc(local_now: datetime) -> str:
 def _fetch_kma_mid(endpoint: str, reg_id: str, tm_fc: str, retries: int = 3):
     if not KMA_API_KEY:
         return None
+    endpoints = _kma_endpoints(f"MidFcstInfoService/{endpoint}")
     last_err = None
-    for attempt in range(retries):
+    for attempt in range(max(retries, len(endpoints))):
+        url, key_name, key_val = endpoints[attempt % len(endpoints)]
         try:
             res = requests.get(
-                f"http://apis.data.go.kr/1360000/MidFcstInfoService/{endpoint}",
+                url,
                 params={
-                    "serviceKey": KMA_API_KEY,
+                    key_name: key_val,
                     "numOfRows": 10,
                     "pageNo": 1,
                     "dataType": "JSON",
