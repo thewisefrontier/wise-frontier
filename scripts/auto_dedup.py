@@ -28,6 +28,14 @@ SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 
 MERGE_THRESHOLD = 0.7  # 이 이상이면 자동 통합, 미만이면 미발행만
 
+# 정기 발행물은 중복 판정에서 제외한다.
+# 다이제스트는 제목이 "[데일리 다이제스트] " 접두어 + 추상 명사구(지정학·기후·공급망)로
+# 고정돼 있어 내용이 전혀 달라도 trigram 유사도가 0.5를 넘는다.
+# 실측(2026-08-04): 7/31↔7/30 = 0.623, 8/2↔7/30 = 0.580 → 둘 다 오탐 미발행.
+# 하루 1건만 생성되고 daily_digest.py가 digest_exists_for_today()로 자체 중복 방지를 하므로
+# 애초에 dedup 대상이 아니다.
+EXCLUDE_CATEGORIES = {"다이제스트"}
+
 
 def _headers():
     return {
@@ -51,22 +59,65 @@ def fetch_duplicate_pairs(hours=72, threshold=0.5):
     return res.json()
 
 
-def unpublish_articles(ids: list):
-    """id 목록을 한 번에 미발행 처리"""
+def fetch_categories(ids: list) -> dict:
+    """id → category 매핑. 제외 카테고리 판정에 쓴다."""
     if not ids:
-        return True
+        return {}
     id_list = ",".join(str(i) for i in ids)
-    res = requests.patch(
+    res = requests.get(
         f"{SUPABASE_URL}/rest/v1/articles",
         headers=_headers(),
-        params={"id": f"in.({id_list})"},
-        json={"is_published": False},
-        timeout=30,
+        params={"id": f"in.({id_list})", "select": "id,category"},
+        timeout=20,
     )
-    if res.status_code not in (200, 204):
-        print(f"❌ 미발행 처리 실패: HTTP {res.status_code} - {res.text[:300]}")
-        return False
-    return True
+    if res.status_code != 200:
+        print(f"⚠️ 카테고리 조회 실패: HTTP {res.status_code} — 제외 필터 미적용")
+        return {}
+    return {r["id"]: (r.get("category") or "") for r in res.json()}
+
+
+def unpublish_articles(ids: list, scores: dict = None):
+    """id 목록을 미발행 처리하고 사유를 update_log에 남긴다.
+
+    사유를 남기는 이유: 기존에는 is_published만 바꿔 log가 비어 있었고,
+    그 탓에 다이제스트 오탐 미발행의 원인을 찾는 데 시간이 걸렸다.
+    note 문구는 export의 화이트리스트에 없으므로 공개 JSON에는 실리지 않는다.
+    """
+    if not ids:
+        return True
+    scores = scores or {}
+    ok = True
+    stamp = now_kst().strftime("%Y-%m-%d %H:%M")
+    for aid in ids:
+        sc = scores.get(aid)
+        note = ("자동 중복정리 미발행"
+                + (f" — 유사도 {sc*100:.0f}%" if sc is not None else ""))
+        log = []
+        try:
+            g = requests.get(
+                f"{SUPABASE_URL}/rest/v1/articles",
+                headers=_headers(),
+                params={"id": f"eq.{aid}", "select": "update_log"},
+                timeout=15,
+            )
+            if g.status_code == 200 and g.json():
+                cur = g.json()[0].get("update_log")
+                if isinstance(cur, list):
+                    log = cur
+        except Exception as e:
+            print(f"  ⚠️ #{aid} update_log 조회 실패: {e}")
+        log.append({"timestamp": stamp, "note": note})
+        res = requests.patch(
+            f"{SUPABASE_URL}/rest/v1/articles",
+            headers=_headers(),
+            params={"id": f"eq.{aid}"},
+            json={"is_published": False, "update_log": log},
+            timeout=30,
+        )
+        if res.status_code not in (200, 204):
+            print(f"❌ #{aid} 미발행 처리 실패: HTTP {res.status_code} - {res.text[:200]}")
+            ok = False
+    return ok
 
 
 def merge_pair(id_keep: int, id_remove: int) -> bool:
@@ -104,6 +155,19 @@ def run():
         print("중복 후보 없음")
         return
 
+    # 정기 발행물(다이제스트 등)은 제목 구조상 trigram이 구조적으로 높아 오탐이 난다.
+    cats = fetch_categories(sorted({p["id_a"] for p in pairs} | {p["id_b"] for p in pairs}))
+    if cats:
+        before = len(pairs)
+        pairs = [p for p in pairs
+                 if cats.get(p["id_a"], "") not in EXCLUDE_CATEGORIES
+                 and cats.get(p["id_b"], "") not in EXCLUDE_CATEGORIES]
+        if before != len(pairs):
+            print(f"제외 카테고리로 {before - len(pairs)}쌍 건너뜀 ({', '.join(EXCLUDE_CATEGORIES)})")
+        if not pairs:
+            print("처리할 중복 후보 없음")
+            return
+
     high_pairs = [p for p in pairs if p["score"] >= MERGE_THRESHOLD]
     low_pairs = [p for p in pairs if p["score"] < MERGE_THRESHOLD]
 
@@ -124,13 +188,17 @@ def run():
 
     # ── 50~70%: 미발행만 ──
     later_ids = set()
+    later_scores = {}
     for pair in low_pairs:
         is_a_later = pair["created_at_a"] >= pair["created_at_b"]
         later_id = pair["id_a"] if is_a_later else pair["id_b"]
         later_ids.add(later_id)
+        # 같은 기사가 여러 쌍에 걸리면 가장 높은 유사도를 기록한다
+        if pair["score"] > later_scores.get(later_id, 0):
+            later_scores[later_id] = pair["score"]
 
     if later_ids:
-        if unpublish_articles(sorted(later_ids)):
+        if unpublish_articles(sorted(later_ids), later_scores):
             print(f"✅ 미발행 처리 완료 {len(later_ids)}건: {sorted(later_ids)}")
         else:
             print("❌ 미발행 처리 중 오류 발생")
