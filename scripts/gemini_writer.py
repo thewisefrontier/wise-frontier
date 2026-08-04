@@ -1657,11 +1657,14 @@ def park_multi_topic_articles(articles: list) -> int:
 
 # ── 라이브 기사 능동적 업데이트 ──────────────────────────────
 
-# 라이브 업데이트에서 항상 제외할 카테고리.
-# 자체 데이터 소스와 전용 생성 경로를 가진 기사는 Gemini 후속 병합으로
-# 덮어쓰면 실측값이 창작으로 대체된다. subcategory 화이트리스트와 별개로
-# 카테고리 기준 가드를 둬서 명명 규칙이 바뀌어도 뚫리지 않게 한다.
-LIVE_UPDATE_EXCLUDE_CATEGORIES = {"날씨"}
+# 라이브 업데이트 대상 subcategory 접두 (트렌드 기사 전용).
+# 트렌드는 사건이 며칠에 걸쳐 전개되므로 후속 정보를 능동 검색해 반영하는 것이
+# 기사의 핵심이다. 반대로 일반 기사(cluster_/solo_)는 후속 반영이 필요 없고,
+# 정기 자동생성물(weather_/국제유가/digest_)은 외부 API 실측값이 본문이라
+# Gemini가 덮어쓰면 실측이 창작으로 대체된다.
+# (실사고 id=47879: 기상청 기반 한국 날씨 기사가 "역대 최고기온 42.5도 경신
+#  반영"이라는 근거 없는 내용으로 전면 교체됨)
+LIVE_UPDATE_PREFIXES = ("trend_", "realtrend_", "extrend_")
 
 
 def get_stale_live_articles() -> list:
@@ -1673,12 +1676,18 @@ def get_stale_live_articles() -> list:
             headers=_sb_headers(),
             # dict를 쓰면 같은 키("created_at")가 뒤엣것으로 덮어써져 48시간 하한이
             # 통째로 사라진다. 튜플 리스트로 보내야 PostgREST가 두 조건을 AND로 묶는다.
-            # select에 subcategory를 포함해야 아래 digest_ 필터가 실제로 동작한다.
+            # select에 subcategory를 포함해야 아래 접두 필터가 실제로 동작한다.
+            #
+            # ⚠️ 기존에는 score=eq.1 로 걸렀는데, 트렌드 기사는 score=2로 저장되어
+            # 정작 대상이어야 할 트렌드가 통째로 빠지고 일반·자동생성 기사만
+            # 돌고 있었다(2026-08-04 실측: trend_/realtrend_ 216건 전부 score=2,
+            # weather_ 105건이 score=1이라 대상에 포함). score 조건을 버리고
+            # subcategory 접두로 직접 지정한다.
             params=[
                 ("select", "id,title_ko,summary_ko,country,category,score,subcategory"),
                 ("source", "eq.NewsFinal"),
                 ("is_published", "eq.true"),
-                ("score", "eq.1"),
+                ("subcategory", "like.*trend_*"),
                 ("created_at", f"gte.{since}"),
                 ("created_at", f"lte.{not_after}"),
                 ("order", "created_at.desc"),
@@ -1687,19 +1696,10 @@ def get_stale_live_articles() -> list:
             timeout=15
         )
         if res.status_code in (200, 206):
-            # 후속 업데이트는 RSS 소스 기반 기사(cluster_/solo_)에만 적용한다.
-            # 제외 대상은 "정기 자동생성물"과 "자체 갱신 경로를 가진 기사"다:
-            #   weather_(매일 날씨) · 국제유가 · 금리 · digest_ → 외부 API 실측값이
-            #     본문이라 Gemini가 덮어쓰면 실측이 창작으로 대체된다
-            #     (실사고 id=47879: 기상청 기반 한국 날씨 기사가 "역대 최고기온
-            #      42.5도 경신 반영"이라는 근거 없는 내용으로 전면 교체됨)
-            #   trend_/realtrend_/extrend_ → gemini_summarizer가 [업데이트 이력]
-            #     append로 갱신하는 리빙 아티클. 여기서 전면 교체하면 이력이 소실된다
-            # 태풍·폭우·폭염 등 "뉴스성" 기상 기사는 RSS로 들어와 cluster_/solo_로
-            # 저장되므로 이 필터에 걸리지 않고 계속 업데이트된다.
+            # PostgREST의 like.*trend_* 는 앞뒤 와일드카드라 오탐 여지가 있어
+            # 접두를 코드에서 다시 정확히 검증한다.
             return [a for a in res.json()
-                    if (a.get("subcategory") or "").startswith(("cluster_", "solo_"))
-                    and (a.get("category") or "") not in LIVE_UPDATE_EXCLUDE_CATEGORIES]
+                    if (a.get("subcategory") or "").startswith(LIVE_UPDATE_PREFIXES)]
     except Exception as e:
         print(f"  [라이브 업데이트] 조회 실패: {e}")
     return []

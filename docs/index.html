@@ -196,6 +196,15 @@
     .digest-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 900; margin-bottom: 8px; line-height: 1.4; color: var(--text); }
     .digest-preview { font-size: 13px; color: var(--muted); line-height: 1.6; }
     .digest-more { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--accent2); margin-top: 10px; }
+    .digest-body { display: flex; gap: 14px; align-items: flex-start; }
+    .digest-thumb {
+      width: 120px; height: 90px; object-fit: cover;
+      border-radius: 6px; flex-shrink: 0;
+    }
+    .card-thumb {
+      width: 88px; height: 66px; object-fit: cover;
+      border-radius: 6px; flex-shrink: 0;
+    }
 
     .feed-header {
       display: flex; justify-content: space-between; align-items: center;
@@ -351,6 +360,8 @@
       .region-btn, .sector-btn { padding: 8px 10px; font-size: 11px; }
       .article-card { padding: 12px 14px; }
       .article-title { font-size: 13px; }
+      .digest-thumb { width: 88px; height: 66px; }
+      .card-thumb { width: 72px; height: 54px; }
       header { padding: 0 12px; }
       .header-top { padding: 5px 12px; }
     }
@@ -1003,11 +1014,11 @@
           <span class="article-time" data-created="${a.created_at}">${formatTime(a.created_at)}</span>
         </div>
         <div style="display:flex;gap:12px;align-items:flex-start;">
+          ${a.image_url ? `<img src="${a.image_url}" alt="" loading="lazy" class="card-thumb" onerror="this.remove()">` : ''}
           <div style="flex:1;min-width:0;">
             <div class="article-title">${a.title_ko||a.title_en}</div>
             ${a.summary_ko ? `<div class="article-summary">${cleanBody(a.summary_ko).slice(0,120)}${a.summary_ko.length>120?'…':''}</div>` : ''}
           </div>
-          ${a.image_url ? `<img src="${a.image_url}" alt="" loading="lazy" style="width:88px;height:66px;object-fit:cover;border-radius:6px;flex-shrink:0;">` : ''}
         </div>
         <div class="article-footer">
           <span class="article-source">ⓒ NewsFinal</span>
@@ -1109,9 +1120,14 @@
 
     box.innerHTML = `
       <div class="digest-label">📋 오늘의 다이제스트</div>
-      <div class="digest-title">${title}</div>
-      <div class="digest-preview">${preview}${body.length > 180 ? '…' : ''}</div>
-      <div class="digest-more">전체 보기 →</div>
+      <div class="digest-body">
+        ${digest.image_url ? `<img src="${digest.image_url}" alt="" loading="lazy" class="digest-thumb" onerror="this.remove()">` : ''}
+        <div style="flex:1;min-width:0;">
+          <div class="digest-title">${title}</div>
+          <div class="digest-preview">${preview}${body.length > 180 ? '…' : ''}</div>
+          <div class="digest-more">전체 보기 →</div>
+        </div>
+      </div>
     `;
     box.style.display = 'block';
     box.onclick = () => location.href = `article?id=${digest.id}`;
