@@ -61,7 +61,7 @@ _exhausted_keys_primary  = set()  # RPD 소진 키 (3.5)
 _exhausted_keys_fallback = set()  # RPD 소진 키 (3.1)
 
 
-def call_gemini_weather(prompt: str, max_tokens: int = 1200) -> str | None:
+def call_gemini_weather(prompt: str, max_tokens: int = 2000) -> str | None:
     """날씨 기사 본문 생성용 Gemini 호출 (키 로테이션)."""
     global _current_key_idx, _exhausted_keys_primary, _exhausted_keys_fallback
 
@@ -103,6 +103,12 @@ def call_gemini_weather(prompt: str, max_tokens: int = 1200) -> str | None:
                     _current_key_idx = (idx + 1) % n
                     cands = res.json().get("candidates", [])
                     if not cands:
+                        return None
+                    # maxOutputTokens 초과로 잘린 응답을 정상 취급하면 본문·JSON이
+                    # 중간에서 끊긴 채 저장된다. 폐기하고 코드 폴백 문장을 쓴다.
+                    finish = cands[0].get("finishReason", "")
+                    if finish and finish != "STOP":
+                        print(f"  [WARN] {model} 응답 비정상 종료(finishReason={finish}) — 폐기")
                         return None
                     parts = cands[0].get("content", {}).get("parts", [])
                     text = "".join(p.get("text", "") for p in parts).strip()

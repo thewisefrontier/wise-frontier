@@ -951,7 +951,15 @@ def call_gemini(prompt, max_tokens=1000, retry=2):
                 res = requests.post(url, json=payload, timeout=(10, 30))
                 if res.status_code == 200:
                     _current_key_idx = (idx + 1) % n
-                    return res.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
+                    _cand = res.json()["candidates"][0]
+                    # maxOutputTokens 초과로 잘린 응답을 정상 취급하면 문장·JSON이
+                    # 중간에서 끊긴 채 저장된다(실사고 id=47879: 본문이 절단되고
+                    # 파싱 실패로 "제목:/내용:" 라벨이 그대로 기사에 노출).
+                    _finish = _cand.get("finishReason", "")
+                    if _finish and _finish != "STOP":
+                        print(f"  [WARN] {model} 응답 비정상 종료(finishReason={_finish}) — 폐기")
+                        return None
+                    return _cand["content"]["parts"][0]["text"].strip()
                 elif res.status_code == 429:
                     print(f"  [429] {model} 키 {idx+1} RPD 소진 — 블랙리스트 추가")
                     exhausted.add(idx)
@@ -1649,6 +1657,13 @@ def park_multi_topic_articles(articles: list) -> int:
 
 # ── 라이브 기사 능동적 업데이트 ──────────────────────────────
 
+# 라이브 업데이트에서 항상 제외할 카테고리.
+# 자체 데이터 소스와 전용 생성 경로를 가진 기사는 Gemini 후속 병합으로
+# 덮어쓰면 실측값이 창작으로 대체된다. subcategory 화이트리스트와 별개로
+# 카테고리 기준 가드를 둬서 명명 규칙이 바뀌어도 뚫리지 않게 한다.
+LIVE_UPDATE_EXCLUDE_CATEGORIES = {"날씨"}
+
+
 def get_stale_live_articles() -> list:
     since     = (now_kst() - timedelta(hours=48)).strftime("%Y-%m-%d %H:%M")
     not_after = (now_kst() - timedelta(hours=3)).strftime("%Y-%m-%d %H:%M")
@@ -1672,8 +1687,19 @@ def get_stale_live_articles() -> list:
             timeout=15
         )
         if res.status_code in (200, 206):
+            # 후속 업데이트는 RSS 소스 기반 기사(cluster_/solo_)에만 적용한다.
+            # 제외 대상은 "정기 자동생성물"과 "자체 갱신 경로를 가진 기사"다:
+            #   weather_(매일 날씨) · 국제유가 · 금리 · digest_ → 외부 API 실측값이
+            #     본문이라 Gemini가 덮어쓰면 실측이 창작으로 대체된다
+            #     (실사고 id=47879: 기상청 기반 한국 날씨 기사가 "역대 최고기온
+            #      42.5도 경신 반영"이라는 근거 없는 내용으로 전면 교체됨)
+            #   trend_/realtrend_/extrend_ → gemini_summarizer가 [업데이트 이력]
+            #     append로 갱신하는 리빙 아티클. 여기서 전면 교체하면 이력이 소실된다
+            # 태풍·폭우·폭염 등 "뉴스성" 기상 기사는 RSS로 들어와 cluster_/solo_로
+            # 저장되므로 이 필터에 걸리지 않고 계속 업데이트된다.
             return [a for a in res.json()
-                    if not (a.get("subcategory") or "").startswith("digest_")]
+                    if (a.get("subcategory") or "").startswith(("cluster_", "solo_"))
+                    and (a.get("category") or "") not in LIVE_UPDATE_EXCLUDE_CATEGORIES]
     except Exception as e:
         print(f"  [라이브 업데이트] 조회 실패: {e}")
     return []
@@ -1773,7 +1799,7 @@ def update_live_articles():
 업데이트노트: (핵심 변경 15자 이내)
 본문: (업데이트된 전체 본문)"""
 
-        result = call_gemini_article(prompt, max_tokens=2000)
+        result = call_gemini_article(prompt, max_tokens=3000)
         if not result or "업데이트 불필요" in result:
             print(f"     업데이트 불필요")
             continue
@@ -1790,6 +1816,10 @@ def update_live_articles():
         if has_polite_ending(new_body):
             print("     🔧 합쇼체 감지 → 자동 변환 적용")
             new_body = to_plain_style(new_body)
+
+        # 다른 저장 경로와 동일하게 라벨 유출을 차단한다(실사고 id=47879:
+        # Gemini가 "본문:" 뒤에 다시 "제목:/내용:" 구조를 넣어 그대로 저장됨)
+        new_body = _strip_leaked_labels(new_body)
 
         if update_article(art_id, title, new_body, note=note):
             update_article_count(art_id, 2)
