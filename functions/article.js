@@ -30,6 +30,20 @@ const REGION_KO = {
 const regionKo = (r) => REGION_KO[r] || r || '';
 
 // article.html의 cleanBody()와 동일 (마크다운 잔여·프로모 문구 제거)
+// 상단 [업데이트] 블록을 걷어내고 원 본문만 반환한다. 요약·메타 설명 전용.
+// 본문 렌더에는 쓰지 않는다 — 독자에게는 업데이트가 맨 위에 보여야 한다.
+// 카드나 검색 스니펫에 "■ 8월 4일 12:31 — …"이 먼저 나오면 무슨 사건인지
+// 알 수 없으므로, 사건을 설명하는 원 본문 리드를 쓴다.
+function stripUpdates(text) {
+  const s = String(text || '');
+  if (!s.replace(/^\s+/, '').startsWith('[업데이트]')) return s;
+  const i = s.indexOf('\n────────');
+  if (i === -1) return s;
+  const rest = s.slice(i + 1);
+  const nl = rest.indexOf('\n');
+  return nl === -1 ? '' : rest.slice(nl + 1).replace(/^\n+/, '');
+}
+
 function cleanBody(text) {
   if (!text) return '';
   text = text
@@ -242,7 +256,7 @@ export async function onRequestGet(context) {
 
     const title = a.title_ko || a.title_en || '';
     const fullTitle = `${title} — NewsFinal`;
-    const desc = cleanBody(a.summary_ko || a.summary_en || '').replace(/\s+/g, ' ').trim().slice(0, 150);
+    const desc = cleanBody(stripUpdates(a.summary_ko) || a.summary_en || '').replace(/\s+/g, ' ').trim().slice(0, 150);
     const canonical = `${SITE}/article?id=${a.id}`;
     const ogImage = a.image_url || `${SITE}/favicon-512.png`;
     const publishedIso = toIsoKST(a.created_at);

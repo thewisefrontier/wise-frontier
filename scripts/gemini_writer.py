@@ -1755,16 +1755,134 @@ def search_followup(title: str, country: str) -> list:
     return results
 
 
-# [업데이트 이력] 구분자 — gemini_summarizer.merge_trend_article()이 붙이는 형식과 동일
+# ── 라이브 업데이트: 상단 블록 구조 ──────────────────────────────────
+#
+#   [업데이트]
+#   ■ 8월 4일 12:31 — 최신
+#   ■ 8월 3일 09:10 — 그 이전
+#   ────────
+#   (원 본문 — 최초 생성 이후 불변)
+#
+# BBC·CNN 라이브 기사와 같은 배치다. 최신이 맨 위에 오므로 본문의 낡은 수치가
+# 아래 남아도 독자는 갱신된 값을 먼저 읽는다. 덕분에 **본문 전면 재작성이
+# 아예 필요 없어진다** — Gemini가 이미 검수를 통과한 문장을 다시 쓸 일이
+# 없으므로 누락·변형·창작 리스크가 구조적으로 제거된다.
+#
+# ⚠️ 원 본문은 어떤 경로로도 덮어쓰지 않는다. 이 불변식을 깨면 위 이점이 전부 사라진다.
+
+UPDATE_HEAD = "[업데이트]"
+UPDATE_SEP  = "────────"
+
+# 구형(하단) 이력 구분자. gemini_summarizer가 붙여 온 기존 발행분과의 읽기 호환용.
+# 신규 append는 전부 상단 블록으로 가지만, 이미 붙어 있는 하단 이력은 보존한다.
 HISTORY_SEP = "────────\n[업데이트 이력]"
 
+MIN_DELTA_LEN     = 60    # 이보다 짧으면 새 내용으로 치지 않는다
+DELTA_DUP_OVERLAP = 0.65  # 문장 겹침률이 이 이상이면 재탕으로 보고 폐기
+                          # (실측: 조사·어미만 바꾼 환언 0.69 / 무관한 문장 0.18 이하)
 
-def _split_history(summary: str) -> tuple[str, str]:
-    """본문과 [업데이트 이력] 구간을 분리해 (본문, 이력) 반환. 이력이 없으면 이력은 빈 문자열."""
-    parts = summary.split(HISTORY_SEP, 1)
-    base = parts[0].rstrip()
-    history = (HISTORY_SEP + parts[1]) if len(parts) > 1 else ""
-    return base, history
+# 업데이트 항목의 머리표·타임스탬프. 내용 비교 전에 떼어내지 않으면
+# 같은 문장인데도 접두 때문에 겹침률이 떨어져 중복이 새어 나간다.
+# (summarizer가 붙인 구형 항목은 타임스탬프가 없으므로 선택 그룹으로 둔다)
+_HIST_PREFIX_RE = re.compile(
+    r"^■\s*(?:\d{1,2}월\s*\d{1,2}일\s*\d{1,2}:\d{2}\s*(?:업데이트)?\s*[—\-–]\s*)?"
+)
+
+
+def _split_article(summary: str) -> tuple[str, str, str]:
+    """(상단 업데이트 블록, 원 본문, 구형 하단 이력)으로 분리한다.
+    없는 구간은 빈 문자열. 어느 것도 없으면 전부 본문으로 취급한다."""
+    s = (summary or "").lstrip()
+    updates = ""
+    if s.startswith(UPDATE_HEAD):
+        parts = s.split("\n" + UPDATE_SEP, 1)
+        if len(parts) == 2:
+            updates = parts[0].rstrip()
+            # 구분선 줄의 나머지를 버리고 다음 줄부터 본문
+            s = parts[1].split("\n", 1)[1] if "\n" in parts[1] else ""
+            s = s.lstrip("\n")
+
+    parts = s.split(HISTORY_SEP, 1)
+    body   = parts[0].rstrip()
+    legacy = (HISTORY_SEP + parts[1]) if len(parts) > 1 else ""
+    return updates, body, legacy
+
+
+def _compose_article(updates: str, body: str, legacy: str) -> str:
+    """_split_article()의 역연산."""
+    out = ""
+    if updates:
+        out += updates.rstrip() + "\n" + UPDATE_SEP + "\n\n"
+    out += (body or "").rstrip()
+    if legacy:
+        out += "\n\n" + legacy
+    return out
+
+
+def _update_stamp() -> str:
+    d = now_kst()
+    return f"{d.month}월 {d.day}일 {d.strftime('%H:%M')}"
+
+
+def _prepend_update(updates: str, delta: str) -> str:
+    """새 항목을 블록 맨 위(헤더 바로 아래)에 넣는다. 최신이 위."""
+    entry = f"■ {_update_stamp()} — {delta}"
+    if updates:
+        lines = updates.split("\n")
+        return "\n".join([lines[0], entry] + lines[1:])
+    return UPDATE_HEAD + "\n" + entry
+
+
+def _norm_sent(s: str) -> str:
+    return re.sub(r"[\s\W_]+", "", s or "")
+
+
+def _char_ngrams(s: str, n: int = 3) -> set:
+    s = _norm_sent(s)
+    return {s[i:i + n] for i in range(len(s) - n + 1)} if len(s) >= n else set()
+
+
+def _overlap(a: set, b: set) -> float:
+    """작은 쪽 기준 포함률. 길이가 다른 두 서술의 '같은 말인가'를 자카드보다 잘 잡는다."""
+    if not a or not b:
+        return 0.0
+    return len(a & b) / min(len(a), len(b))
+
+
+def _split_sents(text: str) -> list:
+    return [x for x in re.split(r"(?<=다\.)\s*|\n+", text or "") if x.strip()]
+
+
+def _dedupe_delta(delta: str, existing: str) -> str:
+    """기존 본문·업데이트에 이미 있는 내용을 문장 단위로 delta에서 제거한다.
+    완전일치뿐 아니라 조사·어미만 바꾼 재탕도 겹침률로 걸러낸다.
+    delta 자체의 문장 간 중복도 같이 제거한다.
+
+    ⚠️ 한계: 문자 3-gram 기반이라 어휘를 통째로 바꾼 환언은 못 잡는다
+       (예: "사임 의사를 밝혔다" vs "사임하겠다는 뜻을 나타냈다" → 겹침률 0).
+    """
+    existing = "\n".join(_HIST_PREFIX_RE.sub("", ln.strip())
+                         for ln in (existing or "").split("\n"))
+    seen_norm, seen_ng = set(), []
+    for x in _split_sents(existing):
+        ns = _norm_sent(x)
+        if not ns:
+            continue
+        seen_norm.add(ns)
+        seen_ng.append(_char_ngrams(x))
+
+    kept = []
+    for x in _split_sents(delta):
+        ns = _norm_sent(x)
+        if not ns or ns in seen_norm:
+            continue
+        ng = _char_ngrams(x)
+        if any(_overlap(ng, g) >= DELTA_DUP_OVERLAP for g in seen_ng):
+            continue
+        kept.append(x.strip())
+        seen_norm.add(ns)
+        seen_ng.append(ng)
+    return " ".join(kept).strip()
 
 
 def update_live_articles():
@@ -1785,9 +1903,8 @@ def update_live_articles():
         country = a.get("country") or ""
         art_id  = a["id"]
 
-        # [업데이트 이력]은 후속 append 구간이라 재작성 대상에서 제외하고 그대로 보존한다.
-        # Gemini에 넘기지도, 덮어쓰지도 않는다.
-        base_body, history = _split_history(summary)
+        # 원 본문은 어떤 경우에도 Gemini에 넘기지 않고 덮어쓰지도 않는다.
+        updates, base_body, legacy = _split_article(summary)
 
         print(f"  → {title[:50]}")
         followups = search_followup(title, country)
@@ -1801,48 +1918,53 @@ def update_live_articles():
             b = f.get("summary_ko") or f.get("summary_en") or ""
             followup_text += f"- {t}\n  {b[:200]}\n"
 
-        prompt = f"""현재 기사와 후속 정보를 비교해서, 추가할 새로운 내용이 있으면 업데이트하세요.
-새로운 내용이 없으면 "업데이트 불필요"라고만 답하세요.
+        applied = "\n".join(x for x in (updates, legacy) if x)
+        applied_block = f"\n[이미 반영된 업데이트]\n{applied}\n" if applied else ""
+
+        # 증분만 생성한다. 본문 재작성 경로는 존재하지 않는다.
+        delta_prompt = f"""아래 기사에 이어 붙일 '새로 확인된 내용'만 쓰세요.
 
 [현재 기사]
 제목: {title}
 내용: {base_body}
-
+{applied_block}
 [후속 정보]
 {followup_text}
 
-새 내용이 있으면:
-업데이트노트: (핵심 변경 15자 이내)
-본문: (업데이트된 전체 본문)"""
+규칙:
+- 현재 기사와 이미 반영된 업데이트에 있는 내용은 절대 반복하지 마세요. 요약·재정리도 금지입니다.
+- 새로 확인된 사실이 없으면 정확히 "업데이트 불필요" 한 줄만 출력하세요.
+- 2~4문장, 사실 서술형 한국어. 논평·마크다운·헤더·소제목 금지.
+- 수치가 갱신됐으면 갱신된 값을 명시하세요(예: "사망자는 30명으로 늘었다").
+- 모든 문장을 "-다"로 종결하세요. "-습니다", "-입니다" 등 정중체는 쓰지 마세요.
+- 날짜는 후속 정보에 명시된 "N일(현지시간)" 형식만 쓰세요. 날짜 근거가 없으면 생략하고 추측하지 마세요.
+- 고유명사는 한글 음차로 쓰되, 명칭에 든 영문 약어는 알파벳 그대로 두세요(오픈AI, xAI, UN, EU).
+  영문+숫자 코드(H-1B, 5G)와 한국 기업 약칭(SK, LG)도 그대로 둡니다.
 
-        # 본문 전체를 재작성시키므로 출력 토큰이 원문 길이에 비례해야 한다.
-        # 부족하면 finishReason != STOP 으로 응답이 폐기돼 긴 기사가 영영 갱신되지 않는다.
-        need_tokens = min(8000, max(3000, int(len(base_body) * 1.6) + 800))
-        result = call_gemini_article(prompt, max_tokens=need_tokens)
-        if not result or "업데이트 불필요" in result:
-            print(f"     업데이트 불필요")
+새로 확인된 내용:"""
+
+        delta = call_gemini_article(delta_prompt, max_tokens=600)
+        if not delta or "업데이트 불필요" in delta:
+            print("     업데이트 불필요")
             continue
 
-        note = "후속 정보 업데이트"
-        new_body = result
-        for line in result.strip().split("\n"):
-            if line.startswith("업데이트노트:"):
-                note = line.replace("업데이트노트:", "").strip()
-            elif line.startswith("본문:"):
-                new_body = result[result.find("본문:")+3:].strip()
-                break
-
-        if has_polite_ending(new_body):
+        delta = delta.strip()
+        if delta.startswith("새로 확인된 내용:"):
+            delta = delta.split(":", 1)[1].strip()
+        delta = _strip_leaked_labels(delta)
+        if has_polite_ending(delta):
             print("     🔧 합쇼체 감지 → 자동 변환 적용")
-            new_body = to_plain_style(new_body)
+            delta = to_plain_style(delta)
 
-        # 다른 저장 경로와 동일하게 라벨 유출을 차단한다(실사고 id=47879:
-        # Gemini가 "본문:" 뒤에 다시 "제목:/내용:" 구조를 넣어 그대로 저장됨)
-        new_body = _strip_leaked_labels(new_body)
+        # 중복 방어 — 같은 내용이 매 실행마다 append되는 것을 막는다.
+        # 비교 대상은 본문 + 기존 업데이트 전체(summary)다.
+        delta = _dedupe_delta(delta, summary)
+        if len(delta) < MIN_DELTA_LEN:
+            print(f"     새 내용 부족({len(delta)}자) → 생략")
+            continue
 
-        # 보존해 둔 이력을 원문 그대로 되붙인다(합쇼체 변환·라벨 제거 대상 아님)
-        if history:
-            new_body = new_body.rstrip() + "\n\n" + history
+        note = "후속 정보 추가"
+        new_body = _compose_article(_prepend_update(updates, delta), base_body, legacy)
 
         if update_article(art_id, title, new_body, note=note):
             update_article_count(art_id, 2)

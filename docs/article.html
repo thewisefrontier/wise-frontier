@@ -232,7 +232,21 @@
     'north_america': '북미', 'east_asia': '동아시아', 'europe': '유럽',
   };
   function regionKo(r) { return REGION_KO[r] || r || ''; }
-  function cleanBody(text) {
+  // 상단 [업데이트] 블록을 걷어내고 원 본문만 반환한다. 요약·메타 설명 전용.
+// 본문 렌더에는 쓰지 않는다 — 독자에게는 업데이트가 맨 위에 보여야 한다.
+// 카드나 검색 스니펫에 "■ 8월 4일 12:31 — …"이 먼저 나오면 무슨 사건인지
+// 알 수 없으므로, 사건을 설명하는 원 본문 리드를 쓴다.
+function stripUpdates(text) {
+  const s = String(text || '');
+  if (!s.replace(/^\s+/, '').startsWith('[업데이트]')) return s;
+  const i = s.indexOf('\n────────');
+  if (i === -1) return s;
+  const rest = s.slice(i + 1);
+  const nl = rest.indexOf('\n');
+  return nl === -1 ? '' : rest.slice(nl + 1).replace(/^\n+/, '');
+}
+
+function cleanBody(text) {
     if (!text) return '';
     text = text
       .replace(/\*\*(.+?)\*\*/g, '$1')
@@ -437,9 +451,9 @@
       .map(x => x.article);
 
     document.title = `${title} — NewsFinal`;
-    document.querySelector('meta[name="description"]')?.setAttribute('content', cleanBody(a.summary_ko || '').slice(0, 150));
+    document.querySelector('meta[name="description"]')?.setAttribute('content', cleanBody(stripUpdates(a.summary_ko || '')).slice(0, 150));
     document.querySelector('meta[property="og:title"]')?.setAttribute('content', `${title} — NewsFinal`);
-    document.querySelector('meta[property="og:description"]')?.setAttribute('content', cleanBody(a.summary_ko || '').slice(0, 150));
+    document.querySelector('meta[property="og:description"]')?.setAttribute('content', cleanBody(stripUpdates(a.summary_ko || '')).slice(0, 150));
     document.querySelector('link[rel="canonical"]')?.setAttribute('href', `https://newsfinal.co.kr/article?id=${a.id}`);
     if (a.image_url) document.querySelector('meta[property="og:image"]')?.setAttribute('content', a.image_url);
 

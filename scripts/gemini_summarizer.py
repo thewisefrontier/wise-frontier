@@ -15,6 +15,16 @@ import requests
 from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
 
+# 라이브 업데이트 상단 [업데이트] 블록 형식을 gemini_writer와 공유한다.
+# 형식이 갈리면 한 기사에 상단 블록과 하단 이력이 동시에 생겨 파싱이 엉킨다.
+# gemini_writer는 __main__ 가드가 있어 import 시 실행되지 않는다.
+# import 실패에도 병합 자체는 죽지 않도록 폴백을 둔다.
+try:
+    from gemini_writer import _split_article, _compose_article, _prepend_update
+    _HAS_UPDATE_BLOCK = True
+except Exception:
+    _HAS_UPDATE_BLOCK = False
+
 # 외부 트렌드 수집 모듈 (GDELT, Google Trends, Reddit)
 try:
     from external_trends import collect_external_trends
@@ -648,8 +658,13 @@ def find_similar_trend(title: str, country: str | None = None,
 
 def _summarize_delta(root_summary: str, new_title: str, new_body: str) -> str:
     """루트 기사에 없는 '새 전개'만 1~3문장으로 요약. 새 사실 없으면 '없음'."""
-    # [업데이트 이력] 이전 원본 본문만 비교 기준으로 사용 (기존 delta 제외)
-    base_summary = root_summary.split("────────\n[업데이트 이력]")[0].strip()
+    # 본문을 앞에 두고 이미 반영된 업데이트를 뒤에 붙여 비교 기준으로 쓴다.
+    # (상단 블록이 앞을 차지하면 본문 리드가 잘림 한도 밖으로 밀려난다)
+    if _HAS_UPDATE_BLOCK:
+        _u, _b, _l = _split_article(root_summary)
+        base_summary = "\n".join(x for x in (_b, _u, _l) if x).strip()
+    else:
+        base_summary = root_summary.split("────────\n[업데이트 이력]")[0].strip()
     prompt = f"""아래는 진행 중인 사건의 기존 정리 기사와, 방금 수집된 새 기사입니다.
 기존 기사에 '없는 새로운 사실'만 1~3문장으로 요약하세요.
 - 날짜는 반드시 소스에 명시된 "N일(현지시간)" 형식만 사용. "오늘", "어제", "화요일", "월요일" 등 요일·상대적 표현 금지. 날짜 정보가 없으면 생략.
@@ -687,7 +702,10 @@ def merge_trend_article(existing: dict, new_title: str, new_body: str, note: str
         print(f"    → 새 전개 없음, append 생략 (id={art_id})")
         return True  # 병합 성공 처리 → 신규 중복 생성 방지
 
-    if "[업데이트 이력]" not in existing_summary:
+    if _HAS_UPDATE_BLOCK:
+        u, b, l = _split_article(existing_summary)
+        new_summary = _compose_article(_prepend_update(u, delta), b, l)
+    elif "[업데이트 이력]" not in existing_summary:
         new_summary = existing_summary.rstrip() + "\n\n────────\n[업데이트 이력]\n■ " + delta
     else:
         new_summary = existing_summary.rstrip() + "\n■ " + delta
