@@ -1755,6 +1755,18 @@ def search_followup(title: str, country: str) -> list:
     return results
 
 
+# [업데이트 이력] 구분자 — gemini_summarizer.merge_trend_article()이 붙이는 형식과 동일
+HISTORY_SEP = "────────\n[업데이트 이력]"
+
+
+def _split_history(summary: str) -> tuple[str, str]:
+    """본문과 [업데이트 이력] 구간을 분리해 (본문, 이력) 반환. 이력이 없으면 이력은 빈 문자열."""
+    parts = summary.split(HISTORY_SEP, 1)
+    base = parts[0].rstrip()
+    history = (HISTORY_SEP + parts[1]) if len(parts) > 1 else ""
+    return base, history
+
+
 def update_live_articles():
     if not GEMINI_API_KEYS:
         return
@@ -1773,6 +1785,10 @@ def update_live_articles():
         country = a.get("country") or ""
         art_id  = a["id"]
 
+        # [업데이트 이력]은 후속 append 구간이라 재작성 대상에서 제외하고 그대로 보존한다.
+        # Gemini에 넘기지도, 덮어쓰지도 않는다.
+        base_body, history = _split_history(summary)
+
         print(f"  → {title[:50]}")
         followups = search_followup(title, country)
         if not followups:
@@ -1790,7 +1806,7 @@ def update_live_articles():
 
 [현재 기사]
 제목: {title}
-내용: {summary[:500]}
+내용: {base_body}
 
 [후속 정보]
 {followup_text}
@@ -1799,7 +1815,10 @@ def update_live_articles():
 업데이트노트: (핵심 변경 15자 이내)
 본문: (업데이트된 전체 본문)"""
 
-        result = call_gemini_article(prompt, max_tokens=3000)
+        # 본문 전체를 재작성시키므로 출력 토큰이 원문 길이에 비례해야 한다.
+        # 부족하면 finishReason != STOP 으로 응답이 폐기돼 긴 기사가 영영 갱신되지 않는다.
+        need_tokens = min(8000, max(3000, int(len(base_body) * 1.6) + 800))
+        result = call_gemini_article(prompt, max_tokens=need_tokens)
         if not result or "업데이트 불필요" in result:
             print(f"     업데이트 불필요")
             continue
@@ -1820,6 +1839,10 @@ def update_live_articles():
         # 다른 저장 경로와 동일하게 라벨 유출을 차단한다(실사고 id=47879:
         # Gemini가 "본문:" 뒤에 다시 "제목:/내용:" 구조를 넣어 그대로 저장됨)
         new_body = _strip_leaked_labels(new_body)
+
+        # 보존해 둔 이력을 원문 그대로 되붙인다(합쇼체 변환·라벨 제거 대상 아님)
+        if history:
+            new_body = new_body.rstrip() + "\n\n" + history
 
         if update_article(art_id, title, new_body, note=note):
             update_article_count(art_id, 2)
