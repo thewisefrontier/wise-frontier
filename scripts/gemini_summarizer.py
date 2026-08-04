@@ -518,6 +518,56 @@ def _fetch_source_details(rows: list) -> list:
     return rows or []
 
 
+_KW_RE_CACHE = {}
+
+
+def _kw_regex(kw: str):
+    """ASCII 키워드는 단어경계 정규식, 한국어는 None(부분문자열 검사).
+
+    ⚠️ Python `\\b`는 한국어 문자를 단어 문자로 취급하므로 쓰지 않는다.
+    ASCII-only lookaround로 대체한다.
+    """
+    k = (kw or "").strip()
+    if not k:
+        return None
+    if k in _KW_RE_CACHE:
+        return _KW_RE_CACHE[k]
+    rx = None
+    try:
+        if all(ord(c) < 128 for c in k):
+            rx = re.compile(r"(?<![A-Za-z0-9])" + re.escape(k) + r"(?![A-Za-z0-9])", re.I)
+    except Exception:
+        rx = None
+    _KW_RE_CACHE[k] = rx
+    return rx
+
+
+def _trend_relevance(a: dict, keywords: list) -> int:
+    """트렌드 그룹과의 관련도 점수. 제목 매칭 3점 / 요약 매칭 1점.
+
+    PostgREST `ilike.*kw*`는 부분문자열이라 무관 기사가 대량 유입된다.
+    실측(2026-08-04, 7일치): `mali` 129건 중 60건(46%)이 Somalia·Somaliland·
+    Malice·abnormality·normalisasi(인니어)·Omar Malik 오탐, `gang` 33건 중
+    28건(85%)이 perdagangan(인니 '무역')·pedagang('상인')·Ganggu 오탐.
+    """
+    title = f"{a.get('title_en') or ''} {a.get('title_ko') or ''}"
+    body = f"{a.get('summary_en') or ''} {a.get('summary_ko') or ''}"
+    score = 0
+    for kw in (keywords or []):
+        rx = _kw_regex(kw)
+        if rx is not None:
+            if rx.search(title):
+                score += 3
+            elif rx.search(body):
+                score += 1
+        else:
+            if kw and kw in title:
+                score += 3
+            elif kw and kw in body:
+                score += 1
+    return score
+
+
 def get_trend_articles(keywords: list, days: int = 7) -> list:
     """지난 N일간 특정 키워드가 포함된 수집 기사 반환"""
     since = (now_kst() - timedelta(days=days)).strftime("%Y-%m-%d %H:%M")
@@ -549,7 +599,18 @@ def get_trend_articles(keywords: list, days: int = 7) -> list:
         if a["id"] not in seen:
             seen.add(a["id"])
             unique.append(a)
-    return unique
+
+    # 관련도 재검증 — 조회는 부분문자열이므로 여기서 단어경계로 걸러낸다.
+    scored = []
+    for a in unique:
+        sc = _trend_relevance(a, keywords)
+        if sc <= 0:
+            continue
+        a["_trend_score"] = sc
+        scored.append(a)
+    if len(unique) != len(scored):
+        print(f"  ↳ 관련도 필터: {len(unique)}건 → {len(scored)}건 ({len(unique)-len(scored)}건 제외)")
+    return scored
 
 
 
@@ -836,7 +897,7 @@ def run_trend_tracker():
             continue
 
         # 최신 기사 최대 8건으로 Gemini 프롬프트 구성
-        top = sorted(articles, key=lambda a: a.get("created_at", ""), reverse=True)[:8]
+        top = sorted(articles, key=lambda a: (a.get("_trend_score", 0), a.get("created_at", "")), reverse=True)[:8]
         today_str = now_kst().strftime("%Y년 %m월 %d일")
 
         article_list = ""
@@ -855,7 +916,7 @@ def run_trend_tracker():
 
 이 기사들을 종합해 현재 진행 중인 상황을 정리하는 추적 기사를 작성하세요.
 - 현재 상황이 어떻게 전개되고 있는지 시간 순으로 정리하세요.
-- 본문은 부가가치 문단을 포함해 최소 800자 이상으로 작성하세요. 각 사건마다 한 문장으로 끝내지 말고, 배경·경위·현재 상황을 구체적으로 풀어서 서술하세요. 서로 다른 사건이 섞여 있으면 각각을 문단으로 나누어 충분히 설명하세요.
+- 위 기사 중 [{group_name}] 주제와 직접 관련이 없는 것은 본문에서 완전히 제외하세요. 무관한 사건을 같은 기사에 엮지 마세요. 하나의 기사는 하나의 사안만 다뤄야 합니다.\n- 본문은 각 사건마다 한 문장으로 끝내지 말고, 배경·경위·현재 상황을 구체적으로 풀어서 서술하세요. 관련 기사가 충분하면 800자 이상이 적당합니다. 다만 분량을 채우려고 위 기사에 없는 내용을 지어내거나 무관한 사건을 끌어오지는 마세요. 쓸 내용이 적으면 그만큼 짧게 쓰세요.
 - 문단을 나눌 때는 반드시 빈 줄(줄바꿈 2번)로 구분하세요. 한 문단에 모든 문장을 붙여 쓰지 마세요.
 - 모든 날짜는 사건이 일어난 현지시간 기준으로만 표기하세요. 한국 시간(KST)이나 UTC로 환산·계산하지 말고, 소스 기사에 나온 날짜를 하루도 앞뒤로 옮기지 말고 그대로 "N일(현지시간)" 형식으로 쓰세요. "2026년 7월 15일", "오늘", "현재" 같은 절대 날짜나 오늘 날짜는 쓰지 말고, 날짜를 알 수 없으면 쓰지 마세요.
 - "현지시각 기준으로", "현재 시점", "현 시점 기준", "최근 들어" 같은 모호한 시간 표현으로 날짜를 대체하지 마세요. 이런 표현은 금지어입니다. 구체적 날짜를 모르면 시간 표현 자체를 아예 쓰지 말고 사실만 서술하세요.
