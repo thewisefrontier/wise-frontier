@@ -130,32 +130,93 @@ def already_published(price_date: date) -> bool:
     return False
 
 
+# ── 데이터 신선도 ────────────────────────────────────────────
+# 데이터 날짜가 대상 날짜와 정확히 일치할 때만 기사를 쓴다.
+# 하루라도 뒤처지면 "어제 종가로 오늘 기사"가 되므로 생성을 중단한다.
+MAX_STALE_BUSINESS_DAYS = 0
+
+
+def _parse_data_date(s: str) -> date | None:
+    """'YYYY-MM-DD' / 'YYYY-MM' 형태 문자열을 date로 변환. 실패 시 None."""
+    s = (s or "").strip()[:10]
+    for fmt in ("%Y-%m-%d", "%Y-%m"):
+        try:
+            return datetime.strptime(s, fmt).date()
+        except ValueError:
+            continue
+    return None
+
+
+def _business_days_between(older: date, newer: date) -> int:
+    """older~newer 사이 영업일 수(주말 제외). newer가 더 과거면 음수."""
+    if older == newer:
+        return 0
+    sign = 1 if newer > older else -1
+    a, b = (older, newer) if newer > older else (newer, older)
+    n, cur = 0, a
+    while cur < b:
+        cur += timedelta(days=1)
+        if cur.weekday() < 5:
+            n += 1
+    return n * sign
+
+
+def _accept_prices(src_name: str, wti: tuple, brent: tuple, target: date) -> dict | None:
+    """소스 결과를 신선도 검사 후 채택. 부적합하면 None(→ 다음 소스로 폴백)."""
+    wti_t, wti_p, wti_d = wti
+    brent_t, brent_p, brent_d = brent
+
+    if not (wti_t and wti_p and brent_t and brent_p):
+        return None
+
+    if wti_d is None or brent_d is None:
+        print(f"  [SKIP] {src_name}: 데이터 날짜 확인 불가 → 사용 안 함")
+        return None
+
+    data_date = min(wti_d, brent_d)
+    lag = _business_days_between(data_date, target)
+
+    if lag < 0:
+        print(f"  [SKIP] {src_name}: 데이터 날짜({data_date})가 대상({target})보다 미래")
+        return None
+    if lag > MAX_STALE_BUSINESS_DAYS:
+        print(f"  [SKIP] {src_name}: 데이터 정체 — 최신 {data_date}, 대상 {target} ({lag}영업일 뒤처짐)")
+        return None
+    return {
+        "wti":    _calc(wti_t, wti_p),
+        "brent":  _calc(brent_t, brent_p),
+        "date":   data_date,
+        "source": src_name,
+    }
+
+
 # ── 유가 데이터 수집 ─────────────────────────────────────────
 
-def fetch_stooq(symbol: str) -> tuple[float | None, float | None]:
-    """Stooq CSV에서 최근 2일 종가를 가져와 (오늘, 전일) 반환."""
+def fetch_stooq(symbol: str) -> tuple[float | None, float | None, date | None]:
+    """Stooq CSV에서 최근 2일 종가를 가져와 (오늘, 전일, 최신 데이터 날짜) 반환."""
     url = f"https://stooq.com/q/d/l/?s={symbol}&i=d"
     try:
         res = requests.get(url, timeout=15, headers={"User-Agent": "Mozilla/5.0"})
         if res.status_code != 200:
-            return None, None
+            return None, None, None
         lines = [l for l in res.text.strip().splitlines() if l and not l.startswith("Date")]
         if len(lines) < 2:
-            return None, None
+            return None, None, None
         latest  = lines[-1].split(",")
         prev    = lines[-2].split(",")
         close_today = float(latest[4]) if len(latest) > 4 else None
         close_prev  = float(prev[4])   if len(prev)  > 4 else None
-        return close_today, close_prev
+        data_date   = _parse_data_date(latest[0]) if latest else None
+        return close_today, close_prev, data_date
     except Exception as e:
         print(f"  [WARN] Stooq 조회 실패 ({symbol}): {e}")
-        return None, None
+        return None, None, None
 
 
-def fetch_eia(series_id: str) -> tuple[float | None, float | None]:
-    """EIA API에서 최근 2일 종가를 가져와 (오늘, 전일) 반환."""
+def fetch_eia(series_id: str) -> tuple[float | None, float | None, date | None]:
+    """EIA API에서 최근 2일 종가를 가져와 (오늘, 전일, 최신 데이터 날짜) 반환."""
     if not EIA_API_KEY:
-        return None, None
+        return None, None, None
     url = (
         f"https://api.eia.gov/v2/seriesid/{series_id}"
         f"?api_key={EIA_API_KEY}&data[0]=value&sort[0][column]=period&sort[0][direction]=desc&length=5"
@@ -163,51 +224,48 @@ def fetch_eia(series_id: str) -> tuple[float | None, float | None]:
     try:
         res = requests.get(url, timeout=15)
         if res.status_code != 200:
-            return None, None
+            return None, None, None
         data = res.json().get("response", {}).get("data", [])
         if len(data) < 2:
-            return None, None
-        return float(data[0]["value"]), float(data[1]["value"])
+            return None, None, None
+        data_date = _parse_data_date(str(data[0].get("period", "")))
+        return float(data[0]["value"]), float(data[1]["value"]), data_date
     except Exception as e:
         print(f"  [WARN] EIA 조회 실패 ({series_id}): {e}")
-        return None, None
+        return None, None, None
 
 
 def get_oil_prices() -> dict | None:
-    """WTI·Brent 종가(달러/배럴)와 전일 대비 변화량·변화율을 반환."""
-    result = {}
+    """WTI·Brent 종가(달러/배럴)와 전일 대비 변화량·변화율을 반환.
+
+    소스가 반환한 실제 데이터 날짜를 검사해, 대상 날짜와 어긋나면
+    그 소스를 버리고 다음 소스로 넘어간다.
+    모든 소스가 정체돼 있으면 None(=기사 생성 중단)을 반환한다.
+    """
+    target = get_target_price_date()
 
     if EIA_API_KEY:
         print("  → EIA API 조회 시도...")
-        wti_t, wti_p = fetch_eia(EIA_SERIES["WTI"])
+        wti = fetch_eia(EIA_SERIES["WTI"])
         time.sleep(1)
-        brent_t, brent_p = fetch_eia(EIA_SERIES["Brent"])
-        if wti_t and wti_p and brent_t and brent_p:
-            result = {
-                "wti":   _calc(wti_t, wti_p),
-                "brent": _calc(brent_t, brent_p),
-                "date":  get_target_price_date(),
-                "source": "EIA",
-            }
-            print(f"  ✓ EIA: WTI ${wti_t:.2f} (전일 ${wti_p:.2f}), Brent ${brent_t:.2f} (전일 ${brent_p:.2f})")
+        brent = fetch_eia(EIA_SERIES["Brent"])
+        result = _accept_prices("EIA", wti, brent, target)
+        if result:
+            print(f"  ✓ EIA({result['date']}): WTI ${wti[0]:.2f} (전일 ${wti[1]:.2f}), "
+                  f"Brent ${brent[0]:.2f} (전일 ${brent[1]:.2f})")
             return result
 
     print("  → Stooq 조회 시도...")
-    wti_t, wti_p = fetch_stooq(STOOQ_SYMBOLS["WTI"])
+    wti = fetch_stooq(STOOQ_SYMBOLS["WTI"])
     time.sleep(1)
-    brent_t, brent_p = fetch_stooq(STOOQ_SYMBOLS["Brent"])
-
-    if wti_t and wti_p and brent_t and brent_p:
-        result = {
-            "wti":   _calc(wti_t, wti_p),
-            "brent": _calc(brent_t, brent_p),
-            "date":  get_target_price_date(),
-            "source": "Stooq",
-        }
-        print(f"  ✓ Stooq: WTI ${wti_t:.2f} (전일 ${wti_p:.2f}), Brent ${brent_t:.2f} (전일 ${brent_p:.2f})")
+    brent = fetch_stooq(STOOQ_SYMBOLS["Brent"])
+    result = _accept_prices("Stooq", wti, brent, target)
+    if result:
+        print(f"  ✓ Stooq({result['date']}): WTI ${wti[0]:.2f} (전일 ${wti[1]:.2f}), "
+              f"Brent ${brent[0]:.2f} (전일 ${brent[1]:.2f})")
         return result
 
-    print("  [ERROR] 모든 소스 유가 데이터 수집 실패")
+    print("  [ERROR] 신선한 유가 데이터 확보 실패 → 기사 생성 중단")
     return None
 
 
@@ -478,6 +536,14 @@ def main():
     if not prices:
         print("  [ERROR] 유가 데이터 수집 실패 → 종료")
         return
+
+    # 실제 데이터 날짜가 대상 날짜와 다르면 그 날짜로 중복 재검사
+    # (소스 정체 시 같은 수치의 기사를 반복 생성하는 것을 차단)
+    if prices["date"] != price_date:
+        if already_published(prices["date"]):
+            print(f"  → {prices['date']} 유가 기사 이미 존재 → 스킵")
+            return
+        price_date = prices["date"]
 
     print("  → Gemini로 기사 생성 중...")
     prompt       = build_article_prompt(prices)
