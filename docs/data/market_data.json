@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-05 13:05",
+  "updated_at": "2026-08-05 13:06",
   "indices": [
     {
       "name": "S&P 500",
@@ -25,14 +25,14 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 6638.98,
-      "change_pct": 6.1,
+      "price": 6639.93,
+      "change_pct": 6.11,
       "up": true
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 799.69,
+      "price": 799.63,
       "change_pct": 8.45,
       "up": true
     },
@@ -53,22 +53,22 @@
     {
       "name": "SET (태국)",
       "symbol": "^SET.BK",
-      "price": 1617.83,
-      "change_pct": 0.04,
-      "up": true
+      "price": 1617.06,
+      "change_pct": -0.0,
+      "up": false
     },
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 6347.22,
-      "change_pct": 0.44,
+      "price": 6345.32,
+      "change_pct": 0.41,
       "up": true
     },
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 6287.47,
-      "change_pct": -0.15,
+      "price": 6287.68,
+      "change_pct": -0.14,
       "up": false
     },
     {
@@ -121,14 +121,14 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 6638.98,
-        "change_pct": 6.1,
+        "price": 6639.93,
+        "change_pct": 6.11,
         "up": true
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 799.69,
+        "price": 799.63,
         "change_pct": 8.45,
         "up": true
       }
@@ -151,22 +151,22 @@
       {
         "name": "SET (태국)",
         "symbol": "^SET.BK",
-        "price": 1617.83,
-        "change_pct": 0.04,
-        "up": true
+        "price": 1617.06,
+        "change_pct": -0.0,
+        "up": false
       },
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 6347.22,
-        "change_pct": 0.44,
+        "price": 6345.32,
+        "change_pct": 0.41,
         "up": true
       },
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 6287.47,
-        "change_pct": -0.15,
+        "price": 6287.68,
+        "change_pct": -0.14,
         "up": false
       }
     ],
@@ -198,8 +198,8 @@
     "ANTM": {
       "name": "Aneka Tambang Tbk",
       "symbol": "ANTM.JK",
-      "price": 3030.0,
-      "change_pct": 4.84,
+      "price": 3020.0,
+      "change_pct": 4.5,
       "up": true
     },
     "ACB": {
