@@ -1,5 +1,37 @@
 [
   {
+    "id": "dbs_group_holdings",
+    "name": "DBS Group Holdings Ltd",
+    "name_ko": "디비에스은행",
+    "country": "",
+    "country_flag": "🌍",
+    "exchange": "SGX",
+    "ticker": "D05",
+    "sector": "은행",
+    "description": "1968년에 설립된 싱가포르 본사의 동남아시아 최대 규모 은행 그룹입니다. 싱가포르, 인도, 인도네시아 등 아시아 태평양 지역에서 리더십을 발휘하며 전통 및 디지털 수탁 기능을 통합 제공합니다. 글로벌 파이낸스 최우수 하위 보관 은행으로 선정되며 탁월한 국경 간 시장 연결성과 증권 서비스를 인정받았습니다.",
+    "founded_year": 1968,
+    "headquarters": "싱가포르, 싱가포르",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-05 21:54"
+  },
+  {
+    "id": "unicredit",
+    "name": "UniCredit S.p.A.",
+    "name_ko": "유니크레디트",
+    "country": "",
+    "country_flag": "🌍",
+    "exchange": "BIT",
+    "ticker": "UCG",
+    "sector": "은행",
+    "description": "1870년에 설립된 이탈리아의 대형 은행 그룹으로, 중부 및 동부 유럽 지역에서 강력한 프랜차이즈를 구축하고 있습니다. 디지털 인프라 강화와 AI 채택을 통해 운영 효율성을 높이고 있으며, 글로벌 파이낸스 선정 최우수 하위 보관 은행으로 꼽힙니다. 유럽 및 프론티어 시장에서 광범위한 금융 및 수탁 서비스를 제공하고 있습니다.",
+    "founded_year": 1870,
+    "headquarters": "밀라노, 이탈리아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-05 21:54"
+  },
+  {
     "id": "perenco",
     "name": "Perenco",
     "name_ko": "페렝코",
@@ -254,6 +286,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-19 01:21"
+  },
+  {
+    "id": "first_bank_of_nigeria",
+    "name": "First Bank of Nigeria",
+    "name_ko": "퍼스트뱅크 오브 나이지리아",
+    "country": "나이지리아",
+    "country_flag": "🇳🇬",
+    "exchange": "NGX",
+    "ticker": "FBNH",
+    "sector": "은행",
+    "description": "1894년에 설립된 나이지리아의 유서 깊은 대형 상업 은행으로, 광범위한 지점망과 디지털 금융 서비스를 제공합니다. 나이지리아 금융 시장에서 선도적인 위치를 차지하며 기업 및 소매 금융 분야에서 핵심적인 역할을 수행합니다. 본사는 나이지리아라고스에 위치해 있습니다.",
+    "founded_year": 1894,
+    "headquarters": "라고스, 나이지리아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-05 21:53"
   },
   {
     "id": "gombe_radio_corporation",
@@ -2144,6 +2192,22 @@
     "updated_at": "2026-08-01 21:17"
   },
   {
+    "id": "kims_hospitals",
+    "name": "KIMS Hospitals",
+    "name_ko": "킴스 병원",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "KIMS",
+    "sector": "의료",
+    "description": "인도 안드라프라데시주와 텔랑가나주를 중심으로 다수의 병원을 운영하는 대형 의료 서비스 제공 기업입니다. 2004년에 설립되었으며, 다양한 전문 진료과와 첨단 의료 기술을 바탕으로 인도 남부 지역에서 높은 의료 평판과 시장 지위를 확보하고 있습니다. 인도 증권거래소(NSE)에 상장되어 있습니다.",
+    "founded_year": 2004,
+    "headquarters": "하이드라바드, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-05 21:56"
+  },
+  {
     "id": "kvn_productions",
     "name": "KVN Productions",
     "name_ko": "케이비엔 프로덕션",
@@ -2206,6 +2270,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-22 01:58"
+  },
+  {
+    "id": "monte_carlo_fashions",
+    "name": "Monte Carlo Fashions Limited",
+    "name_ko": "몬테 카를로 패션즈",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "MONTECARLO",
+    "sector": "의류 및 패션",
+    "description": "1984년 설립된 인도의 프리미엄 의류 및 홈 텍스타일 브랜드입니다. 방한용 의류로 시작해 현재는 스웨터, 재킷, 셔츠 등 다양한 연중 착용 의류로 포트폴리오를 확장했습니다. 인도 시장에서 인지도가 높은 대표적인 패션 기업입니다.",
+    "founded_year": 1984,
+    "headquarters": "루디아나, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-05 21:55"
   },
   {
     "id": "moonshot_ai",
@@ -2384,22 +2464,6 @@
     "updated_at": "2026-08-02 21:12"
   },
   {
-    "id": "tcs",
-    "name": "Tata Consultancy Services Limited",
-    "name_ko": "타타 컨설턴시 서비시스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "TCS",
-    "sector": "IT 서비스",
-    "description": "1968년에 설립된 인도 타타 그룹 산하의 세계적인 IT 서비스 및 컨설팅 기업입니다. 전 세계 기업들을 상대로 디지털 전환, 소프트웨어 개발 및 아웃소싱 서비스를 제공합니다.",
-    "founded_year": 1968,
-    "headquarters": "뭄바이, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-02 17:22"
-  },
-  {
     "id": "tata_consultancy_services",
     "name": "Tata Consultancy Services Limited",
     "name_ko": "타타 컨설턴시 서비스",
@@ -2414,6 +2478,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-19 01:21"
+  },
+  {
+    "id": "tcs",
+    "name": "Tata Consultancy Services Limited",
+    "name_ko": "타타 컨설턴시 서비시스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "TCS",
+    "sector": "IT 서비스",
+    "description": "1968년에 설립된 인도 타타 그룹 산하의 세계적인 IT 서비스 및 컨설팅 기업입니다. 전 세계 기업들을 상대로 디지털 전환, 소프트웨어 개발 및 아웃소싱 서비스를 제공합니다.",
+    "founded_year": 1968,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-02 17:22"
   },
   {
     "id": "tata_motors",
@@ -2750,6 +2830,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-02 17:22"
+  },
+  {
+    "id": "pt_bank_rakyat_indonesia",
+    "name": "PT Bank Rakyat Indonesia (Persero) Tbk",
+    "name_ko": "인도네시아 텡가라 은행 (BRI)",
+    "country": "인도네시아",
+    "country_flag": "🇮🇩",
+    "exchange": "IDX",
+    "ticker": "BBRI",
+    "sector": "은행",
+    "description": "1895년에 설립된 인도네시아의 국영 상업 은행으로, 마이크로파이낸스 및 중소기업(MSME) 금융 분야에서 시장 지배적 위상을 자랑합니다. 인도네시아 전역에 걸친 광범위한 지점망을 통해 소외 계층과 실물 경제에 필수적인 금융 서비스와 신용을 공급하고 있습니다. 국가 경제 성장을 뒷받침하는 핵심 금융 기관입니다.",
+    "founded_year": 1895,
+    "headquarters": "자카르타, 인도네시아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-05 21:54"
   },
   {
     "id": "pertamina",
