@@ -825,6 +825,30 @@ JSON_OUTPUT_SPEC = r"""[출력 형식]
 - JSON 이외의 텍스트는 한 글자도 출력하지 마세요."""
 
 
+def _pub_day_label(raw) -> str:
+    """source_published_at(UTC ISO8601) → '8월 3일'. 실패 시 빈 문자열.
+
+    ⚠️ 값은 UTC 기준이라 현지시간과 최대 하루 어긋날 수 있다. 그럼에도 주입하는 이유:
+      - country 컬럼이 원본 기사의 55.9%에서 비어 있어 국가별 오프셋 보정이 불가능하다
+        (2026-08-05 실측, 8/1 이후 5,692건 기준)
+      - date_guard도 발행일 당일과 전날을 모두 근거로 인정한다(±1일 수용)
+      - 아무 날짜도 주지 않으면 Gemini가 요일로 도피하거나 날짜를 지어낸다.
+        하루 오차는 그보다 명백히 낫다.
+    소스 원문 본문에 날짜가 명시돼 있으면 그쪽이 우선이라는 규칙은 writer_rules에 있다.
+    """
+    s = str(raw or "")[:10]
+    m = re.match(r"^(\d{4})-(\d{2})-(\d{2})$", s)
+    if not m:
+        return ""
+    try:
+        mm, dd = int(m.group(2)), int(m.group(3))
+    except ValueError:
+        return ""
+    if not (1 <= mm <= 12 and 1 <= dd <= 31):
+        return ""
+    return f"{mm}월 {dd}일"
+
+
 def build_issue_prompt(cluster, existing_summary=None):
     sorted_cluster = sorted(cluster, key=lambda a: bool(a.get("full_text")), reverse=True)
     main_articles = sorted_cluster[:5]
@@ -835,7 +859,9 @@ def build_issue_prompt(cluster, existing_summary=None):
         t = a.get("title_ko") or a.get("title_en") or ""
         full_text = a.get("full_text") or ""
         s = full_text if full_text else (a.get("summary_ko") or a.get("summary_en") or "")
-        article_list += f"{i}. [{a.get('source','')}] {t}\n"
+        pub = _pub_day_label(a.get("source_published_at"))
+        pub_tag = f" (보도 {pub})" if pub else ""
+        article_list += f"{i}. [{a.get('source','')}]{pub_tag} {t}\n"
         if s:
             article_list += f"   {s}\n\n"
 
@@ -856,8 +882,10 @@ def build_issue_prompt(cluster, existing_summary=None):
 - 매체 홍보성 내용(구독 유도, 텔레그램 채널 안내 등)은 포함하지 마세요.
 - 날짜 표기는 "2일(현지시간)" 형식으로 간결하게 쓰세요.
 - "2026년 6월 24일 현재", "오늘", "현재" 등 절대 날짜를 본문에 쓰지 마세요. 소스 기사의 날짜 기준으로 "N일(현지시간)"으로만 표기하세요.
+- 요일(월요일~일요일)을 단독으로 쓰지 마세요. 원문에 "on Wednesday"처럼 요일만 있으면 그 요일을 한국어로 옮기지 말고, 아래 보도일 규칙에 따라 날짜로 바꾸거나 시점 표현을 생략하세요. 요일은 "8일 토요일"처럼 날짜와 병기할 때만 허용됩니다.
+- 각 원문 제목 옆에 "(보도 M월 D일)"이 붙어 있을 수 있습니다. 원문 본문에 사건 날짜가 명시돼 있으면 그 날짜가 우선이고, 명시된 날짜가 없을 때만 보도일을 사건 시점으로 보고 "D일(현지시간)" 형식으로 쓰세요. 보도일 표기가 없고 원문에도 날짜가 없으면 날짜를 쓰지 마세요.
 - 기사 문체로 작성하세요. 논평/칼럼 문체는 금지입니다.
-- 모든 인명·지명은 반드시 한글로 음차하세요. 키릴 문자, 아랍 문자, 데바나가리 등 비라틴 문자를 그대로 쓰지 마세요.
+- 모든 인명·지명은 반드시 한글로 음차하세요. 키릴 문자, 아랍 문자, 데바나가리 등 비라틴 문자를 그대로 쓰지 마세요. 한자도 마찬가지입니다. 다만 "고(故)", "대(對)중국"처럼 괄호 안에 넣는 병기는 허용됩니다.
 """ + JSON_OUTPUT_SPEC
 
     rules = load_prompt("writer_rules", fallback=FALLBACK_RULES)
