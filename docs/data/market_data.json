@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06 22:03",
+  "updated_at": "2026-08-06 22:04",
   "indices": [
     {
       "name": "S&P 500",
@@ -39,28 +39,28 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 115295.34,
+      "price": 115296.94,
       "change_pct": -0.1,
       "up": false
     },
     {
       "name": "EGX30 (이집트)",
       "symbol": "^CASE30",
-      "price": 54817.4,
-      "change_pct": 0.29,
+      "price": 54676.9,
+      "change_pct": 0.03,
       "up": true
     },
     {
       "name": "SET (태국)",
       "symbol": "^SET.BK",
-      "price": 1624.3,
-      "change_pct": 0.9,
+      "price": 1614.64,
+      "change_pct": 0.3,
       "up": true
     },
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 6343.47,
+      "price": 6343.71,
       "change_pct": -0.12,
       "up": false
     },
@@ -137,28 +137,28 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 115295.34,
+        "price": 115296.94,
         "change_pct": -0.1,
         "up": false
       },
       {
         "name": "EGX30 (이집트)",
         "symbol": "^CASE30",
-        "price": 54817.4,
-        "change_pct": 0.29,
+        "price": 54676.9,
+        "change_pct": 0.03,
         "up": true
       },
       {
         "name": "SET (태국)",
         "symbol": "^SET.BK",
-        "price": 1624.3,
-        "change_pct": 0.9,
+        "price": 1614.64,
+        "change_pct": 0.3,
         "up": true
       },
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 6343.47,
+        "price": 6343.71,
         "change_pct": -0.12,
         "up": false
       },
@@ -198,15 +198,15 @@
     "ANTM": {
       "name": "Aneka Tambang Tbk",
       "symbol": "ANTM.JK",
-      "price": 3090.0,
-      "change_pct": 0.65,
+      "price": 3080.0,
+      "change_pct": 0.33,
       "up": true
     },
     "ACB": {
       "name": "Asia Commercial Joint Stock Bank",
       "symbol": "ACB.VN",
-      "price": 22350.0,
-      "change_pct": -0.45,
+      "price": 22150.0,
+      "change_pct": -1.34,
       "up": false
     },
     "BPI": {
