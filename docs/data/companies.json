@@ -1072,6 +1072,22 @@
     "updated_at": "2026-07-15 12:37"
   },
   {
+    "id": "bidv",
+    "name": "Joint Stock Commercial Bank for Investment and Development of Vietnam",
+    "name_ko": "베트남투자개발은행",
+    "country": "베트남",
+    "country_flag": "🇻🇳",
+    "exchange": "HOSE",
+    "ticker": "BID",
+    "sector": "은행",
+    "description": "1957년에 설립된 베트남의 국영 상업은행으로, 자산 규모 기준 베트남 선도 은행 중 하나입니다. 기업 금융, 리테일 금융, 자산 관리 등 종합적인 금융 서비스를 제공하며 베트남 경제 전반에 큰 영향력을 행사하고 있습니다. 본 기사에서는 중국 위신페이와의 국경 간 QR 결제 서비스에서 청산 은행 역할을 맡아 거래를 처리합니다.",
+    "founded_year": 1957,
+    "headquarters": "하노이, 베트남",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-06 19:34"
+  },
+  {
     "id": "khanh_hoa_sanest",
     "name": "Khanh Hoa Salanganes Nest Soft Drink Joint Stock Company",
     "name_ko": "칸호아 제비집 회사",
@@ -1118,6 +1134,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-17 23:14"
+  },
+  {
+    "id": "saigon_jewelry_company",
+    "name": "Saigon Jewelry Company Limited",
+    "name_ko": "사이공주얼리컴퍼니",
+    "country": "베트남",
+    "country_flag": "🇻🇳",
+    "exchange": "비상장",
+    "ticker": "",
+    "sector": "귀금속 및 소매",
+    "description": "1988년에 설립된 베트남의 대표적인 국영 귀금속 제조 및 유통 기업입니다. 금지금 및 보석류 생산에서 베트남 시장 점유율 1위를 차지하고 있습니다. 베트남 내 금 가격 산정의 기준 역할을 하는 주요 기업입니다.",
+    "founded_year": 1988,
+    "headquarters": "호치민, 베트남",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-06 19:33"
   },
   {
     "id": "tt_group",
@@ -1488,22 +1520,6 @@
     "updated_at": "2026-07-30 17:02"
   },
   {
-    "id": "stoneco",
-    "name": "StoneCo Ltd.",
-    "name_ko": "스톤코",
-    "country": "브라질",
-    "country_flag": "🌍",
-    "exchange": "NASDAQ",
-    "ticker": "STNE",
-    "sector": "핀테크",
-    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
-    "founded_year": 2012,
-    "headquarters": "상파울루, 브라질",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-29 20:49"
-  },
-  {
     "id": "stone_co",
     "name": "StoneCo Ltd.",
     "name_ko": "스톤",
@@ -1518,6 +1534,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-22 23:37"
+  },
+  {
+    "id": "stoneco",
+    "name": "StoneCo Ltd.",
+    "name_ko": "스톤코",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "NASDAQ",
+    "ticker": "STNE",
+    "sector": "핀테크",
+    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
+    "founded_year": 2012,
+    "headquarters": "상파울루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-29 20:49"
   },
   {
     "id": "xp_inc",
@@ -2560,22 +2592,6 @@
     "updated_at": "2026-08-02 21:12"
   },
   {
-    "id": "tcs",
-    "name": "Tata Consultancy Services Limited",
-    "name_ko": "타타 컨설턴시 서비시스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "TCS",
-    "sector": "IT 서비스",
-    "description": "1968년에 설립된 인도 타타 그룹 산하의 세계적인 IT 서비스 및 컨설팅 기업입니다. 전 세계 기업들을 상대로 디지털 전환, 소프트웨어 개발 및 아웃소싱 서비스를 제공합니다.",
-    "founded_year": 1968,
-    "headquarters": "뭄바이, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-02 17:22"
-  },
-  {
     "id": "tata_consultancy_services",
     "name": "Tata Consultancy Services Limited",
     "name_ko": "타타 컨설턴시 서비스",
@@ -2590,6 +2606,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-19 01:21"
+  },
+  {
+    "id": "tcs",
+    "name": "Tata Consultancy Services Limited",
+    "name_ko": "타타 컨설턴시 서비시스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "TCS",
+    "sector": "IT 서비스",
+    "description": "1968년에 설립된 인도 타타 그룹 산하의 세계적인 IT 서비스 및 컨설팅 기업입니다. 전 세계 기업들을 상대로 디지털 전환, 소프트웨어 개발 및 아웃소싱 서비스를 제공합니다.",
+    "founded_year": 1968,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-02 17:22"
   },
   {
     "id": "tata_motors",
