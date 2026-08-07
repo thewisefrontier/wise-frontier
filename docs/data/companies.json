@@ -1536,22 +1536,6 @@
     "updated_at": "2026-07-30 17:02"
   },
   {
-    "id": "stoneco",
-    "name": "StoneCo Ltd.",
-    "name_ko": "스톤코",
-    "country": "브라질",
-    "country_flag": "🌍",
-    "exchange": "NASDAQ",
-    "ticker": "STNE",
-    "sector": "핀테크",
-    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
-    "founded_year": 2012,
-    "headquarters": "상파울루, 브라질",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-29 20:49"
-  },
-  {
     "id": "stone_co",
     "name": "StoneCo Ltd.",
     "name_ko": "스톤",
@@ -1566,6 +1550,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-22 23:37"
+  },
+  {
+    "id": "stoneco",
+    "name": "StoneCo Ltd.",
+    "name_ko": "스톤코",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "NASDAQ",
+    "ticker": "STNE",
+    "sector": "핀테크",
+    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
+    "founded_year": 2012,
+    "headquarters": "상파울루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-29 20:49"
   },
   {
     "id": "xp_inc",
@@ -2672,22 +2672,6 @@
     "updated_at": "2026-08-02 21:12"
   },
   {
-    "id": "tcs",
-    "name": "Tata Consultancy Services Limited",
-    "name_ko": "타타 컨설턴시 서비시스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "TCS",
-    "sector": "IT 서비스",
-    "description": "1968년에 설립된 인도 타타 그룹 산하의 세계적인 IT 서비스 및 컨설팅 기업입니다. 전 세계 기업들을 상대로 디지털 전환, 소프트웨어 개발 및 아웃소싱 서비스를 제공합니다.",
-    "founded_year": 1968,
-    "headquarters": "뭄바이, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-02 17:22"
-  },
-  {
     "id": "tata_consultancy_services",
     "name": "Tata Consultancy Services Limited",
     "name_ko": "타타 컨설턴시 서비스",
@@ -2702,6 +2686,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-19 01:21"
+  },
+  {
+    "id": "tcs",
+    "name": "Tata Consultancy Services Limited",
+    "name_ko": "타타 컨설턴시 서비시스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "TCS",
+    "sector": "IT 서비스",
+    "description": "1968년에 설립된 인도 타타 그룹 산하의 세계적인 IT 서비스 및 컨설팅 기업입니다. 전 세계 기업들을 상대로 디지털 전환, 소프트웨어 개발 및 아웃소싱 서비스를 제공합니다.",
+    "founded_year": 1968,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-02 17:22"
   },
   {
     "id": "tata_motors",
@@ -3216,6 +3216,22 @@
     "updated_at": "2026-07-30 09:06"
   },
   {
+    "id": "cooperativa_provincial_de_servicios_publicos_de_neuquen",
+    "name": "Cooperativa Provincial de Servicios Públicos de Neuquén Ltda.",
+    "name_ko": "칼프(CALF)",
+    "country": "중국",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "통신",
+    "description": "1932년에 설립된 아르헨티나 네우켄 주의 대표적인 전력 및 인터넷 서비스 협동조합입니다. 네우켄 및 인근 지역의 10만 가구 이상과 주요 석유 기업 밀집 지역에 전력과 광섬유 인터넷 서비스를 공급하고 있습니다. 지역 사회 기반시설 확충을 주도하며 공공 서비스 부문에서 중요한 위상을 차지하고 있습니다.",
+    "founded_year": 1932,
+    "headquarters": "네우켄, 아르헨티나",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-07 13:12"
+  },
+  {
     "id": "saic_motor",
     "name": "SAIC Motor Corporation Limited",
     "name_ko": "상하이자동차",
@@ -3598,6 +3614,22 @@
     "website": null,
     "is_published": true,
     "updated_at": null
+  },
+  {
+    "id": "bank_of_the_philippines_islands",
+    "name": "Bank of the Philippine Islands",
+    "name_ko": "필리핀 제도은행",
+    "country": "필리핀",
+    "country_flag": "🇵🇭",
+    "exchange": "PSE",
+    "ticker": "BPI",
+    "sector": "은행",
+    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 종합 금융 서비스를 제공하며 필리핀 금융 시장에서 높은 신뢰와 견고한 입지를 다지고 있다. 본 기사에서는 공공 인프라 지출 감소 추정을 발표한 주요 금융기관으로 언급되었다.",
+    "founded_year": 1851,
+    "headquarters": "마카티, 필리핀",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-07 13:12"
   },
   {
     "id": "bank_of_the_philippine_islands",
