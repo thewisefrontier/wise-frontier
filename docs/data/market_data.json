@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-07 20:08",
+  "updated_at": "2026-08-07 20:42",
   "indices": [
     {
       "name": "S&P 500",
@@ -39,8 +39,8 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 117257.9,
-      "change_pct": 1.69,
+      "price": 117126.77,
+      "change_pct": 1.58,
       "up": true
     },
     {
@@ -89,7 +89,7 @@
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
       "price": 16.24,
-      "change_pct": -0.42,
+      "change_pct": -0.39,
       "up": false
     }
   ],
@@ -137,8 +137,8 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 117257.9,
-        "change_pct": 1.69,
+        "price": 117126.77,
+        "change_pct": 1.58,
         "up": true
       },
       {
@@ -189,7 +189,7 @@
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
         "price": 16.24,
-        "change_pct": -0.42,
+        "change_pct": -0.39,
         "up": false
       }
     ]
