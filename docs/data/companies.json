@@ -1536,22 +1536,6 @@
     "updated_at": "2026-07-30 17:02"
   },
   {
-    "id": "stone_co",
-    "name": "StoneCo Ltd.",
-    "name_ko": "스톤",
-    "country": "브라질",
-    "country_flag": "🌍",
-    "exchange": "NASDAQ",
-    "ticker": "STNE",
-    "sector": "핀테크",
-    "description": "2012년에 설립된 브라질의 대표적인 핀테크 기업으로, 소상공인을 위한 결제 처리 및 금융 관리 소프트웨어를 제공합니다. 결제 단말기뿐만 아니라 가맹점 관리 시스템과 금융 서비스를 통합하여 중소기업의 디지털 전환을 지원합니다. 브라질 결제 시장에서 혁신적인 기술력과 서비스로 강력한 점유율을 확보하고 있습니다.",
-    "founded_year": 2012,
-    "headquarters": "상파울루, 브라질",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-22 23:37"
-  },
-  {
     "id": "stoneco",
     "name": "StoneCo Ltd.",
     "name_ko": "스톤코",
@@ -1566,6 +1550,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-29 20:49"
+  },
+  {
+    "id": "stone_co",
+    "name": "StoneCo Ltd.",
+    "name_ko": "스톤",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "NASDAQ",
+    "ticker": "STNE",
+    "sector": "핀테크",
+    "description": "2012년에 설립된 브라질의 대표적인 핀테크 기업으로, 소상공인을 위한 결제 처리 및 금융 관리 소프트웨어를 제공합니다. 결제 단말기뿐만 아니라 가맹점 관리 시스템과 금융 서비스를 통합하여 중소기업의 디지털 전환을 지원합니다. 브라질 결제 시장에서 혁신적인 기술력과 서비스로 강력한 점유율을 확보하고 있습니다.",
+    "founded_year": 2012,
+    "headquarters": "상파울루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-22 23:37"
   },
   {
     "id": "xp_inc",
@@ -2768,6 +2768,22 @@
     "updated_at": "2026-07-30 17:03"
   },
   {
+    "id": "singareni_collieries_company",
+    "name": "The Singareni Collieries Company Limited",
+    "name_ko": "싱가레니 콜리어리스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "싱가레니 콜리어리스는 1920년에 설립된 인도 텔랑가나주의 국영 석탄 채굴 기업입니다. 주로 인도 남부 지역의 전력 및 산업 수요를 충족하기 위해 석탄을 공급하며, 지역 경제에서 중요한 위치를 차지하고 있습니다. 토목 및 인프라 개발과 관련된 지역 사회 공헌 활동도 함께 수행하고 있습니다.",
+    "founded_year": 1920,
+    "headquarters": "코다구뎀, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-08 01:12"
+  },
+  {
     "id": "tm_inputs_and_services",
     "name": "TM Inputs and Services",
     "name_ko": "티엠 인푸츠 앤드 서비스",
@@ -3648,22 +3664,6 @@
     "updated_at": null
   },
   {
-    "id": "bank_of_the_philippine_islands",
-    "name": "Bank of the Philippine Islands",
-    "name_ko": "필리핀 제도은행",
-    "country": "필리핀",
-    "country_flag": "🇵🇭",
-    "exchange": "PSE",
-    "ticker": "BPI",
-    "sector": "은행",
-    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 개인 및 기업 금융, 자산 관리, 보험 등 종합적인 금융 서비스를 제공한다. 필리핀 금융 시장에서 높은 신뢰도와 탄탄한 시장 지위를 유지하고 있다.",
-    "founded_year": 1851,
-    "headquarters": "마닐라, 필리핀",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-30 02:38"
-  },
-  {
     "id": "bank_of_the_philippines_islands",
     "name": "Bank of the Philippine Islands",
     "name_ko": "필리핀 제도은행",
@@ -3678,6 +3678,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-07 13:12"
+  },
+  {
+    "id": "bank_of_the_philippine_islands",
+    "name": "Bank of the Philippine Islands",
+    "name_ko": "필리핀 제도은행",
+    "country": "필리핀",
+    "country_flag": "🇵🇭",
+    "exchange": "PSE",
+    "ticker": "BPI",
+    "sector": "은행",
+    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 개인 및 기업 금융, 자산 관리, 보험 등 종합적인 금융 서비스를 제공한다. 필리핀 금융 시장에서 높은 신뢰도와 탄탄한 시장 지위를 유지하고 있다.",
+    "founded_year": 1851,
+    "headquarters": "마닐라, 필리핀",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-30 02:38"
   },
   {
     "id": "basel_tiles",
