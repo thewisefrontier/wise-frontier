@@ -51,7 +51,7 @@
       "status": "active"
     },
     "BusinessDay Nigeria": {
-      "ok": 653,
+      "ok": 651,
       "fail": 2,
       "status": "active"
     },
@@ -156,7 +156,7 @@
       "ok": 0,
       "fail": 13,
       "status": "active",
-      "too_old": 114
+      "too_old": 115
     },
     "Vanguard Business": {
       "ok": 86,
@@ -286,8 +286,8 @@
       "status": "active"
     },
     "Philippine Star Business": {
-      "ok": 184,
-      "fail": 18,
+      "ok": 179,
+      "fail": 19,
       "status": "active"
     },
     "Moneycontrol India": {
@@ -826,7 +826,7 @@
       "status": "active"
     },
     "Punch Business": {
-      "ok": 742,
+      "ok": 740,
       "fail": 28,
       "status": "active"
     },
@@ -912,7 +912,7 @@
       "status": "active"
     },
     "Burkina24": {
-      "ok": 281,
+      "ok": 278,
       "fail": 1,
       "status": "active"
     },
@@ -983,7 +983,7 @@
       "status": "active"
     },
     "Sahel Intelligence": {
-      "ok": 81,
+      "ok": 82,
       "fail": 0,
       "status": "active"
     },
@@ -1136,7 +1136,7 @@
       "status": "active"
     },
     "RFI Afrique": {
-      "ok": 263,
+      "ok": 260,
       "fail": 0,
       "status": "active"
     },
@@ -1368,7 +1368,7 @@
       "status": "active"
     },
     "Guinee Conakry Info": {
-      "ok": 367,
+      "ok": 365,
       "fail": 15,
       "status": "active"
     },
@@ -1383,7 +1383,7 @@
       "status": "active"
     },
     "A Nacao Cape Verde": {
-      "ok": 167,
+      "ok": 168,
       "fail": 8,
       "status": "active"
     },
@@ -1639,8 +1639,8 @@
       "status": "active"
     },
     "The Nation Malawi": {
-      "ok": 181,
-      "fail": 117,
+      "ok": 183,
+      "fail": 116,
       "status": "active"
     },
     "New Era Namibia": {
@@ -1792,8 +1792,8 @@
       "status": "active"
     },
     "Front Page Africa Liberia": {
-      "ok": 0,
-      "fail": 428,
+      "ok": 5,
+      "fail": 427,
       "status": "active"
     },
     "Property Kenya": {
@@ -2163,7 +2163,7 @@
       "status": "active"
     },
     "El Financiero Mexico": {
-      "ok": 469,
+      "ok": 467,
       "fail": 0,
       "status": "active"
     },
@@ -2193,7 +2193,7 @@
       "status": "active"
     },
     "Legit Nigeria": {
-      "ok": 493,
+      "ok": 491,
       "fail": 1,
       "status": "active"
     },
@@ -2233,7 +2233,7 @@
       "status": "active"
     },
     "Rio Times Online": {
-      "ok": 323,
+      "ok": 326,
       "fail": 4,
       "status": "active"
     },
@@ -2381,7 +2381,7 @@
       "status": "active"
     },
     "abc_news_australia": {
-      "ok": 439,
+      "ok": 438,
       "fail": 0,
       "status": "active"
     },
@@ -2436,7 +2436,7 @@
       "status": "active"
     },
     "telesur_venezuela": {
-      "ok": 396,
+      "ok": 394,
       "fail": 3,
       "status": "active"
     },
@@ -2598,7 +2598,7 @@
       "too_old": 95
     },
     "Prensa Libre Guatemala": {
-      "ok": 439,
+      "ok": 436,
       "fail": 0,
       "status": "active"
     },
@@ -2735,7 +2735,7 @@
       "status": "active"
     },
     "Telangana Today": {
-      "ok": 399,
+      "ok": 397,
       "fail": 0,
       "status": "active"
     },
@@ -2750,12 +2750,12 @@
       "status": "active"
     },
     "France 24 English": {
-      "ok": 245,
+      "ok": 246,
       "fail": 25,
       "status": "active"
     },
     "Euronews": {
-      "ok": 281,
+      "ok": 280,
       "fail": 15,
       "status": "active"
     },
@@ -2801,6 +2801,6 @@
       "status": "active"
     }
   },
-  "daily_count": 318,
+  "daily_count": 200,
   "last_reset": "2026-08-09"
 }
