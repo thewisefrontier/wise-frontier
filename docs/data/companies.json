@@ -1600,20 +1600,20 @@
     "updated_at": "2026-07-30 17:02"
   },
   {
-    "id": "stoneco",
-    "name": "StoneCo Ltd.",
-    "name_ko": "스톤코",
+    "id": "smartfit",
+    "name": "Smart Fit Escola de Ginástica e Dança S.A.",
+    "name_ko": "스마트핏",
     "country": "브라질",
     "country_flag": "🌍",
-    "exchange": "NASDAQ",
-    "ticker": "STNE",
-    "sector": "핀테크",
-    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
-    "founded_year": 2012,
+    "exchange": "B3",
+    "ticker": "SMFT3",
+    "sector": "서비스",
+    "description": "스마트핏은 라틴아메리카 최대 규모의 피트니스 체인 운영 기업입니다. 저비용 고밀도 비즈니스 모델을 바탕으로 브라질을 포함한 중남미 여러 국가에서 빠르게 점포망을 확장하고 있습니다. 회원 수 증가와 신규 체육관 개장을 통해 지속적인 외형 성장을 이루고 있습니다.",
+    "founded_year": 2009,
     "headquarters": "상파울루, 브라질",
     "website": null,
     "is_published": true,
-    "updated_at": "2026-07-29 20:49"
+    "updated_at": "2026-08-09 07:08"
   },
   {
     "id": "stone_co",
@@ -1630,6 +1630,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-22 23:37"
+  },
+  {
+    "id": "stoneco",
+    "name": "StoneCo Ltd.",
+    "name_ko": "스톤코",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "NASDAQ",
+    "ticker": "STNE",
+    "sector": "핀테크",
+    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
+    "founded_year": 2012,
+    "headquarters": "상파울루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-29 20:49"
   },
   {
     "id": "xp_inc",
@@ -2864,22 +2880,6 @@
     "updated_at": "2026-08-02 14:30"
   },
   {
-    "id": "singareni_collieries",
-    "name": "The Singareni Collieries Company Limited",
-    "name_ko": "싱가레니 콜리어리스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "",
-    "sector": "에너지",
-    "description": "싱가레니 콜리어리스는 인도의 국영 탄광 및 에너지 기업으로, 주로 텔랑가나주에서 석탄 채굴 및 화력 발전 사업을 수행하고 있습니다. 1920년에 설립되었으며, 인도 남부 지역의 전력 공급과 산업 성장에 필수적인 에너지 자원을 안정적으로 공급하는 핵심적인 역할을 담당하고 있습니다. 인도 정부와 텔랑가나주 정부가 공동으로 소유하고 있는 대형 민간 및 공공 성격의 기업입니다.",
-    "founded_year": 1920,
-    "headquarters": "하이드라바드, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-30 17:03"
-  },
-  {
     "id": "singareni_collieries_company",
     "name": "The Singareni Collieries Company Limited",
     "name_ko": "싱가레니 콜리어리스",
@@ -2894,6 +2894,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-08 01:12"
+  },
+  {
+    "id": "singareni_collieries",
+    "name": "The Singareni Collieries Company Limited",
+    "name_ko": "싱가레니 콜리어리스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "싱가레니 콜리어리스는 인도의 국영 탄광 및 에너지 기업으로, 주로 텔랑가나주에서 석탄 채굴 및 화력 발전 사업을 수행하고 있습니다. 1920년에 설립되었으며, 인도 남부 지역의 전력 공급과 산업 성장에 필수적인 에너지 자원을 안정적으로 공급하는 핵심적인 역할을 담당하고 있습니다. 인도 정부와 텔랑가나주 정부가 공동으로 소유하고 있는 대형 민간 및 공공 성격의 기업입니다.",
+    "founded_year": 1920,
+    "headquarters": "하이드라바드, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-30 17:03"
   },
   {
     "id": "tm_inputs_and_services",
@@ -3824,22 +3840,6 @@
     "updated_at": null
   },
   {
-    "id": "bank_of_the_philippine_islands",
-    "name": "Bank of the Philippine Islands",
-    "name_ko": "필리핀 제도은행",
-    "country": "필리핀",
-    "country_flag": "🇵🇭",
-    "exchange": "PSE",
-    "ticker": "BPI",
-    "sector": "은행",
-    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 개인 및 기업 금융, 자산 관리, 보험 등 종합적인 금융 서비스를 제공한다. 필리핀 금융 시장에서 높은 신뢰도와 탄탄한 시장 지위를 유지하고 있다.",
-    "founded_year": 1851,
-    "headquarters": "마닐라, 필리핀",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-30 02:38"
-  },
-  {
     "id": "bank_of_the_philippines_islands",
     "name": "Bank of the Philippine Islands",
     "name_ko": "필리핀 제도은행",
@@ -3854,6 +3854,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-07 13:12"
+  },
+  {
+    "id": "bank_of_the_philippine_islands",
+    "name": "Bank of the Philippine Islands",
+    "name_ko": "필리핀 제도은행",
+    "country": "필리핀",
+    "country_flag": "🇵🇭",
+    "exchange": "PSE",
+    "ticker": "BPI",
+    "sector": "은행",
+    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 개인 및 기업 금융, 자산 관리, 보험 등 종합적인 금융 서비스를 제공한다. 필리핀 금융 시장에서 높은 신뢰도와 탄탄한 시장 지위를 유지하고 있다.",
+    "founded_year": 1851,
+    "headquarters": "마닐라, 필리핀",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-30 02:38"
   },
   {
     "id": "basel_tiles",
