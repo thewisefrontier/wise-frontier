@@ -1744,6 +1744,38 @@
     "updated_at": "2026-07-16 01:58"
   },
   {
+    "id": "naftogaz",
+    "name": "Naftogaz of Ukraine",
+    "name_ko": "나프토가스",
+    "country": "스페인",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "1998년에 설립된 우크라이나의 국영 에너지 기업으로, 석유와 천연가스의 탐사, 생산, 운송 및 정제 등을 담당하고 있습니다. 우크라이나 에너지 안보의 핵심적인 역할을 수행하며 국가 전반에 가스와 석유를 공급하는 최대 규모의 기업입니다. 지속적인 지정학적 갈등 속에서도 주요 에너지 인프라를 운영하며 국가 에너지 공급을 유지하고 있습니다.",
+    "founded_year": 1998,
+    "headquarters": "키이우, 우크라이나",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-09 04:26"
+  },
+  {
+    "id": "ukrnafta",
+    "name": "Ukrnafta",
+    "name_ko": "우크나프타",
+    "country": "스페인",
+    "country_flag": "🌍",
+    "exchange": "PFTS",
+    "ticker": "UNAF",
+    "sector": "에너지",
+    "description": "1994년에 설립된 우크라이나의 최대 석유 및 가스 생산 기업으로, 국영 에너지 기업인 나프토가스 그룹에 속해 있습니다. 원유 및 천연가스 채굴과 함께 우크라이나 전역에서 주유소 체인을 운영하며 연료 소매업도 병행하고 있습니다. 우크라이나 국내 석유·가스 생산량의 상당 부분을 차지하며 국가 경제와 에너지 공급망에서 중요한 위상을 지니고 있습니다.",
+    "founded_year": 1994,
+    "headquarters": "키이우, 우크라이나",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-09 04:26"
+  },
+  {
     "id": "bw_digital",
     "name": "BW Digital",
     "name_ko": "비더블유 디지털",
@@ -2784,22 +2816,6 @@
     "updated_at": "2026-08-02 21:12"
   },
   {
-    "id": "tcs",
-    "name": "Tata Consultancy Services Limited",
-    "name_ko": "타타 컨설턴시 서비시스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "TCS",
-    "sector": "IT 서비스",
-    "description": "1968년에 설립된 인도 타타 그룹 산하의 세계적인 IT 서비스 및 컨설팅 기업입니다. 전 세계 기업들을 상대로 디지털 전환, 소프트웨어 개발 및 아웃소싱 서비스를 제공합니다.",
-    "founded_year": 1968,
-    "headquarters": "뭄바이, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-02 17:22"
-  },
-  {
     "id": "tata_consultancy_services",
     "name": "Tata Consultancy Services Limited",
     "name_ko": "타타 컨설턴시 서비스",
@@ -2814,6 +2830,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-19 01:21"
+  },
+  {
+    "id": "tcs",
+    "name": "Tata Consultancy Services Limited",
+    "name_ko": "타타 컨설턴시 서비시스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "TCS",
+    "sector": "IT 서비스",
+    "description": "1968년에 설립된 인도 타타 그룹 산하의 세계적인 IT 서비스 및 컨설팅 기업입니다. 전 세계 기업들을 상대로 디지털 전환, 소프트웨어 개발 및 아웃소싱 서비스를 제공합니다.",
+    "founded_year": 1968,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-02 17:22"
   },
   {
     "id": "tata_motors",
@@ -2832,22 +2864,6 @@
     "updated_at": "2026-08-02 14:30"
   },
   {
-    "id": "singareni_collieries_company",
-    "name": "The Singareni Collieries Company Limited",
-    "name_ko": "싱가레니 콜리어리스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "",
-    "sector": "에너지",
-    "description": "싱가레니 콜리어리스는 1920년에 설립된 인도 텔랑가나주의 국영 석탄 채굴 기업입니다. 주로 인도 남부 지역의 전력 및 산업 수요를 충족하기 위해 석탄을 공급하며, 지역 경제에서 중요한 위치를 차지하고 있습니다. 토목 및 인프라 개발과 관련된 지역 사회 공헌 활동도 함께 수행하고 있습니다.",
-    "founded_year": 1920,
-    "headquarters": "코다구뎀, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-08 01:12"
-  },
-  {
     "id": "singareni_collieries",
     "name": "The Singareni Collieries Company Limited",
     "name_ko": "싱가레니 콜리어리스",
@@ -2862,6 +2878,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-30 17:03"
+  },
+  {
+    "id": "singareni_collieries_company",
+    "name": "The Singareni Collieries Company Limited",
+    "name_ko": "싱가레니 콜리어리스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "싱가레니 콜리어리스는 1920년에 설립된 인도 텔랑가나주의 국영 석탄 채굴 기업입니다. 주로 인도 남부 지역의 전력 및 산업 수요를 충족하기 위해 석탄을 공급하며, 지역 경제에서 중요한 위치를 차지하고 있습니다. 토목 및 인프라 개발과 관련된 지역 사회 공헌 활동도 함께 수행하고 있습니다.",
+    "founded_year": 1920,
+    "headquarters": "코다구뎀, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-08 01:12"
   },
   {
     "id": "tm_inputs_and_services",
