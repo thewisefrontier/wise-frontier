@@ -1584,22 +1584,6 @@
     "updated_at": "2026-07-30 17:02"
   },
   {
-    "id": "stoneco",
-    "name": "StoneCo Ltd.",
-    "name_ko": "스톤코",
-    "country": "브라질",
-    "country_flag": "🌍",
-    "exchange": "NASDAQ",
-    "ticker": "STNE",
-    "sector": "핀테크",
-    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
-    "founded_year": 2012,
-    "headquarters": "상파울루, 브라질",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-29 20:49"
-  },
-  {
     "id": "stone_co",
     "name": "StoneCo Ltd.",
     "name_ko": "스톤",
@@ -1614,6 +1598,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-22 23:37"
+  },
+  {
+    "id": "stoneco",
+    "name": "StoneCo Ltd.",
+    "name_ko": "스톤코",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "NASDAQ",
+    "ticker": "STNE",
+    "sector": "핀테크",
+    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
+    "founded_year": 2012,
+    "headquarters": "상파울루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-29 20:49"
   },
   {
     "id": "xp_inc",
@@ -3712,6 +3712,38 @@
     "updated_at": "2026-07-17 20:13"
   },
   {
+    "id": "niranjans_fiji",
+    "name": "Niranjans Fiji",
+    "name_ko": "니란잔스 피지",
+    "country": "피지",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "자동차 및 산업재",
+    "description": "피지를 기반으로 자동차 판매, 정비, 산업용 장비 공급 등을 영위하는 유력 민간 기업이다. 오랜 역사 동안 현지 운송 및 산업 부문에서 중요한 역할을 담당해왔다. 지역 사회의 공익 캠페인과 환경 보호 활동을 적극적으로 지원하고 있다.",
+    "founded_year": null,
+    "headquarters": "수바, 피지",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-08 15:19"
+  },
+  {
+    "id": "suzuki_fiji",
+    "name": "Suzuki Fiji",
+    "name_ko": "스즈키 피지",
+    "country": "피지",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "자동차 및 유통",
+    "description": "피지 시장에 일본 스즈키 브랜드의 자동차 및 관련 제품을 수입·유통하는 기업이다. 현지에서 다양한 환경 및 사회 공헌 활동을 지원하며 브랜드 인지도를 높이고 있다. 피지 경제 내에서 주요 민간 유통 기업 중 하나로 활동하고 있다.",
+    "founded_year": null,
+    "headquarters": "수바, 피지",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-08 15:19"
+  },
+  {
     "id": "arte_ceramics",
     "name": "Arte Ceramics",
     "name_ko": "아르테 세라미체",
@@ -3744,22 +3776,6 @@
     "updated_at": null
   },
   {
-    "id": "bank_of_the_philippines_islands",
-    "name": "Bank of the Philippine Islands",
-    "name_ko": "필리핀 제도은행",
-    "country": "필리핀",
-    "country_flag": "🇵🇭",
-    "exchange": "PSE",
-    "ticker": "BPI",
-    "sector": "은행",
-    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 종합 금융 서비스를 제공하며 필리핀 금융 시장에서 높은 신뢰와 견고한 입지를 다지고 있다. 본 기사에서는 공공 인프라 지출 감소 추정을 발표한 주요 금융기관으로 언급되었다.",
-    "founded_year": 1851,
-    "headquarters": "마카티, 필리핀",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-07 13:12"
-  },
-  {
     "id": "bank_of_the_philippine_islands",
     "name": "Bank of the Philippine Islands",
     "name_ko": "필리핀 제도은행",
@@ -3774,6 +3790,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-30 02:38"
+  },
+  {
+    "id": "bank_of_the_philippines_islands",
+    "name": "Bank of the Philippine Islands",
+    "name_ko": "필리핀 제도은행",
+    "country": "필리핀",
+    "country_flag": "🇵🇭",
+    "exchange": "PSE",
+    "ticker": "BPI",
+    "sector": "은행",
+    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 종합 금융 서비스를 제공하며 필리핀 금융 시장에서 높은 신뢰와 견고한 입지를 다지고 있다. 본 기사에서는 공공 인프라 지출 감소 추정을 발표한 주요 금융기관으로 언급되었다.",
+    "founded_year": 1851,
+    "headquarters": "마카티, 필리핀",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-07 13:12"
   },
   {
     "id": "basel_tiles",
