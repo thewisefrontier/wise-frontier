@@ -1972,17 +1972,28 @@ def update_live_articles():
             print(f"     후속 없음")
             continue
 
+        # search_followup()이 full_text(원문 전문)까지 조회해오는데도 여태 안 쓰고
+        # summary만, 그것도 200자로 잘라 넘겼다 — 재료 자체가 부족하니 압축 요약밖에
+        # 못 나온 것도 당연하다. full_text가 있으면 그걸 우선 쓰고, 길이 상한도
+        # 모델 컨텍스트 기준으로 충분히 넉넉하게 잡는다(5건 합쳐도 15000자 안쪽).
         followup_text = ""
         for f in followups[:5]:
             t = f.get("title_ko") or f.get("title_en") or ""
-            b = f.get("summary_ko") or f.get("summary_en") or ""
-            followup_text += f"- {t}\n  {b[:200]}\n"
+            b = f.get("full_text") or f.get("summary_ko") or f.get("summary_en") or ""
+            followup_text += f"- {t}\n  {b[:3000]}\n"
 
         applied = "\n".join(x for x in (updates, legacy) if x)
         applied_block = f"\n[이미 반영된 업데이트]\n{applied}\n" if applied else ""
 
         # 증분만 생성한다. 본문 재작성 경로는 존재하지 않는다.
-        delta_prompt = f"""아래 기사에 이어 붙일 '새로 확인된 내용'만 쓰세요.
+        # BBC·CNN 라이브 기사처럼 상단에 쌓이는 구조 자체는 유지하되(위치는 그대로),
+        # 각 업데이트 항목은 압축 요약이 아니라 그 자체로 완결된 기사문이어야 한다.
+        # 실사고(2026-08-09): "2~4문장" 상한과 후속 정보 200자 절단 때문에 매번
+        # 짧은 요약 블럿만 생성돼 "기사가 아니라 요약이 올라온다"는 지적을 받음.
+        delta_prompt = f"""아래 기사에 이어 붙일 '새로 확인된 내용'을 기사문으로 쓰세요.
+BBC·CNN 라이브 업데이트처럼, 이 항목 하나만 읽어도 무슨 일이 있었는지 충분히
+이해되는 완결된 기사 문단이어야 합니다. 사실을 나열만 하는 압축 요약이 아니라,
+후속 정보에 담긴 배경·경위·수치·전망까지 살려서 서술하세요.
 
 [현재 기사]
 제목: {title}
@@ -1992,9 +2003,10 @@ def update_live_articles():
 {followup_text}
 
 규칙:
-- 현재 기사와 이미 반영된 업데이트에 있는 내용은 절대 반복하지 마세요. 요약·재정리도 금지입니다.
+- 현재 기사와 이미 반영된 업데이트에 있는 내용은 절대 반복하지 마세요.
 - 새로 확인된 사실이 없으면 정확히 "업데이트 불필요" 한 줄만 출력하세요.
-- 2~4문장, 사실 서술형 한국어. 논평·마크다운·헤더·소제목 금지.
+- 후속 정보에 담긴 사실 관계를 빠짐없이 살려 쓰세요. 문장 수를 인위적으로 줄이지 말고,
+  근거가 있는 만큼 충분히 서술하세요(보통 3문단 이상 분량이 나옵니다). 논평·마크다운·헤더·소제목 금지.
 - 수치가 갱신됐으면 갱신된 값을 명시하세요(예: "사망자는 30명으로 늘었다").
 - 모든 문장을 "-다"로 종결하세요. "-습니다", "-입니다" 등 정중체는 쓰지 마세요.
 - 날짜는 후속 정보에 명시된 "N일(현지시간)" 형식만 쓰세요. 날짜 근거가 없으면 생략하고 추측하지 마세요.
@@ -2003,7 +2015,7 @@ def update_live_articles():
 
 새로 확인된 내용:"""
 
-        delta = call_gemini_article(delta_prompt, max_tokens=600)
+        delta = call_gemini_article(delta_prompt, max_tokens=1500)
         if not delta or "업데이트 불필요" in delta:
             print("     업데이트 불필요")
             continue
@@ -2019,10 +2031,13 @@ def update_live_articles():
 
         # 중복 방어 — 같은 내용이 매 실행마다 append되는 것을 막는다.
         # 비교 대상은 본문 + 기존 업데이트 전체(summary)다.
+        # _dedupe_delta는 문장을 공백으로 다시 이어붙이므로(단락 구분 소실),
+        # 여러 문단 분량 기사문을 만든 뒤에는 _ensure_paragraphs로 단락을 복원한다.
         delta = _dedupe_delta(delta, summary)
         if len(delta) < MIN_DELTA_LEN:
             print(f"     새 내용 부족({len(delta)}자) → 생략")
             continue
+        delta = _ensure_paragraphs(delta)
 
         note = "후속 정보 추가"
         new_body = _compose_article(_prepend_update(updates, delta), base_body, legacy)
