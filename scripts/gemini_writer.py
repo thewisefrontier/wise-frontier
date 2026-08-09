@@ -1972,11 +1972,15 @@ def update_live_articles():
             print(f"     후속 없음")
             continue
 
+        # search_followup()이 full_text(원문 전문)까지 조회해오는데도 여태 안 쓰고
+        # summary만, 그것도 200자로 잘라 넘겼다 — 재료 자체가 부족하니 압축 요약밖에
+        # 못 나온 것도 당연하다. full_text가 있으면 그걸 우선 쓰고, 길이 상한도
+        # 모델 컨텍스트 기준으로 충분히 넉넉하게 잡는다(5건 합쳐도 15000자 안쪽).
         followup_text = ""
         for f in followups[:5]:
             t = f.get("title_ko") or f.get("title_en") or ""
-            b = f.get("summary_ko") or f.get("summary_en") or ""
-            followup_text += f"- {t}\n  {b[:600]}\n"
+            b = f.get("full_text") or f.get("summary_ko") or f.get("summary_en") or ""
+            followup_text += f"- {t}\n  {b[:3000]}\n"
 
         applied = "\n".join(x for x in (updates, legacy) if x)
         applied_block = f"\n[이미 반영된 업데이트]\n{applied}\n" if applied else ""
