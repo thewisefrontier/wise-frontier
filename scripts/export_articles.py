@@ -57,7 +57,11 @@ EXPORT_EXCLUDE_FIELDS = (
     "dedup_reviewed",
 )
 
-PUBLIC_UPDATE_NOTE_RE = re.compile(r"트렌드 추적 업데이트|내용 보강|본문 보강|기사 병합|속보")
+# 실사고(2026-08-09): 예전엔 화이트리스트 방식이었는데, 실제 업데이트 경로들이 쓰는 노트
+# 문구("후속 정보 추가", generate_update_note()의 자유 문장 등)와 화이트리스트가 하나도
+# 안 맞아 진짜 업데이트가 있어도 로그에 항상 안 보였다. 블랙리스트로 뒤집음
+# (functions/article.js의 publicUpdateLog와 동일 로직 유지).
+INTERNAL_ONLY_NOTE_RE = re.compile(r"실시간 트렌드 감지|자동 중복정리|음역 자동 교정|문자셋 이탈|복수주제 분리 파킹|수동 정리")
 
 
 def sanitize_update_log(log):
@@ -69,7 +73,7 @@ def sanitize_update_log(log):
             continue
         if i == 0:
             label = "최초 게시"
-        elif PUBLIC_UPDATE_NOTE_RE.search(str(item.get("note") or "")):
+        elif not INTERNAL_ONLY_NOTE_RE.search(str(item.get("note") or "")):
             label = "내용 업데이트"
         else:
             continue
