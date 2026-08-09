@@ -501,6 +501,56 @@ def update_article_count(article_id, new_count):
     return res.status_code in (200, 204)
 
 
+# ── article_keywords (search_followup용 구조화 키워드) ──────────────────
+# 2026-08-09 도입. 방문자에게는 절대 노출되지 않는 내부 전용 테이블 —
+# anon에는 아무 권한도 없고, authenticated는 RLS로 admin 역할만 SELECT 가능,
+# service_role(이 스크립트가 쓰는 키)만 쓸 수 있다. articles에 컬럼으로 얹지
+# 않은 이유는 article.js/article.html이 articles에 select=*를 쓰기 때문 —
+# 컬럼 하나라도 anon 권한이 없으면 그 select=* 전체가 permission denied로
+# 깨진다. 이 함수들은 실패해도 기사 저장/업데이트 자체를 막지 않는다
+# (키워드는 후속 매칭 품질을 높이는 보조 데이터일 뿐, 핵심 경로가 아니다).
+def save_article_keywords(article_id, keyword_ko: str = "", keyword_en: str = "") -> bool:
+    if not article_id or article_id <= 0:
+        return False
+    if not (keyword_ko or "").strip() and not (keyword_en or "").strip():
+        return True  # 둘 다 없으면 쓸 것도 없다 — 실패가 아니라 스킵
+    try:
+        res = requests.post(
+            f"{SUPABASE_URL}/rest/v1/article_keywords",
+            headers={**_sb_headers(), "Prefer": "resolution=merge-duplicates"},
+            json={
+                "article_id": article_id,
+                "keyword_ko": (keyword_ko or "").strip()[:200],
+                "keyword_en": (keyword_en or "").strip()[:200],
+            },
+            timeout=15,
+        )
+        return res.status_code in (200, 201, 204)
+    except Exception as e:
+        print(f"  ⚠️ id={article_id} 키워드 저장 실패(무시하고 계속): {e}")
+        return False
+
+
+def get_keywords_for_ids(ids: list) -> dict:
+    """{article_id: {"keyword_ko": ..., "keyword_en": ...}} 매핑. 실패 시 빈 dict
+    (호출부는 빈 dict를 "키워드 없음 → 검색 생략"으로 안전하게 처리해야 한다)."""
+    if not ids:
+        return {}
+    try:
+        id_list = ",".join(str(i) for i in ids)
+        res = requests.get(
+            f"{SUPABASE_URL}/rest/v1/article_keywords",
+            headers=_sb_headers(),
+            params={"article_id": f"in.({id_list})", "select": "article_id,keyword_ko,keyword_en"},
+            timeout=15,
+        )
+        if res.status_code in (200, 206):
+            return {r["article_id"]: r for r in res.json()}
+    except Exception as e:
+        print(f"  ⚠️ 키워드 일괄 조회 실패(무시하고 계속): {e}")
+    return {}
+
+
 # ── 클러스터링 ────────────────────────────────────────────
 
 def split_multi_topic_title(title: str) -> list:
@@ -802,8 +852,15 @@ JSON_OUTPUT_SPEC = r"""[출력 형식]
   "countries": ["기사에서 직접 당사국으로 등장하는 국가들만. 본문에 단순 언급·비교 대상으로만 나오는 나라는 제외. 최대 3개. 없으면 빈 배열"],
   "category": "경제 | 금융 | 자원·에너지 | 산업·기업 | 정치·외교 | 사회 | IT·과학 | 문화·예술 | 글로벌 중 하나",
   "is_travel": false,
-  "body": "기사 본문"
+  "body": "기사 본문",
+  "keyword_ko": "이 기사만의 핵심 주제어 1개(한글). 나중에 이 기사의 후속 소식을 검색할 때 쓰인다",
+  "keyword_en": "keyword_ko와 같은 대상의 영문 표기. 고유명사는 원문 로마자 그대로"
 }
+[keyword_ko/keyword_en 작성 기준]
+국가명·지역명만 단독으로 쓰지 마세요 — 너무 넓어서 검색 시 완전히 무관한 기사와 섞입니다.
+이 기사를 다른 기사와 구별해주는 가장 구체적인 고유명사(사건명·기업명·인물명·기관명 등)를 쓰세요.
+예: "님바 광산 회사"/"Nimba Mining Company", "태풍 돌핀"/"Typhoon Dolphin". 마땅한 고유명사가
+전혀 없으면(드묾) 빈 문자열로 두세요 — 억지로 국가명을 넣지 마세요.
 [분야 선택 기준]
 - 경제: 거시경제, 무역, GDP, 통화정책, 인플레이션 등 국가 경제 전반
 - 금융: 은행, 증권, 투자, 환율, 핀테크
@@ -1265,7 +1322,17 @@ def parse_json_response(text: str):
             raw_travel = data.get("여행")
         summary_3lines = str(data.get("summary_3lines") or data.get("3줄요약") or "").strip()
         investment_idea = str(data.get("investment_idea") or data.get("투자아이디어") or "").strip()
-        return title, body, country, category, countries, _coerce_bool(raw_travel), summary_3lines, investment_idea
+        # keyword_ko/keyword_en: article_keywords 테이블용 — 아직 프롬프트가 이 키를
+        # 요구하지 않는 동안은 항상 빈 문자열이며, 하위 호출부가 빈 값을 안전하게
+        # "키워드 없음 → 검색 생략"으로 처리하므로 코드 배포만으로는 아무 것도 바뀌지 않는다.
+        keyword_ko = str(data.get("keyword_ko") or "").strip()
+        if keyword_ko in _NULLISH:
+            keyword_ko = ""
+        keyword_en = str(data.get("keyword_en") or "").strip()
+        if keyword_en in _NULLISH:
+            keyword_en = ""
+        return (title, body, country, category, countries, _coerce_bool(raw_travel),
+                summary_3lines, investment_idea, keyword_ko, keyword_en)
     return None
 
 
@@ -1297,7 +1364,9 @@ def _parse_labeled_response(text: str):
             body_lines = ([val] if val else []) + lines[i + 1:]
             break
     body = "\n".join(body_lines).strip() if body_lines is not None else _strip_leaked_labels(raw)
-    return title, body, country, category, countries, is_travel, "", ""
+    # 레거시 라벨 형식에는 keyword_ko/keyword_en이 없다 — 빈 문자열로 두면
+    # 하위 호출부가 "키워드 없음"으로 안전하게 처리한다(검색 생략, 오탐 없음).
+    return title, body, country, category, countries, is_travel, "", "", "", ""
 
 
 def _ensure_paragraphs(text: str, target: int = 3) -> str:
@@ -1396,7 +1465,7 @@ def _normalize_recent_abs_dates(text: str, base=None, window_days: int = None,
 def _plainify_parsed(parsed):
     """파싱 결과의 텍스트 필드에 합쇼체 → 해라체 변환을 강제 적용.
     프롬프트 지시·재생성이 모두 실패해도 DB에는 '-다' 체만 저장되도록 하는 최종 안전장치."""
-    title, body, country, category, countries, is_travel, summary3, investment = parsed
+    title, body, country, category, countries, is_travel, summary3, investment, keyword_ko, keyword_en = parsed
 
     # 보도 시점 절대날짜 → "N일(현지시간)" 축약 (과거·미래 날짜는 불변)
     _before = (title, body, summary3, investment)
@@ -1410,13 +1479,16 @@ def _plainify_parsed(parsed):
         body = to_plain_style(body)
         summary3 = to_plain_style(summary3)
         investment = to_plain_style(investment)
-    return title, body, country, category, countries, is_travel, summary3, investment
+    return title, body, country, category, countries, is_travel, summary3, investment, keyword_ko, keyword_en
 
 
 def parse_title_and_body(text):
-    """Gemini 응답 파싱. 1순위 JSON, 실패 시 레거시 라벨 파서로 폴백."""
+    """Gemini 응답 파싱. 1순위 JSON, 실패 시 레거시 라벨 파서로 폴백.
+    반환 10-튜플의 마지막 두 값(keyword_ko, keyword_en)은 프롬프트가 해당 키를
+    아직 요구하지 않는 동안은 항상 빈 문자열이다 — 호출부는 이를 "키워드 없음"으로
+    안전하게 처리해야 한다(검색 생략이 오탐보다 낫다)."""
     if not text:
-        return "", "", "", "", [], False, "", ""
+        return "", "", "", "", [], False, "", "", "", ""
     parsed = parse_json_response(text)
     if parsed:
         return _plainify_parsed(parsed)
@@ -1752,56 +1824,68 @@ def get_stale_live_articles() -> list:
         if res.status_code in (200, 206):
             # PostgREST의 like.*trend_* 는 앞뒤 와일드카드라 오탐 여지가 있어
             # 접두를 코드에서 다시 정확히 검증한다.
-            return [a for a in res.json()
-                    if (a.get("subcategory") or "").startswith(LIVE_UPDATE_PREFIXES)]
+            articles = [a for a in res.json()
+                        if (a.get("subcategory") or "").startswith(LIVE_UPDATE_PREFIXES)]
+            kw_map = get_keywords_for_ids([a["id"] for a in articles])
+            for a in articles:
+                kw = kw_map.get(a["id"]) or {}
+                a["keyword_ko"] = kw.get("keyword_ko") or ""
+                a["keyword_en"] = kw.get("keyword_en") or ""
+            return articles
     except Exception as e:
         print(f"  [라이브 업데이트] 조회 실패: {e}")
     return []
 
 
-def search_followup(title: str, country: str) -> list:
+def search_followup(title: str, country: str, keyword_ko: str = "", keyword_en: str = "") -> list:
+    """keyword_ko/keyword_en(article_keywords 테이블, 2026-08-09 도입)이 있으면 그것만
+    쓴다 - Gemini가 생성 시점에 핵심 주제를 직접 답한 구조화 데이터라, 제목 문자열을
+    매번 다시 추측하는 것보다 안전하다. 키워드가 없는 기사(이 필드 도입 이전 생성분)는
+    title 파싱 구식 로직으로 폴백하되, 두 차례 실사고(id=63237, 61698 - 국가명만으로
+    검색해 완전 무관한 내용이 붙음) 이후 확정된 원칙을 지킨다: 쓸 만한 키워드가 없으면
+    검색 자체를 생략한다. 놓치는 게 오매칭보다 낫다."""
     import urllib.parse
     since = (now_kst() - timedelta(hours=48)).strftime("%Y-%m-%d %H:%M")
 
-    # 제목은 "국가명, 본문" 형식이라 첫 단어가 거의 항상 국가명이다. 국가명만으로
-    # 검색하면 완전히 무관한 기사까지 "후속 정보"로 오매칭돼 엉뚱한 업데이트가
-    # 붙는 사고가 났다(실사고 2026-08-09, id=63237: 기니 광산 협약 기사에
-    # 무관한 기니 기상특보가 "후속 정보 추가"로 붙음). 국가명 다음의 실제
-    # 핵심어를 우선 쓰고, 본문에 남는 단어가 없을 때만 국가명으로 폴백한다.
-    body_part = title.split(",", 1)[1] if "," in title else title
-    kw_list = [w for w in body_part.replace(",", "").replace("\xb7", " ").split() if len(w) >= 2]
-    kw = kw_list[0] if kw_list else country
+    if keyword_ko or keyword_en:
+        kw = keyword_ko.strip()
+        eng_kw = keyword_en.strip()
+    else:
+        # 폴백: 구조화 키워드가 없는 기사용 title 파싱 휴리스틱.
+        # 제목은 "국가명, 본문" 형식이라 첫 단어가 거의 항상 국가명이다. 국가명만으로
+        # 검색하면 무관한 기사가 붙는다(id=63237). 국가명 다음 실제 핵심어를 쓴다.
+        body_part = title.split(",", 1)[1] if "," in title else title
+        kw_list = [w for w in body_part.replace(",", "").replace("\xb7", " ").split() if len(w) >= 2]
+        kw = kw_list[0] if kw_list else country
+        # 한글 전용 제목은 영문 단어가 없다. country 폴백은 무관한 GDELT 결과를
+        # 불러온다(id=61698). 영문 키워드가 없으면 GDELT 검색을 건너뛴다.
+        eng_words = [w for w in title.split() if not any("가" <= c <= "힣" for c in w)]
+        eng_kw = " ".join(eng_words[:3]) if eng_words else ""
 
     results = []
 
-    try:
-        res = requests.get(
-            _sb_url(),
-            headers=_sb_headers(),
-            params={
-                "select": "title_en,title_ko,summary_en,summary_ko,full_text,source",
-                "source": "neq.NewsFinal",
-                "created_at": f"gte.{since}",
-                "or": f"(title_ko.ilike.*{kw}*,title_en.ilike.*{kw}*)",
-                "order": "created_at.desc",
-                "limit": "8",
-            },
-            timeout=15
-        )
-        if res.status_code in (200, 206):
-            results.extend(res.json())
-    except Exception:
-        pass
+    if kw:
+        try:
+            res = requests.get(
+                _sb_url(),
+                headers=_sb_headers(),
+                params={
+                    "select": "title_en,title_ko,summary_en,summary_ko,full_text,source",
+                    "source": "neq.NewsFinal",
+                    "created_at": f"gte.{since}",
+                    "or": f"(title_ko.ilike.*{kw}*,title_en.ilike.*{kw}*)",
+                    "order": "created_at.desc",
+                    "limit": "8",
+                },
+                timeout=15
+            )
+            if res.status_code in (200, 206):
+                results.extend(res.json())
+        except Exception:
+            pass
 
-    try:
-        # \uC2E4\uC0AC\uACE0(2026-08-09, id=61698): \uD55C\uAE00\uB85C\uB9CC \uB41C \uC81C\uBAA9(\uAC70\uC758 \uC804\uBD80)\uC740 eng_words\uAC00
-        # \uD56D\uC0C1 \uBE44\uC5B4\uC11C country\uB85C \uD3F4\uBC31\uD588\uB294\uB370, \uADF8\uB7EC\uBA74 GDELT\uAC00 "\uB0A8\uC544\uD504\uB9AC\uCE74\uACF5\uD654\uAD6D" \uAD00\uB828
-        # \uC544\uBB34 \uAE30\uC0AC\uB098 5\uAC74 \uBB3C\uC5B4\uC640 \uC9D0\uBC14\uBE0C\uC6E8 \uC774\uC8FC\uBBFC\u00B7\uCD95\uAD6C\u00B7\uB7ED\uBE44 \uAC19\uC740 \uC644\uC804 \uBB34\uAD00\uD55C \uB0B4\uC6A9\uC774
-        # "\uD6C4\uC18D \uC815\uBCF4"\uB85C 5\uCC28\uB840 \uC5F0\uC18D \uBD99\uC5C8\uB2E4. country \uD3F4\uBC31\uC744 \uC5C6\uC560\uACE0, \uC601\uBB38 \uD0A4\uC6CC\uB4DC\uAC00 \uC5C6\uC73C\uBA74
-        # (\uAC70\uC758 \uD56D\uC0C1 \uADF8\uB7F0 \uACBD\uC6B0) \uC774 \uAC80\uC0C9 \uC790\uCCB4\uB97C \uAC74\uB108\uB6F4\uB2E4 \u2014 \uB193\uCE58\uB294 \uAC8C \uC624\uB9E4\uCE6D\uBCF4\uB2E4 \uB0AB\uB2E4.
-        eng_words = [w for w in title.split() if not any("\uAC00" <= c <= "\uD7A3" for c in w)]
-        eng_kw = " ".join(eng_words[:3]) if eng_words else ""
-        if eng_kw:
+    if eng_kw:
+        try:
             gres = requests.get(
                 f"https://api.gdeltproject.org/api/v2/doc/doc"
                 f"?query={urllib.parse.quote(eng_kw)}&mode=artlist&maxrecords=5&timespan=2d&format=json",
@@ -1814,8 +1898,8 @@ def search_followup(title: str, country: str) -> list:
                         "summary_en": a.get("title", ""),
                         "source": a.get("domain", "GDELT"),
                     })
-    except Exception:
-        pass
+        except Exception:
+            pass
 
     return results
 
@@ -1973,6 +2057,8 @@ def update_live_articles():
         title   = a.get("title_ko") or ""
         summary = a.get("summary_ko") or ""
         country = a.get("country") or ""
+        keyword_ko = a.get("keyword_ko") or ""
+        keyword_en = a.get("keyword_en") or ""
         art_id  = a["id"]
 
         prior_live_updates = sum(
@@ -1988,7 +2074,7 @@ def update_live_articles():
         updates, base_body, legacy = _split_article(summary)
 
         print(f"  → {title[:50]}")
-        followups = search_followup(title, country)
+        followups = search_followup(title, country, keyword_ko, keyword_en)
         if not followups:
             print(f"     후속 없음")
             continue
@@ -2117,12 +2203,13 @@ def run():
             content = call_gemini_article(prompt, max_tokens=4000 if has_full else 1500)
 
             if content:
-                gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel, gen_summary3, gen_investment = parse_title_and_body(content)
+                gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel, gen_summary3, gen_investment, gen_keyword_ko, gen_keyword_en = parse_title_and_body(content)
                 gen_body = _ensure_paragraphs(gen_body)
                 new_title = gen_title if gen_title else titles[0][:50]
                 note = generate_update_note(existing["summary_ko"], gen_body or _strip_leaked_labels(content))
                 update_article(existing["id"], new_title, gen_body or _strip_leaked_labels(content), note=note, countries=gen_countries if gen_countries else None, country=gen_country or "", summary_3lines=gen_summary3 or None, investment_idea=gen_investment or None)
                 update_article_count(existing["id"], prev_count + 1)
+                save_article_keywords(existing["id"], gen_keyword_ko, gen_keyword_en)
                 if gen_country or gen_category or gen_travel:
                     update_fields = {}
                     if gen_country:
@@ -2160,13 +2247,14 @@ def run():
                 content = call_gemini_article(prompt, max_tokens=4000 if has_full else 1500)
 
                 if content:
-                    gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel, gen_summary3, gen_investment = parse_title_and_body(content)
+                    gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel, gen_summary3, gen_investment, gen_keyword_ko, gen_keyword_en = parse_title_and_body(content)
                     gen_body = _ensure_paragraphs(gen_body)
                     new_title = gen_title if gen_title else probe_title
                     note = generate_update_note(existing_summary, gen_body or _strip_leaked_labels(content))
                     update_article(similar_existing["id"], new_title, gen_body or _strip_leaked_labels(content), note=note, countries=gen_countries if gen_countries else None, country=gen_country or "", summary_3lines=gen_summary3 or None, investment_idea=gen_investment or None)
                     prev_count = existing_full.get("score", 0) if existing_full else 0
                     update_article_count(similar_existing["id"], max(prev_count, cur_count) + 1)
+                    save_article_keywords(similar_existing["id"], gen_keyword_ko, gen_keyword_en)
                     if gen_country or gen_category or gen_travel:
                         update_fields = {}
                         if gen_country:
@@ -2196,7 +2284,7 @@ def run():
             content = call_gemini_article(prompt, max_tokens=4000 if has_full else 1500)
 
             if content:
-                gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel, gen_summary3, gen_investment = parse_title_and_body(content)
+                gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel, gen_summary3, gen_investment, gen_keyword_ko, gen_keyword_en = parse_title_and_body(content)
                 gen_body = _ensure_paragraphs(gen_body)
                 full_title = gen_title if gen_title else titles[0][:50]
 
@@ -2256,6 +2344,7 @@ def run():
                 if article_id > 0:
                     status = "✅ 저장 완료" if published else "📋 미발행 저장"
                     print(f"  {status} (id={article_id}): {full_title}\n")
+                    save_article_keywords(article_id, gen_keyword_ko, gen_keyword_en)
                     if published:
                         today_own_articles.append({"id": article_id, "title_ko": full_title})
                         generated += 1
@@ -2348,7 +2437,7 @@ def run():
             content = call_gemini_article(prompt, max_tokens=4000)
 
             if content:
-                gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel, gen_summary3, gen_investment = parse_title_and_body(content)
+                gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel, gen_summary3, gen_investment, gen_keyword_ko, gen_keyword_en = parse_title_and_body(content)
                 gen_body = _ensure_paragraphs(gen_body)
                 new_title = gen_title if gen_title else title[:50]
                 existing_sum = existing_full.get("summary_ko") if existing_full else None
@@ -2356,6 +2445,7 @@ def run():
                 update_article(similar_existing["id"], new_title, gen_body or _strip_leaked_labels(content), note=note, countries=gen_countries if gen_countries else None, country=gen_country or "", summary_3lines=gen_summary3 or None, investment_idea=gen_investment or None)
                 prev_count = existing_full.get("score", 0) if existing_full else 0
                 update_article_count(similar_existing["id"], prev_count + 1)
+                save_article_keywords(similar_existing["id"], gen_keyword_ko, gen_keyword_en)
                 if gen_country or gen_category or gen_travel:
                     update_fields = {}
                     if gen_country:
@@ -2400,7 +2490,7 @@ def run():
 
         content = call_gemini_article(prompt, max_tokens=4000)
         if content:
-            gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel, gen_summary3, gen_investment = parse_title_and_body(content)
+            gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel, gen_summary3, gen_investment, gen_keyword_ko, gen_keyword_en = parse_title_and_body(content)
             gen_body = _ensure_paragraphs(gen_body)
             full_title = gen_title if gen_title else title[:50]
 
@@ -2453,6 +2543,7 @@ def run():
             if article_id > 0:
                 status = "✅ 단독 저장" if published else "📋 단독 미발행"
                 print(f"  {status} (id={article_id}): {full_title}\n")
+                save_article_keywords(article_id, gen_keyword_ko, gen_keyword_en)
                 if published:
                     today_own_articles.append({"id": article_id, "title_ko": full_title})
                     solo_generated += 1
