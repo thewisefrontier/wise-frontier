@@ -1763,7 +1763,13 @@ def search_followup(title: str, country: str) -> list:
     import urllib.parse
     since = (now_kst() - timedelta(hours=48)).strftime("%Y-%m-%d %H:%M")
 
-    kw_list = [w for w in title.replace(",", "").replace("\xb7", " ").split() if len(w) >= 2]
+    # 제목은 "국가명, 본문" 형식이라 첫 단어가 거의 항상 국가명이다. 국가명만으로
+    # 검색하면 완전히 무관한 기사까지 "후속 정보"로 오매칭돼 엉뚱한 업데이트가
+    # 붙는 사고가 났다(실사고 2026-08-09, id=63237: 기니 광산 협약 기사에
+    # 무관한 기니 기상특보가 "후속 정보 추가"로 붙음). 국가명 다음의 실제
+    # 핵심어를 우선 쓰고, 본문에 남는 단어가 없을 때만 국가명으로 폴백한다.
+    body_part = title.split(",", 1)[1] if "," in title else title
+    kw_list = [w for w in body_part.replace(",", "").replace("\xb7", " ").split() if len(w) >= 2]
     kw = kw_list[0] if kw_list else country
 
     results = []
