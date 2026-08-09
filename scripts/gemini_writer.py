@@ -1738,7 +1738,7 @@ def get_stale_live_articles() -> list:
             # weather_ 105건이 score=1이라 대상에 포함). score 조건을 버리고
             # subcategory 접두로 직접 지정한다.
             params=[
-                ("select", "id,title_ko,summary_ko,country,category,score,subcategory"),
+                ("select", "id,title_ko,summary_ko,country,category,score,subcategory,update_log"),
                 ("source", "eq.NewsFinal"),
                 ("is_published", "eq.true"),
                 ("subcategory", "like.*trend_*"),
@@ -1794,8 +1794,13 @@ def search_followup(title: str, country: str) -> list:
         pass
 
     try:
+        # \uC2E4\uC0AC\uACE0(2026-08-09, id=61698): \uD55C\uAE00\uB85C\uB9CC \uB41C \uC81C\uBAA9(\uAC70\uC758 \uC804\uBD80)\uC740 eng_words\uAC00
+        # \uD56D\uC0C1 \uBE44\uC5B4\uC11C country\uB85C \uD3F4\uBC31\uD588\uB294\uB370, \uADF8\uB7EC\uBA74 GDELT\uAC00 "\uB0A8\uC544\uD504\uB9AC\uCE74\uACF5\uD654\uAD6D" \uAD00\uB828
+        # \uC544\uBB34 \uAE30\uC0AC\uB098 5\uAC74 \uBB3C\uC5B4\uC640 \uC9D0\uBC14\uBE0C\uC6E8 \uC774\uC8FC\uBBFC\u00B7\uCD95\uAD6C\u00B7\uB7ED\uBE44 \uAC19\uC740 \uC644\uC804 \uBB34\uAD00\uD55C \uB0B4\uC6A9\uC774
+        # "\uD6C4\uC18D \uC815\uBCF4"\uB85C 5\uCC28\uB840 \uC5F0\uC18D \uBD99\uC5C8\uB2E4. country \uD3F4\uBC31\uC744 \uC5C6\uC560\uACE0, \uC601\uBB38 \uD0A4\uC6CC\uB4DC\uAC00 \uC5C6\uC73C\uBA74
+        # (\uAC70\uC758 \uD56D\uC0C1 \uADF8\uB7F0 \uACBD\uC6B0) \uC774 \uAC80\uC0C9 \uC790\uCCB4\uB97C \uAC74\uB108\uB6F4\uB2E4 \u2014 \uB193\uCE58\uB294 \uAC8C \uC624\uB9E4\uCE6D\uBCF4\uB2E4 \uB0AB\uB2E4.
         eng_words = [w for w in title.split() if not any("\uAC00" <= c <= "\uD7A3" for c in w)]
-        eng_kw = " ".join(eng_words[:3]) if eng_words else country
+        eng_kw = " ".join(eng_words[:3]) if eng_words else ""
         if eng_kw:
             gres = requests.get(
                 f"https://api.gdeltproject.org/api/v2/doc/doc"
@@ -1840,6 +1845,13 @@ HISTORY_SEP = "────────\n[업데이트 이력]"
 MIN_DELTA_LEN     = 60    # 이보다 짧으면 새 내용으로 치지 않는다
 DELTA_DUP_OVERLAP = 0.65  # 문장 겹침률이 이 이상이면 재탕으로 보고 폐기
                           # (실측: 조사·어미만 바꾼 환언 0.69 / 무관한 문장 0.18 이하)
+
+# 한 기사에 붙는 "후속 정보 추가" 최대 횟수. update_article()이 매번 created_at을
+# 지금 시각으로 갱신해서 get_stale_live_articles()의 "3~48시간 전" 창에 계속 다시
+# 걸리므로, 이 캡이 없으면 무한히 반복 적용될 수 있다(실사고 id=61698: 매 회차마다
+# 걸려 24시간 동안 5차례 연속 붙음 — search_followup 매칭 버그와 별개로, 매칭이
+# 완벽해도 한 기사가 끝없이 늘어나는 걸 막을 장치가 없었다).
+MAX_LIVE_UPDATES_PER_ARTICLE = 3
 
 # 업데이트 항목의 머리표·타임스탬프. 내용 비교 전에 떼어내지 않으면
 # 같은 문장인데도 접두 때문에 겹침률이 떨어져 중복이 새어 나간다.
@@ -1962,6 +1974,15 @@ def update_live_articles():
         summary = a.get("summary_ko") or ""
         country = a.get("country") or ""
         art_id  = a["id"]
+
+        prior_live_updates = sum(
+            1 for l in (a.get("update_log") or [])
+            if (l or {}).get("note") == "후속 정보 추가"
+        )
+        if prior_live_updates >= MAX_LIVE_UPDATES_PER_ARTICLE:
+            print(f"  → {title[:50]}")
+            print(f"     [SKIP] 후속 정보 추가 {prior_live_updates}회로 상한 도달 — 더 이상 붙이지 않음")
+            continue
 
         # 원 본문은 어떤 경우에도 Gemini에 넘기지 않고 덮어쓰지도 않는다.
         updates, base_body, legacy = _split_article(summary)
