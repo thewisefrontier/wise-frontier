@@ -20,7 +20,7 @@ from dotenv import load_dotenv
 # gemini_writer는 __main__ 가드가 있어 import 시 실행되지 않는다.
 # import 실패에도 병합 자체는 죽지 않도록 폴백을 둔다.
 try:
-    from gemini_writer import _split_article, _compose_article, _prepend_update
+    from gemini_writer import _split_article, _compose_article, _prepend_update, _ensure_paragraphs
     _HAS_UPDATE_BLOCK = True
 except Exception:
     _HAS_UPDATE_BLOCK = False
@@ -766,7 +766,10 @@ def find_similar_trend(title: str, country: str | None = None,
 
 
 def _summarize_delta(root_summary: str, new_title: str, new_body: str) -> str:
-    """루트 기사에 없는 '새 전개'만 1~3문장으로 요약. 새 사실 없으면 '없음'."""
+    """루트 기사에 없는 '새 전개'를 기사문으로 서술. 새 사실 없으면 '없음'.
+    실사고(2026-08-09): "1~3문장 요약" 제약 때문에 실제로는 팩트가 더 있어도
+    압축 요약만 붙었다 — 팩트 기반이기만 하면 길이는 문제되지 않는다는 방침에
+    따라 문장 수 상한을 없애고 재료(입력 길이)도 넉넉히 준다."""
     # 본문을 앞에 두고 이미 반영된 업데이트를 뒤에 붙여 비교 기준으로 쓴다.
     # (상단 블록이 앞을 차지하면 본문 리드가 잘림 한도 밖으로 밀려난다)
     if _HAS_UPDATE_BLOCK:
@@ -775,26 +778,30 @@ def _summarize_delta(root_summary: str, new_title: str, new_body: str) -> str:
     else:
         base_summary = root_summary.split("────────\n[업데이트 이력]")[0].strip()
     prompt = f"""아래는 진행 중인 사건의 기존 정리 기사와, 방금 수집된 새 기사입니다.
-기존 기사에 '없는 새로운 사실'만 1~3문장으로 요약하세요.
+기존 기사에 '없는 새로운 사실'을 기사문으로 서술하세요. 이 항목 하나만 읽어도
+무슨 일이 있었는지 충분히 이해되는 완결된 문단이어야 합니다. 새 기사에 담긴
+사실 관계(배경·경위·수치·전망)를 빠짐없이 살려 쓰되, 새 기사에 없는 내용을
+지어내지는 마세요 — 팩트에 근거하는 한 길이는 제한하지 않습니다.
 - 날짜는 반드시 소스에 명시된 "N일(현지시간)" 형식만 사용. "오늘", "어제", "화요일", "월요일" 등 요일·상대적 표현 금지. 날짜 정보가 없으면 생략.
 - 새로운 사실이 없으면 정확히 "없음" 한 단어만 출력.
 - 논평·마크다운·헤더 금지, 사실 서술형 한국어로만.
 - 모든 문장을 "-다"로 종결하세요. "-습니다", "-입니다" 등 정중체는 쓰지 마세요.
 
 [기존 정리 기사]
-{base_summary[:1500]}
+{base_summary[:3000]}
 
 [새 기사] {new_title}
-{new_body[:1200]}
+{new_body[:3000]}
 
-새 전개 요약:"""
+새 전개:"""
     try:
-        out = call_gemini_article(prompt, max_tokens=300)
+        out = call_gemini_article(prompt, max_tokens=1200)
         if out:
             out = out.strip()
-            if out.startswith("새 전개 요약:"):
+            if out.startswith("새 전개 요약:") or out.startswith("새 전개:"):
                 out = out.split(":", 1)[1].strip()
-            return out.strip()
+            out = out.strip()
+            return _ensure_paragraphs(out) if _HAS_UPDATE_BLOCK else out
     except Exception as e:
         print(f"    → 델타 요약 실패: {e}")
     return ((new_body or "")[:200]).strip()
