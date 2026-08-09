@@ -240,7 +240,11 @@ export async function onRequestGet(context) {
     // Supabase 서버 조회 (is_published=true 1건)
     let a = null;
     const apiUrl = `${SUPABASE_URL}/rest/v1/articles?id=eq.${encodeURIComponent(id)}&is_published=eq.true&select=*`;
-    const dbRes = await fetch(apiUrl, { headers: { apikey: SUPABASE_ANON_KEY } });
+    // Worker의 fetch()는 대상 서버 응답의 Cache-Control에 따라 Cloudflare 엣지에
+    // 캐시될 수 있다 — 이 응답에 실어 보내는 no-store 헤더는 우리가 브라우저에
+    // 주는 응답에만 적용되고, 이 서브리퀘스트 자체와는 무관하다. 그 결과 기사가
+    // 갱신돼도 낡은 캐시가 한동안 노출되는 문제가 있었다(실사고: id=63237).
+    const dbRes = await fetch(apiUrl, { headers: { apikey: SUPABASE_ANON_KEY }, cache: 'no-store' });
     if (dbRes.ok) {
       const rows = await dbRes.json();
       a = rows[0] || null;
