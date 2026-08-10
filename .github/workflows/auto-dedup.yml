@@ -21,28 +21,56 @@ jobs:
     steps:
       - name: 코드 체크아웃
         uses: actions/checkout@v5
+        with:
+          # run.yml과 동일한 이유로 ref 명시(트리거 시점 SHA 고정 방지). 이 워크플로우는
+          # run.yml 완료(workflow_run)마다 매번 걸리는데, run.yml이 100분 가드로 스킵되면
+          # (커밋 없음) 여기서도 할 일이 없다 — 바로 아래 가드가 그걸 확인한다.
+          ref: main
+
+      # run.yml은 100분 가드로 스킵될 때 커밋을 아예 안 남긴다. 이 워크플로우는
+      # workflow_run으로 run.yml "완료"마다 걸리므로(스킵이든 풀이든 conclusion=success),
+      # 가드 없이는 새 기사가 하나도 없는데도 25~40분마다 돌게 된다(실측 2026-08-09~10,
+      # "Auto-unpublish duplicate articles" 커밋이 스킵 구간에도 계속 찍힘 — 처리할 게
+      # 없어도 RPC 조회 자체는 매번 나갔다는 뜻). HEAD의 마지막 커밋 메시지가
+      # run.yml의 "Update articles & state"가 아니면 직전 run.yml이 스킵됐다는 뜻이므로
+      # 여기도 스킵한다.
+      - name: 가드 (직전 run.yml이 실제로 작업했을 때만 진행)
+        id: guard
+        if: github.event_name == 'workflow_run'
+        run: |
+          last_msg=$(git log -1 --format=%s)
+          echo "직전 커밋: $last_msg"
+          if [ "$last_msg" != "Update articles & state" ]; then
+            echo "직전 run.yml이 스킵됨(새 기사 없음) -> 이번 실행은 작업 없이 통과"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Python 설정
+        if: steps.guard.outputs.skip != 'true'
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
       - name: 패키지 설치
+        if: steps.guard.outputs.skip != 'true'
         run: pip install -r requirements.txt
 
       - name: 중복기사 자동 미발행
+        if: steps.guard.outputs.skip != 'true'
         run: python scripts/auto_dedup.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
 
       - name: 웹사이트 데이터 내보내기
+        if: steps.guard.outputs.skip != 'true'
         run: python scripts/export_articles.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
 
       - name: 변경사항 커밋 및 푸시
+        if: steps.guard.outputs.skip != 'true'
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
