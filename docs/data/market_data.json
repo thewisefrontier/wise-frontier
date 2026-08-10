@@ -1,26 +1,26 @@
 {
-  "updated_at": "2026-08-10 21:53",
+  "updated_at": "2026-08-10 23:08",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7757.64,
-      "change_pct": 0.44,
+      "price": 7762.18,
+      "change_pct": 0.68,
       "up": true
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 26690.62,
-      "change_pct": 1.24,
+      "price": 26679.79,
+      "change_pct": 1.26,
       "up": true
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 54036.93,
-      "change_pct": -0.57,
-      "up": false
+      "price": 53906.65,
+      "change_pct": 0.04,
+      "up": true
     },
     {
       "name": "코스피",
@@ -74,15 +74,15 @@
     {
       "name": "USD/NGN",
       "symbol": "USDNGN=X",
-      "price": 1362.19,
-      "change_pct": -0.01,
+      "price": 1358.98,
+      "change_pct": -0.25,
       "up": false
     },
     {
       "name": "USD/KES",
       "symbol": "USDKES=X",
-      "price": 129.3,
-      "change_pct": 0.73,
+      "price": 129.4,
+      "change_pct": 0.81,
       "up": true
     },
     {
@@ -98,23 +98,23 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7757.64,
-        "change_pct": 0.44,
+        "price": 7762.18,
+        "change_pct": 0.68,
         "up": true
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 26690.62,
-        "change_pct": 1.24,
+        "price": 26679.79,
+        "change_pct": 1.26,
         "up": true
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 54036.93,
-        "change_pct": -0.57,
-        "up": false
+        "price": 53906.65,
+        "change_pct": 0.04,
+        "up": true
       }
     ],
     "kr": [
@@ -174,15 +174,15 @@
       {
         "name": "USD/NGN",
         "symbol": "USDNGN=X",
-        "price": 1362.19,
-        "change_pct": -0.01,
+        "price": 1358.98,
+        "change_pct": -0.25,
         "up": false
       },
       {
         "name": "USD/KES",
         "symbol": "USDKES=X",
-        "price": 129.3,
-        "change_pct": 0.73,
+        "price": 129.4,
+        "change_pct": 0.81,
         "up": true
       },
       {
