@@ -160,6 +160,22 @@
     "updated_at": "2026-07-15 01:38"
   },
   {
+    "id": "alimentos_y_terrenos",
+    "name": "Alimentos y Terrenos, S.A.",
+    "name_ko": "알리멘토스 이 테레노스",
+    "country": "과테말라",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "식음료",
+    "description": "과테말라에서 55년의 역사를 가진 베이커리 및 레스토랑 브랜드 파치(Patsy)를 운영하는 주요 식품 기업이다. 육류, 제과, 쿠키, 빵, 소스 등 다양한 식품 생산 라인을 보유하고 있다. 최근 대규모 신규 생산·보관 시설을 준공하여국내 공급망 효율성과 생산 능력을 대폭 강화했다.",
+    "founded_year": null,
+    "headquarters": "과테말라시티, 과테말라",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-11 06:08"
+  },
+  {
     "id": "banco_industrial",
     "name": "Banco Industrial, S.A.",
     "name_ko": "반코 인두스트리알",
@@ -3040,22 +3056,6 @@
     "updated_at": "2026-08-02 21:12"
   },
   {
-    "id": "tata_consultancy_services",
-    "name": "Tata Consultancy Services Limited",
-    "name_ko": "타타 컨설턴시 서비스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "TCS",
-    "sector": "IT 서비스",
-    "description": "1968년 설립된 글로벌 IT 서비스 및 컨설팅 기업으로 타타 그룹의 핵심 계열사입니다. 전 세계 기업들을 대상으로 소프트웨어 개발, 비즈니스 솔루션, IT 아웃소싱 서비스를 제공합니다. 인도 IT 산업의 선구자이자 세계적인 수준의 기술력을 보유한 기업으로 평가받습니다.",
-    "founded_year": 1968,
-    "headquarters": "뭄바이, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-19 01:21"
-  },
-  {
     "id": "tcs",
     "name": "Tata Consultancy Services Limited",
     "name_ko": "타타 컨설턴시 서비시스",
@@ -3070,6 +3070,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-02 17:22"
+  },
+  {
+    "id": "tata_consultancy_services",
+    "name": "Tata Consultancy Services Limited",
+    "name_ko": "타타 컨설턴시 서비스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "TCS",
+    "sector": "IT 서비스",
+    "description": "1968년 설립된 글로벌 IT 서비스 및 컨설팅 기업으로 타타 그룹의 핵심 계열사입니다. 전 세계 기업들을 대상으로 소프트웨어 개발, 비즈니스 솔루션, IT 아웃소싱 서비스를 제공합니다. 인도 IT 산업의 선구자이자 세계적인 수준의 기술력을 보유한 기업으로 평가받습니다.",
+    "founded_year": 1968,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-19 01:21"
   },
   {
     "id": "tata_motors",
