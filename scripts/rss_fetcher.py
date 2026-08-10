@@ -799,6 +799,20 @@ NOISE_KEYWORDS = [
     #    시세표 제목에만 나타나는 표현으로 좁힐 것.
     "per tola", "check opening rates", "check new rates",
     "opening rates on", "currency exchange rates in",
+    # 매체 자체의 일일 뉴스 다이제스트/모음 — 우리 사이트에는 이미 자체
+    # "데일리 다이제스트" 기능이 있어 겹친다(2026-08-10 사용자 확정, 용납 불가).
+    # 무관한 사건 여러 개를 한 기사에 욱여넣는 형식이라 verify_single_topic이
+    # 가끔 놓친다(실사고 id=61648: "텔레그래프 투데이가 전하는 8일자 주요
+    # 뉴스 동향" — 증시·테니스·홍수·국경통제·교통사고·연예 6~7건이 한 기사에
+    # 섞여 발행됨. id=6273, 64613도 같은 유형). RSS 수집 단계에서 아예 차단해
+    # 클러스터링·단독기사화 파이프라인까지 안 가게 막는다.
+    # 실측 확인된 반복 소스: OCHA Africa("Today's top news: 국가나열"),
+    # Punch Business("Morning/Evening/Afternoon recap: ... other top stories"),
+    # Egypt Independent("... and the day's other top stories").
+    "today's top news", "other top stories", "day's other top stories",
+    "morning recap", "evening recap", "afternoon recap",
+    "news roundup", "news round-up", "daily briefing", "morning briefing",
+    "news at a glance", "today's headlines", "headlines today",
 ]
 
 # 소프트 노이즈 — 수집은 하되 텔레그램/홈페이지 발송 안 함
