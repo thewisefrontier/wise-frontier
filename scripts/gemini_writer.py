@@ -718,9 +718,16 @@ def articles_are_related(a, b):
     title_kw_b = title_keywords(title_b)
     title_common = title_kw_a & title_kw_b
 
-    # 국가 정보 없는 글로벌 기사는 더 엄격하게 판단
-    both_global = not country_a and not country_b
-    high_threshold = SIMILARITY_HIGH + 10 if both_global else SIMILARITY_HIGH
+    # 국가 정보가 둘 다 없거나 한쪽만 없으면 더 엄격하게 판단.
+    # 실사고(2026-08-10): diff_country는 양쪽 다 country가 있어야만 발동하는데,
+    # RSS 원본은 절반 이상이 country가 비어 있다(00_공통.md §3). 한쪽만 비어도
+    # "같은 국가" 경로의 느슨한 기준을 그대로 타면서 완전 무관한 기사끼리
+    # 묶였다(id=63029: 미 상원 암호화폐 법안 + 러시아 키예프 공습,
+    # id=62142: 우크라이나 정유소 공습 + 러시아 은어 유행, id=6273: 캐나다
+    # 구리 광산 + 나이지리아 전 장관 무죄). "같은 국가라고 확신할 수 없으면"
+    # 전부 엄격 기준으로 통일한다 — 오탐이 누락보다 나쁘다는 원칙.
+    country_uncertain = not country_a or not country_b
+    high_threshold = SIMILARITY_HIGH + 10 if country_uncertain else SIMILARITY_HIGH
 
     # 조건 1: 제목이 매우 유사 + 본문 앞부분도 키워드 2개 이상 공유
     if title_sim >= high_threshold and len(lead_common) >= 2:
@@ -728,14 +735,14 @@ def articles_are_related(a, b):
 
     # 조건 2: 제목 키워드 2개 이상 공유 + 본문 앞부분 키워드 3개 이상 공유 + 같은 카테고리
     # 글로벌 기사는 키워드 요건 강화
-    req_title = 3 if both_global else 2
-    req_lead  = 4 if both_global else 3
+    req_title = 3 if country_uncertain else 2
+    req_lead  = 4 if country_uncertain else 3
     if len(title_common) >= req_title and len(lead_common) >= req_lead and same_category:
         return True
 
     # 조건 3: 제목+본문 키워드 합산 — 글로벌은 더 많이 요구
     all_common = (title_kw_a | lead_kw_a) & (title_kw_b | lead_kw_b)
-    req_all = 6 if both_global else 4
+    req_all = 6 if country_uncertain else 4
     if len(all_common) >= req_all and same_category:
         return True
 
@@ -749,8 +756,13 @@ def is_coherent_cluster(cluster: list) -> bool:
     공통 키워드 없이 각자 다른 주제면 엉터리.
     Gemini 호출 없이 규칙 기반으로 처리.
     """
-    if len(cluster) < 4:
-        return True  # 소규모는 통과
+    # 실사고(2026-08-10): "소규모는 통과"가 <4였는데, 실제 잡탕 사고 다수가
+    # 정확히 2개짜리 클러스터였다(articles_are_related가 무관한 기사 둘을
+    # 잘못 묶으면 그대로 여기를 건너뛰어 발행됨 — id=63029, 62142, 6273 등).
+    # 아래 로직 자체는 N=2에도 그대로 성립한다(키워드 공유 없는 쌍 = 고립 =
+    # 연결비율 0 = False). 1개(=단독)만 자명하게 통과시킨다.
+    if len(cluster) < 2:
+        return True  # 단독 기사는 자명하게 단일 이슈
 
     import re
 
