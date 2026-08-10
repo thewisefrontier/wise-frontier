@@ -1200,6 +1200,14 @@ COUNTRY_TO_REGION = {
     "콜롬비아": "latin_america", "페루": "latin_america", "칠레": "latin_america",
     "아르헨티나": "latin_america", "브라질": "latin_america", "멕시코": "latin_america",
     "가이아나": "latin_america", "수리남": "latin_america",
+    # 중미 — 실사고(2026-08-10, id=65426): "과테말라"가 여기 없어서
+    # country_to_region("과테말라")가 매핑 실패로 "global"을 반환했다.
+    # 과테말라는 이 사이트에서 비중이 큰 국가라(수십 건/일) 결과적으로
+    # 과테말라 기사 다수가 region="global"로 잘못 태그되고 있었을 가능성이 높다.
+    "과테말라": "latin_america", "베네수엘라": "latin_america", "에콰도르": "latin_america",
+    "볼리비아": "latin_america", "파라과이": "latin_america", "우루과이": "latin_america",
+    "파나마": "latin_america", "코스타리카": "latin_america", "온두라스": "latin_america",
+    "니카라과": "latin_america", "엘살바도르": "latin_america", "벨리즈": "latin_america",
 }
 
 def country_to_region(country: str) -> str:
@@ -2233,7 +2241,7 @@ def run():
                         update_fields["region"] = country_to_region(norm_country)
                     if gen_category:
                         update_fields["category"] = gen_category
-                        if gen_category == "글로벌":
+                        if gen_category == "글로벌" and not gen_country:
                             update_fields["region"] = "global"
                     if gen_travel:
                         update_fields["is_travel"] = True
@@ -2278,7 +2286,7 @@ def run():
                             update_fields["region"] = country_to_region(norm_country)
                         if gen_category:
                             update_fields["category"] = gen_category
-                            if gen_category == "글로벌":
+                            if gen_category == "글로벌" and not gen_country:
                                 update_fields["region"] = "global"
                         if gen_travel:
                             update_fields["is_travel"] = True
@@ -2306,7 +2314,7 @@ def run():
                 final_country = normalize_country(gen_country or country)
                 final_category = gen_category or category or "종합"
                 final_region = country_to_region(final_country) if final_country else (cluster[0].get("region") or "global")
-                if final_category == "글로벌":
+                if final_category == "글로벌" and not final_country:
                     final_region = "global"
 
                 # published 기본값. 아래 조건들이 하나도 걸리지 않는 정상 경로에서
@@ -2469,7 +2477,7 @@ def run():
                         update_fields["region"] = country_to_region(norm_country)
                     if gen_category:
                         update_fields["category"] = gen_category
-                        if gen_category == "글로벌":
+                        if gen_category == "글로벌" and not gen_country:
                             update_fields["region"] = "global"
                     if gen_travel:
                         update_fields["is_travel"] = True
@@ -2512,7 +2520,7 @@ def run():
             final_country = normalize_country(gen_country or a.get("country") or "")
             final_category = gen_category or a.get("category") or "종합"
             final_region = country_to_region(final_country) if final_country else (a.get("region") or "global")
-            if final_category == "글로벌":
+            if final_category == "글로벌" and not final_country:
                 final_region = "global"
 
             if not verify_single_topic(full_title, gen_body or _strip_leaked_labels(content)):

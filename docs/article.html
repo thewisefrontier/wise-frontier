@@ -474,7 +474,7 @@ function cleanBody(text) {
           && !a.subcategory.startsWith('weather_')
           && !a.subcategory.endsWith('briefing')
           ? `<span class="tag">${a.subcategory}</span>` : ''}
-        ${a.region ? `<span class="tag">${regionKo(a.region)}</span>` : ''}
+        ${a.region && regionKo(a.region) !== a.category ? `<span class="tag">${regionKo(a.region)}</span>` : ''}
         ${a.countries && a.countries.length > 0
           ? a.countries.map(c => `<a class="tag" href="/?country=${encodeURIComponent(c)}">${c}</a>`).join('')
           : (a.country ? `<a class="tag" href="/?country=${encodeURIComponent(a.country)}">${a.country}</a>` : '')}

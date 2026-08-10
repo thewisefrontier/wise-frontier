@@ -141,7 +141,7 @@ function buildWrapperHtml(a) {
       <div class="article-tags">
         ${a.category ? `<a class="tag" href="/?category=${encodeURIComponent(a.category)}">${esc(a.category)}</a>` : ''}
         ${showSub ? `<span class="tag">${esc(a.subcategory)}</span>` : ''}
-        ${a.region ? `<span class="tag">${esc(regionKo(a.region))}</span>` : ''}
+        ${a.region && regionKo(a.region) !== a.category ? `<span class="tag">${esc(regionKo(a.region))}</span>` : ''}
         ${countries.length > 0
           ? countries.map((c) => `<a class="tag" href="/country.html?name=${encodeURIComponent(c)}">${esc(c)}</a>`).join('')
           : (a.country ? `<a class="tag" href="/country.html?name=${encodeURIComponent(a.country)}">${esc(a.country)}</a>` : '')}
