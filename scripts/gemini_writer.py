@@ -358,16 +358,23 @@ def find_similar_article(title: str, own_articles: list, threshold: int = 70):
 _JSON_BODY_KEY_RE = re.compile(r'"(?:body|\ubcf8\ubb38)"\s*:\s*"')
 
 
-def _unwrap_json_body(text):
-    """\ubcf8\ubb38\uc774 raw JSON\uc774\uba74 \ub0b4\ubd80 body\ub97c \uaebc\ub0b8\ub2e4.
-    \ubc18\ud658: None=\uc815\uc0c1 \ubcf8\ubb38(\ubcc0\uacbd \ubd88\ud544\uc694) / str=\ubcf5\uad6c\ub41c \ubcf8\ubb38 / ""=JSON\uc774\uc9c0\ub9cc \ubcf5\uad6c \uc2e4\ud328"""
+def _unwrap_json_body(text, _depth=0):
+    """본문이 raw JSON이면 내부 body를 꺼낸다.
+    반환: None=정상 본문(변경 불필요) / str=복구된 본문 / ""=JSON이지만 복구 실패
+
+    실사고(2026-08-04~08-10, 16건 확인): 클러스터 병합 업데이트("기존 기사 업데이트")
+    응답에서 Gemini가 body 필드 안에 JSON 전체를 또 넣는 경우가 있는데, 이게 2단
+    이상 겹치면(바깥 body 안에 다시 body가 있는 JSON) 예전 코드는 한 겹만 벗기고
+    포기해서 안쪽 JSON 그대로가 본문으로 저장됐다(summary_3lines/investment_idea는
+    바깥쪽 JSON에서 바로 뽑히므로 정상이었고, body만 깨졌던 이유). depth 제한을 두고
+    재귀적으로 계속 벗긴다."""
     if not text:
         return None
     s = str(text).strip()
     if not s.startswith("{"):
         return None
     head = s[:800]
-    if not (_JSON_BODY_KEY_RE.search(head) or '"title"' in head or '"\uc81c\ubaa9"' in head):
+    if not (_JSON_BODY_KEY_RE.search(head) or '"title"' in head or '"제목"' in head):
         return None
     j = s.rfind("}")
     for cand in (s, s[:j + 1] if j > 0 else ""):
@@ -377,10 +384,18 @@ def _unwrap_json_body(text):
             data = json.loads(cand)
         except Exception:
             continue
-        if isinstance(data, dict):
-            inner = str(data.get("body") or data.get("\ubcf8\ubb38") or "").strip()
-            if inner and not inner.startswith("{"):
-                return inner
+        if not isinstance(data, dict):
+            continue
+        inner = str(data.get("body") or data.get("본문") or "").strip()
+        if not inner:
+            continue
+        if not inner.startswith("{"):
+            return inner
+        if _depth >= 4:
+            continue  # 비정상적으로 깊게 중첩 -> 이 후보는 포기, 다음 후보 시도
+        deeper = _unwrap_json_body(inner, _depth + 1)
+        if deeper:
+            return deeper
     return ""
 
 
