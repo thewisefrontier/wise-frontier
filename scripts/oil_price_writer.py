@@ -201,7 +201,16 @@ def _accept_prices(src_name: str, wti: tuple, brent: tuple, target: date) -> dic
 
 
 # ── 유가 데이터 수집 ─────────────────────────────────────────
-
+# ⚠️ Stooq 봇 검증 시도·실패 기록 (2026-08-10). 단순 GET에는 CSV 대신 JS
+# 연산증명(해시캐시) 챌린지가 온다. 챌린지 자체(SHA-256 브루트포스로 앞 d자리
+# 0인 해시 찾기, POST /__verify)는 Python으로 재현해 실제로 통과시켰다
+# (verify 응답 "ok" 확인). 하지만 통과 후에도 실제 CSV 요청은 매번 빈 응답
+# (Content-Length 0, "attachment;filename=error.txt")만 돌아왔고, auth
+# 쿠키가 요청마다 계속 재발급되는 걸 봐서는 PoW보다 더 깊은 방어(세션 검증,
+# 요청 패턴 분석 등)가 있는 것으로 보인다. 여기서 더 파고드는 건 투입 대비
+# 실효가 낮다고 판단해 재현 코드는 되돌리고 원래 방식(단순 GET, 실패 시
+# None 반환)으로 둔다 — 폴백이 계속 막혀 있어도 1차 소스인 EIA가 정상화되면
+# 문제없다.
 def fetch_stooq(symbol: str) -> tuple[float | None, float | None, date | None]:
     """Stooq CSV에서 최근 2일 종가를 가져와 (오늘, 전일, 최신 데이터 날짜) 반환."""
     url = f"https://stooq.com/q/d/l/?s={symbol}&i=d"
