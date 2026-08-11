@@ -1712,22 +1712,6 @@
     "updated_at": "2026-08-09 07:08"
   },
   {
-    "id": "stoneco",
-    "name": "StoneCo Ltd.",
-    "name_ko": "스톤코",
-    "country": "브라질",
-    "country_flag": "🌍",
-    "exchange": "NASDAQ",
-    "ticker": "STNE",
-    "sector": "핀테크",
-    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
-    "founded_year": 2012,
-    "headquarters": "상파울루, 브라질",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-29 20:49"
-  },
-  {
     "id": "stone_co",
     "name": "StoneCo Ltd.",
     "name_ko": "스톤",
@@ -1742,6 +1726,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-22 23:37"
+  },
+  {
+    "id": "stoneco",
+    "name": "StoneCo Ltd.",
+    "name_ko": "스톤코",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "NASDAQ",
+    "ticker": "STNE",
+    "sector": "핀테크",
+    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
+    "founded_year": 2012,
+    "headquarters": "상파울루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-29 20:49"
   },
   {
     "id": "xp_inc",
@@ -2800,6 +2800,22 @@
     "updated_at": "2026-08-09 18:31"
   },
   {
+    "id": "monster_mind_creations",
+    "name": "Monster Mind Creations",
+    "name_ko": "몬스터 마인드 크리에이션스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "엔터테인먼트",
+    "description": "인도의 영화 제작 및 미디어 콘텐츠 개발 기업입니다. 주요 영화 프로젝트에 공동 제작사로 참여하며 콘텐츠 제작 역량을 다지고 있습니다. 인도 대중문화 시장에서 주목받는 작품들을 선보이고 있습니다.",
+    "founded_year": null,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-11 19:56"
+  },
+  {
     "id": "monte_carlo_fashions",
     "name": "Monte Carlo Fashions Limited",
     "name_ko": "몬테 카를로 패션즈",
@@ -2974,6 +2990,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-02 23:44"
+  },
+  {
+    "id": "sbi_capital_markets",
+    "name": "SBI Capital Markets Limited",
+    "name_ko": "에스비아이 캐피탈 마켓",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "금융",
+    "description": "인도 최대 국영 상업은행인 인도스테이트은행(SBI)의 전액 출자 자회사로 설립된 투자 은행 및 금융 자문사입니다. 기업금융, 프로젝트 자문, 자본시장 관련 서비스를 제공합니다. 인도 금융 시장에서 공공 및 민간 부문 인프라 프로젝트의 가치 평가와 재무 자문을 수행하며 높은 신뢰를 받고 있습니다.",
+    "founded_year": 1986,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-11 19:56"
   },
   {
     "id": "shanta_sriram_constructions",
@@ -4112,22 +4144,6 @@
     "updated_at": null
   },
   {
-    "id": "bank_of_the_philippine_islands",
-    "name": "Bank of the Philippine Islands",
-    "name_ko": "필리핀 제도은행",
-    "country": "필리핀",
-    "country_flag": "🇵🇭",
-    "exchange": "PSE",
-    "ticker": "BPI",
-    "sector": "은행",
-    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 개인 및 기업 금융, 자산 관리, 보험 등 종합적인 금융 서비스를 제공한다. 필리핀 금융 시장에서 높은 신뢰도와 탄탄한 시장 지위를 유지하고 있다.",
-    "founded_year": 1851,
-    "headquarters": "마닐라, 필리핀",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-30 02:38"
-  },
-  {
     "id": "bank_of_the_philippines_islands",
     "name": "Bank of the Philippine Islands",
     "name_ko": "필리핀 제도은행",
@@ -4142,6 +4158,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-07 13:12"
+  },
+  {
+    "id": "bank_of_the_philippine_islands",
+    "name": "Bank of the Philippine Islands",
+    "name_ko": "필리핀 제도은행",
+    "country": "필리핀",
+    "country_flag": "🇵🇭",
+    "exchange": "PSE",
+    "ticker": "BPI",
+    "sector": "은행",
+    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 개인 및 기업 금융, 자산 관리, 보험 등 종합적인 금융 서비스를 제공한다. 필리핀 금융 시장에서 높은 신뢰도와 탄탄한 시장 지위를 유지하고 있다.",
+    "founded_year": 1851,
+    "headquarters": "마닐라, 필리핀",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-30 02:38"
   },
   {
     "id": "basel_tiles",
