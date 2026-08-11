@@ -1,25 +1,25 @@
 {
-  "updated_at": "2026-08-11 21:38",
+  "updated_at": "2026-08-11 23:08",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7753.11,
-      "change_pct": 0.56,
+      "price": 7760.12,
+      "change_pct": 0.03,
       "up": true
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 26605.36,
-      "change_pct": 0.98,
-      "up": true
+      "price": 26609.12,
+      "change_pct": -0.31,
+      "up": false
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 53975.98,
-      "change_pct": 0.17,
+      "price": 54041.77,
+      "change_pct": 0.01,
       "up": true
     },
     {
@@ -39,8 +39,8 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 116307.54,
-      "change_pct": -1.03,
+      "price": 116224.97,
+      "change_pct": -1.1,
       "up": false
     },
     {
@@ -74,15 +74,15 @@
     {
       "name": "USD/NGN",
       "symbol": "USDNGN=X",
-      "price": 1358.98,
-      "change_pct": -0.17,
+      "price": 1360.37,
+      "change_pct": -0.07,
       "up": false
     },
     {
       "name": "USD/KES",
       "symbol": "USDKES=X",
-      "price": 129.4,
-      "change_pct": 1.26,
+      "price": 129.38,
+      "change_pct": 1.24,
       "up": true
     },
     {
@@ -98,22 +98,22 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7753.11,
-        "change_pct": 0.56,
+        "price": 7760.12,
+        "change_pct": 0.03,
         "up": true
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 26605.36,
-        "change_pct": 0.98,
-        "up": true
+        "price": 26609.12,
+        "change_pct": -0.31,
+        "up": false
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 53975.98,
-        "change_pct": 0.17,
+        "price": 54041.77,
+        "change_pct": 0.01,
         "up": true
       }
     ],
@@ -137,8 +137,8 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 116307.54,
-        "change_pct": -1.03,
+        "price": 116224.97,
+        "change_pct": -1.1,
         "up": false
       },
       {
@@ -174,15 +174,15 @@
       {
         "name": "USD/NGN",
         "symbol": "USDNGN=X",
-        "price": 1358.98,
-        "change_pct": -0.17,
+        "price": 1360.37,
+        "change_pct": -0.07,
         "up": false
       },
       {
         "name": "USD/KES",
         "symbol": "USDKES=X",
-        "price": 129.4,
-        "change_pct": 1.26,
+        "price": 129.38,
+        "change_pct": 1.24,
         "up": true
       },
       {
