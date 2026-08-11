@@ -352,6 +352,22 @@
     "updated_at": "2026-08-08 06:25"
   },
   {
+    "id": "irtra",
+    "name": "IRTRA",
+    "name_ko": "이르트라",
+    "country": "과테말라",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "관광/레저",
+    "description": "이르트라는 과테말라의 대표적인 테마파크 및 관광 단지 운영 기관입니다. 과테마지카 내 제툴룰 테마파크 등을 소유 및 운영하며 현지 레저 산업에서 중요한 위치를 차지합니다. 비영리 민간 기업 성격의 과테말라 관광 인프라 개발 주체입니다.",
+    "founded_year": 1962,
+    "headquarters": "과테말라시티, 과테말라",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-12 06:34"
+  },
+  {
     "id": "uno_guatemala",
     "name": "Uno Guatemala",
     "name_ko": "우노 과테말라",
@@ -3216,22 +3232,6 @@
     "updated_at": "2026-08-02 14:30"
   },
   {
-    "id": "singareni_collieries_company",
-    "name": "The Singareni Collieries Company Limited",
-    "name_ko": "싱가레니 콜리어리스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "",
-    "sector": "에너지",
-    "description": "싱가레니 콜리어리스는 1920년에 설립된 인도 텔랑가나주의 국영 석탄 채굴 기업입니다. 주로 인도 남부 지역의 전력 및 산업 수요를 충족하기 위해 석탄을 공급하며, 지역 경제에서 중요한 위치를 차지하고 있습니다. 토목 및 인프라 개발과 관련된 지역 사회 공헌 활동도 함께 수행하고 있습니다.",
-    "founded_year": 1920,
-    "headquarters": "코다구뎀, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-08 01:12"
-  },
-  {
     "id": "singareni_collieries",
     "name": "The Singareni Collieries Company Limited",
     "name_ko": "싱가레니 콜리어리스",
@@ -3246,6 +3246,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-30 17:03"
+  },
+  {
+    "id": "singareni_collieries_company",
+    "name": "The Singareni Collieries Company Limited",
+    "name_ko": "싱가레니 콜리어리스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "싱가레니 콜리어리스는 1920년에 설립된 인도 텔랑가나주의 국영 석탄 채굴 기업입니다. 주로 인도 남부 지역의 전력 및 산업 수요를 충족하기 위해 석탄을 공급하며, 지역 경제에서 중요한 위치를 차지하고 있습니다. 토목 및 인프라 개발과 관련된 지역 사회 공헌 활동도 함께 수행하고 있습니다.",
+    "founded_year": 1920,
+    "headquarters": "코다구뎀, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-08 01:12"
   },
   {
     "id": "titan_company",
@@ -4208,22 +4224,6 @@
     "updated_at": null
   },
   {
-    "id": "bank_of_the_philippine_islands",
-    "name": "Bank of the Philippine Islands",
-    "name_ko": "필리핀 제도은행",
-    "country": "필리핀",
-    "country_flag": "🇵🇭",
-    "exchange": "PSE",
-    "ticker": "BPI",
-    "sector": "은행",
-    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 개인 및 기업 금융, 자산 관리, 보험 등 종합적인 금융 서비스를 제공한다. 필리핀 금융 시장에서 높은 신뢰도와 탄탄한 시장 지위를 유지하고 있다.",
-    "founded_year": 1851,
-    "headquarters": "마닐라, 필리핀",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-30 02:38"
-  },
-  {
     "id": "bank_of_the_philippines_islands",
     "name": "Bank of the Philippine Islands",
     "name_ko": "필리핀 제도은행",
@@ -4238,6 +4238,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-07 13:12"
+  },
+  {
+    "id": "bank_of_the_philippine_islands",
+    "name": "Bank of the Philippine Islands",
+    "name_ko": "필리핀 제도은행",
+    "country": "필리핀",
+    "country_flag": "🇵🇭",
+    "exchange": "PSE",
+    "ticker": "BPI",
+    "sector": "은행",
+    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 개인 및 기업 금융, 자산 관리, 보험 등 종합적인 금융 서비스를 제공한다. 필리핀 금융 시장에서 높은 신뢰도와 탄탄한 시장 지위를 유지하고 있다.",
+    "founded_year": 1851,
+    "headquarters": "마닐라, 필리핀",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-30 02:38"
   },
   {
     "id": "basel_tiles",
