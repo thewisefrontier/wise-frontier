@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-12 21:18",
+  "updated_at": "2026-08-12 21:19",
   "indices": [
     {
       "name": "S&P 500",
@@ -39,8 +39,8 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 116104.5,
-      "change_pct": 0.14,
+      "price": 116151.24,
+      "change_pct": 0.18,
       "up": true
     },
     {
@@ -89,7 +89,7 @@
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
       "price": 16.13,
-      "change_pct": -0.34,
+      "change_pct": -0.33,
       "up": false
     }
   ],
@@ -137,8 +137,8 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 116104.5,
-        "change_pct": 0.14,
+        "price": 116151.24,
+        "change_pct": 0.18,
         "up": true
       },
       {
@@ -189,10 +189,32 @@
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
         "price": 16.13,
-        "change_pct": -0.34,
+        "change_pct": -0.33,
         "up": false
       }
     ]
   },
-  "company_prices": {}
+  "company_prices": {
+    "ANTM": {
+      "name": "Aneka Tambang Tbk",
+      "symbol": "ANTM.JK",
+      "price": 3090.0,
+      "change_pct": 0.0,
+      "up": true
+    },
+    "ACB": {
+      "name": "Asia Commercial Joint Stock Bank",
+      "symbol": "ACB.VN",
+      "price": 22750.0,
+      "change_pct": 0.44,
+      "up": true
+    },
+    "BPI": {
+      "name": "Bank of the Philippine Islands",
+      "symbol": "BPI.PS",
+      "price": 0,
+      "change_pct": 0,
+      "up": true
+    }
+  }
 }
