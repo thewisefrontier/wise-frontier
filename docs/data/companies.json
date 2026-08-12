@@ -2560,6 +2560,22 @@
     "updated_at": "2026-08-03 14:57"
   },
   {
+    "id": "brilliant_portfolios",
+    "name": "Brilliant Portfolios Limited",
+    "name_ko": "브릴리언트 포트폴리오스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "BSE",
+    "ticker": "539404",
+    "sector": "금융",
+    "description": "브릴리언트 포트폴리오스는 인도에 본사를  금융 및 투자 관련 서비스를 제공하는 기업이다. 최근 발표된 분기 실적에서 매출과 순이익 모두 큰 폭의 성장을 기록하며 주목받았다. 인도 금융 시장에서 다양한 포트폴리오 관리 활동을 영위하고 있다.",
+    "founded_year": 1994,
+    "headquarters": "뉴델리, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-12 18:17"
+  },
+  {
     "id": "cochin_minerals_and_rutile",
     "name": "Cochin Minerals and Rutile Ltd",
     "name_ko": "코친 미네랄스 앤드 루틸",
@@ -3232,6 +3248,22 @@
     "updated_at": "2026-08-02 14:30"
   },
   {
+    "id": "singareni_collieries_company",
+    "name": "The Singareni Collieries Company Limited",
+    "name_ko": "싱가레니 콜리어리스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "싱가레니 콜리어리스는 1920년에 설립된 인도 텔랑가나주의 국영 석탄 채굴 기업입니다. 주로 인도 남부 지역의 전력 및 산업 수요를 충족하기 위해 석탄을 공급하며, 지역 경제에서 중요한 위치를 차지하고 있습니다. 토목 및 인프라 개발과 관련된 지역 사회 공헌 활동도 함께 수행하고 있습니다.",
+    "founded_year": 1920,
+    "headquarters": "코다구뎀, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-08 01:12"
+  },
+  {
     "id": "singareni_collieries",
     "name": "The Singareni Collieries Company Limited",
     "name_ko": "싱가레니 콜리어리스",
@@ -3248,20 +3280,36 @@
     "updated_at": "2026-07-30 17:03"
   },
   {
-    "id": "singareni_collieries_company",
-    "name": "The Singareni Collieries Company Limited",
-    "name_ko": "싱가레니 콜리어리스",
+    "id": "tata_power",
+    "name": "The Tata Power Company Limited",
+    "name_ko": "타타 파워",
     "country": "인도",
     "country_flag": "🌍",
     "exchange": "NSE",
-    "ticker": "",
-    "sector": "에너지",
-    "description": "싱가레니 콜리어리스는 1920년에 설립된 인도 텔랑가나주의 국영 석탄 채굴 기업입니다. 주로 인도 남부 지역의 전력 및 산업 수요를 충족하기 위해 석탄을 공급하며, 지역 경제에서 중요한 위치를 차지하고 있습니다. 토목 및 인프라 개발과 관련된 지역 사회 공헌 활동도 함께 수행하고 있습니다.",
-    "founded_year": 1920,
-    "headquarters": "코다구뎀, 인도",
+    "ticker": "TATAPOWER",
+    "sector": "유틸리티",
+    "description": "1915년에 설립된 인도의 선도적인 통합 전력 기업으로, 발전, 송배전, 그리고 신재생에너지 사업을 아우릅니다. 태양광 및풍력 등 친환경 에너지 포트폴리오를 빠르게 확대하며 인도 전력 시장의 탈탄소화를 주도하고 있습니다. 안정적인 전력 공급을 바탕으로 인도 전역에서 광범위한 고객 기반을 확보하고 있습니다.",
+    "founded_year": 1915,
+    "headquarters": "뭄바이, 인도",
     "website": null,
     "is_published": true,
-    "updated_at": "2026-08-08 01:12"
+    "updated_at": "2026-08-12 18:16"
+  },
+  {
+    "id": "yamuna_syndicate",
+    "name": "The Yamuna Syndicate Limited",
+    "name_ko": "야무나 신디케이트",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "BSE",
+    "ticker": "540980",
+    "sector": "유통 및 무역",
+    "description": "야무나 신디케이트는 인도에 기반을 둔 기업으로 석유제품, 화학제품, 농기구 등 다양한 산업재 유통 및 무역 사업을 영위하고 있다. 오랜 역사 동안 인도 내에서 안정적인 영업망을 구축하며 성장해 왔다. 최근 견조한 매출과 연결 순이익 증가세를 보였다.",
+    "founded_year": 1955,
+    "headquarters": "야무나나가르, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-12 18:17"
   },
   {
     "id": "titan_company",
