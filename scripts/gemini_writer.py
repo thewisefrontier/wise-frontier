@@ -2016,11 +2016,18 @@ def _update_stamp() -> str:
 
 
 def _prepend_update(updates: str, delta: str) -> str:
-    """새 항목을 블록 맨 위(헤더 바로 아래)에 넣는다. 최신이 위."""
+    """새 항목을 블록 맨 위(헤더 바로 아래)에 넣는다. 최신이 위.
+
+    실사고(2026-08-13, id=72477): delta가 짧은 한 줄이던 시절엔 안 보였는데,
+    라이브 업데이트를 "완결된 기사문"으로 바꾼 뒤(2026-08-09) 각 항목이 여러
+    문단이 되면서 새 항목과 그 다음(기존) 항목 사이에 빈 줄이 없어 문단이
+    그대로 붙어버리는 문제가 드러났다. lines[1:]를 이어붙일 때 빈 문자열을
+    하나 끼워 새 항목 끝과 기존 항목 시작 사이에 반드시 빈 줄이 들어가게 한다.
+    """
     entry = f"■ {_update_stamp()} — {delta}"
     if updates:
         lines = updates.split("\n")
-        return "\n".join([lines[0], entry] + lines[1:])
+        return "\n".join([lines[0], entry, ""] + lines[1:])
     return UPDATE_HEAD + "\n" + entry
 
 
@@ -2166,6 +2173,12 @@ BBC·CNN 라이브 업데이트처럼, 이 항목 하나만 읽어도 무슨 일
         if delta.startswith("새로 확인된 내용:"):
             delta = delta.split(":", 1)[1].strip()
         delta = _strip_leaked_labels(delta)
+        # 실사고(2026-08-13, id=72477): Gemini가 우리 쪽 "■ 날짜 — " 표기 형식을
+        # 델타 본문 맨 앞에 스스로 흉내내 넣는 경우가 있다. _prepend_update()가
+        # 이미 자체 "■ {stamp} — "를 앞에 붙이므로 이중으로 찍힌다
+        # ("■ 8월 13일 16:25 — ■ 12일(현지시간) — ..."). 앞머리에 남은
+        # "■ ... — " 패턴은 무조건 우리 것이 아니라 Gemini가 흉내낸 잔재이므로 제거.
+        delta = re.sub(r"^■\s*[^—\n]{0,30}—\s*", "", delta)
         delta = _normalize_recent_abs_dates(delta)
         if has_polite_ending(delta):
             print("     🔧 합쇼체 감지 → 자동 변환 적용")
