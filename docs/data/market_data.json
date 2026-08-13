@@ -4,22 +4,22 @@
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7815.73,
-      "change_pct": 1.13,
+      "price": 7813.71,
+      "change_pct": 1.11,
       "up": true
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 26870.42,
-      "change_pct": 1.61,
+      "price": 26864.7,
+      "change_pct": 1.59,
       "up": true
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 53982.57,
-      "change_pct": 0.35,
+      "price": 53961.75,
+      "change_pct": 0.32,
       "up": true
     },
     {
@@ -39,7 +39,7 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 114252.64,
+      "price": 114259.17,
       "change_pct": -0.63,
       "up": false
     },
@@ -89,7 +89,7 @@
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
       "price": 16.16,
-      "change_pct": -0.18,
+      "change_pct": -0.16,
       "up": false
     }
   ],
@@ -98,22 +98,22 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7815.73,
-        "change_pct": 1.13,
+        "price": 7813.71,
+        "change_pct": 1.11,
         "up": true
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 26870.42,
-        "change_pct": 1.61,
+        "price": 26864.7,
+        "change_pct": 1.59,
         "up": true
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 53982.57,
-        "change_pct": 0.35,
+        "price": 53961.75,
+        "change_pct": 0.32,
         "up": true
       }
     ],
@@ -137,7 +137,7 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 114252.64,
+        "price": 114259.17,
         "change_pct": -0.63,
         "up": false
       },
@@ -189,7 +189,7 @@
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
         "price": 16.16,
-        "change_pct": -0.18,
+        "change_pct": -0.16,
         "up": false
       }
     ]
