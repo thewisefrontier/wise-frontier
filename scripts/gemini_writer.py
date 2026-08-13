@@ -307,10 +307,14 @@ def find_similar_article(title: str, own_articles: list, threshold: int = 70):
         print(f"  ⚠️ [중복체크 경고] RPC 호출 실패: {e}")
 
     # ── 2차: 숫자 제거 + 국가+날짜+키워드 재비교 ──
+    # 실사고(2026-08-13, id=67076/72477): 같은 콜롬비아 지진을 다룬 두 기사가
+    # 별개 루트로 갈라졌다. 1차 RPC는 72시간 창인데 2차 폴백만 48시간이라,
+    # 67076(8/11 00:59 생성)이 72477 생성 시점(8/13 04:47, 간격 51.8시간)엔
+    # 이미 48시간 창을 벗어나 후보에서 빠졌다. 1차와 동일하게 72시간으로 맞춘다.
     try:
         title_stripped = _strip_numbers(title)
         today = now_kst().strftime("%Y-%m-%d")
-        since_48h = (now_kst() - timedelta(hours=48)).strftime("%Y-%m-%d %H:%M")
+        since_72h = (now_kst() - timedelta(hours=72)).strftime("%Y-%m-%d %H:%M")
 
         # 오늘 발행된 자체 기사 조회 (country 필터 없이 — 제목에서 국가명 추출 후 비교)
         res2 = requests.get(
@@ -320,7 +324,7 @@ def find_similar_article(title: str, own_articles: list, threshold: int = 70):
                 "select": "id,title_ko,country",
                 "source": "eq.NewsFinal",
                 "is_published": "eq.true",
-                "created_at": f"gte.{since_48h}",
+                "created_at": f"gte.{since_72h}",
                 "order": "created_at.desc",
                 "limit": "100",
             },
