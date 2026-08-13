@@ -1200,6 +1200,22 @@
     "updated_at": "2026-08-09 12:13"
   },
   {
+    "id": "impsa",
+    "name": "IMPSA S.A.",
+    "name_ko": "임프사",
+    "country": "베네수엘라",
+    "country_flag": "🌍",
+    "exchange": "BCBA",
+    "ticker": "IMPS",
+    "sector": "에너지",
+    "description": "임프사는 아르헨티나의 대표적인 중공업 및 에너지 기업으로, 수력 발전 및 풍력 발전 설비 제조 분야에서 전문성을 가지고 있습니다. 1907년에 설립되어 남미 지역의 대규모 발전 인프라 구축에 핵심적인 역할을 수행해 왔습니다. 최근 베네수엘라와의 전력망 강화 계약을 통해 해외 수력발전소 공사 재개 및 설비 공급을 추진하고 있습니다.",
+    "founded_year": 1907,
+    "headquarters": "멘도사, 아르헨티나",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-13 12:43"
+  },
+  {
     "id": "asia_commercial_bank",
     "name": "Asia Commercial Bank",
     "name_ko": null,
@@ -3232,22 +3248,6 @@
     "updated_at": "2026-08-02 21:12"
   },
   {
-    "id": "tcs",
-    "name": "Tata Consultancy Services Limited",
-    "name_ko": "타타 컨설턴시 서비시스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "TCS",
-    "sector": "IT 서비스",
-    "description": "1968년에 설립된 인도 타타 그룹 산하의 세계적인 IT 서비스 및 컨설팅 기업입니다. 전 세계 기업들을 상대로 디지털 전환, 소프트웨어 개발 및 아웃소싱 서비스를 제공합니다.",
-    "founded_year": 1968,
-    "headquarters": "뭄바이, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-02 17:22"
-  },
-  {
     "id": "tata_consultancy_services",
     "name": "Tata Consultancy Services Limited",
     "name_ko": "타타 컨설턴시 서비스",
@@ -3262,6 +3262,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-19 01:21"
+  },
+  {
+    "id": "tcs",
+    "name": "Tata Consultancy Services Limited",
+    "name_ko": "타타 컨설턴시 서비시스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "TCS",
+    "sector": "IT 서비스",
+    "description": "1968년에 설립된 인도 타타 그룹 산하의 세계적인 IT 서비스 및 컨설팅 기업입니다. 전 세계 기업들을 상대로 디지털 전환, 소프트웨어 개발 및 아웃소싱 서비스를 제공합니다.",
+    "founded_year": 1968,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-02 17:22"
   },
   {
     "id": "tata_motors",
@@ -3280,22 +3296,6 @@
     "updated_at": "2026-08-02 14:30"
   },
   {
-    "id": "singareni_collieries",
-    "name": "The Singareni Collieries Company Limited",
-    "name_ko": "싱가레니 콜리어리스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "",
-    "sector": "에너지",
-    "description": "싱가레니 콜리어리스는 인도의 국영 탄광 및 에너지 기업으로, 주로 텔랑가나주에서 석탄 채굴 및 화력 발전 사업을 수행하고 있습니다. 1920년에 설립되었으며, 인도 남부 지역의 전력 공급과 산업 성장에 필수적인 에너지 자원을 안정적으로 공급하는 핵심적인 역할을 담당하고 있습니다. 인도 정부와 텔랑가나주 정부가 공동으로 소유하고 있는 대형 민간 및 공공 성격의 기업입니다.",
-    "founded_year": 1920,
-    "headquarters": "하이드라바드, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-30 17:03"
-  },
-  {
     "id": "singareni_collieries_company",
     "name": "The Singareni Collieries Company Limited",
     "name_ko": "싱가레니 콜리어리스",
@@ -3310,6 +3310,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-08 01:12"
+  },
+  {
+    "id": "singareni_collieries",
+    "name": "The Singareni Collieries Company Limited",
+    "name_ko": "싱가레니 콜리어리스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "싱가레니 콜리어리스는 인도의 국영 탄광 및 에너지 기업으로, 주로 텔랑가나주에서 석탄 채굴 및 화력 발전 사업을 수행하고 있습니다. 1920년에 설립되었으며, 인도 남부 지역의 전력 공급과 산업 성장에 필수적인 에너지 자원을 안정적으로 공급하는 핵심적인 역할을 담당하고 있습니다. 인도 정부와 텔랑가나주 정부가 공동으로 소유하고 있는 대형 민간 및 공공 성격의 기업입니다.",
+    "founded_year": 1920,
+    "headquarters": "하이드라바드, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-30 17:03"
   },
   {
     "id": "tata_power",
@@ -3678,6 +3694,38 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-05 21:54"
+  },
+  {
+    "id": "charoen_pokphand_indonesia",
+    "name": "PT Charoen Pokphand Indonesia Tbk",
+    "name_ko": "피티 차로엔 포크판 인도네시아",
+    "country": "인도네시아",
+    "country_flag": "🇮🇩",
+    "exchange": "IDX",
+    "ticker": "CPIN",
+    "sector": "필수소비재",
+    "description": "1972년에 설립된 인도네시아 최대 규모의 가금류 및 사료 제조 기업입니다. 사료 생산, 닭 사육, 육가공품 유통에 이르는 수직 계열화된 사업 구조를 갖추고 있습니다. 인도네시아 소비재 및 농축산업 분야의 선두 주자로 자리 잡고 있습니다.",
+    "founded_year": 1972,
+    "headquarters": "자카르타, 인도네시아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-13 12:44"
+  },
+  {
+    "id": "goto_gojek_tokopedia",
+    "name": "PT GoTo Gojek Tokopedia Tbk",
+    "name_ko": "피티 고토 고젝 토코페디아",
+    "country": "인도네시아",
+    "country_flag": "🇮🇩",
+    "exchange": "IDX",
+    "ticker": "GOTO",
+    "sector": "테크놀로지",
+    "description": "2021년 고젝과 토코페디아의 합병으로 설립된 인도네시아의 대표적인 대형 IT 기업입니다. 차량 호출, 배달, 전자상거래 및 금융 서비스 등을 아우르는 슈퍼 앱 생태계를 구축하고 있습니다. 인도네시아 디지털 경제의 핵심 기업으로 꼽히나, 최근 주가 하락과 지수 편출 등으로 변동성을 겪고 있습니다.",
+    "founded_year": 2021,
+    "headquarters": "자카르타, 인도네시아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-13 12:44"
   },
   {
     "id": "pt_kereta_api_indonesia",
