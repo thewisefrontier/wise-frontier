@@ -1,25 +1,25 @@
 {
-  "updated_at": "2026-08-14 21:39",
+  "updated_at": "2026-08-14 23:04",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7798.99,
-      "change_pct": 0.92,
+      "price": 7808.14,
+      "change_pct": 0.77,
       "up": true
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 26803.03,
-      "change_pct": 1.35,
+      "price": 26823.27,
+      "change_pct": 0.88,
       "up": true
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 53839.99,
-      "change_pct": 0.09,
+      "price": 53823.15,
+      "change_pct": 0.1,
       "up": true
     },
     {
@@ -39,8 +39,8 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 113738.32,
-      "change_pct": -0.33,
+      "price": 113778.11,
+      "change_pct": -0.3,
       "up": false
     },
     {
@@ -74,22 +74,22 @@
     {
       "name": "USD/NGN",
       "symbol": "USDNGN=X",
-      "price": 1357.68,
-      "change_pct": -0.39,
+      "price": 1357.32,
+      "change_pct": -0.41,
       "up": false
     },
     {
       "name": "USD/KES",
       "symbol": "USDKES=X",
-      "price": 129.24,
-      "change_pct": 0.75,
+      "price": 129.0,
+      "change_pct": 0.56,
       "up": true
     },
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.17,
-      "change_pct": 0.2,
+      "price": 16.18,
+      "change_pct": 0.27,
       "up": true
     }
   ],
@@ -98,22 +98,22 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7798.99,
-        "change_pct": 0.92,
+        "price": 7808.14,
+        "change_pct": 0.77,
         "up": true
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 26803.03,
-        "change_pct": 1.35,
+        "price": 26823.27,
+        "change_pct": 0.88,
         "up": true
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 53839.99,
-        "change_pct": 0.09,
+        "price": 53823.15,
+        "change_pct": 0.1,
         "up": true
       }
     ],
@@ -137,8 +137,8 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 113738.32,
-        "change_pct": -0.33,
+        "price": 113778.11,
+        "change_pct": -0.3,
         "up": false
       },
       {
@@ -174,22 +174,22 @@
       {
         "name": "USD/NGN",
         "symbol": "USDNGN=X",
-        "price": 1357.68,
-        "change_pct": -0.39,
+        "price": 1357.32,
+        "change_pct": -0.41,
         "up": false
       },
       {
         "name": "USD/KES",
         "symbol": "USDKES=X",
-        "price": 129.24,
-        "change_pct": 0.75,
+        "price": 129.0,
+        "change_pct": 0.56,
         "up": true
       },
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.17,
-        "change_pct": 0.2,
+        "price": 16.18,
+        "change_pct": 0.27,
         "up": true
       }
     ]
