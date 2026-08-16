@@ -249,10 +249,21 @@ export async function onRequestGet(context) {
     // 주는 응답에만 적용되고, 이 서브리퀘스트 자체와는 무관하다. 그 결과 기사가
     // 갱신돼도 낡은 캐시가 한동안 노출되는 문제가 있었다(실사고: id=63237).
     const dbRes = await fetch(apiUrl, { headers: { apikey: SUPABASE_ANON_KEY }, cache: 'no-store' });
-    if (dbRes.ok) {
-      const rows = await dbRes.json();
-      a = rows[0] || null;
+
+    // ⚠️ 실사고(2026-08-16): dbRes.ok가 false인 걸 "기사 없음"과 똑같이 취급해
+    // 404를 내리고 있었다 — Supabase 일시 오류(레이트리밋·타임아웃 등)로 멀쩡한
+    // 기사가 순간적으로 "없는 페이지"로 신고되는 버그. "확실히 없음"과 "일시적으로
+    // 조회 실패"는 구분해야 한다 — 후자는 503(+Retry-After)로 응답해 크롤러가
+    // 나중에 재시도하게 해야지, 확정적 404/소프트 200으로 잘못 신고하면 안 된다.
+    if (!dbRes.ok) {
+      return new Response(shell.body, {
+        status: 503,
+        headers: { 'content-type': 'text/html; charset=utf-8', 'retry-after': '120' },
+      });
     }
+
+    const rows = await dbRes.json();
+    a = rows[0] || null;
 
     // 기사 없음/미게시 → 404 상태로 셸 반환(크롤러에 not found 신호)
     if (!a) {
@@ -301,12 +312,16 @@ export async function onRequestGet(context) {
     resp.headers.set('cache-control', 'no-store');
     return resp;
   } catch (e) {
-    // 어떤 실패에도 백지 방지: 원본 셸(CSR)로 폴백 + 원인 헤더 노출
+    // ⚠️ 실사고(2026-08-16, GSC "Soft 404" 253건): 렌더링 단계 예외를 전부
+    // status 200 + 빈 CSR 셸로 응답하고 있었다. 크롤러 입장에선 "200인데
+    // 실제로는 빈 페이지"로 보여 소프트 404로 분류된다. 이건 확정 실패가
+    // 아니라 일시적 문제이므로 503(+Retry-After)으로 응답해 재시도를 유도한다.
     const fb = await env.ASSETS.fetch(new URL('/article.html', url.origin));
     return new Response(fb.body, {
-      status: 200,
+      status: 503,
       headers: {
         'content-type': 'text/html; charset=utf-8',
+        'retry-after': '120',
         'x-ssr-error': String(e && e.message || e).slice(0, 150),
       },
     });
