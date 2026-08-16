@@ -30,8 +30,13 @@ def now_kst() -> datetime:
     """GitHub Actions 러너(UTC)와 무관하게 정확한 KST 현재시각 반환"""
     return datetime.now(timezone.utc).astimezone(KST)
 
-GEMINI_MODEL_PRIMARY  = "gemini-3.5-flash-lite"
-GEMINI_MODEL_FALLBACK = "gemini-3.1-flash-lite"
+GEMINI_MODELS = [
+    "gemini-3.7-flash",
+    "gemini-3.6-flash",
+    "gemini-3.5-flash",
+    "gemini-3.5-flash-lite",
+    "gemini-3.1-flash-lite",
+]
 
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
@@ -52,8 +57,7 @@ GEMINI_API_KEYS = [k for k in [
 ] if k]
 
 _current_key_idx = 0
-_exhausted_keys_primary  = set()  # RPD 소진 키 (3.5)
-_exhausted_keys_fallback = set()  # RPD 소진 키 (3.1)
+_exhausted_keys = {m: set() for m in GEMINI_MODELS}  # 모델별 RPD 소진 키
 
 
 def _sb_headers():
@@ -130,8 +134,8 @@ def digest_exists_for_today() -> bool:
     return res.status_code in (200, 206) and len(res.json()) > 0
 
 
-def call_gemini(prompt, max_tokens=3000):
-    global _current_key_idx, _exhausted_keys_primary, _exhausted_keys_fallback
+def call_gemini(prompt, max_tokens=3000, start_tier=0):
+    global _current_key_idx, _exhausted_keys
     if not GEMINI_API_KEYS:
         print("[ERROR] GEMINI_API_KEY 없음")
         return None
@@ -142,10 +146,7 @@ def call_gemini(prompt, max_tokens=3000):
     }
 
     n = len(GEMINI_API_KEYS)
-    model_stages = [
-        (GEMINI_MODEL_PRIMARY,  _exhausted_keys_primary),
-        (GEMINI_MODEL_FALLBACK, _exhausted_keys_fallback),
-    ]
+    model_stages = [(m, _exhausted_keys[m]) for m in GEMINI_MODELS[start_tier:]]
 
     for model, exhausted in model_stages:
         available = [i for i in range(n) if i not in exhausted]
@@ -299,7 +300,7 @@ def fetch_article_image(title: str, body: str) -> str:
 
 제목: {title}
 본문 앞부분: {body[:300]}"""
-    kw = call_gemini(prompt, max_tokens=30)
+    kw = call_gemini(prompt, max_tokens=30, start_tier=3)
     if not kw:
         return ""
     query = kw.strip().replace(",", " ").split("\n")[0][:100]

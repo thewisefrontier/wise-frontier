@@ -40,8 +40,14 @@ def now_kst() -> datetime:
 
 load_dotenv()
 
-GEMINI_MODEL_PRIMARY  = "gemini-3.5-flash-lite"
-GEMINI_MODEL_FALLBACK = "gemini-3.1-flash-lite"
+# RPD 낮은 고품질 모델부터 순서대로 소진시키고, RPD 500인 lite 모델을 마지막 안전망으로 둔다
+GEMINI_MODELS = [
+    "gemini-3.7-flash",
+    "gemini-3.6-flash",
+    "gemini-3.5-flash",
+    "gemini-3.5-flash-lite",
+    "gemini-3.1-flash-lite",
+]
 CALL_INTERVAL      = 10
 MAX_CLUSTERS_PER_RUN = 7  # 한 번 실행당 최대 처리 클러스터 수
 
@@ -77,7 +83,7 @@ def send_to_newsfinal_channel(article_id, title, body, is_update=False):
         return False
     try:
         preview = (body or "").strip().replace("\n\n", "\n")[:300]
-        url = f"https://newsfinal.co.kr/article.html?id={article_id}"
+        url = f"https://newsfinal.co.kr/article?id={article_id}"
         label = "🔄 업데이트" if is_update else "📋 NewsFinal"
         msg = f"{label}\n\n*{title}*\n\n{preview}{'…' if len(body or '') > 300 else ''}\n\n[전체 기사 보기]({url})"
         res = requests.post(
@@ -108,8 +114,7 @@ GEMINI_API_KEYS = [k for k in [
 ] if k]
 
 _current_key_idx = 0
-_exhausted_keys_primary  = set()  # RPD 소진 키 (3.5)
-_exhausted_keys_fallback = set()  # RPD 소진 키 (3.1)
+_exhausted_keys = {m: set() for m in GEMINI_MODELS}  # 모델별 RPD 소진 키
 
 # 프롬프트 캐시
 _prompt_cache = {}
@@ -974,6 +979,7 @@ def build_issue_prompt(cluster, existing_summary=None):
 - 각 원문 제목 옆에 "(보도 M월 D일)"이 붙어 있을 수 있습니다. 원문 본문에 사건 날짜가 명시돼 있으면 그 날짜가 우선이고, 명시된 날짜가 없을 때만 보도일을 사건 시점으로 보고 "D일(현지시간)" 형식으로 쓰세요. 보도일 표기가 없고 원문에도 날짜가 없으면 날짜를 쓰지 마세요.
 - 기사 문체로 작성하세요. 논평/칼럼 문체는 금지입니다.
 - 모든 인명·지명은 반드시 한글로 음차하세요. 키릴 문자, 아랍 문자, 데바나가리 등 비라틴 문자를 그대로 쓰지 마세요. 한자도 마찬가지입니다. 다만 "고(故)", "대(對)중국"처럼 괄호 안에 넣는 병기는 허용됩니다.
+- 영화·도서·게임 등 작품 제목은 소스 기사에 등장한 원어 표기를 정확히 확인해서만 쓰세요. 공식 한국어 제목을 확신할 수 없으면 새 표현을 지어내지 말고, 원어 제목을 괄호로 병기하거나(예: "브랜드 뉴 데이(Brand New Day)") 원어 그대로 쓰세요.
 """ + JSON_OUTPUT_SPEC
 
     rules = load_prompt("writer_rules", fallback=FALLBACK_RULES)
@@ -1030,8 +1036,8 @@ def build_issue_prompt(cluster, existing_summary=None):
                                count=len(main_articles))
 
 
-def call_gemini(prompt, max_tokens=1000, retry=2):
-    global _current_key_idx, _exhausted_keys_primary, _exhausted_keys_fallback
+def call_gemini(prompt, max_tokens=1000, retry=2, start_tier=0):
+    global _current_key_idx, _exhausted_keys
     if not GEMINI_API_KEYS:
         print("[ERROR] GEMINI_API_KEY 없음")
         return None
@@ -1042,10 +1048,7 @@ def call_gemini(prompt, max_tokens=1000, retry=2):
     }
 
     n = len(GEMINI_API_KEYS)
-    model_stages = [
-        (GEMINI_MODEL_PRIMARY,  _exhausted_keys_primary),
-        (GEMINI_MODEL_FALLBACK, _exhausted_keys_fallback),
-    ]
+    model_stages = [(m, _exhausted_keys[m]) for m in GEMINI_MODELS[start_tier:]]
 
     for model, exhausted in model_stages:
         # 소진되지 않은 키만 후보로
@@ -1171,14 +1174,50 @@ def to_plain_style(text: str) -> str:
     return _BNIDA_RE.sub(_bnida_to_nda, text)
 
 
+def verify_no_fabricated_names(source_prompt: str, body: str) -> str:
+    """생성된 본문에 원문 자료에 없는 고유명사(작품명·인명·지명·기관명)가 새로 등장했는지 확인.
+    실사고(2026-08-16, id=79327): 영화 "Brand New Day"를 "유니온 오브 어 뉴 데이"로
+    완전히 잘못 옮김 — 작품 제목은 인명·지명과 달리 음차 규칙이 커버하지 않던 영역이라
+    Gemini가 자기 사전지식으로 그럴듯한 제목을 지어냈다. 문자열 대조로는 정상 음차까지
+    오탐하므로 Gemini 판단으로 비교한다. 문제 없으면 빈 문자열, 의심되면 이름 목록 반환."""
+    if not body:
+        return ""
+    check_prompt = f"""아래는 기사 작성에 쓰인 원본 자료와, 그걸 바탕으로 생성된 한국어 기사 본문입니다.
+기사 본문에 나오는 고유명사(영화·도서·게임 등 작품명, 인명, 지명, 기관명)가 원본 자료에
+실제로 근거하는지 확인하세요. 정상적인 한글 음차나 공식 번역명은 문제가 아닙니다 —
+원본 자료에 등장하는 대상을 다른 이름으로 완전히 잘못 지어낸 경우만 찾으세요.
+그런 이름이 있으면 "지어낸이름 → 원본표기" 형식으로 쉼표 구분해 나열하세요.
+없으면 "없음"이라고만 답하세요.
+
+[원본 자료]
+{source_prompt[:3000]}
+
+[생성된 기사 본문]
+{body[:2000]}
+
+답변:"""
+    result = call_gemini(check_prompt, max_tokens=150, start_tier=3)
+    if not result:
+        return ""
+    result = result.strip()
+    if not result or ("없음" in result and len(result) <= 12):
+        return ""
+    return result
+
+
 def call_gemini_article(prompt, max_tokens=1500, style_retries=1):
-    """기사 본문 생성 전용 호출. 논평/칼럼체·합쇼체 감지 시 최대 style_retries회 재생성."""
+    """기사 본문 생성 전용 호출. 논평/칼럼체·합쇼체·원문에 없는 고유명사 감지 시 최대 style_retries회 재생성."""
     content = call_gemini(prompt, max_tokens=max_tokens)
     attempt = 0
-    while content and (has_column_style(content) or has_polite_ending(content)) and attempt < style_retries:
+    fabricated = verify_no_fabricated_names(prompt, content) if content else ""
+    while content and (has_column_style(content) or has_polite_ending(content) or fabricated) and attempt < style_retries:
         attempt += 1
-        reason = "논평/칼럼체" if has_column_style(content) else "합쇼체(-습니다/-입니다)"
-        print(f"  ⚠️ {reason} 감지 → 재생성 시도 ({attempt}/{style_retries})")
+        reasons = []
+        if has_column_style(content) or has_polite_ending(content):
+            reasons.append("논평/칼럼체" if has_column_style(content) else "합쇼체(-습니다/-입니다)")
+        if fabricated:
+            reasons.append(f"원문에 없는 고유명사({fabricated})")
+        print(f"  ⚠️ {', '.join(reasons)} 감지 → 재생성 시도 ({attempt}/{style_retries})")
         retry_prompt = (
             prompt
             + "\n\n[재작성 지시] 방금 작성한 결과에 논평/칼럼 문체(예: '~를 보여줍니다', "
@@ -1186,12 +1225,19 @@ def call_gemini_article(prompt, max_tokens=1500, style_retries=1):
               "'-습니다'/'-입니다' 같은 정중체(합쇼체) 종결이 섞여 있었습니다. "
               "감정·의견이 섞인 표현을 모두 배제하고, 모든 문장을 '-다'로 종결하는 "
               "스트레이트 뉴스 문체로만 다시 작성하세요."
+            + (f"\n또한 다음 이름을 원문에 없는 표현으로 잘못 지어냈습니다: {fabricated}. "
+               "영화·도서 등 작품 제목이나 고유명사는 원본 자료에 나온 표기를 그대로 옮기고, "
+               "정확한 한국어 정식 명칭을 확신할 수 없으면 지어내지 말고 원문 표기를 그대로 쓰세요."
+               if fabricated else "")
         )
         retried = call_gemini(retry_prompt, max_tokens=max_tokens)
         if retried:
             content = retried
+            fabricated = verify_no_fabricated_names(prompt, content)
     if content and (has_column_style(content) or has_polite_ending(content)):
         print("  ⚠️ 재생성 후에도 논평체·합쇼체 패턴이 남아있음 (파싱 단계에서 변환)")
+    if content and fabricated:
+        print(f"  ⚠️ 재생성 후에도 원문에 없는 고유명사 남아있음: {fabricated} (그대로 발행 — 수동 확인 필요)")
     return content
 
 
@@ -1598,7 +1644,7 @@ def generate_update_note(existing_summary: str, new_summary: str) -> str:
 
 기존 내용: {(existing_summary or '')[:300]}
 새 내용: {(new_summary or '')[:300]}"""
-    result = call_gemini(prompt, max_tokens=50)
+    result = call_gemini(prompt, max_tokens=50, start_tier=3)
     return (result or "업데이트").strip().replace('\n', ' ')[:30]
 
 
@@ -1611,7 +1657,7 @@ def fetch_article_image(title: str, body: str) -> str:
 
 제목: {title}
 본문 앞부분: {body[:300]}"""
-    kw = call_gemini(prompt, max_tokens=30)
+    kw = call_gemini(prompt, max_tokens=30, start_tier=3)
     if not kw:
         return ""
     query = kw.strip().replace(",", " ").split("\n")[0][:100]
@@ -1668,7 +1714,7 @@ def detect_and_register_companies(title: str, body: str, country: str):
 ]
 추출할 기업이 없으면 빈 배열 []을 반환하세요."""
 
-    raw = call_gemini(prompt, max_tokens=800)
+    raw = call_gemini(prompt, max_tokens=800, start_tier=2)
     if not raw:
         return
 
@@ -1737,7 +1783,7 @@ def verify_single_topic(title: str, body: str) -> bool:
 
 답변 (YES 또는 NO만):"""
 
-    result = call_gemini(prompt, max_tokens=5)
+    result = call_gemini(prompt, max_tokens=5, start_tier=3)
     if not result:
         return True
     return "YES" in result.upper()
@@ -2454,6 +2500,7 @@ def run():
 - "2026년 6월 24일 현재", "오늘", "현재" 등 절대 날짜를 본문에 쓰지 마세요.
 - 기사 문체로 작성하세요. 논평/칼럼 문체는 금지입니다.
 - 모든 인명·지명은 반드시 한글로 음차하세요. 키릴 문자, 아랍 문자 등 비라틴 문자를 그대로 쓰지 마세요.
+- 영화·도서·게임 등 작품 제목은 소스 기사에 등장한 원어 표기를 정확히 확인해서만 쓰세요. 공식 한국어 제목을 확신할 수 없으면 새 표현을 지어내지 말고, 원어 제목을 괄호로 병기하거나(예: "브랜드 뉴 데이(Brand New Day)") 원어 그대로 쓰세요.
 """ + JSON_OUTPUT_SPEC)
 
         similar_existing, pre_sim_score = find_similar_article(title, today_own_articles) if title else (None, 0)

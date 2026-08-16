@@ -99,7 +99,7 @@ def build_briefing(date: str = None) -> str:
         lines.append(f"\n*{country_key}*")
         for a in items[:3]:  # 국가당 최대 3건
             title_ko = a.get("title_ko") or a.get("title_en", "")
-            url = f"https://newsfinal.co.kr/article.html?id={a.get('id')}"
+            url = f"https://newsfinal.co.kr/article?id={a.get('id')}"
             lines.append(f"· [{title_ko}]({url})")
 
     lines.append(f"\n_NewsFinal | 프론티어 미디어_")

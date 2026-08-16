@@ -22,8 +22,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # ── 설정 ────────────────────────────────────────────────────
-GEMINI_MODEL_PRIMARY  = "gemini-3.5-flash-lite"
-GEMINI_MODEL_FALLBACK = "gemini-3.1-flash-lite"
+GEMINI_MODELS = [
+    "gemini-3.7-flash",
+    "gemini-3.6-flash",
+    "gemini-3.5-flash",
+    "gemini-3.5-flash-lite",
+    "gemini-3.1-flash-lite",
+]
 SUPABASE_URL         = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 EIA_API_KEY          = os.getenv("EIA_API_KEY", "")  # https://www.eia.gov/opendata/ 무료 등록
@@ -37,8 +42,7 @@ GEMINI_API_KEYS = [k for k in [
 ] if k]
 
 _current_key_idx = 0
-_exhausted_keys_primary  = set()  # RPD 소진 키 (3.5)
-_exhausted_keys_fallback = set()  # RPD 소진 키 (3.1)
+_exhausted_keys = {m: set() for m in GEMINI_MODELS}  # 모델별 RPD 소진 키
 
 KST = timezone(timedelta(hours=9))
 EDT = ZoneInfo("America/New_York")  # 뉴욕 시장 기준
@@ -295,8 +299,8 @@ def _calc(today: float, prev: float) -> dict:
 
 
 # ── Gemini 호출 ──────────────────────────────────────────────
-def call_gemini(prompt: str, max_tokens: int = 1500) -> str | None:
-    global _current_key_idx, _exhausted_keys_primary, _exhausted_keys_fallback
+def call_gemini(prompt: str, max_tokens: int = 1500, start_tier: int = 2) -> str | None:
+    global _current_key_idx, _exhausted_keys
 
     if not GEMINI_API_KEYS:
         print("[ERROR] GEMINI_API_KEY 없음")
@@ -311,10 +315,7 @@ def call_gemini(prompt: str, max_tokens: int = 1500) -> str | None:
     }
 
     n = len(GEMINI_API_KEYS)
-    model_stages = [
-        (GEMINI_MODEL_PRIMARY,  _exhausted_keys_primary),
-        (GEMINI_MODEL_FALLBACK, _exhausted_keys_fallback),
-    ]
+    model_stages = [(m, _exhausted_keys[m]) for m in GEMINI_MODELS[start_tier:]]
 
     for model, exhausted in model_stages:
         available = [i for i in range(n) if i not in exhausted]

@@ -25,8 +25,13 @@ except Exception:  # import 실패해도 백필 자체는 계속돼야 한다
     def to_plain_style(t):
         return t
 
-GEMINI_MODEL_PRIMARY = "gemini-3.5-flash-lite"
-GEMINI_MODEL_FALLBACK = "gemini-3.1-flash-lite"
+GEMINI_MODELS = [
+    "gemini-3.7-flash",
+    "gemini-3.6-flash",
+    "gemini-3.5-flash",
+    "gemini-3.5-flash-lite",
+    "gemini-3.1-flash-lite",
+]
 
 GEMINI_API_KEYS = [k for k in [
     os.getenv("GEMINI_API_KEY"),
@@ -46,8 +51,7 @@ MAX_BODY_CHARS = 3000  # 본문이 너무 길면 토큰 절약을 위해 앞부�
 KST = timezone(timedelta(hours=9))
 
 _current_key_idx = 0
-_exhausted_primary = set()
-_exhausted_fallback = set()
+_exhausted_keys = {m: set() for m in GEMINI_MODELS}  # 모델별 RPD 소진 키
 
 
 def now_kst() -> datetime:
@@ -66,7 +70,7 @@ def _sb_url():
     return f"{SUPABASE_URL}/rest/v1/articles"
 
 
-def call_gemini(prompt: str, max_tokens: int = 500):
+def call_gemini(prompt: str, max_tokens: int = 500, start_tier: int = 3):
     """gemini_summarizer.py의 call_gemini()와 동일한 키 로테이션·폴백 구조."""
     global _current_key_idx
     if not GEMINI_API_KEYS:
@@ -77,10 +81,7 @@ def call_gemini(prompt: str, max_tokens: int = 500):
         "generationConfig": {"temperature": 0.4, "maxOutputTokens": max_tokens},
     }
     n = len(GEMINI_API_KEYS)
-    stages = [
-        (GEMINI_MODEL_PRIMARY, _exhausted_primary),
-        (GEMINI_MODEL_FALLBACK, _exhausted_fallback),
-    ]
+    stages = [(m, _exhausted_keys[m]) for m in GEMINI_MODELS[start_tier:]]
 
     for model, exhausted in stages:
         available = [i for i in range(n) if i not in exhausted]

@@ -54,8 +54,13 @@ def now_kst() -> datetime:
     """GitHub Actions 러너(UTC)와 무관하게 정확한 KST 현재시각 반환"""
     return datetime.now(timezone.utc).astimezone(KST)
 
-GEMINI_MODEL_PRIMARY  = "gemini-3.5-flash-lite"
-GEMINI_MODEL_FALLBACK = "gemini-3.1-flash-lite"
+GEMINI_MODELS = [
+    "gemini-3.7-flash",
+    "gemini-3.6-flash",
+    "gemini-3.5-flash",
+    "gemini-3.5-flash-lite",
+    "gemini-3.1-flash-lite",
+]
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 
@@ -71,8 +76,7 @@ TELEGRAM_TOKEN    = os.getenv("TELEGRAM_TOKEN", "")
 NEWSFINAL_CHANNEL = "@newsfinal"
 
 _current_key_idx = 0
-_exhausted_keys_primary  = set()  # RPD 소진 키 (3.5)
-_exhausted_keys_fallback = set()  # RPD 소진 키 (3.1)
+_exhausted_keys = {m: set() for m in GEMINI_MODELS}  # 모델별 RPD 소진 키
 MAX_ARTICLES = 20
 CALL_INTERVAL = 10
 
@@ -260,8 +264,8 @@ def build_prompt(article: dict) -> str:
                                content=content, summary=summary, rules=rules)
 
 
-def call_gemini(prompt: str, retry: int = 2, max_tokens: int = 500) -> str | None:
-    global _current_key_idx, _exhausted_keys_primary, _exhausted_keys_fallback
+def call_gemini(prompt: str, retry: int = 2, max_tokens: int = 500, start_tier: int = 2) -> str | None:
+    global _current_key_idx, _exhausted_keys
     if not GEMINI_API_KEYS:
         print("[ERROR] GEMINI_API_KEY 없음")
         return None
@@ -275,10 +279,7 @@ def call_gemini(prompt: str, retry: int = 2, max_tokens: int = 500) -> str | Non
     }
 
     n = len(GEMINI_API_KEYS)
-    model_stages = [
-        (GEMINI_MODEL_PRIMARY,  _exhausted_keys_primary),
-        (GEMINI_MODEL_FALLBACK, _exhausted_keys_fallback),
-    ]
+    model_stages = [(m, _exhausted_keys[m]) for m in GEMINI_MODELS[start_tier:]]
 
     for model, exhausted in model_stages:
         available = [i for i in range(n) if i not in exhausted]
@@ -884,7 +885,7 @@ def verify_single_topic(title: str, body: str) -> bool:
 
 답변 (YES 또는 NO만):"""
 
-    result = call_gemini(prompt, max_tokens=5)
+    result = call_gemini(prompt, max_tokens=5, start_tier=3)
     if not result:
         return True
     return "YES" in result.upper()
@@ -1078,7 +1079,7 @@ def run_trend_tracker():
             if TELEGRAM_TOKEN:
                 try:
                     preview = body[:300]
-                    url = f"https://newsfinal.co.kr/article.html?id={article_id}"
+                    url = f"https://newsfinal.co.kr/article?id={article_id}"
                     msg = f"📡 트렌드 추적\n\n*{title}*\n\n{preview}{'…' if len(body) > 300 else ''}\n\n[전체 기사 보기]({url})"
                     requests.post(
                         f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage",
@@ -1559,7 +1560,7 @@ JSON 배열로만 응답하세요 (마크다운 없이):
                 if TELEGRAM_TOKEN and art_id > 0:
                     try:
                         preview = body[:300]
-                        url = f"https://newsfinal.co.kr/article.html?id={art_id}"
+                        url = f"https://newsfinal.co.kr/article?id={art_id}"
                         msg = f"📈 실시간 트렌드\n\n*{title}*\n\n{preview}{'…' if len(body) > 300 else ''}\n\n[전체 기사 보기]({url})"
                         requests.post(
                             f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage",
@@ -1832,7 +1833,7 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
                 if TELEGRAM_TOKEN and art_id > 0:
                     try:
                         preview = body[:300]
-                        url = f"https://newsfinal.co.kr/article.html?id={art_id}"
+                        url = f"https://newsfinal.co.kr/article?id={art_id}"
                         src_str = "+".join(matched_signal["sources"]) if matched_signal else "외부"
                         msg = f"🌐 외부 트렌드 [{src_str}]\n\n*{title}*\n\n{preview}{'…' if len(body)>300 else ''}\n\n[전체 기사 보기]({url})"
                         requests.post(
@@ -1860,7 +1861,7 @@ def run():
     # API 연결 테스트
     global _current_key_idx
     print(f"[체크] Gemini API 연결 테스트... (키 {len(GEMINI_API_KEYS)}개)")
-    test = call_gemini("ping", retry=1)
+    test = call_gemini("ping", retry=1, start_tier=3)
     if test is None:
         print("[SKIP] Gemini API 응답 없음 — 건너뜀")
         return

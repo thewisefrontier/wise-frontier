@@ -25,8 +25,13 @@ def now_kst() -> datetime:
     return datetime.now(timezone.utc).astimezone(KST)
 
 # ── 설정 ────────────────────────────────────────────────────
-GEMINI_MODEL_PRIMARY  = "gemini-3.5-flash-lite"
-GEMINI_MODEL_FALLBACK = "gemini-3.1-flash-lite"
+GEMINI_MODELS = [
+    "gemini-3.7-flash",
+    "gemini-3.6-flash",
+    "gemini-3.5-flash",
+    "gemini-3.5-flash-lite",
+    "gemini-3.1-flash-lite",
+]
 SUPABASE_URL         = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 
@@ -39,8 +44,7 @@ GEMINI_API_KEYS = [k for k in [
 ] if k]
 
 _current_key_idx = 0
-_exhausted_keys_primary  = set()  # RPD 소진 키 (3.5)
-_exhausted_keys_fallback = set()  # RPD 소진 키 (3.1)
+_exhausted_keys = {m: set() for m in GEMINI_MODELS}  # 모델별 RPD 소진 키
 
 # 발표 시각 이후 얼마나 지나야 수집 시작하는지 (오류 방지 버퍼)
 ANNOUNCEMENT_BUFFER_MINUTES = 30
@@ -133,8 +137,8 @@ def get_pending_events() -> list:
 
 # ── Gemini 호출 (키 로테이션) ────────────────────────────────
 def call_gemini(prompt: str, max_tokens: int = 800,
-                use_search: bool = False) -> str | None:
-    global _current_key_idx, _exhausted_keys_primary, _exhausted_keys_fallback
+                use_search: bool = False, start_tier: int = 2) -> str | None:
+    global _current_key_idx, _exhausted_keys
 
     if not GEMINI_API_KEYS:
         print("[ERROR] GEMINI_API_KEY 없음")
@@ -151,10 +155,7 @@ def call_gemini(prompt: str, max_tokens: int = 800,
         payload["tools"] = [{"google_search": {}}]
 
     n = len(GEMINI_API_KEYS)
-    model_stages = [
-        (GEMINI_MODEL_PRIMARY,  _exhausted_keys_primary),
-        (GEMINI_MODEL_FALLBACK, _exhausted_keys_fallback),
-    ]
+    model_stages = [(m, _exhausted_keys[m]) for m in GEMINI_MODELS[start_tier:]]
 
     for model, exhausted in model_stages:
         available = [i for i in range(n) if i not in exhausted]

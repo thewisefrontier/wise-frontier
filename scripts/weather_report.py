@@ -55,8 +55,13 @@ KMA_HUB_KEY = KMA_BRIEFING_KEY or KMA_API_KEY    # 기상청 API허브 authKey
 KMA_API_KEY = KMA_HUB_KEY
 
 # ── Gemini 설정 ──────────────────────────────────────────────
-GEMINI_MODEL_PRIMARY  = "gemini-3.5-flash-lite"
-GEMINI_MODEL_FALLBACK = "gemini-3.1-flash-lite"
+GEMINI_MODELS = [
+    "gemini-3.7-flash",
+    "gemini-3.6-flash",
+    "gemini-3.5-flash",
+    "gemini-3.5-flash-lite",
+    "gemini-3.1-flash-lite",
+]
 GEMINI_API_KEYS = [k for k in [
     os.getenv("GEMINI_API_KEY"),
     os.getenv("GEMINI_API_KEY_2"),
@@ -66,13 +71,12 @@ GEMINI_API_KEYS = [k for k in [
 ] if k]
 
 _current_key_idx = 0
-_exhausted_keys_primary  = set()  # RPD 소진 키 (3.5)
-_exhausted_keys_fallback = set()  # RPD 소진 키 (3.1)
+_exhausted_keys = {m: set() for m in GEMINI_MODELS}  # 모델별 RPD 소진 키
 
 
 def call_gemini_weather(prompt: str, max_tokens: int = 2000) -> str | None:
     """날씨 기사 본문 생성용 Gemini 호출 (키 로테이션)."""
-    global _current_key_idx, _exhausted_keys_primary, _exhausted_keys_fallback
+    global _current_key_idx, _exhausted_keys
 
     if not GEMINI_API_KEYS:
         print("[ERROR] GEMINI_API_KEY 없음")
@@ -87,10 +91,7 @@ def call_gemini_weather(prompt: str, max_tokens: int = 2000) -> str | None:
     }
 
     n = len(GEMINI_API_KEYS)
-    model_stages = [
-        (GEMINI_MODEL_PRIMARY,  _exhausted_keys_primary),
-        (GEMINI_MODEL_FALLBACK, _exhausted_keys_fallback),
-    ]
+    model_stages = [(m, _exhausted_keys[m]) for m in GEMINI_MODELS]
 
     for model, exhausted in model_stages:
         available = [i for i in range(n) if i not in exhausted]
