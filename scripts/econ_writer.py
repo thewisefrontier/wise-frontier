@@ -202,6 +202,34 @@ def call_gemini(prompt: str, max_tokens: int = 800,
     return None
 
 
+def verify_no_fabricated_names(source_prompt: str, body: str) -> str:
+    """생성된 본문에 원문 자료에 없는 고유명사(작품명·인명·지명·기관명)가 새로 등장했는지 확인.
+    gemini_writer.py의 동명 함수와 동일 로직(실사고 2026-08-16, id=79327)."""
+    if not body:
+        return ""
+    check_prompt = f"""아래는 기사 작성에 쓰인 원본 자료와, 그걸 바탕으로 생성된 한국어 기사 본문입니다.
+기사 본문에 나오는 고유명사(영화·도서·게임 등 작품명, 인명, 지명, 기관명)가 원본 자료에
+실제로 근거하는지 확인하세요. 정상적인 한글 음차나 공식 번역명은 문제가 아닙니다 —
+원본 자료에 등장하는 대상을 다른 이름으로 완전히 잘못 지어낸 경우만 찾으세요.
+그런 이름이 있으면 "지어낸이름 → 원본표기" 형식으로 쉼표 구분해 나열하세요.
+없으면 "없음"이라고만 답하세요.
+
+[원본 자료]
+{source_prompt[:3000]}
+
+[생성된 기사 본문]
+{body[:2000]}
+
+답변:"""
+    result = call_gemini(check_prompt, max_tokens=150, use_search=False, start_tier=3)
+    if not result:
+        return ""
+    result = result.strip()
+    if not result or ("없음" in result and len(result) <= 12):
+        return ""
+    return result
+
+
 # ── 숫자 파싱 ────────────────────────────────────────────────
 def parse_rate(text: str | None) -> float | None:
     if not text:
@@ -484,6 +512,17 @@ def main():
                   "감정·의견 표현을 완전히 배제하고 사실 전달 중심으로만 다시 작성하세요."
             )
             article_text = call_gemini(retry_prompt, max_tokens=1500, use_search=False) or article_text
+            time.sleep(5)
+
+        fabricated = verify_no_fabricated_names(build_article_prompt(event, actual_str), article_text)
+        if fabricated:
+            print(f"    ⚠️ 원문에 없는 고유명사 감지({fabricated}) → 재생성")
+            retry_prompt2 = (
+                build_article_prompt(event, actual_str)
+                + f"\n\n[재작성 지시] 다음 이름을 원문에 없는 표현으로 잘못 지어냈습니다: {fabricated}. "
+                  "고유명사는 원본 자료에 나온 표기를 그대로 옮기고, 확신할 수 없으면 지어내지 말고 원문 표기를 그대로 쓰세요."
+            )
+            article_text = call_gemini(retry_prompt2, max_tokens=1500, use_search=False) or article_text
             time.sleep(5)
 
         art_title, art_body = parse_article_output(article_text)

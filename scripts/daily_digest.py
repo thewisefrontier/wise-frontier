@@ -205,23 +205,64 @@ def has_column_style(text: str) -> bool:
     return any(re.search(p, text) for p in BANNED_STYLE_PATTERNS)
 
 
+def verify_no_fabricated_names(source_prompt: str, body: str) -> str:
+    """생성된 본문에 원문 자료에 없는 고유명사(작품명·인명·지명·기관명)가 새로 등장했는지 확인.
+    gemini_writer.py의 동명 함수와 동일 로직(실사고 2026-08-16, id=79327)."""
+    if not body:
+        return ""
+    check_prompt = f"""아래는 기사 작성에 쓰인 원본 자료와, 그걸 바탕으로 생성된 한국어 기사 본문입니다.
+기사 본문에 나오는 고유명사(영화·도서·게임 등 작품명, 인명, 지명, 기관명)가 원본 자료에
+실제로 근거하는지 확인하세요. 정상적인 한글 음차나 공식 번역명은 문제가 아닙니다 —
+원본 자료에 등장하는 대상을 다른 이름으로 완전히 잘못 지어낸 경우만 찾으세요.
+그런 이름이 있으면 "지어낸이름 → 원본표기" 형식으로 쉼표 구분해 나열하세요.
+없으면 "없음"이라고만 답하세요.
+
+[원본 자료]
+{source_prompt[:3000]}
+
+[생성된 기사 본문]
+{body[:2000]}
+
+답변:"""
+    result = call_gemini(check_prompt, max_tokens=150, start_tier=3)
+    if not result:
+        return ""
+    result = result.strip()
+    if not result or ("없음" in result and len(result) <= 12):
+        return ""
+    return result
+
+
 def call_gemini_article(prompt, max_tokens=3000, style_retries=1):
     content = call_gemini(prompt, max_tokens=max_tokens)
     attempt = 0
-    while content and has_column_style(content) and attempt < style_retries:
+    fabricated = verify_no_fabricated_names(prompt, content) if content else ""
+    while content and (has_column_style(content) or fabricated) and attempt < style_retries:
         attempt += 1
-        print(f"  ⚠️ 논평/칼럼체 감지 → 재생성 시도 ({attempt}/{style_retries})")
+        reasons = []
+        if has_column_style(content):
+            reasons.append("논평/칼럼체")
+        if fabricated:
+            reasons.append(f"원문에 없는 고유명사({fabricated})")
+        print(f"  ⚠️ {', '.join(reasons)} 감지 → 재생성 시도 ({attempt}/{style_retries})")
         retry_prompt = (
             prompt
             + "\n\n[재작성 지시] 방금 작성한 결과에 논평/칼럼 문체(예: '~를 보여줍니다', "
               "'~을 도모하고 있습니다', '~라는 평가다', '~지켜볼 필요가 있습니다' 등)가 섞여 있었습니다. "
               "감정·의견이 섞인 표현을 모두 배제하고, 사실 전달 중심의 스트레이트 뉴스 문체로만 다시 작성하세요."
+            + (f"\n또한 다음 이름을 원문에 없는 표현으로 잘못 지어냈습니다: {fabricated}. "
+               "영화·도서 등 작품 제목이나 고유명사는 원본 자료에 나온 표기를 그대로 옮기고, "
+               "정확한 한국어 정식 명칭을 확신할 수 없으면 지어내지 말고 원문 표기를 그대로 쓰세요."
+               if fabricated else "")
         )
         retried = call_gemini(retry_prompt, max_tokens=max_tokens)
         if retried:
             content = retried
+            fabricated = verify_no_fabricated_names(prompt, content)
     if content and has_column_style(content):
         print("  ⚠️ 재생성 후에도 논평체 패턴이 남아있음 (그대로 진행)")
+    if content and fabricated:
+        print(f"  ⚠️ 재생성 후에도 원문에 없는 고유명사 남아있음: {fabricated} (그대로 발행 — 수동 확인 필요)")
     return content
 
 
