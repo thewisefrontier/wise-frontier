@@ -8,11 +8,10 @@ opinet_price_writer.py
   https://www.opinet.co.kr/api/avgAllPrice.do?out=json&certkey=[인증키]
 무료 등록: https://www.opinet.co.kr (오픈API 이용 신청)
 
-⚠️ 2026-08-18: 오피넷 JSON 응답의 필드명(TRADE_DT/PRODCD/PRODNM/PRICE/DIFF)은
-공식 문서로 확인했지만, 최상위 래퍼 키(예: RESULT.OIL 형태인지 등)는 문서로
-100% 확정하지 못했다. 그래서 PRODCD 키를 가진 dict 리스트를 재귀 탐색하는
-방식으로 방어적으로 파싱한다(_find_price_list). 실제 키로 첫 실행 시 응답
-구조가 예상과 다르면 원본을 로그에 남기도록 해뒀다.
+응답 구조(2026-08-18 공식 문서로 확정): JSON은 {"RESULT": {"OIL": [...]}}
+형태이며 각 항목은 TRADE_DT/PRODCD/PRODNM/PRICE/DIFF 필드를 가진다.
+_find_price_list는 이 구조를 포함해 PRODCD 키를 가진 dict 리스트를
+재귀 탐색하므로, 향후 API 쪽 래퍼 변경에도 방어적으로 동작한다.
 
 실행: python scripts/opinet_price_writer.py
 """
@@ -118,8 +117,8 @@ def _parse_trade_date(s: str) -> date | None:
 
 def _find_price_list(obj):
     """JSON 응답 구조에서 PRODCD 키를 가진 dict의 리스트를 재귀 탐색한다.
-    오피넷 JSON 응답의 최상위 래퍼 키를 문서로 100% 확정하지 못해(2026-08-18),
-    구조 변화에 방어적으로 대응하기 위함."""
+    공식 문서 확인 결과(2026-08-18) {"RESULT": {"OIL": [...]}} 형태지만,
+    향후 API 쪽 래퍼가 바뀌어도 방어적으로 동작하도록 재귀 탐색을 유지한다."""
     if isinstance(obj, list):
         if obj and isinstance(obj[0], dict) and "PRODCD" in obj[0]:
             return obj
