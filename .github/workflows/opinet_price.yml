@@ -1,20 +1,19 @@
-name: NewsFinal - Daily Oil Price
+name: NewsFinal - Daily Domestic Oil Price (Opinet)
 
 on:
   schedule:
-    - cron: '30 22 * * 1-5'   # 평일 UTC 22:30 = 뉴욕 17:30~18:30 (EDT/EST 자동 대응)
-    - cron: '0 0 * * 2-6'     # 평일 UTC 00:00 재시도 (API 지연 대비)
+    - cron: '0 23 * * *'   # UTC 23:00 = KST 08:00, 하루 1회
   workflow_dispatch:
 
 permissions:
   contents: write
 
 concurrency:
-  group: newsfinal-oil-price
+  group: newsfinal-opinet-price
   cancel-in-progress: false
 
 jobs:
-  oil_price:
+  opinet_price:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,8 +28,8 @@ jobs:
       - name: 패키지 설치
         run: pip install -r requirements.txt
 
-      - name: 유가 기사 생성
-        run: python scripts/oil_price_writer.py
+      - name: 국내 유가 기사 생성
+        run: python scripts/opinet_price_writer.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
@@ -39,8 +38,7 @@ jobs:
           GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
           GEMINI_API_KEY_4: ${{ secrets.GEMINI_API_KEY_4 }}
           GEMINI_API_KEY_5: ${{ secrets.GEMINI_API_KEY_5 }}
-          EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
-          ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
+          OPINET_API_KEY: ${{ secrets.OPINET_API_KEY }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
           IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
           UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
@@ -56,7 +54,7 @@ jobs:
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add -A
-          git diff --staged --quiet || git commit -m "Update oil price article"
+          git diff --staged --quiet || git commit -m "Update domestic oil price article"
           git pull origin main -X ours --no-rebase
           git push
         env:
