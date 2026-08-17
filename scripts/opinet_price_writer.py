@@ -511,8 +511,15 @@ def main():
 
     print("  → Gemini로 기사 생성 중...")
     prompt = build_article_prompt(prices)
-    article_text = call_gemini(prompt, max_tokens=1500)
+    article_text = call_gemini(prompt, max_tokens=2500)
     time.sleep(8)
+
+    if not article_text:
+        # 첫 시도가 응답 없음/잘림(MAX_TOKENS)으로 실패해도 바로 포기하지 않고
+        # 한 번 더 시도한다(실사고 2026-08-18: 재시도 없이 곧장 실패 처리됨).
+        print("  ⚠️ 첫 시도 실패 → 재시도")
+        article_text = call_gemini(prompt, max_tokens=2500)
+        time.sleep(5)
 
     if not article_text:
         print("  [ERROR] 기사 생성 실패")
@@ -522,7 +529,7 @@ def main():
         print("  ⚠️ 논평체 감지 → 재생성")
         article_text = call_gemini(
             prompt + "\n\n[재작성 지시] 논평/칼럼 문체가 섞였습니다. 사실 전달 중심으로만 다시 작성하세요.",
-            max_tokens=1500,
+            max_tokens=2500,
         ) or article_text
         time.sleep(5)
 
@@ -532,7 +539,7 @@ def main():
         article_text = call_gemini(
             prompt + f"\n\n[재작성 지시] 다음 이름을 원문에 없는 표현으로 잘못 지어냈습니다: {fabricated}. "
                      "고유명사는 원본 자료에 나온 표기를 그대로 옮기고, 확신할 수 없으면 지어내지 말고 원문 표기를 그대로 쓰세요.",
-            max_tokens=1500,
+            max_tokens=2500,
         ) or article_text
         time.sleep(5)
 
