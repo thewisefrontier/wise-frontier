@@ -98,7 +98,14 @@ def call_gemini(prompt: str, max_tokens: int = 500, start_tier: int = 3):
                 res = requests.post(url, json=payload, timeout=(10, 30))
                 if res.status_code == 200:
                     _current_key_idx = (idx + 1) % n
-                    return res.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
+                    _cand = res.json()["candidates"][0]
+                    # maxOutputTokens 초과로 잘린 응답을 정상 취급하면 문장이 중간에서
+                    # 끊긴 채 저장된다(gemini_writer.py 실사고 id=47879와 동일 계열).
+                    _finish = _cand.get("finishReason", "")
+                    if _finish and _finish != "STOP":
+                        print(f"  [WARN] {model} 응답 비정상 종료(finishReason={_finish}) — 폐기")
+                        return None
+                    return _cand["content"]["parts"][0]["text"].strip()
                 elif res.status_code == 429:
                     print(f"  [429] {model} 키 {idx+1} RPD 소진")
                     exhausted.add(idx)
