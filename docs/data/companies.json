@@ -64,6 +64,38 @@
     "updated_at": "2026-08-01 07:12"
   },
   {
+    "id": "ecobank_ghana",
+    "name": "Ecobank Ghana PLC",
+    "name_ko": "에코뱅크 가나",
+    "country": "가나",
+    "country_flag": "🇬🇭",
+    "exchange": "GSE",
+    "ticker": "EBG",
+    "sector": "은행",
+    "description": "1990년에 설립되어 가나에서 영업을 시작한 주요 상업 은행으로, 범아프리카 금융 그룹인 에코뱅크 트랜스인터내셔널의 자회사입니다. 광범위한 디지털 뱅킹 서비스와 지점 네트워크를 통해 개인 및 기업 고객에게 다양한 금융 솔루션을 제공합니다. 가나 은행 시장에서 상위권의 예금 점유율을 기록하고 있습니다.",
+    "founded_year": 1990,
+    "headquarters": "아크라, 가나",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-18 07:14"
+  },
+  {
+    "id": "gcb_bank",
+    "name": "GCB Bank PLC",
+    "name_ko": "GCB 은행",
+    "country": "가나",
+    "country_flag": "🇬🇭",
+    "exchange": "GSE",
+    "ticker": "GCB",
+    "sector": "은행",
+    "description": "1953년에 설립된 가나의 대형 상업 은행으로, 전국적인 지점망과 폭넓은 고객 기반을 보유하고 있습니다. 가나 은행 산업에서 가장 큰 예금 점유율을 차지하며 시장을 선도하고 있습니다. 개인 및 기업 금융 서비스를 제공합니다.",
+    "founded_year": 1953,
+    "headquarters": "아크라, 가나",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-18 07:14"
+  },
+  {
     "id": "gold_coast_refinery",
     "name": "Gold Coast Refinery",
     "name_ko": "골드 코스트 레이너리",
@@ -78,6 +110,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-10 06:13"
+  },
+  {
+    "id": "stanbic_bank_ghana",
+    "name": "Stanbic Bank Ghana Limited",
+    "name_ko": "스탠빅 은행 가나",
+    "country": "가나",
+    "country_flag": "🇬🇭",
+    "exchange": "",
+    "ticker": "",
+    "sector": "은행",
+    "description": "아프리카 최대 금융 그룹 중 하나인 스탠다드 뱅크 그룹의 자회사로 1999년에 설립되었습니다. 가나 내에서 기업 금융, 투자 은행업, 소매 금융 등 종합적인 금융 서비스를 제공합니다. 탄탄한 자본력과 디지털 역량을 바탕으로 주요 은행 중 하나로 자리 잡고 있습니다.",
+    "founded_year": 1999,
+    "headquarters": "아크라, 가나",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-18 07:14"
   },
   {
     "id": "zeepay_ghana",
@@ -512,6 +560,22 @@
     "updated_at": null
   },
   {
+    "id": "calvados_global_services",
+    "name": "Calvados Global Services",
+    "name_ko": "캘바도스 글로벌 서비스",
+    "country": "나이지리아",
+    "country_flag": "🇳🇬",
+    "exchange": "",
+    "ticker": "",
+    "sector": "투자",
+    "description": "캘바도스 글로벌 서비스는 나이지리아의 억만장자 투자자 페미 오테도라가 소유 및 운영하는 투자 법인입니다. 주요 기업의 지분 인수 및 자본 투자 활동을 주로 수행합니다. 이번 퍼스트 홀드코 주식 대량 매입의 주체로 참여하였습니다.",
+    "founded_year": null,
+    "headquarters": "라고스, 나이지리아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-18 07:15"
+  },
+  {
     "id": "dangote_cement",
     "name": "Dangote Cement",
     "name_ko": null,
@@ -558,6 +622,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-05 21:53"
+  },
+  {
+    "id": "first_holdco",
+    "name": "First HoldCo Plc",
+    "name_ko": "퍼스트 홀드코",
+    "country": "나이지리아",
+    "country_flag": "🇳🇬",
+    "exchange": "NGX",
+    "ticker": "FBNH",
+    "sector": "은행",
+    "description": "퍼스트 홀드코는 나이지리아의 대표적인 금융 지주회사로 산하에 주요 상업 은행 등을 거느리고 있습니다. 아프리카 서부 지역에서 광범위한 금융 서비스를 제공하며 시장 내 선도적인 지위를 차지하고 있습니다. 억만장자 페미 오테도라가 회장직을 맡아 지분을 확대하며 경영권을 공고히 하고 있습니다.",
+    "founded_year": 2010,
+    "headquarters": "라고스, 나이지리아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-18 07:15"
   },
   {
     "id": "gombe_radio_corporation",
@@ -1872,22 +1952,6 @@
     "updated_at": "2026-08-09 07:08"
   },
   {
-    "id": "stone_co",
-    "name": "StoneCo Ltd.",
-    "name_ko": "스톤",
-    "country": "브라질",
-    "country_flag": "🌍",
-    "exchange": "NASDAQ",
-    "ticker": "STNE",
-    "sector": "핀테크",
-    "description": "2012년에 설립된 브라질의 대표적인 핀테크 기업으로, 소상공인을 위한 결제 처리 및 금융 관리 소프트웨어를 제공합니다. 결제 단말기뿐만 아니라 가맹점 관리 시스템과 금융 서비스를 통합하여 중소기업의 디지털 전환을 지원합니다. 브라질 결제 시장에서 혁신적인 기술력과 서비스로 강력한 점유율을 확보하고 있습니다.",
-    "founded_year": 2012,
-    "headquarters": "상파울루, 브라질",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-22 23:37"
-  },
-  {
     "id": "stoneco",
     "name": "StoneCo Ltd.",
     "name_ko": "스톤코",
@@ -1902,6 +1966,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-29 20:49"
+  },
+  {
+    "id": "stone_co",
+    "name": "StoneCo Ltd.",
+    "name_ko": "스톤",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "NASDAQ",
+    "ticker": "STNE",
+    "sector": "핀테크",
+    "description": "2012년에 설립된 브라질의 대표적인 핀테크 기업으로, 소상공인을 위한 결제 처리 및 금융 관리 소프트웨어를 제공합니다. 결제 단말기뿐만 아니라 가맹점 관리 시스템과 금융 서비스를 통합하여 중소기업의 디지털 전환을 지원합니다. 브라질 결제 시장에서 혁신적인 기술력과 서비스로 강력한 점유율을 확보하고 있습니다.",
+    "founded_year": 2012,
+    "headquarters": "상파울루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-22 23:37"
   },
   {
     "id": "xp_inc",
@@ -3552,22 +3632,6 @@
     "updated_at": "2026-08-14 23:23"
   },
   {
-    "id": "singareni_collieries_company",
-    "name": "The Singareni Collieries Company Limited",
-    "name_ko": "싱가레니 콜리어리스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "",
-    "sector": "에너지",
-    "description": "싱가레니 콜리어리스는 1920년에 설립된 인도 텔랑가나주의 국영 석탄 채굴 기업입니다. 주로 인도 남부 지역의 전력 및 산업 수요를 충족하기 위해 석탄을 공급하며, 지역 경제에서 중요한 위치를 차지하고 있습니다. 토목 및 인프라 개발과 관련된 지역 사회 공헌 활동도 함께 수행하고 있습니다.",
-    "founded_year": 1920,
-    "headquarters": "코다구뎀, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-08 01:12"
-  },
-  {
     "id": "singareni_collieries",
     "name": "The Singareni Collieries Company Limited",
     "name_ko": "싱가레니 콜리어리스",
@@ -3582,6 +3646,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-30 17:03"
+  },
+  {
+    "id": "singareni_collieries_company",
+    "name": "The Singareni Collieries Company Limited",
+    "name_ko": "싱가레니 콜리어리스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "싱가레니 콜리어리스는 1920년에 설립된 인도 텔랑가나주의 국영 석탄 채굴 기업입니다. 주로 인도 남부 지역의 전력 및 산업 수요를 충족하기 위해 석탄을 공급하며, 지역 경제에서 중요한 위치를 차지하고 있습니다. 토목 및 인프라 개발과 관련된 지역 사회 공헌 활동도 함께 수행하고 있습니다.",
+    "founded_year": 1920,
+    "headquarters": "코다구뎀, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-08 01:12"
   },
   {
     "id": "tata_power",
@@ -4688,22 +4768,6 @@
     "updated_at": null
   },
   {
-    "id": "bank_of_the_philippines_islands",
-    "name": "Bank of the Philippine Islands",
-    "name_ko": "필리핀 제도은행",
-    "country": "필리핀",
-    "country_flag": "🇵🇭",
-    "exchange": "PSE",
-    "ticker": "BPI",
-    "sector": "은행",
-    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 종합 금융 서비스를 제공하며 필리핀 금융 시장에서 높은 신뢰와 견고한 입지를 다지고 있다. 본 기사에서는 공공 인프라 지출 감소 추정을 발표한 주요 금융기관으로 언급되었다.",
-    "founded_year": 1851,
-    "headquarters": "마카티, 필리핀",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-07 13:12"
-  },
-  {
     "id": "bank_of_the_philippine_islands",
     "name": "Bank of the Philippine Islands",
     "name_ko": "필리핀 제도은행",
@@ -4718,6 +4782,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-30 02:38"
+  },
+  {
+    "id": "bank_of_the_philippines_islands",
+    "name": "Bank of the Philippine Islands",
+    "name_ko": "필리핀 제도은행",
+    "country": "필리핀",
+    "country_flag": "🇵🇭",
+    "exchange": "PSE",
+    "ticker": "BPI",
+    "sector": "은행",
+    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 종합 금융 서비스를 제공하며 필리핀 금융 시장에서 높은 신뢰와 견고한 입지를 다지고 있다. 본 기사에서는 공공 인프라 지출 감소 추정을 발표한 주요 금융기관으로 언급되었다.",
+    "founded_year": 1851,
+    "headquarters": "마카티, 필리핀",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-07 13:12"
   },
   {
     "id": "basel_tiles",
