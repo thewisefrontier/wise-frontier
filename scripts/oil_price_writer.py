@@ -237,26 +237,38 @@ def fetch_stooq(symbol: str) -> tuple[float | None, float | None, date | None]:
         return None, None, None
 
 
-def fetch_eia(series_id: str) -> tuple[float | None, float | None, date | None]:
-    """EIA API에서 최근 2일 종가를 가져와 (오늘, 전일, 최신 데이터 날짜) 반환."""
+def fetch_eia(series_id: str, retries: int = 2) -> tuple[float | None, float | None, date | None]:
+    """EIA API에서 최근 2일 종가를 가져와 (오늘, 전일, 최신 데이터 날짜) 반환.
+    실사고(2026-08-17~18): read timeout=15초가 너무 빡빡해서 WTI·Brent 둘 다
+    타임아웃으로 실패 → Stooq 폴백은 봇 검증에 막혀있어 결국 기사가 이틀 연속
+    스킵됐다. EIA는 키 문제가 아니라 단순 응답 지연이었으므로, 타임아웃을
+    늘리고 일시적 지연에 대비해 짧은 재시도를 추가한다."""
     if not EIA_API_KEY:
         return None, None, None
     url = (
         f"https://api.eia.gov/v2/seriesid/{series_id}"
         f"?api_key={EIA_API_KEY}&data[0]=value&sort[0][column]=period&sort[0][direction]=desc&length=5"
     )
-    try:
-        res = requests.get(url, timeout=15)
-        if res.status_code != 200:
+    for attempt in range(retries + 1):
+        try:
+            res = requests.get(url, timeout=(10, 30))
+            if res.status_code != 200:
+                return None, None, None
+            data = res.json().get("response", {}).get("data", [])
+            if len(data) < 2:
+                return None, None, None
+            data_date = _parse_data_date(str(data[0].get("period", "")))
+            return float(data[0]["value"]), float(data[1]["value"]), data_date
+        except requests.exceptions.Timeout:
+            if attempt < retries:
+                print(f"  [WARN] EIA 타임아웃 ({series_id}) → 재시도 ({attempt+1}/{retries})")
+                continue
+            print(f"  [WARN] EIA 조회 실패 ({series_id}): 재시도 후에도 타임아웃")
             return None, None, None
-        data = res.json().get("response", {}).get("data", [])
-        if len(data) < 2:
+        except Exception as e:
+            print(f"  [WARN] EIA 조회 실패 ({series_id}): {e}")
             return None, None, None
-        data_date = _parse_data_date(str(data[0].get("period", "")))
-        return float(data[0]["value"]), float(data[1]["value"]), data_date
-    except Exception as e:
-        print(f"  [WARN] EIA 조회 실패 ({series_id}): {e}")
-        return None, None, None
+    return None, None, None
 
 
 def get_oil_prices() -> dict | None:
