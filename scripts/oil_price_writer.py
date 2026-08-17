@@ -33,6 +33,7 @@ GEMINI_MODELS = [
 SUPABASE_URL         = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 EIA_API_KEY          = os.getenv("EIA_API_KEY", "")  # https://www.eia.gov/opendata/ 무료 등록
+ALPHA_VANTAGE_API_KEY = os.getenv("ALPHA_VANTAGE_API_KEY", "")  # https://www.alphavantage.co/support/#api-key 무료 등록
 
 GEMINI_API_KEYS = [k for k in [
     os.getenv("GEMINI_API_KEY"),
@@ -61,6 +62,12 @@ STOOQ_SYMBOLS = {
 EIA_SERIES = {
     "WTI":   "PET.RWTC.D",    # WTI Crude Oil Spot Price (Dollars per Barrel)
     "Brent": "PET.RBRTE.D",   # Brent Europe Crude Oil Spot Price
+}
+
+# Alpha Vantage 원자재 함수명 (일별 종가 제공, 봇 검증 없음)
+ALPHA_VANTAGE_FUNCTIONS = {
+    "WTI":   "WTI",
+    "Brent": "BRENT",
 }
 
 
@@ -216,6 +223,40 @@ def _accept_prices(src_name: str, wti: tuple, brent: tuple, target: date) -> dic
 # 실효가 낮다고 판단해 재현 코드는 되돌리고 원래 방식(단순 GET, 실패 시
 # None 반환)으로 둔다 — 폴백이 계속 막혀 있어도 1차 소스인 EIA가 정상화되면
 # 문제없다.
+def fetch_alphavantage(function: str, retries: int = 1) -> tuple[float | None, float | None, date | None]:
+    """Alpha Vantage 원자재 API에서 최근 2일 종가를 가져와 (오늘, 전일, 최신 데이터 날짜) 반환.
+    실사고(2026-08-17~18): EIA 데이터가 4영업일 지연 + Stooq가 봇 검증으로 막혀
+    유가 기사가 며칠 연속 스킵됐다. 봇 검증이 없는 독립 소스를 EIA·Stooq 사이
+    3차 폴백으로 추가."""
+    if not ALPHA_VANTAGE_API_KEY:
+        return None, None, None
+    url = (
+        f"https://www.alphavantage.co/query"
+        f"?function={function}&interval=daily&apikey={ALPHA_VANTAGE_API_KEY}"
+    )
+    for attempt in range(retries + 1):
+        try:
+            res = requests.get(url, timeout=(10, 30))
+            if res.status_code != 200:
+                return None, None, None
+            data = res.json().get("data", [])
+            if len(data) < 2:
+                return None, None, None
+            latest, prev = data[0], data[1]
+            data_date = _parse_data_date(str(latest.get("date", "")))
+            return float(latest["value"]), float(prev["value"]), data_date
+        except requests.exceptions.Timeout:
+            if attempt < retries:
+                print(f"  [WARN] Alpha Vantage 타임아웃 ({function}) → 재시도 ({attempt+1}/{retries})")
+                continue
+            print(f"  [WARN] Alpha Vantage 조회 실패 ({function}): 재시도 후에도 타임아웃")
+            return None, None, None
+        except Exception as e:
+            print(f"  [WARN] Alpha Vantage 조회 실패 ({function}): {e}")
+            return None, None, None
+    return None, None, None
+
+
 def fetch_stooq(symbol: str) -> tuple[float | None, float | None, date | None]:
     """Stooq CSV에서 최근 2일 종가를 가져와 (오늘, 전일, 최신 데이터 날짜) 반환."""
     url = f"https://stooq.com/q/d/l/?s={symbol}&i=d"
@@ -288,6 +329,17 @@ def get_oil_prices() -> dict | None:
         result = _accept_prices("EIA", wti, brent, target)
         if result:
             print(f"  ✓ EIA({result['date']}): WTI ${wti[0]:.2f} (전일 ${wti[1]:.2f}), "
+                  f"Brent ${brent[0]:.2f} (전일 ${brent[1]:.2f})")
+            return result
+
+    if ALPHA_VANTAGE_API_KEY:
+        print("  → Alpha Vantage 조회 시도...")
+        wti = fetch_alphavantage(ALPHA_VANTAGE_FUNCTIONS["WTI"])
+        time.sleep(1)
+        brent = fetch_alphavantage(ALPHA_VANTAGE_FUNCTIONS["Brent"])
+        result = _accept_prices("Alpha Vantage", wti, brent, target)
+        if result:
+            print(f"  ✓ Alpha Vantage({result['date']}): WTI ${wti[0]:.2f} (전일 ${wti[1]:.2f}), "
                   f"Brent ${brent[0]:.2f} (전일 ${brent[1]:.2f})")
             return result
 
