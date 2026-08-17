@@ -1151,12 +1151,32 @@ function cleanBody(text) {
 
   async function loadArticles() {
     try {
-      const res = await fetch('data/articles.json');
+      // 다이제스트 카드는 정적 스냅샷(data/articles.json) 대신 항상 라이브 조회한다.
+      // DB를 고쳐도 다음 export_articles.py 재생성 전까지 옛 내용이 남는 문제
+      // (실사고 2026-08-17, id=80581)를 막기 위함. 목록/날씨/브리핑은 항목이 많아
+      // 매번 라이브 조회하면 비용이 커서 기존대로 스냅샷을 쓴다.
+      const SUPABASE_URL = 'https://fotdngseksqaghvtcvqh.supabase.co';
+      const SUPABASE_ANON_KEY = 'sb_publishable_rT3kSEAAdM0DJlDW5fEWww_M37h6dDW';
+      const [res, digestRes] = await Promise.all([
+        fetch('data/articles.json'),
+        fetch(
+          `${SUPABASE_URL}/rest/v1/articles?select=*&source=eq.NewsFinal&is_published=eq.true&subcategory=like.digest_*&order=created_at.desc&limit=1`,
+          { headers: { apikey: SUPABASE_ANON_KEY } }
+        ).catch(() => null),
+      ]);
       if (!res.ok) throw new Error();
       const raw = await res.json();
       const weatherArticles = raw.filter(a => a.category === '날씨');
       allArticles = raw.filter(a => !(a.subcategory || '').startsWith('digest_') && a.category !== '날씨');
-      renderDigest(raw);
+
+      let liveDigest = null;
+      if (digestRes && digestRes.ok) {
+        try {
+          const rows = await digestRes.json();
+          liveDigest = rows[0] || null;
+        } catch (e) { /* 무시 — 스냅샷의 다이제스트로 폴백 */ }
+      }
+      renderDigest(liveDigest ? [liveDigest, ...raw] : raw);
       renderArticles(allArticles);
       renderBriefing(allArticles);
       renderWeatherWidget(weatherArticles);
