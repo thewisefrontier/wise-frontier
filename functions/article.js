@@ -99,32 +99,37 @@ function buildWrapperHtml(a) {
   const title = a.title_ko || a.title_en || '';
   const body = cleanBody(a.summary_ko || a.summary_en || '');
 
-  // "- " 시작 줄을 <ul><li>로 묶기 (renderArticle과 동일).
-  // 문단(빈 줄) 단위로 먼저 블록을 나눈 뒤 블록별로 불릿 처리한다.
+  // "- " 시작 줄을 <ul><li>로, 나머지는 <p>로 묶는다 (renderArticle과 동일).
+  // 문단(빈 줄) 단위로 먼저 블록을 나눈 뒤 블록별로 처리한다.
   // ⚠️ 실사고(2026-08-17, id=80581 다이제스트): 예전엔 \n\n을 플레이스홀더로
   // 먼저 치환하고 나서 split('\n')을 했는데, 그러면 문단 경계가 진짜 개행이
   // 아니게 되어 split이 그 지점을 못 끊었다. 그 결과 불릿("- ") 줄 바로 뒤에
   // 빈 줄이 오면 다음 섹션 전체가 그 불릿 <li> 안으로 통째로 흡수됐다.
   // 블록을 먼저 나누면 이런 교차 오염이 구조적으로 불가능하다.
+  // ⚠️ 또한 이전엔 전체를 바깥 <p>로 한 번 더 감쌌는데, <p> 안에 <ul>이 들어가는
+  // 건 HTML 파서가 허용하지 않아 브라우저가 <p>를 강제로 끊고 빈 <p></p>를
+  // 끼워넣었다(id=80581에서 재확인). 블록마다 <p>·<ul>을 스스로 완결된
+  // 형태로 내보내고, 바깥에서는 더 이상 <p>로 감싸지 않는다.
   const htmlBlocks = body.split(/\n\n+/).map((block) => {
-    const bulletified = block.split('\n').reduce((acc, line) => {
+    const acc = block.split('\n').reduce((acc, line) => {
       const trimmed = line.trim();
       if (trimmed.startsWith('- ')) {
-        if (!acc.inList) { acc.html += '<ul>'; acc.inList = true; }
-        acc.html += `<li>${trimmed.slice(2)}</li>`;
+        if (!acc.inList) { acc.parts.push({ type: 'ul', items: [] }); acc.inList = true; }
+        acc.parts[acc.parts.length - 1].items.push(trimmed.slice(2));
       } else {
-        if (acc.inList) { acc.html += '</ul>'; acc.inList = false; }
-        acc.html += line + '<br>';
+        acc.inList = false;
+        const last = acc.parts[acc.parts.length - 1];
+        if (last && last.type === 'p') { last.lines.push(line); }
+        else { acc.parts.push({ type: 'p', lines: [line] }); }
       }
       return acc;
-    }, { html: '', inList: false });
-    let html = bulletified.html + (bulletified.inList ? '</ul>' : '');
-    return html
-      .replace(/<br>(<ul>)/g, '$1')
-      .replace(/(<\/ul>)<br>/g, '$1')
-      .replace(/<br>$/, '');
+    }, { parts: [], inList: false });
+    return acc.parts.map((p) => p.type === 'ul'
+      ? `<ul>${p.items.map((i) => `<li>${i}</li>`).join('')}</ul>`
+      : `<p>${p.lines.join('<br>')}</p>`
+    ).join('');
   });
-  const processedBody = htmlBlocks.join('</p><p>');
+  const processedBody = htmlBlocks.join('');
 
   const bodyHtml = processedBody
     .replace(/!\[([^\]]*)\]\((https?:\/\/[^)\s]+)\)/g, '<img src="$2" alt="$1" loading="lazy" style="max-width:100%;border-radius:6px;margin:8px 0;display:block;">')
@@ -228,7 +233,7 @@ ${updateLogHtml}
       ${heroHtml}
 
       <div class="article-body">
-        <p>${bodyHtml}</p>
+        ${bodyHtml}
       </div>
 ${investHtml}
 
