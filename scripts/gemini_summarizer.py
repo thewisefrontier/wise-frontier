@@ -9,6 +9,7 @@ Gemini Flash로 고품질 한국어 요약을 재생성합니다.
 
 import os
 import re
+import json
 import math
 import time
 import requests
@@ -1091,7 +1092,8 @@ def run_trend_tracker():
                     requests.post(
                         f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage",
                         data={"chat_id": NEWSFINAL_CHANNEL, "text": msg,
-                              "parse_mode": "Markdown", "disable_web_page_preview": False},
+                              "parse_mode": "Markdown",
+                              "link_preview_options": json.dumps({"prefer_small_media": True})},
                         timeout=15
                     )
                 except Exception:
@@ -1572,7 +1574,8 @@ JSON 배열로만 응답하세요 (마크다운 없이):
                         requests.post(
                             f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage",
                             data={"chat_id": NEWSFINAL_CHANNEL, "text": msg,
-                                  "parse_mode": "Markdown", "disable_web_page_preview": False},
+                                  "parse_mode": "Markdown",
+                                  "link_preview_options": json.dumps({"prefer_small_media": True})},
                             timeout=15
                         )
                     except Exception:
@@ -1846,7 +1849,8 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
                         requests.post(
                             f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage",
                             data={"chat_id": NEWSFINAL_CHANNEL, "text": msg,
-                                  "parse_mode": "Markdown"},
+                                  "parse_mode": "Markdown",
+                                  "link_preview_options": json.dumps({"prefer_small_media": True})},
                             timeout=15
                         )
                     except Exception:

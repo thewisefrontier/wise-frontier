@@ -92,7 +92,9 @@ def send_to_newsfinal_channel(article_id, title, body, is_update=False):
                 "chat_id": NEWSFINAL_CHANNEL,
                 "text": msg,
                 "parse_mode": "Markdown",
-                "disable_web_page_preview": False,
+                # 링크 미리보기 이미지가 과도하게 크게 뜨던 문제(2026-08-18 사용자 신고)
+                # → prefer_small_media로 축소. 복합 타입이라 JSON 문자열로 직렬화 필요.
+                "link_preview_options": json.dumps({"prefer_small_media": True}),
             },
             timeout=15
         )
