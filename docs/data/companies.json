@@ -2528,6 +2528,38 @@
     "updated_at": null
   },
   {
+    "id": "emaar_misr",
+    "name": "Emaar Misr for Development",
+    "name_ko": "에마르 미스르",
+    "country": "이집트",
+    "country_flag": "🇪🇬",
+    "exchange": "EGX",
+    "ticker": "EMFD",
+    "sector": "부동산",
+    "description": "2005년에 설립된 아랍에미리트 에마르 프로퍼티스의 자회사로, 이집트 내에서 대규모 주거 및 상업용 복합단지를 개발합니다. 프리미엄 주거지와 해안 리조트 프로젝트를 통해 이집트 부동산 시장에서 높은 브랜드 인지도와 상위권 실적을 유지하고 있습니다.",
+    "founded_year": 2005,
+    "headquarters": "카이로, 이집트",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-19 05:13"
+  },
+  {
+    "id": "palm_hills_developments",
+    "name": "Palm Hills Developments",
+    "name_ko": "팜 힐스 디벨롭먼츠",
+    "country": "이집트",
+    "country_flag": "🇪🇬",
+    "exchange": "EGX",
+    "ticker": "PHDC",
+    "sector": "부동산",
+    "description": "1997년에 설립된 이집트의 주요 부동산 개발 업체로, 주거 및 상업용 부동산과 골프 리조트 개발을 전문으로 합니다. 이집트 주요 도시 인근에 대규모 주거 커뮤니티를 성공적으로 공급하며 시장 내 강력한 입지를 다지고 있습니다.",
+    "founded_year": 1997,
+    "headquarters": "카이로, 이집트",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-19 05:13"
+  },
+  {
     "id": "talaat_moustafa_group",
     "name": "Talaat Moustafa Group (TMGH)",
     "name_ko": null,
@@ -3166,6 +3198,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-22 01:58"
+  },
+  {
+    "id": "meta_platforms",
+    "name": "Meta Platforms, Inc.",
+    "name_ko": "메타 플랫폼스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NASDAQ",
+    "ticker": "META",
+    "sector": "기술",
+    "description": "메타 플랫폼스는 페이스북, 인스타그램, 왓츠앱 등을 운영하는 세계적인 소셜 미디어 및 기술 기업입니다. 2004년에 설립되어 전 세계 수십억 명의 사용자를 연결하는 소셜 네트워크 서비스를 제공하고 있습니다. 인도 시장에서도 페이스북과 인스타그램을 통해 막대한 이용자 기반을 확보하고 있습니다.",
+    "founded_year": 2004,
+    "headquarters": "멘로파크, 미국",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-19 05:15"
   },
   {
     "id": "milky_mist_dairy_food",
@@ -4768,22 +4816,6 @@
     "updated_at": null
   },
   {
-    "id": "bank_of_the_philippine_islands",
-    "name": "Bank of the Philippine Islands",
-    "name_ko": "필리핀 제도은행",
-    "country": "필리핀",
-    "country_flag": "🇵🇭",
-    "exchange": "PSE",
-    "ticker": "BPI",
-    "sector": "은행",
-    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 개인 및 기업 금융, 자산 관리, 보험 등 종합적인 금융 서비스를 제공한다. 필리핀 금융 시장에서 높은 신뢰도와 탄탄한 시장 지위를 유지하고 있다.",
-    "founded_year": 1851,
-    "headquarters": "마닐라, 필리핀",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-30 02:38"
-  },
-  {
     "id": "bank_of_the_philippines_islands",
     "name": "Bank of the Philippine Islands",
     "name_ko": "필리핀 제도은행",
@@ -4798,6 +4830,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-07 13:12"
+  },
+  {
+    "id": "bank_of_the_philippine_islands",
+    "name": "Bank of the Philippine Islands",
+    "name_ko": "필리핀 제도은행",
+    "country": "필리핀",
+    "country_flag": "🇵🇭",
+    "exchange": "PSE",
+    "ticker": "BPI",
+    "sector": "은행",
+    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 개인 및 기업 금융, 자산 관리, 보험 등 종합적인 금융 서비스를 제공한다. 필리핀 금융 시장에서 높은 신뢰도와 탄탄한 시장 지위를 유지하고 있다.",
+    "founded_year": 1851,
+    "headquarters": "마닐라, 필리핀",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-30 02:38"
   },
   {
     "id": "basel_tiles",
