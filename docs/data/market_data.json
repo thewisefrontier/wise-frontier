@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-18 18:17",
+  "updated_at": "2026-08-18 19:01",
   "indices": [
     {
       "name": "S&P 500",
@@ -39,22 +39,22 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 114644.29,
-      "change_pct": -0.02,
+      "price": 114462.96,
+      "change_pct": -0.18,
       "up": false
     },
     {
       "name": "EGX30 (이집트)",
       "symbol": "^CASE30",
-      "price": 55487.0,
-      "change_pct": 0.13,
-      "up": true
+      "price": 55393.2,
+      "change_pct": -0.04,
+      "up": false
     },
     {
       "name": "SET (태국)",
       "symbol": "^SET.BK",
-      "price": 1621.68,
-      "change_pct": -0.29,
+      "price": 1621.62,
+      "change_pct": -0.3,
       "up": false
     },
     {
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.24,
-      "change_pct": 0.29,
+      "price": 16.23,
+      "change_pct": 0.21,
       "up": true
     }
   ],
@@ -137,22 +137,22 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 114644.29,
-        "change_pct": -0.02,
+        "price": 114462.96,
+        "change_pct": -0.18,
         "up": false
       },
       {
         "name": "EGX30 (이집트)",
         "symbol": "^CASE30",
-        "price": 55487.0,
-        "change_pct": 0.13,
-        "up": true
+        "price": 55393.2,
+        "change_pct": -0.04,
+        "up": false
       },
       {
         "name": "SET (태국)",
         "symbol": "^SET.BK",
-        "price": 1621.68,
-        "change_pct": -0.29,
+        "price": 1621.62,
+        "change_pct": -0.3,
         "up": false
       },
       {
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.24,
-        "change_pct": 0.29,
+        "price": 16.23,
+        "change_pct": 0.21,
         "up": true
       }
     ]
@@ -206,7 +206,7 @@
       "name": "Asia Commercial Joint Stock Bank",
       "symbol": "ACB.VN",
       "price": 21650.0,
-      "change_pct": -2.26,
+      "change_pct": -2.48,
       "up": false
     },
     "BPI": {
