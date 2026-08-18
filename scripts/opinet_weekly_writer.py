@@ -94,6 +94,30 @@ def already_published(week_end: date) -> bool:
     return False
 
 
+# 첫 발행을 미룰 최소 이력 기간. 사용자 결정(2026-08-18): 이력이 하루이틀만
+# 쌓인 채로 첫 기사가 나가면 "전주 대비 데이터 없음"만 반복하는 빈약한
+# 기사가 되므로, 3주치가 쌓일 때까지는 조용히 스킵하고 이후 자동으로
+# 시작한다(수동으로 다시 켜는 절차 불필요).
+MIN_HISTORY_DAYS = 21
+
+
+def has_enough_history(week_end: date) -> bool:
+    """opinet_price_history의 최초 저장일이 MIN_HISTORY_DAYS 이상 지났는지 확인."""
+    res = requests.get(
+        f"{SUPABASE_URL}/rest/v1/opinet_price_history",
+        headers=_sb_headers(),
+        params={"select": "price_date", "order": "price_date.asc", "limit": "1"},
+        timeout=10,
+    )
+    if res.status_code not in (200, 206):
+        return False
+    rows = res.json()
+    if not rows:
+        return False
+    earliest = datetime.strptime(rows[0]["price_date"], "%Y-%m-%d").date()
+    return (week_end - earliest).days >= MIN_HISTORY_DAYS
+
+
 # ── 주간 이력 집계 ────────────────────────────────────────────
 def _fetch_history(prodcd: str, since: date, until: date) -> list:
     """opinet_price_history에서 [since, until] 구간(포함) 데이터 조회, 날짜 오름차순."""
@@ -567,6 +591,10 @@ def main():
 
     week_end = now_kst().date()
     print(f"  → 집계 종료일: {week_end.isoformat()}")
+
+    if not has_enough_history(week_end):
+        print(f"  → 이력이 아직 {MIN_HISTORY_DAYS}일 미만 → 첫 발행 보류 (자동으로 쌓이면 재실행 시 시작됨)")
+        return
 
     if already_published(week_end):
         print(f"  → {week_end} 기준 주간 유가 기사 이미 존재 → 스킵")
