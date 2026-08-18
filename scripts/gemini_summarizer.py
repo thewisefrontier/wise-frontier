@@ -1093,7 +1093,7 @@ def run_trend_tracker():
                         f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage",
                         data={"chat_id": NEWSFINAL_CHANNEL, "text": msg,
                               "parse_mode": "Markdown",
-                              "link_preview_options": json.dumps({"prefer_small_media": True})},
+                              "link_preview_options": json.dumps({"prefer_small_media": True, "url": url})},
                         timeout=15
                     )
                 except Exception:
@@ -1575,7 +1575,7 @@ JSON 배열로만 응답하세요 (마크다운 없이):
                             f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage",
                             data={"chat_id": NEWSFINAL_CHANNEL, "text": msg,
                                   "parse_mode": "Markdown",
-                                  "link_preview_options": json.dumps({"prefer_small_media": True})},
+                                  "link_preview_options": json.dumps({"prefer_small_media": True, "url": url})},
                             timeout=15
                         )
                     except Exception:
@@ -1850,7 +1850,7 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
                             f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage",
                             data={"chat_id": NEWSFINAL_CHANNEL, "text": msg,
                                   "parse_mode": "Markdown",
-                                  "link_preview_options": json.dumps({"prefer_small_media": True})},
+                                  "link_preview_options": json.dumps({"prefer_small_media": True, "url": url})},
                             timeout=15
                         )
                     except Exception:

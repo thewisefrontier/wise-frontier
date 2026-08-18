@@ -93,8 +93,10 @@ def send_to_newsfinal_channel(article_id, title, body, is_update=False):
                 "text": msg,
                 "parse_mode": "Markdown",
                 # 링크 미리보기 이미지가 과도하게 크게 뜨던 문제(2026-08-18 사용자 신고)
-                # → prefer_small_media로 축소. 복합 타입이라 JSON 문자열로 직렬화 필요.
-                "link_preview_options": json.dumps({"prefer_small_media": True}),
+                # → prefer_small_media로 축소. ⚠️ Bot API 문서: "prefer_small_media는
+                # url이 명시적으로 지정 안 되면 무시된다" — 1차 수정 때 이걸 놓쳐서
+                # 효과가 없었다(2026-08-18 재신고로 발견). url을 반드시 같이 넣을 것.
+                "link_preview_options": json.dumps({"prefer_small_media": True, "url": url}),
             },
             timeout=15
         )
