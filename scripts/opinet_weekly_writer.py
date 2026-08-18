@@ -1,19 +1,19 @@
 """
-opinet_price_writer.py
------------------------
-오피넷(한국석유공사) Open API로 전국 주유소 평균가격(휘발유·경유·LPG 등)을
-조회해 국내 기름값 뉴스 기사를 자동 생성합니다.
+opinet_weekly_writer.py
+------------------------
+매주 토요일, 지난 한 주(월~금 또는 최근 7일)의 국내 평균 유가 동향을
+정리한 "주간 유가 동향" 기사를 자동 생성합니다. `opinet_price_writer.py`가
+매일 쌓아온 `opinet_price_history`를 바탕으로 이번 주 평균을 지난주 평균과
+비교하고, 오피넷 시도별 평균가(`avgSidoPrice`)로 최고·최저 지역을 짚고,
+직전에 발행된 국제유가 기사를 참고해 향후 반영 가능성을 언급합니다.
 
-데이터 소스: 오피넷 avgAllPrice API
-  https://www.opinet.co.kr/api/avgAllPrice.do?out=json&certkey=[인증키]
-무료 등록: https://www.opinet.co.kr (오픈API 이용 신청)
+⚠️ 2026-08-18 신설 — 이력 축적이 오늘부터 시작이라 "N주 연속" 같은 표현은
+실제로 계산 가능한 주 수만큼만 쓴다(`count_consecutive_weeks()`). 데이터가
+1~2주뿐이면 "이번 주 대비 지난주"까지만 정직하게 서술하고, 여러 주 연속
+표현은 억지로 만들지 않는다.
 
-응답 구조(2026-08-18 공식 문서로 확정): JSON은 {"RESULT": {"OIL": [...]}}
-형태이며 각 항목은 TRADE_DT/PRODCD/PRODNM/PRICE/DIFF 필드를 가진다.
-_find_price_list는 이 구조를 포함해 PRODCD 키를 가진 dict 리스트를
-재귀 탐색하므로, 향후 API 쪽 래퍼 변경에도 방어적으로 동작한다.
-
-실행: python scripts/opinet_price_writer.py
+실행: python scripts/opinet_weekly_writer.py
+권장: 주 1회(토요일) 실행
 """
 
 import os
@@ -36,7 +36,7 @@ GEMINI_MODELS = [
 ]
 SUPABASE_URL         = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
-OPINET_API_KEY       = os.getenv("OPINET_API_KEY", "")  # https://www.opinet.co.kr 오픈API 무료 등록
+OPINET_API_KEY       = os.getenv("OPINET_API_KEY", "")
 
 GEMINI_API_KEYS = [k for k in [
     os.getenv("GEMINI_API_KEY"),
@@ -47,20 +47,12 @@ GEMINI_API_KEYS = [k for k in [
 ] if k]
 
 _current_key_idx = 0
-_exhausted_keys = {m: set() for m in GEMINI_MODELS}  # 모델별 RPD 소진 키
+_exhausted_keys = {m: set() for m in GEMINI_MODELS}
 
 KST = timezone(timedelta(hours=9))
 
-# 오피넷 유종 코드 (공식 문서 확인, 2026-08-18)
-PRODUCT_NAMES = {
-    "B027": "휘발유",
-    "B034": "고급휘발유",
-    "D047": "경유",
-    "K015": "LPG(부탄)",
-    "C004": "실내등유",
-}
-# 기사에서 다룰 핵심 유종(일반인 관심도 기준)
-HEADLINE_PRODUCTS = ["B027", "D047", "K015"]
+PRODUCT_NAMES = {"B027": "휘발유", "D047": "경유"}
+HEADLINE_PRODUCTS = ["B027", "D047"]
 
 
 # ── 헬퍼 ────────────────────────────────────────────────────
@@ -90,9 +82,8 @@ def _sb_articles_url():
     return f"{SUPABASE_URL}/rest/v1/articles"
 
 
-def already_published(price_date: date) -> bool:
-    """해당 날짜 국내 유가 기사가 이미 존재하는지 확인 (url 필드 기준)."""
-    internal_url = f"internal://opinet_price_{price_date.isoformat()}"
+def already_published(week_end: date) -> bool:
+    internal_url = f"internal://opinet_weekly_{week_end.isoformat()}"
     res = requests.get(
         f"{_sb_articles_url()}?url=eq.{internal_url}&is_published=eq.true&select=id",
         headers=_sb_headers(),
@@ -103,47 +94,122 @@ def already_published(price_date: date) -> bool:
     return False
 
 
-def save_price_history(prices: dict) -> None:
-    """일별 원시 평균가를 opinet_price_history에 기록.
-    2026-08-18 신설 — 기사 본문(자유 텍스트)만 남기면 주간·N주 연속 비교를
-    할 방법이 없어서, opinet_weekly_writer.py가 쓸 구조화 이력을 따로 쌓는다.
-    (article_id, price_date) UNIQUE라 같은 날 여러 번 돌아도 중복 안 쌓임."""
-    price_date = prices["date"].isoformat()
-    rows = [
-        {"price_date": price_date, "prodcd": code, "price": item["price"], "diff": item["diff"]}
-        for code, item in prices["prices"].items()
-    ]
+# 첫 발행을 미룰 최소 이력 기간. 사용자 결정(2026-08-18): 이력이 하루이틀만
+# 쌓인 채로 첫 기사가 나가면 "전주 대비 데이터 없음"만 반복하는 빈약한
+# 기사가 되므로, 3주치가 쌓일 때까지는 조용히 스킵하고 이후 자동으로
+# 시작한다(수동으로 다시 켜는 절차 불필요).
+MIN_HISTORY_DAYS = 21
+
+
+def has_enough_history(week_end: date) -> bool:
+    """opinet_price_history의 최초 저장일이 MIN_HISTORY_DAYS 이상 지났는지 확인."""
+    res = requests.get(
+        f"{SUPABASE_URL}/rest/v1/opinet_price_history",
+        headers=_sb_headers(),
+        params={"select": "price_date", "order": "price_date.asc", "limit": "1"},
+        timeout=10,
+    )
+    if res.status_code not in (200, 206):
+        return False
+    rows = res.json()
     if not rows:
-        return
-    try:
-        res = requests.post(
-            f"{SUPABASE_URL}/rest/v1/opinet_price_history",
-            headers={**_sb_headers(), "Prefer": "resolution=merge-duplicates,return=minimal"},
-            json=rows,
-            timeout=15,
-        )
-        if res.status_code not in (200, 201, 204):
-            print(f"  ⚠️ 가격 이력 저장 실패 {res.status_code}: {res.text[:200]}")
-    except Exception as e:
-        print(f"  ⚠️ 가격 이력 저장 예외: {e}")
+        return False
+    earliest = datetime.strptime(rows[0]["price_date"], "%Y-%m-%d").date()
+    return (week_end - earliest).days >= MIN_HISTORY_DAYS
 
 
-# ── 오피넷 데이터 수집 ────────────────────────────────────────
-def _parse_trade_date(s: str) -> date | None:
-    """'20260818' 또는 'YYYY-MM-DD' 형태 문자열을 date로 변환."""
-    s = re.sub(r"[^0-9]", "", str(s or ""))
-    if len(s) != 8:
+# ── 주간 이력 집계 ────────────────────────────────────────────
+def _fetch_history(prodcd: str, since: date, until: date) -> list:
+    """opinet_price_history에서 [since, until] 구간(포함) 데이터 조회, 날짜 오름차순."""
+    res = requests.get(
+        f"{SUPABASE_URL}/rest/v1/opinet_price_history",
+        headers=_sb_headers(),
+        params={
+            "select": "price_date,price",
+            "prodcd": f"eq.{prodcd}",
+            "price_date": [f"gte.{since.isoformat()}", f"lte.{until.isoformat()}"],
+            "order": "price_date.asc",
+        },
+        timeout=15,
+    )
+    if res.status_code in (200, 206):
+        return res.json()
+    return []
+
+
+def _week_avg(rows: list) -> float | None:
+    if not rows:
         return None
-    try:
-        return datetime.strptime(s, "%Y%m%d").date()
-    except ValueError:
-        return None
+    return sum(float(r["price"]) for r in rows) / len(rows)
 
 
+def count_consecutive_weeks(prodcd: str, week_end: date, direction: str) -> int:
+    """direction("상승"/"하락")과 같은 방향으로 몇 주 연속인지 센다.
+    이력이 부족하면(데이터 축적 초기) 계산 가능한 만큼만 반환 — 지어내지 않는다."""
+    if direction not in ("상승", "하락"):
+        return 1
+    weeks = 1
+    cursor_end = week_end
+    prev_avg = None
+    for _ in range(52):  # 최대 1년치까지만 탐색
+        cur_start = cursor_end - timedelta(days=6)
+        cur_rows = _fetch_history(prodcd, cur_start, cursor_end)
+        cur_avg = _week_avg(cur_rows)
+        if cur_avg is None:
+            break
+        prior_end = cur_start - timedelta(days=1)
+        prior_start = prior_end - timedelta(days=6)
+        prior_rows = _fetch_history(prodcd, prior_start, prior_end)
+        prior_avg = _week_avg(prior_rows)
+        if prior_avg is None:
+            break
+        this_dir = "상승" if cur_avg > prior_avg else ("하락" if cur_avg < prior_avg else "보합")
+        if this_dir != direction:
+            break
+        weeks += 1
+        cursor_end = prior_end
+    return weeks
+
+
+def build_weekly_summary(week_end: date) -> dict | None:
+    """이번 주(week_end 포함 최근 7일) vs 지난주 평균을 유종별로 계산."""
+    this_start = week_end - timedelta(days=6)
+    prev_end = this_start - timedelta(days=1)
+    prev_start = prev_end - timedelta(days=6)
+
+    result = {}
+    for code in HEADLINE_PRODUCTS:
+        this_rows = _fetch_history(code, this_start, week_end)
+        this_avg = _week_avg(this_rows)
+        if this_avg is None:
+            continue
+        prev_rows = _fetch_history(code, prev_start, prev_end)
+        prev_avg = _week_avg(prev_rows)
+
+        diff = None
+        direction = None
+        weeks = 1
+        if prev_avg is not None:
+            diff = this_avg - prev_avg
+            direction = "상승" if diff > 0 else ("하락" if diff < 0 else "보합")
+            if direction in ("상승", "하락"):
+                weeks = count_consecutive_weeks(code, week_end, direction)
+
+        result[code] = {
+            "name": PRODUCT_NAMES.get(code, code),
+            "this_avg": this_avg,
+            "prev_avg": prev_avg,
+            "diff": diff,
+            "direction": direction,
+            "consecutive_weeks": weeks,
+            "days_in_this_week": len(this_rows),
+        }
+    return result or None
+
+
+# ── 오피넷 시도별 평균가 (지역 최고·최저) ─────────────────────
 def _find_price_list(obj):
-    """JSON 응답 구조에서 PRODCD 키를 가진 dict의 리스트를 재귀 탐색한다.
-    공식 문서 확인 결과(2026-08-18) {"RESULT": {"OIL": [...]}} 형태지만,
-    향후 API 쪽 래퍼가 바뀌어도 방어적으로 동작하도록 재귀 탐색을 유지한다."""
+    """avgAllPrice와 동일한 방어적 파서 — PRODCD 키를 가진 리스트를 재귀 탐색."""
     if isinstance(obj, list):
         if obj and isinstance(obj[0], dict) and "PRODCD" in obj[0]:
             return obj
@@ -159,64 +225,68 @@ def _find_price_list(obj):
     return None
 
 
-def fetch_opinet_prices() -> dict | None:
-    """전국 평균 유가(유종별 리터당 원)를 조회. 실패 시 None."""
+def fetch_regional_extremes(prodcd: str = "B027") -> dict | None:
+    """시도별 평균가(avgSidoPrice)로 최고·최저 지역을 찾는다. 실패 시 None(본문에서 생략)."""
     if not OPINET_API_KEY:
-        print("  [SKIP] OPINET_API_KEY 없음")
         return None
-
-    url = f"https://www.opinet.co.kr/api/avgAllPrice.do?out=json&certkey={OPINET_API_KEY}"
+    url = f"https://www.opinet.co.kr/api/avgSidoPrice.do?out=json&prodcd={prodcd}&certkey={OPINET_API_KEY}"
     try:
         res = requests.get(url, timeout=(10, 30))
         if res.status_code != 200:
-            print(f"  [ERROR] 오피넷 API {res.status_code}: {res.text[:200]}")
             return None
         data = res.json()
-    except requests.exceptions.Timeout:
-        print("  [ERROR] 오피넷 API 타임아웃")
-        return None
     except Exception as e:
-        print(f"  [ERROR] 오피넷 API 호출 실패: {e}")
+        print(f"  ⚠️ 시도별 평균가 조회 실패: {e}")
         return None
 
-    price_list = _find_price_list(data)
-    if not price_list:
-        print(f"  [ERROR] 오피넷 응답에서 가격 목록을 찾지 못함. 원본(앞부분): {str(data)[:500]}")
+    rows = _find_price_list(data)
+    if not rows:
         return None
 
-    prices = {}
-    trade_dt = None
-    for item in price_list:
-        code = item.get("PRODCD")
-        if not code:
-            continue
-        name = PRODUCT_NAMES.get(code, item.get("PRODNM") or code)
+    parsed = []
+    for r in rows:
         try:
-            price = float(item.get("PRICE"))
-            diff = float(item.get("DIFF", 0) or 0)
+            parsed.append({"name": r.get("SIDONM", ""), "price": float(r.get("PRICE"))})
         except (TypeError, ValueError):
             continue
-        prices[code] = {"name": name, "price": price, "diff": diff}
-        if not trade_dt:
-            trade_dt = _parse_trade_date(item.get("TRADE_DT"))
-
-    if not prices or not trade_dt:
-        print(f"  [ERROR] 오피넷 가격 데이터 파싱 실패. 원본(앞부분): {str(data)[:500]}")
+    if not parsed:
         return None
 
-    return {"date": trade_dt, "prices": prices}
+    parsed.sort(key=lambda x: x["price"])
+    return {"lowest": parsed[0], "highest": parsed[-1]}
+
+
+# ── 최근 국제유가 기사 참고 ────────────────────────────────────
+def get_recent_international_context() -> str:
+    """가장 최근 발행된 [국제유가] 기사 제목+리드를 짧게 가져와 프롬프트 참고자료로 쓴다.
+    없어도 기사 생성 자체는 계속 진행(본문에서 그 부분만 생략)."""
+    try:
+        res = requests.get(
+            _sb_articles_url(),
+            headers=_sb_headers(),
+            params={
+                "select": "title_ko,summary_ko,created_at",
+                "source": "eq.NewsFinal",
+                "subcategory": "eq.국제유가",
+                "is_published": "eq.true",
+                "order": "created_at.desc",
+                "limit": "1",
+            },
+            timeout=10,
+        )
+        if res.status_code in (200, 206):
+            rows = res.json()
+            if rows:
+                a = rows[0]
+                lead = (a.get("summary_ko") or "")[:300]
+                return f"{a.get('title_ko','')} ({a.get('created_at','')[:10]})\n{lead}"
+    except Exception:
+        pass
+    return ""
 
 
 # ── Gemini 호출 (키 로테이션) ─────────────────────────────────
-# 실사고(2026-08-18): start_tier=2(gemini-3.5-flash)에서 재시도까지 포함해
-# 2회 연속 MAX_TOKENS로 실패했는데, 실제 필요한 본문은 646자에 불과했다
-# (max_tokens=8000으로 재현 시 정상 생성 확인). Gemini 3.x는 "thinking" 토큰이
-# maxOutputTokens 예산을 함께 소모하는 구조라, 비-lite 모델이 답변 생성 전에
-# 내부 추론으로 예산을 다 써버리면 눈에 보이는 본문 없이 잘릴 수 있다(공식
-# 문서로 정확한 thinkingConfig 필드까지는 확정 못함). 이 스크립트처럼 짧고
-# 단순한 구조화 기사엔 thinking이 불필요하므로, RPD 500으로 여유도 있는
-# lite 티어(start_tier=3)로 시작하도록 변경 — 사용자 제안.
-def call_gemini(prompt: str, max_tokens: int = 1500, start_tier: int = 3) -> str | None:
+def call_gemini(prompt: str, max_tokens: int = 4000, start_tier: int = 2) -> str | None:
     global _current_key_idx, _exhausted_keys
     if not GEMINI_API_KEYS:
         print("[ERROR] GEMINI_API_KEY 없음")
@@ -276,7 +346,6 @@ def call_gemini(prompt: str, max_tokens: int = 1500, start_tier: int = 3) -> str
 
 
 def wikipedia_confirms(name: str, threshold: int = 70) -> bool:
-    """이름과 충분히 비슷한 위키 문서 제목이 하나라도 있으면 True (결정론적 조회)."""
     name = (name or "").strip()
     if not name:
         return False
@@ -299,7 +368,6 @@ def wikipedia_confirms(name: str, threshold: int = 70) -> bool:
 
 
 def extract_candidate_names(body: str) -> list:
-    """판단이 아니라 단순 추출 — LLM 위험도가 낮은 작업이라 위키 조회 대상을 뽑는 데만 쓴다."""
     if not body:
         return []
     prompt = f"""아래 기사 본문에서 실제 존재 여부를 확인해볼 만한 구체적 고유명사를 추출하세요.
@@ -321,12 +389,10 @@ def extract_candidate_names(body: str) -> list:
 
 
 def verify_no_fabricated_names(source_prompt: str, body: str) -> str:
-    """생성된 본문에 원문 자료에 없는 고유명사가 새로 등장했는지 확인.
-    oil_price_writer.py의 동명 함수와 동일 로직(실사고 2026-08-16, id=79327)."""
     if not body:
         return ""
     check_prompt = f"""아래는 기사 작성에 쓰인 원본 자료와, 그걸 바탕으로 생성된 한국어 기사 본문입니다.
-기사 본문에 나오는 고유명사(인명, 기관명)가 원본 자료에 실제로 근거하는지 확인하세요.
+기사 본문에 나오는 고유명사(인명, 기관명, 지역명)가 원본 자료에 실제로 근거하는지 확인하세요.
 원본 자료에 등장하는 대상을 다른 이름으로 완전히 잘못 지어낸 경우만 찾으세요.
 그런 이름이 있으면 "지어낸이름 → 원본표기" 형식으로 쉼표 구분해 나열하세요.
 없으면 "없음"이라고만 답하세요.
@@ -354,74 +420,86 @@ def verify_no_fabricated_names(source_prompt: str, body: str) -> str:
 
 
 # ── 기사 프롬프트 ────────────────────────────────────────────
-def build_article_prompt(prices: dict) -> str:
-    pdate = prices["date"]
-    p = prices["prices"]
+def build_article_prompt(week_end: date, summary: dict, regional: dict | None, intl_context: str) -> str:
+    this_start = week_end - timedelta(days=6)
 
     lines = []
     for code in HEADLINE_PRODUCTS:
-        if code not in p:
+        if code not in summary:
             continue
-        item = p[code]
-        direction = "상승" if item["diff"] > 0 else ("하락" if item["diff"] < 0 else "보합")
-        lines.append(
-            f"- {item['name']}: 리터당 {item['price']:,.2f}원 "
-            f"(전일比 {'+' if item['diff']>0 else ''}{item['diff']:,.2f}원, {direction})"
-        )
+        s = summary[code]
+        if s["prev_avg"] is None:
+            lines.append(f"- {s['name']}: 이번 주 평균 리터당 {s['this_avg']:,.2f}원 (지난주 비교 데이터 아직 없음 — 이력 축적 초기)")
+        else:
+            weeks_note = f"{s['consecutive_weeks']}주 연속 {s['direction']}" if s["consecutive_weeks"] >= 2 else f"전주 대비 {s['direction']}"
+            lines.append(
+                f"- {s['name']}: 이번 주({this_start.month}/{this_start.day}~{week_end.month}/{week_end.day}) 평균 리터당 {s['this_avg']:,.2f}원, "
+                f"지난주 평균 {s['prev_avg']:,.2f}원 대비 {'+' if s['diff']>0 else ''}{s['diff']:,.2f}원 ({weeks_note})"
+            )
     price_lines = "\n".join(lines)
 
-    gasoline_price = int(round(p.get("B027", {}).get("price", 0)))
-    gasoline_dir = "상승" if p.get("B027", {}).get("diff", 0) > 0 else (
-        "하락" if p.get("B027", {}).get("diff", 0) < 0 else "보합"
-    )
+    regional_line = ""
+    if regional:
+        regional_line = (
+            f"\n[지역별 휘발유 평균가]\n"
+            f"- 최고가 지역: {regional['highest']['name']} 리터당 {regional['highest']['price']:,.2f}원\n"
+            f"- 최저가 지역: {regional['lowest']['name']} 리터당 {regional['lowest']['price']:,.2f}원\n"
+            f"- 지역 간 격차: 리터당 {regional['highest']['price'] - regional['lowest']['price']:,.2f}원"
+        )
+
+    intl_block = f"\n[참고 — 최근 발행된 국제유가 기사]\n{intl_context}" if intl_context else ""
+
+    gasoline = summary.get("B027", {})
+    gasoline_price = int(round(gasoline.get("this_avg", 0)))
 
     return f"""당신은 국내 경제·생활물가 전문 기자입니다.
-아래 오피넷(한국석유공사) 전국 평균 유가 데이터를 바탕으로 뉴스 기사를 작성하세요.
+아래 오피넷(한국석유공사) 데이터를 바탕으로 "주간 국내 유가 동향" 기사를 작성하세요.
 
-[유가 데이터] (출처: 오피넷/한국석유공사)
-- 기준일: {pdate.month}월 {pdate.day}일
+[이번 주 평균 유가] (출처: 오피넷/한국석유공사)
 {price_lines}
+{regional_line}
+{intl_block}
 
 [출력 형식] — 반드시 이 형식 그대로:
 TITLE: <제목>
 BODY: <본문>
 
 [제목]
-- 반드시 "[국내유가] "로 시작. 대괄호 포함 그대로 출력.
-- "[국내유가] 휘발유 리터당 {gasoline_price}원…<핵심 동인>" 형태, 대괄호 포함 50자 이내
-- 예: "[국내유가] 휘발유 리터당 1,650원…나흘째 {gasoline_dir}"
+- 반드시 "[주간유가] "로 시작. 대괄호 포함 그대로 출력.
+- "[주간유가] 휘발유 리터당 {gasoline_price}원…<핵심 동인>" 형태, 대괄호 포함 55자 이내
 
 [본문]
 1. 뉴스 스타일. 모든 문장 "-다" 종결. 감정·논평 표현 금지.
    금지어: '주목됩니다', '기대됩니다', '보여줍니다', '시사합니다'
 2. 구조:
-   ① 리드: "국내 주유소 휘발유 평균 판매가격이 {pdate.month}월 {pdate.day}일 기준 리터당 {gasoline_price}원을 기록했다."
-   ② 경유·LPG 등 다른 유종 가격·전일 대비 수치
-   ③ 변동 배경: 국제유가 흐름, 정유사 공급가, 유류세, 환율 등 (사실 기반으로만, 데이터에 없는 구체적 수치를 지어내지 말 것)
-   ④ 소비자·자영업자(운수업 등) 체감 영향
-3. 날짜는 "{pdate.month}월 {pdate.day}일" 형식만. "오늘", "현재", 절대연도 금지.
-4. 출처: "오피넷(한국석유공사)에 따르면" 반드시 포함.
-5. 분량: 500자 이상.
+   ① 리드: 이번 주 휘발유·경유 평균가와 전주 대비 방향
+   ② 유종별 상세 수치 (위 데이터에 있는 것만 — 지어내지 말 것)
+   ③ 지역별 최고·최저가 비교 (데이터 있을 때만)
+   ④ 국제유가 참고자료가 있으면, 국내 반영까지 통상 2~3주 걸린다는 점과 함께 향후 전망 언급 (참고자료 없으면 이 문단 생략)
+3. **"지난주 비교 데이터 아직 없음"이라고 표시된 유종은 절대 "N주 연속" 같은 표현을 쓰지 말고, 이번 주 수치만 사실대로 서술하세요.** 데이터에 없는 "몇 주 연속" 숫자를 지어내면 안 됩니다.
+4. 날짜는 "이번 주", "{this_start.month}월 {this_start.day}일~{week_end.day}일" 형식만. "오늘", "현재", 절대연도 금지.
+5. 출처: "오피넷(한국석유공사)에 따르면" 반드시 포함.
+6. 분량: 500자 이상.
 """
 
 
 # ── 파싱 ─────────────────────────────────────────────────────
-TITLE_PREFIX = "[국내유가]"
+TITLE_PREFIX = "[주간유가]"
 
 
 def enforce_title_prefix(title: str) -> str:
     t = (title or "").strip()
     if not t:
         return t
-    m = re.match(r"^\s*\[\s*국내\s*유가\s*\]\s*(.*)$", t)
+    m = re.match(r"^\s*\[\s*주간\s*유가\s*\]\s*(.*)$", t)
     if m:
         t = m.group(1).strip()
     else:
-        m2 = re.match(r"^국내유가(?:가|는)?\s*[,·]?\s+(.+)$", t)
+        m2 = re.match(r"^주간유가(?:는)?\s*[,·]?\s+(.+)$", t)
         if m2 and m2.group(1)[:1] not in ("와", "과", "및"):
             t = m2.group(1).strip()
         else:
-            t = re.sub(r"^국내유가\s*[,·]\s*", "", t).strip()
+            t = re.sub(r"^주간유가\s*[,·]\s*", "", t).strip()
     return f"{TITLE_PREFIX} {t}" if t else TITLE_PREFIX
 
 
@@ -442,57 +520,39 @@ def has_column_style(text: str) -> bool:
 
 
 # ── 대표 이미지 ──────────────────────────────────────────────
-_OIL_IMAGE_KEYWORDS = [
-    "gas station",
-    "fuel pump",
-    "gasoline pump",
-    "petrol station korea",
-    "fuel nozzle",
-    "car refueling",
-]
+_IMAGE_KEYWORDS = ["gas station", "fuel pump", "gasoline price", "car refueling"]
 
 
-def fetch_oil_image(price_date: date) -> str:
+def fetch_weekly_image(week_end: date) -> str:
     if not PIXABAY_API_KEY:
         return ""
-    seed = price_date.toordinal()
-    query = _OIL_IMAGE_KEYWORDS[seed % len(_OIL_IMAGE_KEYWORDS)]
+    seed = week_end.toordinal()
+    query = _IMAGE_KEYWORDS[seed % len(_IMAGE_KEYWORDS)]
     try:
         res = requests.get(
             "https://pixabay.com/api/",
-            params={
-                "key": PIXABAY_API_KEY,
-                "q": query,
-                "image_type": "photo",
-                "safesearch": "true",
-                "per_page": 10,
-            },
+            params={"key": PIXABAY_API_KEY, "q": query, "image_type": "photo", "safesearch": "true", "per_page": 10},
             timeout=15,
         )
         if res.status_code != 200:
-            print(f"  ⚠️ Pixabay {res.status_code}: {res.text[:100]}")
             return ""
         hits = res.json().get("hits", [])
         if not hits:
-            print(f"  ⚠️ Pixabay 결과 없음: {query}")
             return ""
         hit = hits[seed % len(hits)]
         raw_url = hit.get("largeImageURL", "")
         if not raw_url:
             return ""
-        url = store_image(raw_url, key_hint=f"opinet_{price_date.isoformat()}")
-        print(f"  🖼️ 이미지: {query} → {url[:70]}")
-        return url or ""
+        return store_image(raw_url, key_hint=f"opinet_weekly_{week_end.isoformat()}") or ""
     except Exception as e:
         print(f"  ⚠️ Pixabay 실패: {e}")
     return ""
 
 
 # ── 기사 삽입 ────────────────────────────────────────────────
-def insert_article(title_ko: str, summary_ko: str, prices: dict, image_url: str = "") -> int:
+def insert_article(title_ko: str, summary_ko: str, week_end: date, image_url: str = "") -> int:
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
-    price_date = prices["date"].isoformat()
-    internal_url = f"internal://opinet_price_{price_date}"
+    internal_url = f"internal://opinet_weekly_{week_end.isoformat()}"
 
     payload = {
         "title_en": title_ko,
@@ -502,7 +562,7 @@ def insert_article(title_ko: str, summary_ko: str, prices: dict, image_url: str 
         "url": internal_url,
         "source": "NewsFinal",
         "category": "경제",
-        "subcategory": "국내유가",
+        "subcategory": "국내유가_주간",
         "region": "global",
         "country": "한국",
         "country_flag": "🇰🇷",
@@ -511,7 +571,7 @@ def insert_article(title_ko: str, summary_ko: str, prices: dict, image_url: str 
         "score": 1,
         "created_at": now_str,
         "first_published_at": now_str,
-        "update_log": [{"timestamp": now_str, "note": "국내 유가 자동 기사"}],
+        "update_log": [{"timestamp": now_str, "note": "주간 국내 유가 동향 자동 기사"}],
         "sent_telegram": 0,
         "is_published": True,
     }
@@ -527,32 +587,35 @@ def insert_article(title_ko: str, summary_ko: str, prices: dict, image_url: str 
 
 # ── 메인 ─────────────────────────────────────────────────────
 def main():
-    print(f"\n[opinet_price_writer] 시작: {now_kst().strftime('%Y-%m-%d %H:%M')} KST")
+    print(f"\n[opinet_weekly_writer] 시작: {now_kst().strftime('%Y-%m-%d %H:%M')} KST")
 
-    prices = fetch_opinet_prices()
-    if not prices:
-        print("  [ERROR] 오피넷 유가 데이터 수집 실패 → 종료")
+    week_end = now_kst().date()
+    print(f"  → 집계 종료일: {week_end.isoformat()}")
+
+    if not has_enough_history(week_end):
+        print(f"  → 이력이 아직 {MIN_HISTORY_DAYS}일 미만 → 첫 발행 보류 (자동으로 쌓이면 재실행 시 시작됨)")
         return
 
-    price_date = prices["date"]
-    print(f"  → 데이터 기준일: {price_date.isoformat()}")
-
-    save_price_history(prices)
-
-    if already_published(price_date):
-        print(f"  → {price_date} 국내 유가 기사 이미 존재 → 스킵")
+    if already_published(week_end):
+        print(f"  → {week_end} 기준 주간 유가 기사 이미 존재 → 스킵")
         return
+
+    summary = build_weekly_summary(week_end)
+    if not summary:
+        print("  [ERROR] 이번 주 이력 데이터 없음 → 종료 (opinet_price_writer.py가 최근 며칠 안 돈 것으로 보임)")
+        return
+
+    regional = fetch_regional_extremes()
+    intl_context = get_recent_international_context()
 
     print("  → Gemini로 기사 생성 중...")
-    prompt = build_article_prompt(prices)
-    article_text = call_gemini(prompt, max_tokens=2500)
+    prompt = build_article_prompt(week_end, summary, regional, intl_context)
+    article_text = call_gemini(prompt, max_tokens=4000)
     time.sleep(8)
 
     if not article_text:
-        # 첫 시도가 응답 없음/잘림(MAX_TOKENS)으로 실패해도 바로 포기하지 않고
-        # 한 번 더 시도한다(실사고 2026-08-18: 재시도 없이 곧장 실패 처리됨).
         print("  ⚠️ 첫 시도 실패 → 재시도")
-        article_text = call_gemini(prompt, max_tokens=2500)
+        article_text = call_gemini(prompt, max_tokens=4000)
         time.sleep(5)
 
     if not article_text:
@@ -563,7 +626,7 @@ def main():
         print("  ⚠️ 논평체 감지 → 재생성")
         article_text = call_gemini(
             prompt + "\n\n[재작성 지시] 논평/칼럼 문체가 섞였습니다. 사실 전달 중심으로만 다시 작성하세요.",
-            max_tokens=2500,
+            max_tokens=4000,
         ) or article_text
         time.sleep(5)
 
@@ -573,7 +636,7 @@ def main():
         article_text = call_gemini(
             prompt + f"\n\n[재작성 지시] 다음 이름을 원문에 없는 표현으로 잘못 지어냈습니다: {fabricated}. "
                      "고유명사는 원본 자료에 나온 표기를 그대로 옮기고, 확신할 수 없으면 지어내지 말고 원문 표기를 그대로 쓰세요.",
-            max_tokens=2500,
+            max_tokens=4000,
         ) or article_text
         time.sleep(5)
 
@@ -591,15 +654,15 @@ def main():
     print(f"  → 제목: {art_title}")
     print(f"  → 본문 {len(art_body)}자")
 
-    image_url = fetch_oil_image(price_date)
+    image_url = fetch_weekly_image(week_end)
 
-    art_id = insert_article(art_title, art_body, prices, image_url)
+    art_id = insert_article(art_title, art_body, week_end, image_url)
     if art_id > 0:
         print(f"  ✓ 기사 삽입 완료 (articles.id={art_id})")
     else:
         print("  [ERROR] 기사 삽입 실패")
 
-    print(f"[opinet_price_writer] 완료: {now_kst().strftime('%Y-%m-%d %H:%M')} KST")
+    print(f"[opinet_weekly_writer] 완료: {now_kst().strftime('%Y-%m-%d %H:%M')} KST")
 
 
 if __name__ == "__main__":
