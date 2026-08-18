@@ -1,25 +1,25 @@
 {
-  "updated_at": "2026-08-18 23:56",
+  "updated_at": "2026-08-19 00:51",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7697.77,
-      "change_pct": -1.13,
+      "price": 7702.82,
+      "change_pct": -1.07,
       "up": false
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 26283.16,
-      "change_pct": -1.67,
+      "price": 26329.33,
+      "change_pct": -1.5,
       "up": false
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 53403.21,
-      "change_pct": -0.61,
+      "price": 53360.45,
+      "change_pct": -0.69,
       "up": false
     },
     {
@@ -39,8 +39,8 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 113738.62,
-      "change_pct": -0.81,
+      "price": 113323.45,
+      "change_pct": -1.18,
       "up": false
     },
     {
@@ -89,7 +89,7 @@
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
       "price": 16.25,
-      "change_pct": 0.37,
+      "change_pct": 0.33,
       "up": true
     }
   ],
@@ -98,22 +98,22 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7697.77,
-        "change_pct": -1.13,
+        "price": 7702.82,
+        "change_pct": -1.07,
         "up": false
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 26283.16,
-        "change_pct": -1.67,
+        "price": 26329.33,
+        "change_pct": -1.5,
         "up": false
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 53403.21,
-        "change_pct": -0.61,
+        "price": 53360.45,
+        "change_pct": -0.69,
         "up": false
       }
     ],
@@ -137,8 +137,8 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 113738.62,
-        "change_pct": -0.81,
+        "price": 113323.45,
+        "change_pct": -1.18,
         "up": false
       },
       {
@@ -189,7 +189,7 @@
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
         "price": 16.25,
-        "change_pct": 0.37,
+        "change_pct": 0.33,
         "up": true
       }
     ]
@@ -206,7 +206,7 @@
       "name": "Asia Commercial Joint Stock Bank",
       "symbol": "ACB.VN",
       "price": 21650.0,
-      "change_pct": -2.48,
+      "change_pct": -2.26,
       "up": false
     },
     "BPI": {
