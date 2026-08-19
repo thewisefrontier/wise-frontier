@@ -173,19 +173,28 @@ def call_gemini(prompt, max_tokens=3000, start_tier=0):
                     # 이 파일에도 없어서 id=80581 다이제스트가 잘린 채 발행됨 2026-08-17).
                     _finish = _cand.get("finishReason", "")
                     if _finish and _finish != "STOP":
-                        print(f"  [WARN] {model} 응답 비정상 종료(finishReason={_finish}) — 폐기")
-                        return None
+                        # 같은 키로 재시도해도 같은 모델이면 다시 잘릴 뿐이라 다음 모델
+                        # 티어로 넘어간다 (해당 키는 소진 처리하지 않음 — RPD와 무관한 문제).
+                        print(f"  [WARN] {model} 응답 비정상 종료(finishReason={_finish}) → 다음 모델로")
+                        break
                     return _cand["content"]["parts"][0]["text"].strip()
                 elif res.status_code == 429:
                     print(f"  [429] {model} 키 {idx+1} 한도 초과 → 다음 키")
                     exhausted.add(idx)
                     continue
+                elif res.status_code == 503:
+                    print(f"  [503] {model} 키 {idx+1} 과부하 → 다음 키")
+                    continue
                 else:
                     print(f"[ERROR] Gemini {res.status_code}: {res.text[:200]}")
                     return None
             except requests.exceptions.Timeout:
-                print(f"  [TIMEOUT] {model} 키 {idx+1}")
-                return None
+                # 다른 스크립트(gemini_writer.py 등)는 타임아웃 시 다음 키로 넘어가는데
+                # 이 파일만 즉시 전체 포기(return None)로 남아있었다. 다이제스트는 프롬프트가
+                # 커서(최대 200건 종합) 상위 non-lite 모델이 45초 안에 못 끝내는 경우가 잦고,
+                # 그때마다 5단계 캐스케이드 전체를 안 써보고 포기해 8/18·8/19 무발행이 발생했다.
+                print(f"  [TIMEOUT] {model} 키 {idx+1} → 다음 키")
+                continue
             except Exception as e:
                 print(f"[ERROR] {e}")
                 return None
