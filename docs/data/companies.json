@@ -400,6 +400,22 @@
     "updated_at": "2026-08-02 01:13"
   },
   {
+    "id": "escohe_2",
+    "name": "Escoje 2",
+    "name_ko": "에스코헤 2",
+    "country": "과테말라",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "엔터테인먼트",
+    "description": "에스코헤 2는 과테말라에서 최초로 온라인 복권 구매 및 당첨금 환전 서비스를 도입한 디지털 복권 사업자입니다. 국제 도박 산업에서 15년 이상의 경력을 바탕으로 벨리즈에서 최초의 전자 복권 시스템을 구축한 이력이 있습니다. 자국 내 디지털 전환을 주도하며 건전한 놀이 문화와 업계 전반의 모범 사례 도입을 추진하고 있습니다.",
+    "founded_year": null,
+    "headquarters": "과테말라시티, 과테말라",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-20 07:12"
+  },
+  {
     "id": "gasolineras_uno",
     "name": "Gasolineras Uno",
     "name_ko": "가소리네라스 우노",
@@ -3664,22 +3680,6 @@
     "updated_at": "2026-08-02 21:12"
   },
   {
-    "id": "tata_consultancy_services",
-    "name": "Tata Consultancy Services Limited",
-    "name_ko": "타타 컨설턴시 서비스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "TCS",
-    "sector": "IT 서비스",
-    "description": "1968년 설립된 글로벌 IT 서비스 및 컨설팅 기업으로 타타 그룹의 핵심 계열사입니다. 전 세계 기업들을 대상으로 소프트웨어 개발, 비즈니스 솔루션, IT 아웃소싱 서비스를 제공합니다. 인도 IT 산업의 선구자이자 세계적인 수준의 기술력을 보유한 기업으로 평가받습니다.",
-    "founded_year": 1968,
-    "headquarters": "뭄바이, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-19 01:21"
-  },
-  {
     "id": "tcs",
     "name": "Tata Consultancy Services Limited",
     "name_ko": "타타 컨설턴시 서비시스",
@@ -3694,6 +3694,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-02 17:22"
+  },
+  {
+    "id": "tata_consultancy_services",
+    "name": "Tata Consultancy Services Limited",
+    "name_ko": "타타 컨설턴시 서비스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "TCS",
+    "sector": "IT 서비스",
+    "description": "1968년 설립된 글로벌 IT 서비스 및 컨설팅 기업으로 타타 그룹의 핵심 계열사입니다. 전 세계 기업들을 대상으로 소프트웨어 개발, 비즈니스 솔루션, IT 아웃소싱 서비스를 제공합니다. 인도 IT 산업의 선구자이자 세계적인 수준의 기술력을 보유한 기업으로 평가받습니다.",
+    "founded_year": 1968,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-19 01:21"
   },
   {
     "id": "tata_motors",
@@ -4864,22 +4880,6 @@
     "updated_at": null
   },
   {
-    "id": "bank_of_the_philippine_islands",
-    "name": "Bank of the Philippine Islands",
-    "name_ko": "필리핀 제도은행",
-    "country": "필리핀",
-    "country_flag": "🇵🇭",
-    "exchange": "PSE",
-    "ticker": "BPI",
-    "sector": "은행",
-    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 개인 및 기업 금융, 자산 관리, 보험 등 종합적인 금융 서비스를 제공한다. 필리핀 금융 시장에서 높은 신뢰도와 탄탄한 시장 지위를 유지하고 있다.",
-    "founded_year": 1851,
-    "headquarters": "마닐라, 필리핀",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-30 02:38"
-  },
-  {
     "id": "bank_of_the_philippines_islands",
     "name": "Bank of the Philippine Islands",
     "name_ko": "필리핀 제도은행",
@@ -4894,6 +4894,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-07 13:12"
+  },
+  {
+    "id": "bank_of_the_philippine_islands",
+    "name": "Bank of the Philippine Islands",
+    "name_ko": "필리핀 제도은행",
+    "country": "필리핀",
+    "country_flag": "🇵🇭",
+    "exchange": "PSE",
+    "ticker": "BPI",
+    "sector": "은행",
+    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 개인 및 기업 금융, 자산 관리, 보험 등 종합적인 금융 서비스를 제공한다. 필리핀 금융 시장에서 높은 신뢰도와 탄탄한 시장 지위를 유지하고 있다.",
+    "founded_year": 1851,
+    "headquarters": "마닐라, 필리핀",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-30 02:38"
   },
   {
     "id": "basel_tiles",
