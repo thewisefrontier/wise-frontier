@@ -40,6 +40,13 @@ except Exception:
     def check_date_hallucination(body, sources, base_date=None):
         return False, ""
 
+# 저장 시점 문자셋 혼입 하드 블록. import 실패해도 본 기능이 죽지 않도록 폴백을 둔다.
+try:
+    from script_leak import detect_script_leak
+except Exception:
+    def detect_script_leak(title, body):
+        return []
+
 # 카테고리 정규화 공통 모듈. import 실패해도 본 기능이 죽지 않도록 폴백을 둔다.
 try:
     from category_guard import normalize_category
@@ -131,6 +138,9 @@ def get_articles_to_summarize(limit: int) -> list:
 
 
 def update_summary(article_id: int, summary_ko: str):
+    if detect_script_leak("", summary_ko):
+        print(f"  ⚠️ [문자 혼입 감지] 업데이트 차단: id={article_id}")
+        return
     requests.patch(
         f"{_sb_url()}?id=eq.{article_id}",
         headers=_sb_headers(),
@@ -835,6 +845,10 @@ def merge_trend_article(existing: dict, new_title: str, new_body: str, note: str
     else:
         new_summary = existing_summary.rstrip() + "\n■ " + delta
 
+    if detect_script_leak("", new_summary):
+        print(f"  ⚠️ [문자 혼입 감지] 병합 차단: id={art_id}")
+        return False
+
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
     new_log = existing_log + [{"timestamp": now_str, "note": note}]
     try:
@@ -907,6 +921,9 @@ def save_trend_article(group_name: str, title: str, body: str,
                        countries: list, summary_3lines: str = "", investment_idea: str = "",
                        published: bool = True, guard_note: str = "") -> int:
     """트렌드 추적 기사 저장"""
+    if detect_script_leak(title, body):
+        print(f"  ⚠️ [문자 혼입 감지] 저장 차단: {title[:60]}")
+        return -1
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
     payload = {
         "title_en": title, "title_ko": title,
@@ -1503,6 +1520,11 @@ JSON 배열로만 응답하세요 (마크다운 없이):
         if not title:
             title = f"{issue_ko} — {today_str}"
 
+        if detect_script_leak(title, body):
+            print(f"  [{topic}] ⚠️ [문자 혼입 감지] 미발행: {title[:50]}")
+            time.sleep(CALL_INTERVAL)
+            continue
+
         # 생성된 실제 제목+국가로 동일 사건 루트 재확인 (우선)
         similar = find_similar_trend(title, country=art_country, days=14, body=body)
 
@@ -1793,6 +1815,11 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
 
         if not title:
             title = f"{issue_ko} — {today_str}"
+
+        if detect_script_leak(title, body):
+            print(f"  [{topic}] ⚠️ [문자 혼입 감지] 미발행: {title[:50]}")
+            time.sleep(CALL_INTERVAL)
+            continue
 
         # 생성된 실제 제목+국가로 동일 사건 루트 재확인 (우선)
         ext_similar = find_similar_trend(title, country=art_country, days=14, body=body)

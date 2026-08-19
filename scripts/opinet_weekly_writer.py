@@ -26,6 +26,13 @@ from rapidfuzz import fuzz
 
 load_dotenv()
 
+# 저장 시점 문자셋 혼입 하드 블록. import 실패해도 본 기능이 죽지 않도록 폴백을 둔다.
+try:
+    from script_leak import detect_script_leak
+except Exception:
+    def detect_script_leak(title, body):
+        return []
+
 # ── 설정 ────────────────────────────────────────────────────
 GEMINI_MODELS = [
     "gemini-3.7-flash",
@@ -551,6 +558,9 @@ def fetch_weekly_image(week_end: date) -> str:
 
 # ── 기사 삽입 ────────────────────────────────────────────────
 def insert_article(title_ko: str, summary_ko: str, week_end: date, image_url: str = "") -> int:
+    if detect_script_leak(title_ko, summary_ko):
+        print(f"  ⚠️ [문자 혼입 감지] 저장 차단: {title_ko[:60]}")
+        return -1
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
     internal_url = f"internal://opinet_weekly_{week_end.isoformat()}"
 

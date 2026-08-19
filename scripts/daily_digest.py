@@ -23,6 +23,13 @@ except Exception:
     def check_date_hallucination(body, sources, base_date=None):
         return False, ""
 
+# 저장 시점 문자셋 혼입 하드 블록. import 실패해도 본 기능이 죽지 않도록 폴백을 둔다.
+try:
+    from script_leak import detect_script_leak
+except Exception:
+    def detect_script_leak(title, body):
+        return []
+
 load_dotenv()
 
 KST = timezone(timedelta(hours=9))
@@ -468,6 +475,9 @@ def _digest_sources(articles: list) -> list:
 
 
 def save_digest(title, body, article_count, image_url="", published=True, guard_note=""):
+    if detect_script_leak(title, body):
+        print(f"  ⚠️ [문자 혼입 감지] 저장 차단: {title[:60]}")
+        return -1
     today_key = f"digest_{now_kst().strftime('%Y%m%d')}"
     payload = {
         "title_en": title,

@@ -25,6 +25,13 @@ except Exception:  # import 실패해도 백필 자체는 계속돼야 한다
     def to_plain_style(t):
         return t
 
+# 저장 시점 문자셋 혼입 하드 블록. import 실패해도 본 기능이 죽지 않도록 폴백을 둔다.
+try:
+    from script_leak import detect_script_leak
+except Exception:
+    def detect_script_leak(title, body):
+        return []
+
 GEMINI_MODELS = [
     "gemini-3.7-flash",
     "gemini-3.6-flash",
@@ -194,6 +201,9 @@ def parse_response(text: str):
 
 
 def update_article(article_id: int, summary_3lines: str, investment_idea: str) -> bool:
+    if detect_script_leak(summary_3lines, investment_idea):
+        print(f"  ⚠️ [문자 혼입 감지] id={article_id} 업데이트 차단")
+        return False
     # 저장 직전 최종 방어. 프롬프트가 지켜지지 않아도 DB에는 '-다' 체만 들어간다.
     if has_polite_ending(summary_3lines) or has_polite_ending(investment_idea):
         print(f"  🔧 id={article_id} 합쇼체 감지 → 자동 변환")

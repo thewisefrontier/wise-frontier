@@ -32,6 +32,13 @@ except Exception:
     def normalize_category(raw, default="글로벌"):
         return "" if raw is None else str(raw).strip()
 
+# 저장 시점 문자셋 혼입 하드 블록. import 실패해도 본 기능이 죽지 않도록 폴백을 둔다.
+try:
+    from script_leak import detect_script_leak
+except Exception:
+    def detect_script_leak(title, body):
+        return []
+
 KST = timezone(timedelta(hours=9))
 
 def now_kst() -> datetime:
@@ -67,14 +74,6 @@ def _sb_headers():
 
 def _sb_url():
     return f"{SUPABASE_URL}/rest/v1/articles"
-
-
-# ── 키릴 문자 감지 ────────────────────────────────────────
-def has_cyrillic(text: str) -> bool:
-    """제목/본문에 키릴 문자가 포함되어 있으면 True"""
-    if not text:
-        return False
-    return bool(re.search(r'[\u0400-\u04FF]', text))
 
 
 def send_to_newsfinal_channel(article_id, title, body, is_update=False):
@@ -413,9 +412,10 @@ def _unwrap_json_body(text, _depth=0):
 
 
 def save_article(title_ko, summary_ko, cluster_key, category, region, country="", article_count=0, published=True, countries=None, image_url="", is_travel=False, summary_3lines="", investment_idea="", unpub_reason=""):
-    # 키릴 문자 감지 — 저장 차단
-    if has_cyrillic(title_ko) or has_cyrillic(summary_ko):
-        print(f"  ⚠️ [키릴 감지] 저장 차단: {title_ko[:60]}")
+    # 문자셋 혼입 감지(아랍/히브리/키릴/태국/데바나가리/벵골/타밀/한자) — 저장 차단
+    _leak = detect_script_leak(title_ko, summary_ko)
+    if _leak:
+        print(f"  ⚠️ [문자 혼입 감지: {_leak[0][0]}] 저장 차단: {title_ko[:60]}")
         return -1
 
     # raw JSON 본문 차단 (2026-08-04 중첩 JSON 사고)
@@ -465,9 +465,10 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
 
 def update_article(article_id, title_ko, summary_ko, note: str = "업데이트", countries=None, country="", summary_3lines=None, investment_idea=None):
     """기사 갱신(병합 업데이트) — update_log에 업데이트 기록 추가"""
-    # 키릴 문자 감지 — 업데이트 차단
-    if has_cyrillic(title_ko) or has_cyrillic(summary_ko):
-        print(f"  ⚠️ [키릴 감지] 업데이트 차단: {title_ko[:60]}")
+    # 문자셋 혼입 감지(아랍/히브리/키릴/태국/데바나가리/벵골/타밀/한자) — 업데이트 차단
+    _leak = detect_script_leak(title_ko, summary_ko)
+    if _leak:
+        print(f"  ⚠️ [문자 혼입 감지: {_leak[0][0]}] 업데이트 차단: {title_ko[:60]}")
         return False
 
     # raw JSON 본문 차단 (2026-08-04 중첩 JSON 사고)

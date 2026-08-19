@@ -15,6 +15,8 @@ import re
 import requests
 from datetime import datetime, timedelta, timezone
 
+from script_leak import detect_script_leak
+
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "")
@@ -97,69 +99,14 @@ CHECK_WINDOW_HOURS = 48  # 점검 대상: 최근 N시간 내 발행 기사 (워�
 
 
 # ── 문자셋 이탈 검출 ───────────────────────────────────────
+# detect_script_leak()은 script_leak.py로 이전(공용화) — 저장 시점 하드 블록에서도
+# 동일 로직을 쓰기 위함. 이 파일은 배치 스캔 전용으로 계속 여기서 import해 쓴다.
+#
 # 고유명사 음역 도중 Gemini가 한글 대신 외국 문자를 뱉는 현상.
-# 실사례(2026-08-05 실측, 7/1~8/5 발행분 12건):
-#   "이스ام 파레스"(Issam Fares) / "가이انا"(가이아나) / "이슬라마باد"(이슬라마바드)
-#   "베르나르دو"(Bernardo) / "لندن행"(런던) / "라다크리شن난"(Radhakrishnan)
-#
-# ⚠️ KNOWN_FIXES와 성격이 다르다. 원형을 코드가 알 수 없으므로 자동 교정이 불가능하다.
-#    (`이스ام`의 `ام`이 "삼"인지 "사무"인지 판별 불가) → 검출·알림만 하고 교정은 수동.
-#
-# ⚠️ 그리스 문자는 제외한다. 수식·과학 기사에서 정상 사용된다(α, β, π).
-#
-# 한자(CJK)는 별도 처리한다. "고(故)", "대(對)중국", "시진핑(習近平)"처럼
-# 괄호 안 병기는 한국 언론의 정상 관행이므로, 괄호 구간을 제거한 뒤에도
-# 남는 한자만 오류로 본다. 실측(2026-08-05, 7/20 이후) 이 방식으로 오탐 0건:
-#   "전离층"(전리층) / "윈드폴 稅"(세) / "카贝요"(Cabello) / "카르나타카州"(주)
-#   "1万2341대"(1만) / "페塔尔"(페타르) / "駐屯 중인"(주둔) / "사회事务"(사무)
-_SCRIPT_LEAK_RANGES = [
-    ("아랍", r"\u0600-\u06FF\u0750-\u077F\uFB50-\uFDFF\uFE70-\uFEFF"),
-    ("히브리", r"\u0590-\u05FF"),
-    ("키릴", r"\u0400-\u04FF"),
-    ("태국", r"\u0E00-\u0E7F"),
-    ("데바나가리", r"\u0900-\u097F"),
-    ("벵골", r"\u0980-\u09FF"),
-    ("타밀", r"\u0B80-\u0BFF"),
-]
-
-_SCRIPT_LEAK_RE = [
-    (name, re.compile(r"[" + rng + r"]"), re.compile(r".{0,14}[" + rng + r"]+.{0,14}"))
-    for name, rng in _SCRIPT_LEAK_RANGES
-]
-
-# 괄호 병기 구간. 20자 상한은 긴 괄호가 통째로 지워져 오류를 놓치는 것을 막는다.
-_PAREN_RE = re.compile(r"\([^)]{0,20}\)")
-_CJK_PROBE = re.compile(r"[\u4E00-\u9FFF]")
-_CJK_CTX = re.compile(r".{0,14}[\u4E00-\u9FFF]+.{0,14}")
-
 # True로 바꾸면 검출 기사를 자동 미발행 처리한다.
 # 기본값 False — 오류는 고유명사 몇 글자에 한정되고 기사 전체는 유효하므로,
 # 알림을 받아 수동 교정하는 편이 트래픽 손실이 적다(5주 12건 규모).
 UNPUBLISH_ON_SCRIPT_LEAK = False
-
-
-def detect_script_leak(title: str, body: str):
-    """비허용 문자셋 혼입 검출. [(스크립트명, 문맥), ...] 반환."""
-    hits = []
-    for field in (title or "", body or ""):
-        if not field:
-            continue
-        for name, probe, ctx_re in _SCRIPT_LEAK_RE:
-            if not probe.search(field):
-                continue
-            for m in ctx_re.finditer(field):
-                snippet = m.group(0).replace("\n", " ").strip()
-                if snippet and all(snippet != h[1] for h in hits):
-                    hits.append((name, snippet))
-
-        # 한자는 괄호 병기를 걷어낸 뒤 남는 것만 오류로 본다
-        if _CJK_PROBE.search(field):
-            stripped = _PAREN_RE.sub("", field)
-            for m in _CJK_CTX.finditer(stripped):
-                snippet = m.group(0).replace("\n", " ").strip()
-                if snippet and all(snippet != h[1] for h in hits):
-                    hits.append(("한자", snippet))
-    return hits
 
 
 
