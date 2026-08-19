@@ -110,10 +110,16 @@ function buildWrapperHtml(a) {
   // 건 HTML 파서가 허용하지 않아 브라우저가 <p>를 강제로 끊고 빈 <p></p>를
   // 끼워넣었다(id=80581에서 재확인). 블록마다 <p>·<ul>을 스스로 완결된
   // 형태로 내보내고, 바깥에서는 더 이상 <p>로 감싸지 않는다.
+  // 다이제스트 등의 "[섹션 소제목]" 줄은 <h2>로 승격(SEO 헤더 구조).
+  const SECTION_RE = /^\[(.+)\]$/;
   const htmlBlocks = body.split(/\n\n+/).map((block) => {
     const acc = block.split('\n').reduce((acc, line) => {
       const trimmed = line.trim();
-      if (trimmed.startsWith('- ')) {
+      const sectionMatch = trimmed.match(SECTION_RE);
+      if (sectionMatch) {
+        acc.inList = false;
+        acc.parts.push({ type: 'h2', text: sectionMatch[1] });
+      } else if (trimmed.startsWith('- ')) {
         if (!acc.inList) { acc.parts.push({ type: 'ul', items: [] }); acc.inList = true; }
         acc.parts[acc.parts.length - 1].items.push(trimmed.slice(2));
       } else {
@@ -124,10 +130,11 @@ function buildWrapperHtml(a) {
       }
       return acc;
     }, { parts: [], inList: false });
-    return acc.parts.map((p) => p.type === 'ul'
-      ? `<ul>${p.items.map((i) => `<li>${i}</li>`).join('')}</ul>`
-      : `<p>${p.lines.join('<br>')}</p>`
-    ).join('');
+    return acc.parts.map((p) => {
+      if (p.type === 'ul') return `<ul>${p.items.map((i) => `<li>${i}</li>`).join('')}</ul>`;
+      if (p.type === 'h2') return `<h2>${p.text}</h2>`;
+      return `<p>${p.lines.join('<br>')}</p>`;
+    }).join('');
   });
   const processedBody = htmlBlocks.join('');
 
