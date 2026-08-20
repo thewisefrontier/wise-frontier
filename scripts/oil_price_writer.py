@@ -540,10 +540,19 @@ def build_article_prompt(prices: dict) -> str:
     wti_dir   = "상승" if wti["change"]   > 0 else ("하락" if wti["change"]   < 0 else "보합")
     wti_dollar   = int(round(wti["price"]))
 
+    # 실제 데이터 출처에 맞는 한국어 인용구. src와 무관하게 항상 EIA를
+    # 인용하면 Alpha Vantage·Stooq에서 받은 날도 EIA를 인용한 것처럼
+    # 기사에 나가는 오귀속이 생긴다.
+    src_citation = {
+        "EIA": "미국 에너지정보청(EIA)에 따르면",
+        "Alpha Vantage": "Alpha Vantage 집계에 따르면",
+        "Stooq": "Stooq 집계에 따르면",
+    }.get(src, f"{src}에 따르면")
+
     return f"""당신은 에너지·원자재 전문 기자입니다.
 아래 유가 데이터를 바탕으로 뉴스 기사를 작성하세요.
 
-[유가 데이터] (출처: {src} / 에너지정보청(EIA))
+[유가 데이터] (출처: {src})
 - 기준일: {pdate.day}일(현지시간) — 뉴욕상업거래소(NYMEX) 종가
 - WTI 원유: 배럴당 ${wti['price']:.2f} (전일比 {wti['pct']:+.2f}%, {'+' if wti['change']>0 else ''}{wti['change']:.2f}달러)
 - 브렌트유: 배럴당 ${brent['price']:.2f} (전일比 {brent['pct']:+.2f}%, {'+' if brent['change']>0 else ''}{brent['change']:.2f}달러)
@@ -569,7 +578,9 @@ BODY: <본문>
    ④ 원유 수출국·신흥시장 영향 (사우디아라비아, 나이지리아, 러시아 등 최소 1개국)
    ⑤ 향후 주시 요인 (사실 기반)
 3. 날짜: "{pdate.day}일(현지시간)" 형식만. "오늘", "현재", 절대연도 금지.
-4. 출처: "에너지정보청(EIA)에 따르면" 또는 "뉴욕상업거래소(NYMEX)에서" 반드시 포함.
+4. 출처: "{src_citation}" 또는 "뉴욕상업거래소(NYMEX)에서" 반드시 포함.
+   단, 첫 언급 이후 같은 기관을 또 인용할 때는 정식 명칭을 반복하지 말고 약칭만 쓰세요
+   (예: "미국 에너지정보청(EIA)에 따르면"으로 한 번 쓴 뒤에는 "EIA는" 처럼 EIA만).
 5. 비라틴 문자 국가명·지명은 한국어 음역.
 6. 분량: 700자 이상.
 """
