@@ -245,9 +245,12 @@ def fetch_alphavantage(function: str, retries: int = 1) -> tuple[float | None, f
         try:
             res = requests.get(url, timeout=(10, 30))
             if res.status_code != 200:
+                print(f"  [WARN] Alpha Vantage 조회 실패 ({function}): HTTP {res.status_code} - {res.text[:200]}")
                 return None, None, None
-            data = res.json().get("data", [])
+            body = res.json()
+            data = body.get("data", [])
             if len(data) < 2:
+                print(f"  [WARN] Alpha Vantage 조회 실패 ({function}): 데이터 없음 - {str(body)[:200]}")
                 return None, None, None
             latest, prev = data[0], data[1]
             data_date = _parse_data_date(str(latest.get("date", "")))
@@ -301,9 +304,12 @@ def fetch_eia(series_id: str, retries: int = 2) -> tuple[float | None, float | N
         try:
             res = requests.get(url, timeout=(10, 30))
             if res.status_code != 200:
+                print(f"  [WARN] EIA 조회 실패 ({series_id}): HTTP {res.status_code} - {res.text[:200]}")
                 return None, None, None
-            data = res.json().get("response", {}).get("data", [])
+            body = res.json()
+            data = body.get("response", {}).get("data", [])
             if len(data) < 2:
+                print(f"  [WARN] EIA 조회 실패 ({series_id}): 데이터 없음 - {str(body)[:200]}")
                 return None, None, None
             data_date = _parse_data_date(str(data[0].get("period", "")))
             return float(data[0]["value"]), float(data[1]["value"]), data_date
