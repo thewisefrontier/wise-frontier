@@ -880,6 +880,38 @@
     "updated_at": null
   },
   {
+    "id": "antonov",
+    "name": "Antonov State Enterprise",
+    "name_ko": "안토노프",
+    "country": "러시아",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "항공우주",
+    "description": "1946년에 설립된 우크라이나의 대표적인 항공기 제작 및 설계 기업입니다. 대형 수송기 제작 기술로 국제적으로 잘 알려져 있으며, 우크라이나 방위산업의 핵심 자산입니다. 국가 소유의 대형 방산 기업으로 분류됩니다.",
+    "founded_year": 1946,
+    "headquarters": "키이우, 우크라이나",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-20 17:57"
+  },
+  {
+    "id": "dteks",
+    "name": "DTEK",
+    "name_ko": "DTEK",
+    "country": "러시아",
+    "country_flag": "🌍",
+    "exchange": "PFTS",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "2005년에 설립된 우크라이나 최대의 민간 에너지 기업으로, 전력 생산 및 유통을 담당합니다. 우크라이나 전력망의 상당 부분을 운영하며 국가 에너지 안보에서 핵심적인 역할을 맡고 있습니다. 전쟁 중에도 지속적인 긴급 복구 작업을 수행하고 있습니다.",
+    "founded_year": 2005,
+    "headquarters": "키이우, 우크라이나",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-20 17:57"
+  },
+  {
     "id": "efko_group",
     "name": "Efko Group",
     "name_ko": "에프코 그룹",
@@ -3200,6 +3232,22 @@
     "updated_at": "2026-08-15 19:08"
   },
   {
+    "id": "jio_financial_services",
+    "name": "Jio Financial Services Limited",
+    "name_ko": "지오 파이낸셜 서비스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "JIOFIN",
+    "sector": "금융",
+    "description": "지오 파이낸셜 서비스는 2019년에 설립되어 릴라이언스 인더스트리스에서 분할된 인도 기반의 선도적인 비은행 금융회사(NBFC)입니다. 디지털 중심의 금융 플랫폼을 통해 대출, 결제, 보험 및 자산 관리 등 다양한 금융 서비스를 제공하고 있습니다. 인도 내 광범위한 디지털 생태계를 활용하여 금융 접근성을 대폭 향상시키고 있습니다.",
+    "founded_year": 2019,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-20 18:09"
+  },
+  {
     "id": "kims_hospitals",
     "name": "KIMS Hospitals",
     "name_ko": "킴스 병원",
@@ -3232,22 +3280,6 @@
     "updated_at": "2026-07-30 14:14"
   },
   {
-    "id": "lic_india",
-    "name": "Life Insurance Corporation of India",
-    "name_ko": "인도 생명보험공사",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "BSE",
-    "ticker": "543257",
-    "sector": "보험",
-    "description": "1956년에 설립된 인도 국영 생명보험회사입니다. 인도 보험 시장에서 독보적인 점유율을 차지하며 수많은 가입자를 보유한 최대의 기관투자자 중 하나입니다. 정부 소유의 높은 안정성을 바탕으로 다양한 생명보험 및 자산운용 서비스를 제공합니다.",
-    "founded_year": 1956,
-    "headquarters": "뭄바이, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-20 15:32"
-  },
-  {
     "id": "lic",
     "name": "Life Insurance Corporation of India",
     "name_ko": "인도생명보험공사",
@@ -3262,6 +3294,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-04 16:21"
+  },
+  {
+    "id": "lic_india",
+    "name": "Life Insurance Corporation of India",
+    "name_ko": "인도 생명보험공사",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "BSE",
+    "ticker": "543257",
+    "sector": "보험",
+    "description": "1956년에 설립된 인도 국영 생명보험회사입니다. 인도 보험 시장에서 독보적인 점유율을 차지하며 수많은 가입자를 보유한 최대의 기관투자자 중 하나입니다. 정부 소유의 높은 안정성을 바탕으로 다양한 생명보험 및 자산운용 서비스를 제공합니다.",
+    "founded_year": 1956,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-20 15:32"
   },
   {
     "id": "lumitime_technologies",
@@ -3792,22 +3840,6 @@
     "updated_at": "2026-08-14 23:23"
   },
   {
-    "id": "singareni_collieries",
-    "name": "The Singareni Collieries Company Limited",
-    "name_ko": "싱가레니 콜리어리스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "",
-    "sector": "에너지",
-    "description": "싱가레니 콜리어리스는 인도의 국영 탄광 및 에너지 기업으로, 주로 텔랑가나주에서 석탄 채굴 및 화력 발전 사업을 수행하고 있습니다. 1920년에 설립되었으며, 인도 남부 지역의 전력 공급과 산업 성장에 필수적인 에너지 자원을 안정적으로 공급하는 핵심적인 역할을 담당하고 있습니다. 인도 정부와 텔랑가나주 정부가 공동으로 소유하고 있는 대형 민간 및 공공 성격의 기업입니다.",
-    "founded_year": 1920,
-    "headquarters": "하이드라바드, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-30 17:03"
-  },
-  {
     "id": "singareni_collieries_company",
     "name": "The Singareni Collieries Company Limited",
     "name_ko": "싱가레니 콜리어리스",
@@ -3822,6 +3854,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-08 01:12"
+  },
+  {
+    "id": "singareni_collieries",
+    "name": "The Singareni Collieries Company Limited",
+    "name_ko": "싱가레니 콜리어리스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "싱가레니 콜리어리스는 인도의 국영 탄광 및 에너지 기업으로, 주로 텔랑가나주에서 석탄 채굴 및 화력 발전 사업을 수행하고 있습니다. 1920년에 설립되었으며, 인도 남부 지역의 전력 공급과 산업 성장에 필수적인 에너지 자원을 안정적으로 공급하는 핵심적인 역할을 담당하고 있습니다. 인도 정부와 텔랑가나주 정부가 공동으로 소유하고 있는 대형 민간 및 공공 성격의 기업입니다.",
+    "founded_year": 1920,
+    "headquarters": "하이드라바드, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-30 17:03"
   },
   {
     "id": "tata_power",
