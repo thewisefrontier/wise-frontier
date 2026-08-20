@@ -36,6 +36,12 @@ MERGE_THRESHOLD = 0.7  # 이 이상이면 자동 통합, 미만이면 미발행�
 # 애초에 dedup 대상이 아니다.
 EXCLUDE_CATEGORIES = {"다이제스트"}
 
+# 국내·국제유가는 category가 범용 "경제"라 카테고리 제외로는 못 걸러낸다.
+# "[국내유가] 휘발유 리터당 N원…" 템플릿 제목이 매일 반복돼 trigram 유사도가
+# 항상 50%를 넘는다(실사고: 8/19·8/20 연속 오탐 미발행, digest_exists_for_today()
+# 대응하는 자체 중복 방지가 opinet/oil 스크립트엔 없어 dedup에 그대로 노출됐다).
+EXCLUDE_SUBCATEGORIES = {"국내유가", "국제유가"}
+
 
 def _headers():
     return {
@@ -60,20 +66,25 @@ def fetch_duplicate_pairs(hours=72, threshold=0.5):
 
 
 def fetch_categories(ids: list) -> dict:
-    """id → category 매핑. 제외 카테고리 판정에 쓴다."""
+    """id → (category, subcategory) 매핑. 제외 판정에 쓴다."""
     if not ids:
         return {}
     id_list = ",".join(str(i) for i in ids)
     res = requests.get(
         f"{SUPABASE_URL}/rest/v1/articles",
         headers=_headers(),
-        params={"id": f"in.({id_list})", "select": "id,category"},
+        params={"id": f"in.({id_list})", "select": "id,category,subcategory"},
         timeout=20,
     )
     if res.status_code != 200:
         print(f"⚠️ 카테고리 조회 실패: HTTP {res.status_code} — 제외 필터 미적용")
         return {}
-    return {r["id"]: (r.get("category") or "") for r in res.json()}
+    return {r["id"]: (r.get("category") or "", r.get("subcategory") or "") for r in res.json()}
+
+
+def _is_excluded(id_: int, cats: dict) -> bool:
+    category, subcategory = cats.get(id_, ("", ""))
+    return category in EXCLUDE_CATEGORIES or subcategory in EXCLUDE_SUBCATEGORIES
 
 
 def unpublish_articles(ids: list, scores: dict = None):
@@ -160,10 +171,10 @@ def run():
     if cats:
         before = len(pairs)
         pairs = [p for p in pairs
-                 if cats.get(p["id_a"], "") not in EXCLUDE_CATEGORIES
-                 and cats.get(p["id_b"], "") not in EXCLUDE_CATEGORIES]
+                 if not _is_excluded(p["id_a"], cats)
+                 and not _is_excluded(p["id_b"], cats)]
         if before != len(pairs):
-            print(f"제외 카테고리로 {before - len(pairs)}쌍 건너뜀 ({', '.join(EXCLUDE_CATEGORIES)})")
+            print(f"제외 카테고리/서브카테고리로 {before - len(pairs)}쌍 건너뜀")
         if not pairs:
             print("처리할 중복 후보 없음")
             return
