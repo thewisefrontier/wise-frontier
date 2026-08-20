@@ -328,8 +328,8 @@ def call_gemini(prompt: str, max_tokens: int = 4000, start_tier: int = 2) -> str
                     _cand = res.json()["candidates"][0]
                     _finish = _cand.get("finishReason", "")
                     if _finish and _finish != "STOP":
-                        print(f"  [WARN] {model} 응답 비정상 종료(finishReason={_finish}) — 폐기")
-                        return None
+                        print(f"  [WARN] {model} 응답 비정상 종료(finishReason={_finish}) → 다음 모델로")
+                        break
                     return _cand["content"]["parts"][0]["text"].strip()
                 elif res.status_code == 429:
                     print(f"  [429] {model} 키 {idx+1} RPD 소진 → 다음 키")

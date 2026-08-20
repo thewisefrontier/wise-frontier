@@ -418,10 +418,13 @@ def call_gemini(prompt: str, max_tokens: int = 1500, start_tier: int = 2) -> str
                         return None
                     # maxOutputTokens 초과로 잘린 응답을 정상 취급하면 문장이 중간에서
                     # 끊긴 채 저장된다(gemini_writer.py 실사고 id=47879와 동일 계열).
+                    # 같은 키로 재시도해도 같은 모델이면 다시 잘릴 뿐이라 다음 모델
+                    # 티어로 넘어간다(daily_digest.py 실사고 2026-08-19와 동일 원인 —
+                    # 국제유가가 8/13 이후 이 한 줄 때문에 계속 무발행이었다).
                     _finish = cands[0].get("finishReason", "")
                     if _finish and _finish != "STOP":
-                        print(f"  [WARN] {model} 응답 비정상 종료(finishReason={_finish}) — 폐기")
-                        return None
+                        print(f"  [WARN] {model} 응답 비정상 종료(finishReason={_finish}) → 다음 모델로")
+                        break
                     parts = cands[0].get("content", {}).get("parts", [])
                     text  = "".join(p.get("text", "") for p in parts).strip()
                     return text if text else None

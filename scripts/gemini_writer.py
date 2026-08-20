@@ -1081,8 +1081,8 @@ def call_gemini(prompt, max_tokens=1000, retry=2, start_tier=0):
                     # 파싱 실패로 "제목:/내용:" 라벨이 그대로 기사에 노출).
                     _finish = _cand.get("finishReason", "")
                     if _finish and _finish != "STOP":
-                        print(f"  [WARN] {model} 응답 비정상 종료(finishReason={_finish}) — 폐기")
-                        return None
+                        print(f"  [WARN] {model} 응답 비정상 종료(finishReason={_finish}) → 다음 모델로")
+                        break
                     return _cand["content"]["parts"][0]["text"].strip()
                 elif res.status_code == 429:
                     print(f"  [429] {model} 키 {idx+1} RPD 소진 — 블랙리스트 추가")

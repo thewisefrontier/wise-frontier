@@ -190,8 +190,8 @@ def call_gemini(prompt: str, max_tokens: int = 800,
                     # 끊긴 채 저장된다(gemini_writer.py 실사고 id=47879와 동일 계열).
                     _finish = cands[0].get("finishReason", "")
                     if _finish and _finish != "STOP":
-                        print(f"  [WARN] {model} 응답 비정상 종료(finishReason={_finish}) — 폐기")
-                        return None
+                        print(f"  [WARN] {model} 응답 비정상 종료(finishReason={_finish}) → 다음 모델로")
+                        break
                     parts = cands[0].get("content", {}).get("parts", [])
                     text  = "".join(p.get("text", "") for p in parts).strip()
                     return text if text else None
