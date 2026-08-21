@@ -36,11 +36,13 @@ MERGE_THRESHOLD = 0.7  # 이 이상이면 자동 통합, 미만이면 미발행�
 # 애초에 dedup 대상이 아니다.
 EXCLUDE_CATEGORIES = {"다이제스트"}
 
-# 국내·국제유가는 category가 범용 "경제"라 카테고리 제외로는 못 걸러낸다.
-# "[국내유가] 휘발유 리터당 N원…" 템플릿 제목이 매일 반복돼 trigram 유사도가
-# 항상 50%를 넘는다(실사고: 8/19·8/20 연속 오탐 미발행, digest_exists_for_today()
-# 대응하는 자체 중복 방지가 opinet/oil 스크립트엔 없어 dedup에 그대로 노출됐다).
-EXCLUDE_SUBCATEGORIES = {"국내유가", "국제유가"}
+# 국내·국제유가·프론티어마켓동향은 category가 범용 "경제"라 카테고리 제외로는
+# 못 걸러낸다. "[국내유가] 휘발유 리터당 N원…" 같은 템플릿 제목이 매일
+# 반복돼 trigram 유사도가 항상 50%를 넘는다(실사고: 8/19·8/20 연속 오탐
+# 미발행, digest_exists_for_today() 대응하는 자체 중복 방지가 이 계열
+# 스크립트엔 없어 dedup에 그대로 노출됐다). frontier_markets_writer.py도
+# 신설 시점부터 동일 패턴이 예상돼 미리 등록해둔다.
+EXCLUDE_SUBCATEGORIES = {"국내유가", "국제유가", "프론티어마켓동향"}
 
 
 def _headers():

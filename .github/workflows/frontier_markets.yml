@@ -1,0 +1,64 @@
+name: NewsFinal - Frontier Markets Daily
+
+on:
+  schedule:
+    - cron: '15 23 * * *'   # UTC 23:15 = KST 08:15, 하루 1회 (opinet_price.yml 08:00과 겹치지 않게 오프셋)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: newsfinal-frontier-markets
+  cancel-in-progress: false
+
+jobs:
+  frontier_markets:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v5
+
+      - name: Python 설정
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: 패키지 설치
+        run: pip install -r requirements.txt
+
+      - name: 프론티어 마켓 동향 기사 생성
+        run: python scripts/frontier_markets_writer.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
+          GEMINI_API_KEY_4: ${{ secrets.GEMINI_API_KEY_4 }}
+          GEMINI_API_KEY_5: ${{ secrets.GEMINI_API_KEY_5 }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
+          UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
+
+      - name: 웹사이트 데이터 내보내기
+        run: python scripts/export_articles.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+
+      - name: 변경사항 커밋 및 푸시
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add -A
+          git diff --staged --quiet || git commit -m "Update frontier markets article"
+          for i in 1 2 3 4 5; do
+            git pull origin main -X ours --no-rebase
+            git push && break
+            echo "push failed (attempt $i) - another workflow pushed first, retrying"
+            sleep $((RANDOM % 8 + 3))
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
