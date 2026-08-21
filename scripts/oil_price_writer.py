@@ -5,7 +5,14 @@ WTI·Brent 국제유가 일일 변동을 모니터링하여 뉴스 기사를 자
 
 데이터 소스 (우선순위):
   1. EIA API (에너지정보청 공식, EIA_API_KEY 환경변수)
-  2. Stooq CSV (키 불필요 fallback)
+  2. Yahoo Finance 비공식 차트 API (키 불필요)
+  3. Alpha Vantage (ALPHA_VANTAGE_API_KEY 환경변수)
+
+⚠️ Stooq는 2026-08-21부로 제외했다. robots.txt가 `Disallow: /`(구글봇·
+빙봇 제외 전체 차단)로 명시돼 있고, 실제로도 사이트 전체(메인 외 모든
+데이터 엔드포인트)에 JS 연산증명 챌린지가 걸려 있어 접근이 막혀 있다
+(2026-08-10, 2026-08-21 두 차례 확인). 정책적으로 막아둔 곳이라 우회
+시도 자체를 하지 않는다.
 
 실행: python scripts/oil_price_writer.py
 """
@@ -68,11 +75,6 @@ EDT = ZoneInfo("America/New_York")  # 뉴욕 시장 기준
 # 뉴욕 시장 종가 기준: 현지 17:00 이후에만 실행
 MARKET_CLOSE_HOUR_LOCAL = 17   # 17:00 EDT/EST
 
-# Stooq 심볼
-STOOQ_SYMBOLS = {
-    "WTI":   "@CL.F",
-    "Brent": "@BZ.F",
-}
 
 # EIA 시리즈 ID
 EIA_SERIES = {
@@ -318,26 +320,6 @@ def fetch_yahoo(symbol: str) -> tuple[float | None, float | None, date | None]:
         return None, None, None
 
 
-def fetch_stooq(symbol: str) -> tuple[float | None, float | None, date | None]:
-    """Stooq CSV에서 최근 2일 종가를 가져와 (오늘, 전일, 최신 데이터 날짜) 반환."""
-    url = f"https://stooq.com/q/d/l/?s={symbol}&i=d"
-    try:
-        res = requests.get(url, timeout=15, headers={"User-Agent": "Mozilla/5.0"})
-        if res.status_code != 200:
-            return None, None, None
-        lines = [l for l in res.text.strip().splitlines() if l and not l.startswith("Date")]
-        if len(lines) < 2:
-            return None, None, None
-        latest  = lines[-1].split(",")
-        prev    = lines[-2].split(",")
-        close_today = float(latest[4]) if len(latest) > 4 else None
-        close_prev  = float(prev[4])   if len(prev)  > 4 else None
-        data_date   = _parse_data_date(latest[0]) if latest else None
-        return close_today, close_prev, data_date
-    except Exception as e:
-        print(f"  [WARN] Stooq 조회 실패 ({symbol}): {e}")
-        return None, None, None
-
 
 def fetch_eia(series_id: str, retries: int = 2) -> tuple[float | None, float | None, date | None]:
     """EIA API에서 최근 2일 종가를 가져와 (오늘, 전일, 최신 데이터 날짜) 반환.
@@ -416,16 +398,6 @@ def get_oil_prices() -> dict | None:
             print(f"  ✓ Alpha Vantage({result['date']}): WTI ${wti[0]:.2f} (전일 ${wti[1]:.2f}), "
                   f"Brent ${brent[0]:.2f} (전일 ${brent[1]:.2f})")
             return result
-
-    print("  → Stooq 조회 시도...")
-    wti = fetch_stooq(STOOQ_SYMBOLS["WTI"])
-    time.sleep(1)
-    brent = fetch_stooq(STOOQ_SYMBOLS["Brent"])
-    result = _accept_prices("Stooq", wti, brent, target)
-    if result:
-        print(f"  ✓ Stooq({result['date']}): WTI ${wti[0]:.2f} (전일 ${wti[1]:.2f}), "
-              f"Brent ${brent[0]:.2f} (전일 ${brent[1]:.2f})")
-        return result
 
     print("  [ERROR] 신선한 유가 데이터 확보 실패 → 기사 생성 중단")
     return None
@@ -541,7 +513,6 @@ def build_article_prompt(prices: dict) -> str:
         "EIA": "미국 에너지정보청(EIA)에 따르면",
         "Yahoo Finance": "야후 파이낸스 집계에 따르면",
         "Alpha Vantage": "Alpha Vantage 집계에 따르면",
-        "Stooq": "Stooq 집계에 따르면",
     }.get(src, f"{src}에 따르면")
 
     return f"""당신은 에너지·원자재 전문 기자입니다.
