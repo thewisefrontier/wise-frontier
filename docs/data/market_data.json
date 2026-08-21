@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-21 16:31",
+  "updated_at": "2026-08-21 17:01",
   "indices": [
     {
       "name": "S&P 500",
@@ -39,8 +39,8 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 117470.97,
-      "change_pct": 1.57,
+      "price": 117529.07,
+      "change_pct": 1.62,
       "up": true
     },
     {
@@ -53,15 +53,15 @@
     {
       "name": "SET (태국)",
       "symbol": "^SET.BK",
-      "price": 1619.33,
-      "change_pct": 0.58,
+      "price": 1620.38,
+      "change_pct": 0.65,
       "up": true
     },
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 6542.19,
-      "change_pct": 0.62,
+      "price": 6540.32,
+      "change_pct": 0.6,
       "up": true
     },
     {
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.06,
-      "change_pct": -0.21,
+      "price": 16.04,
+      "change_pct": -0.29,
       "up": false
     }
   ],
@@ -137,8 +137,8 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 117470.97,
-        "change_pct": 1.57,
+        "price": 117529.07,
+        "change_pct": 1.62,
         "up": true
       },
       {
@@ -151,15 +151,15 @@
       {
         "name": "SET (태국)",
         "symbol": "^SET.BK",
-        "price": 1619.33,
-        "change_pct": 0.58,
+        "price": 1620.38,
+        "change_pct": 0.65,
         "up": true
       },
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 6542.19,
-        "change_pct": 0.62,
+        "price": 6540.32,
+        "change_pct": 0.6,
         "up": true
       },
       {
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.06,
-        "change_pct": -0.21,
+        "price": 16.04,
+        "change_pct": -0.29,
         "up": false
       }
     ]
@@ -205,8 +205,8 @@
     "ACB": {
       "name": "Asia Commercial Joint Stock Bank",
       "symbol": "ACB.VN",
-      "price": 22450.0,
-      "change_pct": 2.98,
+      "price": 22750.0,
+      "change_pct": 4.36,
       "up": true
     }
   }
