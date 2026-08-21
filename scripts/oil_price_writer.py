@@ -86,6 +86,12 @@ ALPHA_VANTAGE_FUNCTIONS = {
     "Brent": "BRENT",
 }
 
+# 야후 파이낸스 선물 심볼 (키 불필요, 봇 검증 없음 — 2026-08-21 확인)
+YAHOO_SYMBOLS = {
+    "WTI":   "CL=F",
+    "Brent": "BZ=F",
+}
+
 
 # ── 헬퍼 ────────────────────────────────────────────────────
 PIXABAY_API_KEY = os.getenv("PIXABAY_API_KEY", "")
@@ -276,6 +282,42 @@ def fetch_alphavantage(function: str, retries: int = 1) -> tuple[float | None, f
     return None, None, None
 
 
+def fetch_yahoo(symbol: str) -> tuple[float | None, float | None, date | None]:
+    """야후 파이낸스 비공식 차트 API에서 최신가·전일 종가를 가져와
+    (오늘, 전일, 데이터 시각의 뉴욕 현지 날짜) 반환. 키 불필요.
+    실사고(2026-08-21): EIA·Alpha Vantage가 동시에 2영업일 지연됐고(둘 다
+    같은 8/18에서 멈춤 — 사실상 독립 소스가 아닐 가능성), Stooq는 사이트
+    전체가 JS 연산증명 챌린지로 막혀 있어(8/10 확인, /db/h/ 등 다른 경로도
+    동일) 기사가 또 스킵됐다. 야후 파이낸스는 봇 검증 없이 거의 실시간
+    선물가를 제공해 이번에 확인, 세 소스 사이 새 폴백으로 추가."""
+    url = f"https://query1.finance.yahoo.com/v8/finance/chart/{symbol}?range=5d&interval=1d"
+    try:
+        res = requests.get(url, timeout=(10, 30), headers={"User-Agent": "Mozilla/5.0"})
+        if res.status_code != 200:
+            print(f"  [WARN] Yahoo Finance 조회 실패 ({symbol}): HTTP {res.status_code} - {res.text[:200]}")
+            return None, None, None
+        results = res.json().get("chart", {}).get("result") or []
+        if not results:
+            print(f"  [WARN] Yahoo Finance 조회 실패 ({symbol}): 결과 없음")
+            return None, None, None
+        meta = results[0].get("meta", {})
+        today_price = meta.get("regularMarketPrice")
+        prev_price = meta.get("chartPreviousClose")
+        ts = meta.get("regularMarketTime")
+        if today_price is None or prev_price is None or ts is None:
+            print(f"  [WARN] Yahoo Finance 조회 실패 ({symbol}): 필드 누락 - {str(meta)[:200]}")
+            return None, None, None
+        data_date = (
+            datetime.fromtimestamp(ts, tz=timezone.utc)
+            .astimezone(ZoneInfo("America/New_York"))
+            .date()
+        )
+        return float(today_price), float(prev_price), data_date
+    except Exception as e:
+        print(f"  [WARN] Yahoo Finance 조회 실패 ({symbol}): {e}")
+        return None, None, None
+
+
 def fetch_stooq(symbol: str) -> tuple[float | None, float | None, date | None]:
     """Stooq CSV에서 최근 2일 종가를 가져와 (오늘, 전일, 최신 데이터 날짜) 반환."""
     url = f"https://stooq.com/q/d/l/?s={symbol}&i=d"
@@ -353,6 +395,16 @@ def get_oil_prices() -> dict | None:
             print(f"  ✓ EIA({result['date']}): WTI ${wti[0]:.2f} (전일 ${wti[1]:.2f}), "
                   f"Brent ${brent[0]:.2f} (전일 ${brent[1]:.2f})")
             return result
+
+    print("  → Yahoo Finance 조회 시도...")
+    wti = fetch_yahoo(YAHOO_SYMBOLS["WTI"])
+    time.sleep(1)
+    brent = fetch_yahoo(YAHOO_SYMBOLS["Brent"])
+    result = _accept_prices("Yahoo Finance", wti, brent, target)
+    if result:
+        print(f"  ✓ Yahoo Finance({result['date']}): WTI ${wti[0]:.2f} (전일 ${wti[1]:.2f}), "
+              f"Brent ${brent[0]:.2f} (전일 ${brent[1]:.2f})")
+        return result
 
     if ALPHA_VANTAGE_API_KEY:
         print("  → Alpha Vantage 조회 시도...")
@@ -487,6 +539,7 @@ def build_article_prompt(prices: dict) -> str:
     # 기사에 나가는 오귀속이 생긴다.
     src_citation = {
         "EIA": "미국 에너지정보청(EIA)에 따르면",
+        "Yahoo Finance": "야후 파이낸스 집계에 따르면",
         "Alpha Vantage": "Alpha Vantage 집계에 따르면",
         "Stooq": "Stooq 집계에 따르면",
     }.get(src, f"{src}에 따르면")
