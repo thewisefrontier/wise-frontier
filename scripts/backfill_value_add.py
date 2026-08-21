@@ -57,8 +57,17 @@ MAX_BODY_CHARS = 3000  # 본문이 너무 길면 토큰 절약을 위해 앞부�
 
 KST = timezone(timedelta(hours=9))
 
-_current_key_idx = 0
-_exhausted_keys = {m: set() for m in GEMINI_MODELS}  # 모델별 RPD 소진 키
+try:
+    from gemini_client import GeminiClient
+except Exception:
+    class GeminiClient:  # import 실패해도 본 기능이 죽지 않도록 폴백을 둔다
+        def __init__(self, *a, **k):
+            pass
+
+        def call(self, *a, **k):
+            return None
+
+_gemini_client = GeminiClient(GEMINI_API_KEYS, GEMINI_MODELS)
 
 
 def now_kst() -> datetime:
@@ -78,54 +87,8 @@ def _sb_url():
 
 
 def call_gemini(prompt: str, max_tokens: int = 500, start_tier: int = 3):
-    """gemini_summarizer.py의 call_gemini()와 동일한 키 로테이션·폴백 구조."""
-    global _current_key_idx
-    if not GEMINI_API_KEYS:
-        return None
-
-    payload = {
-        "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {"temperature": 0.4, "maxOutputTokens": max_tokens},
-    }
-    n = len(GEMINI_API_KEYS)
-    stages = [(m, _exhausted_keys[m]) for m in GEMINI_MODELS[start_tier:]]
-
-    for model, exhausted in stages:
-        available = [i for i in range(n) if i not in exhausted]
-        if not available:
-            continue
-        ordered = sorted(available, key=lambda i: (i - _current_key_idx) % n)
-        for idx in ordered:
-            api_key = GEMINI_API_KEYS[idx]
-            url = (
-                f"https://generativelanguage.googleapis.com/v1beta/models/"
-                f"{model}:generateContent?key={api_key}"
-            )
-            try:
-                res = requests.post(url, json=payload, timeout=(10, 30))
-                if res.status_code == 200:
-                    _current_key_idx = (idx + 1) % n
-                    _cand = res.json()["candidates"][0]
-                    # maxOutputTokens 초과로 잘린 응답을 정상 취급하면 문장이 중간에서
-                    # 끊긴 채 저장된다(gemini_writer.py 실사고 id=47879와 동일 계열).
-                    _finish = _cand.get("finishReason", "")
-                    if _finish and _finish != "STOP":
-                        print(f"  [WARN] {model} 응답 비정상 종료(finishReason={_finish}) → 다음 모델로")
-                        break
-                    return _cand["content"]["parts"][0]["text"].strip()
-                elif res.status_code == 429:
-                    print(f"  [429] {model} 키 {idx+1} RPD 소진")
-                    exhausted.add(idx)
-                    continue
-                elif res.status_code == 503:
-                    continue
-                else:
-                    print(f"[ERROR] Gemini {res.status_code}: {res.text[:200]}")
-                    return None
-            except Exception as e:
-                print(f"[ERROR] 호출 실패: {e}")
-                continue
-    return None
+    return _gemini_client.call(prompt, max_tokens=max_tokens, start_tier=start_tier,
+                                temperature=0.4, timeout=(10, 30))
 
 
 def fetch_batch() -> list:

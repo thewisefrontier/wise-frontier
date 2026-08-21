@@ -51,8 +51,17 @@ GEMINI_API_KEYS = [k for k in [
     os.getenv("GEMINI_API_KEY_5"),
 ] if k]
 
-_current_key_idx = 0
-_exhausted_keys = {m: set() for m in GEMINI_MODELS}  # 모델별 RPD 소진 키
+try:
+    from gemini_client import GeminiClient
+except Exception:
+    class GeminiClient:  # import 실패해도 본 기능이 죽지 않도록 폴백을 둔다
+        def __init__(self, *a, **k):
+            pass
+
+        def call(self, *a, **k):
+            return None
+
+_gemini_client = GeminiClient(GEMINI_API_KEYS, GEMINI_MODELS)
 
 # 발표 시각 이후 얼마나 지나야 수집 시작하는지 (오류 방지 버퍼)
 ANNOUNCEMENT_BUFFER_MINUTES = 30
@@ -146,74 +155,8 @@ def get_pending_events() -> list:
 # ── Gemini 호출 (키 로테이션) ────────────────────────────────
 def call_gemini(prompt: str, max_tokens: int = 800,
                 use_search: bool = False, start_tier: int = 2) -> str | None:
-    global _current_key_idx, _exhausted_keys
-
-    if not GEMINI_API_KEYS:
-        print("[ERROR] GEMINI_API_KEY 없음")
-        return None
-
-    payload: dict = {
-        "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {
-            "temperature": 0.1,
-            "maxOutputTokens": max_tokens,
-        },
-    }
-    if use_search:
-        payload["tools"] = [{"google_search": {}}]
-
-    n = len(GEMINI_API_KEYS)
-    model_stages = [(m, _exhausted_keys[m]) for m in GEMINI_MODELS[start_tier:]]
-
-    for model, exhausted in model_stages:
-        available = [i for i in range(n) if i not in exhausted]
-        if not available:
-            print(f"  [{model}] 모든 키 RPD 소진 → 다음 모델로")
-            continue
-
-        ordered = sorted(available, key=lambda i: (i - _current_key_idx) % n)
-
-        for idx in ordered:
-            api_key = GEMINI_API_KEYS[idx]
-            url = (
-                f"https://generativelanguage.googleapis.com/v1beta/models/"
-                f"{model}:generateContent?key={api_key}"
-            )
-            try:
-                res = requests.post(url, json=payload, timeout=(10, 45))
-                if res.status_code == 200:
-                    _current_key_idx = (idx + 1) % n
-                    cands = res.json().get("candidates", [])
-                    if not cands:
-                        return None
-                    # maxOutputTokens 초과로 잘린 응답을 정상 취급하면 문장이 중간에서
-                    # 끊긴 채 저장된다(gemini_writer.py 실사고 id=47879와 동일 계열).
-                    _finish = cands[0].get("finishReason", "")
-                    if _finish and _finish != "STOP":
-                        print(f"  [WARN] {model} 응답 비정상 종료(finishReason={_finish}) → 다음 모델로")
-                        break
-                    parts = cands[0].get("content", {}).get("parts", [])
-                    text  = "".join(p.get("text", "") for p in parts).strip()
-                    return text if text else None
-                elif res.status_code == 429:
-                    print(f"  [429] {model} 키 {idx+1} RPD 소진 — 블랙리스트")
-                    exhausted.add(idx)
-                    continue
-                elif res.status_code == 503:
-                    print(f"  [503] {model} 키 {idx+1} 과부하 → 다음 키")
-                    continue
-                else:
-                    print(f"[ERROR] Gemini {res.status_code}: {res.text[:200]}")
-                    return None
-            except requests.exceptions.Timeout:
-                print(f"  [TIMEOUT] {model} 키 {idx+1} → 다음 키")
-                continue
-            except Exception as e:
-                print(f"[ERROR] {e}")
-                return None
-
-    print("[ERROR] 모든 모델/키 소진 또는 응답 없음")
-    return None
+    return _gemini_client.call(prompt, max_tokens=max_tokens, start_tier=start_tier,
+                                temperature=0.1, timeout=(10, 45), use_search=use_search)
 
 
 def wikipedia_confirms(name: str, threshold: int = 70) -> bool:

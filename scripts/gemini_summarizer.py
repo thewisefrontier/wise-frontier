@@ -93,8 +93,17 @@ GEMINI_API_KEYS = [k for k in [
 TELEGRAM_TOKEN    = os.getenv("TELEGRAM_TOKEN", "")
 NEWSFINAL_CHANNEL = "@newsfinal"
 
-_current_key_idx = 0
-_exhausted_keys = {m: set() for m in GEMINI_MODELS}  # 모델별 RPD 소진 키
+try:
+    from gemini_client import GeminiClient
+except Exception:
+    class GeminiClient:  # import 실패해도 본 기능이 죽지 않도록 폴백을 둔다
+        def __init__(self, *a, **k):
+            pass
+
+        def call(self, *a, **k):
+            return None
+
+_gemini_client = GeminiClient(GEMINI_API_KEYS, GEMINI_MODELS)
 MAX_ARTICLES = 20
 CALL_INTERVAL = 10
 
@@ -294,67 +303,8 @@ def build_prompt(article: dict) -> str:
 
 
 def call_gemini(prompt: str, retry: int = 2, max_tokens: int = 500, start_tier: int = 2) -> str | None:
-    global _current_key_idx, _exhausted_keys
-    if not GEMINI_API_KEYS:
-        print("[ERROR] GEMINI_API_KEY 없음")
-        return None
-
-    payload = {
-        "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {
-            "temperature": 0.4,
-            "maxOutputTokens": max_tokens,
-        }
-    }
-
-    n = len(GEMINI_API_KEYS)
-    model_stages = [(m, _exhausted_keys[m]) for m in GEMINI_MODELS[start_tier:]]
-
-    for model, exhausted in model_stages:
-        available = [i for i in range(n) if i not in exhausted]
-        if not available:
-            print(f"  [{model}] 모든 키 RPD 소진 → 다음 모델로")
-            continue
-
-        ordered = sorted(available, key=lambda i: (i - _current_key_idx) % n)
-
-        for idx in ordered:
-            api_key = GEMINI_API_KEYS[idx]
-            url = (
-                f"https://generativelanguage.googleapis.com/v1beta/models/"
-                f"{model}:generateContent?key={api_key}"
-            )
-            try:
-                res = requests.post(url, json=payload, timeout=(10, 30))
-                if res.status_code == 200:
-                    _current_key_idx = (idx + 1) % n
-                    _cand = res.json()["candidates"][0]
-                    # maxOutputTokens 초과로 잘린 응답을 정상 취급하면 문장이 중간에서
-                    # 끊긴 채 저장된다(gemini_writer.py 실사고 id=47879와 동일 계열).
-                    _finish = _cand.get("finishReason", "")
-                    if _finish and _finish != "STOP":
-                        print(f"  [WARN] {model} 응답 비정상 종료(finishReason={_finish}) → 다음 모델로")
-                        break
-                    return _cand["content"]["parts"][0]["text"].strip()
-                elif res.status_code == 429:
-                    print(f"  [429] {model} 키 {idx+1} RPD 소진 — 블랙리스트 추가")
-                    exhausted.add(idx)
-                    continue
-                elif res.status_code == 503:
-                    print(f"  [503] {model} 키 {idx+1} 과부하 → 다음 키로")
-                    continue
-                else:
-                    print(f"[ERROR] Gemini {res.status_code}: {res.text[:200]}")
-                    return None
-            except requests.exceptions.Timeout:
-                print(f"  [TIMEOUT] {model} 키 {idx+1} — 다음 키로")
-                continue
-            except Exception as e:
-                print(f"[ERROR] {e}")
-                return None
-
-    print("[ERROR] 모든 모델/키 소진 또는 응답 없음")
-    return None
+    return _gemini_client.call(prompt, max_tokens=max_tokens, start_tier=start_tier,
+                                temperature=0.4, timeout=(10, 30))
 
 
 # ── 논평/칼럼체 검출 및 재생성 (트렌드/추적 기사는 "의미/중요성"을
@@ -1957,13 +1907,12 @@ def run():
         return
 
     # API 연결 테스트
-    global _current_key_idx
     print(f"[체크] Gemini API 연결 테스트... (키 {len(GEMINI_API_KEYS)}개)")
     test = call_gemini("ping", retry=1, start_tier=3)
     if test is None:
         print("[SKIP] Gemini API 응답 없음 — 건너뜀")
         return
-    _current_key_idx = 0  # ping으로 밀린 로테이션 인덱스 리셋 — 실제 작업은 항상 1번 키부터 순환
+    _gemini_client._current_key_idx = 0  # ping으로 밀린 로테이션 인덱스 리셋 — 실제 작업은 항상 1번 키부터 순환
     print("[체크] ✅ API 연결 확인")
 
     articles = get_articles_to_summarize(MAX_ARTICLES)

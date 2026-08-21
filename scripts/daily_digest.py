@@ -66,8 +66,17 @@ GEMINI_API_KEYS = [k for k in [
     os.getenv("GEMINI_API_KEY_5"),
 ] if k]
 
-_current_key_idx = 0
-_exhausted_keys = {m: set() for m in GEMINI_MODELS}  # 모델별 RPD 소진 키
+try:
+    from gemini_client import GeminiClient
+except Exception:
+    class GeminiClient:  # import 실패해도 본 기능이 죽지 않도록 폴백을 둔다
+        def __init__(self, *a, **k):
+            pass
+
+        def call(self, *a, **k):
+            return None
+
+_gemini_client = GeminiClient(GEMINI_API_KEYS, GEMINI_MODELS)
 
 
 def _sb_headers():
@@ -145,71 +154,8 @@ def digest_exists_for_today() -> bool:
 
 
 def call_gemini(prompt, max_tokens=3000, start_tier=0):
-    global _current_key_idx, _exhausted_keys
-    if not GEMINI_API_KEYS:
-        print("[ERROR] GEMINI_API_KEY 없음")
-        return None
-
-    payload = {
-        "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {"temperature": 0.5, "maxOutputTokens": max_tokens},
-    }
-
-    n = len(GEMINI_API_KEYS)
-    model_stages = [(m, _exhausted_keys[m]) for m in GEMINI_MODELS[start_tier:]]
-
-    for model, exhausted in model_stages:
-        available = [i for i in range(n) if i not in exhausted]
-        if not available:
-            print(f"  [{model}] 모든 키 RPD 소진 → 다음 모델로")
-            continue
-
-        ordered = sorted(available, key=lambda i: (i - _current_key_idx) % n)
-
-        for idx in ordered:
-            api_key = GEMINI_API_KEYS[idx]
-            url = (
-                f"https://generativelanguage.googleapis.com/v1beta/models/"
-                f"{model}:generateContent?key={api_key}"
-            )
-            try:
-                res = requests.post(url, json=payload, timeout=(10, 45))
-                if res.status_code == 200:
-                    _current_key_idx = (idx + 1) % n
-                    _cand = res.json()["candidates"][0]
-                    # maxOutputTokens 초과로 잘린 응답을 정상 취급하면 문장이 중간에서
-                    # 끊긴 채 저장된다(gemini_writer.py 실사고 id=47879와 동일 계열,
-                    # 이 파일에도 없어서 id=80581 다이제스트가 잘린 채 발행됨 2026-08-17).
-                    _finish = _cand.get("finishReason", "")
-                    if _finish and _finish != "STOP":
-                        # 같은 키로 재시도해도 같은 모델이면 다시 잘릴 뿐이라 다음 모델
-                        # 티어로 넘어간다 (해당 키는 소진 처리하지 않음 — RPD와 무관한 문제).
-                        print(f"  [WARN] {model} 응답 비정상 종료(finishReason={_finish}) → 다음 모델로")
-                        break
-                    return _cand["content"]["parts"][0]["text"].strip()
-                elif res.status_code == 429:
-                    print(f"  [429] {model} 키 {idx+1} 한도 초과 → 다음 키")
-                    exhausted.add(idx)
-                    continue
-                elif res.status_code == 503:
-                    print(f"  [503] {model} 키 {idx+1} 과부하 → 다음 키")
-                    continue
-                else:
-                    print(f"[ERROR] Gemini {res.status_code}: {res.text[:200]}")
-                    return None
-            except requests.exceptions.Timeout:
-                # 다른 스크립트(gemini_writer.py 등)는 타임아웃 시 다음 키로 넘어가는데
-                # 이 파일만 즉시 전체 포기(return None)로 남아있었다. 다이제스트는 프롬프트가
-                # 커서(최대 200건 종합) 상위 non-lite 모델이 45초 안에 못 끝내는 경우가 잦고,
-                # 그때마다 5단계 캐스케이드 전체를 안 써보고 포기해 8/18·8/19 무발행이 발생했다.
-                print(f"  [TIMEOUT] {model} 키 {idx+1} → 다음 키")
-                continue
-            except Exception as e:
-                print(f"[ERROR] {e}")
-                return None
-
-    print("[ERROR] 모든 모델/키 소진")
-    return None
+    return _gemini_client.call(prompt, max_tokens=max_tokens, start_tier=start_tier,
+                                temperature=0.5, timeout=(10, 45))
 
 
 # ── 논평/칼럼체 검출 및 재생성 (다이제스트는 "통찰/분석"을 요구하는 특성상
