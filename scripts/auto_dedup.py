@@ -40,10 +40,11 @@ EXCLUDE_CATEGORIES = {"다이제스트"}
 # 못 걸러낸다. "[국내유가] 휘발유 리터당 N원…" 같은 템플릿 제목이 매일
 # 반복돼 trigram 유사도가 항상 50%를 넘는다(실사고: 8/19·8/20 연속 오탐
 # 미발행, digest_exists_for_today() 대응하는 자체 중복 방지가 이 계열
-# 스크립트엔 없어 dedup에 그대로 노출됐다). frontier_markets_writer.py
-# (subcategory는 "글로벌마켓동향"으로 개편, 2026-08-21)도 신설 시점부터
-# 동일 패턴이 예상돼 미리 등록해둔다.
-EXCLUDE_SUBCATEGORIES = {"국내유가", "국제유가", "글로벌마켓동향"}
+# 스크립트엔 없어 dedup에 그대로 노출됐다). frontier_markets_writer.py도
+# 신설 시점부터 동일 패턴이 예상돼 미리 등록해둔다. "프론티어마켓동향"은
+# 2026-08-21 당일 "글로벌마켓동향"으로 개편되기 전 발행된 기사 1건(id=90417)
+# 을 위해 남겨둔 구 subcategory — 지우지 말 것.
+EXCLUDE_SUBCATEGORIES = {"국내유가", "국제유가", "글로벌마켓동향", "프론티어마켓동향"}
 
 
 def _headers():
