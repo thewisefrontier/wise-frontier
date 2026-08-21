@@ -1,10 +1,14 @@
 """
 frontier_markets_writer.py
 ----------------------------
-프론티어 마켓 통화 12개·증시 지수 7개(ETF 대리지표 2개 포함)의 일일 변동을
-추적해 "프론티어 마켓 동향" 기사를 자동 생성합니다. 국내외 언론이 거의 다루지
-않는 프론티어 통화·증시 급변동을 짚어 사이트 차별화 콘텐츠로 삼습니다
-(2026-08-21 신설 — "결국 콘텐츠 다양화만이 PV를 올릴 수 있다" 사용자 판단).
+주요국 증시(미국·일본·독일·프랑스·영국·유로존) + 프론티어 마켓 통화 12개·
+증시 지수 7개(ETF 대리지표 2개 포함)의 일일 변동을 추적해 "글로벌 마켓 동향"
+기사를 자동 생성합니다(2026-08-21 신설 — "결국 콘텐츠 다양화만이 PV를 올릴
+수 있다" 사용자 판단). 처음엔 "프론티어 마켓 동향"으로 좁게 시작했으나,
+이스라엘 등 포함국이 "프론티어"라는 이름과 안 맞는다는 지적 + 주요국 증시도
+같이 다뤄달라는 요청으로 같은 날 "글로벌 마켓 동향"으로 범위를 넓혔다.
+검색 그라운딩(`use_search=True`)으로 실제 뉴스를 찾아 반영 — 초기 버전은
+수치만 나열해 내용이 빈약하다는 지적을 받고 추가함.
 
 데이터 소스: 야후 파이낸스 비공식 차트 API (키 불필요, 봇 검증 없음,
 oil_price_writer.py에서 2026-08-21 검증된 패턴 재사용)
@@ -103,9 +107,9 @@ def _sb_articles_url():
     return f"{SUPABASE_URL}/rest/v1/articles"
 
 
-def call_gemini(prompt: str, max_tokens: int = 2500, start_tier: int = 3) -> str | None:
+def call_gemini(prompt: str, max_tokens: int = 2500, start_tier: int = 3, use_search: bool = False) -> str | None:
     return _gemini_client.call(prompt, max_tokens=max_tokens, start_tier=start_tier,
-                                temperature=0.3, timeout=(10, 45))
+                                temperature=0.3, timeout=(10, 45), use_search=use_search)
 
 
 # ── 심볼 정의 (2026-08-21 야후 파이낸스 실측 검증) ──────────────
@@ -125,17 +129,33 @@ CURRENCIES = [
     ("우즈베키스탄", "숨", "USDUZS=X"),
 ]
 
-# 증시: 야후 직접 커버 국가만. 베트남·나이지리아는 직접 지수가 없어
-# ETF 대리지표로 대체. 파키스탄·케냐·가나·사우디·카자흐스탄은 야후에
-# 지수 자체가 없어 제외(위 통화 목록엔 포함돼 있음).
-INDICES = [
-    ("남아공", "Top40", "^JN0U.JO"),
-    ("말레이시아", "KLCI", "^KLSE"),
-    ("인도네시아", "종합지수", "^JKSE"),
-    ("이집트", "EGX30", "^CASE30"),
-    ("이스라엘", "TA-125", "^TA125.TA"),
-    ("베트남", "VanEck 베트남 ETF", "VNM"),
-    ("나이지리아", "MSCI 나이지리아 ETF", "NGE"),
+# 주요국 증시: 뉴욕·유럽·일본 등 대형 시장(2026-08-21 추가, 사용자 요청 —
+# "프론티어 마켓 동향"이라는 이름과 이스라엘 등 포함이 안 맞아 "글로벌 마켓
+# 동향"으로 개편하며 주요국도 함께 다루기로 함). 거래소명을 병기해 본문에서
+# "뉴욕증시(NYSE)에서…" 식으로 쓸 수 있게 한다(사용자 요청 — 지수명만 말고
+# 거래소도 언급).
+MAJOR_INDICES = [
+    ("미국", "S&P500", "^GSPC", "뉴욕증시"),
+    ("미국", "나스닥종합", "^IXIC", "뉴욕증시"),
+    ("미국", "다우존스", "^DJI", "뉴욕증시"),
+    ("일본", "닛케이225", "^N225", "도쿄증권거래소(TSE)"),
+    ("독일", "DAX", "^GDAXI", "프랑크푸르트증권거래소"),
+    ("프랑스", "CAC40", "^FCHI", "유로넥스트 파리"),
+    ("영국", "FTSE100", "^FTSE", "런던증권거래소(LSE)"),
+    ("유로존", "유로스톡스50", "^STOXX50E", "범유럽 지수(특정 거래소 없음)"),
+]
+
+# 프론티어 마켓 증시: 야후 직접 커버 국가만. 베트남·나이지리아는 직접
+# 지수가 없어 ETF 대리지표로 대체(거래소 표기 없음). 파키스탄·케냐·가나·
+# 사우디·카자흐스탄은 야후에 지수 자체가 없어 제외(위 통화 목록엔 포함돼 있음).
+FRONTIER_INDICES = [
+    ("남아공", "Top40", "^JN0U.JO", "요하네스버그증권거래소(JSE)"),
+    ("말레이시아", "KLCI", "^KLSE", "말레이시아거래소(Bursa Malaysia)"),
+    ("인도네시아", "종합지수", "^JKSE", "인도네시아증권거래소(IDX)"),
+    ("이집트", "EGX30", "^CASE30", "이집트증권거래소(EGX)"),
+    ("이스라엘", "TA-125", "^TA125.TA", "텔아비브증권거래소(TASE)"),
+    ("베트남", "VanEck 베트남 ETF", "VNM", ""),
+    ("나이지리아", "MSCI 나이지리아 ETF", "NGE", ""),
 ]
 
 
@@ -167,24 +187,32 @@ def fetch_yahoo_quote(symbol: str) -> dict | None:
 
 
 def fetch_all_data() -> dict:
-    """통화·증시 전체를 조회해 변동률 큰 순으로 정렬해 반환."""
+    """통화·주요국 증시·프론티어 증시 전체를 조회해 각각 변동률 큰 순으로 정렬해 반환."""
     currencies = []
     for country, name, symbol in CURRENCIES:
         q = fetch_yahoo_quote(symbol)
         time.sleep(0.5)
         if q:
-            currencies.append({"country": country, "name": name, **q})
+            currencies.append({"country": country, "name": name, "exchange": "", **q})
 
-    indices = []
-    for country, name, symbol in INDICES:
+    major_indices = []
+    for country, name, symbol, exchange in MAJOR_INDICES:
         q = fetch_yahoo_quote(symbol)
         time.sleep(0.5)
         if q:
-            indices.append({"country": country, "name": name, **q})
+            major_indices.append({"country": country, "name": name, "exchange": exchange, **q})
+
+    frontier_indices = []
+    for country, name, symbol, exchange in FRONTIER_INDICES:
+        q = fetch_yahoo_quote(symbol)
+        time.sleep(0.5)
+        if q:
+            frontier_indices.append({"country": country, "name": name, "exchange": exchange, **q})
 
     currencies.sort(key=lambda x: abs(x["pct"]), reverse=True)
-    indices.sort(key=lambda x: abs(x["pct"]), reverse=True)
-    return {"currencies": currencies, "indices": indices}
+    major_indices.sort(key=lambda x: abs(x["pct"]), reverse=True)
+    frontier_indices.sort(key=lambda x: abs(x["pct"]), reverse=True)
+    return {"currencies": currencies, "major_indices": major_indices, "frontier_indices": frontier_indices}
 
 
 # ── 위키피디아 고유명사 검증 (다른 writer 스크립트와 동일 로직) ──────
@@ -234,13 +262,19 @@ def extract_candidate_names(body: str) -> list:
 def verify_no_fabricated_names(source_prompt: str, body: str) -> str:
     if not body:
         return ""
-    check_prompt = f"""아래는 기사 작성에 쓰인 원본 자료와, 그걸 바탕으로 생성된 한국어 기사 본문입니다.
-기사 본문에 나오는 고유명사(기관명·지수명·기업명)가 원본 자료에 실제로
-근거하는지 확인하세요. 원본 자료에 없는 대상을 완전히 잘못 지어낸 경우만
-찾으세요. 그런 이름이 있으면 "지어낸이름 → 원본표기" 형식으로 쉼표 구분해
-나열하세요. 없으면 "없음"이라고만 답하세요.
+    # 이 스크립트는 검색 그라운딩(use_search=True)을 쓰므로 본문에 [원본 자료]
+    # 시세 표에 없는 실제 뉴스(기관·기업·인물명)가 정당하게 등장할 수 있다.
+    # "원본에 없으면 무조건 지어낸 것"으로 보면 검색으로 찾은 진짜 뉴스까지
+    # 오탐 처리하므로, 시세 수치(가격·통화·지수)를 잘못 지어낸 경우만 잡는다.
+    check_prompt = f"""아래는 기사 작성에 쓰인 시세 데이터와, 그걸 바탕으로 검색 결과까지
+반영해 생성된 한국어 기사 본문입니다. 본문에 나오는 가격·환율·지수 수치가
+시세 데이터에 실제로 근거하는지만 확인하세요(수치를 잘못 지어냈거나
+데이터에 없는 국가·통화·지수의 수치를 만들어낸 경우). 검색으로 찾은
+기관명·기업명·인물명 등 뉴스 맥락은 시세 데이터에 없어도 정상이니
+문제 삼지 마세요. 수치 오류가 있으면 "지어낸수치 → 원본수치" 형식으로
+쉼표 구분해 나열하세요. 없으면 "없음"이라고만 답하세요.
 
-[원본 자료]
+[시세 데이터]
 {source_prompt[:3000]}
 
 [생성된 기사 본문]
@@ -282,73 +316,86 @@ def build_article_prompt(data: dict) -> str:
     today = now_kst()
     today_str = today.strftime("%Y년 %m월 %d일")
 
+    def _idx_line(i: dict) -> str:
+        exch = f" ({i['exchange']})" if i.get("exchange") else ""
+        return f"- {i['country']} {i['name']}{exch}: {i['price']:.2f} (전일比 {i['pct']:+.2f}%)"
+
     cur_lines = "\n".join(
         f"- {c['country']} {c['name']}: {c['price']:.2f} (전일比 {c['pct']:+.2f}%)"
         for c in data["currencies"]
     )
-    idx_lines = "\n".join(
-        f"- {i['country']} {i['name']}: {i['price']:.2f} (전일比 {i['pct']:+.2f}%)"
-        for i in data["indices"]
-    )
+    major_idx_lines = "\n".join(_idx_line(i) for i in data["major_indices"])
+    frontier_idx_lines = "\n".join(_idx_line(i) for i in data["frontier_indices"])
 
     top_cur = data["currencies"][:3]
-    top_idx = data["indices"][:3]
+    top_major = data["major_indices"][:3]
+    top_frontier = data["frontier_indices"][:3]
     top_cur_str = ", ".join(f"{c['country']} {c['pct']:+.1f}%" for c in top_cur)
-    top_idx_str = ", ".join(f"{i['country']} {i['pct']:+.1f}%" for i in top_idx)
+    top_major_str = ", ".join(f"{i['country']} {i['name']} {i['pct']:+.1f}%" for i in top_major)
+    top_frontier_str = ", ".join(f"{i['country']} {i['pct']:+.1f}%" for i in top_frontier)
 
-    return f"""당신은 프론티어 마켓 전문 경제 기자입니다.
-아래는 오늘({today_str}) 기준 프론티어 마켓 통화·증시 데이터입니다(달러 대비
-환율, 전일 대비 변동률). 이 데이터를 바탕으로 뉴스 기사를 작성하세요.
+    return f"""당신은 글로벌 마켓 전문 경제 기자입니다. 구글 검색으로 오늘 시장을
+움직인 실제 뉴스(연준 발언, 기업 실적, 지정학 이슈, 경제 지표 발표 등)를
+찾아서, 아래 시세 데이터와 결합해 기사를 작성하세요. 검색 없이 수치만
+나열하지 말고, 왜 그렇게 움직였는지 실제 근거를 찾아 반영하세요.
 
-[통화 — 달러 대비, 변동률 큰 순]
+오늘({today_str}) 기준 시세 데이터(달러 대비 환율, 전일 대비 변동률):
+
+[주요국 증시 — 지수 포인트, 거래소 병기]
+{major_idx_lines}
+
+[프론티어 마켓 통화 — 달러 대비]
 {cur_lines}
 
-[증시 지수 — 현지통화 기준, 변동률 큰 순]
-{idx_lines}
+[프론티어 마켓 증시 — 현지통화 기준, 거래소 병기]
+{frontier_idx_lines}
 
 [변동폭 상위]
-- 통화: {top_cur_str}
-- 증시: {top_idx_str}
+- 주요국 증시: {top_major_str}
+- 프론티어 통화: {top_cur_str}
+- 프론티어 증시: {top_frontier_str}
 
 [출력 형식] — 반드시 이 형식 그대로:
 TITLE: <제목>
 BODY: <본문>
 
 [제목]
-- 반드시 "[프론티어 마켓 동향] "으로 시작. 대괄호 포함 그대로 출력.
-- 통화·증시 중 변동폭이 가장 큰 이슈를 담아 50자 이내로.
-- 예: "[프론티어 마켓 동향] 나이지리아 나이라 급락, 아르헨티나 페소도 약세"
+- 반드시 "[글로벌 마켓 동향] "으로 시작. 대괄호 포함 그대로 출력.
+- 오늘 가장 두드러진 이슈(주요국 증시든 프론티어 통화·증시든) 하나를 담아 50자 이내로.
+- 예: "[글로벌 마켓 동향] 뉴욕증시 사흘째 상승…나이지리아 나이라는 약세"
 
 [본문]
 1. 뉴스 스타일. 모든 문장 "-다" 종결. 감정·논평 표현 절대 금지.
    금지어: '주목됩니다', '기대됩니다', '보여줍니다', '지켜볼 필요가 있습니다'
-2. 구조:
-   ① 리드: 오늘 프론티어 마켓에서 가장 두드러진 통화·증시 변동을 한 문장으로 요약
-   ② [통화 동향] 변동폭 상위 통화 3~4개를 구체적 수치와 함께 서술(급락/급등 배경이
-      데이터에 근거해 유추 가능하면 짧게 언급, 근거 없으면 수치만 사실 전달)
-   ③ [증시 동향] 변동폭 상위 지수 2~3개를 구체적 수치와 함께 서술
-   ④ 프론티어 마켓 공통 배경 요인이 있으면 짚기(달러 강세/약세, 원자재 가격, 글로벌
-      금리 등) — 데이터에 없는 내용을 지어내지 말고 일반적으로 알려진 사실만
-3. 날짜는 "{today.day}일" 형식으로만 표기. 위 대괄호 소제목("[통화 동향]", "[증시 동향]")은
-   본문 안에 그대로 포함하고, 소제목 앞에는 빈 줄을 하나씩 두세요.
-4. 수치는 위 데이터를 그대로 사용하고 절대 지어내지 마세요.
-5. 비라틴 문자 국가명·통화명·지수명은 이미 한국어로 제공했으니 그대로 쓰세요.
-6. 분량: 700자 이상.
+2. 구조 — 아래 소제목을 본문에 그대로 포함하고 소제목 앞에는 빈 줄을 하나씩 두세요:
+   ① 리드: 오늘 시장을 움직인 가장 중요한 이슈를 한 문장으로 요약(검색으로 찾은 실제
+      뉴스 기반. 반드시 거래소명을 언급, 예: "뉴욕증시(NYSE)에서 S&P500 지수는…")
+   ② [주요국 증시] 변동폭 상위 지수 2~3개를, 그 지수가 움직인 실제 이유(검색으로 찾은
+      뉴스 — 연준 금리 발표, 주요 기업 실적, 경제 지표 등)와 함께 서술. 거래소명 포함.
+   ③ [프론티어 마켓 통화] 변동폭 상위 통화 3~4개를 구체적 수치와 함께 서술. 검색으로
+      해당국의 실제 통화·경제 뉴스를 찾을 수 있으면 반영하고, 못 찾으면 달러 강세/약세
+      같은 공통 요인으로 설명하되 지어내지 마세요.
+   ④ [프론티어 마켓 증시] 변동폭 상위 지수 2~3개를 거래소명과 함께 서술.
+3. 날짜는 "{today.day}일" 형식으로만 표기.
+4. 수치는 위 데이터를 그대로 사용하고 절대 지어내지 마세요. 검색으로 찾은 뉴스도
+   실제 사실만 반영하고, 확인 안 되는 내용은 지어내지 마세요.
+5. 비라틴 문자 국가명·통화명·지수명·기업명은 정확한 한국어 표기로.
+6. 분량: 900자 이상(검색 근거로 실질적 분석을 담아 앞선 수치 나열형 버전보다 풍부하게).
 """
 
 
-TITLE_PREFIX = "[프론티어 마켓 동향]"
+TITLE_PREFIX = "[글로벌 마켓 동향]"
 
 
 def enforce_title_prefix(title: str) -> str:
     t = (title or "").strip()
     if not t:
         return t
-    m = re.match(r"^\s*\[\s*프론티어\s*마켓\s*동향\s*\]\s*(.*)$", t)
+    m = re.match(r"^\s*\[\s*글로벌\s*마켓\s*동향\s*\]\s*(.*)$", t)
     if m:
         t = m.group(1).strip()
     else:
-        m2 = re.match(r"^프론티어\s*마켓\s*동향(?:이|은)?\s*[,·]?\s+(.+)$", t)
+        m2 = re.match(r"^글로벌\s*마켓\s*동향(?:이|은)?\s*[,·]?\s+(.+)$", t)
         if m2:
             t = m2.group(1).strip()
     return f"{TITLE_PREFIX} {t}" if t else TITLE_PREFIX
@@ -365,8 +412,8 @@ def parse_article_output(text: str) -> tuple[str, str]:
     return title, body
 
 
-def call_gemini_article(prompt: str, max_tokens: int = 2500) -> str | None:
-    text = call_gemini(prompt, max_tokens=max_tokens)
+def call_gemini_article(prompt: str, max_tokens: int = 3500) -> str | None:
+    text = call_gemini(prompt, max_tokens=max_tokens, use_search=True)
     time.sleep(5)
     if not text:
         return None
@@ -375,7 +422,7 @@ def call_gemini_article(prompt: str, max_tokens: int = 2500) -> str | None:
         print("  ⚠️ 논평체 감지 → 재생성")
         retried = call_gemini(
             prompt + "\n\n[재작성 지시] 논평/칼럼 문체가 섞였습니다. 사실 전달 중심으로만 다시 작성하세요.",
-            max_tokens=max_tokens,
+            max_tokens=max_tokens, use_search=True,
         )
         if retried:
             text = retried
@@ -384,11 +431,11 @@ def call_gemini_article(prompt: str, max_tokens: int = 2500) -> str | None:
     _, body_probe = parse_article_output(text)
     fabricated = verify_no_fabricated_names(prompt, body_probe or text)
     if fabricated:
-        print(f"  ⚠️ 원문에 없는 고유명사 감지({fabricated}) → 재생성")
+        print(f"  ⚠️ 수치 오류 의심({fabricated}) → 재생성")
         retried = call_gemini(
-            prompt + f"\n\n[재작성 지시] 다음 이름을 원문에 없는 표현으로 잘못 지어냈습니다: {fabricated}. "
-                     "데이터에 없는 기관명·지수명은 지어내지 말고 빼세요.",
-            max_tokens=max_tokens,
+            prompt + f"\n\n[재작성 지시] 다음 수치를 시세 데이터와 다르게 잘못 썼습니다: {fabricated}. "
+                     "가격·환율·지수 수치는 반드시 위 [시세 데이터]에 나온 값 그대로 쓰세요.",
+            max_tokens=max_tokens, use_search=True,
         )
         if retried:
             text = retried
@@ -460,7 +507,11 @@ def insert_article(title_ko: str, summary_ko: str, data: dict, article_date: dat
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
     internal_url = f"internal://frontier_markets_{article_date.isoformat()}"
 
-    top_countries = [c["country"] for c in data["currencies"][:3]] + [i["country"] for i in data["indices"][:2]]
+    top_countries = (
+        [i["country"] for i in data["major_indices"][:2]]
+        + [c["country"] for c in data["currencies"][:2]]
+        + [i["country"] for i in data["frontier_indices"][:2]]
+    )
     countries = list(dict.fromkeys(top_countries))  # 순서 유지 중복 제거
 
     payload = {
@@ -471,7 +522,7 @@ def insert_article(title_ko: str, summary_ko: str, data: dict, article_date: dat
         "url": internal_url,
         "source": "NewsFinal",
         "category": "경제",
-        "subcategory": "프론티어마켓동향",
+        "subcategory": "글로벌마켓동향",
         "region": "global",
         "country": "",
         "country_flag": "🌍",
@@ -480,7 +531,7 @@ def insert_article(title_ko: str, summary_ko: str, data: dict, article_date: dat
         "score": 1,
         "created_at": now_str,
         "first_published_at": now_str,
-        "update_log": [{"timestamp": now_str, "note": "프론티어 마켓 동향 자동 기사"}],
+        "update_log": [{"timestamp": now_str, "note": "글로벌 마켓 동향 자동 기사"}],
         "sent_telegram": 0,
         "is_published": True,
     }
@@ -507,16 +558,18 @@ def main():
 
     article_date = now_kst().date()
     if already_published(article_date):
-        print(f"  → {article_date} 프론티어 마켓 동향 기사 이미 존재 → 스킵")
+        print(f"  → {article_date} 글로벌 마켓 동향 기사 이미 존재 → 스킵")
         return
 
-    print("  → 야후 파이낸스에서 통화·증시 데이터 수집 중...")
+    print("  → 야후 파이낸스에서 시세 데이터 수집 중...")
     data = fetch_all_data()
-    if len(data["currencies"]) < 3 or len(data["indices"]) < 2:
+    if len(data["currencies"]) < 3 or len(data["major_indices"]) < 2 or len(data["frontier_indices"]) < 2:
         print(f"  [ERROR] 데이터 수집 부족(통화 {len(data['currencies'])}건, "
-              f"증시 {len(data['indices'])}건) → 종료")
+              f"주요국 증시 {len(data['major_indices'])}건, "
+              f"프론티어 증시 {len(data['frontier_indices'])}건) → 종료")
         return
-    print(f"  → 통화 {len(data['currencies'])}건, 증시 {len(data['indices'])}건 수집 완료")
+    print(f"  → 통화 {len(data['currencies'])}건, 주요국 증시 {len(data['major_indices'])}건, "
+          f"프론티어 증시 {len(data['frontier_indices'])}건 수집 완료")
 
     print("  → Gemini로 기사 생성 중...")
     prompt = build_article_prompt(data)

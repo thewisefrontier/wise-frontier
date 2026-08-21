@@ -1,4 +1,4 @@
-name: NewsFinal - Frontier Markets Daily
+name: NewsFinal - Global Markets Daily
 
 on:
   schedule:
@@ -28,7 +28,7 @@ jobs:
       - name: 패키지 설치
         run: pip install -r requirements.txt
 
-      - name: 프론티어 마켓 동향 기사 생성
+      - name: 글로벌 마켓 동향 기사 생성
         run: python scripts/frontier_markets_writer.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -53,7 +53,7 @@ jobs:
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add -A
-          git diff --staged --quiet || git commit -m "Update frontier markets article"
+          git diff --staged --quiet || git commit -m "Update global markets article"
           for i in 1 2 3 4 5; do
             git pull origin main -X ours --no-rebase
             git push && break
