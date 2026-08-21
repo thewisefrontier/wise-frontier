@@ -170,15 +170,23 @@ def extract_candidate_names(title: str, body: str) -> list:
 
 
 def build_check_prompt(title: str, body: str) -> str:
-    return f"""아래는 뉴스파이널에 이미 발행된 기사입니다. 본문에 등장하는 고유명사
-(영화·도서·게임 등 작품명, 인명, 지명, 기관명, 인용된 발언자 등)가 실제로 존재하는
-정확한 이름인지 웹 검색으로 확인하세요.
+    return f"""아래는 뉴스파이널에 이미 발행된 기사입니다. 아래 두 가지를 확인하세요.
 
+[1. 고유명사 정확성] 본문에 등장하는 고유명사(영화·도서·게임 등 작품명, 인명, 지명,
+기관명, 인용된 발언자 등)가 실제로 존재하는 정확한 이름인지 웹 검색으로 확인하세요.
 정상적인 한글 음차나 공식 번역명 표기는 문제가 아닙니다 — 실제로 존재하지 않거나,
 실존 대상과 이름 자체가 다르게 틀린 경우만 찾으세요.
 
-문제가 있으면 "기사 속 표기 → 올바른 표기" 형식으로 쉼표 구분해 나열하세요.
-모두 문제없으면 "없음"이라고만 답하세요.
+[2. 현지화 누락] 아래 세 가지가 있으면 찾으세요(2026-08-21 id=90665·90457 실사고로 추가):
+- 한글로 옮기지 않고 영문 그대로 남은 외국 기업명(비자종류·통화코드·모델명·한국 기업
+  그룹 약칭·OpenAI 같은 영문 약어 포함 명칭은 정상이니 제외)
+- crore(1천만)·lakh(10만) 같은 인도식 단위가 "Rs 1.34 crore"처럼 한국어 억/만 단위로
+  환산되지 않고 원문 그대로 남은 경우
+- 제목이 "~돌파 속 기념하는 ~의 날"처럼 영어 원문 어순을 그대로 옮긴 듯 부자연스러운 경우
+
+문제가 있으면 항목별로 "[분류] 기사 속 표기 → 올바른 표기(또는 지적 사유)" 형식으로
+쉼표 구분해 나열하세요. 분류는 [고유명사]/[미음차 기업명]/[단위 미환산]/[제목 어색함]
+중 하나를 쓰세요. 모두 문제없으면 "없음"이라고만 답하세요.
 
 제목: {title}
 
@@ -243,7 +251,9 @@ _SUSPECT_PAIR_RE = re.compile(r"([^,→\n]+?)\s*→\s*([^,\n]+)")
 
 def wiki_cross_check(suspect: str) -> str:
     """'지어낸이름 → 원본표기' 쌍마다 위키 조회 결과를 덧붙인 문자열 반환.
-    조회 실패해도 원래 suspect는 그대로 살아있어야 하므로 예외를 삼킨다."""
+    조회 실패해도 원래 suspect는 그대로 살아있어야 하므로 예외를 삼킨다.
+    [단위 미환산]/[제목 어색함]은 실존 여부 문제가 아니라 위키 조회 대상이
+    아니므로 건너뛴다(2026-08-21 현지화 점검 항목 추가와 함께 도입)."""
     if not suspect:
         return suspect
     try:
@@ -253,6 +263,8 @@ def wiki_cross_check(suspect: str) -> str:
         notes = []
         for wrong, correct in pairs[:5]:
             wrong, correct = wrong.strip(), correct.strip()
+            if wrong.startswith("[단위 미환산]") or wrong.startswith("[제목 어색함]"):
+                continue
             wrong_found = wikipedia_confirms(wrong)
             correct_found = wikipedia_confirms(correct)
             if wrong_found and not correct_found:
