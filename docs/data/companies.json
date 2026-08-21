@@ -128,6 +128,22 @@
     "updated_at": "2026-08-10 06:13"
   },
   {
+    "id": "mtn_ghana",
+    "name": "Scancom PLC (MTN Ghana)",
+    "name_ko": "MTN 가나",
+    "country": "가나",
+    "country_flag": "🇬🇭",
+    "exchange": "GSE",
+    "ticker": "MTNGH",
+    "sector": "통신",
+    "description": "MTN 가나는 2006년에 설립된 가나 최대의 이동통신 및 핀테크 서비스 제공업체입니다. 모회사인 남아프리카공화국 MTN 그룹의 자회사로 가나 증권거래소에 상장되어 있습니다. 안정적인 가입자 기반을 바탕으로 현지 통신 시장에서 독보적인 지위를 차지하고 있습니다.",
+    "founded_year": 2006,
+    "headquarters": "아크라, 가나",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-21 14:02"
+  },
+  {
     "id": "stanbic_bank_ghana",
     "name": "Stanbic Bank Ghana Limited",
     "name_ko": "스탠빅 은행 가나",
@@ -2736,6 +2752,22 @@
     "updated_at": "2026-07-29 23:02"
   },
   {
+    "id": "ajel",
+    "name": "Ajel Ltd.",
+    "name_ko": "아젤",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "BSE",
+    "ticker": "532322",
+    "sector": "IT 서비스",
+    "description": "아젤은 인도에 본사를 둔 글로벌 IT 컨설팅 및 소프트웨어 개발 서비스 제공 기업입니다. 기업 고객을 위한 맞춤형 소프트웨어 솔루션, 시스템 통합, IT 아웃소싱 서비스를 제공합니다. 다양한 산업 분야에 걸쳐 기술 컨설팅과 디지털 전환 서비스를 지원하고 있습니다.",
+    "founded_year": 1996,
+    "headquarters": "하이데라바드, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-21 14:01"
+  },
+  {
     "id": "andrew_yule_and_company",
     "name": "Andrew Yule & Company Limited",
     "name_ko": "앤드류 율 컴퍼니",
@@ -3408,6 +3440,38 @@
     "updated_at": "2026-07-25 07:28"
   },
   {
+    "id": "mvk_agro_food",
+    "name": "M.V.K. Agro Food",
+    "name_ko": "M.V.K. 아그로 푸드",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "농식품",
+    "description": "인도의 농식품 기업으로 농업 및 식품 가공 관련 사업을 영위하고 있습니다. 최근 분기 기준 큰 폭의 매출 및 순이익 성장을 기록하며 주목받고 있습니다. 인도 시장에서 농식품 분야의 입지를 확대해 나가고 있습니다.",
+    "founded_year": null,
+    "headquarters": "인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-21 14:01"
+  },
+  {
+    "id": "manipal_health_enterprises",
+    "name": "Manipal Health Enterprises",
+    "name_ko": "마니팔 헬스 엔터프라이즈",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "헬스케어",
+    "description": "인도를 대표하는 대형 병원 체인 및 헬스케어 서비스 제공 기업입니다. 고품질의 의료 서비스와 첨단 시설을 갖추고 인도 전역에서 네트워크를 확장하고 있습니다. 민간 의료 부문에서 선도적인 시장 지위를 차지하고 있습니다.",
+    "founded_year": 1991,
+    "headquarters": "벵갈루루, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-21 14:01"
+  },
+  {
     "id": "manorama_industries",
     "name": "Manorama Industries Limited",
     "name_ko": "마노라마 인더스트리",
@@ -3824,6 +3888,22 @@
     "updated_at": "2026-07-19 12:56"
   },
   {
+    "id": "spel_semiconductor",
+    "name": "Spel Semiconductor Ltd.",
+    "name_ko": "스펠 반도체",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "BSE",
+    "ticker": "517114",
+    "sector": "반도체",
+    "description": "스펠 반도체는 인도 최초의 반도체 IC 조립 및 테스트 OSAT(Outsourced Semiconductor Assembly and Test) 업체입니다. 집적 회로의 조립 및 테스트 서비스를 제공하여 인도 국내외 전자 산업을 지원합니다. 인도 반도체 제조 생태계에서 오랜 업력을 가진 상장 기업입니다.",
+    "founded_year": 1988,
+    "headquarters": "첸나이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-21 14:01"
+  },
+  {
     "id": "state_bank_of_india",
     "name": "State Bank of India",
     "name_ko": "인도국영은행",
@@ -3952,22 +4032,6 @@
     "updated_at": "2026-08-14 23:23"
   },
   {
-    "id": "singareni_collieries",
-    "name": "The Singareni Collieries Company Limited",
-    "name_ko": "싱가레니 콜리어리스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "",
-    "sector": "에너지",
-    "description": "싱가레니 콜리어리스는 인도의 국영 탄광 및 에너지 기업으로, 주로 텔랑가나주에서 석탄 채굴 및 화력 발전 사업을 수행하고 있습니다. 1920년에 설립되었으며, 인도 남부 지역의 전력 공급과 산업 성장에 필수적인 에너지 자원을 안정적으로 공급하는 핵심적인 역할을 담당하고 있습니다. 인도 정부와 텔랑가나주 정부가 공동으로 소유하고 있는 대형 민간 및 공공 성격의 기업입니다.",
-    "founded_year": 1920,
-    "headquarters": "하이드라바드, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-30 17:03"
-  },
-  {
     "id": "singareni_collieries_company",
     "name": "The Singareni Collieries Company Limited",
     "name_ko": "싱가레니 콜리어리스",
@@ -3982,6 +4046,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-08 01:12"
+  },
+  {
+    "id": "singareni_collieries",
+    "name": "The Singareni Collieries Company Limited",
+    "name_ko": "싱가레니 콜리어리스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "싱가레니 콜리어리스는 인도의 국영 탄광 및 에너지 기업으로, 주로 텔랑가나주에서 석탄 채굴 및 화력 발전 사업을 수행하고 있습니다. 1920년에 설립되었으며, 인도 남부 지역의 전력 공급과 산업 성장에 필수적인 에너지 자원을 안정적으로 공급하는 핵심적인 역할을 담당하고 있습니다. 인도 정부와 텔랑가나주 정부가 공동으로 소유하고 있는 대형 민간 및 공공 성격의 기업입니다.",
+    "founded_year": 1920,
+    "headquarters": "하이드라바드, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-30 17:03"
   },
   {
     "id": "tata_power",
