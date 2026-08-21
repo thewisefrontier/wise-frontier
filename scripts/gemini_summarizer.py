@@ -47,6 +47,16 @@ except Exception:
     def detect_script_leak(title, body):
         return []
 
+# 저장 시점 raw JSON 본문 차단. import 실패해도 본 기능이 죽지 않도록 폴백을 둔다.
+# 실사고(2026-08-20, id=89758): update_summary()는 JSON을 요청한 적이 없는데도
+# Gemini가 자발적으로 gemini_writer.py 스타일 JSON 전체를 응답했고, 이 파일엔
+# gemini_writer.py의 _unwrap_json_body() 같은 가드가 전혀 없어 그대로 저장됐다.
+try:
+    from json_body_guard import unwrap_json_body
+except Exception:
+    def unwrap_json_body(text, _depth=0):
+        return None
+
 # 카테고리 정규화 공통 모듈. import 실패해도 본 기능이 죽지 않도록 폴백을 둔다.
 try:
     from category_guard import normalize_category
@@ -141,6 +151,14 @@ def update_summary(article_id: int, summary_ko: str):
     if detect_script_leak("", summary_ko):
         print(f"  ⚠️ [문자 혼입 감지] 업데이트 차단: id={article_id}")
         return
+    _unwrapped = unwrap_json_body(summary_ko)
+    if _unwrapped is not None:
+        if _unwrapped:
+            print(f"  🔧 [raw JSON 본문] id={article_id} 내부 body 추출 → 복구")
+            summary_ko = _unwrapped
+        else:
+            print(f"  ⛔ [raw JSON 본문] 업데이트 차단: id={article_id}")
+            return
     requests.patch(
         f"{_sb_url()}?id=eq.{article_id}",
         headers=_sb_headers(),
@@ -837,6 +855,17 @@ def merge_trend_article(existing: dict, new_title: str, new_body: str, note: str
         print(f"    → 새 전개 없음, append 생략 (id={art_id})")
         return True  # 병합 성공 처리 → 신규 중복 생성 방지
 
+    # delta 자체가 raw JSON이면 concat 후엔 "{"로 시작 안 해서 아래 new_summary
+    # 검사로는 못 잡는다 — append되기 전, delta 단독일 때 확인해야 한다.
+    _unwrapped_delta = unwrap_json_body(delta)
+    if _unwrapped_delta is not None:
+        if _unwrapped_delta:
+            print(f"  🔧 [raw JSON 본문] id={art_id} 새 전개 내부 body 추출 → 복구")
+            delta = _unwrapped_delta
+        else:
+            print(f"  ⛔ [raw JSON 본문] id={art_id} 병합 차단(새 전개)")
+            return False
+
     if _HAS_UPDATE_BLOCK:
         u, b, l = _split_article(existing_summary)
         new_summary = _compose_article(_prepend_update(u, delta), b, l)
@@ -924,6 +953,14 @@ def save_trend_article(group_name: str, title: str, body: str,
     if detect_script_leak(title, body):
         print(f"  ⚠️ [문자 혼입 감지] 저장 차단: {title[:60]}")
         return -1
+    _unwrapped = unwrap_json_body(body)
+    if _unwrapped is not None:
+        if _unwrapped:
+            print("  🔧 [raw JSON 본문] 내부 body 추출 → 복구")
+            body = _unwrapped
+        else:
+            print(f"  ⛔ [raw JSON 본문] 저장 차단: {title[:60]}")
+            return -1
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
     payload = {
         "title_en": title, "title_ko": title,
@@ -1525,6 +1562,16 @@ JSON 배열로만 응답하세요 (마크다운 없이):
             time.sleep(CALL_INTERVAL)
             continue
 
+        _unwrapped = unwrap_json_body(body)
+        if _unwrapped is not None:
+            if _unwrapped:
+                print(f"  [{topic}] 🔧 [raw JSON 본문] 내부 body 추출 → 복구")
+                body = _unwrapped
+            else:
+                print(f"  [{topic}] ⛔ [raw JSON 본문] 미발행: {title[:50]}")
+                time.sleep(CALL_INTERVAL)
+                continue
+
         # 생성된 실제 제목+국가로 동일 사건 루트 재확인 (우선)
         similar = find_similar_trend(title, country=art_country, days=14, body=body)
 
@@ -1820,6 +1867,16 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
             print(f"  [{topic}] ⚠️ [문자 혼입 감지] 미발행: {title[:50]}")
             time.sleep(CALL_INTERVAL)
             continue
+
+        _unwrapped = unwrap_json_body(body)
+        if _unwrapped is not None:
+            if _unwrapped:
+                print(f"  [{topic}] 🔧 [raw JSON 본문] 내부 body 추출 → 복구")
+                body = _unwrapped
+            else:
+                print(f"  [{topic}] ⛔ [raw JSON 본문] 미발행: {title[:50]}")
+                time.sleep(CALL_INTERVAL)
+                continue
 
         # 생성된 실제 제목+국가로 동일 사건 루트 재확인 (우선)
         ext_similar = find_similar_trend(title, country=art_country, days=14, body=body)

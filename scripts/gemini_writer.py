@@ -39,6 +39,13 @@ except Exception:
     def detect_script_leak(title, body):
         return []
 
+# 저장 시점 raw JSON 본문 차단. import 실패해도 본 기능이 죽지 않도록 폴백을 둔다.
+try:
+    from json_body_guard import unwrap_json_body as _unwrap_json_body
+except Exception:
+    def _unwrap_json_body(text, _depth=0):
+        return None
+
 KST = timezone(timedelta(hours=9))
 
 def now_kst() -> datetime:
@@ -360,55 +367,6 @@ def find_similar_article(title: str, own_articles: list, threshold: int = 70):
         print(f"  ⚠️ [2차 중복체크 경고] {e}")
 
     return None, 0
-
-
-# ── raw JSON 본문 차단 ──────────────────────────────────────────────────
-# ⚠️ 2026-08-04 사고: Gemini가 JSON 응답의 body 필드 "안에" JSON 전문을 다시
-#   써넣는 중첩 출력을 하는 경우가 있다(12건, 발행 8건). 바깥 JSON은 문법이
-#   정상이라 parse_json_response()를 그대로 통과해 본문이 JSON 덩어리가 됐다.
-#   ① 파싱 단계에서 언랩 시도 ② 저장/갱신 관문에서 최종 차단(키릴 차단과 동일 계열).
-_JSON_BODY_KEY_RE = re.compile(r'"(?:body|\ubcf8\ubb38)"\s*:\s*"')
-
-
-def _unwrap_json_body(text, _depth=0):
-    """본문이 raw JSON이면 내부 body를 꺼낸다.
-    반환: None=정상 본문(변경 불필요) / str=복구된 본문 / ""=JSON이지만 복구 실패
-
-    실사고(2026-08-04~08-10, 16건 확인): 클러스터 병합 업데이트("기존 기사 업데이트")
-    응답에서 Gemini가 body 필드 안에 JSON 전체를 또 넣는 경우가 있는데, 이게 2단
-    이상 겹치면(바깥 body 안에 다시 body가 있는 JSON) 예전 코드는 한 겹만 벗기고
-    포기해서 안쪽 JSON 그대로가 본문으로 저장됐다(summary_3lines/investment_idea는
-    바깥쪽 JSON에서 바로 뽑히므로 정상이었고, body만 깨졌던 이유). depth 제한을 두고
-    재귀적으로 계속 벗긴다."""
-    if not text:
-        return None
-    s = str(text).strip()
-    if not s.startswith("{"):
-        return None
-    head = s[:800]
-    if not (_JSON_BODY_KEY_RE.search(head) or '"title"' in head or '"제목"' in head):
-        return None
-    j = s.rfind("}")
-    for cand in (s, s[:j + 1] if j > 0 else ""):
-        if not cand:
-            continue
-        try:
-            data = json.loads(cand)
-        except Exception:
-            continue
-        if not isinstance(data, dict):
-            continue
-        inner = str(data.get("body") or data.get("본문") or "").strip()
-        if not inner:
-            continue
-        if not inner.startswith("{"):
-            return inner
-        if _depth >= 4:
-            continue  # 비정상적으로 깊게 중첩 -> 이 후보는 포기, 다음 후보 시도
-        deeper = _unwrap_json_body(inner, _depth + 1)
-        if deeper:
-            return deeper
-    return ""
 
 
 def save_article(title_ko, summary_ko, cluster_key, category, region, country="", article_count=0, published=True, countries=None, image_url="", is_travel=False, summary_3lines="", investment_idea="", unpub_reason=""):
