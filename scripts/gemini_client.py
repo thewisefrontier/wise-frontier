@@ -20,6 +20,8 @@ script_leak.py·json_body_guard.py와 같은 이유로 공용화한다.
 코드는 전혀 안 바뀐다.
 """
 
+import time
+
 import requests
 
 DEFAULT_GEMINI_MODELS = [
@@ -29,6 +31,11 @@ DEFAULT_GEMINI_MODELS = [
     "gemini-3.5-flash-lite",
     "gemini-3.1-flash-lite",
 ]
+
+# 429/503으로 키를 바로바로 넘기면 짧은 시간에 여러 키를 몰아 쏘게 되어
+# 분당 한도(RPM)를 스크립트 자신이 태워버릴 수 있다(2026-08-22 실사고 —
+# frontier_markets_writer.py 수동 실행이 5키×2모델 연속 호출로 RPM 초과).
+RETRY_DELAY = 2
 
 
 class GeminiClient:
@@ -89,9 +96,11 @@ class GeminiClient:
                     elif res.status_code == 429:
                         print(f"  [429] {model} 키 {idx+1} 한도 초과 → 다음 키")
                         exhausted.add(idx)
+                        time.sleep(RETRY_DELAY)
                         continue
                     elif res.status_code == 503:
                         print(f"  [503] {model} 키 {idx+1} 과부하 → 다음 키")
+                        time.sleep(RETRY_DELAY)
                         continue
                     else:
                         print(f"[ERROR] Gemini {res.status_code}: {res.text[:200]}")

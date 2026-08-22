@@ -107,7 +107,7 @@ def _sb_articles_url():
     return f"{SUPABASE_URL}/rest/v1/articles"
 
 
-def call_gemini(prompt: str, max_tokens: int = 2500, start_tier: int = 3, use_search: bool = False) -> str | None:
+def call_gemini(prompt: str, max_tokens: int = 2500, start_tier: int = 0, use_search: bool = False) -> str | None:
     return _gemini_client.call(prompt, max_tokens=max_tokens, start_tier=start_tier,
                                 temperature=0.3, timeout=(10, 45), use_search=use_search)
 
