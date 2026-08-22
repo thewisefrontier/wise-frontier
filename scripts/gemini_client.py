@@ -46,7 +46,7 @@ class GeminiClient:
         self._exhausted_keys = {m: set() for m in self.models}
 
     def call(self, prompt, max_tokens=1500, start_tier=0, temperature=0.5,
-             timeout=(10, 45), use_search=False):
+             timeout=(10, 45), use_search=False, max_stages=None):
         if not self.api_keys:
             print("[ERROR] GEMINI_API_KEY 없음")
             return None
@@ -60,6 +60,15 @@ class GeminiClient:
 
         n = len(self.api_keys)
         model_stages = [(m, self._exhausted_keys[m]) for m in self.models[start_tier:]]
+        # 검색 그라운딩(use_search)은 구글 쪽에서 그라운딩 전용 쿼터가 아니라
+        # 훨씬 작은 generate_content_free_tier_requests(키당 하루 20건 수준)로
+        # 잘못 집계되는 사례가 보고돼 있다(2026-08-22 실사고, frontier_markets_writer.py
+        # 25회=5키×5모델 연속 429). 이 좁은 쿼터는 모델을 바꿔도 안 풀릴 가능성이
+        # 높으므로, 모델 단계를 끝까지 도는 대신 max_stages로 시도 폭을 제한해
+        # 쿼터를 헛되이 태우지 않고 빨리 포기하게 한다(호출부가 비검색 폴백으로
+        # 넘어갈 수 있게).
+        if max_stages is not None:
+            model_stages = model_stages[:max_stages]
 
         for model, exhausted in model_stages:
             available = [i for i in range(n) if i not in exhausted]

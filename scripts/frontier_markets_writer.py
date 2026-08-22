@@ -107,9 +107,11 @@ def _sb_articles_url():
     return f"{SUPABASE_URL}/rest/v1/articles"
 
 
-def call_gemini(prompt: str, max_tokens: int = 2500, start_tier: int = 0, use_search: bool = False) -> str | None:
+def call_gemini(prompt: str, max_tokens: int = 2500, start_tier: int = 0, use_search: bool = False,
+                 max_stages: int | None = None) -> str | None:
     return _gemini_client.call(prompt, max_tokens=max_tokens, start_tier=start_tier,
-                                temperature=0.3, timeout=(10, 45), use_search=use_search)
+                                temperature=0.3, timeout=(10, 45), use_search=use_search,
+                                max_stages=max_stages)
 
 
 # ── 심볼 정의 (2026-08-21 야후 파이낸스 실측 검증) ──────────────
@@ -413,7 +415,15 @@ def parse_article_output(text: str) -> tuple[str, str]:
 
 
 def call_gemini_article(prompt: str, max_tokens: int = 3500) -> str | None:
-    text = call_gemini(prompt, max_tokens=max_tokens, use_search=True)
+    # 검색 그라운딩(use_search)은 구글 쪽 쿼터 오분류 버그로 모델을 바꿔가며
+    # 재시도해도 안 풀릴 때가 있다(2026-08-22 실사고, 5키×5모델=25연속 429).
+    # max_stages=1로 헛된 재시도를 줄이고, 그래도 막히면 검색 없이(전체
+    # 캐스케이드) 폴백해 최소한 기사는 나가게 한다 — 실시간 뉴스 맥락은
+    # 빠지지만 시세 수치만으로도 기사 자체는 유효하다.
+    text = call_gemini(prompt, max_tokens=max_tokens, use_search=True, max_stages=1)
+    if not text:
+        print("  ⚠️ 검색 그라운딩 실패 → 검색 없이 재시도")
+        text = call_gemini(prompt, max_tokens=max_tokens, use_search=False)
     time.sleep(5)
     if not text:
         return None
@@ -422,7 +432,7 @@ def call_gemini_article(prompt: str, max_tokens: int = 3500) -> str | None:
         print("  ⚠️ 논평체 감지 → 재생성")
         retried = call_gemini(
             prompt + "\n\n[재작성 지시] 논평/칼럼 문체가 섞였습니다. 사실 전달 중심으로만 다시 작성하세요.",
-            max_tokens=max_tokens, use_search=True,
+            max_tokens=max_tokens, use_search=True, max_stages=1,
         )
         if retried:
             text = retried
@@ -435,7 +445,7 @@ def call_gemini_article(prompt: str, max_tokens: int = 3500) -> str | None:
         retried = call_gemini(
             prompt + f"\n\n[재작성 지시] 다음 수치를 시세 데이터와 다르게 잘못 썼습니다: {fabricated}. "
                      "가격·환율·지수 수치는 반드시 위 [시세 데이터]에 나온 값 그대로 쓰세요.",
-            max_tokens=max_tokens, use_search=True,
+            max_tokens=max_tokens, use_search=True, max_stages=1,
         )
         if retried:
             text = retried
