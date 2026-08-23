@@ -914,6 +914,110 @@ def _pub_day_label(raw) -> str:
     return f"{mm}월 {dd}일"
 
 
+_ACRONYM_RE = re.compile(r'\b[A-Z]{2,6}(?:/[A-Z0-9]{2,6})?\b')
+
+# 흔히 쓰여 이미 모델이 잘 아는 약어는 위키 조회에서 제외(불필요한 API 호출 방지).
+_COMMON_ACRONYMS = {
+    "UN", "EU", "US", "USA", "UK", "WHO", "CEO", "CFO", "CTO", "COO", "GDP",
+    "IPO", "AI", "IT", "NATO", "FBI", "CIA", "NASA", "FIFA", "UEFA", "OPEC",
+    "IMF", "WTO", "UNESCO", "USD", "EUR", "GBP", "JPY", "CNY", "KRW", "UAE",
+    "NGO", "PM", "VP", "CEOs",
+}
+
+
+def wikipedia_lookup(name: str, threshold: int = 70) -> tuple | None:
+    """이름과 가장 비슷한 위키 문서의 (제목, 한 줄 설명) 반환. 없으면 None.
+    무료 위키 API만 쓰므로(Gemini 미사용) 쿼터 부담이 없다.
+    opensearch는 설명(description)을 거의 항상 빈 문자열로 주기 때문에(실측
+    2026-08-23: FARDC 검색 결과 desc가 전부 ''), 제목만 opensearch로 찾고
+    한 줄 설명은 query API(extracts)로 별도 조회한다."""
+    name = (name or "").strip()
+    if not name:
+        return None
+    best_title, best_lang, best_score = None, None, 0
+    for lang in ("ko", "en"):
+        try:
+            res = requests.get(
+                f"https://{lang}.wikipedia.org/w/api.php",
+                params={"action": "opensearch", "search": name, "limit": 3, "namespace": 0, "format": "json"},
+                headers={"User-Agent": "NewsFinal-EntityCheck/1.0 (+https://newsfinal.co.kr)"},
+                timeout=10,
+            )
+            if res.status_code == 200:
+                data = res.json()
+                if len(data) >= 2 and isinstance(data[1], list):
+                    for title in data[1]:
+                        score = fuzz.token_sort_ratio(name, title)
+                        if score >= threshold and score > best_score:
+                            best_title, best_lang, best_score = title, lang, score
+        except Exception:
+            continue
+
+    if not best_title:
+        return None
+
+    try:
+        res = requests.get(
+            f"https://{best_lang}.wikipedia.org/w/api.php",
+            params={"action": "query", "prop": "extracts", "exintro": 1, "explaintext": 1,
+                    "exsentences": 1, "redirects": 1, "titles": best_title, "format": "json"},
+            headers={"User-Agent": "NewsFinal-EntityCheck/1.0 (+https://newsfinal.co.kr)"},
+            timeout=10,
+        )
+        if res.status_code == 200:
+            pages = res.json().get("query", {}).get("pages", {})
+            for page in pages.values():
+                extract = (page.get("extract") or "").strip()
+                if extract:
+                    return (best_title, extract)
+    except Exception:
+        pass
+    return None
+
+
+def extract_naming_candidates(text: str, limit: int = 4) -> list:
+    """소스 원문(영문)에서 약어 패턴을 규칙 기반으로 추출(LLM 미사용).
+    "R K Sharma"류 이니셜 인명은 위키 조회 대상에서 제외한다 — 실측(2026-08-23)
+    결과 짧은 이니셜 인명은 전혀 무관한 동명이인(예: "R K Sharma" → 캐나다
+    벤처캐피털리스트 "Ray Sharma")과 fuzzy-match되는 오탐이 흔했다. 이니셜
+    인명은 위키 확인 없이 writer_rules의 "이니셜 생략, 성만 표기" 규칙에만
+    맡긴다(확인 불가능한 추측을 프롬프트에 끼워 넣는 것보다 안전)."""
+    if not text:
+        return []
+    seen, found = set(), []
+    for m in _ACRONYM_RE.finditer(text):
+        term = m.group().strip()
+        base = term.split('/')[0]
+        if term in seen or base in _COMMON_ACRONYMS:
+            continue
+        seen.add(term)
+        found.append(term)
+        if len(found) >= limit:
+            break
+    return found
+
+
+def build_naming_hints(source_text: str) -> str:
+    """약어 후보를 위키에서 조회해 프롬프트에 붙일 표기 참고 블록을 만든다.
+    2026-08-23 실사고(id=94001 "에프에이알디시" 등)로 도입 — 검색 그라운딩
+    (Gemini) 대신 무료 위키 API를 먼저 쓰고, 위키에 없는 후보는 그냥
+    건너뛴다(모델 자체 지식 + writer_rules의 약어 규칙에 맡김). 이 저장소에서
+    기사량이 가장 많은 스크립트라 Gemini 호출을 추가하지 않는 것이 핵심."""
+    hints = []
+    for term in extract_naming_candidates(source_text):
+        hit = wikipedia_lookup(term)
+        if hit:
+            title, desc = hit
+            hints.append(f"- {term}: {title} — {desc}")
+    if not hints:
+        return ""
+    return (
+        "\n\n[표기 참고 - 위키피디아 확인]\n" + "\n".join(hints) +
+        "\n위 정보를 참고해 정확한 한국어 표기로 쓰세요(약어는 로마자 그대로 두고 "
+        "처음 등장 시 위 설명을 바탕으로 뜻을 괄호 병기)."
+    )
+
+
 def build_issue_prompt(cluster, existing_summary=None):
     sorted_cluster = sorted(cluster, key=lambda a: bool(a.get("full_text")), reverse=True)
     main_articles = sorted_cluster[:5]
@@ -934,6 +1038,8 @@ def build_issue_prompt(cluster, existing_summary=None):
         article_list += "\n[추가 관련 기사 제목]\n"
         for t in extra_titles:
             article_list += f"- {t}\n"
+
+    article_list += build_naming_hints(article_list)
 
     today_str = now_kst().strftime("%Y년 %m월 %d일")
     country = cluster[0].get("country") or ""
