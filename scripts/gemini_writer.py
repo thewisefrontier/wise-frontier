@@ -915,6 +915,11 @@ def _pub_day_label(raw) -> str:
 
 
 _ACRONYM_RE = re.compile(r'\b[A-Z]{2,6}(?:/[A-Z0-9]{2,6})?\b')
+# 2~3단어 타이틀케이스 조직명(예: "Assam Rifles", "Guruvayur Devaswom Board").
+# 사람 이름과 헷갈리지 않도록 흔한 인명 접두 호칭이 앞에 오면 제외한다.
+_TITLECASE_ORG_RE = re.compile(r'\b(?:[A-Z][a-z]+ ){1,2}[A-Z][a-z]+\b')
+_PERSON_TITLE_PREFIXES = {"Mr", "Mrs", "Ms", "Dr", "Prof", "President", "Prime",
+                           "Minister", "Chairman", "Secretary", "Governor", "Chief"}
 
 # 흔히 쓰여 이미 모델이 잘 아는 약어는 위키 조회에서 제외(불필요한 API 호출 방지).
 _COMMON_ACRONYMS = {
@@ -976,36 +981,60 @@ def wikipedia_lookup(name: str, threshold: int = 70) -> tuple | None:
 
 
 def extract_naming_candidates(text: str, limit: int = 4) -> list:
-    """소스 원문(영문)에서 약어 패턴을 규칙 기반으로 추출(LLM 미사용).
-    "R K Sharma"류 이니셜 인명은 위키 조회 대상에서 제외한다 — 실측(2026-08-23)
-    결과 짧은 이니셜 인명은 전혀 무관한 동명이인(예: "R K Sharma" → 캐나다
-    벤처캐피털리스트 "Ray Sharma")과 fuzzy-match되는 오탐이 흔했다. 이니셜
-    인명은 위키 확인 없이 writer_rules의 "이니셜 생략, 성만 표기" 규칙에만
-    맡긴다(확인 불가능한 추측을 프롬프트에 끼워 넣는 것보다 안전)."""
+    """소스 원문(영문)에서 약어·타이틀케이스 조직명 후보를 규칙 기반으로 추출
+    (LLM 미사용). (용어, 종류) 튜플로 반환 — 종류에 따라 위키 매칭 엄격도가
+    다르다(build_naming_hints 참조).
+
+    "R K Sharma"류 이니셜 인명은 제외한다 — 실측(2026-08-23) 결과 짧은
+    이니셜 인명은 전혀 무관한 동명이인(예: "R K Sharma" → 캐나다 벤처캐피털
+    리스트 "Ray Sharma")과 fuzzy-match되는 오탐이 흔했다. 이니셜 인명은
+    위키 확인 없이 writer_rules의 "이니셜 생략, 성만 표기" 규칙에만 맡긴다
+    (확인 불가능한 추측을 프롬프트에 끼워 넣는 것보다 안전)."""
     if not text:
         return []
     seen, found = set(), []
+
     for m in _ACRONYM_RE.finditer(text):
         term = m.group().strip()
         base = term.split('/')[0]
         if term in seen or base in _COMMON_ACRONYMS:
             continue
         seen.add(term)
-        found.append(term)
+        found.append((term, "acronym"))
+        if len(found) >= limit:
+            return found
+
+    for m in _TITLECASE_ORG_RE.finditer(text):
+        term = m.group().strip()
+        if term in seen:
+            continue
+        words = term.split()
+        prefix_before = text[max(0, m.start() - 15):m.start()].split()
+        if (words[0].rstrip(".,") in _PERSON_TITLE_PREFIXES
+                or (prefix_before and prefix_before[-1].rstrip(".,") in _PERSON_TITLE_PREFIXES)):
+            continue
+        seen.add(term)
+        found.append((term, "org"))
         if len(found) >= limit:
             break
     return found
 
 
 def build_naming_hints(source_text: str) -> str:
-    """약어 후보를 위키에서 조회해 프롬프트에 붙일 표기 참고 블록을 만든다.
-    2026-08-23 실사고(id=94001 "에프에이알디시" 등)로 도입 — 검색 그라운딩
-    (Gemini) 대신 무료 위키 API를 먼저 쓰고, 위키에 없는 후보는 그냥
-    건너뛴다(모델 자체 지식 + writer_rules의 약어 규칙에 맡김). 이 저장소에서
-    기사량이 가장 많은 스크립트라 Gemini 호출을 추가하지 않는 것이 핵심."""
+    """약어·조직명 후보를 위키에서 조회해 프롬프트에 붙일 표기 참고 블록을
+    만든다. 2026-08-23 실사고(id=94001 "에프에이알디시", id=95881
+    "Assam Rifles" 음차 누락 등)로 도입 — 검색 그라운딩(Gemini) 대신 무료
+    위키 API를 먼저 쓰고, 위키에 없는 후보는 그냥 건너뛴다(모델 자체 지식 +
+    writer_rules 규칙에 맡김). 이 저장소에서 기사량이 가장 많은 스크립트라
+    Gemini 호출을 추가하지 않는 것이 핵심.
+
+    타이틀케이스 조직명("org")은 약어보다 애매한 문자열이라(사람 이름과
+    형태가 겹침) 위키 매칭 threshold를 95로 엄격하게 잡아 오탐 위험을
+    낮춘다 — 약어(70)보다 훨씬 보수적이다."""
     hints = []
-    for term in extract_naming_candidates(source_text):
-        hit = wikipedia_lookup(term)
+    for term, kind in extract_naming_candidates(source_text):
+        threshold = 95 if kind == "org" else 70
+        hit = wikipedia_lookup(term, threshold=threshold)
         if hit:
             title, desc = hit
             hints.append(f"- {term}: {title} — {desc}")
