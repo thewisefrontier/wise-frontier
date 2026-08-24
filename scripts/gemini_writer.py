@@ -918,6 +918,9 @@ _ACRONYM_RE = re.compile(r'\b[A-Z]{2,6}(?:/[A-Z0-9]{2,6})?\b')
 # 2~3단어 타이틀케이스 조직명(예: "Assam Rifles", "Guruvayur Devaswom Board").
 # 사람 이름과 헷갈리지 않도록 흔한 인명 접두 호칭이 앞에 오면 제외한다.
 _TITLECASE_ORG_RE = re.compile(r'\b(?:[A-Z][a-z]+ ){1,2}[A-Z][a-z]+\b')
+# 단일 단어 고유명사(예: "Guruvayur", "Imphal"). 문장 맨 앞은 그냥 대문자로
+# 시작하는 흔한 단어일 뿐 고유명사 신호가 아니므로 코드에서 따로 제외한다.
+_SINGLE_PROPER_RE = re.compile(r'\b[A-Z][a-z]{3,}\b')
 _PERSON_TITLE_PREFIXES = {"Mr", "Mrs", "Ms", "Dr", "Prof", "President", "Prime",
                            "Minister", "Chairman", "Secretary", "Governor", "Chief"}
 
@@ -927,6 +930,15 @@ _COMMON_ACRONYMS = {
     "IPO", "AI", "IT", "NATO", "FBI", "CIA", "NASA", "FIFA", "UEFA", "OPEC",
     "IMF", "WTO", "UNESCO", "USD", "EUR", "GBP", "JPY", "CNY", "KRW", "UAE",
     "NGO", "PM", "VP", "CEOs",
+}
+
+# 이미 모델이 잘 아는 흔한 단일 고유명사는 조회에서 제외(불필요한 API 호출 방지).
+_COMMON_PROPER_NOUNS = {
+    "India", "China", "Japan", "Korea", "America", "Africa", "Europe", "Asia",
+    "United", "America", "Reuters", "Bloomberg", "Twitter", "Facebook",
+    "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",
+    "January", "February", "March", "April", "May", "June", "July", "August",
+    "September", "October", "November", "December", "New", "The",
 }
 
 
@@ -1004,17 +1016,33 @@ def extract_naming_candidates(text: str, limit: int = 4) -> list:
         if len(found) >= limit:
             return found
 
+    org_words = set()
     for m in _TITLECASE_ORG_RE.finditer(text):
         term = m.group().strip()
+        words = term.split()
+        org_words.update(words)
         if term in seen:
             continue
-        words = term.split()
         prefix_before = text[max(0, m.start() - 15):m.start()].split()
         if (words[0].rstrip(".,") in _PERSON_TITLE_PREFIXES
                 or (prefix_before and prefix_before[-1].rstrip(".,") in _PERSON_TITLE_PREFIXES)):
             continue
         seen.add(term)
         found.append((term, "org"))
+        if len(found) >= limit:
+            return found
+
+    # 단일 단어 고유명사: 문장 맨 앞(그냥 대문자로 시작하는 흔한 단어일 뿐인
+    # 경우)과, 위에서 이미 조직명의 일부로 다룬 단어는 제외한다.
+    for m in _SINGLE_PROPER_RE.finditer(text):
+        term = m.group().strip()
+        if term in seen or term in org_words or term in _COMMON_PROPER_NOUNS:
+            continue
+        preceding = text[:m.start()].rstrip()
+        if not preceding or preceding[-1] in ".!?":
+            continue
+        seen.add(term)
+        found.append((term, "single"))
         if len(found) >= limit:
             break
     return found
@@ -1028,12 +1056,14 @@ def build_naming_hints(source_text: str) -> str:
     writer_rules 규칙에 맡김). 이 저장소에서 기사량이 가장 많은 스크립트라
     Gemini 호출을 추가하지 않는 것이 핵심.
 
-    타이틀케이스 조직명("org")은 약어보다 애매한 문자열이라(사람 이름과
-    형태가 겹침) 위키 매칭 threshold를 95로 엄격하게 잡아 오탐 위험을
-    낮춘다 — 약어(70)보다 훨씬 보수적이다."""
+    타이틀케이스 조직명("org")과 단일 단어 고유명사("single")는 약어보다
+    애매한 문자열이라(사람 이름·흔한 단어와 형태가 겹침) 위키 매칭
+    threshold를 95로 엄격하게 잡아 오탐 위험을 낮춘다 — 약어(70)보다
+    훨씬 보수적이다. 특히 단일 단어는 후보군 중 가장 모호하므로 정확
+    일치에 가까운 매칭만 신뢰한다."""
     hints = []
     for term, kind in extract_naming_candidates(source_text):
-        threshold = 95 if kind == "org" else 70
+        threshold = 70 if kind == "acronym" else 95
         hit = wikipedia_lookup(term, threshold=threshold)
         if hit:
             title, desc = hit
