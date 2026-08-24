@@ -71,6 +71,12 @@ except Exception:
 
 _gemini_client = GeminiClient(GEMINI_API_KEYS, GEMINI_MODELS)
 
+try:
+    from nvidia_client import call_nvidia
+except Exception:
+    def call_nvidia(*a, **k):
+        return None
+
 
 def now_kst() -> datetime:
     return datetime.now(timezone.utc).astimezone(KST)
@@ -282,6 +288,39 @@ def wiki_cross_check(suspect: str) -> str:
     return suspect
 
 
+# ── NVIDIA(Nemotron) 2차 교차검증 ─────────────────────────────
+# "같은 모델(Gemini)이 쓰고 같은 모델이 검증하면 맹점이 그대로 반복된다"
+# (2026-08-24 사용자 지적) — 다른 모델 계열로 독립 재검토를 받는다.
+# 무료 티어 크레딧이 한정적이라(월 1,000) Gemini가 실제로 의심을 확정한
+# 소수 건에만 쓴다. wiki_unconfirmed 단독 신호(무명 고유명사라 위키에 없을
+# 뿐인 경우가 많은 노이즈 신호)는 여기 대상이 아니다 — Gemini 판단이
+# 실제로 있어야만 호출한다(사용자 결정: "1차 모델을 더욱 고도화시켜서
+# 최대한 나오는 걸 줄여야지").
+def nvidia_cross_check(title: str, body: str, gemini_suspect: str) -> str:
+    if not gemini_suspect:
+        return ""
+    prompt = f"""다른 AI 모델이 아래 기사에서 다음과 같은 문제를 지적했습니다. 이
+지적이 실제로 타당한지 기사 본문과 대조해 독립적으로 재검토하세요. 같은 모델이
+쓰고 같은 모델이 검증하면 놓치는 게 있을 수 있어 다른 모델의 시각으로 재확인하는
+것입니다.
+
+[제목]
+{title}
+
+[본문]
+{body[:2000]}
+
+[다른 모델의 지적]
+{gemini_suspect}
+
+각 지적 항목에 대해 "동의" 또는 "동의 안 함(이유)"으로만 짧게 답하세요. 전부
+동의하면 "전부 동의"라고만 답하세요."""
+    result = call_nvidia(prompt, max_tokens=400)
+    if not result:
+        return ""
+    return f"[Nemotron 교차검증] {result.strip()}"
+
+
 def save_review(article_id: int, status: str, suspect_names: str) -> bool:
     try:
         res = requests.post(
@@ -350,9 +389,17 @@ def run():
 
         # 2차: Gemini 검색 그라운딩 판단 (기존 방식, 보조 신호로 격하)
         result = call_gemini(build_check_prompt(title, body))
-        suspect = parse_check_result(result)
+        gemini_suspect = parse_check_result(result)
+        suspect = gemini_suspect
         if suspect:
             suspect = wiki_cross_check(suspect)
+            # 3차: 다른 모델 계열(Nemotron)로 독립 재검토. wiki_unconfirmed 단독
+            # 신호는 노이즈가 많아 대상에서 제외 — Gemini가 실제로 뭔가 지적했을
+            # 때만 크레딧 한정적인 이 호출을 쓴다.
+            nvidia_note = nvidia_cross_check(title, body, gemini_suspect)
+            if nvidia_note:
+                suspect = suspect + "\n" + nvidia_note
+            time.sleep(2)
 
         if wiki_unconfirmed:
             note = "[위키 독립조회 미확인 — 위키에서 실존을 확인 못한 고유명사] " + ", ".join(wiki_unconfirmed)
