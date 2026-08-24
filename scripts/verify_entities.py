@@ -190,9 +190,15 @@ def build_check_prompt(title: str, body: str) -> str:
   환산되지 않고 원문 그대로 남은 경우
 - 제목이 "~돌파 속 기념하는 ~의 날"처럼 영어 원문 어순을 그대로 옮긴 듯 부자연스러운 경우
 
+[3. 수식어 날조] 실존하는 일반명사·집단명(예: "아디바시", "원주민", "노동자") 앞에 실제
+보도에는 없는 수식어나 설명이 붙어 있는지 검색으로 확인하세요(예: "PreferredSource
+Adivasis"처럼 명사 자체는 실존해도 그 앞의 꾸밈말이 지어낸 것인 경우 — 2026-08-25
+id=98010 실사고). 검색으로 그런 수식어가 실제 보도에 쓰인 적이 있는지 확인하고, 근거를
+못 찾으면 지적하세요.
+
 문제가 있으면 항목별로 "[분류] 기사 속 표기 → 올바른 표기(또는 지적 사유)" 형식으로
-쉼표 구분해 나열하세요. 분류는 [고유명사]/[미음차 기업명]/[단위 미환산]/[제목 어색함]
-중 하나를 쓰세요. 모두 문제없으면 "없음"이라고만 답하세요.
+쉼표 구분해 나열하세요. 분류는 [고유명사]/[미음차 기업명]/[단위 미환산]/[제목 어색함]/
+[수식어 날조] 중 하나를 쓰세요. 모두 문제없으면 "없음"이라고만 답하세요.
 
 제목: {title}
 
@@ -258,8 +264,9 @@ _SUSPECT_PAIR_RE = re.compile(r"([^,→\n]+?)\s*→\s*([^,\n]+)")
 def wiki_cross_check(suspect: str) -> str:
     """'지어낸이름 → 원본표기' 쌍마다 위키 조회 결과를 덧붙인 문자열 반환.
     조회 실패해도 원래 suspect는 그대로 살아있어야 하므로 예외를 삼킨다.
-    [단위 미환산]/[제목 어색함]은 실존 여부 문제가 아니라 위키 조회 대상이
-    아니므로 건너뛴다(2026-08-21 현지화 점검 항목 추가와 함께 도입)."""
+    [단위 미환산]/[제목 어색함]/[수식어 날조]는 실존 여부 문제가 아니라 위키 조회
+    대상이 아니므로 건너뛴다(2026-08-21 현지화 점검 항목 추가와 함께 도입,
+    2026-08-25 수식어 날조 추가)."""
     if not suspect:
         return suspect
     try:
@@ -269,7 +276,8 @@ def wiki_cross_check(suspect: str) -> str:
         notes = []
         for wrong, correct in pairs[:5]:
             wrong, correct = wrong.strip(), correct.strip()
-            if wrong.startswith("[단위 미환산]") or wrong.startswith("[제목 어색함]"):
+            if (wrong.startswith("[단위 미환산]") or wrong.startswith("[제목 어색함]")
+                    or wrong.startswith("[수식어 날조]")):
                 continue
             wrong_found = wikipedia_confirms(wrong)
             correct_found = wikipedia_confirms(correct)
