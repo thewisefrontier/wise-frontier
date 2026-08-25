@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25 21:04",
+  "updated_at": "2026-08-25 21:35",
   "indices": [
     {
       "name": "S&P 500",
@@ -39,9 +39,9 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 116733.93,
-      "change_pct": 0.02,
-      "up": true
+      "price": 116662.37,
+      "change_pct": -0.04,
+      "up": false
     },
     {
       "name": "EGX30 (이집트)",
@@ -137,9 +137,9 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 116733.93,
-        "change_pct": 0.02,
-        "up": true
+        "price": 116662.37,
+        "change_pct": -0.04,
+        "up": false
       },
       {
         "name": "EGX30 (이집트)",
