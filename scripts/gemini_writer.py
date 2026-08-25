@@ -1466,10 +1466,21 @@ _NULLISH = ("없음", "-", "N/A", "n/a", "없다", "null", "None", "")
 
 
 def _strip_leaked_labels(text: str) -> str:
-    """파싱이 완전히 실패했을 때 응답에 남은 라벨 줄을 제거해 본문만 남긴다."""
+    """파싱이 완전히 실패했을 때 응답에 남은 라벨 줄을 제거해 본문만 남긴다.
+    ⚠️ 실사고(2026-08-26, id=99924): 이 함수는 gen_body or _strip_leaked_labels(content)
+    형태로 "정상 파싱이 실패했을 때의 최후 폴백"으로 여러 호출부(cluster 업데이트
+    3곳)에서 쓰인다. 원문이 "제목:"/"본문:" 라벨이 아니라 raw JSON이었던 경우
+    이 함수는 라벨을 하나도 못 찾아 원문을 거의 그대로 반환했고, 그게 그대로
+    summary_ko에 저장된 사고가 있었다. save_article()/update_article()의 최종
+    가드가 잡아줄 거라 가정했지만 실제로는 뚫렸다(정확한 유출 지점은 라이브
+    로그 없이 특정 못함) — 이 함수 자체에도 방어선을 하나 더 둬서 단일 지점
+    의존을 없앤다."""
     if not text:
         return ""
     raw = _FENCE_RE.sub("", text).strip()
+    _unwrapped = _unwrap_json_body(raw)
+    if _unwrapped:
+        return _unwrapped
     out = []
     for line in raw.split("\n"):
         m = _LABEL_LINE_RE.match(line)
