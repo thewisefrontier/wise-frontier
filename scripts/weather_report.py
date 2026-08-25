@@ -1911,10 +1911,19 @@ def build_today_report(country_name, weather_list, local_now: datetime):
 
     cap_name, cap_w = _find_capital(weather_list)
     cap_today = next((info for n, c, info in valid if c), None)
+    # 이미 10일치를 받아오면서 "오늘"만 쓰고 있었다 — 내일 전망은 추가 API
+    # 호출 없이 같은 응답에서 꺼내 쓸 수 있는 실제 데이터다(2026-08-25,
+    # 사용자 지적: "그냥 데이터만 늘어놨다").
+    cap_tomorrow = None
+    if cap_w:
+        cap_dates = list(cap_w["daily"].keys())
+        tomorrow_key = cap_dates[1] if len(cap_dates) > 1 else None
+        cap_tomorrow = cap_w["daily"].get(tomorrow_key) if tomorrow_key else None
 
     tmax_all = [info["tmax"] for _, _, info in valid]
     tmin_all = [info["tmin"] for _, _, info in valid]
     feels_all = [info["feels_max"] for _, _, info in valid if info.get("feels_max") is not None]
+    uv_all = [info["uv"] for _, _, info in valid if info.get("uv") is not None]
     rain_cities = [(n, info) for n, c, info in valid if (info.get("precip") or 0) > 0]
     thunder_cities = [n for n, c, info in valid if info.get("code") in (95, 96, 99)]
     windy_cities = [n for n, c, info in valid if (info.get("wind_max") or 0) >= 40]
@@ -1926,6 +1935,7 @@ def build_today_report(country_name, weather_list, local_now: datetime):
         cap_desc = (
             f"{cap_condition}, 최고 {fmt_num(cap_today['tmax'])}°C, 최저 {fmt_num(cap_today['tmin'])}°C, "
             f"강수확률 {fmt_num(cap_today.get('precip_prob') or 0)}%"
+            + (f", 내일 최고 {fmt_num(cap_tomorrow['tmax'])}°C" if cap_tomorrow and cap_tomorrow.get('tmax') is not None else "")
         )
 
     gemini_prompt = f"""다음은 {country_name} 주요 도시 날씨 데이터다. 이를 바탕으로 뉴스 기사 본문(서두 문단)을 작성하라.
@@ -1934,6 +1944,7 @@ def build_today_report(country_name, weather_list, local_now: datetime):
 수도 {cap_name}: {cap_desc if cap_desc else '데이터 없음'}
 전국 최저기온: {fmt_num(min(tmin_all))}°C / 최고기온: {fmt_num(max(tmax_all))}°C
 체감 최고기온: {fmt_num(max(feels_all))}°C {'(온열질환 주의)' if feels_all and max(feels_all) >= 33 else ''}
+최고 자외선지수: {fmt_num(max(uv_all), 1) if uv_all else '?'}
 강수 예상 지역: {', '.join(f"{n}({fmt_num(info['precip'],1)}mm)" for n, info in rain_cities[:6]) if rain_cities else '없음'}
 뇌우 예상 지역: {', '.join(thunder_cities[:5]) if thunder_cities else '없음'}
 강풍 예상 지역(40km/h↑): {', '.join(windy_cities[:5]) if windy_cities else '없음'}
@@ -1943,7 +1954,8 @@ def build_today_report(country_name, weather_list, local_now: datetime):
 - 뉴스 기사 형식. 종결어미는 반드시 "-다" 체
 - 본문은 2~3개 문단으로 나누어 작성. JSON body 값에서 문단 구분은 반드시 \\n\\n(개행 두 번)으로 표시
 - 날짜 표기: 오늘은 {local_now.day}일이다. 본문은 반드시 "{local_now.day}일(현지시간)"으로 시작할 것(다른 숫자 사용 금지). "오늘", 절대연도 절대 금지
-- 700자 이상 작성
+- 900자 이상 작성
+- 수도의 내일 최고기온이 제공되면 오늘과 비교하는 문장을 포함할 것(예: "내일은 오늘보다 기온이 오를 전망이다"). 자외선지수가 8 이상이면 자외선 주의를 언급할 것. 둘 다 없으면 언급하지 말 것
 - "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
 - 타 매체명 언급 금지
 - 제공된 날씨 수치 데이터에만 근거해 작성할 것. 지정학적 상황·분쟁·외교·경제·유가·증시 등 날씨 외 내용 추가 절대 금지
@@ -2169,6 +2181,7 @@ def build_group_today_report(group_name, countries_data, local_now: datetime):
         lines = [f"[{country_name}]"]
         cap_name, cap_w = _find_capital(weather_list)
         cap_today = None
+        cap_tomorrow = None
         for name, is_capital, w in weather_list:
             label = f"{name}(수도)" if is_capital else name
             if w is None:
@@ -2184,8 +2197,13 @@ def build_group_today_report(group_name, countries_data, local_now: datetime):
                 all_valid.append((country_name, name, is_capital, today_info))
                 if is_capital:
                     cap_today = today_info
+                    # 이미 10일치를 받아오면서 "오늘"만 쓰고 있었다 — 내일 전망은
+                    # 추가 API 호출 없이 같은 응답에서 바로 꺼내 쓸 수 있는 실제
+                    # 데이터다(2026-08-25, 사용자 지적: "그냥 데이터만 늘어놨다").
+                    tomorrow_key = dates[1] if len(dates) > 1 else None
+                    cap_tomorrow = w["daily"].get(tomorrow_key) if tomorrow_key else None
         country_blocks.append("\n".join(lines))
-        capitals_info.append((country_name, cap_name, cap_today))
+        capitals_info.append((country_name, cap_name, cap_today, cap_tomorrow))
 
     if not any_success:
         return None, None
@@ -2199,28 +2217,39 @@ def build_group_today_report(group_name, countries_data, local_now: datetime):
     windy = [f"{cn}({city})" for cn, city, ic, info in all_valid if (info.get("wind_max") or 0) >= 40]
     heat = [f"{cn}({city})" for cn, city, ic, info in all_valid if (info.get("tmax") or 0) >= 38 or (info.get("feels_max") or 0) >= 38]
 
+    # 국가 간 기온차 — 이미 있는 수치를 비교만 하면 나오는 진짜 사실이라
+    # 별도 지식 없이도 "가장 더운 곳과 가장 추운 곳 차이는 N도" 서술이 가능하다.
+    hottest = max(successful_caps, key=lambda c: c[2]["tmax"]) if successful_caps else None
+    coldest = min(successful_caps, key=lambda c: c[2]["tmax"]) if successful_caps else None
+
     cap_summary_lines = "\n".join(
         f"- {cn}({cap}): 최고 {fmt_num(info['tmax'])}°C, 최저 {fmt_num(info['tmin'])}°C, "
-        f"날씨 {WEATHER_CODE_KO.get(info.get('code'), '-')}, 강수확률 {fmt_num(info.get('precip_prob') or 0)}%"
-        for cn, cap, info in successful_caps
+        f"날씨 {WEATHER_CODE_KO.get(info.get('code'), '-')}, 강수확률 {fmt_num(info.get('precip_prob') or 0)}%, "
+        f"강수량 {fmt_num(info.get('precip'), 1)}mm, 자외선지수 {fmt_num(info.get('uv'), 1)}"
+        + (f", 내일 최고 {fmt_num(tmr['tmax'])}°C" if tmr and tmr.get('tmax') is not None else "")
+        for cn, cap, info, tmr in successful_caps
     )
 
     gemini_prompt = f"""다음은 {group_name} 주요국 수도 날씨 데이터다. 이를 바탕으로 뉴스 기사 본문(서두 문단)을 작성하라.
 
 [날씨 데이터]
 지역 최저기온: {fmt_num(min(tmin_all)) if tmin_all else '?'}°C / 최고기온: {fmt_num(max(tmax_all)) if tmax_all else '?'}°C
+가장 더운 곳: {f"{hottest[0]}({hottest[1]}) {fmt_num(hottest[2]['tmax'])}°C" if hottest else '?'}
+가장 선선한 곳: {f"{coldest[0]}({coldest[1]}) {fmt_num(coldest[2]['tmax'])}°C" if coldest else '?'}
 비 소식 국가: {', '.join(rainy[:6]) if rainy else '없음'}
 뇌우 지역: {', '.join(thunder[:5]) if thunder else '없음'}
 강풍 지역(40km/h↑): {', '.join(windy[:5]) if windy else '없음'}
 폭염 지역(38°C↑): {', '.join(heat[:5]) if heat else '없음'}
-국가별 수도 날씨:
+국가별 수도 날씨(강수량·자외선지수·내일 최고기온 포함):
 {cap_summary_lines}
 
 [작성 규칙]
 - 뉴스 기사 형식. 종결어미는 반드시 "-다" 체
 - 본문은 2~3개 문단으로 나누어 작성. JSON body 값에서 문단 구분은 반드시 \\n\\n(개행 두 번)으로 표시
 - 날짜 표기: 오늘은 {local_now.day}일이다. 본문은 반드시 "{local_now.day}일(현지시간)"으로 시작할 것(다른 숫자 사용 금지). "오늘", 절대연도 절대 금지
-- 700자 이상 작성
+- 900자 이상 작성
+- 단순히 수치를 순서대로 나열하지 말고, [날씨 데이터]에 이미 있는 비교값(가장 더운 곳/선선한 곳, 내일 최고기온 변화)을 활용해 "어디가 왜 다른지" 비교하는 문장을 최소 1개 이상 포함할 것(예: "A는 B보다 N도 높다", "C는 내일 기온이 더 오를 전망이다")
+- 자외선지수가 8 이상인 지역이 있으면 자외선 주의를 언급할 것(없으면 언급 금지)
 - "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
 - 타 매체명 언급 금지
 - 제공된 날씨 수치 데이터에만 근거해 작성할 것. 지정학적 상황·분쟁·외교·경제·유가·증시 등 날씨 외 내용 추가 절대 금지
