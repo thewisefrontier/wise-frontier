@@ -4,7 +4,9 @@ weather_report.py
 전세계 주요국 + 프론티어마켓 국가들의 날씨를 실시간 API(Open-Meteo, 무료·키 불필요)로
 조회한다. 한국을 제외한 국가들은 대륙 그룹(아프리카/동남아시아/중동/남아시아/중앙아시아/
 중남미/북미/동아시아/유럽/오세아니아, 총 10개)으로 묶어 각 그룹당 기사 하나를 생성하고,
-한국은 별도의 개별 기사로 발행한다. Gemini를 쓰지 않는다 — 실제 수치만 사용.
+한국은 별도의 개별 기사로 발행한다. 도시별 상세 수치는 API 원본 그대로 템플릿에 꽂고,
+서두 요약 문단만 Gemini로 생성한다(날씨 수치 데이터에만 근거하도록 프롬프트로 제한 —
+아래 "Gemini 설정" 참조).
 
 - 각 그룹은 대표 국가의 "현지 아침"(06~09시) 시간대에 발행한다 (IANA 타임존 기준).
 - 현지 기준 월~금 아침: 오늘 날씨.
@@ -70,78 +72,29 @@ GEMINI_API_KEYS = [k for k in [
     os.getenv("GEMINI_API_KEY_5"),
 ] if k]
 
-_current_key_idx = 0
-_exhausted_keys = {m: set() for m in GEMINI_MODELS}  # 모델별 RPD 소진 키
+try:
+    from gemini_client import GeminiClient
+except Exception:
+    class GeminiClient:  # import 실패해도 본 기능이 죽지 않도록 폴백을 둔다
+        def __init__(self, *a, **k):
+            pass
+
+        def call(self, *a, **k):
+            return None
+
+_gemini_client = GeminiClient(GEMINI_API_KEYS, GEMINI_MODELS)
 
 
 def call_gemini_weather(prompt: str, max_tokens: int = 2000) -> str | None:
-    """날씨 기사 본문 생성용 Gemini 호출 (키 로테이션)."""
-    global _current_key_idx, _exhausted_keys
-
-    if not GEMINI_API_KEYS:
-        print("[ERROR] GEMINI_API_KEY 없음")
-        return None
-
-    payload = {
-        "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {
-            "temperature": 0.4,
-            "maxOutputTokens": max_tokens,
-        },
-    }
-
-    n = len(GEMINI_API_KEYS)
-    model_stages = [(m, _exhausted_keys[m]) for m in GEMINI_MODELS]
-
-    for model, exhausted in model_stages:
-        available = [i for i in range(n) if i not in exhausted]
-        if not available:
-            print(f"  [{model}] 모든 Gemini 키 RPD 소진 → 다음 모델로")
-            continue
-
-        ordered = sorted(available, key=lambda i: (i - _current_key_idx) % n)
-
-        for idx in ordered:
-            api_key = GEMINI_API_KEYS[idx]
-            url = (
-                f"https://generativelanguage.googleapis.com/v1beta/models/"
-                f"{model}:generateContent?key={api_key}"
-            )
-            try:
-                res = requests.post(url, json=payload, timeout=(10, 60))
-                if res.status_code == 200:
-                    _current_key_idx = (idx + 1) % n
-                    cands = res.json().get("candidates", [])
-                    if not cands:
-                        return None
-                    # maxOutputTokens 초과로 잘린 응답을 정상 취급하면 본문·JSON이
-                    # 중간에서 끊긴 채 저장된다. 폐기하고 코드 폴백 문장을 쓴다.
-                    finish = cands[0].get("finishReason", "")
-                    if finish and finish != "STOP":
-                        print(f"  [WARN] {model} 응답 비정상 종료(finishReason={finish}) — 폐기")
-                        return None
-                    parts = cands[0].get("content", {}).get("parts", [])
-                    text = "".join(p.get("text", "") for p in parts).strip()
-                    return text if text else None
-                elif res.status_code == 429:
-                    print(f"  [429] {model} 키 {idx+1} RPD 소진 — 블랙리스트")
-                    exhausted.add(idx)
-                    continue
-                elif res.status_code == 503:
-                    print(f"  [503] {model} 키 {idx+1} 과부하 → 다음 키")
-                    continue
-                else:
-                    print(f"[ERROR] Gemini {res.status_code}: {res.text[:200]}")
-                    return None
-            except requests.exceptions.Timeout:
-                print(f"  [TIMEOUT] {model} 키 {idx+1} → 다음 키")
-                continue
-            except Exception as e:
-                print(f"[ERROR] {e}")
-                return None
-
-    print("[ERROR] 모든 Gemini 모델/키 소진 또는 응답 없음")
-    return None
+    """날씨 기사 본문 생성용 Gemini 호출.
+    2026-08-25 gemini_client.py로 교체 — 이전 자체 구현은 MAX_TOKENS로
+    잘린 응답을 만나면 다음 모델로 넘어가지 않고 즉시 전체를 포기했다
+    (2026-08-20 다른 9개 스크립트에서 고친 것과 동일한 결함이 이 파일만
+    누락돼 있었다). 북미 그룹 리포트가 유독 짧게(671자) 나온 실사고로
+    발견 — 700자 이상을 요구하는 프롬프트인데 첫 모델에서 잘리자마자
+    바로 코드 폴백(두 문장짜리 최소 요약)으로 떨어진 것."""
+    return _gemini_client.call(prompt, max_tokens=max_tokens, start_tier=0,
+                                temperature=0.4, timeout=(10, 60))
 
 
 def _strip_local_time_kr(text: str) -> str:
