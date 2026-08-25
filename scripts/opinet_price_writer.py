@@ -24,6 +24,12 @@ from datetime import datetime, timedelta, timezone, date
 from dotenv import load_dotenv
 from rapidfuzz import fuzz
 
+try:
+    from news_context import fetch_headlines
+except Exception:
+    def fetch_headlines(*a, **k):
+        return []
+
 load_dotenv()
 
 # 저장 시점 문자셋 혼입 하드 블록. import 실패해도 본 기능이 죽지 않도록 폴백을 둔다.
@@ -337,12 +343,31 @@ def build_article_prompt(prices: dict) -> str:
         "하락" if p.get("B027", {}).get("diff", 0) < 0 else "보합"
     )
 
+    # 2026-08-26 도입(oil_price_writer.py와 동일 패턴): 변동 배경(③)을
+    # 예전엔 근거 없이 추정 서술해야 했다. 구글 뉴스에서 실제 국내 유가
+    # 관련 헤드라인을 가져와 검증 가능한 근거로 쓴다.
+    headlines = fetch_headlines("국내 유가 정유사 유류세", limit=5, hl="ko", gl="KR")
+    if headlines:
+        headline_block = "\n[관련 실제 보도 헤드라인 (참고용)]\n" + "\n".join(f"- {h}" for h in headlines)
+        bg_instruction = (
+            "③ 변동 배경: 위 [관련 실제 보도 헤드라인]에 나온 사건·원인(예: 국제유가 흐름, 유류세, "
+            "정유사 실적·공급가, 환율)만 근거로 구체적으로 서술하세요. ⚠️ 헤드라인은 최신순 검색 결과라 "
+            "오늘자가 아닐 수 있으니, 헤드라인에 나온 구체적 가격·수치는 절대 인용하지 마세요 — 가격·수치는 "
+            "오직 위 [유가 데이터]만 쓰고, 헤드라인은 '왜'(원인·사건)에만 쓰세요. 헤드라인에 없는 내용을 "
+            "지어내지 마세요. 특정 매체를 출처로 직접 인용하지는 말고 \"~인 것으로 알려졌다\", "
+            "\"~라는 분석이 나온다\"처럼 자연스럽게 녹여 쓰세요."
+        )
+    else:
+        headline_block = ""
+        bg_instruction = "③ 변동 배경: 국제유가 흐름, 정유사 공급가, 유류세, 환율 등 (사실 기반으로만, 데이터에 없는 구체적 수치를 지어내지 말 것)"
+
     return f"""당신은 국내 경제·생활물가 전문 기자입니다.
 아래 오피넷(한국석유공사) 전국 평균 유가 데이터를 바탕으로 뉴스 기사를 작성하세요.
 
 [유가 데이터] (출처: 오피넷/한국석유공사)
 - 기준일: {pdate.month}월 {pdate.day}일
 {price_lines}
+{headline_block}
 
 [출력 형식] — 반드시 이 형식 그대로:
 TITLE: <제목>
@@ -359,7 +384,7 @@ BODY: <본문>
 2. 구조:
    ① 리드: "국내 주유소 휘발유 평균 판매가격이 {pdate.month}월 {pdate.day}일 기준 리터당 {gasoline_price}원을 기록했다."
    ② 경유·LPG 등 다른 유종 가격·전일 대비 수치
-   ③ 변동 배경: 국제유가 흐름, 정유사 공급가, 유류세, 환율 등 (사실 기반으로만, 데이터에 없는 구체적 수치를 지어내지 말 것)
+   {bg_instruction}
    ④ 소비자·자영업자(운수업 등) 체감 영향
 3. 날짜는 "{pdate.month}월 {pdate.day}일" 형식만. "오늘", "현재", 절대연도 금지.
 4. 출처: "오피넷(한국석유공사)에 따르면" 반드시 포함.
