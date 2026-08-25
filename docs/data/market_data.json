@@ -1,25 +1,25 @@
 {
-  "updated_at": "2026-08-25 21:41",
+  "updated_at": "2026-08-25 22:44",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7652.86,
-      "change_pct": 0.15,
+      "price": 7680.45,
+      "change_pct": 0.08,
       "up": true
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 25980.19,
-      "change_pct": -0.33,
+      "price": 26174.28,
+      "change_pct": -0.02,
       "up": false
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 53417.16,
-      "change_pct": 1.25,
+      "price": 53480.17,
+      "change_pct": 0.38,
       "up": true
     },
     {
@@ -39,9 +39,9 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 116741.57,
-      "change_pct": 0.03,
-      "up": true
+      "price": 116002.06,
+      "change_pct": -0.61,
+      "up": false
     },
     {
       "name": "EGX30 (이집트)",
@@ -74,22 +74,22 @@
     {
       "name": "USD/NGN",
       "symbol": "USDNGN=X",
-      "price": 1344.56,
-      "change_pct": -0.27,
+      "price": 1345.44,
+      "change_pct": -0.2,
       "up": false
     },
     {
       "name": "USD/KES",
       "symbol": "USDKES=X",
-      "price": 129.4,
-      "change_pct": 0.76,
+      "price": 129.3,
+      "change_pct": 0.69,
       "up": true
     },
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 15.98,
-      "change_pct": -0.08,
+      "price": 15.97,
+      "change_pct": -0.16,
       "up": false
     }
   ],
@@ -98,22 +98,22 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7652.86,
-        "change_pct": 0.15,
+        "price": 7680.45,
+        "change_pct": 0.08,
         "up": true
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 25980.19,
-        "change_pct": -0.33,
+        "price": 26174.28,
+        "change_pct": -0.02,
         "up": false
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 53417.16,
-        "change_pct": 1.25,
+        "price": 53480.17,
+        "change_pct": 0.38,
         "up": true
       }
     ],
@@ -137,9 +137,9 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 116741.57,
-        "change_pct": 0.03,
-        "up": true
+        "price": 116002.06,
+        "change_pct": -0.61,
+        "up": false
       },
       {
         "name": "EGX30 (이집트)",
@@ -174,22 +174,22 @@
       {
         "name": "USD/NGN",
         "symbol": "USDNGN=X",
-        "price": 1344.56,
-        "change_pct": -0.27,
+        "price": 1345.44,
+        "change_pct": -0.2,
         "up": false
       },
       {
         "name": "USD/KES",
         "symbol": "USDKES=X",
-        "price": 129.4,
-        "change_pct": 0.76,
+        "price": 129.3,
+        "change_pct": 0.69,
         "up": true
       },
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 15.98,
-        "change_pct": -0.08,
+        "price": 15.97,
+        "change_pct": -0.16,
         "up": false
       }
     ]
@@ -212,8 +212,8 @@
     "BBAR": {
       "name": "Banco BBVA Argentina S.A.",
       "symbol": "BBAR",
-      "price": 14.76,
-      "change_pct": 4.83,
+      "price": 14.59,
+      "change_pct": 3.84,
       "up": true
     }
   }
