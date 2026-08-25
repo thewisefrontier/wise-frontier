@@ -1,25 +1,25 @@
 {
-  "updated_at": "2026-08-26 04:51",
+  "updated_at": "2026-08-26 05:23",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7671.6,
-      "change_pct": -0.04,
-      "up": false
+      "price": 7677.28,
+      "change_pct": 0.04,
+      "up": true
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 26116.79,
-      "change_pct": -0.24,
+      "price": 26151.3,
+      "change_pct": -0.11,
       "up": false
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 53567.24,
-      "change_pct": 0.54,
+      "price": 53577.4,
+      "change_pct": 0.56,
       "up": true
     },
     {
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 15.94,
-      "change_pct": -0.33,
+      "price": 15.91,
+      "change_pct": -0.51,
       "up": false
     }
   ],
@@ -98,22 +98,22 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7671.6,
-        "change_pct": -0.04,
-        "up": false
+        "price": 7677.28,
+        "change_pct": 0.04,
+        "up": true
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 26116.79,
-        "change_pct": -0.24,
+        "price": 26151.3,
+        "change_pct": -0.11,
         "up": false
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 53567.24,
-        "change_pct": 0.54,
+        "price": 53577.4,
+        "change_pct": 0.56,
         "up": true
       }
     ],
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 15.94,
-        "change_pct": -0.33,
+        "price": 15.91,
+        "change_pct": -0.51,
         "up": false
       }
     ]
@@ -212,8 +212,8 @@
     "BBAR": {
       "name": "Banco BBVA Argentina S.A.",
       "symbol": "BBAR",
-      "price": 14.78,
-      "change_pct": 5.16,
+      "price": 14.8,
+      "change_pct": 5.34,
       "up": true
     }
   }
