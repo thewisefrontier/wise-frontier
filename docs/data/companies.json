@@ -2496,6 +2496,38 @@
     "updated_at": "2026-07-27 07:21"
   },
   {
+    "id": "bbva_argentina",
+    "name": "Banco BBVA Argentina S.A.",
+    "name_ko": "BBVA 아르헨티나",
+    "country": "아르헨티나",
+    "country_flag": "🌍",
+    "exchange": "BYMA",
+    "ticker": "BBAR",
+    "sector": "은행",
+    "description": "1886년에 전신이 설립된 아르헨티나의 유력 대형 상업은행으로, 스페인 BBVA 그룹의 계열사입니다. 개인 및 기업 고객을 위한 폭넓은 은행 상품과 디지털 금융 서비스를 제공하고 있습니다. 아르헨티나 금융 시장에서 외국계 자본 기반의 안정성과 높은 브랜드 인지도를 지니고 있습니다.",
+    "founded_year": 1886,
+    "headquarters": "부에노스아이레스, 아르헨티나",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-25 16:57"
+  },
+  {
+    "id": "banco_macro",
+    "name": "Banco Macro S.A.",
+    "name_ko": "방코 마크로",
+    "country": "아르헨티나",
+    "country_flag": "🌍",
+    "exchange": "BYMA",
+    "ticker": "BMA",
+    "sector": "은행",
+    "description": "1985년에 설립되어 아르헨티나 전역에 광범위한 지점망을 보유한 대형 민간 상업은행입니다. 중소기업 및 개인 고객을 대상으로 한 예금, 대출, 자산관리 등 종합 금융 서비스를 제공합니다. 아르헨티나의 대표적인 금융 기관 중 하나로 내수 경제 및 국가 신용도 변화에 민감하게 반응합니다.",
+    "founded_year": 1985,
+    "headquarters": "부에노스아이레스, 아르헨티나",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-25 16:57"
+  },
+  {
     "id": "csn",
     "name": "Companhia Siderúrgica Nacional",
     "name_ko": "CSN",
@@ -2526,6 +2558,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-07 12:45"
+  },
+  {
+    "id": "grupo_financiero_galicia",
+    "name": "Grupo Financiero Galicia S.A.",
+    "name_ko": "그룹 갈리시아",
+    "country": "아르헨티나",
+    "country_flag": "🌍",
+    "exchange": "BYMA",
+    "ticker": "GGAL",
+    "sector": "은행",
+    "description": "1999년에 설립된 아르헨티나의 선도적인 금융 지주회사로, 주력 자회사인 방코 갈리시아를 통해 소매 및 기업 금융 서비스를 제공합니다. 아르헨티나 증권거래소 및 뉴욕증권거래소에 상장되어 있으며, 현지 금융 시장에서 높은 시가총액과 거래 비중을 차지합니다. 아르헨티나 거시경제 변동성과 환율 변화에 큰 영향을 받는 대표적인 은행주입니다.",
+    "founded_year": 1999,
+    "headquarters": "부에노스아이레스, 아르헨티나",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-25 16:57"
   },
   {
     "id": "agalarov_development",
@@ -3536,22 +3584,6 @@
     "updated_at": "2026-07-30 14:14"
   },
   {
-    "id": "lic_india",
-    "name": "Life Insurance Corporation of India",
-    "name_ko": "인도 생명보험공사",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "BSE",
-    "ticker": "543257",
-    "sector": "보험",
-    "description": "1956년에 설립된 인도 국영 생명보험회사입니다. 인도 보험 시장에서 독보적인 점유율을 차지하며 수많은 가입자를 보유한 최대의 기관투자자 중 하나입니다. 정부 소유의 높은 안정성을 바탕으로 다양한 생명보험 및 자산운용 서비스를 제공합니다.",
-    "founded_year": 1956,
-    "headquarters": "뭄바이, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-20 15:32"
-  },
-  {
     "id": "lic",
     "name": "Life Insurance Corporation of India",
     "name_ko": "인도생명보험공사",
@@ -3566,6 +3598,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-04 16:21"
+  },
+  {
+    "id": "lic_india",
+    "name": "Life Insurance Corporation of India",
+    "name_ko": "인도 생명보험공사",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "BSE",
+    "ticker": "543257",
+    "sector": "보험",
+    "description": "1956년에 설립된 인도 국영 생명보험회사입니다. 인도 보험 시장에서 독보적인 점유율을 차지하며 수많은 가입자를 보유한 최대의 기관투자자 중 하나입니다. 정부 소유의 높은 안정성을 바탕으로 다양한 생명보험 및 자산운용 서비스를 제공합니다.",
+    "founded_year": 1956,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-20 15:32"
   },
   {
     "id": "lumitime_technologies",
@@ -4176,22 +4224,6 @@
     "updated_at": "2026-08-02 21:12"
   },
   {
-    "id": "tcs",
-    "name": "Tata Consultancy Services Limited",
-    "name_ko": "타타 컨설턴시 서비시스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "TCS",
-    "sector": "IT 서비스",
-    "description": "1968년에 설립된 인도 타타 그룹 산하의 세계적인 IT 서비스 및 컨설팅 기업입니다. 전 세계 기업들을 상대로 디지털 전환, 소프트웨어 개발 및 아웃소싱 서비스를 제공합니다.",
-    "founded_year": 1968,
-    "headquarters": "뭄바이, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-02 17:22"
-  },
-  {
     "id": "tata_consultancy_services",
     "name": "Tata Consultancy Services Limited",
     "name_ko": "타타 컨설턴시 서비스",
@@ -4206,6 +4238,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-19 01:21"
+  },
+  {
+    "id": "tcs",
+    "name": "Tata Consultancy Services Limited",
+    "name_ko": "타타 컨설턴시 서비시스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "TCS",
+    "sector": "IT 서비스",
+    "description": "1968년에 설립된 인도 타타 그룹 산하의 세계적인 IT 서비스 및 컨설팅 기업입니다. 전 세계 기업들을 상대로 디지털 전환, 소프트웨어 개발 및 아웃소싱 서비스를 제공합니다.",
+    "founded_year": 1968,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-02 17:22"
   },
   {
     "id": "tata_motors",
@@ -4240,22 +4288,6 @@
     "updated_at": "2026-08-14 23:23"
   },
   {
-    "id": "singareni_collieries_company",
-    "name": "The Singareni Collieries Company Limited",
-    "name_ko": "싱가레니 콜리어리스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "",
-    "sector": "에너지",
-    "description": "싱가레니 콜리어리스는 1920년에 설립된 인도 텔랑가나주의 국영 석탄 채굴 기업입니다. 주로 인도 남부 지역의 전력 및 산업 수요를 충족하기 위해 석탄을 공급하며, 지역 경제에서 중요한 위치를 차지하고 있습니다. 토목 및 인프라 개발과 관련된 지역 사회 공헌 활동도 함께 수행하고 있습니다.",
-    "founded_year": 1920,
-    "headquarters": "코다구뎀, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-08 01:12"
-  },
-  {
     "id": "singareni_collieries",
     "name": "The Singareni Collieries Company Limited",
     "name_ko": "싱가레니 콜리어리스",
@@ -4270,6 +4302,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-30 17:03"
+  },
+  {
+    "id": "singareni_collieries_company",
+    "name": "The Singareni Collieries Company Limited",
+    "name_ko": "싱가레니 콜리어리스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "싱가레니 콜리어리스는 1920년에 설립된 인도 텔랑가나주의 국영 석탄 채굴 기업입니다. 주로 인도 남부 지역의 전력 및 산업 수요를 충족하기 위해 석탄을 공급하며, 지역 경제에서 중요한 위치를 차지하고 있습니다. 토목 및 인프라 개발과 관련된 지역 사회 공헌 활동도 함께 수행하고 있습니다.",
+    "founded_year": 1920,
+    "headquarters": "코다구뎀, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-08 01:12"
   },
   {
     "id": "tata_power",
