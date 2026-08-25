@@ -28,6 +28,12 @@ import requests
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
+try:
+    from news_context import fetch_headlines
+except Exception:
+    def fetch_headlines(*a, **k):
+        return []
+
 KST = timezone(timedelta(hours=9))
 
 def now_kst() -> datetime:
@@ -588,6 +594,15 @@ GROUPS = {
         "region": "oceania", "tz": "Australia/Sydney", "primary": "호주",
         "countries": ["호주", "뉴질랜드"],
     },
+}
+
+# 구글 뉴스 헤드라인 검색용 영문 지역명. 한글 그룹명을 그대로 검색어에
+# 섞으면(예: "남아시아 heatwave weather") 결과가 거의 안 나온다(2026-08-26
+# 실측: 0건) — 검색 자체는 영문으로만 해야 한다.
+GROUP_NAME_EN = {
+    "아프리카": "Africa", "동남아시아": "Southeast Asia", "중동": "Middle East",
+    "남아시아": "South Asia", "중앙아시아": "Central Asia", "중남미": "Latin America",
+    "북미": "North America", "동아시아": "East Asia", "유럽": "Europe", "오세아니아": "Oceania",
 }
 
 # WMO 날씨 코드 → 한국어 설명
@@ -1938,6 +1953,31 @@ def build_today_report(country_name, weather_list, local_now: datetime):
             + (f", 내일 최고 {fmt_num(cap_tomorrow['tmax'])}°C" if cap_tomorrow and cap_tomorrow.get('tmax') is not None else "")
         )
 
+    # 2026-08-26: 데이터가 이미 특이기상을 확인해준 경우에만 관련 실제
+    # 보도 헤드라인을 보조 근거로 붙인다(build_group_today_report()와
+    # 동일 원칙 — 데이터 없이 헤드라인만으로 새 사실을 지어내지 않도록).
+    _event_kw = []
+    if heat_cities:
+        _event_kw.append("heatwave")
+    if thunder_cities:
+        _event_kw.append("storm")
+    if windy_cities:
+        _event_kw.append("high winds")
+    if rain_cities:
+        _event_kw.append("flooding rain")
+    _country_en = COUNTRY_EN.get(country_name, country_name)
+    headlines = fetch_headlines(f"{_country_en} {' '.join(_event_kw)}") if _event_kw else []
+    if headlines:
+        headline_block = "\n실제 관련 보도 헤드라인(참고용, 데이터로 이미 확인된 사건에 대한 배경 설명에만 사용):\n" + "\n".join(f"- {h}" for h in headlines)
+        headline_note = (
+            "\n- 위 [실제 관련 보도 헤드라인]은 데이터로 이미 확인된 특이기상(폭염·뇌우·강풍·강수)에 대한 "
+            "배경 설명(예: 원인·영향 지역 확대·피해 상황)에만 참고하세요. 헤드라인에만 나오고 위 데이터에는 "
+            "없는 새로운 지역·수치·현상을 끌어오지 마세요. 헤드라인이 이 나라와 무관해 보이면 그냥 무시하세요."
+        )
+    else:
+        headline_block = ""
+        headline_note = ""
+
     gemini_prompt = f"""다음은 {country_name} 주요 도시 날씨 데이터다. 이를 바탕으로 뉴스 기사 본문(서두 문단)을 작성하라.
 
 [날씨 데이터]
@@ -1949,6 +1989,7 @@ def build_today_report(country_name, weather_list, local_now: datetime):
 뇌우 예상 지역: {', '.join(thunder_cities[:5]) if thunder_cities else '없음'}
 강풍 예상 지역(40km/h↑): {', '.join(windy_cities[:5]) if windy_cities else '없음'}
 폭염 지역(체감 33°C↑): {', '.join(heat_cities[:5]) if heat_cities else '없음'}
+{headline_block}
 
 [작성 규칙]
 - 뉴스 기사 형식. 종결어미는 반드시 "-다" 체
@@ -1959,7 +2000,7 @@ def build_today_report(country_name, weather_list, local_now: datetime):
 - "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
 - 타 매체명 언급 금지
 - 제공된 날씨 수치 데이터에만 근거해 작성할 것. 지정학적 상황·분쟁·외교·경제·유가·증시 등 날씨 외 내용 추가 절대 금지
-- [날씨 데이터]에 제시된 항목만 서술할 것. 역대 기록·평년값·특보 발효 여부 등 제공되지 않은 정보는 사실이든 아니든 절대 언급 금지
+- [날씨 데이터]에 제시된 항목만 서술할 것. 역대 기록·평년값·특보 발효 여부 등 제공되지 않은 정보는 사실이든 아니든 절대 언급 금지{headline_note}
 - "없음"으로 표시된 항목은 아예 언급하지 말 것("~는 없는 상태다" 식 서술 금지)
 - 수도 날씨 서술 후 특이기상(뇌우·강풍·폭염·강수) 언급, 전국 기온 범위로 마무리
 - 본문만 출력(제목·소제목 불필요)
@@ -2217,6 +2258,34 @@ def build_group_today_report(group_name, countries_data, local_now: datetime):
     windy = [f"{cn}({city})" for cn, city, ic, info in all_valid if (info.get("wind_max") or 0) >= 40]
     heat = [f"{cn}({city})" for cn, city, ic, info in all_valid if (info.get("tmax") or 0) >= 38 or (info.get("feels_max") or 0) >= 38]
 
+    # 2026-08-26 도입: 데이터가 이미 특이기상(폭염·뇌우·강풍·강수)을 확인해준
+    # 경우에만, 그 사건을 다루는 실제 보도 헤드라인을 보조 근거로 붙인다.
+    # 날씨는 "제공된 데이터에만 근거" 원칙이 핵심 안전장치라(사용자 지적:
+    # "역대 기록·평년값은 절대 언급 금지"), 데이터로 확인 안 된 걸 헤드라인만
+    # 보고 새로 지어내는 걸 막기 위해 데이터가 먼저 신호를 준 경우로만 좁힌다.
+    _event_kw = []
+    if heat:
+        _event_kw.append("heatwave")
+    if thunder:
+        _event_kw.append("storm")
+    if windy:
+        _event_kw.append("high winds")
+    if rainy:
+        _event_kw.append("flooding rain")
+    _group_en = GROUP_NAME_EN.get(group_name, group_name)
+    headlines = fetch_headlines(f"{_group_en} {' '.join(_event_kw)}") if _event_kw else []
+    if headlines:
+        headline_block = "\n실제 관련 보도 헤드라인(참고용, 데이터로 이미 확인된 사건에 대한 배경 설명에만 사용):\n" + "\n".join(f"- {h}" for h in headlines)
+        headline_note = (
+            "\n- 위 [실제 관련 보도 헤드라인]은 데이터로 이미 확인된 특이기상(폭염·뇌우·강풍·강수)에 대한 "
+            "배경 설명(예: 원인·영향 지역 확대·피해 상황)에만 참고하세요. 헤드라인에만 나오고 [날씨 데이터]에는 "
+            "없는 새로운 지역·수치·현상을 끌어오지 마세요 — 헤드라인은 이미 데이터가 보여준 사건을 구체화하는 "
+            "용도일 뿐입니다. 헤드라인이 이 지역과 무관해 보이면 그냥 무시하세요."
+        )
+    else:
+        headline_block = ""
+        headline_note = ""
+
     # 국가 간 기온차 — 이미 있는 수치를 비교만 하면 나오는 진짜 사실이라
     # 별도 지식 없이도 "가장 더운 곳과 가장 추운 곳 차이는 N도" 서술이 가능하다.
     hottest = max(successful_caps, key=lambda c: c[2]["tmax"]) if successful_caps else None
@@ -2242,6 +2311,7 @@ def build_group_today_report(group_name, countries_data, local_now: datetime):
 폭염 지역(38°C↑): {', '.join(heat[:5]) if heat else '없음'}
 국가별 수도 날씨(강수량·자외선지수·내일 최고기온 포함):
 {cap_summary_lines}
+{headline_block}
 
 [작성 규칙]
 - 뉴스 기사 형식. 종결어미는 반드시 "-다" 체
@@ -2253,7 +2323,7 @@ def build_group_today_report(group_name, countries_data, local_now: datetime):
 - "주목됩니다", "기대됩니다", "보입니다", "있습니다" 등 논평·경어체 금지
 - 타 매체명 언급 금지
 - 제공된 날씨 수치 데이터에만 근거해 작성할 것. 지정학적 상황·분쟁·외교·경제·유가·증시 등 날씨 외 내용 추가 절대 금지
-- [날씨 데이터]에 제시된 항목만 서술할 것. 역대 기록·평년값·특보 발효 여부 등 제공되지 않은 정보는 사실이든 아니든 절대 언급 금지
+- [날씨 데이터]에 제시된 항목만 서술할 것. 역대 기록·평년값·특보 발효 여부 등 제공되지 않은 정보는 사실이든 아니든 절대 언급 금지{headline_note}
 - "없음"으로 표시된 항목은 아예 언급하지 말 것("~는 없는 상태다" 식 서술 금지)
 - 지역 전체 기온 범위로 시작해 특이기상(뇌우·강풍·폭염·강수) 국가를 구체적으로 언급
 - 본문만 출력(제목·소제목 불필요)
