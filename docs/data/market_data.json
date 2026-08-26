@@ -1,26 +1,26 @@
 {
-  "updated_at": "2026-08-27 02:05",
+  "updated_at": "2026-08-27 03:08",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7665.96,
-      "change_pct": 0.17,
+      "price": 7675.13,
+      "change_pct": 0.29,
       "up": true
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 26062.98,
-      "change_pct": 0.32,
+      "price": 26116.43,
+      "change_pct": 0.52,
       "up": true
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 53412.11,
-      "change_pct": -0.01,
-      "up": false
+      "price": 53451.14,
+      "change_pct": 0.06,
+      "up": true
     },
     {
       "name": "코스피",
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 15.98,
-      "change_pct": -0.09,
+      "price": 15.97,
+      "change_pct": -0.17,
       "up": false
     }
   ],
@@ -98,23 +98,23 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7665.96,
-        "change_pct": 0.17,
+        "price": 7675.13,
+        "change_pct": 0.29,
         "up": true
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 26062.98,
-        "change_pct": 0.32,
+        "price": 26116.43,
+        "change_pct": 0.52,
         "up": true
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 53412.11,
-        "change_pct": -0.01,
-        "up": false
+        "price": 53451.14,
+        "change_pct": 0.06,
+        "up": true
       }
     ],
     "kr": [
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 15.98,
-        "change_pct": -0.09,
+        "price": 15.97,
+        "change_pct": -0.17,
         "up": false
       }
     ]
@@ -212,8 +212,8 @@
     "BBAR": {
       "name": "Banco BBVA Argentina S.A.",
       "symbol": "BBAR",
-      "price": 14.7,
-      "change_pct": -0.41,
+      "price": 14.75,
+      "change_pct": -0.07,
       "up": false
     }
   }
