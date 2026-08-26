@@ -168,6 +168,13 @@ SIMILARITY_HIGH         = 65
 SIMILARITY_SAME_COUNTRY = 40
 CLUSTER_MIN_SIZE        = 2
 
+# 2026-08-26: 선진국(GLOBAL_COUNTRIES 중 프론티어마켓 편집 방향과 무관한 11개국)은
+# 이미 국내외 종합매체가 넘치게 다루므로, 이 사이트는 여러 소스에서 중복 보도된
+# "중요도 높은" 사건만 기사화한다(사용자 결정) — 구글뉴스 톱뉴스 피드 추가로
+# 유입량 자체는 늘었지만 전부 기사화하면 프론티어마켓 포지셔닝이 흐려진다.
+ADVANCED_ECONOMIES      = {"미국", "일본", "독일", "영국", "이탈리아", "스페인", "네덜란드", "캐나다", "포르투갈", "뉴질랜드", "한국"}
+CLUSTER_MIN_SIZE_ADVANCED = 4
+
 STOPWORDS = {
     "the","a","an","in","on","at","to","of","for","and","or","is","are",
     "was","were","has","have","been","will","with","by","from","this","that",
@@ -2487,6 +2494,10 @@ def run():
                 print(f"  [SKIP] 기사 부족 ({cur_count}건)\n")
                 continue
 
+            if country in ADVANCED_ECONOMIES and cur_count < CLUSTER_MIN_SIZE_ADVANCED:
+                print(f"  [SKIP] 선진국({country}) 저중복 이슈 ({cur_count}건 < {CLUSTER_MIN_SIZE_ADVANCED}건) — 프론티어마켓 편집방향상 제외\n")
+                continue
+
             probe_title = titles[0][:80] if titles else ""
             similar_existing, sim_score = find_similar_article(probe_title, today_own_articles) if probe_title else (None, 0)
 
@@ -2617,6 +2628,7 @@ def run():
         if len(a.get("full_text") or "") >= 1000
         and not is_multi_topic_title(a.get("title_en","") or a.get("title_ko",""))
         and not is_multi_topic_body(a.get("full_text","") or a.get("summary_en",""))
+        and (a.get("country") or "") not in ADVANCED_ECONOMIES
     ]
 
     multi_topic_skipped = [
