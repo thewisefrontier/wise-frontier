@@ -1,25 +1,25 @@
 {
-  "updated_at": "2026-08-28 00:00",
+  "updated_at": "2026-08-28 00:30",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7722.12,
-      "change_pct": 0.58,
+      "price": 7719.09,
+      "change_pct": 0.54,
       "up": true
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 26473.7,
-      "change_pct": 1.23,
+      "price": 26434.26,
+      "change_pct": 1.08,
       "up": true
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 53601.76,
-      "change_pct": 0.05,
+      "price": 53641.57,
+      "change_pct": 0.12,
       "up": true
     },
     {
@@ -39,9 +39,9 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 116831.74,
-      "change_pct": 0.02,
-      "up": true
+      "price": 116806.24,
+      "change_pct": -0.01,
+      "up": false
     },
     {
       "name": "EGX30 (이집트)",
@@ -98,22 +98,22 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7722.12,
-        "change_pct": 0.58,
+        "price": 7719.09,
+        "change_pct": 0.54,
         "up": true
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 26473.7,
-        "change_pct": 1.23,
+        "price": 26434.26,
+        "change_pct": 1.08,
         "up": true
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 53601.76,
-        "change_pct": 0.05,
+        "price": 53641.57,
+        "change_pct": 0.12,
         "up": true
       }
     ],
@@ -137,9 +137,9 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 116831.74,
-        "change_pct": 0.02,
-        "up": true
+        "price": 116806.24,
+        "change_pct": -0.01,
+        "up": false
       },
       {
         "name": "EGX30 (이집트)",
@@ -212,8 +212,8 @@
     "BBAR": {
       "name": "Banco BBVA Argentina S.A.",
       "symbol": "BBAR",
-      "price": 14.53,
-      "change_pct": -1.82,
+      "price": 14.51,
+      "change_pct": -1.96,
       "up": false
     }
   }
