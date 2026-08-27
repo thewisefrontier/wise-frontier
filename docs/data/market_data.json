@@ -1,24 +1,24 @@
 {
-  "updated_at": "2026-08-27 23:00",
+  "updated_at": "2026-08-27 23:20",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7704.22,
-      "change_pct": 0.35,
+      "price": 7710.89,
+      "change_pct": 0.44,
       "up": true
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 26368.62,
-      "change_pct": 0.83,
+      "price": 26428.36,
+      "change_pct": 1.06,
       "up": true
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 53458.46,
+      "price": 53461.86,
       "change_pct": -0.22,
       "up": false
     },
@@ -39,8 +39,8 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 116718.05,
-      "change_pct": -0.08,
+      "price": 116768.15,
+      "change_pct": -0.04,
       "up": false
     },
     {
@@ -98,21 +98,21 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7704.22,
-        "change_pct": 0.35,
+        "price": 7710.89,
+        "change_pct": 0.44,
         "up": true
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 26368.62,
-        "change_pct": 0.83,
+        "price": 26428.36,
+        "change_pct": 1.06,
         "up": true
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 53458.46,
+        "price": 53461.86,
         "change_pct": -0.22,
         "up": false
       }
@@ -137,8 +137,8 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 116718.05,
-        "change_pct": -0.08,
+        "price": 116768.15,
+        "change_pct": -0.04,
         "up": false
       },
       {
@@ -212,8 +212,8 @@
     "BBAR": {
       "name": "Banco BBVA Argentina S.A.",
       "symbol": "BBAR",
-      "price": 14.79,
-      "change_pct": -0.03,
+      "price": 14.55,
+      "change_pct": -1.69,
       "up": false
     }
   }
