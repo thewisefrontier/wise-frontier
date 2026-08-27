@@ -1,26 +1,26 @@
 {
-  "updated_at": "2026-08-28 03:00",
+  "updated_at": "2026-08-28 03:30",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7731.0,
-      "change_pct": 0.7,
+      "price": 7714.04,
+      "change_pct": 0.48,
       "up": true
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 26496.85,
-      "change_pct": 1.32,
+      "price": 26427.66,
+      "change_pct": 1.06,
       "up": true
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 53618.42,
-      "change_pct": 0.08,
-      "up": true
+      "price": 53526.19,
+      "change_pct": -0.1,
+      "up": false
     },
     {
       "name": "코스피",
@@ -98,23 +98,23 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7731.0,
-        "change_pct": 0.7,
+        "price": 7714.04,
+        "change_pct": 0.48,
         "up": true
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 26496.85,
-        "change_pct": 1.32,
+        "price": 26427.66,
+        "change_pct": 1.06,
         "up": true
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 53618.42,
-        "change_pct": 0.08,
-        "up": true
+        "price": 53526.19,
+        "change_pct": -0.1,
+        "up": false
       }
     ],
     "kr": [
@@ -212,8 +212,8 @@
     "BBAR": {
       "name": "Banco BBVA Argentina S.A.",
       "symbol": "BBAR",
-      "price": 14.59,
-      "change_pct": -1.42,
+      "price": 14.53,
+      "change_pct": -1.82,
       "up": false
     }
   }
