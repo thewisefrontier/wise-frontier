@@ -1,15 +1,14 @@
 name: NewsFinal - Auto Run
 
 on:
-  schedule:
-    # 매시 47분. 정각(0분)은 전 세계 저장소가 몰려 GitHub이 예약 실행을
-    # 지연·누락시키는 구간이라 옮김(2026-07-29: 14개 시간대 중 8회만 실행,
-    # 08:27~12:21 4시간 공백 실측). 다른 워크플로우와도 분 단위로 분리:
-    #   :10/:40 backfill, :20 weather, :30 oil_price → :47 사용
-    # 2026-08-03: :47 단독으로도 누락 재발(10:18 이후 3사이클 공백).
-    # 이중화 + 아래 '중복 실행 가드'로 45분 이내 재실행은 스스로 취소.
-    - cron: '17 * * * *'
-    - cron: '47 * * * *'
+  # 2026-08-27: GitHub 자체 schedule 트리거가 11:11~18:47(7시간 반) 동안
+  # 단 한 번도 안 쐈던 사고 발생(이미 2026-07-29, 08-03에도 같은 유형의
+  # 누락이 반복됐었음 — 이중 cron으로도 못 막음). schedule 트리거를 완전히
+  # 제거하고 외부 크론 핑 서비스(cron-job.org, wise-frontier-trigger 잡)가
+  # workflow_dispatch를 30분마다 호출하는 방식으로 전환(newsissue 프로젝트의
+  # fetch_news.yml에서 2026-08-19에 먼저 적용해 검증된 패턴).
+  # ⚠️ cron-job.org 계정/토큰 상태가 죽으면 이 파이프라인 전체가 같이
+  # 멈춘다 — 가끔 확인할 것.
   workflow_dispatch:
 
 permissions:
@@ -61,7 +60,6 @@ jobs:
       # → 임계를 낮추려면 Gemini 호출량 증가를 함께 감안할 것.
       - name: 중복 실행 가드 (직전 사이클 완료 후 100분 미만이면 스킵)
         id: guard
-        if: github.event_name == 'schedule'
         run: |
           last=$(git log -1 --format=%cI --grep='^Update articles & state$' || true)
           if [ -z "$last" ]; then
