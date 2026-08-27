@@ -1,9 +1,11 @@
 name: NewsFinal - Daily Oil Price
 
 on:
-  schedule:
-    - cron: '30 22 * * 1-5'   # 평일 UTC 22:30 = 뉴욕 17:30~18:30 (EDT/EST 자동 대응)
-    - cron: '0 0 * * 2-6'     # 평일 UTC 00:00 재시도 (API 지연 대비)
+  # 2026-08-27: run.yml/weather.yml과 같은 이유로 GitHub schedule 제거,
+  # 외부 크론(cron-job.org)의 workflow_dispatch로 전환. 예전엔 재시도용
+  # 두 번째 cron('0 0 * * 2-6')을 따로 박아뒀지만, 이제 30분마다 호출되고
+  # 스크립트 자체가 market_is_closed()/already_published()로 게이트하므로
+  # 그 재시도 슬롯은 불필요해져 제거.
   workflow_dispatch:
 
 permissions:
