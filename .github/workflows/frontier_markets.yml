@@ -1,8 +1,11 @@
 name: NewsFinal - Global Markets Daily
 
 on:
-  schedule:
-    - cron: '15 23 * * *'   # UTC 23:15 = KST 08:15, 하루 1회 (opinet_price.yml 08:00과 겹치지 않게 오프셋)
+  # 2026-08-28: 이 워크플로우가 08:15 KST 예정에서 7시간 넘게 늦은 15:56에야
+  # 처음 실행된 것을 확인(run.yml/opinet_price.yml과 같은 GitHub schedule
+  # 트리거 무응답 사고, 같은 날 저장소 전반에 걸쳐 발생). schedule 제거,
+  # 외부 크론(cron-job.org)의 workflow_dispatch로 전환. 스크립트 자체가
+  # already_published()로 게이트하므로 자주 호출해도 안전.
   workflow_dispatch:
 
 permissions:

@@ -543,6 +543,15 @@ def insert_article(title_ko: str, summary_ko: str, prices: dict, image_url: str 
 def main():
     print(f"\n[opinet_price_writer] 시작: {now_kst().strftime('%Y-%m-%d %H:%M')} KST")
 
+    # 2026-08-28: 외부 트리거(cron-job.org)가 30분마다 호출하게 되면서,
+    # 이미 오늘자 기사가 나간 뒤에도 매번 오피넷(정부 API)을 호출하고 있던
+    # 문제를 발견(사용자 지적) — oil_price_writer.py처럼 already_published()를
+    # API 호출보다 먼저 체크해 불필요한 정부 API 호출을 막는다.
+    today = now_kst().date()
+    if already_published(today):
+        print(f"  → {today} 국내 유가 기사 이미 존재 → 스킵")
+        return
+
     prices = fetch_opinet_prices()
     if not prices:
         print("  [ERROR] 오피넷 유가 데이터 수집 실패 → 종료")
@@ -553,7 +562,7 @@ def main():
 
     save_price_history(prices)
 
-    if already_published(price_date):
+    if price_date != today and already_published(price_date):
         print(f"  → {price_date} 국내 유가 기사 이미 존재 → 스킵")
         return
 
