@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29 05:14",
+  "updated_at": "2026-08-29 05:15",
   "indices": [
     {
       "name": "S&P 500",
@@ -89,7 +89,7 @@
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
       "price": 16.16,
-      "change_pct": 1.33,
+      "change_pct": 1.35,
       "up": true
     }
   ],
@@ -189,7 +189,7 @@
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
         "price": 16.16,
-        "change_pct": 1.33,
+        "change_pct": 1.35,
         "up": true
       }
     ]
@@ -212,8 +212,8 @@
     "BBAR": {
       "name": "Banco BBVA Argentina S.A.",
       "symbol": "BBAR",
-      "price": 14.48,
-      "change_pct": -2.92,
+      "price": 14.47,
+      "change_pct": -3.02,
       "up": false
     }
   }
