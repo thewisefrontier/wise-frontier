@@ -817,6 +817,48 @@ def is_coherent_cluster(cluster: list) -> bool:
     return True
 
 
+_TITLE_SOURCE_SUFFIX_RE = re.compile(r'\s+[-–|]\s+[^-–|]{2,40}$')
+
+
+def _is_garbled_headline_mashup(title: str, summary: str) -> bool:
+    """구글뉴스류 피드의 '요약'이 실제 요약이 아니라 제목 뒤에 다른 헤드라인이
+    그대로 이어붙은 경우를 감지한다.
+
+    실사고(2026-08-27, id=103586): 구글뉴스 독일 피드에서 온 두 항목의
+    summary_en이 title_en과 거의 동일하게 시작한 뒤 다른 헤드라인 조각이
+    그대로 이어붙어 있었다(예: "...Hamburger AbendblattLive-Ticker zum
+    Prozess: Christina Block: „Ich..."). 번역·본문크롤링 전 상태라 이 뭉친
+    텍스트가 그대로 프롬프트에 들어갔고, 맥락 없는 독일어 관용구
+    ("Zepter in die Hand nehmen" = "직접 나서다")를 Gemini가 자기 배경지식
+    (오이겐 블록=블록하우스 창업자)으로 채워 "경영권 전면에 나선다"는
+    완전히 다른 사실을 지어냈다.
+    ⚠️ title은 보통 "헤드라인 - 매체명" 형태이고 summary는 매체명 뒤에
+    구분자 없이 다음 헤드라인이 바로 붙는 형태라(실측), 단순 startswith로는
+    안 잡힌다 — 매체명 접미사를 뗀 핵심 헤드라인부만 퍼지 비교한다."""
+    if not title or not summary:
+        return False
+    core = _TITLE_SOURCE_SUFFIX_RE.sub('', title).strip().lower()
+    if len(core) < 15:
+        core = title.strip().lower()
+    s = summary.strip().lower()
+    probe_len = min(len(core), len(s))
+    if probe_len < 15:
+        return False
+    return fuzz.ratio(core[:probe_len], s[:probe_len]) >= 85 and len(s) > len(core) + 10
+
+
+def _has_real_content(a: dict) -> bool:
+    """full_text가 있거나, 요약이 제목의 단순 반복/뭉치기가 아닌 경우만
+    '실제 내용 있음'으로 본다. 제목 하나뿐인 항목은 소스로서 신뢰할 수 없다."""
+    if a.get("full_text"):
+        return True
+    summary = a.get("summary_ko") or a.get("summary_en") or ""
+    if not summary:
+        return False
+    title = a.get("title_en") or a.get("title_ko") or ""
+    return not _is_garbled_headline_mashup(title, summary)
+
+
 def cluster_articles(articles):
     """기사를 이슈별로 클러스터링"""
     clusters = []
@@ -836,8 +878,14 @@ def cluster_articles(articles):
                 used.add(j)
 
         if len(cluster) >= CLUSTER_MIN_SIZE:
+            # 클러스터 구성원 전원이 제목뿐이고 본문·실제 요약이 하나도 없으면
+            # (2026-08-27 실사고, id=103586) 헤드라인만으로 세부 사실을 지어낼
+            # 위험이 매우 커 검토 필요로 미발행 저장한다.
+            if not any(_has_real_content(x) for x in cluster if not x.get("__needs_review__")):
+                print(f"  [검토필요] 본문·요약 없이 제목뿐인 클러스터 ({len(cluster)}건) — 미발행 저장")
+                cluster.append({"__needs_review__": True})
             # 다국가 혼합 클러스터 → 검토 필요로 미발행 저장
-            if not is_coherent_cluster(cluster):
+            elif not is_coherent_cluster(cluster):
                 print(f"  [검토필요] 다국가 혼합 클러스터 ({len(cluster)}건) — 미발행 저장")
                 cluster.append({"__needs_review__": True})
             clusters.append(cluster)
@@ -1093,7 +1141,12 @@ def build_issue_prompt(cluster, existing_summary=None):
     for i, a in enumerate(main_articles, 1):
         t = a.get("title_ko") or a.get("title_en") or ""
         full_text = a.get("full_text") or ""
-        s = full_text if full_text else (a.get("summary_ko") or a.get("summary_en") or "")
+        raw_summary = a.get("summary_ko") or a.get("summary_en") or ""
+        # 요약이 실제 요약이 아니라 제목+다른 헤드라인이 뭉쳐진 것이면(구글뉴스류
+        # 피드 특유의 오염) 버린다 — 실사고(2026-08-27, id=103586) 참조.
+        if not full_text and _is_garbled_headline_mashup(a.get("title_en") or a.get("title_ko") or "", raw_summary):
+            raw_summary = ""
+        s = full_text if full_text else raw_summary
         pub = _pub_day_label(a.get("source_published_at"))
         pub_tag = f" (보도 {pub})" if pub else ""
         article_list += f"{i}. [{a.get('source','')}]{pub_tag} {t}\n"
