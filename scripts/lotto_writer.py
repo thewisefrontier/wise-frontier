@@ -163,7 +163,7 @@ def build_lotto645_article(d: dict) -> tuple[str, str, str]:
     title = f"[복권] 로또 {round_no}회 당첨번호 {nums_str}…보너스 {bonus}"
 
     body = (
-        f"동행복권이 {draw_date.day}일 추첨한 로또6/45 {round_no}회 당첨번호를 발표했다. "
+        f"동행복권이 {draw_date.day}일 로또6/45 {round_no}회 당첨번호를 추첨·발표했다. "
         f"당첨번호는 {nums_str}이며 보너스 번호는 {bonus}다.\n\n"
         f"1등 당첨자는 {d['rnk1WnNope']:,}명으로 각자 {format_amount(d['rnk1WnAmt'])}씩 받는다. "
         f"1등 총 당첨금은 {format_amount(d['rnk1SumWnAmt'])}이다.\n"
@@ -262,7 +262,7 @@ def build_pension720_article(latest: dict, prizes: list) -> tuple[str, str, str]
         p = by_rank.get(rank)
         return p["wnTotalCnt"] if p and p.get("wnTotalCnt") else None
 
-    paras = [f"동행복권이 {draw_date.day}일 추첨한 연금복권720+ {round_no}회 당첨번호를 발표했다."]
+    paras = [f"동행복권이 {draw_date.day}일 연금복권720+ {round_no}회 당첨번호를 추첨·발표했다."]
 
     c1 = cnt(1)
     if c1:
