@@ -515,11 +515,14 @@ def build_article_prompt(prices: dict) -> str:
     # 실제 데이터 출처에 맞는 한국어 인용구. src와 무관하게 항상 EIA를
     # 인용하면 Alpha Vantage·Stooq에서 받은 날도 EIA를 인용한 것처럼
     # 기사에 나가는 오귀속이 생긴다.
+    # 2026-08-28 사용자 결정: EIA(미국 정부 공식 기관)는 이름을 그대로 밝히되,
+    # Yahoo Finance·Alpha Vantage처럼 비공식 민간 집계 소스는 이름을 노출하지
+    # 않고 "시장 집계에 따르면"으로 순화한다 — EIA가 간헐적으로 타임아웃돼
+    # 폴백이 자주 발동되는데, 비공식 소스명이 기사에 그대로 노출되는 게
+    # 부적절하다는 판단.
     src_citation = {
         "EIA": "미국 에너지정보청(EIA)에 따르면",
-        "Yahoo Finance": "야후 파이낸스 집계에 따르면",
-        "Alpha Vantage": "Alpha Vantage 집계에 따르면",
-    }.get(src, f"{src}에 따르면")
+    }.get(src, "시장 집계에 따르면")
 
     # 2026-08-26 도입: 가격 변동 배경(③)을 예전엔 Gemini 자체 지식으로만
     # 추정 서술해야 했다(근거가 없어 "~로 풀이된다" 헤지 표현 강제). 구글
