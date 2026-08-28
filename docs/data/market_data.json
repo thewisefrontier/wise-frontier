@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-28 15:30",
+  "updated_at": "2026-08-28 15:56",
   "indices": [
     {
       "name": "S&P 500",
@@ -25,15 +25,15 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 6787.89,
-      "change_pct": -0.3,
+      "price": 6788.88,
+      "change_pct": -0.28,
       "up": false
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 836.79,
-      "change_pct": 1.2,
+      "price": 838.41,
+      "change_pct": 1.4,
       "up": true
     },
     {
@@ -67,8 +67,8 @@
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 5972.33,
-      "change_pct": -0.54,
+      "price": 5984.6,
+      "change_pct": -0.33,
       "up": false
     },
     {
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 15.99,
-      "change_pct": 0.31,
+      "price": 15.97,
+      "change_pct": 0.15,
       "up": true
     }
   ],
@@ -121,15 +121,15 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 6787.89,
-        "change_pct": -0.3,
+        "price": 6788.88,
+        "change_pct": -0.28,
         "up": false
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 836.79,
-        "change_pct": 1.2,
+        "price": 838.41,
+        "change_pct": 1.4,
         "up": true
       }
     ],
@@ -165,8 +165,8 @@
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 5972.33,
-        "change_pct": -0.54,
+        "price": 5984.6,
+        "change_pct": -0.33,
         "up": false
       }
     ],
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 15.99,
-        "change_pct": 0.31,
+        "price": 15.97,
+        "change_pct": 0.15,
         "up": true
       }
     ]
@@ -205,8 +205,8 @@
     "ACB": {
       "name": "Asia Commercial Joint Stock Bank",
       "symbol": "ACB.VN",
-      "price": 22500.0,
-      "change_pct": 1.12,
+      "price": 22550.0,
+      "change_pct": 1.35,
       "up": true
     },
     "BBAR": {
