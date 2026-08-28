@@ -217,44 +217,82 @@ def fetch_pension720_prizes(round_no: int) -> list:
 # 아예 쓰지 않고, 공식 발표 고정액을 그대로 상수로 박아둔다. API에서는
 # 회차마다 변하는 "당첨자 수"(wnTotalCnt)만 가져온다 — 금액을 API 필드
 # 해석에 의존하지 않아야 오탐 위험이 없다(사용자 요구: "절대 오타 금지").
+#
+# 각 필드: (라벨, 세전 월지급액 또는 None(월지급식이 아닌 등수), 지급개월수, 고정 당첨금 문구)
 _PT720_RANK_INFO = {
-    # rank: (라벨, 고정 당첨금 문구)
-    1: ("1등", "매월 700만원씩 20년(세전 총 16억 8,000만원)"),
-    2: ("2등", "매월 100만원씩 10년(세전 총 1억 2,000만원)"),
-    3: ("3등", "100만원"),
-    4: ("4등", "10만원"),
-    5: ("5등", "5만원"),
-    6: ("6등", "5,000원"),
-    7: ("7등", "1,000원"),
-    8: ("보너스", "매월 100만원씩 10년(세전 총 1억 2,000만원)"),
+    1: ("1등", 7_000_000, 20 * 12, "매월 700만원씩 20년(세전 총 16억 8,000만원)"),
+    2: ("2등", 1_000_000, 10 * 12, "매월 100만원씩 10년(세전 총 1억 2,000만원)"),
+    3: ("3등", None, None, "100만원"),
+    4: ("4등", None, None, "10만원"),
+    5: ("5등", None, None, "5만원"),
+    6: ("6등", None, None, "5,000원"),
+    7: ("7등", None, None, "1,000원"),
+    8: ("보너스", 1_000_000, 10 * 12, "매월 100만원씩 10년(세전 총 1억 2,000만원)"),
 }
+
+# 복권 당첨금 기타소득세(3억원 이하 구간): 소득세 20% + 지방소득세 2% = 22%.
+# 연금복권 월 지급액(700만원/100만원)은 회차당 지급액 기준이라 이 구간에
+# 항상 해당한다(사용자 요구: 세율은 세법에 명시된 고정값만 쓰고 추정 금지).
+_PT720_TAX_RATE = 0.22
+
+
+def _after_tax_monthly(monthly_krw: int) -> str:
+    net = round(monthly_krw * (1 - _PT720_TAX_RATE))
+    return f"{net // 10_000}만원"
+
+
+# 하위 등수 당첨번호는 당첨번호 끝자리를 그대로 쓴다(연금복권 공식 규정 —
+# 등수가 내려갈수록 뒷자리 일치 개수가 하나씩 줄어든다). 이미 확보한 num
+# 문자열을 슬라이싱하기만 하므로 API 재호출·추정 없이 오타 위험이 없다.
+_PT720_RANK_DIGITS = {2: 6, 3: 5, 4: 4, 5: 3, 6: 2, 7: 1}
 
 
 def build_pension720_article(latest: dict, prizes: list) -> tuple[str, str, str]:
     round_no = latest["psltEpsd"]
     draw_date = datetime.strptime(latest["psltRflYmd"], "%Y%m%d").date()
     bnd = latest["wnBndNo"]
-    num = latest["wnRnkVl"]
+    num = str(latest["wnRnkVl"])
     bonus_num = latest["bnsRnkVl"]
 
     title = f"[복권] 연금복권720+ {round_no}회 당첨번호 {bnd}조 {num}"
 
-    prize_lines = []
     by_rank = {p["wnRnk"]: p for p in prizes}
-    for rank in (1, 2, 3, 4, 5):
+
+    def cnt(rank):
         p = by_rank.get(rank)
-        if not p or not p.get("wnTotalCnt"):
-            continue
-        label, amount_desc = _PT720_RANK_INFO.get(rank, (f"{rank}등", ""))
-        prize_lines.append(
-            f"{label} 당첨자는 {p['wnTotalCnt']:,}명으로, 당첨금은 {amount_desc}이다."
+        return p["wnTotalCnt"] if p and p.get("wnTotalCnt") else None
+
+    paras = [f"동행복권이 {draw_date.day}일 추첨한 연금복권720+ {round_no}회 당첨번호를 발표했다."]
+
+    c1 = cnt(1)
+    if c1:
+        paras.append(f"{round_no}회 연금복권720+의 1등 당첨번호는 '{bnd}조 {num}'이다.")
+        paras.append(
+            f"1등 당첨자는 {c1:,}명이다. 1등에 당첨될 시 매달 700만원씩 20년간 연금식으로 받게 된다. "
+            f"세후 실수령액은 월 약 {_after_tax_monthly(_PT720_RANK_INFO[1][1])}이다."
         )
 
-    body = (
-        f"동행복권이 {draw_date.day}일 추첨한 연금복권720+ {round_no}회 당첨번호를 발표했다. "
-        f"당첨번호는 {bnd}조 {num}이며 보너스 번호는 {bonus_num}다.\n\n"
-        + "\n".join(prize_lines)
-    )
+    c2 = cnt(2)
+    if c2:
+        paras.append(f"2등 당첨번호는 '{num}'이다.")
+        paras.append(f"당첨자는 {c2:,}명이다. 2등에 당첨될 경우 월 100만원을 10년간 연금식으로 받는다.")
+
+    for rank, unit in ((3, "100만원"), (4, "10만원"), (5, "5만원"), (6, "5,000원"), (7, "1,000원")):
+        c = cnt(rank)
+        if not c:
+            continue
+        digits = num[-_PT720_RANK_DIGITS[rank]:]
+        paras.append(f"{rank}등 당첨번호는 '{digits}'이다. 당첨자 총 {c:,}명에게 각 {unit}이 지급된다.")
+
+    c8 = cnt(8)
+    if c8:
+        paras.append(f"보너스 번호는 각 조 '{bonus_num}'이다.")
+        paras.append(
+            f"보너스 당첨자는 {c8:,}명이다. 보너스 번호 6자리가 일치한 당첨자는 월 100만원씩 10년간 "
+            f"연금식으로 지급받는다."
+        )
+
+    body = "\n\n".join(paras)
     url_key = f"internal://pension720_{round_no}"
     return title, body, url_key
 
