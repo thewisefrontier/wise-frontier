@@ -88,10 +88,47 @@ except Exception:
         return src_url
 
 KST = timezone(timedelta(hours=9))
+EDT = ZoneInfo("America/New_York")  # 뉴욕 시장 기준
+
+# 뉴욕 시장 종가 기준: 현지 17:00 이후에만 실행(oil_price_writer.py와 동일 패턴)
+MARKET_CLOSE_HOUR_LOCAL = 17
 
 
 def now_kst() -> datetime:
     return datetime.now(timezone.utc).astimezone(KST)
+
+
+def now_edt() -> datetime:
+    return datetime.now(timezone.utc).astimezone(EDT)
+
+
+# 2026-08-28 실사고(id=108312): cron-job.org로 30분마다 호출되게 바뀌면서,
+# 자정 KST가 넘자마자(00:01) 그날치 기사가 즉시 생성됐다. 이때 뉴욕은
+# 아직 전날 장중(뉴욕 기준 오전)이라 실제로 존재하지도 않는 "종가"를
+# 근거로 기사가 나갔고, 리드 문장엔 아직 오지도 않은 "29일(현지시간)"이
+# 날짜로 박혔다(now_kst().date()를 그대로 썼기 때문). oil_price_writer.py의
+# market_is_closed()/get_target_price_date() 패턴을 그대로 가져와, 뉴욕
+# 종가가 실제로 존재하는 시점에만 실행하고 그 날짜를 정확히 쓴다.
+def market_is_closed() -> bool:
+    """뉴욕 현지 17:00 이후인지 확인 (주말은 금요일 종가 사용)."""
+    now = now_edt()
+    if now.weekday() >= 5:
+        return True
+    return now.hour >= MARKET_CLOSE_HOUR_LOCAL
+
+
+def get_target_market_date() -> date:
+    """수집 대상 날짜 결정. 뉴욕 17:00 이후 → 당일, 그 전 → 전 영업일."""
+    now = now_edt()
+    if now.weekday() >= 5:
+        days_back = now.weekday() - 4
+        return (now - timedelta(days=days_back)).date()
+    if now.hour >= MARKET_CLOSE_HOUR_LOCAL:
+        return now.date()
+    prev = now - timedelta(days=1)
+    while prev.weekday() >= 5:
+        prev -= timedelta(days=1)
+    return prev.date()
 
 
 def _sb_headers():
@@ -315,7 +352,9 @@ def has_column_style(text: str) -> bool:
 
 # ── 기사 프롬프트 ────────────────────────────────────────────
 def build_article_prompt(data: dict) -> str:
-    today = now_kst()
+    # ⚠️ now_kst()가 아니라 실제 뉴욕 종가가 존재하는 거래일을 써야 한다
+    # (2026-08-28 실사고, id=108312 참조).
+    today = get_target_market_date()
     today_str = today.strftime("%Y년 %m월 %d일")
 
     def _idx_line(i: dict) -> str:
@@ -432,10 +471,14 @@ def call_gemini_article(prompt: str, max_tokens: int = 3500) -> str | None:
     # max_stages=1로 헛된 재시도를 줄이고, 그래도 막히면 검색 없이(전체
     # 캐스케이드) 폴백해 최소한 기사는 나가게 한다 — 실시간 뉴스 맥락은
     # 빠지지만 시세 수치만으로도 기사 자체는 유효하다.
-    text = call_gemini(prompt, max_tokens=max_tokens, use_search=True, max_stages=1)
+    # 2026-08-29 사용자 지적: 플래그십(3.7-flash, start_tier=0)이 무료
+    # RPD가 작아 5키가 한꺼번에 소진되는 일이 잦았다(cron-job.org로 호출
+    # 빈도가 늘면서 더 심해짐) — oil_price_writer.py/opinet_price_writer.py와
+    # 같이 RPD 여유가 큰 lite 티어(start_tier=3)부터 시작하도록 변경.
+    text = call_gemini(prompt, max_tokens=max_tokens, use_search=True, max_stages=1, start_tier=3)
     if not text:
         print("  ⚠️ 검색 그라운딩 실패 → 검색 없이 재시도")
-        text = call_gemini(prompt, max_tokens=max_tokens, use_search=False)
+        text = call_gemini(prompt, max_tokens=max_tokens, use_search=False, start_tier=3)
     time.sleep(5)
     if not text:
         return None
@@ -578,7 +621,12 @@ def main():
         print("  [SKIP] SUPABASE 환경변수 없음")
         return
 
-    article_date = now_kst().date()
+    if not market_is_closed():
+        edt_now = now_edt()
+        print(f"  → 뉴욕 시장 미종료 ({edt_now.strftime('%H:%M')} EDT) → 스킵")
+        return
+
+    article_date = get_target_market_date()
     if already_published(article_date):
         print(f"  → {article_date} 글로벌 마켓 동향 기사 이미 존재 → 스킵")
         return
