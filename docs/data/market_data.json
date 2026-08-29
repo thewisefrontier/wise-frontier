@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-30 08:07",
+  "updated_at": "2026-08-30 08:10",
   "indices": [
     {
       "name": "S&P 500",
@@ -18,7 +18,7 @@
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 53559.99,
+      "price": 53560.0,
       "change_pct": 0.18,
       "up": true
     },
@@ -39,7 +39,7 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 118173.36,
+      "price": 118173.0,
       "change_pct": 1.17,
       "up": true
     },
@@ -112,7 +112,7 @@
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 53559.99,
+        "price": 53560.0,
         "change_pct": 0.18,
         "up": true
       }
@@ -137,7 +137,7 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 118173.36,
+        "price": 118173.0,
         "change_pct": 1.17,
         "up": true
       },
