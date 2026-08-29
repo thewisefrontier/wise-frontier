@@ -213,13 +213,29 @@ def fetch_yahoo_quote(symbol: str) -> dict | None:
             return None
         meta = results[0].get("meta", {})
         price = meta.get("regularMarketPrice")
-        prev = meta.get("chartPreviousClose")
-        if price is None or prev is None or not prev:
+        # 실사고(2026-08-29, id=109658): chartPreviousClose는 "전일 종가"가
+        # 아니라 range=5d 요청의 시작점(5거래일 전) 기준값이라, 이걸로 등락률을
+        # 계산하면 방향 자체가 뒤집힐 수 있다(다우 실제 -0.02% 하락인데
+        # chartPreviousClose 기준으론 +0.53% 상승으로 나옴 — 종가 수치 자체는
+        # 정확했는데 비교 기준일이 틀렸던 것). meta.regularMarketChangePercent는
+        # 야후가 전일 대비로 직접 계산해 제공하는 필드라 실제 발표 등락률과
+        # 정확히 일치함(S&P -0.25%, 다우 -0.02% 등 실측 확인) — 이걸 우선
+        # 쓰고, 없을 때만 chartPreviousClose로 폴백한다.
+        pct = meta.get("regularMarketChangePercent")
+        if price is None:
             print(f"  [WARN] 야후 조회 실패 ({symbol}): 필드 누락")
             return None
-        change = price - prev
-        pct = (change / prev * 100) if prev else 0.0
-        return {"price": float(price), "prev": float(prev), "change": change, "pct": pct}
+        if pct is not None:
+            prev = price / (1 + pct / 100) if pct != -100 else None
+            change = price - prev if prev else 0.0
+        else:
+            prev = meta.get("chartPreviousClose")
+            if prev is None or not prev:
+                print(f"  [WARN] 야후 조회 실패 ({symbol}): 필드 누락")
+                return None
+            change = price - prev
+            pct = (change / prev * 100) if prev else 0.0
+        return {"price": float(price), "prev": float(prev) if prev else None, "change": change, "pct": pct}
     except Exception as e:
         print(f"  [WARN] 야후 조회 실패 ({symbol}): {e}")
         return None
