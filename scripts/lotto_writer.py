@@ -182,6 +182,24 @@ def _ball_color(n: int) -> str:
     return "#B0D840"
 
 
+# 자체 생성 이미지용 한글 폰트(Noto Sans KR Bold를 이 스크립트가 실제로 쓰는
+# 문구만 남기고 서브셋 — 원본은 ~4.8MB, 서브셋은 ~10KB). CI(우분투 러너)에
+# 한글 폰트가 기본 설치되어 있지 않아 자체 폰트를 커밋해 둔다(2026-08-31,
+# 사용자 지시: "한글로 바꿀까요?" → "응"). 서브셋 재생성:
+#   py -m fontTools.subset <원본 폰트> --text="<필요 문자 전부>" \
+#     --output-file=scripts/assets/NotoSansKR-Bold-subset.otf
+_KR_FONT_PATH = os.path.join(os.path.dirname(__file__), "assets", "NotoSansKR-Bold-subset.otf")
+
+
+def _kr_font(size: int):
+    from PIL import ImageFont
+    try:
+        return ImageFont.truetype(_KR_FONT_PATH, size)
+    except Exception as e:
+        print(f"  [WARN] 한글 폰트 로드 실패({e}), 기본 폰트로 대체")
+        return ImageFont.load_default(size=size)
+
+
 def _capture_dhlottery_result_image(result_url: str, round_no: int) -> bytes | None:
     """동행복권 추첨결과 페이지(로또645 /lt645/result, 연금복권720+ /pt720/result —
     둘 다 같은 마크업: .swiper-slide-active .result-infoWrap)에서 해당 회차
@@ -226,19 +244,18 @@ def capture_pension720_result_image(round_no: int) -> bytes | None:
 
 
 def generate_lotto645_ball_image(nums: list[int], bonus: int, round_no: int) -> bytes:
-    """캡처 실패 시 대체용 자체 생성 이미지. 공 색상은 동행복권 공식 규칙과 동일하게
-    맞추되, 한글 폰트를 CI에 새로 설치할 필요가 없도록 문구는 영문만 쓴다."""
+    """캡처 실패 시 대체용 자체 생성 이미지. 공 색상은 동행복권 공식 규칙과 동일."""
     import io
-    from PIL import Image, ImageDraw, ImageFont
+    from PIL import Image, ImageDraw
 
     W, H = 700, 220
     img = Image.new("RGB", (W, H), "#FFFFFF")
     draw = ImageDraw.Draw(img)
-    title_font = ImageFont.load_default(size=26)
-    small_font = ImageFont.load_default(size=15)
-    num_font = ImageFont.load_default(size=24)
+    title_font = _kr_font(26)
+    small_font = _kr_font(15)
+    num_font = _kr_font(24)
 
-    draw.text((W / 2, 30), f"Lotto 6/45 - Round {round_no}", font=title_font, fill="#222222", anchor="mm")
+    draw.text((W / 2, 30), f"로또6/45 제{round_no}회 당첨번호", font=title_font, fill="#222222", anchor="mm")
 
     balls = [*nums, "+", bonus]
     r, gap = 28, 12
@@ -253,7 +270,7 @@ def generate_lotto645_ball_image(nums: list[int], bonus: int, round_no: int) -> 
             draw.text((x, y), str(b), font=num_font, fill="white", anchor="mm")
         x += 2 * r + gap
 
-    draw.text((W / 2, H - 25), "NewsFinal", font=small_font, fill="#999999", anchor="mm")
+    draw.text((W / 2, H - 25), "뉴스파이널", font=small_font, fill="#999999", anchor="mm")
 
     buf = io.BytesIO()
     img.save(buf, format="PNG")
@@ -261,19 +278,18 @@ def generate_lotto645_ball_image(nums: list[int], bonus: int, round_no: int) -> 
 
 
 def generate_pension720_ball_image(bnd: str, num: str, bonus_num: str, round_no: int) -> bytes:
-    """캡처 실패 시 대체용 자체 생성 이미지. 한글 폰트 CI 설치가 필요 없도록 문구는
-    영문만 쓴다(로또645 자체 생성 이미지와 같은 원칙)."""
+    """캡처 실패 시 대체용 자체 생성 이미지."""
     import io
-    from PIL import Image, ImageDraw, ImageFont
+    from PIL import Image, ImageDraw
 
     W, H = 700, 260
     img = Image.new("RGB", (W, H), "#FFFFFF")
     draw = ImageDraw.Draw(img)
-    title_font = ImageFont.load_default(size=24)
-    label_font = ImageFont.load_default(size=15)
-    num_font = ImageFont.load_default(size=20)
+    title_font = _kr_font(24)
+    label_font = _kr_font(15)
+    num_font = _kr_font(20)
 
-    draw.text((W / 2, 26), f"Pension Lottery 720+ - Round {round_no}", font=title_font, fill="#222222", anchor="mm")
+    draw.text((W / 2, 26), f"연금복권720+ 제{round_no}회 당첨번호", font=title_font, fill="#222222", anchor="mm")
 
     def draw_row(y: int, label: str, band: str, digits: str, color: str):
         draw.text((30, y), label, font=label_font, fill="#666666", anchor="lm")
@@ -286,10 +302,10 @@ def generate_pension720_ball_image(bnd: str, num: str, bonus_num: str, round_no:
             draw.text((x, y), ch, font=num_font, fill="white", anchor="mm")
             x += 2 * r + gap
 
-    draw_row(110, "1st", bnd, num, "#FF7272")
-    draw_row(170, "Bonus", "", bonus_num, "#69C8F2")
+    draw_row(110, "1등", bnd, num, "#FF7272")
+    draw_row(170, "보너스", "", bonus_num, "#69C8F2")
 
-    draw.text((W / 2, H - 22), "NewsFinal", font=label_font, fill="#999999", anchor="mm")
+    draw.text((W / 2, H - 22), "뉴스파이널", font=label_font, fill="#999999", anchor="mm")
 
     buf = io.BytesIO()
     img.save(buf, format="PNG")
@@ -359,6 +375,102 @@ def backfill_pension720_image(round_no: int, bnd: str, num: str, bonus_num: str)
     _backfill_dh_image(
         f"internal://pension720_{round_no}", f"연금복권 {round_no}회",
         lambda: get_pension720_image_url(round_no, bnd, num, bonus_num),
+    )
+
+
+def capture_powerball_result_image(draw_date_str: str) -> bytes | None:
+    """powerball.com 결과 페이지에서 당첨번호+잭팟 카드만 잘라 스크린샷.
+    dhlottery와 wait 전략이 다르다 — networkidle은 이 사이트에서 계속
+    타임아웃(백그라운드 폴링으로 추정), domcontentloaded + 명시적 셀렉터
+    대기가 안정적으로 확인됨(2026-08-31)."""
+    try:
+        from playwright.sync_api import sync_playwright
+    except Exception as e:
+        print(f"  [WARN] playwright 미설치: {e}")
+        return None
+    try:
+        draw_date = datetime.strptime(draw_date_str, "%Y-%m-%d").date()
+    except Exception:
+        return None
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            try:
+                page = browser.new_page(
+                    viewport={"width": 900, "height": 800},
+                    user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                               "(KHTML, like Gecko) Chrome/120.0 Safari/537.36",
+                )
+                page.goto(f"https://www.powerball.com/draw-result?gc=powerball&date={draw_date_str}",
+                          timeout=45000, wait_until="domcontentloaded")
+                el = page.locator(".number-card.number-powerball")
+                el.wait_for(state="visible", timeout=20000)
+                expect = f"{draw_date.strftime('%b')} {draw_date.day}, {draw_date.year}"
+                if expect not in el.inner_text():
+                    print(f"  [WARN] 캡처 페이지 날짜 불일치(기대 {expect})")
+                    return None
+                return el.screenshot()
+            finally:
+                browser.close()
+    except Exception as e:
+        print(f"  [WARN] 파워볼 결과 캡처 실패: {e}")
+        return None
+
+
+def generate_powerball_ball_image(white_balls: list[int], powerball: int, draw_date, multiplier: str) -> bytes:
+    """캡처 실패 시 대체용 자체 생성 이미지. 흰 공/빨간 파워볼 공 색상은
+    공식 파워볼 표기와 동일."""
+    import io
+    from PIL import Image, ImageDraw
+
+    W, H = 700, 220
+    img = Image.new("RGB", (W, H), "#FFFFFF")
+    draw = ImageDraw.Draw(img)
+    title_font = _kr_font(24)
+    small_font = _kr_font(15)
+    num_font = _kr_font(22)
+
+    draw.text((W / 2, 28), f"파워볼 {draw_date.month}월 {draw_date.day}일 당첨번호",
+              font=title_font, fill="#222222", anchor="mm")
+
+    balls = [*white_balls, powerball]
+    r, gap = 26, 12
+    total_w = len(balls) * (2 * r) + (len(balls) - 1) * gap
+    x = (W - total_w) / 2 + r
+    y = 115
+    for i, b in enumerate(balls):
+        is_pb = i == len(balls) - 1
+        fill = "#D0021B" if is_pb else "#E5E5E5"
+        text_color = "white" if is_pb else "#222222"
+        draw.ellipse((x - r, y - r, x + r, y + r), fill=fill,
+                     outline=None if is_pb else "#999999")
+        draw.text((x, y), str(b), font=num_font, fill=text_color, anchor="mm")
+        x += 2 * r + gap
+
+    if multiplier:
+        draw.text((W / 2, 165), f"파워플레이 {multiplier}배", font=small_font, fill="#666666", anchor="mm")
+
+    draw.text((W / 2, H - 22), "뉴스파이널", font=small_font, fill="#999999", anchor="mm")
+
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+    return buf.getvalue()
+
+
+def get_powerball_image_url(draw_date_str: str, white_balls: list[int], powerball: int,
+                             draw_date, multiplier: str) -> str:
+    return _get_dh_image_url(
+        f"powerball_{draw_date_str}",
+        lambda: capture_powerball_result_image(draw_date_str),
+        lambda: generate_powerball_ball_image(white_balls, powerball, draw_date, multiplier),
+    )
+
+
+def backfill_powerball_image(draw_date_str: str, white_balls: list[int], powerball: int,
+                              draw_date, multiplier: str) -> None:
+    _backfill_dh_image(
+        f"internal://powerball_{draw_date_str}", f"파워볼 {draw_date_str}",
+        lambda: get_powerball_image_url(draw_date_str, white_balls, powerball, draw_date, multiplier),
     )
 
 
@@ -775,12 +887,18 @@ def run():
     if pb:
         pb_date = pb["draw_date"][:10]
         pb_url = f"internal://powerball_{pb_date}"
+        pb_nums = [int(n) for n in pb["winning_numbers"].split()]
+        pb_white, pb_ball = pb_nums[:5], pb_nums[5]
+        pb_draw_date = datetime.strptime(pb_date, "%Y-%m-%d").date()
+        pb_multiplier = pb.get("multiplier", "")
         if already_published(pb_url):
             print(f"  → 파워볼 {pb_date} 이미 발행됨 → 스킵")
+            backfill_powerball_image(pb_date, pb_white, pb_ball, pb_draw_date, pb_multiplier)
         else:
             prize = fetch_powerball_prize_data(pb_date)
             title, body, url_key = build_powerball_article(pb, prize)
-            aid = insert_article(title, body, url_key, countries=["미국"])
+            image_url = get_powerball_image_url(pb_date, pb_white, pb_ball, pb_draw_date, pb_multiplier)
+            aid = insert_article(title, body, url_key, countries=["미국"], image_url=image_url)
             print(f"  {'✓' if aid > 0 else '✗'} 파워볼 {pb_date}: id={aid}")
     else:
         print("  → 파워볼 데이터 조회 실패")
