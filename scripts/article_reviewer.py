@@ -123,6 +123,35 @@ _ENGLISH_RUN_RE = re.compile(
 )
 
 
+# ── 발행 시간 상식 검사 (2026-08-30 데스킹 툴 고도화) ────────────────────
+# 매일 정해진 시각에 나가야 하는 데이터 기사 유형만 대상으로 한다(일반
+# 뉴스·트렌드 기사는 사건 발생 시점이 제각각이라 적용 불가). url 접두어로
+# 유형을 식별 — cron-job.org 전환(2026-08-27~28) 당시 정한 실행 시간대와
+# 동일하게 맞춘다. 날씨는 국가별 현지 아침 시간이 하루 종일 퍼져 있어
+# SKIP_CATEGORIES로 이미 전면 제외돼 있으므로 여기 포함하지 않는다.
+URL_PREFIX_EXPECTED_HOURS = {
+    "internal://oil_price_": (6, 12),         # 뉴욕장 마감(KST 06~07시) 이후
+    "internal://opinet_price_": (5, 10),       # 오피넷 갱신 이후
+    "internal://frontier_markets_": (6, 12),   # 뉴욕장 마감 이후
+}
+
+
+def detect_timing_flag(url: str, created_at: str) -> str | None:
+    """url 유형별 상식적인 발행 시간대를 벗어났으면 사유를 반환."""
+    if not url or not created_at:
+        return None
+    for prefix, (start_h, end_h) in URL_PREFIX_EXPECTED_HOURS.items():
+        if url.startswith(prefix):
+            try:
+                hour = int(created_at[11:13])
+            except (ValueError, IndexError):
+                return None
+            if not (start_h <= hour < end_h):
+                return f"발행시간 이상({created_at[11:16]}, 예상 {start_h:02d}~{end_h:02d}시)"
+            return None
+    return None
+
+
 def detect_untranslated_english(joined: str) -> list:
     """괄호 밖에 남은 2단어 이상 영문 연속 구간을 미번역 의심으로 반환."""
     stripped = _PAREN_RE.sub("", joined)
@@ -146,7 +175,7 @@ def fetch_candidates() -> list:
             _sb_url(),
             headers=_sb_headers(),
             params={
-                "select": "id,title_ko,summary_ko,category,update_log,created_at",
+                "select": "id,title_ko,summary_ko,category,update_log,created_at,url",
                 "source": "eq.NewsFinal",
                 "is_published": "eq.true",
                 "created_at": f"gte.{since}",
@@ -162,10 +191,14 @@ def fetch_candidates() -> list:
     return []
 
 
-def detect_flags(title: str, body: str, category: str) -> list:
+def detect_flags(title: str, body: str, category: str, url: str = "", created_at: str = "") -> list:
     """자동 수정하지 않고 알림만 보내는 위반 항목 탐지."""
     flags = []
     joined = f"{title}\n{body}"
+
+    timing_flag = detect_timing_flag(url, created_at)
+    if timing_flag:
+        flags.append(timing_flag)
 
     m = ABS_DATE_LOCALTIME_RE.search(joined)
     if m:
@@ -306,7 +339,7 @@ def run():
                     fixed.append({"id": aid, "title": title})
                     print(f"  ✅ id={aid} 합쇼체 변환 — {', '.join(changed)}")
 
-        flags = detect_flags(title, body, category)
+        flags = detect_flags(title, body, category, a.get("url") or "", a.get("created_at") or "")
         if flags:
             flagged.append({"id": aid, "title": title, "flags": flags})
             print(f"  ⚠️ id={aid} {', '.join(flags)}")
