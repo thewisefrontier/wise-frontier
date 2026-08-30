@@ -701,6 +701,11 @@ def insert_article(title_ko: str, summary_ko: str, data: dict, article_date: dat
         "update_log": [{"timestamp": now_str, "note": "글로벌 마켓 동향 자동 기사"}],
         "sent_telegram": 0,
         "is_published": True,
+        # 2026-08-30: 데스킹 단계에서 본문 수치와 대조하기 위해 실제로 가져온
+        # 원본 시세를 그대로 저장(Gemini가 글로 옮기며 숫자를 잘못 쓰는
+        # 사고를 잡는 용도 — 소스 데이터 자체 오류는 fetch_all_data()의
+        # 다중검증이 이미 막음).
+        "source_data": data,
     }
 
     headers = {**_sb_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
