@@ -103,7 +103,7 @@ _CJK_CTX = re.compile(".{0,14}[一-鿿]+.{0,14}")
 def detect_script_leak(title: str, body: str):
     """비허용 문자셋 혼입 검출. [(스크립트명, 문맥), ...] 반환."""
     hits = []
-    for field in (title or "", body or ""):
+    for field, is_title in ((title or "", True), (body or "", False)):
         if not field:
             continue
         for name, probe, ctx_re in _SCRIPT_LEAK_RE:
@@ -114,10 +114,13 @@ def detect_script_leak(title: str, body: str):
                 if snippet and all(snippet != h[1] for h in hits):
                     hits.append((name, snippet))
 
-        # 한자는 괄호 병기와 관용 국가명 축약을 걷어낸 뒤 남는 것만 오류로 본다
+        # 한자는 괄호 병기를 걷어낸 뒤 남는 것만 오류로 본다. 관용 국가명
+        # 축약(美/中/日 등) 예외는 제목에만 적용한다 — 본문은 그대로 보수적으로
+        # 본다(2026-08-31, 사용자 지시: "관용 국가명 축약은 '제목만'으로 한정").
         if _CJK_PROBE.search(field):
             stripped = _PAREN_RE.sub("", field)
-            stripped = _CJK_COUNTRY_ABBR_RE.sub("", stripped)
+            if is_title:
+                stripped = _CJK_COUNTRY_ABBR_RE.sub("", stripped)
             for m in _CJK_CTX.finditer(stripped):
                 snippet = m.group(0).replace("\n", " ").strip()
                 if snippet and all(snippet != h[1] for h in hits):
