@@ -37,10 +37,14 @@ check_transliteration.py가 배치로 쓰던 로직을 공용 모듈로 뽑아, 
 괄호 없이 흔히 쓰는 국가명 한 글자 축약까지 전부 오류로 잡고 있었다.
 lotto_writer.py의 파워볼 기사가 제목의 "美 파워볼" 때문에 저장 시점마다
 100% 차단되어 단 한 건도 발행되지 못한 채 방치된 것으로 확인(사용자
-제보: "파워볼 기사는 우리쪽에서 한번도 나간 적이 없다"). 실제 스크립트
-혼입(이름 음역 중 외국 문자 새어나옴)은 항상 2글자 이상 이어지므로,
-괄호 밖에 남는 한자가 1글자뿐이면 의도된 국가명 축약으로 보고 넘어가고
-2글자 이상 연속될 때만 오류로 본다.
+제보: "파워볼 기사는 우리쪽에서 한번도 나간 적이 없다").
+
+처음엔 "한자 1글자는 통과"로 문턱을 낮췄으나, 사용자 지시로 방향을
+바꿨다 — 하드 블록 자체는 그대로 보수적으로 두고(1글자든 몇 글자든
+미확인 한자는 여전히 걸린다), 실제로 한국 언론이 흔히 쓰는 국가명
+축약 한 글자만 화이트리스트로 예외 처리한다(_CJK_COUNTRY_ABBR).
+목록에 없는 한자는 1글자여도 그대로 오류로 잡힌다 — 새 국가명 축약이
+필요하면 이 목록에 추가할 것.
 """
 
 import re
@@ -86,10 +90,14 @@ _SCRIPT_LEAK_RE = [
 
 # 괄호 병기 구간. 20자 상한은 긴 괄호가 통째로 지워져 오류를 놓치는 것을 막는다.
 _PAREN_RE = re.compile(r"\([^)]{0,20}\)")
-# 2글자 이상 연속된 한자만 본다(1글자는 "美/中/日/英" 같은 한국 언론의
-# 정상적인 국가명 축약과 구분 불가 — 실제 스크립트 혼입은 항상 2글자 이상).
-_CJK_PROBE = re.compile("[一-鿿]{2,}")
-_CJK_CTX = re.compile(".{0,14}[一-鿿]{2,}.{0,14}")
+
+# 괄호 없이도 한국 언론이 흔히 쓰는 국가/지역명 한 글자 한자 축약(관용 표기).
+# 이 목록에 없는 한자는 1글자든 여러 글자든 그대로 오류로 본다 — 하드 블록
+# 자체는 보수적으로 유지하고, 실제로 쓰이는 관용 표기만 예외로 뺀다
+# (2026-08-31, 사용자 지시: "한자 감지기 차단은 그대로 두고 ... 예외를 두자").
+_CJK_COUNTRY_ABBR_RE = re.compile("[美中日英佛獨伊濠印北韓露加]")
+_CJK_PROBE = re.compile("[一-鿿]")
+_CJK_CTX = re.compile(".{0,14}[一-鿿]+.{0,14}")
 
 
 def detect_script_leak(title: str, body: str):
@@ -106,9 +114,10 @@ def detect_script_leak(title: str, body: str):
                 if snippet and all(snippet != h[1] for h in hits):
                     hits.append((name, snippet))
 
-        # 한자는 괄호 병기를 걷어낸 뒤 남는 것만 오류로 본다
+        # 한자는 괄호 병기와 관용 국가명 축약을 걷어낸 뒤 남는 것만 오류로 본다
         if _CJK_PROBE.search(field):
             stripped = _PAREN_RE.sub("", field)
+            stripped = _CJK_COUNTRY_ABBR_RE.sub("", stripped)
             for m in _CJK_CTX.finditer(stripped):
                 snippet = m.group(0).replace("\n", " ").strip()
                 if snippet and all(snippet != h[1] for h in hits):
