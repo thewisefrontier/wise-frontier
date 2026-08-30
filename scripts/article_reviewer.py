@@ -152,6 +152,71 @@ def detect_timing_flag(url: str, created_at: str) -> str | None:
     return None
 
 
+# ── 수치 확인 (2026-08-30 데스킹 툴 고도화) ──────────────────────────────
+# "소스 데이터 자체가 틀림"은 frontier_markets_writer.py의 다중검증(2026-08-30)이
+# 이미 막는다. 여기서 잡는 건 다른 실패 유형 — "소스 데이터는 맞는데 Gemini가
+# 본문으로 옮겨 적으며 숫자를 잘못 쓰는" 전사 오류다. 그래서 발행 후 다시
+# 데이터를 조회해 비교하지 않는다(다음날 데스킹 시점엔 이미 다른 날짜
+# 데이터라 비교 자체가 안 맞음) — 대신 기사 작성 시점에 실제로 썼던 원본
+# 수치를 articles.source_data(JSON)에 같이 저장해두고, 그 값이 본문에
+# 그대로 등장하는지만 확인한다.
+_NUMBER_RE = re.compile(r"-?\d[\d,]*\.?\d*")
+
+# 소스 데이터 전체 중 일부(예: 움직임이 작아 본문에서 생략된 지표)가 안
+# 보이는 건 정상적인 문체 차이일 수 있다 — 상당 비율이 통째로 안 보일
+# 때만("Gemini가 완전히 다른 데이터를 썼다" 수준) 이상으로 본다.
+NUMBER_MISMATCH_MIN_ITEMS = 3      # 이보다 항목이 적으면(유가처럼 2개뿐) 신뢰도 낮아 스킵
+NUMBER_MISMATCH_THRESHOLD = 0.4    # 40% 이상 안 보이면 플래그
+
+
+def _walk_prices(node, path=""):
+    """source_data JSON 트리에서 'price' 키를 가진 딕셔너리를 전부 찾아
+    (라벨, 값) 쌍으로 반환한다. 기사 유형별로 구조가 달라도(글로벌마켓동향은
+    리스트의 리스트, 유가는 wti/brent 중첩, 국내유가는 유종 코드별 딕셔너리)
+    재귀 탐색이라 공통으로 동작한다."""
+    found = []
+    if isinstance(node, dict):
+        price = node.get("price")
+        if isinstance(price, (int, float)):
+            label = node.get("name") or node.get("country") or path or "값"
+            found.append((str(label), float(price)))
+        for k, v in node.items():
+            found.extend(_walk_prices(v, k))
+    elif isinstance(node, list):
+        for item in node:
+            found.extend(_walk_prices(item, path))
+    return found
+
+
+def _extract_body_numbers(body: str) -> set:
+    nums = set()
+    for m in _NUMBER_RE.finditer(body or ""):
+        try:
+            nums.add(float(m.group(0).replace(",", "")))
+        except ValueError:
+            pass
+    return nums
+
+
+def detect_number_mismatch(source_data, body: str) -> str | None:
+    """source_data의 가격 수치 중 상당 비율이 본문에 전혀 안 보이면 플래그."""
+    if not source_data:
+        return None
+    price_pairs = _walk_prices(source_data)
+    if len(price_pairs) < NUMBER_MISMATCH_MIN_ITEMS:
+        return None
+    body_numbers = _extract_body_numbers(body)
+    missing = [
+        label for label, value in price_pairs
+        if not any(abs(value - bn) < max(0.05, abs(value) * 0.001) for bn in body_numbers)
+    ]
+    ratio = len(missing) / len(price_pairs)
+    if ratio >= NUMBER_MISMATCH_THRESHOLD:
+        sample = ", ".join(missing[:3])
+        return f"수치 불일치 의심({len(missing)}/{len(price_pairs)}건 본문에 없음, 예: {sample})"
+    return None
+
+
 def detect_untranslated_english(joined: str) -> list:
     """괄호 밖에 남은 2단어 이상 영문 연속 구간을 미번역 의심으로 반환."""
     stripped = _PAREN_RE.sub("", joined)
@@ -175,7 +240,7 @@ def fetch_candidates() -> list:
             _sb_url(),
             headers=_sb_headers(),
             params={
-                "select": "id,title_ko,summary_ko,category,update_log,created_at,url",
+                "select": "id,title_ko,summary_ko,category,update_log,created_at,url,source_data",
                 "source": "eq.NewsFinal",
                 "is_published": "eq.true",
                 "created_at": f"gte.{since}",
@@ -191,7 +256,8 @@ def fetch_candidates() -> list:
     return []
 
 
-def detect_flags(title: str, body: str, category: str, url: str = "", created_at: str = "") -> list:
+def detect_flags(title: str, body: str, category: str, url: str = "", created_at: str = "",
+                  source_data=None) -> list:
     """자동 수정하지 않고 알림만 보내는 위반 항목 탐지."""
     flags = []
     joined = f"{title}\n{body}"
@@ -199,6 +265,10 @@ def detect_flags(title: str, body: str, category: str, url: str = "", created_at
     timing_flag = detect_timing_flag(url, created_at)
     if timing_flag:
         flags.append(timing_flag)
+
+    number_flag = detect_number_mismatch(source_data, body)
+    if number_flag:
+        flags.append(number_flag)
 
     m = ABS_DATE_LOCALTIME_RE.search(joined)
     if m:
@@ -339,7 +409,8 @@ def run():
                     fixed.append({"id": aid, "title": title})
                     print(f"  ✅ id={aid} 합쇼체 변환 — {', '.join(changed)}")
 
-        flags = detect_flags(title, body, category, a.get("url") or "", a.get("created_at") or "")
+        flags = detect_flags(title, body, category, a.get("url") or "", a.get("created_at") or "",
+                              a.get("source_data"))
         if flags:
             flagged.append({"id": aid, "title": title, "flags": flags})
             print(f"  ⚠️ id={aid} {', '.join(flags)}")

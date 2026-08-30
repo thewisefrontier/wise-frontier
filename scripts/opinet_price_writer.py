@@ -528,6 +528,9 @@ def insert_article(title_ko: str, summary_ko: str, prices: dict, image_url: str 
         "update_log": [{"timestamp": now_str, "note": "국내 유가 자동 기사"}],
         "sent_telegram": 0,
         "is_published": True,
+        # 2026-08-30: 데스킹 단계 본문-수치 대조용 원본 시세 저장.
+        # prices["date"]는 date 객체라 JSON 직렬화가 안 되므로 문자열로 교체.
+        "source_data": {**prices, "date": price_date},
     }
 
     headers = {**_sb_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
