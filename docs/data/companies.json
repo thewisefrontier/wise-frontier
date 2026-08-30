@@ -2704,6 +2704,22 @@
     "updated_at": "2026-08-24 03:27"
   },
   {
+    "id": "african_alliance",
+    "name": "African Alliance",
+    "name_ko": "아프리칸 얼라이언스",
+    "country": "에스와티니",
+    "country_flag": "🌍",
+    "exchange": "JSE",
+    "ticker": "AFV",
+    "sector": "금융/투자",
+    "description": "아프리카 대륙을 중심으로 투자 banking, 자산 관리, 금융 자문 서비스를 제공하는 금융 그룹입니다. 에스와티니를 비롯한 아프리카 프론티어 시장의 인프라 및 기업 투자에 적극적으로 참여하고 있습니다. 지역 경제 발전과 연계된 다양한 투자 프로젝트를 수행합니다.",
+    "founded_year": 1990,
+    "headquarters": "요하네스버그, 남아프리카공화국",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-30 13:22"
+  },
+  {
     "id": "fnb_eswatini",
     "name": "First National Bank of Eswatini",
     "name_ko": "FNB 에스와티니",
@@ -2718,6 +2734,38 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-28 13:49"
+  },
+  {
+    "id": "inkabi_records",
+    "name": "Inkabi Records",
+    "name_ko": "인카비 레코즈",
+    "country": "에스와티니",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "엔터테인먼트",
+    "description": "남아프리카공화국의 유명 아티스트 빅 줄루가 설립한 독립 음악 레이블이다. 아프로팝과 아프로소울 장르의 실력파 아티스트들을 다수 보유하고 있다. 현지 음악 시장에서 대중성과 예술성을 모두 인정받는 문화 콘텐츠 기업이다.",
+    "founded_year": 2018,
+    "headquarters": "요하네스버그, 남아프리카공화국",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-30 13:23"
+  },
+  {
+    "id": "kellogg_tolaram",
+    "name": "Kellogg Tolaram",
+    "name_ko": "켈로그 톨라람",
+    "country": "에스와티니",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "식음료",
+    "description": "미국 켈로그와 싱가포르 톨라람 그룹의 합작법인으로 아프리카 시장을 대상으로 시리얼 및 식품을 제조·유통합니다. 에스와티니 등 아프리카 지역에서 생산 시설을 확장하며 입지를 넓혀가고 있습니다. 비상장 합작법인으로 아프리카 소비재 시장의 성장 수혜를 목표로 합니다.",
+    "founded_year": 2019,
+    "headquarters": "라고스, 나이지리아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-30 13:22"
   },
   {
     "id": "mtn_eswatini",
@@ -4416,22 +4464,6 @@
     "updated_at": "2026-08-14 23:23"
   },
   {
-    "id": "singareni_collieries",
-    "name": "The Singareni Collieries Company Limited",
-    "name_ko": "싱가레니 콜리어리스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "",
-    "sector": "에너지",
-    "description": "싱가레니 콜리어리스는 인도의 국영 탄광 및 에너지 기업으로, 주로 텔랑가나주에서 석탄 채굴 및 화력 발전 사업을 수행하고 있습니다. 1920년에 설립되었으며, 인도 남부 지역의 전력 공급과 산업 성장에 필수적인 에너지 자원을 안정적으로 공급하는 핵심적인 역할을 담당하고 있습니다. 인도 정부와 텔랑가나주 정부가 공동으로 소유하고 있는 대형 민간 및 공공 성격의 기업입니다.",
-    "founded_year": 1920,
-    "headquarters": "하이드라바드, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-30 17:03"
-  },
-  {
     "id": "singareni_collieries_company",
     "name": "The Singareni Collieries Company Limited",
     "name_ko": "싱가레니 콜리어리스",
@@ -4446,6 +4478,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-08 01:12"
+  },
+  {
+    "id": "singareni_collieries",
+    "name": "The Singareni Collieries Company Limited",
+    "name_ko": "싱가레니 콜리어리스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "싱가레니 콜리어리스는 인도의 국영 탄광 및 에너지 기업으로, 주로 텔랑가나주에서 석탄 채굴 및 화력 발전 사업을 수행하고 있습니다. 1920년에 설립되었으며, 인도 남부 지역의 전력 공급과 산업 성장에 필수적인 에너지 자원을 안정적으로 공급하는 핵심적인 역할을 담당하고 있습니다. 인도 정부와 텔랑가나주 정부가 공동으로 소유하고 있는 대형 민간 및 공공 성격의 기업입니다.",
+    "founded_year": 1920,
+    "headquarters": "하이드라바드, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-30 17:03"
   },
   {
     "id": "tata_power",
@@ -5744,22 +5792,6 @@
     "updated_at": null
   },
   {
-    "id": "bank_of_the_philippine_islands",
-    "name": "Bank of the Philippine Islands",
-    "name_ko": "필리핀 제도은행",
-    "country": "필리핀",
-    "country_flag": "🇵🇭",
-    "exchange": "PSE",
-    "ticker": "BPI",
-    "sector": "은행",
-    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 개인 및 기업 금융, 자산 관리, 보험 등 종합적인 금융 서비스를 제공한다. 필리핀 금융 시장에서 높은 신뢰도와 탄탄한 시장 지위를 유지하고 있다.",
-    "founded_year": 1851,
-    "headquarters": "마닐라, 필리핀",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-30 02:38"
-  },
-  {
     "id": "bank_of_the_philippines_islands",
     "name": "Bank of the Philippine Islands",
     "name_ko": "필리핀 제도은행",
@@ -5774,6 +5806,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-07 13:12"
+  },
+  {
+    "id": "bank_of_the_philippine_islands",
+    "name": "Bank of the Philippine Islands",
+    "name_ko": "필리핀 제도은행",
+    "country": "필리핀",
+    "country_flag": "🇵🇭",
+    "exchange": "PSE",
+    "ticker": "BPI",
+    "sector": "은행",
+    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 개인 및 기업 금융, 자산 관리, 보험 등 종합적인 금융 서비스를 제공한다. 필리핀 금융 시장에서 높은 신뢰도와 탄탄한 시장 지위를 유지하고 있다.",
+    "founded_year": 1851,
+    "headquarters": "마닐라, 필리핀",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-30 02:38"
   },
   {
     "id": "basel_tiles",
