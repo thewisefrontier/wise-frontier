@@ -1003,7 +1003,10 @@ def run_trend_tracker():
             pub_tag = f" (보도 {pub})" if pub else ""
             article_list += f"{i}. [{a.get('source','')}]{pub_tag} {t}\n"
             if body:
-                article_list += f"   {body[:300]}\n\n"
+                # 2026-08-30 사용자 지적: 300자 제한에 문서화된 근거가 없었음
+                # (도입 커밋 2026-06-23도 이유 설명 없음) — 토큰 비용이 실제
+                # 제약이 아니므로 소스 본문을 자르지 않고 그대로 씀.
+                article_list += f"   {body}\n\n"
 
         prompt = f"""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다.
 아래는 지난 {TREND_WINDOW_DAYS}일간 [{group_name}] 관련 기사 {len(articles)}건의 주요 내용입니다.
@@ -1449,7 +1452,10 @@ JSON 배열로만 응답하세요 (마크다운 없이):
             pub_tag = f" (보도 {pub})" if pub else ""
             article_list += f"{i}. [{a.get('source','')}]{pub_tag} {t}\n"
             if body:
-                article_list += f"   {body[:300]}\n\n"
+                # 2026-08-30 사용자 지적: 300자 제한에 문서화된 근거가 없었음
+                # (도입 커밋 2026-06-23도 이유 설명 없음) — 토큰 비용이 실제
+                # 제약이 아니므로 소스 본문을 자르지 않고 그대로 씀.
+                article_list += f"   {body}\n\n"
 
         # 대표 국가 추론
         countries_in_articles = [a.get("country") for a in related if a.get("country")]
