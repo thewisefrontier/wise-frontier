@@ -64,21 +64,39 @@ def _sb_articles_url():
     return f"{SUPABASE_URL}/rest/v1/articles"
 
 
-def format_amount(value) -> str:
-    """숫자를 한국식 억/만 단위 문자열로 변환. 예: 1197258718 -> '11억 9,725만 8,718원'"""
+def _to_man_units(value) -> str:
+    """숫자를 한국식 억/만 단위로 그룹핑. 억/만 단위 자체가 자릿수 구분 역할을
+    하므로 그룹 내부에는 콤마(,)를 쓰지 않는다(예: '1,478만'이 아니라 '1478만').
+    예: 1197258718 -> '11억 9725만 8718'"""
     value = int(round(value))
     if value == 0:
-        return "0원"
+        return "0"
     eok, rem = divmod(value, 100_000_000)
     man, won = divmod(rem, 10_000)
     parts = []
     if eok:
         parts.append(f"{eok}억")
     if man:
-        parts.append(f"{man:,}만")
+        parts.append(f"{man}만")
     if won:
-        parts.append(f"{won:,}")
-    return " ".join(parts) + "원"
+        parts.append(f"{won}")
+    return " ".join(parts)
+
+
+def format_amount(value) -> str:
+    """숫자를 한국식 억/만 단위 금액 문자열로 변환. 예: 1197258718 -> '11억 9725만 8718원'"""
+    if int(round(value)) == 0:
+        return "0원"
+    return _to_man_units(value) + "원"
+
+
+def format_count(value) -> str:
+    """인원수 등을 한국식 단위로 변환. 1만 미만은 콤마 구분(예: '3,081'),
+    1만 이상은 억/만 단위로 그룹핑(예: 152825 -> '15만 2825')."""
+    value = int(value)
+    if value < 10_000:
+        return f"{value:,}"
+    return _to_man_units(value)
 
 
 def already_published(url_key: str) -> bool:
@@ -153,7 +171,37 @@ def fetch_lotto645(round_no: int) -> dict | None:
         return None
 
 
-def build_lotto645_article(d: dict) -> tuple[str, str, str]:
+def fetch_lotto645_winning_shops(round_no: int) -> list[dict] | None:
+    """1등 당첨 판매점 목록 조회(지역 정보용). 실패 시 None(기사에서 해당 문장만 생략)."""
+    try:
+        res = requests.get(
+            "https://www.dhlottery.co.kr/wnprchsplcsrch/selectLtWnShp.do",
+            params={"srchWnShpRnk": "1", "srchLtEpsd": round_no, "srchShpLctn": ""},
+            headers={"User-Agent": "Mozilla/5.0",
+                     "Referer": "https://www.dhlottery.co.kr/wnprchsplcsrch/home"},
+            timeout=15,
+        )
+        res.encoding = "utf-8"
+        if res.status_code != 200:
+            print(f"  [WARN] 당첨 판매점 조회 실패: HTTP {res.status_code}")
+            return None
+        return res.json().get("data", {}).get("list", [])
+    except Exception as e:
+        print(f"  [WARN] 당첨 판매점 조회 실패: {e}")
+        return None
+
+
+def _shop_region_summary(shops: list[dict]) -> str:
+    """[{'region': '서울', ...}, ...] -> '서울 2곳, 부산 1곳, ...' (등장 순서 유지)"""
+    counts: dict[str, int] = {}
+    for shp in shops:
+        region = (shp.get("region") or "").strip()
+        if region:
+            counts[region] = counts.get(region, 0) + 1
+    return ", ".join(f"{region} {n}곳" for region, n in counts.items())
+
+
+def build_lotto645_article(d: dict, shops: list[dict] | None = None) -> tuple[str, str, str]:
     nums = [d[f"tm{i}WnNo"] for i in range(1, 7)]
     bonus = d["bnsWnNo"]
     round_no = d["ltEpsd"]
@@ -162,15 +210,26 @@ def build_lotto645_article(d: dict) -> tuple[str, str, str]:
     nums_str = ", ".join(str(n) for n in nums)
     title = f"[복권] 로또 {round_no}회 당첨번호 {nums_str}…보너스 {bonus}"
 
+    auto_n, manual_n, semi_n = d.get("winType1", 0), d.get("winType2", 0), d.get("winType3", 0)
+    type_note = ""
+    if auto_n + manual_n + semi_n == d["rnk1WnNope"]:
+        type_note = f"(자동 {auto_n}명, 수동 {manual_n}명, 반자동 {semi_n}명)"
+
+    shop_sentence = ""
+    if shops:
+        region_summary = _shop_region_summary(shops)
+        if region_summary:
+            shop_sentence = f" 1등 당첨 판매점은 {region_summary}에서 나왔다."
+
     body = (
         f"동행복권이 {draw_date.day}일 로또6/45 {round_no}회 당첨번호를 추첨·발표했다. "
         f"당첨번호는 {nums_str}이며 보너스 번호는 {bonus}다.\n\n"
-        f"1등 당첨자는 {d['rnk1WnNope']:,}명으로 각자 {format_amount(d['rnk1WnAmt'])}씩 받는다. "
-        f"1등 총 당첨금은 {format_amount(d['rnk1SumWnAmt'])}이다.\n"
-        f"2등 당첨자는 {d['rnk2WnNope']:,}명으로 각자 {format_amount(d['rnk2WnAmt'])}씩 받는다.\n"
-        f"3등 당첨자는 {d['rnk3WnNope']:,}명으로 각자 {format_amount(d['rnk3WnAmt'])}씩 받는다.\n"
-        f"4등(5개 번호 일치)은 {d['rnk4WnNope']:,}명으로 각자 {format_amount(d['rnk4WnAmt'])}씩, "
-        f"5등(4개 번호 일치)은 {d['rnk5WnNope']:,}명으로 각자 {format_amount(d['rnk5WnAmt'])}씩 받는다.\n\n"
+        f"1등 당첨자는 {format_count(d['rnk1WnNope'])}명{type_note}으로 각자 {format_amount(d['rnk1WnAmt'])}씩 받는다. "
+        f"1등 총 당첨금은 {format_amount(d['rnk1SumWnAmt'])}이다.{shop_sentence}\n"
+        f"2등 당첨자는 {format_count(d['rnk2WnNope'])}명으로 각자 {format_amount(d['rnk2WnAmt'])}씩 받는다.\n"
+        f"3등 당첨자는 {format_count(d['rnk3WnNope'])}명으로 각자 {format_amount(d['rnk3WnAmt'])}씩 받는다.\n"
+        f"4등(5개 번호 일치)은 {format_count(d['rnk4WnNope'])}명으로 각자 {format_amount(d['rnk4WnAmt'])}씩, "
+        f"5등(4개 번호 일치)은 {format_count(d['rnk5WnNope'])}명으로 각자 {format_amount(d['rnk5WnAmt'])}씩 받는다.\n\n"
         f"이번 {round_no}회차 총 판매금액은 {format_amount(d['rlvtEpsdSumNtslAmt'])}이었다."
     )
     url_key = f"internal://lotto645_{round_no}"
@@ -349,7 +408,8 @@ def run():
     else:
         d = fetch_lotto645(round_no)
         if d:
-            title, body, url_key = build_lotto645_article(d)
+            shops = fetch_lotto645_winning_shops(round_no)
+            title, body, url_key = build_lotto645_article(d, shops)
             aid = insert_article(title, body, url_key, countries=["한국"])
             print(f"  {'✓' if aid > 0 else '✗'} 로또 {round_no}회: id={aid}")
         else:

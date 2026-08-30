@@ -1,8 +1,9 @@
 name: NewsFinal - Lottery Results Daily
 
+# GitHub 자체 schedule: 트리거가 신뢰할 수 없어(2026-08-29 21:00 KST 예약분이
+# 통째로 스킵되고, 다음날 분도 지연되어 실제로는 2026-08-31 00:51 KST에야 실행됨)
+# cron-job.org 외부 트리거로 대체(다른 5개 워크플로우와 동일한 조치).
 on:
-  schedule:
-    - cron: '0 12 * * *'   # UTC 12:00 = KST 21:00, 하루 1회 (로또 추첨 20:35 KST 이후 여유)
   workflow_dispatch:
 
 permissions:
