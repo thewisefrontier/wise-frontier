@@ -491,7 +491,142 @@ def fetch_powerball_latest() -> dict | None:
         return None
 
 
-def build_powerball_article(d: dict) -> tuple[str, str, str]:
+# data.ny.gov(공식 소스)는 당첨번호만 제공하고 잭팟 금액·등수별 당첨자 수는
+# 없다(2026-08-21 확인). powerball.com에 별도 공개 API는 없지만(2026-08-31
+# 확인, 네트워크 요청 전부가 서버렌더 HTML) 결과 페이지 DOM 구조가 안정적
+# (등수별 로또볼에 m5-pb/m5/m4-pb/... 클래스가 붙어 있어 순서가 아니라
+# 클래스명으로 등수를 식별할 수 있음)이라 스크레이핑으로 보강한다.
+_PB_TIER_LABELS = {
+    "m5-pb": "1등(파워볼 포함 5개 일치, 잭팟)",
+    "m5": "2등(5개 일치)",
+    "m4-pb": "3등(파워볼 포함 4개 일치)",
+    "m4": "4등(4개 일치)",
+    "m3-pb": "5등(파워볼 포함 3개 일치)",
+    "m3": "6등(3개 일치)",
+    "m2-pb": "7등(파워볼 포함 2개 일치)",
+    "m1-pb": "8등(파워볼 포함 1개 일치)",
+    "m0-pb": "9등(파워볼만 일치)",
+}
+
+
+def _usd_million_to_kr(million: float) -> str:
+    """119.0 -> '1억 1900만 달러' (억/만 단위는 format_amount와 동일한 방식)."""
+    total_man = round(million * 100)
+    eok, man = divmod(total_man, 10_000)
+    parts = []
+    if eok:
+        parts.append(f"{eok}억")
+    if man or not parts:
+        parts.append(f"{man}만")
+    return " ".join(parts) + " 달러"
+
+
+def fetch_powerball_prize_data(draw_date_str: str) -> dict | None:
+    """powerball.com 결과 페이지에서 잭팟 금액·현금가치·등수별 당첨자 수를 가져온다.
+    페이지 구조가 바뀌는 등 무엇이든 실패하면 None — 호출부는 당첨번호만으로 발행한다."""
+    try:
+        from playwright.sync_api import sync_playwright
+    except Exception as e:
+        print(f"  [WARN] playwright 미설치: {e}")
+        return None
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            try:
+                page = browser.new_page(
+                    user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                               "(KHTML, like Gecko) Chrome/120.0 Safari/537.36",
+                )
+                page.goto(f"https://www.powerball.com/draw-result?gc=powerball&date={draw_date_str}",
+                          timeout=30000, wait_until="load")
+                page.wait_for_selector("table tbody tr", timeout=15000)
+                data = page.evaluate("""() => {
+                    const table = document.querySelector('table');
+                    const rows = table ? [...table.querySelectorAll('tbody tr')] : [];
+                    const tiers = rows.map(r => {
+                        const matchCell = r.querySelector('.match-col');
+                        const ballsDiv = matchCell ? matchCell.querySelector('.game-balls') : null;
+                        const tierClass = ballsDiv ? [...ballsDiv.classList].find(c => c.startsWith('m')) : null;
+                        const tds = [...r.querySelectorAll('td')].map(td => td.textContent.replace(/\\s+/g,' ').trim());
+                        return [tierClass, tds];
+                    });
+                    const jackpotEl = document.querySelector('.estimated-jackpot');
+                    const cashEl = document.querySelector('.cash-value');
+                    const card = document.querySelector('.winner-card.winner-powerball');
+                    const groups = card
+                        ? [...card.querySelectorAll('.winners-group')].map(g => g.textContent.replace(/\\s+/g,' ').trim())
+                        : [];
+                    return {
+                        jackpot_text: jackpotEl ? jackpotEl.textContent.replace(/\\s+/g,' ').trim() : null,
+                        cash_text: cashEl ? cashEl.textContent.replace(/\\s+/g,' ').trim() : null,
+                        groups: groups,
+                        tiers: tiers,
+                    };
+                }""")
+                if not data or not data.get("tiers"):
+                    return None
+                return data
+            finally:
+                browser.close()
+    except Exception as e:
+        print(f"  [WARN] 파워볼 상금 정보 조회 실패: {e}")
+        return None
+
+
+def _pb_prize_sentences(prize: dict) -> str:
+    """스크레이핑 결과(dict)를 기사 문단으로 조립. 파싱 중 무엇이든 안 맞으면
+    빈 문자열을 돌려줘 기존 당첨번호만 있는 기사로 안전하게 후퇴한다."""
+    try:
+        import re as _re
+        tiers = {t[0]: t[1] for t in prize["tiers"] if t[0]}
+
+        m = _re.search(r"([\d.]+)\s*Million", prize.get("jackpot_text") or "", _re.I)
+        jackpot_kr = _usd_million_to_kr(float(m.group(1))) if m else None
+        m = _re.search(r"([\d.]+)\s*Million", prize.get("cash_text") or "", _re.I)
+        cash_kr = _usd_million_to_kr(float(m.group(1))) if m else None
+        if not (jackpot_kr and cash_kr):
+            return ""
+
+        groups = prize.get("groups") or []
+        jackpot_line = groups[0] if len(groups) > 0 else ""
+        match5_line = groups[2] if len(groups) > 2 else ""
+
+        sentences = [f"이번 추첨의 추정 잭팟은 {jackpot_kr}(현금가치 {cash_kr})였다."]
+
+        if "none" in jackpot_line.lower():
+            sentences.append("이번 추첨에서 1등(잭팟) 당첨자는 나오지 않았다.")
+        else:
+            states = jackpot_line.split("None")[-1].replace("Powerball JACKPOT WINNERS", "").strip()
+            sentences.append("이번 추첨에서 1등(잭팟) 당첨자가 나왔다.")
+            if states:
+                sentences.append(f"당첨 지역은 {states}다.")
+
+        m5 = tiers.get("m5")
+        if m5 and len(m5) >= 3:
+            m5_count = format_count(int(m5[1].replace(",", "")))
+            states = match5_line.split("Winners")[-1].strip()
+            sentences.append(f"2등(5개 번호 일치)은 {m5_count}명으로 각자 {m5[2]}를 받는다.")
+            if states and "none" not in states.lower():
+                sentences.append(f"2등 당첨 지역은 {states}다.")
+
+        etc_labels = ["m4-pb", "m4", "m3-pb", "m3", "m2-pb", "m1-pb", "m0-pb"]
+        etc_parts = []
+        for key in etc_labels:
+            row = tiers.get(key)
+            if not row or len(row) < 3:
+                continue
+            count = format_count(int(row[1].replace(",", "")))
+            etc_parts.append(f"{_PB_TIER_LABELS[key]} {count}명({row[2]})")
+        if etc_parts:
+            sentences.append("이 밖에 " + ", ".join(etc_parts) + "이 당첨됐다.")
+
+        return " ".join(sentences)
+    except Exception as e:
+        print(f"  [WARN] 파워볼 상금 정보 파싱 실패: {e}")
+        return ""
+
+
+def build_powerball_article(d: dict, prize: dict | None = None) -> tuple[str, str, str]:
     draw_date = datetime.strptime(d["draw_date"][:10], "%Y-%m-%d").date()
     nums = [int(n) for n in d["winning_numbers"].split()]
     white_balls, powerball = nums[:5], nums[5]
@@ -500,10 +635,13 @@ def build_powerball_article(d: dict) -> tuple[str, str, str]:
     nums_str = ", ".join(str(n) for n in white_balls)
     title = f"[복권] 美 파워볼 {draw_date.month}월 {draw_date.day}일 당첨번호 {nums_str}+파워볼 {powerball}"
 
+    prize_text = _pb_prize_sentences(prize) if prize else ""
+
     body = (
         f"미국 파워볼이 {draw_date.month}월 {draw_date.day}일(현지시간) 추첨한 당첨번호를 발표했다. "
         f"당첨번호는 {nums_str}이며 파워볼 번호는 {powerball}이다."
         + (f" 이날 파워플레이 배수는 {multiplier}배였다." if multiplier else "")
+        + (f"\n\n{prize_text}" if prize_text else "")
     )
     url_key = f"internal://powerball_{d['draw_date'][:10]}"
     return title, body, url_key
@@ -561,7 +699,8 @@ def run():
         if already_published(pb_url):
             print(f"  → 파워볼 {pb_date} 이미 발행됨 → 스킵")
         else:
-            title, body, url_key = build_powerball_article(pb)
+            prize = fetch_powerball_prize_data(pb_date)
+            title, body, url_key = build_powerball_article(pb, prize)
             aid = insert_article(title, body, url_key, countries=["미국"])
             print(f"  {'✓' if aid > 0 else '✗'} 파워볼 {pb_date}: id={aid}")
     else:
