@@ -264,6 +264,30 @@ def get_lotto645_image_url(round_no: int, nums: list[int], bonus: int) -> str:
         return ""
 
 
+def backfill_lotto645_image(round_no: int, nums: list[int], bonus: int) -> None:
+    """이미 발행된 기사에 image_url이 비어 있으면 채워 넣는다.
+    이미지 기능(2026-08-31) 추가 이전에 발행된 과거 기사 보정용."""
+    lotto_url = f"internal://lotto645_{round_no}"
+    res = requests.get(
+        f"{_sb_articles_url()}?url=eq.{lotto_url}&select=id,image_url",
+        headers=_sb_headers(), timeout=10,
+    )
+    if res.status_code not in (200, 206):
+        return
+    rows = res.json()
+    if not rows or rows[0].get("image_url"):
+        return
+    image_url = get_lotto645_image_url(round_no, nums, bonus)
+    if not image_url:
+        return
+    patch = requests.patch(
+        f"{_sb_articles_url()}?id=eq.{rows[0]['id']}",
+        headers=_sb_headers(), json={"image_url": image_url}, timeout=15,
+    )
+    ok = patch.status_code in (200, 204)
+    print(f"  {'🖼️' if ok else '✗'} 로또 {round_no}회 이미지 백필: {'완료' if ok else '실패'}")
+
+
 def fetch_lotto645_winning_shops(round_no: int) -> list[dict] | None:
     """1등 당첨 판매점 목록 조회(지역 정보용). 실패 시 None(기사에서 해당 문장만 생략)."""
     try:
@@ -498,6 +522,10 @@ def run():
     lotto_url = f"internal://lotto645_{round_no}"
     if already_published(lotto_url):
         print(f"  → 로또 {round_no}회 이미 발행됨 → 스킵")
+        d = fetch_lotto645(round_no)
+        if d:
+            nums = [d[f"tm{i}WnNo"] for i in range(1, 7)]
+            backfill_lotto645_image(round_no, nums, d["bnsWnNo"])
     else:
         d = fetch_lotto645(round_no)
         if d:
