@@ -110,6 +110,30 @@ REPORTER_RE = re.compile(
 
 LOCAL_TIME_TOKEN = "현지시간"
 
+# ── 영어 미번역 감지 (2026-08-30 데스킹 툴 고도화, id=111363 사고 계기) ──────
+# 괄호 안(정상적인 원어 병기)은 검사 대상에서 제외하고, 괄호 밖에 남아있는
+# "대문자로 시작하는 단어 2개 이상 연속"만 미번역 의심으로 본다. 실측
+# 검증(2026-08-30, 최근 발행 200건): 9건 플래그, 그중 대다수가 실제
+# 인명·기관명·지명 미번역(NBC News, Ali Mahaman Lamine, Ghat Road 등)이고
+# 나머지는 작품 제목류(원어 그대로 쓰는 게 허용된 예외) — 오탐률 낮음 확인.
+_PAREN_RE = re.compile(r"\([^)]*\)")
+_ENGLISH_RUN_RE = re.compile(
+    r"\b[A-Z][a-zA-Z&'-]*(?:\s+(?:of|and|for|the|de|du|von|van|in|on)\s+[A-Za-z][a-zA-Z'-]*"
+    r"|\s+[A-Z][a-zA-Z&'-]*)+\b"
+)
+
+
+def detect_untranslated_english(joined: str) -> list:
+    """괄호 밖에 남은 2단어 이상 영문 연속 구간을 미번역 의심으로 반환."""
+    stripped = _PAREN_RE.sub("", joined)
+    matches = [m for m in _ENGLISH_RUN_RE.findall(stripped) if len(m) >= 8]
+    # 같은 구문이 여러 번 나와도 한 번만 알림
+    seen = []
+    for m in matches:
+        if m not in seen:
+            seen.append(m)
+    return seen
+
 
 def fetch_candidates() -> list:
     """최근 CHECK_WINDOW_HOURS 시간 내 발행된 자체기사 조회.
@@ -165,6 +189,10 @@ def detect_flags(title: str, body: str, category: str) -> list:
 
     if (category or "") not in DATE_EXEMPT_CATEGORIES and LOCAL_TIME_TOKEN not in joined:
         flags.append("현지시간 누락")
+
+    english_leftover = detect_untranslated_english(joined)
+    if english_leftover:
+        flags.append(f"영어 미번역 의심({', '.join(english_leftover[:3])})")
 
     return flags
 
