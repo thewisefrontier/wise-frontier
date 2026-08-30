@@ -59,6 +59,7 @@ GEMINI_MODELS = [
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 PIXABAY_API_KEY = os.getenv("PIXABAY_API_KEY", "")
+ALPHA_VANTAGE_API_KEY = os.getenv("ALPHA_VANTAGE_API_KEY", "")  # oil_price_writer.py와 동일 키 재사용
 
 GEMINI_API_KEYS = [k for k in [
     os.getenv("GEMINI_API_KEY"),
@@ -198,6 +199,59 @@ FRONTIER_INDICES = [
 ]
 
 
+# 2026-08-30 사용자 결정: 소스 하나만 믿다가 방향이 뒤집힌 사고(id=109658)를
+# 겪은 뒤, "공인된 단일 소스가 아닌 이상 여러 곳에서 확인하자"는 방침.
+# ① 야후 응답 자체 필드 간 정합성(regularMarketChangePercent vs
+#    chartPreviousClose 유도값)을 항상 대조 — 공짜라 전량 실행.
+# ② 주요국 증시(추적 ETF가 있는 8개)만 불일치 시에만 Alpha Vantage로
+#    2차 확인(무료 쿼터가 작아서 — oil_price_writer.py와 공유 — 상시
+#    호출은 안 하고 의심될 때만 호출).
+# 프론티어 통화·증시는 대체 무료 소스가 사실상 없어 ②를 적용 못 하므로,
+# 불일치 시 그 항목은 지어내지 말고 그냥 기사에서 뺀다(①만 적용).
+MAJOR_INDEX_AV_PROXY = {
+    "^GSPC": "SPY", "^IXIC": "QQQ", "^DJI": "DIA",
+    "^N225": "EWJ", "^GDAXI": "EWG", "^FCHI": "EWQ",
+    "^FTSE": "EWU", "^STOXX50E": "FEZ",
+}
+
+
+def _pct_disagree(pct_a: float, pct_b: float) -> bool:
+    """두 등락률이 서로 모순되는지(부호가 다르거나 크게 벌어지는지) 판정.
+
+    ⚠️ 실사고(2026-08-30) 첫 구현은 "±0.03% 이내는 노이즈로 무시"하는
+    데드존을 뒀는데, 정작 오늘 사고 값(다우 -0.018%)이 그 데드존 안에
+    들어가 부호 비교 자체가 스킵되며 잡아내지 못했다. 부호는 곱해서
+    직접 비교하고, 둘 다 사실상 보합(0.01% 미만)인 경우에만 예외로 둔다."""
+    if abs(pct_a) < 0.01 and abs(pct_b) < 0.01:
+        return False
+    if pct_a * pct_b < 0:
+        return True
+    return abs(pct_a - pct_b) > max(2.0, abs(pct_a) * 2)
+
+
+def fetch_alphavantage_pct(av_symbol: str) -> float | None:
+    """Alpha Vantage GLOBAL_QUOTE에서 전일 대비 등락률(%)만 가져온다.
+    무료 쿼터가 작아 의심스러울 때만 호출하는 2차 확인용."""
+    if not ALPHA_VANTAGE_API_KEY:
+        return None
+    try:
+        res = requests.get(
+            "https://www.alphavantage.co/query",
+            params={"function": "GLOBAL_QUOTE", "symbol": av_symbol, "apikey": ALPHA_VANTAGE_API_KEY},
+            timeout=(10, 30),
+        )
+        if res.status_code != 200:
+            return None
+        quote = res.json().get("Global Quote", {})
+        raw = quote.get("10. change percent", "")
+        if not raw:
+            return None
+        return float(raw.strip().rstrip("%"))
+    except Exception as e:
+        print(f"  [WARN] Alpha Vantage 2차 확인 실패 ({av_symbol}): {e}")
+        return None
+
+
 def fetch_yahoo_quote(symbol: str) -> dict | None:
     """야후 파이낸스 비공식 차트 API에서 최신가·전일 종가를 가져온다.
     키 불필요, 봇 검증 없음(oil_price_writer.py 2026-08-21 검증 패턴)."""
@@ -222,47 +276,79 @@ def fetch_yahoo_quote(symbol: str) -> dict | None:
         # 정확히 일치함(S&P -0.25%, 다우 -0.02% 등 실측 확인) — 이걸 우선
         # 쓰고, 없을 때만 chartPreviousClose로 폴백한다.
         pct = meta.get("regularMarketChangePercent")
+        chart_prev = meta.get("chartPreviousClose")
         if price is None:
             print(f"  [WARN] 야후 조회 실패 ({symbol}): 필드 누락")
             return None
+        suspect = False
         if pct is not None:
             prev = price / (1 + pct / 100) if pct != -100 else None
             change = price - prev if prev else 0.0
+            # 2026-08-30: regularMarketChangePercent(주 소스)와
+            # chartPreviousClose 유도값(구 소스)이 서로 모순되면 의심 표시.
+            if chart_prev:
+                alt_pct = (price - chart_prev) / chart_prev * 100
+                suspect = _pct_disagree(pct, alt_pct)
         else:
-            prev = meta.get("chartPreviousClose")
+            prev = chart_prev
             if prev is None or not prev:
                 print(f"  [WARN] 야후 조회 실패 ({symbol}): 필드 누락")
                 return None
             change = price - prev
             pct = (change / prev * 100) if prev else 0.0
-        return {"price": float(price), "prev": float(prev) if prev else None, "change": change, "pct": pct}
+        return {"price": float(price), "prev": float(prev) if prev else None,
+                "change": change, "pct": pct, "_suspect": suspect}
     except Exception as e:
         print(f"  [WARN] 야후 조회 실패 ({symbol}): {e}")
         return None
 
 
 def fetch_all_data() -> dict:
-    """통화·주요국 증시·프론티어 증시 전체를 조회해 각각 변동률 큰 순으로 정렬해 반환."""
+    """통화·주요국 증시·프론티어 증시 전체를 조회해 각각 변동률 큰 순으로 정렬해 반환.
+
+    2026-08-30: 자체 정합성 검사(_suspect)에 걸린 항목은 지어내는 것보다
+    빼는 게 낫다는 원칙(사용자 확정)에 따라 처리한다.
+    - 통화·프론티어 증시: 대체 무료 소스가 사실상 없어 의심되면 그냥 제외.
+    - 주요국 증시: 추적 ETF가 있는 경우에만 Alpha Vantage로 2차 확인 —
+      방향이 일치하면 살리고, 여전히 불일치하거나 확인 자체가 안 되면 제외.
+    """
     currencies = []
     for country, name, symbol in CURRENCIES:
         q = fetch_yahoo_quote(symbol)
         time.sleep(0.5)
-        if q:
-            currencies.append({"country": country, "name": name, "exchange": "", **q})
+        if not q:
+            continue
+        if q.pop("_suspect", False):
+            print(f"  ⚠️ [정합성 불일치 → 제외] {country} {name}({symbol})")
+            continue
+        currencies.append({"country": country, "name": name, "exchange": "", **q})
 
     major_indices = []
     for country, name, symbol, exchange in MAJOR_INDICES:
         q = fetch_yahoo_quote(symbol)
         time.sleep(0.5)
-        if q:
-            major_indices.append({"country": country, "name": name, "exchange": exchange, **q})
+        if not q:
+            continue
+        if q.pop("_suspect", False):
+            av_symbol = MAJOR_INDEX_AV_PROXY.get(symbol)
+            av_pct = fetch_alphavantage_pct(av_symbol) if av_symbol else None
+            if av_pct is not None and not _pct_disagree(q["pct"], av_pct):
+                print(f"  ✓ [Alpha Vantage 2차 확인 일치] {country} {name}: 야후 {q['pct']:+.2f}% / AV({av_symbol}) {av_pct:+.2f}%")
+            else:
+                print(f"  ⚠️ [정합성 불일치, 2차 확인도 실패/불일치 → 제외] {country} {name}({symbol})")
+                continue
+        major_indices.append({"country": country, "name": name, "exchange": exchange, **q})
 
     frontier_indices = []
     for country, name, symbol, exchange in FRONTIER_INDICES:
         q = fetch_yahoo_quote(symbol)
         time.sleep(0.5)
-        if q:
-            frontier_indices.append({"country": country, "name": name, "exchange": exchange, **q})
+        if not q:
+            continue
+        if q.pop("_suspect", False):
+            print(f"  ⚠️ [정합성 불일치 → 제외] {country} {name}({symbol})")
+            continue
+        frontier_indices.append({"country": country, "name": name, "exchange": exchange, **q})
 
     currencies.sort(key=lambda x: abs(x["pct"]), reverse=True)
     major_indices.sort(key=lambda x: abs(x["pct"]), reverse=True)
