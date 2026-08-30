@@ -107,7 +107,7 @@ def already_published(url_key: str) -> bool:
     return res.status_code in (200, 206) and len(res.json()) > 0
 
 
-def insert_article(title: str, body: str, url_key: str, countries=None) -> int:
+def insert_article(title: str, body: str, url_key: str, countries=None, image_url: str = "") -> int:
     if detect_script_leak(title, body):
         print(f"  ⚠️ [문자 혼입 감지] 저장 차단: {title[:60]}")
         return -1
@@ -123,7 +123,7 @@ def insert_article(title: str, body: str, url_key: str, countries=None) -> int:
         "country": (countries or ["한국"])[0],
         "country_flag": "",
         "countries": countries or ["한국"],
-        "image_url": "",
+        "image_url": image_url,
         "score": 1,
         "created_at": now_str,
         "first_published_at": now_str,
@@ -169,6 +169,99 @@ def fetch_lotto645(round_no: int) -> dict | None:
     except Exception as e:
         print(f"  [WARN] 로또 조회 실패: {e}")
         return None
+
+
+# 동행복권 공식 공 색상 규칙(1-10 노랑/11-20 파랑/21-30 빨강/31-40 회색/41-45 초록).
+_BALL_COLOR_BANDS = [(10, "#FBC400"), (20, "#69C8F2"), (30, "#FF7272"), (40, "#AAAAAA"), (45, "#B0D840")]
+
+
+def _ball_color(n: int) -> str:
+    for upper, color in _BALL_COLOR_BANDS:
+        if n <= upper:
+            return color
+    return "#B0D840"
+
+
+def capture_lotto645_result_image(round_no: int) -> bytes | None:
+    """동행복권 추첨결과 페이지(/lt645/result)에서 해당 회차 결과 카드만 잘라
+    스크린샷. 사이트 개편·봇 차단·회차 표시 어긋남 등으로 실패할 수 있어
+    무엇이든 잘못되면 예외를 삼키고 None을 반환한다 — 호출부가 자체 생성
+    이미지로 대체한다(사용자 지시, 2026-08-31: "오류 나면 자체 생성으로")."""
+    try:
+        from playwright.sync_api import sync_playwright
+    except Exception as e:
+        print(f"  [WARN] playwright 미설치: {e}")
+        return None
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            try:
+                page = browser.new_page(
+                    viewport={"width": 900, "height": 800},
+                    user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                               "(KHTML, like Gecko) Chrome/120.0 Safari/537.36",
+                )
+                page.goto("https://www.dhlottery.co.kr/lt645/result", timeout=20000,
+                          wait_until="networkidle")
+                el = page.locator(".swiper-slide-active .result-infoWrap")
+                el.wait_for(state="visible", timeout=10000)
+                if f"{round_no}회" not in el.inner_text():
+                    print(f"  [WARN] 캡처 페이지 회차 불일치(기대 {round_no}회)")
+                    return None
+                return el.screenshot()
+            finally:
+                browser.close()
+    except Exception as e:
+        print(f"  [WARN] 추첨결과 캡처 실패: {e}")
+        return None
+
+
+def generate_lotto645_ball_image(nums: list[int], bonus: int, round_no: int) -> bytes:
+    """캡처 실패 시 대체용 자체 생성 이미지. 공 색상은 동행복권 공식 규칙과 동일하게
+    맞추되, 한글 폰트를 CI에 새로 설치할 필요가 없도록 문구는 영문만 쓴다."""
+    import io
+    from PIL import Image, ImageDraw, ImageFont
+
+    W, H = 700, 220
+    img = Image.new("RGB", (W, H), "#FFFFFF")
+    draw = ImageDraw.Draw(img)
+    title_font = ImageFont.load_default(size=26)
+    small_font = ImageFont.load_default(size=15)
+    num_font = ImageFont.load_default(size=24)
+
+    draw.text((W / 2, 30), f"Lotto 6/45 - Round {round_no}", font=title_font, fill="#222222", anchor="mm")
+
+    balls = [*nums, "+", bonus]
+    r, gap = 28, 12
+    total_w = len(balls) * (2 * r) + (len(balls) - 1) * gap
+    x = (W - total_w) / 2 + r
+    y = 120
+    for b in balls:
+        if b == "+":
+            draw.text((x, y), "+", font=title_font, fill="#666666", anchor="mm")
+        else:
+            draw.ellipse((x - r, y - r, x + r, y + r), fill=_ball_color(b))
+            draw.text((x, y), str(b), font=num_font, fill="white", anchor="mm")
+        x += 2 * r + gap
+
+    draw.text((W / 2, H - 25), "NewsFinal", font=small_font, fill="#999999", anchor="mm")
+
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+    return buf.getvalue()
+
+
+def get_lotto645_image_url(round_no: int, nums: list[int], bonus: int) -> str:
+    """캡처 우선 시도, 실패하면 자체 생성 이미지로 대체 후 R2에 영구 저장."""
+    data = capture_lotto645_result_image(round_no)
+    if data is None:
+        data = generate_lotto645_ball_image(nums, bonus, round_no)
+    try:
+        from image_store import store_image_bytes
+        return store_image_bytes(data, "png", key_hint=f"lotto645_{round_no}")
+    except Exception as e:
+        print(f"  [WARN] 이미지 저장 실패: {e}")
+        return ""
 
 
 def fetch_lotto645_winning_shops(round_no: int) -> list[dict] | None:
@@ -410,7 +503,9 @@ def run():
         if d:
             shops = fetch_lotto645_winning_shops(round_no)
             title, body, url_key = build_lotto645_article(d, shops)
-            aid = insert_article(title, body, url_key, countries=["한국"])
+            nums = [d[f"tm{i}WnNo"] for i in range(1, 7)]
+            image_url = get_lotto645_image_url(round_no, nums, d["bnsWnNo"])
+            aid = insert_article(title, body, url_key, countries=["한국"], image_url=image_url)
             print(f"  {'✓' if aid > 0 else '✗'} 로또 {round_no}회: id={aid}")
         else:
             print(f"  → 로또 {round_no}회 데이터 없음(아직 추첨 전이거나 회차 계산 오류)")

@@ -29,11 +29,16 @@ jobs:
       - name: 패키지 설치
         run: pip install -r requirements.txt
 
+      - name: Playwright 브라우저 설치 (로또 추첨결과 캡처용)
+        run: python -m playwright install --with-deps chromium
+
       - name: 복권 당첨정보 기사 생성
         run: python scripts/lotto_writer.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
+          UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
 
       - name: 웹사이트 데이터 내보내기
         run: python scripts/export_articles.py

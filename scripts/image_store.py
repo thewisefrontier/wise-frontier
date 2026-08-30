@@ -85,6 +85,65 @@ def is_permanent(url: str) -> bool:
     return bool(u) and any(h in u for h in _PERMANENT_HINTS)
 
 
+def store_image_bytes(data: bytes, ext: str, key_hint: str = "", fallback_url: str = "") -> str:
+    """이미지 바이트를 직접 R2에 저장하고 영구 URL을 반환.
+
+    스크린샷 캡처나 자체 생성 이미지처럼 원본 URL 없이 바이트만 있는 경우에 쓴다.
+
+    Args:
+        data:         이미지 바이트
+        ext:          확장자(jpg/png/webp/gif)
+        key_hint:     R2 파일명에 쓸 힌트. 같은 힌트는 같은 키로 덮어쓴다.
+        fallback_url: 실패 시 대신 반환할 값(보통 빈 문자열).
+
+    Returns:
+        성공 시 R2 영구 URL. 실패하거나 설정이 없으면 fallback_url.
+    """
+    if not data:
+        return fallback_url
+
+    if not IMAGE_UPLOAD_URL or not UPLOAD_SECRET:
+        print("  ⚠️ R2 업로드 미설정(IMAGE_UPLOAD_URL/UPLOAD_SECRET)")
+        return fallback_url
+
+    try:
+        if len(data) > MAX_IMAGE_BYTES:
+            print(f"  ⚠️ 이미지 과대({len(data)}B)")
+            return fallback_url
+
+        mime = f"image/{'jpeg' if ext == 'jpg' else ext}"
+        filename = f"{_slugify(key_hint) or 'img'}.{ext}"
+
+        up = requests.post(
+            IMAGE_UPLOAD_URL,
+            headers={
+                "Authorization": f"Bearer {UPLOAD_SECRET}",
+                "Content-Type": "application/json",
+            },
+            json={
+                "base64": base64.b64encode(data).decode("ascii"),
+                "mimeType": mime,
+                "filename": filename,
+            },
+            timeout=60,
+        )
+        if up.status_code != 200:
+            print(f"  ⚠️ R2 업로드 실패 {up.status_code}: {up.text[:120]}")
+            return fallback_url
+
+        url = (up.json() or {}).get("url", "")
+        if not url:
+            print("  ⚠️ R2 응답에 url 없음")
+            return fallback_url
+
+        print(f"  🗄️ R2 저장 완료: {filename} ({len(data):,}B)")
+        return url
+
+    except Exception as e:
+        print(f"  ⚠️ R2 저장 예외: {e}")
+        return fallback_url
+
+
 def store_image(src_url: str, key_hint: str = "", timeout: int = 30) -> str:
     """임시 이미지 URL을 R2에 저장하고 영구 URL을 반환.
 
@@ -122,32 +181,7 @@ def store_image(src_url: str, key_hint: str = "", timeout: int = 30) -> str:
 
         content_type = res.headers.get("Content-Type", "")
         ext = _guess_ext(src_url, content_type)
-        mime = f"image/{'jpeg' if ext == 'jpg' else ext}"
-        filename = f"{_slugify(key_hint) or 'img'}.{ext}"
-
-        up = requests.post(
-            IMAGE_UPLOAD_URL,
-            headers={
-                "Authorization": f"Bearer {UPLOAD_SECRET}",
-                "Content-Type": "application/json",
-            },
-            json={
-                "base64": base64.b64encode(data).decode("ascii"),
-                "mimeType": mime,
-                "filename": filename,
-            },
-            timeout=60,
-        )
-        if up.status_code != 200:
-            print(f"  ⚠️ R2 업로드 실패 {up.status_code}: {up.text[:120]} — 원본 URL 유지")
-            return src_url
-
-        url = (up.json() or {}).get("url", "")
-        if not url:
-            print("  ⚠️ R2 응답에 url 없음 — 원본 URL 유지")
-            return src_url
-
-        print(f"  🗄️ R2 저장 완료: {filename} ({len(data):,}B)")
+        url = store_image_bytes(data, ext, key_hint, fallback_url=src_url)
         return url
 
     except Exception as e:
