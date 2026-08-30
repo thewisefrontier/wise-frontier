@@ -470,8 +470,10 @@ def extract_summary(entry):
     # 오류 페이지 감지
     if any(x in summary.lower() for x in ["error 500", "error 404", "server error", "that's an error", "please try again"]):
         return ""
-    if len(summary) > 150:
-        summary = summary[:150].rsplit(' ', 1)[0] + "..."
+    # 2026-08-30 사용자 지적: 150자 제한에 문서화된 근거가 없었음. full_text가
+    # 크롤링 안 되는 소스(특히 구글뉴스)는 이 요약이 사실상 유일한 본문
+    # 재료인데, 여기서 이미 뭉개지면 이후 어떤 단계에서 절단 제한을 풀어도
+    # 소용없다 — 가장 상류 병목이었음. 토큰 비용이 실제 제약이 아니므로 제거.
     return clean_text(summary)
 
 
@@ -1151,10 +1153,14 @@ for data in results:
         title_ko = title
 
     # 요약 번역
+    # 2026-08-30 사용자 지적: 300자 제한에 근거 없었음. deep_translator의
+    # GoogleTranslator는 대략 5000자까지 지원하므로 그 안에서 넉넉하게 씀
+    # (한도 초과 시에도 아래 except가 잡아 기존과 동일하게 빈 문자열로
+    # 폴백하므로 더 나빠질 게 없음).
     summary_ko = ""
     if summary_en:
         try:
-            summary_ko = GoogleTranslator(source="auto", target="ko").translate(summary_en[:300])
+            summary_ko = GoogleTranslator(source="auto", target="ko").translate(summary_en[:4500])
             summary_ko = clean_text(summary_ko)
             if _is_bad_translation(summary_ko):
                 summary_ko = ""
