@@ -1132,10 +1132,17 @@ def build_naming_hints(source_text: str) -> str:
     )
 
 
+MAX_CLUSTER_SOURCES = 12  # 2026-08-30 사용자 지적: 소스가 6개 이상인 클러스터도
+# 5개까지만 본문 재료로 쓰고 나머지는 제목만 나열해 실제 내용을 버리고
+# 있었다(전체 발행 기사 1,280건 중 732건이 900자 미만). 토큰 비용이
+# 실제 제약이 아니므로 상한을 12로 올려 더 많은 실제 소스를 살린다
+# (완전 무제한은 아님 — 극단적으로 큰 클러스터의 프롬프트 폭주 방지).
+
+
 def build_issue_prompt(cluster, existing_summary=None):
     sorted_cluster = sorted(cluster, key=lambda a: bool(a.get("full_text")), reverse=True)
-    main_articles = sorted_cluster[:5]
-    extra_titles = [a.get("title_ko") or a.get("title_en") or "" for a in sorted_cluster[5:]]
+    main_articles = sorted_cluster[:MAX_CLUSTER_SOURCES]
+    extra_titles = [a.get("title_ko") or a.get("title_en") or "" for a in sorted_cluster[MAX_CLUSTER_SOURCES:]]
 
     article_list = ""
     for i, a in enumerate(main_articles, 1):
