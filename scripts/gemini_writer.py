@@ -385,6 +385,75 @@ def find_similar_article(title: str, own_articles: list, threshold: int = 70):
     return None, 0
 
 
+def find_continuing_story(title: str, body_excerpt: str, country: str, hours: int = 72):
+    """find_similar_article()로는 못 잡는 '같은 사안의 후속 보도'를 LLM으로 판별.
+
+    실측(2026-08-31, 네팔·티베트 홍수): 사망자 수만 바뀌는 게 아니라 표현
+    자체가 매번 달라지는("홍수"→"산사태"→"빙하호수 범람") 빠르게 전개되는
+    재난은 제목 문자열 유사도로 거의 못 잡는다 — 실제 기사 13건, 78개
+    쌍 비교에서 find_similar_article() 기준으로는 2쌍(2.6%)만 잡혔다.
+    사용자 지시(2026-08-31): "후속 기사로 나올 수는 있는데 이전 기사를
+    참조하고 가야지" — 병합(같은 글 덮어쓰기)이 아니라, 같은 나라의 최근
+    발행 기사를 후보로 놓고 LLM에게 "같은 사안이 이어지는 후속 보도인지"
+    직접 판별시킨다. 찾으면 그 기사를 별도의 새 기사 프롬프트에 "이전
+    보도" 컨텍스트로 넣어 연속성 있게 쓰게 한다(build_issue_prompt의
+    continuation_* 인자).
+    """
+    if not country or not title:
+        return None
+    since = (now_kst() - timedelta(hours=hours)).strftime("%Y-%m-%d %H:%M")
+    try:
+        res = requests.get(
+            _sb_url(), headers=_sb_headers(),
+            params={
+                "select": "id,title_ko,summary_ko,created_at",
+                "source": "eq.NewsFinal",
+                "is_published": "eq.true",
+                "country": f"eq.{country}",
+                "created_at": f"gte.{since}",
+                "order": "created_at.desc",
+                "limit": "15",
+            },
+            timeout=10,
+        )
+        if res.status_code not in (200, 206):
+            return None
+        candidates = [c for c in res.json() if c.get("summary_ko")]
+    except Exception as e:
+        print(f"  ⚠️ [후속기사 탐지] 후보 조회 실패: {e}")
+        return None
+
+    if not candidates:
+        return None
+
+    listing = "\n".join(f"{i+1}. {c['title_ko']}" for i, c in enumerate(candidates))
+    prompt = f"""아래는 새로 들어온 기사와, 같은 나라({country})에 대해 최근 {hours}시간 이내 NewsFinal이 이미 발행한 기사 목록입니다.
+
+[새 기사]
+제목: {title}
+{(body_excerpt or "")[:500]}
+
+[최근 발행된 기사 목록]
+{listing}
+
+새 기사가 위 목록 중 하나와 "같은 사안이 이어지는 후속 보도"입니까? (예: 같은 재난·같은 사건의 피해 규모나 전개 상황이 업데이트된 경우) 단순히 같은 나라라는 이유만으로 답하지 마세요. 서로 다른 사건이면 "없음"입니다.
+같은 사안이면 해당 번호만 숫자로 답하세요. 아니면 "없음"이라고만 답하세요. 다른 말은 하지 마세요."""
+
+    try:
+        resp = call_gemini(prompt, max_tokens=10, start_tier=3)
+        if not resp:
+            return None
+        m = re.match(r"^\s*(\d+)", resp.strip())
+        if not m:
+            return None
+        idx = int(m.group(1)) - 1
+        if 0 <= idx < len(candidates):
+            return candidates[idx]
+    except Exception as e:
+        print(f"  ⚠️ [후속기사 탐지] 판별 실패: {e}")
+    return None
+
+
 def save_article(title_ko, summary_ko, cluster_key, category, region, country="", article_count=0, published=True, countries=None, image_url="", is_travel=False, summary_3lines="", investment_idea="", unpub_reason=""):
     # 문자셋 혼입 감지(아랍/히브리/키릴/태국/데바나가리/벵골/타밀/한자) — 저장 차단
     _leak = detect_script_leak(title_ko, summary_ko)
@@ -1139,7 +1208,7 @@ MAX_CLUSTER_SOURCES = 12  # 2026-08-30 사용자 지적: 소스가 6개 이상�
 # (완전 무제한은 아님 — 극단적으로 큰 클러스터의 프롬프트 폭주 방지).
 
 
-def build_issue_prompt(cluster, existing_summary=None):
+def build_issue_prompt(cluster, existing_summary=None, continuation_title=None, continuation_summary=None):
     sorted_cluster = sorted(cluster, key=lambda a: bool(a.get("full_text")), reverse=True)
     main_articles = sorted_cluster[:MAX_CLUSTER_SOURCES]
     extra_titles = [a.get("title_ko") or a.get("title_en") or "" for a in sorted_cluster[MAX_CLUSTER_SOURCES:]]
@@ -1206,6 +1275,29 @@ def build_issue_prompt(cluster, existing_summary=None):
         return template.format(today_str=today_str, existing_summary=existing_summary,
                                article_list=article_list, rules=rules,
                                country=country, category=category)
+
+    elif continuation_summary:
+        # 2026-08-31: find_similar_article()가 못 잡는 "표현이 매번 바뀌는
+        # 후속 재난 보도"(네팔·티베트 홍수 사례) 대응. existing_summary
+        # 병합(같은 글 덮어쓰기)과 달리, 별도의 새 기사를 저장하되 이전
+        # 보도를 참고해 연속성 있게 쓰게 한다(사용자 지시: "후속 기사로
+        # 나올 수는 있는데 이전 기사를 참조하고 가야지").
+        template = load_prompt("writer_continuation", fallback="""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다.
+아래는 진행 중인 사안에 대해 NewsFinal이 이미 보도한 이전 기사와, 새로 들어온 후속 소식입니다. ({today_str})
+국가: {country} | 분야: {category}
+
+[이전 보도 — {continuation_title}]
+{continuation_summary}
+
+[새로 들어온 후속 소식]
+{article_list}
+
+이전 보도를 이미 읽은 독자를 전제로, 새로 들어온 후속 소식을 반영한 완전히 새로운 독립 기사를 작성하세요. 이전 기사를 그대로 반복하지 말고, 이전 보도 대비 무엇이 새로 바뀌었는지(수치 변화, 새로운 전개 등)를 리드나 앞부분에서 자연스럽게 언급하세요(예: "앞서 469명으로 집계됐던 사망자 수가 750명으로 늘었다"). 이미 보도된 내용을 처음 알리는 것처럼 쓰지 마세요.
+팩트(수치, 인명, 날짜, 기관명)를 최대한 살리고, 한국어로 작성하세요.
+{rules}""")
+        return template.format(today_str=today_str, continuation_title=continuation_title or "",
+                               continuation_summary=continuation_summary, article_list=article_list,
+                               rules=rules, country=country, category=category)
 
     elif len(main_articles) == 1 or (len(main_articles) <= 4 and len({a.get("source","") for a in main_articles}) >= 2):
         template = load_prompt("writer_single", fallback="""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다.
@@ -2602,8 +2694,19 @@ def run():
                 processed += 1
                 continue
 
-            print(f"  → 신규 이슈 기사 생성")
-            prompt  = build_issue_prompt(cluster)
+            body_excerpt = " ".join(
+                (a.get("full_text") or a.get("summary_ko") or a.get("summary_en") or "")[:300]
+                for a in cluster[:2]
+            )
+            continuing = find_continuing_story(probe_title, body_excerpt, country) if probe_title else None
+
+            if continuing:
+                print(f"  → 후속 보도로 판단(이전: {continuing['title_ko'][:40]}) → 참조해서 새 기사 작성")
+                prompt = build_issue_prompt(cluster, continuation_title=continuing["title_ko"],
+                                            continuation_summary=continuing["summary_ko"])
+            else:
+                print(f"  → 신규 이슈 기사 생성")
+                prompt = build_issue_prompt(cluster)
             has_full = any(a.get("full_text") for a in cluster)
             content = call_gemini_article(prompt, max_tokens=4000 if has_full else 1500)
 
