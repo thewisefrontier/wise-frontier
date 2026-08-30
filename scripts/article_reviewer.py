@@ -20,6 +20,7 @@ scripts/article_reviewer.py
 import os
 import re
 import requests
+import feedparser
 from datetime import timedelta
 
 from gemini_writer import (
@@ -217,6 +218,93 @@ def detect_number_mismatch(source_data, body: str) -> str | None:
     return None
 
 
+# ── 유가 기사 국내 언론 교차검증 (2026-08-30) ────────────────────────────
+# "다른 언론사에서 나온 유가 기사를 참조" — 사용자 결정. 다만 이 소스들을
+# rss_sources(일반 수집 풀)에 넣지 않는다 — 넣으면 gemini_writer.py
+# 클러스터링이 한국 국내뉴스를 정식 기사로 잘못 발행할 위험이 있어서,
+# 데스킹 전용 함수로 완전히 분리한다.
+#
+# ⚠️ 연합뉴스는 RSS 자체에 "AI 학습 및 활용 금지" 조항이 명시돼 있어 제외.
+# 아래 4곳은 실측(2026-08-30) 확인 — 정상 작동 + 그런 조항 없음.
+KOREAN_OIL_REFERENCE_FEEDS = [
+    ("뉴시스", "https://www.newsis.com/RSS/economy.xml"),
+    ("이데일리", "http://rss.edaily.co.kr/edaily_news.xml"),
+    ("한국경제", "https://www.hankyung.com/feed/economy"),
+    ("머니투데이", "https://rss.mt.co.kr/mt_news.xml"),
+]
+
+_OIL_KEYWORDS = ["유가", "휘발유", "국제유가", "WTI", "브렌트", "배럴"]
+_KRW_PER_LITER_RE = re.compile(r"리터당\s*([\d,]+\.?\d*)\s*원")
+_USD_PER_BARREL_RE = re.compile(r"배럴당\s*([\d,]+\.?\d*)\s*달러")
+
+
+def fetch_korean_oil_references(within_hours: int = 36) -> list:
+    """뉴시스·이데일리·한국경제·머니투데이에서 유가 관련 최근 기사를 찾아
+    [{source, title, numbers:[(단위, 값), ...]}] 형태로 반환."""
+    cutoff = now_kst() - timedelta(hours=within_hours)
+    results = []
+    for name, url in KOREAN_OIL_REFERENCE_FEEDS:
+        try:
+            # User-Agent 없으면 한국경제 등 일부 매체가 빈 응답을 준다(실측 확인).
+            feed = feedparser.parse(url, request_headers={"User-Agent": "Mozilla/5.0"})
+        except Exception as e:
+            print(f"  [WARN] {name} 교차검증 피드 조회 실패: {e}")
+            continue
+        for entry in feed.entries[:30]:
+            title = entry.get("title", "") or ""
+            desc = entry.get("description", "") or entry.get("summary", "") or ""
+            text = f"{title} {desc}"
+            if not any(kw in text for kw in _OIL_KEYWORDS):
+                continue
+            nums = [("원/L", float(m.group(1).replace(",", "")))
+                    for m in _KRW_PER_LITER_RE.finditer(text)]
+            nums += [("달러/배럴", float(m.group(1).replace(",", "")))
+                     for m in _USD_PER_BARREL_RE.finditer(text)]
+            if nums:
+                results.append({"source": name, "title": title[:60], "numbers": nums})
+    return results
+
+
+def detect_oil_cross_check(url: str, source_data, _fetch=fetch_korean_oil_references) -> str | None:
+    """국내유가/국제유가 기사만 대상으로 국내 언론 보도와 수치를 대조.
+
+    참고할 만한 보도 자체를 못 찾으면(휴일 등) 판단을 보류하고 플래그하지
+    않는다 — "증거 없음"과 "불일치"는 다르다."""
+    is_domestic = url.startswith("internal://opinet_price_")
+    is_intl = url.startswith("internal://oil_price_")
+    if not (is_domestic or is_intl) or not source_data:
+        return None
+
+    unit = "원/L" if is_domestic else "달러/배럴"
+    our_values = []
+    if is_domestic:
+        for item in (source_data.get("prices") or {}).values():
+            if isinstance(item, dict) and isinstance(item.get("price"), (int, float)):
+                our_values.append(float(item["price"]))
+    else:
+        for k in ("wti", "brent"):
+            v = (source_data.get(k) or {}).get("price")
+            if isinstance(v, (int, float)):
+                our_values.append(float(v))
+    if not our_values:
+        return None
+
+    refs = _fetch()
+    ref_values = [n for r in refs for (u, n) in r["numbers"] if u == unit]
+    if not ref_values:
+        return None
+
+    matched = any(
+        any(abs(ov - rv) <= max(0.5, ov * 0.01) for rv in ref_values)
+        for ov in our_values
+    )
+    if not matched:
+        sample_ref = ", ".join(f"{rv:.2f}" for rv in ref_values[:3])
+        sample_our = ", ".join(f"{ov:.2f}" for ov in our_values[:3])
+        return f"국내언론 교차검증 불일치(우리값 {sample_our} vs 언론보도 {sample_ref} {unit})"
+    return None
+
+
 def detect_untranslated_english(joined: str) -> list:
     """괄호 밖에 남은 2단어 이상 영문 연속 구간을 미번역 의심으로 반환."""
     stripped = _PAREN_RE.sub("", joined)
@@ -269,6 +357,10 @@ def detect_flags(title: str, body: str, category: str, url: str = "", created_at
     number_flag = detect_number_mismatch(source_data, body)
     if number_flag:
         flags.append(number_flag)
+
+    oil_cross_flag = detect_oil_cross_check(url, source_data)
+    if oil_cross_flag:
+        flags.append(oil_cross_flag)
 
     m = ABS_DATE_LOCALTIME_RE.search(joined)
     if m:
