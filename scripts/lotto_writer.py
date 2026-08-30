@@ -182,11 +182,13 @@ def _ball_color(n: int) -> str:
     return "#B0D840"
 
 
-def capture_lotto645_result_image(round_no: int) -> bytes | None:
-    """동행복권 추첨결과 페이지(/lt645/result)에서 해당 회차 결과 카드만 잘라
-    스크린샷. 사이트 개편·봇 차단·회차 표시 어긋남 등으로 실패할 수 있어
-    무엇이든 잘못되면 예외를 삼키고 None을 반환한다 — 호출부가 자체 생성
-    이미지로 대체한다(사용자 지시, 2026-08-31: "오류 나면 자체 생성으로")."""
+def _capture_dhlottery_result_image(result_url: str, round_no: int) -> bytes | None:
+    """동행복권 추첨결과 페이지(로또645 /lt645/result, 연금복권720+ /pt720/result —
+    둘 다 같은 마크업: .swiper-slide-active .result-infoWrap)에서 해당 회차
+    결과 카드만 잘라 스크린샷. 사이트 개편·봇 차단·회차 표시 어긋남 등으로
+    실패할 수 있어 무엇이든 잘못되면 예외를 삼키고 None을 반환한다 —
+    호출부가 자체 생성 이미지로 대체한다(사용자 지시, 2026-08-31:
+    "오류 나면 자체 생성으로")."""
     try:
         from playwright.sync_api import sync_playwright
     except Exception as e:
@@ -201,19 +203,26 @@ def capture_lotto645_result_image(round_no: int) -> bytes | None:
                     user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
                                "(KHTML, like Gecko) Chrome/120.0 Safari/537.36",
                 )
-                page.goto("https://www.dhlottery.co.kr/lt645/result", timeout=20000,
-                          wait_until="networkidle")
+                page.goto(result_url, timeout=20000, wait_until="networkidle")
                 el = page.locator(".swiper-slide-active .result-infoWrap")
                 el.wait_for(state="visible", timeout=10000)
                 if f"{round_no}회" not in el.inner_text():
-                    print(f"  [WARN] 캡처 페이지 회차 불일치(기대 {round_no}회)")
+                    print(f"  [WARN] 캡처 페이지 회차 불일치(기대 {round_no}회): {result_url}")
                     return None
                 return el.screenshot()
             finally:
                 browser.close()
     except Exception as e:
-        print(f"  [WARN] 추첨결과 캡처 실패: {e}")
+        print(f"  [WARN] 추첨결과 캡처 실패({result_url}): {e}")
         return None
+
+
+def capture_lotto645_result_image(round_no: int) -> bytes | None:
+    return _capture_dhlottery_result_image("https://www.dhlottery.co.kr/lt645/result", round_no)
+
+
+def capture_pension720_result_image(round_no: int) -> bytes | None:
+    return _capture_dhlottery_result_image("https://www.dhlottery.co.kr/pt720/result", round_no)
 
 
 def generate_lotto645_ball_image(nums: list[int], bonus: int, round_no: int) -> bytes:
@@ -251,25 +260,60 @@ def generate_lotto645_ball_image(nums: list[int], bonus: int, round_no: int) -> 
     return buf.getvalue()
 
 
-def get_lotto645_image_url(round_no: int, nums: list[int], bonus: int) -> str:
+def generate_pension720_ball_image(bnd: str, num: str, bonus_num: str, round_no: int) -> bytes:
+    """캡처 실패 시 대체용 자체 생성 이미지. 한글 폰트 CI 설치가 필요 없도록 문구는
+    영문만 쓴다(로또645 자체 생성 이미지와 같은 원칙)."""
+    import io
+    from PIL import Image, ImageDraw, ImageFont
+
+    W, H = 700, 260
+    img = Image.new("RGB", (W, H), "#FFFFFF")
+    draw = ImageDraw.Draw(img)
+    title_font = ImageFont.load_default(size=24)
+    label_font = ImageFont.load_default(size=15)
+    num_font = ImageFont.load_default(size=20)
+
+    draw.text((W / 2, 26), f"Pension Lottery 720+ - Round {round_no}", font=title_font, fill="#222222", anchor="mm")
+
+    def draw_row(y: int, label: str, band: str, digits: str, color: str):
+        draw.text((30, y), label, font=label_font, fill="#666666", anchor="lm")
+        chars = ([band] if band else []) + list(digits)
+        r, gap = 20, 8
+        total_w = len(chars) * (2 * r) + (len(chars) - 1) * gap
+        x = W - 30 - total_w + r
+        for ch in chars:
+            draw.ellipse((x - r, y - r, x + r, y + r), fill=color)
+            draw.text((x, y), ch, font=num_font, fill="white", anchor="mm")
+            x += 2 * r + gap
+
+    draw_row(110, "1st", bnd, num, "#FF7272")
+    draw_row(170, "Bonus", "", bonus_num, "#69C8F2")
+
+    draw.text((W / 2, H - 22), "NewsFinal", font=label_font, fill="#999999", anchor="mm")
+
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+    return buf.getvalue()
+
+
+def _get_dh_image_url(key_hint: str, capture_fn, generate_fn) -> str:
     """캡처 우선 시도, 실패하면 자체 생성 이미지로 대체 후 R2에 영구 저장."""
-    data = capture_lotto645_result_image(round_no)
+    data = capture_fn()
     if data is None:
-        data = generate_lotto645_ball_image(nums, bonus, round_no)
+        data = generate_fn()
     try:
         from image_store import store_image_bytes
-        return store_image_bytes(data, "png", key_hint=f"lotto645_{round_no}")
+        return store_image_bytes(data, "png", key_hint=key_hint)
     except Exception as e:
         print(f"  [WARN] 이미지 저장 실패: {e}")
         return ""
 
 
-def backfill_lotto645_image(round_no: int, nums: list[int], bonus: int) -> None:
+def _backfill_dh_image(url_key: str, label: str, get_image_url_fn) -> None:
     """이미 발행된 기사에 image_url이 비어 있으면 채워 넣는다.
     이미지 기능(2026-08-31) 추가 이전에 발행된 과거 기사 보정용."""
-    lotto_url = f"internal://lotto645_{round_no}"
     res = requests.get(
-        f"{_sb_articles_url()}?url=eq.{lotto_url}&select=id,image_url",
+        f"{_sb_articles_url()}?url=eq.{url_key}&select=id,image_url",
         headers=_sb_headers(), timeout=10,
     )
     if res.status_code not in (200, 206):
@@ -277,7 +321,7 @@ def backfill_lotto645_image(round_no: int, nums: list[int], bonus: int) -> None:
     rows = res.json()
     if not rows or rows[0].get("image_url"):
         return
-    image_url = get_lotto645_image_url(round_no, nums, bonus)
+    image_url = get_image_url_fn()
     if not image_url:
         return
     patch = requests.patch(
@@ -285,7 +329,37 @@ def backfill_lotto645_image(round_no: int, nums: list[int], bonus: int) -> None:
         headers=_sb_headers(), json={"image_url": image_url}, timeout=15,
     )
     ok = patch.status_code in (200, 204)
-    print(f"  {'🖼️' if ok else '✗'} 로또 {round_no}회 이미지 백필: {'완료' if ok else '실패'}")
+    print(f"  {'🖼️' if ok else '✗'} {label} 이미지 백필: {'완료' if ok else '실패'}")
+
+
+def get_lotto645_image_url(round_no: int, nums: list[int], bonus: int) -> str:
+    return _get_dh_image_url(
+        f"lotto645_{round_no}",
+        lambda: capture_lotto645_result_image(round_no),
+        lambda: generate_lotto645_ball_image(nums, bonus, round_no),
+    )
+
+
+def backfill_lotto645_image(round_no: int, nums: list[int], bonus: int) -> None:
+    _backfill_dh_image(
+        f"internal://lotto645_{round_no}", f"로또 {round_no}회",
+        lambda: get_lotto645_image_url(round_no, nums, bonus),
+    )
+
+
+def get_pension720_image_url(round_no: int, bnd: str, num: str, bonus_num: str) -> str:
+    return _get_dh_image_url(
+        f"pension720_{round_no}",
+        lambda: capture_pension720_result_image(round_no),
+        lambda: generate_pension720_ball_image(bnd, num, bonus_num, round_no),
+    )
+
+
+def backfill_pension720_image(round_no: int, bnd: str, num: str, bonus_num: str) -> None:
+    _backfill_dh_image(
+        f"internal://pension720_{round_no}", f"연금복권 {round_no}회",
+        lambda: get_pension720_image_url(round_no, bnd, num, bonus_num),
+    )
 
 
 def fetch_lotto645_winning_shops(round_no: int) -> list[dict] | None:
@@ -681,12 +755,17 @@ def run():
     if latest:
         p_round = latest["psltEpsd"]
         p_url = f"internal://pension720_{p_round}"
+        p_bnd = latest["wnBndNo"]
+        p_num = str(latest["wnRnkVl"])
+        p_bonus_num = latest["bnsRnkVl"]
         if already_published(p_url):
             print(f"  → 연금복권 {p_round}회 이미 발행됨 → 스킵")
+            backfill_pension720_image(p_round, p_bnd, p_num, p_bonus_num)
         else:
             prizes = fetch_pension720_prizes(p_round)
             title, body, url_key = build_pension720_article(latest, prizes)
-            aid = insert_article(title, body, url_key, countries=["한국"])
+            image_url = get_pension720_image_url(p_round, p_bnd, p_num, p_bonus_num)
+            aid = insert_article(title, body, url_key, countries=["한국"], image_url=image_url)
             print(f"  {'✓' if aid > 0 else '✗'} 연금복권 {p_round}회: id={aid}")
     else:
         print("  → 연금복권 데이터 조회 실패")
