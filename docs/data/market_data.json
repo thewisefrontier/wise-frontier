@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-31 11:45",
+  "updated_at": "2026-08-31 11:56",
   "indices": [
     {
       "name": "S&P 500",
@@ -25,15 +25,15 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 6642.94,
-      "change_pct": -3.9,
+      "price": 6642.34,
+      "change_pct": -3.91,
       "up": false
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 810.74,
-      "change_pct": -3.21,
+      "price": 811.91,
+      "change_pct": -3.07,
       "up": false
     },
     {
@@ -60,8 +60,8 @@
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 6491.39,
-      "change_pct": -0.41,
+      "price": 6482.69,
+      "change_pct": -0.54,
       "up": false
     },
     {
@@ -89,7 +89,7 @@
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
       "price": 16.18,
-      "change_pct": 1.2,
+      "change_pct": 1.15,
       "up": true
     }
   ],
@@ -121,15 +121,15 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 6642.94,
-        "change_pct": -3.9,
+        "price": 6642.34,
+        "change_pct": -3.91,
         "up": false
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 810.74,
-        "change_pct": -3.21,
+        "price": 811.91,
+        "change_pct": -3.07,
         "up": false
       }
     ],
@@ -158,8 +158,8 @@
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 6491.39,
-        "change_pct": -0.41,
+        "price": 6482.69,
+        "change_pct": -0.54,
         "up": false
       },
       {
@@ -189,7 +189,7 @@
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
         "price": 16.18,
-        "change_pct": 1.2,
+        "change_pct": 1.15,
         "up": true
       }
     ]
@@ -198,8 +198,8 @@
     "ANTM": {
       "name": "Aneka Tambang Tbk",
       "symbol": "ANTM.JK",
-      "price": 3120.0,
-      "change_pct": -1.27,
+      "price": 3110.0,
+      "change_pct": -1.58,
       "up": false
     },
     "ACB": {
