@@ -5,35 +5,35 @@
       "name": "S&P 500",
       "symbol": "^GSPC",
       "price": 7631.47,
-      "change_pct": -0.71,
+      "change_pct": -1.04,
       "up": false
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
       "price": 26099.77,
-      "change_pct": -1.03,
+      "change_pct": -1.15,
       "up": false
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
       "price": 52766.88,
-      "change_pct": -0.79,
+      "change_pct": -1.48,
       "up": false
     },
     {
       "name": "코스피",
       "symbol": "^KS11",
       "price": 6835.8,
-      "change_pct": 0.23,
+      "change_pct": 0.69,
       "up": true
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
       "price": 821.25,
-      "change_pct": -1.56,
+      "change_pct": -2.05,
       "up": false
     },
     {
@@ -99,21 +99,21 @@
         "name": "S&P 500",
         "symbol": "^GSPC",
         "price": 7631.47,
-        "change_pct": -0.71,
+        "change_pct": -1.04,
         "up": false
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
         "price": 26099.77,
-        "change_pct": -1.03,
+        "change_pct": -1.15,
         "up": false
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
         "price": 52766.88,
-        "change_pct": -0.79,
+        "change_pct": -1.48,
         "up": false
       }
     ],
@@ -122,14 +122,14 @@
         "name": "코스피",
         "symbol": "^KS11",
         "price": 6835.8,
-        "change_pct": 0.23,
+        "change_pct": 0.69,
         "up": true
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
         "price": 821.25,
-        "change_pct": -1.56,
+        "change_pct": -2.05,
         "up": false
       }
     ],
@@ -213,8 +213,8 @@
       "name": "Banco BBVA Argentina S.A.",
       "symbol": "BBAR",
       "price": 15.11,
-      "change_pct": -0.2,
-      "up": false
+      "change_pct": 4.42,
+      "up": true
     }
   }
 }
