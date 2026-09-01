@@ -667,40 +667,12 @@ _OIL_IMAGE_KEYWORDS = [
 
 def fetch_oil_image(price_date: date) -> str:
     """Pixabay에서 유가 기사용 대표 이미지를 받아 R2에 영구 저장한다.
-    실패 시 빈 문자열(이미지 없이 발행)."""
-    if not PIXABAY_API_KEY:
-        return ""
-    seed = price_date.toordinal()
-    query = _OIL_IMAGE_KEYWORDS[seed % len(_OIL_IMAGE_KEYWORDS)]
-    try:
-        res = requests.get(
-            "https://pixabay.com/api/",
-            params={
-                "key": PIXABAY_API_KEY,
-                "q": query,
-                "image_type": "photo",
-                "safesearch": "true",
-                "per_page": 10,
-            },
-            timeout=15,
-        )
-        if res.status_code != 200:
-            print(f"  ⚠️ Pixabay {res.status_code}: {res.text[:100]}")
-            return ""
-        hits = res.json().get("hits", [])
-        if not hits:
-            print(f"  ⚠️ Pixabay 결과 없음: {query}")
-            return ""
-        hit = hits[seed % len(hits)]
-        raw_url = hit.get("largeImageURL", "")
-        if not raw_url:
-            return ""
-        url = store_image(raw_url, key_hint=f"oil_{price_date.isoformat()}")
-        print(f"  🖼️ 이미지: {query} → {url[:70]}")
-        return url or ""
-    except Exception as e:
-        print(f"  ⚠️ Pixabay 실패: {e}")
-    return ""
+    실패 시 빈 문자열(이미지 없이 발행). 로직은 article_image.py로
+    공용화(2026-09-02, 4개 writer 스크립트에 복붙돼 있었음)."""
+    from article_image import fetch_seeded_pixabay_image
+    return fetch_seeded_pixabay_image(
+        _OIL_IMAGE_KEYWORDS, price_date.toordinal(), f"oil_{price_date.isoformat()}"
+    )
 
 
 # ── 기사 삽입 ────────────────────────────────────────────────

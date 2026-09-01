@@ -634,32 +634,12 @@ _MARKET_IMAGE_KEYWORDS = [
 
 
 def fetch_market_image(seed_date: date) -> str:
-    if not PIXABAY_API_KEY:
-        return ""
-    seed = seed_date.toordinal()
-    query = _MARKET_IMAGE_KEYWORDS[seed % len(_MARKET_IMAGE_KEYWORDS)]
-    try:
-        res = requests.get(
-            "https://pixabay.com/api/",
-            params={"key": PIXABAY_API_KEY, "q": query, "image_type": "photo",
-                    "safesearch": "true", "per_page": 10},
-            timeout=15,
-        )
-        if res.status_code != 200:
-            return ""
-        hits = res.json().get("hits", [])
-        if not hits:
-            return ""
-        hit = hits[seed % len(hits)]
-        raw_url = hit.get("largeImageURL", "")
-        if not raw_url:
-            return ""
-        url = store_image(raw_url, key_hint=f"frontier_markets_{seed_date.isoformat()}")
-        print(f"  🖼️ 이미지: {query} → {url[:70]}")
-        return url or ""
-    except Exception as e:
-        print(f"  ⚠️ Pixabay 실패: {e}")
-    return ""
+    """로직은 article_image.py로 공용화(2026-09-02, 4개 writer 스크립트에
+    복붙돼 있었음)."""
+    from article_image import fetch_seeded_pixabay_image
+    return fetch_seeded_pixabay_image(
+        _MARKET_IMAGE_KEYWORDS, seed_date.toordinal(), f"frontier_markets_{seed_date.isoformat()}"
+    )
 
 
 # ── 중복 체크 & 저장 ──────────────────────────────────────────

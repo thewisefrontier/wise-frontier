@@ -105,6 +105,58 @@ def fetch_wikimedia_image(query: str):
     return None, None
 
 
+def fetch_seeded_pixabay_image(keywords: list, seed: int, key_hint: str) -> str:
+    """고정 키워드 풀에서 seed로 결정론적으로 하나를 골라 Pixabay에서 검색하고
+    R2에 영구 저장한다. 실패 시 빈 문자열.
+
+    Gemini 호출 없이(=API 비용 없이) 매번 다른, 그러나 재현 가능한 사진을
+    쓰고 싶은 데일리 템플릿 기사(유가·환율·글로벌 마켓 동향 등, 주제가
+    매일 같아 키워드를 그때그때 새로 뽑을 이유가 없는 경우)용이다.
+    fetch_article_image()와 달리 Gemini 호출이 없어 call_gemini_fn 주입이
+    필요 없다.
+
+    원래 oil_price_writer.py/opinet_price_writer.py/opinet_weekly_writer.py/
+    frontier_markets_writer.py 4곳에 거의 동일한 코드로 복붙돼 있었다
+    (2026-09-02 감사로 확인). seed는 보통 date.toordinal() — 키워드 선택과
+    같은 날짜 안의 Pixabay 검색결과 중 선택 둘 다에 재사용해 동일 입력에
+    항상 같은 사진이 나오게 한다. key_hint는 R2 저장 키 접두사(호출부마다
+    달라 그대로 파라미터로 받는다, 예: f"oil_{price_date.isoformat()}").
+    """
+    if not PIXABAY_API_KEY or not keywords:
+        return ""
+    query = keywords[seed % len(keywords)]
+    try:
+        res = requests.get(
+            "https://pixabay.com/api/",
+            params={
+                "key": PIXABAY_API_KEY,
+                "q": query,
+                "image_type": "photo",
+                "safesearch": "true",
+                "per_page": 10,
+            },
+            timeout=15,
+        )
+        if res.status_code != 200:
+            print(f"  ⚠️ Pixabay {res.status_code}: {res.text[:100]}")
+            return ""
+        hits = res.json().get("hits", [])
+        if not hits:
+            print(f"  ⚠️ Pixabay 결과 없음: {query}")
+            return ""
+        hit = hits[seed % len(hits)]
+        raw_url = hit.get("largeImageURL", "")
+        if not raw_url:
+            return ""
+        from image_store import store_image
+        url = store_image(raw_url, key_hint=key_hint)
+        print(f"  🖼️ 이미지: {query} → {url[:70]}")
+        return url or ""
+    except Exception as e:
+        print(f"  ⚠️ Pixabay 실패: {e}")
+    return ""
+
+
 def fetch_article_image(title: str, body: str, entity: str, call_gemini_fn) -> tuple:
     """기사 이미지를 찾는다. 반환: (image_url, image_credit).
 

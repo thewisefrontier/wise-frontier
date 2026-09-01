@@ -501,29 +501,12 @@ _IMAGE_KEYWORDS = ["gas station", "fuel pump", "gasoline price", "car refueling"
 
 
 def fetch_weekly_image(week_end: date) -> str:
-    if not PIXABAY_API_KEY:
-        return ""
-    seed = week_end.toordinal()
-    query = _IMAGE_KEYWORDS[seed % len(_IMAGE_KEYWORDS)]
-    try:
-        res = requests.get(
-            "https://pixabay.com/api/",
-            params={"key": PIXABAY_API_KEY, "q": query, "image_type": "photo", "safesearch": "true", "per_page": 10},
-            timeout=15,
-        )
-        if res.status_code != 200:
-            return ""
-        hits = res.json().get("hits", [])
-        if not hits:
-            return ""
-        hit = hits[seed % len(hits)]
-        raw_url = hit.get("largeImageURL", "")
-        if not raw_url:
-            return ""
-        return store_image(raw_url, key_hint=f"opinet_weekly_{week_end.isoformat()}") or ""
-    except Exception as e:
-        print(f"  ⚠️ Pixabay 실패: {e}")
-    return ""
+    """로직은 article_image.py로 공용화(2026-09-02, 4개 writer 스크립트에
+    복붙돼 있었음)."""
+    from article_image import fetch_seeded_pixabay_image
+    return fetch_seeded_pixabay_image(
+        _IMAGE_KEYWORDS, week_end.toordinal(), f"opinet_weekly_{week_end.isoformat()}"
+    )
 
 
 # ── 기사 삽입 ────────────────────────────────────────────────
