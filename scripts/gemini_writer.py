@@ -468,7 +468,7 @@ def find_continuing_story(title: str, body_excerpt: str, country: str, hours: in
     return None
 
 
-def save_article(title_ko, summary_ko, cluster_key, category, region, country="", article_count=0, published=True, countries=None, image_url="", image_credit="", is_travel=False, summary_3lines="", investment_idea="", unpub_reason=""):
+def save_article(title_ko, summary_ko, cluster_key, category, region, country="", article_count=0, published=True, countries=None, image_url="", image_credit="", is_travel=False, summary_3lines="", investment_idea="", unpub_reason="", continuation_of_id=None):
     # 문자셋 혼입 감지(아랍/히브리/키릴/태국/데바나가리/벵골/타밀/한자) — 저장 차단
     _leak = detect_script_leak(title_ko, summary_ko)
     if _leak:
@@ -512,6 +512,7 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
         "is_travel": bool(is_travel),
         "summary_3lines": summary_3lines,
         "investment_idea": investment_idea,
+        **({"continuation_of_id": continuation_of_id} if continuation_of_id else {}),
     }
     return insert_final_article(payload)
 
@@ -2826,6 +2827,7 @@ def run():
                     image_url     = image_url,
                     image_credit  = image_credit,
                     is_travel     = gen_travel,
+                    continuation_of_id = continuing["id"] if (continuing and published) else None,
                 )
                 if article_id > 0:
                     status = "✅ 저장 완료" if published else "📋 미발행 저장"
