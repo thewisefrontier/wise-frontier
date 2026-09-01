@@ -1,0 +1,75 @@
+name: NewsFinal - NY Market Open Preview
+
+# 뉴욕증시 개장(현지 09:30 ET) 프리뷰 기사. GitHub 자체 schedule: 트리거는
+# 이 저장소에서 반복적으로 무응답/지연 사고를 낸 전례가 있어(run.yml/
+# frontier_markets.yml/lotto.yml 등 참조) 처음부터 쓰지 않는다 — 외부 크론
+# (cron-job.org)의 workflow_dispatch로 정시 호출.
+#
+# ⚠️ 09:30 ET는 서머타임에 따라 22:30 KST(3월 중순~11월 초, EDT) 또는
+# 23:30 KST(11월 초~3월 중순, EST)로 바뀐다. cron-job.org 잡은 이 두 시각을
+# 다 포함하는 폭(예: 22:20~23:40 KST, 5~10분 간격)으로 자주 호출하도록
+# 설정할 것 — 스크립트 자신의 market_just_opened()이 뉴욕 로컬시간(DST
+# 자동 반영, ZoneInfo)으로 09:30~09:59 구간에만 실제로 동작하고, 그 밖의
+# 호출은 즉시 스킵한다(frontier_markets.yml과 동일한 "자주 불러도 안전한"
+# 설계 — already_published()가 같은 날 중복 발행도 막는다).
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: newsfinal-ny-market-open
+  cancel-in-progress: false
+
+jobs:
+  ny_market_open:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v5
+
+      - name: Python 설정
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: 패키지 설치
+        run: pip install -r requirements.txt
+
+      - name: 뉴욕증시 개장 프리뷰 기사 생성
+        run: python scripts/ny_market_open_writer.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
+          GEMINI_API_KEY_4: ${{ secrets.GEMINI_API_KEY_4 }}
+          GEMINI_API_KEY_5: ${{ secrets.GEMINI_API_KEY_5 }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
+          IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
+          UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
+
+      - name: 웹사이트 데이터 내보내기
+        run: python scripts/export_articles.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+
+      - name: 변경사항 커밋 및 푸시
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add -A
+          git diff --staged --quiet || git commit -m "Update NY market open article"
+          for i in 1 2 3 4 5; do
+            git pull origin main -X ours --no-rebase
+            git push && break
+            echo "push failed (attempt $i) - another workflow pushed first, retrying"
+            sleep $((RANDOM % 8 + 3))
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
