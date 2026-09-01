@@ -643,6 +643,28 @@ def split_multi_topic_title(title: str) -> list:
     return []
 
 
+# 2026-09-01 사용자 지시: "칼럼, 데스크칼럼, 기자수첩은 기사화 금지". 원문(제목/
+# 본문 첫머리)에 오피니언 장르 표식이 명시적으로 붙어 있는 경우만 잡는다 —
+# "opinion"/"analysis" 같은 단어는 스트레이트 뉴스에도 흔히 나오므로, 콜론·대괄호
+# 등으로 장르 라벨임이 분명한 패턴만 매칭해 오탐을 줄인다. id=118436(인민일보
+# 홍보 칼럼이 "중국이 밝혔다"로 오서술된 사고)은 원문에 이런 라벨이 아예 없어
+# 이 필터로는 못 잡는다 — 그건 writer_rules(바이라인 감지)가 별도로 담당한다.
+_OPINION_LABEL_RE = re.compile(
+    r'(?:^|[\[\(【])\s*(opinion|op-ed|opeds?|column|commentary|editorial|viewpoint|'
+    r'오피니언|칼럼|데스크칼럼|기자수첩|사설|기고)\s*(?:[:\]\)】\-–—|ㅣ]|$)',
+    re.IGNORECASE,
+)
+
+
+def is_opinion_column(title: str, text: str = "") -> bool:
+    """제목 또는 본문 첫머리(200자)에 오피니언/칼럼 장르 라벨이 명시된 경우만 True."""
+    if title and _OPINION_LABEL_RE.search(title.strip()):
+        return True
+    if text and _OPINION_LABEL_RE.search(text[:200].strip()):
+        return True
+    return False
+
+
 def is_multi_topic_title(title: str) -> bool:
     """복수 주제 제목 여부 — 분리 가능한 패턴 + 글로벌 종합 제목"""
     import re
@@ -2577,6 +2599,16 @@ def run():
 
     print("\n[클러스터링] 오늘 기사 분석 중...")
     all_articles = get_today_articles(limit=300)
+
+    opinion_skipped = [
+        a for a in all_articles
+        if is_opinion_column(a.get("title_en") or a.get("title_ko") or "", a.get("full_text") or "")
+    ]
+    if opinion_skipped:
+        print(f"  [제외] 칼럼/오피니언 장르 라벨 {len(opinion_skipped)}건 → 기사화 대상에서 제외")
+        skip_ids = {a["id"] for a in opinion_skipped}
+        all_articles = [a for a in all_articles if a["id"] not in skip_ids]
+
     clusters = cluster_articles(all_articles)
     print(f"  → {len(all_articles)}건 중 {len(clusters)}개 클러스터 발견\n")
 
