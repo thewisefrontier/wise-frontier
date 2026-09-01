@@ -57,6 +57,23 @@ except Exception:
     def unwrap_json_body(text, _depth=0):
         return None
 
+# articles 테이블 삽입 공용 로직(2026-09-02, 이 파일 안에만 같은 헤더구성+
+# POST 블록이 3벌 있던 걸 article_store.py로 공용화). import 실패해도 죽지
+# 않도록 이 파일 자체의 _sb_headers()/_sb_url()로 폴백한다.
+try:
+    from article_store import insert_final_article
+except Exception:
+    def insert_final_article(payload: dict) -> int:
+        headers = {**_sb_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
+        try:
+            res = requests.post(_sb_url(), headers=headers, json=payload, timeout=15)
+            if res.status_code in (200, 201):
+                data = res.json()
+                return data[0].get("id", -1) if data else -1
+        except Exception as e:
+            print(f"  ⚠️ 기사 저장 예외: {e}")
+        return -1
+
 # 카테고리 정규화 공통 모듈. import 실패해도 본 기능이 죽지 않도록 폴백을 둔다.
 try:
     from category_guard import normalize_category
@@ -983,14 +1000,7 @@ def save_trend_article(group_name: str, title: str, body: str,
         "summary_3lines": summary_3lines,
         "investment_idea": investment_idea,
     }
-    try:
-        res = requests.post(_sb_url(), headers=_sb_headers(), json=payload, timeout=15)
-        if res.status_code in (200, 201):
-            data = res.json()
-            return data[0].get("id", -1) if data else -1
-    except Exception as e:
-        print(f"  ⚠️ 트렌드 기사 저장 실패: {e}")
-    return -1
+    return insert_final_article(payload)
 
 
 def run_trend_tracker():
@@ -1640,33 +1650,28 @@ JSON 배열로만 응답하세요 (마크다운 없이):
             "investment_idea": investment_idea,
         }
 
-        try:
-            res = requests.post(_sb_url(), headers=_sb_headers(), json=payload, timeout=15)
-            if res.status_code in (200, 201):
-                data = res.json()
-                art_id = data[0].get("id", -1) if data else -1
-                print(f"  [{topic}] ✅ 실시간 트렌드 기사 생성 (id={art_id}): {title}")
-                generated += 1
+        art_id = insert_final_article(payload)
+        if art_id > 0:
+            print(f"  [{topic}] ✅ 실시간 트렌드 기사 생성 (id={art_id}): {title}")
+            generated += 1
 
-                # 텔레그램 발송
-                if TELEGRAM_TOKEN and art_id > 0:
-                    try:
-                        preview = body[:300]
-                        url = f"https://newsfinal.co.kr/article?id={art_id}"
-                        msg = f"📈 실시간 트렌드\n\n*{title}*\n\n{preview}{'…' if len(body) > 300 else ''}\n\n[전체 기사 보기]({url})"
-                        requests.post(
-                            f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage",
-                            data={"chat_id": NEWSFINAL_CHANNEL, "text": msg,
-                                  "parse_mode": "Markdown",
-                                  "link_preview_options": json.dumps({"prefer_small_media": True, "url": url})},
-                            timeout=15
-                        )
-                    except Exception:
-                        pass
-            else:
-                print(f"  [{topic}] ❌ 저장 실패: {res.status_code}")
-        except Exception as e:
-            print(f"  [{topic}] ❌ 저장 예외: {e}")
+            # 텔레그램 발송
+            if TELEGRAM_TOKEN:
+                try:
+                    preview = body[:300]
+                    url = f"https://newsfinal.co.kr/article?id={art_id}"
+                    msg = f"📈 실시간 트렌드\n\n*{title}*\n\n{preview}{'…' if len(body) > 300 else ''}\n\n[전체 기사 보기]({url})"
+                    requests.post(
+                        f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage",
+                        data={"chat_id": NEWSFINAL_CHANNEL, "text": msg,
+                              "parse_mode": "Markdown",
+                              "link_preview_options": json.dumps({"prefer_small_media": True, "url": url})},
+                        timeout=15
+                    )
+                except Exception:
+                    pass
+        else:
+            print(f"  [{topic}] ❌ 저장 실패")
 
         time.sleep(CALL_INTERVAL)
 
@@ -1932,32 +1937,27 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
             time.sleep(CALL_INTERVAL)
             continue
 
-        try:
-            res = requests.post(_sb_url(), headers=_sb_headers(), json=payload, timeout=15)
-            if res.status_code in (200, 201):
-                data = res.json()
-                art_id = data[0].get("id", -1) if data else -1
-                print(f"  [{topic}] ✅ 외부 트렌드 기사 생성 (id={art_id}): {title}")
-                generated += 1
-                if TELEGRAM_TOKEN and art_id > 0:
-                    try:
-                        preview = body[:300]
-                        url = f"https://newsfinal.co.kr/article?id={art_id}"
-                        src_str = "+".join(matched_signal["sources"]) if matched_signal else "외부"
-                        msg = f"🌐 외부 트렌드 [{src_str}]\n\n*{title}*\n\n{preview}{'…' if len(body)>300 else ''}\n\n[전체 기사 보기]({url})"
-                        requests.post(
-                            f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage",
-                            data={"chat_id": NEWSFINAL_CHANNEL, "text": msg,
-                                  "parse_mode": "Markdown",
-                                  "link_preview_options": json.dumps({"prefer_small_media": True, "url": url})},
-                            timeout=15
-                        )
-                    except Exception:
-                        pass
-            else:
-                print(f"  [{topic}] ❌ 저장 실패: {res.status_code}")
-        except Exception as e:
-            print(f"  [{topic}] ❌ 예외: {e}")
+        art_id = insert_final_article(payload)
+        if art_id > 0:
+            print(f"  [{topic}] ✅ 외부 트렌드 기사 생성 (id={art_id}): {title}")
+            generated += 1
+            if TELEGRAM_TOKEN:
+                try:
+                    preview = body[:300]
+                    url = f"https://newsfinal.co.kr/article?id={art_id}"
+                    src_str = "+".join(matched_signal["sources"]) if matched_signal else "외부"
+                    msg = f"🌐 외부 트렌드 [{src_str}]\n\n*{title}*\n\n{preview}{'…' if len(body)>300 else ''}\n\n[전체 기사 보기]({url})"
+                    requests.post(
+                        f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage",
+                        data={"chat_id": NEWSFINAL_CHANNEL, "text": msg,
+                              "parse_mode": "Markdown",
+                              "link_preview_options": json.dumps({"prefer_small_media": True, "url": url})},
+                        timeout=15
+                    )
+                except Exception:
+                    pass
+        else:
+            print(f"  [{topic}] ❌ 저장 실패")
 
         time.sleep(CALL_INTERVAL)
 

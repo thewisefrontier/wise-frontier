@@ -30,6 +30,17 @@ except Exception:
     def detect_script_leak(title, body):
         return []
 
+# articles 테이블 삽입 공용 로직(2026-09-02, article_store.py로 공용화).
+try:
+    from article_store import insert_final_article
+except Exception:
+    def insert_final_article(payload: dict) -> int:
+        res = requests.post(_sb_url(), headers=_sb_headers(), json=payload, timeout=15)
+        if res.status_code in (200, 201):
+            data = res.json()
+            return data[0].get("id", -1) if data else -1
+        return -1
+
 load_dotenv()
 
 KST = timezone(timedelta(hours=9))
@@ -449,12 +460,7 @@ def save_digest(title, body, article_count, image_url="", published=True, guard_
     if guard_note:
         payload["update_log"] = [{"timestamp": now_kst().strftime("%Y-%m-%d %H:%M"),
                                   "note": guard_note}]
-    res = requests.post(_sb_url(), headers=_sb_headers(), json=payload, timeout=15)
-    if res.status_code in (200, 201):
-        data = res.json()
-        return data[0].get("id", -1) if data else -1
-    print(f"[ERROR] 저장 실패: {res.status_code} {res.text[:200]}")
-    return -1
+    return insert_final_article(payload)
 
 
 def run():

@@ -50,6 +50,18 @@ try:
 except Exception:  # 모듈 없거나 import 실패해도 날씨 발행 자체는 계속돼야 한다
     def store_image(src_url, key_hint="", timeout=30):
         return src_url
+
+# articles 테이블 삽입 공용 로직(2026-09-02, article_store.py로 공용화).
+try:
+    from article_store import insert_final_article
+except Exception:
+    def insert_final_article(payload: dict) -> int:
+        headers = {**_sb_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
+        res = requests.post(_sb_url(), headers=headers, json=payload, timeout=15)
+        if res.status_code in (200, 201):
+            data = res.json()
+            return data[0].get("id", -1) if data else -1
+        return -1
 # 기상청 자료는 기상청 API허브(apihub.kma.go.kr)에서만 받는다. 파라미터는 authKey.
 # 공공데이터포털(apis.data.go.kr) 경로는 2026-08-05 제거했다 — 그쪽에는 날씨 API
 # 활용신청이 없어 호출해도 자료가 오지 않는다(사용자 확인).
@@ -2597,14 +2609,11 @@ def save_report(name, region, title, body, kind: str, local_now: datetime, count
         "posted_blog": 0,
         "dedup_reviewed": True,
     }
-    headers = {**_sb_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
-    res = requests.post(_sb_url(), headers=headers, json=payload, timeout=15)
-    if res.status_code in (200, 201):
-        data = res.json()
-        art_id = data[0].get("id", -1) if data else -1
+    art_id = insert_final_article(payload)
+    if art_id > 0:
         print(f"  ✅ {name}({kind}) 저장 완료 (id={art_id}, 현지 {local_now.strftime('%H:%M')})")
     else:
-        print(f"  ❌ {name}({kind}) 저장 실패: HTTP {res.status_code} - {res.text[:200]}")
+        print(f"  ❌ {name}({kind}) 저장 실패")
 
 
 def run():

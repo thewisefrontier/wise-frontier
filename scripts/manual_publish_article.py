@@ -95,18 +95,14 @@ def build_article(
 
 
 def insert_via_rest(article: dict) -> int:
-    """Supabase REST API로 직접 삽입(운영 스크립트와 동일 방식). 성공 시 id 반환."""
-    headers = {
-        "apikey": SUPABASE_SERVICE_KEY,
-        "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
-        "Content-Type": "application/json",
-        "Prefer": "return=representation",
-    }
-    res = requests.post(f"{SUPABASE_URL}/rest/v1/articles", headers=headers, json=article, timeout=15)
-    if res.status_code not in (200, 201):
-        raise RuntimeError(f"삽입 실패: {res.status_code} — {res.text[:500]}")
-    data = res.json()
-    return data[0]["id"] if data else -1
+    """article_store.insert_final_article()로 위임 — 다른 writer 스크립트와
+    동일한 삽입 경로를 쓴다(2026-09-02, 10여개 스크립트 복붙 로직을
+    article_store.py로 공용화하면서 이 파일도 같이 정리)."""
+    from article_store import insert_final_article
+    art_id = insert_final_article(article)
+    if art_id <= 0:
+        raise RuntimeError("삽입 실패 — article_store.insert_final_article()가 -1 반환")
+    return art_id
 
 
 def print_safe_sql(article: dict):

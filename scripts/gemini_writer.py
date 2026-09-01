@@ -46,6 +46,20 @@ except Exception:
     def _unwrap_json_body(text, _depth=0):
         return None
 
+# articles 테이블 삽입 공용 로직(2026-09-02, 10여개 스크립트에 복붙돼 있던
+# 헤더구성+POST 블록을 article_store.py로 공용화). import 실패해도 죽지
+# 않도록 이 파일 자체의 _sb_headers()/_sb_url()로 폴백한다.
+try:
+    from article_store import insert_final_article
+except Exception:
+    def insert_final_article(payload: dict) -> int:
+        headers = {**_sb_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
+        res = requests.post(_sb_url(), headers=headers, json=payload, timeout=15)
+        if res.status_code in (200, 201):
+            data = res.json()
+            return data[0].get("id", -1) if data else -1
+        return -1
+
 KST = timezone(timedelta(hours=9))
 
 def now_kst() -> datetime:
@@ -499,12 +513,7 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
         "summary_3lines": summary_3lines,
         "investment_idea": investment_idea,
     }
-    headers = {**_sb_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
-    res = requests.post(_sb_url(), headers=headers, json=payload, timeout=15)
-    if res.status_code in (200, 201):
-        data = res.json()
-        return data[0].get("id", -1) if data else -1
-    return -1
+    return insert_final_article(payload)
 
 
 def update_article(article_id, title_ko, summary_ko, note: str = "업데이트", countries=None, country="", summary_3lines=None, investment_idea=None):

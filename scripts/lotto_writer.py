@@ -46,6 +46,18 @@ except Exception:
     def detect_script_leak(title, body):
         return []
 
+# articles 테이블 삽입 공용 로직(2026-09-02, article_store.py로 공용화).
+try:
+    from article_store import insert_final_article
+except Exception:
+    def insert_final_article(payload: dict) -> int:
+        headers = {**_sb_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
+        res = requests.post(_sb_articles_url(), headers=headers, json=payload, timeout=15)
+        if res.status_code in (200, 201):
+            data = res.json()
+            return data[0].get("id", -1) if data else -1
+        return -1
+
 
 def now_kst() -> datetime:
     return datetime.now(timezone.utc).astimezone(KST)
@@ -131,13 +143,7 @@ def insert_article(title: str, body: str, url_key: str, countries=None, image_ur
         "sent_telegram": 0,
         "is_published": True,
     }
-    headers = {**_sb_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
-    res = requests.post(_sb_articles_url(), headers=headers, json=payload, timeout=15)
-    if res.status_code in (200, 201):
-        data = res.json()
-        return data[0].get("id", -1) if data else -1
-    print(f"  [ERROR] 기사 삽입 실패 {res.status_code}: {res.text[:200]}")
-    return -1
+    return insert_final_article(payload)
 
 
 # ── 로또 6/45 ──────────────────────────────────────────────
