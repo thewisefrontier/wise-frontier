@@ -345,8 +345,26 @@ COUNTRY_FLAG_MAP = {
     "튀르키예": "🇹🇷", "폴란드": "🇵🇱", "체코": "🇨🇿", "헝가리": "🇭🇺", "루마니아": "🇷🇴",
 }
 
+# 위키미디어 커먼즈 검색용 영문 기관명(article_image.py). econ_events는 소수의
+# 고정된 중앙은행만 다루는 큐레이션 테이블이라 매핑으로 충분하다 — 새 국가가
+# 추가되면 이 사전에 없어도 그냥 Wikimedia 단계를 건너뛰고 Pixabay로 대체된다.
+CENTRAL_BANK_EN = {
+    "나이지리아": "Central Bank of Nigeria",
+    "남아공": "South African Reserve Bank",
+    "미국": "Federal Reserve",
+    "영국": "Bank of England",
+    "유로존": "European Central Bank",
+    "이집트": "Central Bank of Egypt",
+    "일본": "Bank of Japan",
+    "태국": "Bank of Thailand",
+    "필리핀": "Bangko Sentral ng Pilipinas",
+    "글로벌": "International Monetary Fund",
+}
+
+
 def insert_article(title_ko: str, summary_ko: str,
-                   country: str, event_id: int) -> int:
+                   country: str, event_id: int,
+                   image_url: str = "", image_credit: str = "") -> int:
     if detect_script_leak(title_ko, summary_ko):
         print(f"  ⚠️ [문자 혼입 감지] 저장 차단: {title_ko[:60]}")
         return -1
@@ -366,6 +384,8 @@ def insert_article(title_ko: str, summary_ko: str,
         "country": country,
         "country_flag": flag,
         "countries": [country],
+        "image_url": image_url,
+        "image_credit": image_credit,
         "score": 1,
         "created_at": now_str,
         "first_published_at": now_str,
@@ -549,7 +569,12 @@ def main():
             continue
 
         # ── Step 6: 기사 삽입
-        art_id = insert_article(art_title, art_body, country, eid)
+        from article_image import fetch_article_image
+        entity = CENTRAL_BANK_EN.get(country, "")
+        image_url, image_credit = fetch_article_image(art_title, art_body, entity, call_gemini)
+
+        art_id = insert_article(art_title, art_body, country, eid,
+                                image_url=image_url, image_credit=image_credit)
         if art_id > 0:
             print(f"    ✓ 기사 삽입 완료 (articles.id={art_id}): {art_title}")
         else:
