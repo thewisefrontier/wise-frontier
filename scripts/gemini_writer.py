@@ -1634,34 +1634,15 @@ def country_to_region(country: str) -> str:
     return COUNTRY_TO_REGION.get(country, "global")
 
 
-COUNTRY_ALIASES = {
-    "대한민국": "한국", "남한": "한국", "south korea": "한국", "korea": "한국",
-    "미국": "미국", "usa": "미국", "united states": "미국",
-    "중국": "중국", "china": "중국",
-    "일본": "일본", "japan": "일본",
-    "나이지리아": "나이지리아", "nigeria": "나이지리아",
-    "케냐": "케냐", "kenya": "케냐",
-    "남아프리카공화국": "남아공", "남아프리카": "남아공", "south africa": "남아공",
-    "베트남": "베트남", "vietnam": "베트남",
-    "인도네시아": "인도네시아", "indonesia": "인도네시아",
-    "태국": "태국", "thailand": "태국",
-    "필리핀": "필리핀", "philippines": "필리핀",
-    "이집트": "이집트", "egypt": "이집트",
-    "사우디": "사우디아라비아", "사우디아라비아": "사우디아라비아", "saudi arabia": "사우디아라비아",
-    "uae": "아랍에미리트", "아랍에미리트": "아랍에미리트",
-    "튀르키예": "튀르키예", "터키": "튀르키예", "turkey": "튀르키예",
-    "인도": "인도", "india": "인도",
-}
-
-def normalize_country(country: str) -> str:
-    """Gemini가 생성한 국가명을 표준 표기로 통일"""
-    if not country:
-        return ""
-    key = country.strip().lower()
-    for alias, standard in COUNTRY_ALIASES.items():
-        if alias.lower() == key:
-            return standard
-    return country.strip()
+# 국가명 정규화는 country_guard.py로 공용화(2026-09-02, category_guard.py와
+# 같은 이유 — gemini_summarizer.py의 트렌드 생성 경로에는 이게 없어서 같은
+# 사건이 "한국"/"대한민국"으로 각각 저장돼 중복 발행됨, id=119633/120650).
+try:
+    from country_guard import normalize_country, COUNTRY_ALIASES
+except Exception:
+    COUNTRY_ALIASES = {}
+    def normalize_country(country: str) -> str:
+        return (country or "").strip()
 
 
 def update_article_fields(article_id: int, fields: dict):

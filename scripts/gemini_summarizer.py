@@ -26,6 +26,19 @@ try:
 except Exception:
     _HAS_UPDATE_BLOCK = False
 
+# 국가명 표기 정규화("대한민국"/"한국" 등 동의어를 하나로 통일). gemini_writer.py의
+# 메인 클러스터링 경로는 이미 이걸 쓰고 있었는데, 이 파일의 트렌드 생성 3경로
+# (run_trend_tracker/run_realtime_trend_tracker/run_external_trend_articles)는
+# 빠져있었다(2026-09-02, 사용자 신고로 발견 — id=119633/120650, 같은 "한학자
+# 총재 징역 2년" 사건이 country="한국"과 "대한민국"으로 각각 저장돼
+# find_similar_trend()의 country=eq. 정확일치 필터를 통과 못 하고 중복 발행됨).
+# import 실패해도 정규화 없이(=현재 버그와 동일하게) 죽지 않고 동작한다.
+try:
+    from country_guard import normalize_country
+except Exception:
+    def normalize_country(country: str) -> str:
+        return (country or "").strip()
+
 # 외부 트렌드 수집 모듈 (GDELT, Google Trends, Reddit)
 try:
     from external_trends import collect_external_trends
@@ -1116,11 +1129,11 @@ def run_trend_tracker():
             elif line.startswith("국가:"):
                 c = line.replace("국가:", "").strip()
                 if c not in ("없음", "-", ""):
-                    country = c
+                    country = normalize_country(c)
             elif line.startswith("관련국가:"):
                 raw = line.replace("관련국가:", "").strip()
                 if raw not in ("없음", "-", ""):
-                    countries = [x.strip() for x in raw.split(",") if x.strip()]
+                    countries = [normalize_country(x.strip()) for x in raw.split(",") if x.strip()]
             elif line.startswith("분야:"):
                 gen_category = normalize_category(line.replace("분야:", "").strip()) or category
             elif line.startswith("본문:"):
@@ -1590,11 +1603,11 @@ JSON 배열로만 응답하세요 (마크다운 없이):
             elif line.startswith("국가:"):
                 c = line.replace("국가:", "").strip()
                 if c not in ("없음", "-", ""):
-                    art_country = c
+                    art_country = normalize_country(c)
             elif line.startswith("관련국가:"):
                 raw2 = line.replace("관련국가:", "").strip()
                 if raw2 not in ("없음", "-", ""):
-                    art_countries = [x.strip() for x in raw2.split(",") if x.strip()]
+                    art_countries = [normalize_country(x.strip()) for x in raw2.split(",") if x.strip()]
             elif line.startswith("본문:"):
                 idx = content_text.find("본문:")
                 body = _ensure_paragraphs(content_text[idx + 3:].strip())
@@ -1891,11 +1904,11 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
             elif line.startswith("국가:"):
                 c = line.replace("국가:", "").strip()
                 if c not in ("없음", "-", ""):
-                    art_country = c
+                    art_country = normalize_country(c)
             elif line.startswith("관련국가:"):
                 raw2 = line.replace("관련국가:", "").strip()
                 if raw2 not in ("없음", "-", ""):
-                    art_countries = [x.strip() for x in raw2.split(",") if x.strip()]
+                    art_countries = [normalize_country(x.strip()) for x in raw2.split(",") if x.strip()]
             elif line.startswith("본문:"):
                 idx = content_text.find("본문:")
                 body = _ensure_paragraphs(content_text[idx + 3:].strip())
