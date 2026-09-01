@@ -516,7 +516,29 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
     return insert_final_article(payload)
 
 
-def update_article(article_id, title_ko, summary_ko, note: str = "업데이트", countries=None, country="", summary_3lines=None, investment_idea=None):
+def _generate_update_headline(delta: str) -> str:
+    """이번 업데이트에서 새로 확인된 내용을 25자 내외 한 줄로 요약한다.
+    독자용 "업데이트 기록" 목록에 표시할 용도(2026-09-02, 사용자 요청 —
+    "단순히 '내용 업데이트'만 적지 말고 한줄 요약을 추가로 적어주면 좋을 것 같은데")."""
+    if not delta:
+        return ""
+    prompt = f"""아래는 기사에 새로 추가된 내용입니다. 이번 업데이트에서 무엇이
+새로 확인됐는지 25자 내외 한 줄로 요약하세요. 완결된 문장(예: "사망자 969명으로 늘어")
+형태로 헤드라인만 출력하고, 다른 말은 절대 쓰지 마세요.
+
+{delta[:800]}"""
+    try:
+        headline = call_gemini(prompt, max_tokens=40, start_tier=3)
+    except Exception:
+        headline = None
+    if not headline:
+        return ""
+    headline = headline.strip().strip('"').strip("'")
+    headline = re.sub(r"^(헤드라인|요약)\s*[:：]\s*", "", headline)
+    return headline[:60]
+
+
+def update_article(article_id, title_ko, summary_ko, note: str = "업데이트", countries=None, country="", summary_3lines=None, investment_idea=None, headline: str = ""):
     """기사 갱신(병합 업데이트) — update_log에 업데이트 기록 추가"""
     # 문자셋 혼입 감지(아랍/히브리/키릴/태국/데바나가리/벵골/타밀/한자) — 업데이트 차단
     _leak = detect_script_leak(title_ko, summary_ko)
@@ -550,7 +572,7 @@ def update_article(article_id, title_ko, summary_ko, note: str = "업데이트",
     except Exception:
         existing_log = []
 
-    new_log = existing_log + [{"timestamp": now_str, "note": note}]
+    new_log = existing_log + [{"timestamp": now_str, "note": note, **({"headline": headline} if headline else {})}]
 
     # 주체국(country)을 관련국(countries)에 항상 병합 — 결함 A 재발 방지
     merged_countries = ([country] + [c for c in (countries or []) if c and c != country]) if country else (countries or [])
@@ -2594,9 +2616,10 @@ BBC·CNN 라이브 업데이트처럼, 이 항목 하나만 읽어도 무슨 일
         delta = _ensure_paragraphs(delta)
 
         note = "후속 정보 추가"
+        headline = _generate_update_headline(delta)
         new_body = _compose_article(_prepend_update(updates, delta), base_body, legacy)
 
-        if update_article(art_id, title, new_body, note=note):
+        if update_article(art_id, title, new_body, note=note, headline=headline):
             update_article_count(art_id, 2)
             print(f"     ✅ {note}")
             updated += 1

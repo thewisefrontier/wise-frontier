@@ -78,7 +78,13 @@ def sanitize_update_log(log):
         if i == 0:
             label = "최초 게시"
         elif not INTERNAL_ONLY_NOTE_RE.search(str(item.get("note") or "")):
-            label = "내용 업데이트"
+            # 2026-09-02: headline(gemini_writer.py/gemini_summarizer.py의
+            # _generate_update_headline()이 생성한 25자 내외 한 줄 요약)이 있으면
+            # 그걸 노출한다 — 매번 "내용 업데이트"만 반복 표시하지 말고 실제로
+            # 뭐가 바뀌었는지 보여달라는 요청. docs/js/update-log-filter.js와
+            # 동일 로직 유지할 것.
+            headline = str(item.get("headline") or "").strip()
+            label = headline or "내용 업데이트"
         else:
             continue
         out.append({"timestamp": item.get("timestamp"), "note": label})

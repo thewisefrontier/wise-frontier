@@ -20,13 +20,19 @@
 
 export const INTERNAL_ONLY_NOTE_RE = /실시간 트렌드 감지|자동 중복정리|음역 자동 교정|문자셋 이탈|복수주제 분리 파킹|수동 정리/;
 
+// 2026-09-02: update_log 항목에 headline(이번 업데이트에서 새로 확인된 내용을
+// 25자 내외로 요약한 한 줄, gemini_writer.py/gemini_summarizer.py의
+// _generate_update_headline()이 생성)이 있으면 그걸 노출한다 — 매번 "내용
+// 업데이트"만 반복 표시하지 말고 실제로 뭐가 바뀌었는지 보여달라는 요청.
+// headline이 없는(과거 항목, 또는 생성 실패) 경우에만 일반화된 문구로 대체한다.
 export function publicUpdateLog(log) {
   if (!Array.isArray(log)) return [];
   const out = [];
   for (let i = 0; i < log.length; i++) {
     const l = log[i] || {};
     if (i === 0) out.push({ timestamp: l.timestamp, note: '최초 게시' });
-    else if (!INTERNAL_ONLY_NOTE_RE.test(String(l.note || ''))) out.push({ timestamp: l.timestamp, note: '내용 업데이트' });
+    else if (!INTERNAL_ONLY_NOTE_RE.test(String(l.note || '')))
+      out.push({ timestamp: l.timestamp, note: (l.headline && String(l.headline).trim()) || '내용 업데이트' });
   }
   return out;
 }

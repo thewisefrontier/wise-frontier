@@ -846,6 +846,31 @@ def _summarize_delta(root_summary: str, new_title: str, new_body: str) -> str:
     return ((new_body or "")[:200]).strip()
 
 
+def _generate_update_headline(delta: str) -> str:
+    """이번 업데이트에서 새로 확인된 내용을 25자 내외 한 줄로 요약한다.
+    독자용 "업데이트 기록" 목록에 표시할 용도(2026-09-02, 사용자 요청 —
+    "단순히 '내용 업데이트'만 적지 말고 한줄 요약을 추가로 적어주면 좋을 것 같은데").
+    gemini_writer.py의 동명 함수와 같은 목적 — 스크립트마다 call_gemini
+    인스턴스가 달라 공용화하지 않고 각자 둔다(article_image.py의
+    call_gemini_fn 주입 패턴과 같은 이유)."""
+    if not delta:
+        return ""
+    prompt = f"""아래는 기사에 새로 추가된 내용입니다. 이번 업데이트에서 무엇이
+새로 확인됐는지 25자 내외 한 줄로 요약하세요. 완결된 문장(예: "사망자 969명으로 늘어")
+형태로 헤드라인만 출력하고, 다른 말은 절대 쓰지 마세요.
+
+{delta[:800]}"""
+    try:
+        headline = call_gemini(prompt, max_tokens=40, start_tier=3)
+    except Exception:
+        headline = None
+    if not headline:
+        return ""
+    headline = headline.strip().strip('"').strip("'")
+    headline = re.sub(r"^(헤드라인|요약)\s*[:：]\s*", "", headline)
+    return headline[:60]
+
+
 def merge_trend_article(existing: dict, new_title: str, new_body: str, note: str) -> bool:
     """기존 트렌드 루트 기사에 '새 전개'만 append(리빙 아티클). 제목·기존 본문은 덮어쓰지 않음."""
     art_id = existing["id"]
@@ -892,7 +917,8 @@ def merge_trend_article(existing: dict, new_title: str, new_body: str, note: str
         return False
 
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
-    new_log = existing_log + [{"timestamp": now_str, "note": note}]
+    headline = _generate_update_headline(delta)
+    new_log = existing_log + [{"timestamp": now_str, "note": note, **({"headline": headline} if headline else {})}]
     try:
         res = requests.patch(
             f"{_sb_url()}?id=eq.{art_id}",
