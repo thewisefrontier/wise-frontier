@@ -1,25 +1,25 @@
 {
-  "updated_at": "2026-09-02 00:50",
+  "updated_at": "2026-09-02 01:18",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7660.82,
-      "change_pct": -0.66,
+      "price": 7649.54,
+      "change_pct": -0.48,
       "up": false
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 26242.16,
-      "change_pct": -0.61,
+      "price": 26179.57,
+      "change_pct": -0.73,
       "up": false
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 52971.87,
-      "change_pct": -1.1,
+      "price": 52929.19,
+      "change_pct": -0.48,
       "up": false
     },
     {
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.1,
-      "change_pct": -0.4,
+      "price": 16.13,
+      "change_pct": -0.26,
       "up": false
     }
   ],
@@ -98,22 +98,22 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7660.82,
-        "change_pct": -0.66,
+        "price": 7649.54,
+        "change_pct": -0.48,
         "up": false
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 26242.16,
-        "change_pct": -0.61,
+        "price": 26179.57,
+        "change_pct": -0.73,
         "up": false
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 52971.87,
-        "change_pct": -1.1,
+        "price": 52929.19,
+        "change_pct": -0.48,
         "up": false
       }
     ],
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.1,
-        "change_pct": -0.4,
+        "price": 16.13,
+        "change_pct": -0.26,
         "up": false
       }
     ]
@@ -207,13 +207,6 @@
       "symbol": "ACB.VN",
       "price": 22650.0,
       "change_pct": 0.0,
-      "up": true
-    },
-    "BBAR": {
-      "name": "Banco BBVA Argentina S.A.",
-      "symbol": "BBAR",
-      "price": 15.26,
-      "change_pct": 5.43,
       "up": true
     }
   }
