@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-01 10:44",
+  "updated_at": "2026-09-01 10:55",
   "indices": [
     {
       "name": "S&P 500",
@@ -25,15 +25,15 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 6813.84,
-      "change_pct": 0.37,
+      "price": 6804.47,
+      "change_pct": 0.23,
       "up": true
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 823.47,
-      "change_pct": -1.78,
+      "price": 821.06,
+      "change_pct": -2.07,
       "up": false
     },
     {
@@ -67,29 +67,29 @@
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 5956.33,
-      "change_pct": 0.0,
+      "price": 6064.56,
+      "change_pct": 1.82,
       "up": true
     },
     {
       "name": "USD/NGN",
       "symbol": "USDNGN=X",
       "price": 1335.01,
-      "change_pct": 0.0,
-      "up": true
+      "change_pct": -0.77,
+      "up": false
     },
     {
       "name": "USD/KES",
       "symbol": "USDKES=X",
       "price": 129.38,
-      "change_pct": 0.0,
+      "change_pct": 0.74,
       "up": true
     },
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.1,
-      "change_pct": -0.09,
+      "price": 16.11,
+      "change_pct": -0.38,
       "up": false
     }
   ],
@@ -121,15 +121,15 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 6813.84,
-        "change_pct": 0.37,
+        "price": 6804.47,
+        "change_pct": 0.23,
         "up": true
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 823.47,
-        "change_pct": -1.78,
+        "price": 821.06,
+        "change_pct": -2.07,
         "up": false
       }
     ],
@@ -165,8 +165,8 @@
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 5956.33,
-        "change_pct": 0.0,
+        "price": 6064.56,
+        "change_pct": 1.82,
         "up": true
       }
     ],
@@ -175,21 +175,21 @@
         "name": "USD/NGN",
         "symbol": "USDNGN=X",
         "price": 1335.01,
-        "change_pct": 0.0,
-        "up": true
+        "change_pct": -0.77,
+        "up": false
       },
       {
         "name": "USD/KES",
         "symbol": "USDKES=X",
         "price": 129.38,
-        "change_pct": 0.0,
+        "change_pct": 0.74,
         "up": true
       },
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.1,
-        "change_pct": -0.09,
+        "price": 16.11,
+        "change_pct": -0.38,
         "up": false
       }
     ]
