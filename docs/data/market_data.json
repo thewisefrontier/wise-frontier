@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-01 16:11",
+  "updated_at": "2026-09-01 16:12",
   "indices": [
     {
       "name": "S&P 500",
@@ -39,7 +39,7 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 116257.0,
+      "price": 116257.26,
       "change_pct": -0.0,
       "up": false
     },
@@ -60,8 +60,8 @@
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 6589.38,
-      "change_pct": 0.98,
+      "price": 6590.6,
+      "change_pct": 1.0,
       "up": true
     },
     {
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.11,
-      "change_pct": -0.39,
+      "price": 16.12,
+      "change_pct": -0.31,
       "up": false
     }
   ],
@@ -137,7 +137,7 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 116257.0,
+        "price": 116257.26,
         "change_pct": -0.0,
         "up": false
       },
@@ -158,8 +158,8 @@
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 6589.38,
-        "change_pct": 0.98,
+        "price": 6590.6,
+        "change_pct": 1.0,
         "up": true
       },
       {
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.11,
-        "change_pct": -0.39,
+        "price": 16.12,
+        "change_pct": -0.31,
         "up": false
       }
     ]
