@@ -59,8 +59,12 @@ EXPORT_EXCLUDE_FIELDS = (
 
 # 실사고(2026-08-09): 예전엔 화이트리스트 방식이었는데, 실제 업데이트 경로들이 쓰는 노트
 # 문구("후속 정보 추가", generate_update_note()의 자유 문장 등)와 화이트리스트가 하나도
-# 안 맞아 진짜 업데이트가 있어도 로그에 항상 안 보였다. 블랙리스트로 뒤집음
-# (functions/article.js의 publicUpdateLog와 동일 로직 유지).
+# 안 맞아 진짜 업데이트가 있어도 로그에 항상 안 보였다. 블랙리스트로 뒤집음.
+# ⚠️ Python이라 docs/js/update-log-filter.js를 import할 수 없어 이 정규식은 그 파일과
+#    별도로 유지된다 — 규칙을 고치면 반드시 두 곳(여기 + docs/js/update-log-filter.js)을
+#    같이 고칠 것. docs/article.html·docs/live.html·functions/article.js 3곳은 그 JS
+#    파일 하나를 공용 import한다(2026-09-01 통합, 그 전엔 이 3곳도 각자 복붙돼 있다가
+#    8/9 수정이 일부만 반영돼 재발한 적 있음 — 메모리 newsfinal_update_log_display_drift 참조).
 INTERNAL_ONLY_NOTE_RE = re.compile(r"실시간 트렌드 감지|자동 중복정리|음역 자동 교정|문자셋 이탈|복수주제 분리 파킹|수동 정리")
 
 
