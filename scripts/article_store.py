@@ -32,10 +32,39 @@ update_log 등 최종 기사 필드가 없음)이고, 이 모듈은 합성이 �
 """
 
 import os
+import re
 import requests
 
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
+
+# 크립토 기사 태깅(2026-09-02) — 사용자 지시: "코인 카테고리를 신설하는게
+# 맞지 않을까?"에 "일단 물량 지켜본 뒤 결정하자"고 답한 뒤, "그럼 기사가
+# 나오면 옮기기 쉽도록 크립토 태그를 따로 붙여놔"라는 후속 요청. 지금은
+# 별도 카테고리를 만들지 않고(nav·category_guard.py·여러 프롬프트를 다
+# 고쳐야 하는 구조적 변경이라 물량도 없이 하기엔 이름) "금융" 카테고리
+# 그대로 두되, subcategory 끝에 "_crypto"를 붙여 나중에 물량이 쌓이면
+# `subcategory like '%_crypto'`로 한 번에 찾아서 새 카테고리로 옮기기 쉽게
+# 해둔다. cluster_/trend_/realtrend_ 등 접두사 기반 매칭(find_similar_trend
+# 등)은 접미사 추가로 영향받지 않는다.
+_CRYPTO_KEYWORDS_RE = re.compile(
+    r"비트코인|이더리움|가상자산|가상화폐|암호화폐|스테이블코인|알트코인|"
+    r"도지코인|리플코인|바이낸스|업비트|빗썸|코인베이스|크립토(자산|시장|화폐)?|"
+    r"\bbitcoin\b|\bethereum\b|\bcrypto(currenc\w*)?\b|\bblockchain\b|"
+    r"\bstablecoin\b|\baltcoin\b|\bdefi\b",
+    re.I,
+)
+
+
+def _tag_crypto(payload: dict) -> None:
+    """payload가 크립토 관련 기사면 subcategory 끝에 _crypto를 붙인다(제자리 수정)."""
+    text = f"{payload.get('title_ko') or ''} {payload.get('summary_ko') or ''}"[:2000]
+    if not _CRYPTO_KEYWORDS_RE.search(text):
+        return
+    sub = payload.get("subcategory") or ""
+    if sub.endswith("_crypto"):
+        return
+    payload["subcategory"] = f"{sub}_crypto" if sub else "crypto"
 
 
 def sb_headers() -> dict:
@@ -58,6 +87,7 @@ def insert_final_article(payload: dict) -> int:
     무시하고 넘어간다(resolution=ignore-duplicates — 대부분의 writer
     스크립트가 url을 유니크 키로 써서 재실행 시 중복 삽입을 막는 용도).
     """
+    _tag_crypto(payload)
     headers = {**sb_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
     try:
         res = requests.post(sb_url(), headers=headers, json=payload, timeout=15)
