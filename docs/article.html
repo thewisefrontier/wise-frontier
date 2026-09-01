@@ -467,6 +467,16 @@ function cleanBody(text) {
       .slice(0, 4)
       .map(x => x.article);
 
+    // 후속기사 연결(2026-09-02) — gemini_writer.py의 find_continuing_story()가
+    // 판정해 저장한 continuation_of_id를 명시적으로 표시한다. 기존 "관련 기사"는
+    // 국가/카테고리/지역이 겹치는 최근 기사를 점수로 골라 보여줄 뿐 "이 기사가
+    // 저 기사의 후속이다"라는 연결은 전혀 나타내지 못했다(사용자 지적:
+    // "후속 기사로 나가는 거면 이전 기사와 관련 기사로 묶어야 하고").
+    const prevArticle = a.continuation_of_id
+      ? (allArticles || []).find(r => r.id === a.continuation_of_id)
+      : null;
+    const nextArticle = (allArticles || []).find(r => r.continuation_of_id === a.id) || null;
+
     document.title = `${title} — NewsFinal`;
     document.querySelector('meta[name="description"]')?.setAttribute('content', cleanBody(stripUpdates(a.summary_ko || '')).slice(0, 150));
     document.querySelector('meta[property="og:title"]')?.setAttribute('content', `${title} — NewsFinal`);
@@ -507,6 +517,12 @@ function cleanBody(text) {
         ${a.region ? `<span>🌍 ${regionKo(a.region)}</span>` : ''}
         ${a.country ? `<span>📍 ${a.country}</span>` : ''}
       </div>
+
+      ${(prevArticle || nextArticle) ? `
+        <div style="margin:12px 0;padding:10px 14px;background:rgba(26,95,168,0.06);border-radius:8px;border-left:3px solid var(--accent2);font-size:13px;line-height:1.7;">
+          ${prevArticle ? `<div>⬅️ 이전 보도: <a href="/article?id=${prevArticle.id}" style="color:var(--accent2);">${prevArticle.title_ko || prevArticle.title_en}</a></div>` : ''}
+          ${nextArticle ? `<div>➡️ 후속 기사: <a href="/article?id=${nextArticle.id}" style="color:var(--accent2);">${nextArticle.title_ko || nextArticle.title_en}</a></div>` : ''}
+        </div>` : ''}
 
       ${a.summary_3lines ? `
         <div style="margin:16px 0;padding:14px 16px;background:rgba(26,95,168,0.06);border-radius:8px;border-left:3px solid var(--accent2);">
