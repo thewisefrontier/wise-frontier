@@ -85,16 +85,19 @@ TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "")
 PIXABAY_API_KEY = os.getenv("PIXABAY_API_KEY", "")
 NEWSFINAL_CHANNEL = "@newsfinal"  # NewsFinal 자체기사 전용 채널
 
-def _sb_headers():
-    return {
-        "apikey": SUPABASE_SERVICE_KEY,
-        "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
-        "Content-Type": "application/json",
-        "Prefer": "return=representation",
-    }
-
-def _sb_url():
-    return f"{SUPABASE_URL}/rest/v1/articles"
+# Supabase 헤더/URL 헬퍼는 article_store.py로 공용화(2026-09-02).
+try:
+    from article_store import sb_headers as _sb_headers, sb_url as _sb_url
+except Exception:
+    def _sb_headers():
+        return {
+            "apikey": SUPABASE_SERVICE_KEY,
+            "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
+            "Content-Type": "application/json",
+            "Prefer": "return=representation",
+        }
+    def _sb_url():
+        return f"{SUPABASE_URL}/rest/v1/articles"
 
 
 def send_to_newsfinal_channel(article_id, title, body, is_update=False):

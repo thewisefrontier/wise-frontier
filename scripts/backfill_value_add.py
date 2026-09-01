@@ -74,16 +74,21 @@ def now_kst() -> datetime:
     return datetime.now(timezone.utc).astimezone(KST)
 
 
-def _sb_headers():
-    return {
-        "apikey": SUPABASE_SERVICE_KEY,
-        "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
-        "Content-Type": "application/json",
-    }
-
-
-def _sb_url():
-    return f"{SUPABASE_URL}/rest/v1/articles"
+# Supabase 헤더/URL 헬퍼는 article_store.py로 공용화(2026-09-02, ~14개
+# 스크립트에 바이트 단위로 복붙돼 있었음). 이 파일 것만 Prefer 헤더가
+# 빠져 있었는데, 여기 쓰이는 GET/PATCH 둘 다 Prefer 유무로 동작이
+# 갈리지 않아(PATCH 응답 코드는 200/204 둘 다 이미 허용) 안전하게 통일.
+try:
+    from article_store import sb_headers as _sb_headers, sb_url as _sb_url
+except Exception:
+    def _sb_headers():
+        return {
+            "apikey": SUPABASE_SERVICE_KEY,
+            "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
+            "Content-Type": "application/json",
+        }
+    def _sb_url():
+        return f"{SUPABASE_URL}/rest/v1/articles"
 
 
 def call_gemini(prompt: str, max_tokens: int = 500, start_tier: int = 3):

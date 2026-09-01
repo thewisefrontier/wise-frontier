@@ -20,12 +20,18 @@ CHAT_ID = "@NewsFinalKR"
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 
-def _sb_headers():
-    return {
-        "apikey": SUPABASE_SERVICE_KEY,
-        "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
-        "Content-Type": "application/json",
-    }
+# Supabase 헤더 헬퍼는 article_store.py로 공용화(2026-09-02, ~14개 스크립트에
+# 바이트 단위로 복붙돼 있었음). 여기선 GET에만 쓰여 Prefer 헤더 유무가
+# 응답에 영향 없어 안전하게 통일.
+try:
+    from article_store import sb_headers as _sb_headers
+except Exception:
+    def _sb_headers():
+        return {
+            "apikey": SUPABASE_SERVICE_KEY,
+            "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
+            "Content-Type": "application/json",
+        }
 
 REGION_EMOJI = {
     "africa": "🌍", "southeast_asia": "🌏", "eastern_europe": "🌐",

@@ -300,14 +300,17 @@ def build_static_events() -> list:
     return events
 
 
-# ── Supabase 헬퍼 ────────────────────────────────────────────────────
-def _sb_headers():
-    return {
-        "apikey": SUPABASE_SERVICE_KEY,
-        "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
-        "Content-Type": "application/json",
-        "Prefer": "return=representation",
-    }
+# ── Supabase 헬퍼 (article_store.py로 공용화, 2026-09-02) ────────────
+try:
+    from article_store import sb_headers as _sb_headers
+except Exception:
+    def _sb_headers():
+        return {
+            "apikey": SUPABASE_SERVICE_KEY,
+            "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
+            "Content-Type": "application/json",
+            "Prefer": "return=representation",
+        }
 
 
 def get_existing_keys(start_date: str) -> set:
