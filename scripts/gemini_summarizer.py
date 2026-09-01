@@ -460,20 +460,23 @@ def _ensure_paragraphs(text: str, target: int = 3) -> str:
 
 
 # 추적할 키워드 그룹 — (그룹명, 카테고리, [키워드 목록])
+# 2026-09-01: 4번째 필드는 위키미디어 커먼즈 이미지 검색용 영문 쿼리(article_image.py).
+# keywords 리스트를 그대로 쓰면 "coup"·"al-shabaab" 등 검색 결과가 부정확해서
+# (예: "al-shabaab"만으로 검색하면 관련 없는 사진이 걸릴 수 있음) 별도로 둔다.
 TREND_KEYWORDS = [
-    ("에볼라",       "사회",    ["ebola", "에볼라", "hemorrhagic fever", "출혈열", "MVD", "marburg"]),
-    ("mpox",        "사회",    ["mpox", "monkeypox", "원숭이두창"]),
-    ("콜레라",       "사회",    ["cholera", "콜레라"]),
-    ("수단 분쟁",    "정치·외교", ["sudan", "rapid support forces", "수단", "다르푸르", "darfur", "khartoum", "신속지원군"]),
-    ("DRC 분쟁",    "정치·외교", ["DRC", "congo", "콩고", "M23", "키부", "kivu"]),
+    ("에볼라",       "사회",    ["ebola", "에볼라", "hemorrhagic fever", "출혈열", "MVD", "marburg"], "Ebola virus disease"),
+    ("mpox",        "사회",    ["mpox", "monkeypox", "원숭이두창"], "Mpox"),
+    ("콜레라",       "사회",    ["cholera", "콜레라"], "Cholera"),
+    ("수단 분쟁",    "정치·외교", ["sudan", "rapid support forces", "수단", "다르푸르", "darfur", "khartoum", "신속지원군"], "Sudan conflict"),
+    ("DRC 분쟁",    "정치·외교", ["DRC", "congo", "콩고", "M23", "키부", "kivu"], "Democratic Republic of the Congo conflict"),
     # 2026-08-31: 국가명(somalia/소말리아)만으로도 걸려 있어 인권위 회의·AU
     # 정상회의 참석·민간항공-UN 회담처럼 무관한 행정 기사가 선거무효화·
     # 알샤바브·가뭄 기아 위기와 섞이는 사고 발견(id=116437, 실제 운영
     # 확인) — 중앙아프리카·사헬과 같은 패턴. 국가명은 빼고 실제 위기
     # 행위자(알샤바브)만 남긴다.
-    ("소말리아",     "정치·외교", ["al-shabaab", "알샤바브"]),
-    ("미얀마",       "정치·외교", ["myanmar", "미얀마", "junta", "군부", "NUG"]),
-    ("아이티",       "사회",    ["haiti", "아이티", "gang", "갱단"]),
+    ("소말리아",     "정치·외교", ["al-shabaab", "알샤바브"], "Al-Shabaab Somalia"),
+    ("미얀마",       "정치·외교", ["myanmar", "미얀마", "junta", "군부", "NUG"], "Myanmar civil war"),
+    ("아이티",       "사회",    ["haiti", "아이티", "gang", "갱단"], "Haiti gang violence"),
     # 2026-08-31: 국가명(sahel/mali/burkina/니제르)만 걸려 있어 일본대사관 도로장비
     # 기부, 벨기에 외교장관 방문, 졸업식, 항공노선 확장, 금 생산량 통계처럼
     # 쿠데타와 무관한 행정·경제 기사가 전부 같은 기사로 묶이는 사고 발견
@@ -481,14 +484,14 @@ TREND_KEYWORDS = [
     # 방식으로 실제 군정 관련 행위자로 좁힌다.
     ("사헬 쿠데타",  "정치·외교", ["coup", "쿠데타", "junta", "군정",
                                 "goïta", "goita", "고이타", "traoré", "traore", "트라오레",
-                                "tiani", "티아니", "alliance of sahel", "AES", "사헬국가동맹"]),
+                                "tiani", "티아니", "alliance of sahel", "AES", "사헬국가동맹"], "Sahel coup"),
     # 2026-08-31: 국가명·수도(중앙아프리카/bangui)만 걸려 있어 은행 진출·안보협력
     # 회의·재해관리 프로그램처럼 서로 무관한 행정 기사가 전부 같은 기사로
     # 묶이는 사고(id=114211) 발생 — 다른 항목들처럼 실제 분쟁 관련 행위자로
     # 좁힌다. 국가명·수도 자체는 뺐다(모든 정부 행사가 수도에서 열려 무의미).
     ("중앙아프리카",  "정치·외교", ["coalition of patriots", "wagner", "바그너",
                                 "africa corps", "아프리카군단", "minusca", "미누스카",
-                                "bozize", "bozizé", "보지제"]),
+                                "bozize", "bozizé", "보지제"], "Central African Republic conflict"),
 ]
 
 # 추적 윈도우: 7일간 기사에서 키워드 빈도 분석
@@ -941,7 +944,8 @@ MULTI_TOPIC_NOTE = "복수 토픽 혼입 — 무관한 사건이 한 기사에 �
 def save_trend_article(group_name: str, title: str, body: str,
                        category: str, country: str, region: str,
                        countries: list, summary_3lines: str = "", investment_idea: str = "",
-                       published: bool = True, guard_note: str = "") -> int:
+                       published: bool = True, guard_note: str = "",
+                       image_url: str = "", image_credit: str = "") -> int:
     """트렌드 추적 기사 저장"""
     if detect_script_leak(title, body):
         print(f"  ⚠️ [문자 혼입 감지] 저장 차단: {title[:60]}")
@@ -966,6 +970,8 @@ def save_trend_article(group_name: str, title: str, body: str,
         "country": country,
         "country_flag": "",
         "countries": ([country] + [c for c in (countries or []) if c and c != country]) if country else (countries or []),
+        "image_url": image_url,
+        "image_credit": image_credit,
         "score": 2,  # 라이브 탭에 바로 표시
         "created_at": now_str,
         "first_published_at": now_str,
@@ -994,7 +1000,7 @@ def run_trend_tracker():
 
     print("\n[트렌드 트래커] 장기 이슈 분석 시작...")
 
-    for group_name, category, keywords in TREND_KEYWORDS:
+    for group_name, category, keywords, image_query in TREND_KEYWORDS:
         articles = get_trend_articles(keywords, days=TREND_WINDOW_DAYS)
 
         if len(articles) < TREND_MIN_ARTICLES:
@@ -1124,11 +1130,17 @@ def run_trend_tracker():
                 time.sleep(CALL_INTERVAL)
                 continue
 
+        image_url, image_credit = ("", "")
+        if not (_mt_bad or _dg_bad):
+            from article_image import fetch_article_image
+            image_url, image_credit = fetch_article_image(title, body, image_query, call_gemini)
+
         article_id = save_trend_article(
             group_name=group_name, title=title, body=body,
             category=gen_category, country=country, region=region,
             countries=countries, summary_3lines=summary_3lines, investment_idea=investment_idea,
             published=not (_mt_bad or _dg_bad),
+            image_url=image_url, image_credit=image_credit,
             guard_note=(MULTI_TOPIC_NOTE if _mt_bad
                         else (f"날짜 환각 의심 미발행 — {_dg_reason}" if _dg_bad else "")),
         )
