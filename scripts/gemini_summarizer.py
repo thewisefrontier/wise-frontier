@@ -341,80 +341,21 @@ def call_gemini(prompt: str, retry: int = 2, max_tokens: int = 500, start_tier: 
     return _gemini_client.call(prompt, max_tokens=max_tokens, start_tier=start_tier,
                                 temperature=0.4, timeout=(10, 30))
 
-
-# ── 논평/칼럼체 검출 및 재생성 (트렌드/추적 기사는 "의미/중요성"을
-# 서술하라는 지시가 섞여 있어 논평체가 특히 섞이기 쉬워 재생성 안전장치를 둔다) ──
-BANNED_STYLE_PATTERNS = [
-    r"보여줍니다", r"보여주고 있습니다", r"보여준다",
-    r"도모하고 있습니다", r"도모한다",
-    r"강조하고 있습니다", r"강조한다",
-    r"시사합니다", r"시사한다", r"시사하며",
-    r"주목됩니다", r"주목된다", r"주목받고 있습니다",
-    r"평가된다", r"평가받고 있습니다", r"라는 평가다", r"라는 분석이다",
-    r"필요해 보입니다", r"필요할 것으로 보입니다",
-    r"지켜볼 필요가 있습니다", r"지켜봐야 할 것입니다",
-    r"기대됩니다", r"기대해 볼 만합니다",
-    # 화자 없는 전망/분석형 마무리 문장 (트렌드 기사에서 재발 확인, 2026-07-28)
-    r"분석이 나온다", r"분석이 나옵니다", r"분석도 나온다", r"분석도 나옵니다",
-    r"관측이 나온다", r"관측이 나옵니다",
-    r"우려가 나온다", r"우려가 나옵니다",
-    r"지속될 전망이다", r"지속될 전망입니다",
-    r"이어질 전망이다", r"이어질 전망입니다",
-    r"귀추가 주목된다", r"귀추가 주목됩니다",
-]
-
-def has_column_style(text: str) -> bool:
-    if not text:
+# 문체 검증/변환(논평·칼럼체 감지, 합쇼체 감지·해라체 변환)은 style_guard.py로
+# 공용화(2026-09-02, gemini_writer.py와 완전히 동일한 코드가 각각 복붙돼
+# 있었음). import 실패해도 죽지 않도록 최소 폴백을 둔다.
+try:
+    from style_guard import has_column_style, has_polite_ending, to_plain_style
+    _HAS_STYLE_GUARD = True
+except Exception:
+    _HAS_STYLE_GUARD = False
+    def has_column_style(text: str) -> bool:
         return False
-    return any(re.search(p, text) for p in BANNED_STYLE_PATTERNS)
-
-
-# 문장 종결부의 "-습니다/-입니다/-됩니다"(합쇼체)만 탐지 — 인용문 안 발언은
-# 대개 뒤에 '라고/이라고' 등이 붙어 문장이 안 끝나므로 오탐이 적다.
-_SENT_END_LA = r'(?=[.!?\n]|$)'  # 문장 종결 위치 (인용문 내부 제외용)
-_POLITE_ENDING_RE = re.compile(r'(?:습니다|입니다|됩니다)[")\u2018\u2019\u201c\u201d]*' + _SENT_END_LA)
-
-
-def has_polite_ending(text: str) -> bool:
-    """합쇼체 종결이 있는지 검사.
-    변환기(to_plain_style)가 실제로 고칠 수 있는 패턴과 정확히 일치시킨다.
-    (구 버전은 습니다/입니다/됩니다만 탐지해 '개최합니다.'·'아닙니다.'를 놓쳤음)"""
-    if not text:
+    def has_polite_ending(text: str) -> bool:
         return False
-    return to_plain_style(text) != text
-
-
-# ── 합쇼체 → 해라체 결정론적 변환 (재생성까지 실패했을 때의 최종 안전장치) ──
-# 문장 종결부에만 적용하므로 인용문 안의 발언("문제없습니다"라고)은 보존된다.
-_JONG_B, _JONG_N = 17, 4  # 종성 ㅂ, ㄴ
-
-_POLITE_CONV_RULES = [
-    (re.compile(r'아닙니다' + _SENT_END_LA), '아니다'),
-    (re.compile(r'입니다' + _SENT_END_LA), '이다'),
-    (re.compile(r'습니다' + _SENT_END_LA), '다'),
-]
-_BNIDA_RE = re.compile(r'([가-힣])니다' + _SENT_END_LA)
-
-
-def _bnida_to_nda(m) -> str:
-    """'합니다'→'한다', '됩니다'→'된다' 등 종성 ㅂ + 니다 → 종성 ㄴ + 다."""
-    ch = m.group(1)
-    code = ord(ch) - 0xAC00
-    if not (0 <= code < 11172):
-        return m.group(0)
-    cho, jung, jong = code // 588, (code % 588) // 28, code % 28
-    if jong != _JONG_B:
-        return m.group(0)
-    return chr(0xAC00 + cho * 588 + jung * 28 + _JONG_N) + '다'
-
-
-def to_plain_style(text: str) -> str:
-    """문장 종결부의 합쇼체를 해라체(-다)로 변환."""
-    if not text:
+    def to_plain_style(text: str) -> str:
         return text
-    for rx, rep in _POLITE_CONV_RULES:
-        text = rx.sub(rep, text)
-    return _BNIDA_RE.sub(_bnida_to_nda, text)
+
 
 
 def call_gemini_article(prompt, max_tokens=2000, style_retries=1):
@@ -588,25 +529,21 @@ def _merge_source_details(rows: list) -> list:
     return out
 
 
-def _pub_day_label(raw) -> str:
-    """source_published_at(UTC ISO8601) → '8월 3일'. 실패 시 빈 문자열.
-
-    ⚠️ UTC 기준이라 현지시간과 최대 하루 어긋날 수 있다. 그럼에도 주입하는 이유는
-    country 컬럼이 원본 기사의 55.9%에서 비어 국가별 보정이 불가능하고(2026-08-05 실측),
-    아무 날짜도 주지 않으면 Gemini가 요일로 도피하거나 날짜를 지어내기 때문이다.
-    원문 본문에 날짜가 있으면 그쪽이 우선이라는 규칙은 프롬프트에 명시돼 있다.
-    """
-    s = str(raw or "")[:10]
-    m = re.match(r"^(\d{4})-(\d{2})-(\d{2})$", s)
-    if not m:
-        return ""
-    try:
-        mm, dd = int(m.group(2)), int(m.group(3))
-    except ValueError:
-        return ""
-    if not (1 <= mm <= 12 and 1 <= dd <= 31):
-        return ""
-    return f"{mm}월 {dd}일"
+try:
+    from style_guard import _pub_day_label
+except Exception:
+    def _pub_day_label(raw) -> str:
+        s = str(raw or "")[:10]
+        m = re.match(r"^(\d{4})-(\d{2})-(\d{2})$", s)
+        if not m:
+            return ""
+        try:
+            mm, dd = int(m.group(2)), int(m.group(3))
+        except ValueError:
+            return ""
+        if not (1 <= mm <= 12 and 1 <= dd <= 31):
+            return ""
+        return f"{mm}월 {dd}일"
 
 
 _KW_RE_CACHE = {}
@@ -972,11 +909,18 @@ def trend_article_exists(group_name: str) -> bool:
     return False
 
 
+try:
+    from style_guard import verify_single_topic as _sg_verify_single_topic
+except Exception:
+    _sg_verify_single_topic = None
+
+
 def verify_single_topic(title: str, body: str) -> bool:
-    """하나의 토픽만 다루는지 Gemini로 검수. 판정 실패 시 True(통과)."""
+    """style_guard.verify_single_topic()에 이 파일의 call_gemini를 주입해서 위임."""
+    if _sg_verify_single_topic:
+        return _sg_verify_single_topic(title, body, call_gemini)
     if not title or not body:
         return True
-
     prompt = f"""아래 기사가 하나의 명확한 토픽(사건/이슈/기업/정책)만 다루는지 판단하세요.
 서로 다른 국가나 전혀 관련 없는 사건 여러 개를 한 기사에 묶은 경우 "NO"라고만 답하세요.
 특히 기사 뒷부분 문단에 제목·앞문단과 무관한 다른 사건이 붙어 있으면(예: 영화 흥행 기사 뒤에 스포츠 경기 내용) 반드시 "NO"라고 답하세요.
@@ -987,7 +931,6 @@ def verify_single_topic(title: str, body: str) -> bool:
 {body[:2500]}
 
 답변 (YES 또는 NO만):"""
-
     result = call_gemini(prompt, max_tokens=5, start_tier=3)
     if not result:
         return True
