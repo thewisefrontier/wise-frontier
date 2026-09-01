@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-01 19:23",
+  "updated_at": "2026-09-01 19:24",
   "indices": [
     {
       "name": "S&P 500",
@@ -26,27 +26,27 @@
       "name": "코스피",
       "symbol": "^KS11",
       "price": 6835.8,
-      "change_pct": 0.23,
+      "change_pct": 0.69,
       "up": true
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
       "price": 821.25,
-      "change_pct": -1.56,
+      "change_pct": -2.05,
       "up": false
     },
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 115098.84,
-      "change_pct": -1.0,
+      "price": 115080.16,
+      "change_pct": -1.01,
       "up": false
     },
     {
       "name": "EGX30 (이집트)",
       "symbol": "^CASE30",
-      "price": 55350.2,
+      "price": 55347.1,
       "change_pct": 0.88,
       "up": true
     },
@@ -122,14 +122,14 @@
         "name": "코스피",
         "symbol": "^KS11",
         "price": 6835.8,
-        "change_pct": 0.23,
+        "change_pct": 0.69,
         "up": true
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
         "price": 821.25,
-        "change_pct": -1.56,
+        "change_pct": -2.05,
         "up": false
       }
     ],
@@ -137,14 +137,14 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 115098.84,
-        "change_pct": -1.0,
+        "price": 115080.16,
+        "change_pct": -1.01,
         "up": false
       },
       {
         "name": "EGX30 (이집트)",
         "symbol": "^CASE30",
-        "price": 55350.2,
+        "price": 55347.1,
         "change_pct": 0.88,
         "up": true
       },
