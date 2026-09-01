@@ -245,16 +245,19 @@ def _parse_gemini_weather_response(raw: str | None) -> tuple[str, str]:
         return _t, _ensure_paragraphs(_b)
 
 
-def _sb_headers():
-    return {
-        "apikey": SUPABASE_SERVICE_KEY,
-        "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
-        "Content-Type": "application/json",
-        "Prefer": "return=representation",
-    }
-
-def _sb_url():
-    return f"{SUPABASE_URL}/rest/v1/articles"
+# Supabase 헤더/URL 헬퍼는 article_store.py로 공용화(2026-09-02).
+try:
+    from article_store import sb_headers as _sb_headers, sb_url as _sb_url
+except Exception:
+    def _sb_headers():
+        return {
+            "apikey": SUPABASE_SERVICE_KEY,
+            "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
+            "Content-Type": "application/json",
+            "Prefer": "return=representation",
+        }
+    def _sb_url():
+        return f"{SUPABASE_URL}/rest/v1/articles"
 
 
 # ── 국가별 도시 목록 (첫 번째가 수도) ──────────────────────

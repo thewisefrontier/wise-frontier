@@ -144,17 +144,20 @@ def get_target_market_date() -> date:
     return prev.date()
 
 
-def _sb_headers():
-    return {
-        "apikey": SUPABASE_SERVICE_KEY,
-        "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
-        "Content-Type": "application/json",
-        "Prefer": "return=representation",
-    }
-
-
-def _sb_articles_url():
-    return f"{SUPABASE_URL}/rest/v1/articles"
+# Supabase 헤더/URL 헬퍼는 article_store.py로 공용화(2026-09-02).
+try:
+    from article_store import sb_headers as _sb_headers
+    from article_store import sb_url as _sb_articles_url
+except Exception:
+    def _sb_headers():
+        return {
+            "apikey": SUPABASE_SERVICE_KEY,
+            "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
+            "Content-Type": "application/json",
+            "Prefer": "return=representation",
+        }
+    def _sb_articles_url():
+        return f"{SUPABASE_URL}/rest/v1/articles"
 
 
 def call_gemini(prompt: str, max_tokens: int = 2500, start_tier: int = 0, use_search: bool = False,

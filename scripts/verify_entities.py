@@ -82,13 +82,17 @@ def now_kst() -> datetime:
     return datetime.now(timezone.utc).astimezone(KST)
 
 
-def _sb_headers():
-    return {
-        "apikey": SUPABASE_SERVICE_KEY,
-        "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
-        "Content-Type": "application/json",
-        "Prefer": "return=representation",
-    }
+# Supabase 헤더 헬퍼는 article_store.py로 공용화(2026-09-02).
+try:
+    from article_store import sb_headers as _sb_headers
+except Exception:
+    def _sb_headers():
+        return {
+            "apikey": SUPABASE_SERVICE_KEY,
+            "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
+            "Content-Type": "application/json",
+            "Prefer": "return=representation",
+        }
 
 
 def call_gemini(prompt: str, max_tokens: int = 300, use_search: bool = True, start_tier: int = 3) -> str | None:
