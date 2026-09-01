@@ -454,7 +454,7 @@ def find_continuing_story(title: str, body_excerpt: str, country: str, hours: in
     return None
 
 
-def save_article(title_ko, summary_ko, cluster_key, category, region, country="", article_count=0, published=True, countries=None, image_url="", is_travel=False, summary_3lines="", investment_idea="", unpub_reason=""):
+def save_article(title_ko, summary_ko, cluster_key, category, region, country="", article_count=0, published=True, countries=None, image_url="", image_credit="", is_travel=False, summary_3lines="", investment_idea="", unpub_reason=""):
     # 문자셋 혼입 감지(아랍/히브리/키릴/태국/데바나가리/벵골/타밀/한자) — 저장 차단
     _leak = detect_script_leak(title_ko, summary_ko)
     if _leak:
@@ -487,6 +487,7 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
         "country_flag": "",
         "countries": ([country] + [c for c in (countries or []) if c and c != country]) if country else (countries or []),
         "image_url": image_url,
+        "image_credit": image_credit,
         "score": 1,  # 최초 게시는 항상 1, 업데이트마다 +1
         "created_at": now_str,
         "first_published_at": now_str,
@@ -1984,9 +1985,85 @@ def generate_update_note(existing_summary: str, new_summary: str) -> str:
     return (result or "업데이트").strip().replace('\n', ' ')[:30]
 
 
-def fetch_article_image(title: str, body: str) -> str:
+# 위키미디어 커먼즈는 CC/PD 라이선스 파일만 호스팅하지만, 드물게 마이그레이션
+# 잔재로 비자유 파일이 섞여 있을 수 있어 License 값과 Restrictions를 이중 확인한다.
+_WIKI_LICENSE_ALLOW = {
+    "cc0", "pd", "pd-old", "pd-us",
+    "cc-by-1.0", "cc-by-2.0", "cc-by-2.5", "cc-by-3.0", "cc-by-4.0",
+    "cc-by-sa-1.0", "cc-by-sa-2.0", "cc-by-sa-2.5", "cc-by-sa-3.0", "cc-by-sa-4.0",
+}
+_HTML_TAG_RE = re.compile(r'<[^>]+>')
+
+
+def fetch_wikimedia_image(query: str):
+    """위키미디어 커먼즈에서 CC/PD 라이선스 이미지를 검색한다(2026-09-01, 사용자
+    지시: "사진 출처를 Pixabay 말고 위키미디어에서 CC/퍼블릭도메인 라이선스도
+    뒤져보는 걸로 하자"). 영화 포스터·앨범 커버 등 저작권이 있는 홍보물은
+    커먼즈 정책상 애초에 거의 없다(비자유 콘텐츠는 위키백과 개별 문서에서만
+    "이 문서 안에서만" 허용되는 fair use이지 재배포 가능한 자유 라이선스가
+    아니다) — 인물 사진·공식 행사 사진·랜드마크 등에서 주로 성과가 난다.
+    반환: (image_url, image_credit). CC-BY 계열처럼 저작자 표기 의무가 있는
+    라이선스만 image_credit을 채우고, 퍼블릭도메인 등 표기 의무가 없으면
+    빈 문자열."""
+    if not query:
+        return None, None
+    try:
+        res = requests.get(
+            "https://commons.wikimedia.org/w/api.php",
+            params={
+                "action": "query", "generator": "search",
+                "gsrsearch": query, "gsrnamespace": 6, "gsrlimit": 8,
+                "prop": "imageinfo", "iiprop": "url|extmetadata|size|mime",
+                "format": "json",
+            },
+            headers={"User-Agent": "NewsFinalBot/1.0 (+https://newsfinal.co.kr)"},
+            timeout=15,
+        )
+        if res.status_code != 200:
+            return None, None
+        pages = ((res.json().get("query") or {}).get("pages")) or {}
+        for page in pages.values():
+            infos = page.get("imageinfo") or []
+            if not infos:
+                continue
+            info = infos[0]
+            if info.get("mime") not in ("image/jpeg", "image/png", "image/webp"):
+                continue
+            if (info.get("width") or 0) < 300 or (info.get("height") or 0) < 200:
+                continue
+            meta = info.get("extmetadata") or {}
+            license_key = (meta.get("License", {}).get("value") or "").lower()
+            restrictions = (meta.get("Restrictions", {}).get("value") or "").strip()
+            if restrictions or license_key not in _WIKI_LICENSE_ALLOW:
+                continue
+            url = info.get("url", "")
+            if not url:
+                continue
+            attribution_required = (meta.get("AttributionRequired", {}).get("value") or "").lower() == "true"
+            credit = ""
+            if attribution_required:
+                artist = _HTML_TAG_RE.sub("", meta.get("Artist", {}).get("value", "")).strip()[:80]
+                license_name = meta.get("LicenseShortName", {}).get("value", "")
+                credit = f"사진: {artist} ({license_name}, Wikimedia Commons)" if artist \
+                    else f"사진: Wikimedia Commons ({license_name})"
+            return url, credit
+    except Exception as e:
+        print(f"  ⚠️ 위키미디어 검색 실패: {e}")
+    return None, None
+
+
+def fetch_article_image(title: str, body: str, entity: str = "") -> tuple:
+    """기사 이미지를 찾는다. 반환: (image_url, image_credit).
+    entity(기사의 핵심 고유명사, 보통 keyword_en)가 있으면 위키미디어
+    커먼즈에서 먼저 찾고, 없으면 Pixabay 일반 스톡사진으로 대체한다."""
+    if entity:
+        wiki_url, wiki_credit = fetch_wikimedia_image(entity)
+        if wiki_url:
+            print(f"  🖼️ 위키미디어 커먼즈 이미지 사용: {entity}")
+            return wiki_url, (wiki_credit or "")
+
     if not PIXABAY_API_KEY:
-        return ""
+        return "", ""
     prompt = f"""아래 뉴스 기사의 이미지 검색용 영문 키워드를 2~3개 추출하세요.
 일반적인 시각 소재 위주로 (예: oil refinery, stock market, container port, farmland).
 인명·기업명·구체적 지명은 제외. 쉼표 구분, 키워드만 출력.
@@ -1995,10 +2072,10 @@ def fetch_article_image(title: str, body: str) -> str:
 본문 앞부분: {body[:300]}"""
     kw = call_gemini(prompt, max_tokens=30, start_tier=3)
     if not kw:
-        return ""
+        return "", ""
     query = kw.strip().replace(",", " ").split("\n")[0][:100]
     if not query:
-        return ""
+        return "", ""
     try:
         res = requests.get(
             "https://pixabay.com/api/",
@@ -2014,12 +2091,20 @@ def fetch_article_image(title: str, body: str) -> str:
         if res.status_code == 200:
             hits = res.json().get("hits", [])
             if hits:
-                return hits[0].get("largeImageURL", "")
+                raw_url = hits[0].get("largeImageURL", "")
+                # Pixabay largeImageURL은 ~24시간 후 만료되는 임시 URL이라(image_store.py
+                # 문서 참조) R2에 영구 저장해서 링크가 안 깨지게 한다.
+                try:
+                    from image_store import store_image
+                    return store_image(raw_url, key_hint=f"article_{query}"), ""
+                except Exception as e:
+                    print(f"  ⚠️ R2 저장 실패, 원본 URL 사용: {e}")
+                    return raw_url, ""
         else:
             print(f"  ⚠️ Pixabay {res.status_code}: {res.text[:100]}")
     except Exception as e:
         print(f"  ⚠️ Pixabay 실패: {e}")
-    return ""
+    return "", ""
 
 
 def detect_and_register_companies(title: str, body: str, country: str):
@@ -2782,7 +2867,9 @@ def run():
                         print(f"  ⚠️ [{_dg_reason}] → 미발행으로 저장")
                         published = False
 
-                image_url = fetch_article_image(full_title, gen_body or _strip_leaked_labels(content)) if published else ""
+                image_url, image_credit = fetch_article_image(
+                    full_title, gen_body or _strip_leaked_labels(content), gen_keyword_en
+                ) if published else ("", "")
 
                 article_id = save_article(
                     unpub_reason  = _dg_reason,
@@ -2798,6 +2885,7 @@ def run():
                     published     = published,
                     countries     = gen_countries,
                     image_url     = image_url,
+                    image_credit  = image_credit,
                     is_travel     = gen_travel,
                 )
                 if article_id > 0:
@@ -2983,7 +3071,9 @@ def run():
                     print(f"  ⚠️ [{_dg_reason}] → 미발행으로 저장")
                     published = False
 
-            image_url = fetch_article_image(full_title, gen_body or _strip_leaked_labels(content)) if published else ""
+            image_url, image_credit = fetch_article_image(
+                full_title, gen_body or _strip_leaked_labels(content), gen_keyword_en
+            ) if published else ("", "")
 
             article_id = save_article(
                 unpub_reason=_dg_reason,
@@ -2999,6 +3089,7 @@ def run():
                 published=published,
                 countries=gen_countries,
                 image_url=image_url,
+                image_credit=image_credit,
                 is_travel=gen_travel,
             )
             if article_id > 0:
