@@ -454,7 +454,7 @@ def find_continuing_story(title: str, body_excerpt: str, country: str, hours: in
     return None
 
 
-def save_article(title_ko, summary_ko, cluster_key, category, region, country="", article_count=0, published=True, countries=None, image_url="", is_travel=False, summary_3lines="", investment_idea="", unpub_reason=""):
+def save_article(title_ko, summary_ko, cluster_key, category, region, country="", article_count=0, published=True, countries=None, image_url="", image_credit="", is_travel=False, summary_3lines="", investment_idea="", unpub_reason=""):
     # 문자셋 혼입 감지(아랍/히브리/키릴/태국/데바나가리/벵골/타밀/한자) — 저장 차단
     _leak = detect_script_leak(title_ko, summary_ko)
     if _leak:
@@ -487,6 +487,7 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
         "country_flag": "",
         "countries": ([country] + [c for c in (countries or []) if c and c != country]) if country else (countries or []),
         "image_url": image_url,
+        "image_credit": image_credit,
         "score": 1,  # 최초 게시는 항상 1, 업데이트마다 +1
         "created_at": now_str,
         "first_published_at": now_str,
@@ -641,6 +642,28 @@ def split_multi_topic_title(title: str) -> list:
             if len(parts) >= 2:
                 return parts
     return []
+
+
+# 2026-09-01 사용자 지시: "칼럼, 데스크칼럼, 기자수첩은 기사화 금지". 원문(제목/
+# 본문 첫머리)에 오피니언 장르 표식이 명시적으로 붙어 있는 경우만 잡는다 —
+# "opinion"/"analysis" 같은 단어는 스트레이트 뉴스에도 흔히 나오므로, 콜론·대괄호
+# 등으로 장르 라벨임이 분명한 패턴만 매칭해 오탐을 줄인다. id=118436(인민일보
+# 홍보 칼럼이 "중국이 밝혔다"로 오서술된 사고)은 원문에 이런 라벨이 아예 없어
+# 이 필터로는 못 잡는다 — 그건 writer_rules(바이라인 감지)가 별도로 담당한다.
+_OPINION_LABEL_RE = re.compile(
+    r'(?:^|[\[\(【])\s*(opinion|op-ed|opeds?|column|commentary|editorial|viewpoint|'
+    r'오피니언|칼럼|데스크칼럼|기자수첩|사설|기고)\s*(?:[:\]\)】\-–—|ㅣ]|$)',
+    re.IGNORECASE,
+)
+
+
+def is_opinion_column(title: str, text: str = "") -> bool:
+    """제목 또는 본문 첫머리(200자)에 오피니언/칼럼 장르 라벨이 명시된 경우만 True."""
+    if title and _OPINION_LABEL_RE.search(title.strip()):
+        return True
+    if text and _OPINION_LABEL_RE.search(text[:200].strip()):
+        return True
+    return False
 
 
 def is_multi_topic_title(title: str) -> bool:
@@ -1962,9 +1985,85 @@ def generate_update_note(existing_summary: str, new_summary: str) -> str:
     return (result or "업데이트").strip().replace('\n', ' ')[:30]
 
 
-def fetch_article_image(title: str, body: str) -> str:
+# 위키미디어 커먼즈는 CC/PD 라이선스 파일만 호스팅하지만, 드물게 마이그레이션
+# 잔재로 비자유 파일이 섞여 있을 수 있어 License 값과 Restrictions를 이중 확인한다.
+_WIKI_LICENSE_ALLOW = {
+    "cc0", "pd", "pd-old", "pd-us",
+    "cc-by-1.0", "cc-by-2.0", "cc-by-2.5", "cc-by-3.0", "cc-by-4.0",
+    "cc-by-sa-1.0", "cc-by-sa-2.0", "cc-by-sa-2.5", "cc-by-sa-3.0", "cc-by-sa-4.0",
+}
+_HTML_TAG_RE = re.compile(r'<[^>]+>')
+
+
+def fetch_wikimedia_image(query: str):
+    """위키미디어 커먼즈에서 CC/PD 라이선스 이미지를 검색한다(2026-09-01, 사용자
+    지시: "사진 출처를 Pixabay 말고 위키미디어에서 CC/퍼블릭도메인 라이선스도
+    뒤져보는 걸로 하자"). 영화 포스터·앨범 커버 등 저작권이 있는 홍보물은
+    커먼즈 정책상 애초에 거의 없다(비자유 콘텐츠는 위키백과 개별 문서에서만
+    "이 문서 안에서만" 허용되는 fair use이지 재배포 가능한 자유 라이선스가
+    아니다) — 인물 사진·공식 행사 사진·랜드마크 등에서 주로 성과가 난다.
+    반환: (image_url, image_credit). CC-BY 계열처럼 저작자 표기 의무가 있는
+    라이선스만 image_credit을 채우고, 퍼블릭도메인 등 표기 의무가 없으면
+    빈 문자열."""
+    if not query:
+        return None, None
+    try:
+        res = requests.get(
+            "https://commons.wikimedia.org/w/api.php",
+            params={
+                "action": "query", "generator": "search",
+                "gsrsearch": query, "gsrnamespace": 6, "gsrlimit": 8,
+                "prop": "imageinfo", "iiprop": "url|extmetadata|size|mime",
+                "format": "json",
+            },
+            headers={"User-Agent": "NewsFinalBot/1.0 (+https://newsfinal.co.kr)"},
+            timeout=15,
+        )
+        if res.status_code != 200:
+            return None, None
+        pages = ((res.json().get("query") or {}).get("pages")) or {}
+        for page in pages.values():
+            infos = page.get("imageinfo") or []
+            if not infos:
+                continue
+            info = infos[0]
+            if info.get("mime") not in ("image/jpeg", "image/png", "image/webp"):
+                continue
+            if (info.get("width") or 0) < 300 or (info.get("height") or 0) < 200:
+                continue
+            meta = info.get("extmetadata") or {}
+            license_key = (meta.get("License", {}).get("value") or "").lower()
+            restrictions = (meta.get("Restrictions", {}).get("value") or "").strip()
+            if restrictions or license_key not in _WIKI_LICENSE_ALLOW:
+                continue
+            url = info.get("url", "")
+            if not url:
+                continue
+            attribution_required = (meta.get("AttributionRequired", {}).get("value") or "").lower() == "true"
+            credit = ""
+            if attribution_required:
+                artist = _HTML_TAG_RE.sub("", meta.get("Artist", {}).get("value", "")).strip()[:80]
+                license_name = meta.get("LicenseShortName", {}).get("value", "")
+                credit = f"사진: {artist} ({license_name}, Wikimedia Commons)" if artist \
+                    else f"사진: Wikimedia Commons ({license_name})"
+            return url, credit
+    except Exception as e:
+        print(f"  ⚠️ 위키미디어 검색 실패: {e}")
+    return None, None
+
+
+def fetch_article_image(title: str, body: str, entity: str = "") -> tuple:
+    """기사 이미지를 찾는다. 반환: (image_url, image_credit).
+    entity(기사의 핵심 고유명사, 보통 keyword_en)가 있으면 위키미디어
+    커먼즈에서 먼저 찾고, 없으면 Pixabay 일반 스톡사진으로 대체한다."""
+    if entity:
+        wiki_url, wiki_credit = fetch_wikimedia_image(entity)
+        if wiki_url:
+            print(f"  🖼️ 위키미디어 커먼즈 이미지 사용: {entity}")
+            return wiki_url, (wiki_credit or "")
+
     if not PIXABAY_API_KEY:
-        return ""
+        return "", ""
     prompt = f"""아래 뉴스 기사의 이미지 검색용 영문 키워드를 2~3개 추출하세요.
 일반적인 시각 소재 위주로 (예: oil refinery, stock market, container port, farmland).
 인명·기업명·구체적 지명은 제외. 쉼표 구분, 키워드만 출력.
@@ -1973,10 +2072,10 @@ def fetch_article_image(title: str, body: str) -> str:
 본문 앞부분: {body[:300]}"""
     kw = call_gemini(prompt, max_tokens=30, start_tier=3)
     if not kw:
-        return ""
+        return "", ""
     query = kw.strip().replace(",", " ").split("\n")[0][:100]
     if not query:
-        return ""
+        return "", ""
     try:
         res = requests.get(
             "https://pixabay.com/api/",
@@ -1992,12 +2091,20 @@ def fetch_article_image(title: str, body: str) -> str:
         if res.status_code == 200:
             hits = res.json().get("hits", [])
             if hits:
-                return hits[0].get("largeImageURL", "")
+                raw_url = hits[0].get("largeImageURL", "")
+                # Pixabay largeImageURL은 ~24시간 후 만료되는 임시 URL이라(image_store.py
+                # 문서 참조) R2에 영구 저장해서 링크가 안 깨지게 한다.
+                try:
+                    from image_store import store_image
+                    return store_image(raw_url, key_hint=f"article_{query}"), ""
+                except Exception as e:
+                    print(f"  ⚠️ R2 저장 실패, 원본 URL 사용: {e}")
+                    return raw_url, ""
         else:
             print(f"  ⚠️ Pixabay {res.status_code}: {res.text[:100]}")
     except Exception as e:
         print(f"  ⚠️ Pixabay 실패: {e}")
-    return ""
+    return "", ""
 
 
 def detect_and_register_companies(title: str, body: str, country: str):
@@ -2101,6 +2208,36 @@ def verify_single_topic(title: str, body: str) -> bool:
     if not result:
         return True
     return "YES" in result.upper()
+
+
+def detect_foreign_leftover(body: str) -> str:
+    """한국어 기사 본문에 번역 안 된 외국어(스페인어·프랑스어·독일어·포르투갈어
+    등 라틴 문자 언어) 단어가 남아있는지 LLM으로 판별한다.
+
+    script_leak.py는 비라틴 문자(키릴·아랍·한자 등)만 잡는다. 라틴 문자로
+    쓰인 외국어는 스크립트로 구분이 안 돼서 그 가드를 그대로 통과한다
+    (2026-09-01 실사고, id=118435: 과테말라 매체의 스페인어 원문을 옮기다가
+    "trayectoria"(경력)를 그대로 남기고, 심지어 무관한 독일어 "Jahrzehnte"
+    (decades)까지 섞여 나옴 — 사용자 제보로 발견). 발견하면 발견된 단어
+    문자열을, 없으면 빈 문자열을 반환한다."""
+    if not body:
+        return ""
+    prompt = f"""아래는 한국어로 작성됐어야 할 뉴스 기사입니다. 번역되지 않고 원문 언어(스페인어·프랑스어·독일어·포르투갈어·이탈리아어 등) 그대로 남아있는 단어나 구절이 있는지 확인하세요.
+
+⚠️ 다음은 오류가 아닙니다: 영어 인명·기업명·지명 등 고유명사(한글 음차와 함께 괄호 병기된 원어 포함), 비자 종류·통화코드·모델명 등 관용적으로 로마자를 유지하는 표현, 작품 제목의 원어 병기.
+⚠️ 오류인 것: 그 외 일반 명사·형용사·부사 등이 한국어로 번역되지 않고 스페인어·독일어·프랑스어 등 외국어 단어 그대로 남아있는 경우.
+
+본문:
+{body[:2500]}
+
+번역 안 된 외국어 단어가 있으면 그 단어들만 쉼표로 나열하세요. 없으면 "없음"이라고만 답하세요."""
+    result = call_gemini(prompt, max_tokens=60, start_tier=3)
+    if not result:
+        return ""
+    result = result.strip()
+    if not result or result[:10].replace(" ", "").startswith("없음"):
+        return ""
+    return result[:200]
 
 
 def park_multi_topic_articles(articles: list) -> int:
@@ -2577,6 +2714,16 @@ def run():
 
     print("\n[클러스터링] 오늘 기사 분석 중...")
     all_articles = get_today_articles(limit=300)
+
+    opinion_skipped = [
+        a for a in all_articles
+        if is_opinion_column(a.get("title_en") or a.get("title_ko") or "", a.get("full_text") or "")
+    ]
+    if opinion_skipped:
+        print(f"  [제외] 칼럼/오피니언 장르 라벨 {len(opinion_skipped)}건 → 기사화 대상에서 제외")
+        skip_ids = {a["id"] for a in opinion_skipped}
+        all_articles = [a for a in all_articles if a["id"] not in skip_ids]
+
     clusters = cluster_articles(all_articles)
     print(f"  → {len(all_articles)}건 중 {len(clusters)}개 클러스터 발견\n")
 
@@ -2750,7 +2897,16 @@ def run():
                         print(f"  ⚠️ [{_dg_reason}] → 미발행으로 저장")
                         published = False
 
-                image_url = fetch_article_image(full_title, gen_body or _strip_leaked_labels(content)) if published else ""
+                if published:
+                    _fl = detect_foreign_leftover(gen_body or _strip_leaked_labels(content))
+                    if _fl:
+                        print(f"  ⚠️ [번역 안 된 외국어 잔존: {_fl}] → 미발행으로 저장")
+                        published = False
+                        _dg_reason = f"번역 누락 — 외국어 잔존: {_fl}"
+
+                image_url, image_credit = fetch_article_image(
+                    full_title, gen_body or _strip_leaked_labels(content), gen_keyword_en
+                ) if published else ("", "")
 
                 article_id = save_article(
                     unpub_reason  = _dg_reason,
@@ -2766,6 +2922,7 @@ def run():
                     published     = published,
                     countries     = gen_countries,
                     image_url     = image_url,
+                    image_credit  = image_credit,
                     is_travel     = gen_travel,
                 )
                 if article_id > 0:
@@ -2951,7 +3108,16 @@ def run():
                     print(f"  ⚠️ [{_dg_reason}] → 미발행으로 저장")
                     published = False
 
-            image_url = fetch_article_image(full_title, gen_body or _strip_leaked_labels(content)) if published else ""
+            if published:
+                _fl = detect_foreign_leftover(gen_body or _strip_leaked_labels(content))
+                if _fl:
+                    print(f"  ⚠️ [번역 안 된 외국어 잔존: {_fl}] → 미발행으로 저장")
+                    published = False
+                    _dg_reason = f"번역 누락 — 외국어 잔존: {_fl}"
+
+            image_url, image_credit = fetch_article_image(
+                full_title, gen_body or _strip_leaked_labels(content), gen_keyword_en
+            ) if published else ("", "")
 
             article_id = save_article(
                 unpub_reason=_dg_reason,
@@ -2967,6 +3133,7 @@ def run():
                 published=published,
                 countries=gen_countries,
                 image_url=image_url,
+                image_credit=image_credit,
                 is_travel=gen_travel,
             )
             if article_id > 0:
