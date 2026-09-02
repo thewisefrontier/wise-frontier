@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-09-02 09:46",
+  "updated_at": "2026-09-02 09:55",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
       "price": 7631.47,
-      "change_pct": -1.04,
+      "change_pct": -0.71,
       "up": false
     },
     {
@@ -19,21 +19,21 @@
       "name": "다우존스",
       "symbol": "^DJI",
       "price": 52766.88,
-      "change_pct": -1.48,
+      "change_pct": -0.79,
       "up": false
     },
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 6679.04,
-      "change_pct": -2.07,
+      "price": 6677.09,
+      "change_pct": -2.1,
       "up": false
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 812.31,
-      "change_pct": -2.63,
+      "price": 814.89,
+      "change_pct": -2.33,
       "up": false
     },
     {
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.16,
-      "change_pct": 0.45,
+      "price": 16.17,
+      "change_pct": 0.5,
       "up": true
     }
   ],
@@ -99,7 +99,7 @@
         "name": "S&P 500",
         "symbol": "^GSPC",
         "price": 7631.47,
-        "change_pct": -1.04,
+        "change_pct": -0.71,
         "up": false
       },
       {
@@ -113,7 +113,7 @@
         "name": "다우존스",
         "symbol": "^DJI",
         "price": 52766.88,
-        "change_pct": -1.48,
+        "change_pct": -0.79,
         "up": false
       }
     ],
@@ -121,15 +121,15 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 6679.04,
-        "change_pct": -2.07,
+        "price": 6677.09,
+        "change_pct": -2.1,
         "up": false
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 812.31,
-        "change_pct": -2.63,
+        "price": 814.89,
+        "change_pct": -2.33,
         "up": false
       }
     ],
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.16,
-        "change_pct": 0.45,
+        "price": 16.17,
+        "change_pct": 0.5,
         "up": true
       }
     ]
