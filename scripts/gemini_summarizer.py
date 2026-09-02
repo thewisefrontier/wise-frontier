@@ -696,13 +696,21 @@ def find_similar_trend(title: str, country: str | None = None,
     매칭: country 지정 시 country 일치 필수 + 제목 token_sort_ratio>=sim_threshold + 공유 키워드>=1.
           country=None이면 제목 유사도만으로 느슨히 탐색(사전 스킵 판단용).
     id 오름차순 조회 → 첫 매칭이 곧 루트.
+
+    ⚠️ 2026-09-03 실사고(id=118418 vs 123782, 투팍 살해범 유죄평결 중복):
+    이전엔 subcategory가 trend_/realtrend_/extrend_인 기사만 검색해서,
+    gemini_writer.py의 클러스터링 경로(subcategory=cluster_*)가 먼저 다룬
+    사건을 트렌드 트래커가 전혀 못 보고 새로 만들었다. merge_trend_article()은
+    summary_ko/update_log만 다뤄 subcategory 형식에 의존하지 않으므로
+    (구조적으로 안전), 이제 발행된 NewsFinal 기사 전체를 검색 대상으로 삼는다
+    — 어느 파이프라인이 먼저 다뤘든 중복 판정이 적용돼야 한다.
     """
     from rapidfuzz import fuzz
     since = (now_kst() - timedelta(days=days)).strftime("%Y-%m-%d %H:%M")
     params = {
         "select": "id,title_ko,summary_ko,update_log,country,created_at",
         "source": "eq.NewsFinal",
-        "or": "(subcategory.like.trend_*,subcategory.like.realtrend_*,subcategory.like.extrend_*)",
+        "is_published": "eq.true",
         "created_at": f"gte.{since}",
         "order": "id.asc",
         "limit": "200",
@@ -714,7 +722,8 @@ def find_similar_trend(title: str, country: str | None = None,
         if res.status_code not in (200, 206):
             return None
         new_kw = _title_keywords(title)
-        for a in res.json():
+        candidates = res.json()
+        for a in candidates:
             existing_title = a.get("title_ko") or ""
             if not existing_title:
                 continue
@@ -743,9 +752,51 @@ def find_similar_trend(title: str, country: str | None = None,
                         print(f"    → 유사 트렌드 루트 발견[표기불일치] (id={a['id']}, "
                               f"제목 {sim:.0f}% / 리드 {lead_sim:.0f}% / Jac {lead_jac:.2f}): {existing_title[:40]}")
                         return a
+
+        # 4차 경로(2026-09-03 실사고, id=122653 "니제르 쿠데타" 중복):
+        # 같은 사건이라도 매 생성마다 완전히 다른 한국어 표현이 나올 수 있어
+        # ("통제권 재장악" vs "쿠데타 시도 격퇴" vs "정부 통제권 회복 주장" —
+        # 실측 제목유사도 37~53%, 전부 sim_threshold=60/LEAD_TITLE_MIN=44 미달)
+        # 위 토큰 기반 지표 3종이 전부 놓칠 수 있다. country가 일치하는 가장
+        # 최근 기사 최대 3건에 한해서만 Gemini에게 "같은 사건인지"를 직접
+        # 물어본다 — 전수 호출은 비용이 크므로 최근 소수로 제한(중복은
+        # 거의 항상 가장 최근 보도를 재탕하는 경향).
+        if country and body:
+            recent_same_country = [a for a in candidates if (a.get("country") or "") == country][-3:]
+            for a in reversed(recent_same_country):
+                existing_title = a.get("title_ko") or ""
+                existing_body = a.get("summary_ko") or ""
+                if not existing_title or not existing_body:
+                    continue
+                if _same_event_llm(title, body, existing_title, existing_body):
+                    print(f"    → 유사 트렌드 루트 발견[LLM 판정] (id={a['id']}): {existing_title[:40]}")
+                    return a
     except Exception as e:
         print(f"    → 유사도 체크 실패: {e}")
     return None
+
+
+def _same_event_llm(new_title: str, new_body: str, existing_title: str, existing_body: str) -> bool:
+    """토큰 유사도 지표가 전부 실패했을 때만 쓰는 최후 판정 — 두 기사가
+    같은 실제 사건을 다루는지 Gemini에게 직접 묻는다(위 find_similar_trend
+    4차 경로 참조). 비용 때문에 최근 소수 후보에만 호출된다."""
+    prompt = f"""아래 두 기사가 같은 실제 사건(같은 날짜·같은 구체적 사건)을
+다루고 있습니까? 단순히 같은 나라·같은 종류의 사건(예: 둘 다 "쿠데타
+시도"이지만 서로 다른 날짜의 별개 사건)이면 "다름"입니다. 정확히 "같음"
+또는 "다름" 한 단어만 답하세요.
+
+[기사 A] {existing_title}
+{existing_body[:600]}
+
+[기사 B] {new_title}
+{new_body[:600]}
+
+답변:"""
+    try:
+        result = call_gemini(prompt, max_tokens=10, start_tier=3)
+    except Exception:
+        return False
+    return bool(result) and "같음" in result.strip()
 
 
 def _summarize_delta(root_summary: str, new_title: str, new_body: str) -> str:

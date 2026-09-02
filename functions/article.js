@@ -15,6 +15,7 @@
 //         원하면 Pages 환경변수로 분리 가능(env.SUPABASE_URL 등).
 
 import { publicUpdateLog } from '../docs/js/update-log-filter.js';
+import { imageCreditLabel } from '../docs/js/image-credit.js';
 
 const SUPABASE_URL = 'https://fotdngseksqaghvtcvqh.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_rT3kSEAAdM0DJlDW5fEWww_M37h6dDW';
@@ -206,8 +207,9 @@ function buildWrapperHtml(a) {
         <div style="font-size:14px;line-height:1.8;color:var(--text);">${esc(String(a.investment_idea)).replace(/\\n|\n/g, '<br>')}</div>
       </div>` : '';
 
+  const _imgCredit = imageCreditLabel(a.image_url, a.image_credit);
   const heroHtml = a.image_url
-    ? `<img class="article-hero" src="${esc(a.image_url)}" alt="${esc(title)}" loading="lazy" style="width:100%;max-height:420px;object-fit:cover;border-radius:8px;margin:16px 0 8px;display:block;">` + (/pixabay|r2\.dev/.test(String(a.image_url)) ? `<div style="font-size:12px;color:#888;margin:0 0 12px;text-align:right;">이미지 출처: Pixabay</div>` : '')
+    ? `<img class="article-hero" src="${esc(a.image_url)}" alt="${esc(title)}" loading="lazy" style="width:100%;max-height:420px;object-fit:cover;border-radius:8px;margin:16px 0 8px;display:block;">` + (_imgCredit ? `<div style="font-size:12px;color:#888;margin:0 0 12px;text-align:right;">${esc(_imgCredit)}</div>` : '')
     : '';
 
   return `

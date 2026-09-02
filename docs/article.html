@@ -248,7 +248,9 @@
 
 <script type="module">
   import { publicUpdateLog } from '/js/update-log-filter.js';
+  import { imageCreditLabel } from '/js/image-credit.js';
   window.publicUpdateLog = publicUpdateLog;
+  window.imageCreditLabel = imageCreditLabel;
 </script>
 <script>
   const SUPABASE_URL = 'https://fotdngseksqaghvtcvqh.supabase.co';
@@ -585,7 +587,7 @@ function cleanBody(text) {
             </div>`).join('')}
         </div>` : ''}
 
-      ${a.image_url ? `<img class="article-hero" src="${a.image_url}" alt="${title.replace(/"/g,'&quot;')}" loading="lazy" style="width:100%;max-height:420px;object-fit:cover;border-radius:8px;margin:16px 0 8px;display:block;">`+ (a.image_credit ? `<div style="font-size:12px;color:#888;margin:0 0 12px;text-align:right;">${String(a.image_credit).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>` : (/pixabay|r2\.dev/.test(String(a.image_url)) ? `<div style="font-size:12px;color:#888;margin:0 0 12px;text-align:right;">이미지 출처: Pixabay</div>` : '')) : ''}
+      ${a.image_url ? `<img class="article-hero" src="${a.image_url}" alt="${title.replace(/"/g,'&quot;')}" loading="lazy" style="width:100%;max-height:420px;object-fit:cover;border-radius:8px;margin:16px 0 8px;display:block;">`+ (window.imageCreditLabel(a.image_url, a.image_credit) ? `<div style="font-size:12px;color:#888;margin:0 0 12px;text-align:right;">${String(window.imageCreditLabel(a.image_url, a.image_credit)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>` : '') : ''}
 
       <div class="article-body">
         ${bodyHtml}
