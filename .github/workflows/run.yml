@@ -97,6 +97,15 @@ jobs:
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
 
+      - name: 머니파이널 미국 시장뉴스 수집 (2026-09-03 신설)
+        if: steps.guard.outputs.skip != 'true'
+        continue-on-error: true
+        run: python scripts/market_news_fetcher.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          MONEYFINAL_FEED_KEY: ${{ secrets.MONEYFINAL_FEED_KEY }}
+
       - name: Gemini 요약 고도화
         if: steps.guard.outputs.skip != 'true'
         timeout-minutes: 20

@@ -319,7 +319,16 @@ def fetch_yahoo_quote(symbol: str) -> dict | None:
             change = price - prev
             pct = (change / prev * 100) if prev else 0.0
         return {"price": float(price), "prev": float(prev) if prev else None,
-                "change": change, "pct": pct, "_suspect": suspect}
+                "change": change, "pct": pct, "_suspect": suspect,
+                # 2026-09-03: stock_news_writer.py(개별 종목 기사)가 필요로 하는
+                # 추가 메타필드 — 지수·통화 호출부는 그냥 안 쓰는 여분 키라 무해하다.
+                "long_name": meta.get("longName") or meta.get("shortName") or "",
+                "fifty_two_week_high": meta.get("fiftyTwoWeekHigh"),
+                "fifty_two_week_low": meta.get("fiftyTwoWeekLow"),
+                "day_high": meta.get("regularMarketDayHigh"),
+                "day_low": meta.get("regularMarketDayLow"),
+                "volume": meta.get("regularMarketVolume"),
+                "exchange_name": meta.get("fullExchangeName") or meta.get("exchangeName") or ""}
     except Exception as e:
         print(f"  [WARN] 야후 조회 실패 ({symbol}): {e}")
         return None
