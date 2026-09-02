@@ -1,25 +1,25 @@
 {
-  "updated_at": "2026-09-03 04:54",
+  "updated_at": "2026-09-03 05:10",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7667.29,
+      "price": 7666.6,
       "change_pct": -0.25,
       "up": false
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 26220.87,
-      "change_pct": -0.57,
+      "price": 26217.83,
+      "change_pct": -0.58,
       "up": false
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 53056.39,
-      "change_pct": -0.24,
+      "price": 53061.95,
+      "change_pct": -0.23,
       "up": false
     },
     {
@@ -89,7 +89,7 @@
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
       "price": 16.06,
-      "change_pct": -0.19,
+      "change_pct": -0.22,
       "up": false
     }
   ],
@@ -98,22 +98,22 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7667.29,
+        "price": 7666.6,
         "change_pct": -0.25,
         "up": false
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 26220.87,
-        "change_pct": -0.57,
+        "price": 26217.83,
+        "change_pct": -0.58,
         "up": false
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 53056.39,
-        "change_pct": -0.24,
+        "price": 53061.95,
+        "change_pct": -0.23,
         "up": false
       }
     ],
@@ -189,7 +189,7 @@
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
         "price": 16.06,
-        "change_pct": -0.19,
+        "change_pct": -0.22,
         "up": false
       }
     ]
@@ -212,8 +212,8 @@
     "BBAR": {
       "name": "Banco BBVA Argentina S.A.",
       "symbol": "BBAR",
-      "price": 15.22,
-      "change_pct": 0.53,
+      "price": 15.25,
+      "change_pct": 0.73,
       "up": true
     }
   }
