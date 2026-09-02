@@ -2976,6 +2976,22 @@
     "updated_at": "2026-08-09 15:26"
   },
   {
+    "id": "bahri",
+    "name": "Bahri",
+    "name_ko": "바흐리",
+    "country": "이란",
+    "country_flag": "🌍",
+    "exchange": "TADAWUL",
+    "ticker": "4220",
+    "sector": "에너지/해운",
+    "description": "1978년에 설립된 사우디아라비아의 국영 해운사로, 원유 운송, 화학제품 운송, 물류 및 해상 운송 서비스를 제공합니다. 중동 지역에서 가장 큰 규모의 선대를 운영하며 글로벌 에너지 공급망에서 중요한 역할을 담당하는 대형 민간·국영 기업입니다.",
+    "founded_year": 1978,
+    "headquarters": "리야드, 사우디아라비아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-09-03 05:18"
+  },
+  {
     "id": "commercial_international_bank",
     "name": "Commercial International Bank (CIB)",
     "name_ko": null,
@@ -3760,22 +3776,6 @@
     "updated_at": "2026-07-30 14:14"
   },
   {
-    "id": "lic",
-    "name": "Life Insurance Corporation of India",
-    "name_ko": "인도생명보험공사",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "BSE",
-    "ticker": "LICI",
-    "sector": "보험",
-    "description": "1956년 설립된 인도의 국영 보험사로, 인도 생명보험 시장에서 압도적인 점유율을 차지하고 있는 최대 규모의 보험 기업입니다. 방대한 판매망과 자산 규모를 바탕으로 인도 금융 시장에서 핵심적인 역할을 수행하고 있습니다. 인도 정부가 대주주로 있으며, 인도 증권거래소에 상장된 주요 금융 기업 중 하나입니다.",
-    "founded_year": 1956,
-    "headquarters": "뭄바이, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-04 16:21"
-  },
-  {
     "id": "lic_india",
     "name": "Life Insurance Corporation of India",
     "name_ko": "인도 생명보험공사",
@@ -3790,6 +3790,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-20 15:32"
+  },
+  {
+    "id": "lic",
+    "name": "Life Insurance Corporation of India",
+    "name_ko": "인도생명보험공사",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "BSE",
+    "ticker": "LICI",
+    "sector": "보험",
+    "description": "1956년 설립된 인도의 국영 보험사로, 인도 생명보험 시장에서 압도적인 점유율을 차지하고 있는 최대 규모의 보험 기업입니다. 방대한 판매망과 자산 규모를 바탕으로 인도 금융 시장에서 핵심적인 역할을 수행하고 있습니다. 인도 정부가 대주주로 있으며, 인도 증권거래소에 상장된 주요 금융 기업 중 하나입니다.",
+    "founded_year": 1956,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-04 16:21"
   },
   {
     "id": "lumitime_technologies",
@@ -4464,22 +4480,6 @@
     "updated_at": "2026-08-14 23:23"
   },
   {
-    "id": "singareni_collieries",
-    "name": "The Singareni Collieries Company Limited",
-    "name_ko": "싱가레니 콜리어리스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "",
-    "sector": "에너지",
-    "description": "싱가레니 콜리어리스는 인도의 국영 탄광 및 에너지 기업으로, 주로 텔랑가나주에서 석탄 채굴 및 화력 발전 사업을 수행하고 있습니다. 1920년에 설립되었으며, 인도 남부 지역의 전력 공급과 산업 성장에 필수적인 에너지 자원을 안정적으로 공급하는 핵심적인 역할을 담당하고 있습니다. 인도 정부와 텔랑가나주 정부가 공동으로 소유하고 있는 대형 민간 및 공공 성격의 기업입니다.",
-    "founded_year": 1920,
-    "headquarters": "하이드라바드, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-30 17:03"
-  },
-  {
     "id": "singareni_collieries_company",
     "name": "The Singareni Collieries Company Limited",
     "name_ko": "싱가레니 콜리어리스",
@@ -4494,6 +4494,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-08 01:12"
+  },
+  {
+    "id": "singareni_collieries",
+    "name": "The Singareni Collieries Company Limited",
+    "name_ko": "싱가레니 콜리어리스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "싱가레니 콜리어리스는 인도의 국영 탄광 및 에너지 기업으로, 주로 텔랑가나주에서 석탄 채굴 및 화력 발전 사업을 수행하고 있습니다. 1920년에 설립되었으며, 인도 남부 지역의 전력 공급과 산업 성장에 필수적인 에너지 자원을 안정적으로 공급하는 핵심적인 역할을 담당하고 있습니다. 인도 정부와 텔랑가나주 정부가 공동으로 소유하고 있는 대형 민간 및 공공 성격의 기업입니다.",
+    "founded_year": 1920,
+    "headquarters": "하이드라바드, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-30 17:03"
   },
   {
     "id": "tata_power",
