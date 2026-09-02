@@ -1,26 +1,26 @@
 {
-  "updated_at": "2026-09-02 23:55",
+  "updated_at": "2026-09-03 00:20",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7672.61,
-      "change_pct": -0.18,
+      "price": 7676.89,
+      "change_pct": -0.12,
       "up": false
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 26183.16,
-      "change_pct": -0.71,
+      "price": 26228.56,
+      "change_pct": -0.54,
       "up": false
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 53202.6,
-      "change_pct": 0.03,
-      "up": true
+      "price": 53081.62,
+      "change_pct": -0.2,
+      "up": false
     },
     {
       "name": "코스피",
@@ -39,8 +39,8 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 115265.86,
-      "change_pct": -0.51,
+      "price": 115250.46,
+      "change_pct": -0.52,
       "up": false
     },
     {
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.05,
-      "change_pct": -0.28,
+      "price": 16.04,
+      "change_pct": -0.31,
       "up": false
     }
   ],
@@ -98,23 +98,23 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7672.61,
-        "change_pct": -0.18,
+        "price": 7676.89,
+        "change_pct": -0.12,
         "up": false
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 26183.16,
-        "change_pct": -0.71,
+        "price": 26228.56,
+        "change_pct": -0.54,
         "up": false
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 53202.6,
-        "change_pct": 0.03,
-        "up": true
+        "price": 53081.62,
+        "change_pct": -0.2,
+        "up": false
       }
     ],
     "kr": [
@@ -137,8 +137,8 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 115265.86,
-        "change_pct": -0.51,
+        "price": 115250.46,
+        "change_pct": -0.52,
         "up": false
       },
       {
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.05,
-        "change_pct": -0.28,
+        "price": 16.04,
+        "change_pct": -0.31,
         "up": false
       }
     ]
@@ -212,8 +212,8 @@
     "BBAR": {
       "name": "Banco BBVA Argentina S.A.",
       "symbol": "BBAR",
-      "price": 14.97,
-      "change_pct": -1.12,
+      "price": 15.07,
+      "change_pct": -0.45,
       "up": false
     }
   }
