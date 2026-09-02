@@ -1,25 +1,25 @@
 {
-  "updated_at": "2026-09-02 19:37",
+  "updated_at": "2026-09-02 19:38",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
       "price": 7631.47,
-      "change_pct": -0.71,
+      "change_pct": -1.04,
       "up": false
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
       "price": 26099.77,
-      "change_pct": -1.03,
+      "change_pct": -1.15,
       "up": false
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
       "price": 52766.88,
-      "change_pct": -0.79,
+      "change_pct": -1.48,
       "up": false
     },
     {
@@ -39,15 +39,15 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 115093.25,
+      "price": 115086.41,
       "change_pct": -0.66,
       "up": false
     },
     {
       "name": "EGX30 (이집트)",
       "symbol": "^CASE30",
-      "price": 55403.0,
-      "change_pct": -0.05,
+      "price": 55394.3,
+      "change_pct": -0.07,
       "up": false
     },
     {
@@ -99,21 +99,21 @@
         "name": "S&P 500",
         "symbol": "^GSPC",
         "price": 7631.47,
-        "change_pct": -0.71,
+        "change_pct": -1.04,
         "up": false
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
         "price": 26099.77,
-        "change_pct": -1.03,
+        "change_pct": -1.15,
         "up": false
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
         "price": 52766.88,
-        "change_pct": -0.79,
+        "change_pct": -1.48,
         "up": false
       }
     ],
@@ -137,15 +137,15 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 115093.25,
+        "price": 115086.41,
         "change_pct": -0.66,
         "up": false
       },
       {
         "name": "EGX30 (이집트)",
         "symbol": "^CASE30",
-        "price": 55403.0,
-        "change_pct": -0.05,
+        "price": 55394.3,
+        "change_pct": -0.07,
         "up": false
       },
       {
@@ -213,8 +213,8 @@
       "name": "Banco BBVA Argentina S.A.",
       "symbol": "BBAR",
       "price": 15.11,
-      "change_pct": -0.2,
-      "up": false
+      "change_pct": 4.42,
+      "up": true
     }
   }
 }
