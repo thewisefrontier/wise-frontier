@@ -1,39 +1,39 @@
 {
-  "updated_at": "2026-09-02 11:45",
+  "updated_at": "2026-09-02 12:18",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
       "price": 7631.47,
-      "change_pct": -1.04,
+      "change_pct": -0.71,
       "up": false
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
       "price": 26099.77,
-      "change_pct": -1.15,
+      "change_pct": -1.03,
       "up": false
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 52766.88,
-      "change_pct": -1.48,
+      "price": 52766.9,
+      "change_pct": -0.79,
       "up": false
     },
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 6641.93,
-      "change_pct": -2.61,
+      "price": 6619.38,
+      "change_pct": -2.94,
       "up": false
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 817.25,
-      "change_pct": -2.04,
+      "price": 813.3,
+      "change_pct": -2.52,
       "up": false
     },
     {
@@ -53,22 +53,22 @@
     {
       "name": "SET (태국)",
       "symbol": "^SET.BK",
-      "price": 1588.68,
-      "change_pct": -0.41,
+      "price": 1584.94,
+      "change_pct": -0.24,
       "up": false
     },
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 6591.94,
-      "change_pct": -0.12,
+      "price": 6597.09,
+      "change_pct": -0.04,
       "up": false
     },
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 6015.82,
-      "change_pct": -1.28,
+      "price": 6034.81,
+      "change_pct": -0.97,
       "up": false
     },
     {
@@ -89,7 +89,7 @@
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
       "price": 16.17,
-      "change_pct": 0.48,
+      "change_pct": 0.46,
       "up": true
     }
   ],
@@ -99,21 +99,21 @@
         "name": "S&P 500",
         "symbol": "^GSPC",
         "price": 7631.47,
-        "change_pct": -1.04,
+        "change_pct": -0.71,
         "up": false
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
         "price": 26099.77,
-        "change_pct": -1.15,
+        "change_pct": -1.03,
         "up": false
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 52766.88,
-        "change_pct": -1.48,
+        "price": 52766.9,
+        "change_pct": -0.79,
         "up": false
       }
     ],
@@ -121,15 +121,15 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 6641.93,
-        "change_pct": -2.61,
+        "price": 6619.38,
+        "change_pct": -2.94,
         "up": false
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 817.25,
-        "change_pct": -2.04,
+        "price": 813.3,
+        "change_pct": -2.52,
         "up": false
       }
     ],
@@ -151,22 +151,22 @@
       {
         "name": "SET (태국)",
         "symbol": "^SET.BK",
-        "price": 1588.68,
-        "change_pct": -0.41,
+        "price": 1584.94,
+        "change_pct": -0.24,
         "up": false
       },
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 6591.94,
-        "change_pct": -0.12,
+        "price": 6597.09,
+        "change_pct": -0.04,
         "up": false
       },
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 6015.82,
-        "change_pct": -1.28,
+        "price": 6034.81,
+        "change_pct": -0.97,
         "up": false
       }
     ],
@@ -189,7 +189,7 @@
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
         "price": 16.17,
-        "change_pct": 0.48,
+        "change_pct": 0.46,
         "up": true
       }
     ]
@@ -198,8 +198,8 @@
     "ANTM": {
       "name": "Aneka Tambang Tbk",
       "symbol": "ANTM.JK",
-      "price": 3060.0,
-      "change_pct": -0.65,
+      "price": 3050.0,
+      "change_pct": -0.97,
       "up": false
     },
     "ACB": {
@@ -213,8 +213,8 @@
       "name": "Banco BBVA Argentina S.A.",
       "symbol": "BBAR",
       "price": 15.11,
-      "change_pct": 4.42,
-      "up": true
+      "change_pct": -0.2,
+      "up": false
     }
   }
 }
