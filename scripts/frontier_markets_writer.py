@@ -60,6 +60,13 @@ except Exception:
             return data[0].get("id", -1) if data else -1
         return -1
 
+# 검증된 한국어 기사를 영어로 번역(2026-09-03 신설, translate_guard.py로 공용화).
+try:
+    from translate_guard import translate_article
+except Exception:
+    def translate_article(title_ko: str, body_ko: str, call_gemini_fn, max_tokens: int = 3500) -> tuple[str, str]:
+        return "", ""
+
 GEMINI_MODELS = [
     "gemini-3.7-flash",
     "gemini-3.6-flash",
@@ -683,6 +690,11 @@ def insert_article(title_ko: str, summary_ko: str, data: dict, article_date: dat
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
     internal_url = f"internal://frontier_markets_{article_date.isoformat()}"
 
+    print("  → 영어 번역 생성 중...")
+    title_en, summary_en = translate_article(title_ko, summary_ko, call_gemini)
+    if not summary_en:
+        print("  ⚠️ 영어 번역 실패 → 한국어만 저장")
+
     top_countries = (
         [i["country"] for i in data["major_indices"][:2]]
         + [c["country"] for c in data["currencies"][:2]]
@@ -691,9 +703,9 @@ def insert_article(title_ko: str, summary_ko: str, data: dict, article_date: dat
     countries = list(dict.fromkeys(top_countries))  # 순서 유지 중복 제거
 
     payload = {
-        "title_en": title_ko,
+        "title_en": title_en or title_ko,
         "title_ko": title_ko,
-        "summary_en": "",
+        "summary_en": summary_en,
         "summary_ko": summary_ko,
         "url": internal_url,
         "source": "NewsFinal",

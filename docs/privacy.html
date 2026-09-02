@@ -38,6 +38,27 @@
     nav.page-nav a:first-child { border-left: 1px solid var(--border); }
     nav.page-nav a:hover, nav.page-nav a.active { color: var(--accent2); background: var(--bg2); }
 
+    .nav-wrap { position: relative; }
+    .page-nav-toggle {
+      display: none; align-items: center; gap: 6px;
+      padding: 9px 14px; font-size: 12px; font-weight: 500; color: var(--muted);
+      font-family: 'IBM Plex Mono', monospace; background: var(--bg3);
+      border: none; cursor: pointer; white-space: nowrap; width: 100%; text-align: left;
+    }
+    .page-nav-toggle .arrow { font-size: 9px; transition: transform 0.2s; }
+    .page-nav-toggle.open .arrow { transform: rotate(180deg); }
+    @media (max-width: 768px) {
+      .page-nav-toggle { display: flex; }
+      nav.page-nav {
+        display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 200;
+        flex-direction: column; overflow-x: visible;
+        background: var(--bg2); border: 1px solid var(--border); border-top: none;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      }
+      nav.page-nav.open { display: flex; }
+      nav.page-nav a { border-right: none; border-bottom: 1px solid var(--border); width: 100%; }
+    }
+
     .page-container { max-width: 780px; margin: 0 auto; padding: 36px 24px 60px; }
     h1 { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900; margin-bottom: 8px; }
     .date { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 28px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
@@ -76,6 +97,8 @@
     <a href="/" class="logo">News<span>Final</span></a>
     <div class="header-meta">프론티어 미디어</div>
   </div>
+  <div class="nav-wrap">
+  <button class="page-nav-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">☰ 메뉴 <span class="arrow">▼</span></button>
   <nav class="page-nav">
     <a href="/">홈</a>
     <a href="/live.html" style="color:var(--red);">🔴 라이브</a>
@@ -86,6 +109,7 @@
     <a href="/about.html">소개</a>
     <a href="/terms.html">이용약관</a>
   </nav>
+  </div>
 </header>
 
 <div class="page-container">

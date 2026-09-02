@@ -87,6 +87,27 @@
     nav.page-nav a:first-child { border-left: 1px solid var(--border); }
     nav.page-nav a:hover, nav.page-nav a.active { color: var(--accent2); background: var(--bg2); }
 
+    .nav-wrap { position: relative; }
+    .page-nav-toggle {
+      display: none; align-items: center; gap: 6px;
+      padding: 9px 14px; font-size: 12px; font-weight: 500; color: var(--muted);
+      font-family: 'IBM Plex Mono', monospace; background: var(--bg3);
+      border: none; cursor: pointer; white-space: nowrap; width: 100%; text-align: left;
+    }
+    .page-nav-toggle .arrow { font-size: 9px; transition: transform 0.2s; }
+    .page-nav-toggle.open .arrow { transform: rotate(180deg); }
+    @media (max-width: 768px) {
+      .page-nav-toggle { display: flex; }
+      nav.page-nav {
+        display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 200;
+        flex-direction: column; overflow-x: visible;
+        background: var(--bg2); border: 1px solid var(--border); border-top: none;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      }
+      nav.page-nav.open { display: flex; }
+      nav.page-nav a { border-right: none; border-bottom: 1px solid var(--border); width: 100%; }
+    }
+
     .article-wrapper { max-width: 760px; margin: 0 auto; padding: 32px 24px 60px; }
 
     .back-btn {
@@ -191,6 +212,8 @@
     <a href="/" class="logo">News<span>Final</span></a>
     <div class="header-meta">프론티어 미디어</div>
   </div>
+  <div class="nav-wrap">
+  <button class="page-nav-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">☰ 메뉴 <span class="arrow">▼</span></button>
   <nav class="page-nav">
     <a href="/">홈</a>
     <a href="/live.html" style="color:var(--accent2);">트렌드</a>
@@ -207,6 +230,7 @@
     <a href="/country.html">국가별</a>
     <a href="/weather.html">날씨</a>
   </nav>
+  </div>
 </header>
 
 <div class="article-wrapper" id="article-wrapper">
@@ -405,9 +429,26 @@ function cleanBody(text) {
     }
   }
 
+  // 언어 토글(2026-09-03 신설) — summary_en이 실제로 채워진 기사(현재는
+  // 글로벌 마켓 동향/뉴욕증시 개장 등 국제성 카테고리만 번역됨)에 한해
+  // 표시. title_en은 번역 안 된 기사도 title_ko 복사값이 항상 들어있어
+  // (article_store.py 계열 payload 관례) 게이트 기준으로 못 씀 — 반드시
+  // summary_en 비어있는지로 판단한다.
+  let currentLang = 'ko';
+  let cachedArticle = null, cachedAllArticles = null;
+
+  function toggleLang() {
+    currentLang = currentLang === 'en' ? 'ko' : 'en';
+    if (cachedArticle) renderArticle(cachedArticle, cachedAllArticles);
+  }
+
   function renderArticle(a, allArticles) {
-    const title = a.title_ko || a.title_en || '';
-    const body = cleanBody(a.summary_ko || a.summary_en || '');
+    cachedArticle = a;
+    cachedAllArticles = allArticles;
+    const hasEnglish = !!(a.summary_en && a.summary_en.trim());
+    const lang = (currentLang === 'en' && hasEnglish) ? 'en' : 'ko';
+    const title = lang === 'en' ? (a.title_en || a.title_ko || '') : (a.title_ko || a.title_en || '');
+    const body = cleanBody(lang === 'en' ? (a.summary_en || a.summary_ko || '') : (a.summary_ko || a.summary_en || ''));
 
     // 문단(빈 줄) 단위로 먼저 블록을 나눈 뒤 블록별로 처리한다.
     // ⚠️ 실사고(2026-08-17, id=80581 다이제스트): 예전엔 \n\n을 플레이스홀더로
@@ -508,6 +549,8 @@ function cleanBody(text) {
       </div>
 
       <h1 class="article-title">${title}</h1>
+
+      ${hasEnglish ? `<button onclick="toggleLang()" style="margin:0 0 12px;background:none;border:1px solid var(--border);border-radius:6px;padding:4px 12px;cursor:pointer;color:var(--accent2);font-size:12px;">${lang === 'en' ? '🇰🇷 한국어로 보기' : '🇺🇸 Read in English'}</button>` : ''}
 
       <div class="article-meta">
         <span>${a.byline || '뉴스파이널 편집국'}</span>

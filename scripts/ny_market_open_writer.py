@@ -72,6 +72,13 @@ except Exception:
             return data[0].get("id", -1) if data else -1
         return -1
 
+# 검증된 한국어 기사를 영어로 번역(2026-09-03 신설, translate_guard.py로 공용화).
+try:
+    from translate_guard import translate_article
+except Exception:
+    def translate_article(title_ko: str, body_ko: str, call_gemini_fn, max_tokens: int = 3500) -> tuple[str, str]:
+        return "", ""
+
 # 야후 파이낸스 조회·주요국 지수 목록·검증 로직은 frontier_markets_writer.py
 # 재사용(2026-08-21 검증된 fetch_yahoo_quote 패턴, chartPreviousClose 버그
 # 수정 포함 — export_articles.py의 구버전 fetch_one()과 달리 정확함).
@@ -352,10 +359,15 @@ def insert_article(title_ko: str, summary_ko: str, article_date: date, image_url
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
     internal_url = f"internal://ny_market_open_{article_date.isoformat()}"
 
+    print("  → 영어 번역 생성 중...")
+    title_en, summary_en = translate_article(title_ko, summary_ko, call_gemini)
+    if not summary_en:
+        print("  ⚠️ 영어 번역 실패 → 한국어만 저장")
+
     payload = {
-        "title_en": title_ko,
+        "title_en": title_en or title_ko,
         "title_ko": title_ko,
-        "summary_en": "",
+        "summary_en": summary_en,
         "summary_ko": summary_ko,
         "url": internal_url,
         "source": "NewsFinal",
