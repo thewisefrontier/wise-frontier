@@ -1,25 +1,25 @@
 {
-  "updated_at": "2026-09-02 23:20",
+  "updated_at": "2026-09-02 23:25",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7665.56,
-      "change_pct": -0.27,
+      "price": 7668.64,
+      "change_pct": -0.23,
       "up": false
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 26186.98,
-      "change_pct": -0.7,
+      "price": 26204.72,
+      "change_pct": -0.63,
       "up": false
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 53152.76,
-      "change_pct": -0.06,
+      "price": 53136.35,
+      "change_pct": -0.09,
       "up": false
     },
     {
@@ -39,8 +39,8 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 115600.12,
-      "change_pct": -0.22,
+      "price": 115526.61,
+      "change_pct": -0.28,
       "up": false
     },
     {
@@ -98,22 +98,22 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7665.56,
-        "change_pct": -0.27,
+        "price": 7668.64,
+        "change_pct": -0.23,
         "up": false
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 26186.98,
-        "change_pct": -0.7,
+        "price": 26204.72,
+        "change_pct": -0.63,
         "up": false
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 53152.76,
-        "change_pct": -0.06,
+        "price": 53136.35,
+        "change_pct": -0.09,
         "up": false
       }
     ],
@@ -137,8 +137,8 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 115600.12,
-        "change_pct": -0.22,
+        "price": 115526.61,
+        "change_pct": -0.28,
         "up": false
       },
       {
@@ -212,8 +212,8 @@
     "BBAR": {
       "name": "Banco BBVA Argentina S.A.",
       "symbol": "BBAR",
-      "price": 15.06,
-      "change_pct": -0.53,
+      "price": 15.07,
+      "change_pct": -0.46,
       "up": false
     }
   }
