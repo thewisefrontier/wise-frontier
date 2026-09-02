@@ -1,5 +1,11 @@
 name: NewsFinal - Global Markets Daily
 
+# 2026-09-03: stock_news_writer.py(개별 종목 기사)도 같은 게이트
+# (market_is_closed/get_target_market_date)를 쓰므로, 별도 크론잡을 새로
+# 등록하는 대신 이 워크플로우에 스텝으로 합쳤다 — 크론잡이 늘어날수록
+# "cron-job.org 계정 죽으면 파이프라인 전체 멈춤" 리스크도 같이 늘어나서
+# (이 저장소에서 이미 겪은 문제) 게이트가 같은 작업은 한 크론잡에 묶는다.
+
 on:
   # 2026-08-28: 이 워크플로우가 08:15 KST 예정에서 7시간 넘게 늦은 15:56에야
   # 처음 실행된 것을 확인(run.yml/opinet_price.yml과 같은 GitHub schedule
@@ -33,6 +39,22 @@ jobs:
 
       - name: 글로벌 마켓 동향 기사 생성
         run: python scripts/frontier_markets_writer.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
+          GEMINI_API_KEY_4: ${{ secrets.GEMINI_API_KEY_4 }}
+          GEMINI_API_KEY_5: ${{ secrets.GEMINI_API_KEY_5 }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
+          IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
+          UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
+
+      - name: 개별 종목 동향 기사 생성
+        continue-on-error: true
+        run: python scripts/stock_news_writer.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
