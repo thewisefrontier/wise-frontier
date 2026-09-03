@@ -152,6 +152,22 @@ except Exception:
 
 _gemini_client = GeminiClient(GEMINI_API_KEYS, GEMINI_MODELS)
 
+# 영어 번역(2026-09-03) — "다른 기사도 [번역]해야지" 요청. frontier_markets_
+# writer.py 등 3개 국제성 전용 스크립트에서 시작해, 사용자 확인 후 이 파일의
+# 메인 클러스터링 파이프라인까지 확대(국내 전용 콘텐츠는 제외 — 이 파일은
+# RSS로 수집된 해외 뉴스를 합성하는 경로라 전량 해당 없음). Gemini 호출
+# 비용을 고려해(사용자 지적) 항상 lite 계열(start_tier=3)로 고정해서 부른다
+# — 플래그십 모델 쿼터를 번역이 잠식하지 않도록.
+try:
+    from translate_guard import translate_article
+except Exception:
+    def translate_article(title_ko: str, body_ko: str, call_gemini_fn, max_tokens: int = 3500) -> tuple[str, str]:
+        return "", ""
+
+
+def _call_gemini_for_translation(prompt: str, max_tokens: int = 3500):
+    return _gemini_client.call(prompt, max_tokens=max_tokens, start_tier=3, temperature=0.3, timeout=(10, 45))
+
 # 프롬프트 캐시
 _prompt_cache = {}
 
@@ -490,10 +506,15 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
 
     url = f"internal://{cluster_key}"
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
+
+    title_en, summary_en = "", ""
+    if published:
+        title_en, summary_en = translate_article(title_ko, summary_ko, _call_gemini_for_translation)
+
     payload = {
-        "title_en": title_ko,
+        "title_en": title_en or title_ko,
         "title_ko": title_ko,
-        "summary_en": "",
+        "summary_en": summary_en,
         "summary_ko": summary_ko,
         "url": url,
         "source": "NewsFinal",
@@ -586,7 +607,9 @@ def update_article(article_id, title_ko, summary_ko, note: str = "업데이트",
         headers=_sb_headers(),
         json={
             "title_ko": title_ko,
-            "title_en": title_ko,
+            # title_en은 건드리지 않는다(2026-09-03) — 예전엔 title_ko 복사값을
+            # 매번 덮어썼는데, 이제 title_en에 실제 번역이 들어갈 수 있어서 그걸
+            # 한국어 업데이트마다 지워버리는 꼴이 된다.
             "summary_ko": summary_ko,
             "created_at": now_str,
             "update_log": new_log,

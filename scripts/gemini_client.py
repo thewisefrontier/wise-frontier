@@ -20,9 +20,49 @@ script_leak.py·json_body_guard.py와 같은 이유로 공용화한다.
 코드는 전혀 안 바뀐다.
 """
 
+import os
 import time
+from datetime import datetime, timezone, timedelta
 
 import requests
+
+# 자체 사용량 카운팅(2026-09-03) — "우리가 얼마나 쓰는지 자체적으로
+# 카운팅이 안되나?" 요청. Google AI Studio가 더는 문서에 고정 한도 수치를
+# 안 싣고 로그인된 대시보드에서만 보여줘서, 이 클라이언트가 자기 호출을
+# 직접 집계해 Supabase gemini_usage_daily에 쌓는다(RPC increment_gemini_usage,
+# security definer라 service_role 키만 있으면 별도 테이블 권한 없이도 동작).
+# 실패해도 실제 Gemini 호출 자체는 절대 막지 않는다(집계는 부가 기능).
+_USAGE_SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
+_USAGE_SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
+_KST = timezone(timedelta(hours=9))
+
+
+def _log_usage(model: str, key_index: int, outcome: str,
+               prompt_tokens: int = 0, completion_tokens: int = 0, total_tokens: int = 0) -> None:
+    if not _USAGE_SUPABASE_URL or not _USAGE_SUPABASE_KEY:
+        return
+    try:
+        requests.post(
+            f"{_USAGE_SUPABASE_URL}/rest/v1/rpc/increment_gemini_usage",
+            headers={
+                "apikey": _USAGE_SUPABASE_KEY,
+                "Authorization": f"Bearer {_USAGE_SUPABASE_KEY}",
+                "Content-Type": "application/json",
+            },
+            json={
+                "p_date": datetime.now(_KST).date().isoformat(),
+                "p_model": model,
+                "p_key_index": key_index,
+                "p_outcome": outcome,
+                "p_prompt_tokens": prompt_tokens,
+                "p_completion_tokens": completion_tokens,
+                "p_total_tokens": total_tokens,
+            },
+            timeout=5,
+        )
+    except Exception:
+        pass  # 집계 실패는 무시 — 본 기능(Gemini 호출)에 영향 없어야 한다
+
 
 DEFAULT_GEMINI_MODELS = [
     "gemini-3.7-flash",
@@ -88,7 +128,13 @@ class GeminiClient:
                     res = requests.post(url, json=payload, timeout=timeout)
                     if res.status_code == 200:
                         self._current_key_idx = (idx + 1) % n
-                        cands = res.json().get("candidates", [])
+                        body = res.json()
+                        usage = body.get("usageMetadata", {}) or {}
+                        _log_usage(model, idx + 1, "success",
+                                   usage.get("promptTokenCount", 0),
+                                   usage.get("candidatesTokenCount", 0),
+                                   usage.get("totalTokenCount", 0))
+                        cands = body.get("candidates", [])
                         if not cands:
                             return None
                         # maxOutputTokens 초과로 잘린 응답을 정상 취급하면 문장·JSON이
@@ -104,15 +150,18 @@ class GeminiClient:
                         return text if text else None
                     elif res.status_code == 429:
                         print(f"  [429] {model} 키 {idx+1} 한도 초과 → 다음 키")
+                        _log_usage(model, idx + 1, "429")
                         exhausted.add(idx)
                         time.sleep(RETRY_DELAY)
                         continue
                     elif res.status_code == 503:
                         print(f"  [503] {model} 키 {idx+1} 과부하 → 다음 키")
+                        _log_usage(model, idx + 1, "503")
                         time.sleep(RETRY_DELAY)
                         continue
                     else:
                         print(f"[ERROR] Gemini {res.status_code}: {res.text[:200]}")
+                        _log_usage(model, idx + 1, "other")
                         return None
                 except requests.exceptions.Timeout:
                     print(f"  [TIMEOUT] {model} 키 {idx+1} → 다음 키")

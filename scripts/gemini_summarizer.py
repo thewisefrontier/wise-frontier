@@ -94,6 +94,20 @@ except Exception:
     def normalize_category(raw, default="글로벌"):
         return "" if raw is None else str(raw).strip()
 
+# 영어 번역(2026-09-03) — "다른 기사도 [번역]해야지" 요청으로 트렌드 3개
+# 경로(run_trend_tracker/run_realtime_trend_tracker/run_external_trend_articles)
+# 전부에 확대. 이 파일은 전량 해외 이슈 트렌드라 국내 전용 콘텐츠 제외 대상이
+# 없다. 비용 고려해 항상 lite 계열(start_tier=3)로 고정 호출한다.
+try:
+    from translate_guard import translate_article
+except Exception:
+    def translate_article(title_ko: str, body_ko: str, call_gemini_fn, max_tokens: int = 3500) -> tuple[str, str]:
+        return "", ""
+
+
+def _call_gemini_for_translation(prompt: str, max_tokens: int = 3500):
+    return call_gemini(prompt, max_tokens=max_tokens, start_tier=3)
+
 load_dotenv()
 
 KST = timezone(timedelta(hours=9))
@@ -1024,9 +1038,14 @@ def save_trend_article(group_name: str, title: str, body: str,
             print(f"  ⛔ [raw JSON 본문] 저장 차단: {title[:60]}")
             return -1
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
+
+    title_en, summary_en = "", ""
+    if published:
+        title_en, summary_en = translate_article(title, body, _call_gemini_for_translation)
+
     payload = {
-        "title_en": title, "title_ko": title,
-        "summary_en": "", "summary_ko": body,
+        "title_en": title_en or title, "title_ko": title,
+        "summary_en": summary_en, "summary_ko": body,
         "url": f"internal://trend_{group_name}_{now_kst().strftime('%Y%m%d%H')}",
         "source": "NewsFinal",
         "category": category,
@@ -1673,9 +1692,14 @@ JSON 배열로만 응답하세요 (마크다운 없이):
 
         now_str = now_kst().strftime("%Y-%m-%d %H:%M")
 
+        _will_publish = not (_mt_bad or _dg_bad)
+        title_en, summary_en = "", ""
+        if _will_publish:
+            title_en, summary_en = translate_article(title, body, _call_gemini_for_translation)
+
         payload = {
-            "title_en": title, "title_ko": title,
-            "summary_en": "", "summary_ko": body,
+            "title_en": title_en or title, "title_ko": title,
+            "summary_en": summary_en, "summary_ko": body,
             "url": f"internal://realtrend_{topic.replace(' ','_')}_{now_kst().strftime('%Y%m%d%H')}",
             "source": "NewsFinal",
             "category": category,
@@ -1952,9 +1976,25 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
             print(f"  [{topic}] ⛔ 복수 토픽 혼입 → 미발행: {title[:50]}")
 
         now_str = now_kst().strftime("%Y-%m-%d %H:%M")
+
+        # 유사 기존 트렌드 기사 있으면 병합 — 신규 payload 조립(번역 포함) 전에
+        # 먼저 판단해, 병합될 기사에 쓸데없이 번역 Gemini 호출을 낭비하지 않는다.
+        if ext_similar and not _mt_bad:
+            note = f"외부 트렌드 추가 정보 ({topic})"
+            ok = merge_trend_article(ext_similar, title, body, note)
+            if ok:
+                print(f"  [{topic}] ✅ 기존 트렌드 기사에 병합 (id={ext_similar['id']}): {title}")
+                generated += 1
+            time.sleep(CALL_INTERVAL)
+            continue
+
+        title_en, summary_en = "", ""
+        if not _mt_bad:
+            title_en, summary_en = translate_article(title, body, _call_gemini_for_translation)
+
         payload = {
-            "title_en": title, "title_ko": title,
-            "summary_en": "", "summary_ko": body,
+            "title_en": title_en or title, "title_ko": title,
+            "summary_en": summary_en, "summary_ko": body,
             "url": f"internal://extrend_{topic[:20].replace(' ','_')}_{now_kst().strftime('%Y%m%d%H')}",
             "source": "NewsFinal",
             "category": category,
@@ -1975,15 +2015,6 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
             "summary_3lines": summary_3lines,
             "investment_idea": investment_idea,
         }
-        # 유사 기존 트렌드 기사 있으면 병합
-        if ext_similar and not _mt_bad:
-            note = f"외부 트렌드 추가 정보 ({topic})"
-            ok = merge_trend_article(ext_similar, title, body, note)
-            if ok:
-                print(f"  [{topic}] ✅ 기존 트렌드 기사에 병합 (id={ext_similar['id']}): {title}")
-                generated += 1
-            time.sleep(CALL_INTERVAL)
-            continue
 
         art_id = insert_final_article(payload)
         if art_id > 0:
