@@ -333,6 +333,51 @@ def nvidia_cross_check(title: str, body: str, gemini_suspect: str) -> str:
     return f"[Nemotron 교차검증] {result.strip()}"
 
 
+# 2026-09-03 사용자 지적: "2주간 6건이면 아예 안 쓰는 수준이나 다름없다" —
+# 기존엔 Gemini가 이미 의심 표시한 기사만 엔비디아로 넘겨서(1550건 중 6건),
+# Gemini 자체가 놓친 오류는 영원히 검증되지 않았다. Gemini가 "문제없음"이라고
+# 판단한 기사 중 일부도 실행마다 정해진 예산 안에서 독립적으로 엔비디아에
+# 넘겨 Gemini의 사각지대를 잡는다. 무료 크레딧(월 1000, 이 스크립트는 하루
+# 1회 실행)을 넘지 않도록 실행당 상한을 둔다 — 여유를 크게 남겨 다른 용도와도
+# 부딪히지 않게 한다.
+NVIDIA_INDEPENDENT_BUDGET = 25
+
+
+def build_nvidia_independent_prompt(title: str, body: str) -> str:
+    # call_nvidia는 검색 그라운딩이 없다(자체 지식 기반) — Gemini의 1차 점검
+    # (build_check_prompt, 웹 검색 사용)과 상호보완적인 2번째 독립 판단으로
+    # 쓴다. 확신 없는 항목까지 다 걸러내려 하지 않고, 자체 지식으로 봤을 때
+    # 뚜렷이 이상한 것만 짚게 한다(과다 오탐 방지).
+    return f"""아래는 이미 발행된 뉴스 기사입니다. 다른 AI 모델(Gemini)이 이미 한 번
+검토해 "문제없음"으로 판단한 기사인데, 같은 모델의 판단만 믿는 건 위험하므로
+독립적인 2차 검토를 요청합니다.
+
+본문에 등장하는 고유명사(인명·지명·기관명·작품명 등)나 수치·인용문 중,
+당신이 아는 지식 기준으로 명백히 잘못됐거나 실존하지 않는다고 확신하는
+항목이 있으면 지적하세요. 확신이 없는 항목은 지적하지 마세요(과다 지적
+방지) — 검색 없이 당신의 지식만으로 판단하는 것이니 애매하면 넘어가세요.
+
+문제가 있으면 "[분류] 기사 속 표기 → 지적 사유" 형식으로 쉼표 구분해
+나열하세요. 없으면 "없음"이라고만 답하세요.
+
+제목: {title}
+
+본문:
+{body[:2000]}
+
+답변:"""
+
+
+def nvidia_independent_check(title: str, body: str) -> str:
+    result = call_nvidia(build_nvidia_independent_prompt(title, body), max_tokens=300)
+    if not result:
+        return ""
+    result = result.strip()
+    if not result or ("없음" in result and len(result) <= 12):
+        return ""
+    return f"[Nemotron 독립검토] {result}"
+
+
 def save_review(article_id: int, status: str, suspect_names: str) -> bool:
     try:
         res = requests.post(
@@ -387,6 +432,7 @@ def run():
 
     checked = 0
     flagged = []
+    nvidia_independent_used = 0
     for a in batch:
         title = a.get("title_ko") or ""
         body = (a.get("summary_ko") or "")[:MAX_BODY_CHARS]
@@ -411,6 +457,13 @@ def run():
             nvidia_note = nvidia_cross_check(title, body, gemini_suspect)
             if nvidia_note:
                 suspect = suspect + "\n" + nvidia_note
+            time.sleep(2)
+        elif nvidia_independent_used < NVIDIA_INDEPENDENT_BUDGET:
+            # Gemini가 "문제없음"으로 판단한 기사도 예산 안에서 독립 재검토
+            nvidia_independent_used += 1
+            nvidia_note = nvidia_independent_check(title, body)
+            if nvidia_note:
+                suspect = nvidia_note
             time.sleep(2)
 
         if wiki_unconfirmed:
