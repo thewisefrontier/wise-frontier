@@ -82,6 +82,7 @@ jobs:
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
           IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
           UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
+          MONEYFINAL_FEED_KEY: ${{ secrets.MONEYFINAL_FEED_KEY }}
 
       - name: 웹사이트 데이터 내보내기
         run: python scripts/export_articles.py
