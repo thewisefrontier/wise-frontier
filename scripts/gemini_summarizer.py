@@ -704,7 +704,19 @@ def find_similar_trend(title: str, country: str | None = None,
     summary_ko/update_log만 다뤄 subcategory 형식에 의존하지 않으므로
     (구조적으로 안전), 이제 발행된 NewsFinal 기사 전체를 검색 대상으로 삼는다
     — 어느 파이프라인이 먼저 다뤘든 중복 판정이 적용돼야 한다.
+
+    ⚠️ 2026-08-31 실사고(id=114802 니제르 쿠데타 기사에 우크라이나 전쟁
+    속보가 병합됨): 병합 판단 호출부(run_trend_tracker/run_realtime_trend_tracker/
+    run_external_trend_articles)는 Gemini가 "국가:" 필드를 "없음"으로 답하면
+    country=""(빈 문자열, falsy)를 넘긴다. 이 함수는 그런 경우를 country=None
+    (사전 스킵 판단 전용 느슨 탐색 모드)과 구분하지 못해 country 필터와
+    공유 키워드 요건이 전부 빠진 "제목 유사도만으로" 검색해버렸고, 완전히
+    무관한 기사와 우연히 제목 유사도 60%를 넘겨 오판 병합됐다. country=None
+    (의도적 느슨 탐색)과 country=""(추출 실패)를 구분해, 후자는 아예 매칭
+    시도를 하지 않는다.
     """
+    if country == "":
+        return None
     from rapidfuzz import fuzz
     since = (now_kst() - timedelta(days=days)).strftime("%Y-%m-%d %H:%M")
     params = {
