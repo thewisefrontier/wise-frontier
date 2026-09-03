@@ -184,8 +184,12 @@ def fetch_moneyfinal_crypto_context(symbol: str) -> dict | None:
 
 # ── 기사 프롬프트 ────────────────────────────────────────────
 def build_article_prompt(symbol: str, name_ko: str, data: dict, mf_ctx: dict | None = None) -> str:
-    today = now_kst().date()
+    now = now_kst()
+    today = now.date()
     today_str = today.strftime("%Y년 %m월 %d일")
+    # 코인은 24시간 거래라 "N일"만으로는 언제 시점 가격인지 모호하다(하루
+    # 안에서도 크게 움직임) — 사용자 지적(2026-09-04) 반영, 시:분까지 명시.
+    time_str = now.strftime("%H:%M")
 
     mf_block = ""
     if mf_ctx:
@@ -204,8 +208,9 @@ def build_article_prompt(symbol: str, name_ko: str, data: dict, mf_ctx: dict | N
 기관 매수/매도, 거시경제 이슈, 관련 프로젝트 소식 등)를 찾아서, 아래 시세
 데이터와 결합해 기사를 작성하세요. 검색 없이 수치만 나열하지 마세요.
 
-오늘({today_str}) 기준 {name_ko}({symbol.replace('-USD','')}) 시세 데이터
-(24시간 거래 기준, 달러):
+오늘({today_str} {time_str} 한국시간) 기준 {name_ko}({symbol.replace('-USD','')}) 시세 데이터
+(24시간 거래 기준, 달러 — 코인은 하루 안에서도 가격이 크게 움직이니 이
+시각 기준 데이터임에 유의):
 - 현재가: {data['price']:,.2f}달러 (전일比 {data['pct']:+.2f}%)
 - 당일 거래 범위: {data.get('day_low', 0):,.2f} ~ {data.get('day_high', 0):,.2f}달러
 - 52주 최고/최저: {data.get('fifty_two_week_high', 0):,.2f} / {data.get('fifty_two_week_low', 0):,.2f}달러
@@ -232,14 +237,21 @@ BODY: <본문>
 
    ◆ 가격 동향
    {name_ko} 가격이 오늘 왜 그렇게 움직였는지, 검색으로 찾은 실제 뉴스(규제·
-   기관 수급·거시경제 이슈 등)를 근거로 설명하세요. 반드시 "{today.day}일
-   (한국시간)"을 함께 언급하세요.
+   기관 수급·거시경제 이슈 등)를 근거로 설명하세요. 첫 문장 또는 시세를
+   처음 언급하는 지점에 반드시 "{today.day}일 {time_str}(한국시간) 기준
+   야후 파이낸스 시세로"를 그대로 넣으세요(예: "{today.day}일 {time_str}
+   (한국시간) 기준 야후 파이낸스 시세로 {name_ko} 가격은..."). 코인은 24시간
+   거래에 거래소마다 가격이 조금씩 달라서, 날짜만 쓰면 하루 중 어느
+   시점인지도, 어느 출처 가격인지도 알 수 없습니다 — 시:분과 출처를 둘 다
+   반드시 명시하세요.
 
    ◆ 주요 지표
    당일 거래 범위, 52주 최고/최저 대비 현재 위치 등을 구체적 수치와 함께
    서술하세요.
-3. ⚠️ 날짜: 반드시 ◆ 가격 동향 섹션에 "{today.day}일(한국시간)" 형식으로
-   날짜를 명시하세요. "오늘", "현재", 절대연도(2026년 등)는 금지.
+3. ⚠️ 날짜·시각·출처: 반드시 ◆ 가격 동향 섹션 앞부분에 "{today.day}일
+   {time_str}(한국시간) 기준 야후 파이낸스 시세로" 형식으로 날짜·시각·
+   데이터 출처를 함께 명시하세요(셋 중 하나라도 생략 금지). "오늘", "현재",
+   절대연도(2026년 등)는 금지.
 4. 수치는 위 데이터를 그대로 사용하고 절대 지어내지 마세요. 검색으로 찾은
    뉴스도 실제 사실만 반영하고, 확인 안 되는 내용은 지어내지 마세요.
 5. 분량: 500자 이상.
