@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-03 10:55",
+  "updated_at": "2026-09-03 10:59",
   "indices": [
     {
       "name": "S&P 500",
@@ -25,15 +25,15 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 6676.14,
-      "change_pct": -2.34,
+      "price": 6651.7,
+      "change_pct": -2.69,
       "up": false
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 801.94,
-      "change_pct": -2.35,
+      "price": 799.65,
+      "change_pct": -2.63,
       "up": false
     },
     {
@@ -67,8 +67,8 @@
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 6044.6,
-      "change_pct": -0.14,
+      "price": 6037.47,
+      "change_pct": -0.26,
       "up": false
     },
     {
@@ -121,15 +121,15 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 6676.14,
-        "change_pct": -2.34,
+        "price": 6651.7,
+        "change_pct": -2.69,
         "up": false
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 801.94,
-        "change_pct": -2.35,
+        "price": 799.65,
+        "change_pct": -2.63,
         "up": false
       }
     ],
@@ -165,8 +165,8 @@
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 6044.6,
-        "change_pct": -0.14,
+        "price": 6037.47,
+        "change_pct": -0.26,
         "up": false
       }
     ],
@@ -199,8 +199,8 @@
       "name": "Aneka Tambang Tbk",
       "symbol": "ANTM.JK",
       "price": 3030.0,
-      "change_pct": -1.62,
-      "up": false
+      "change_pct": 0.0,
+      "up": true
     },
     "ACB": {
       "name": "Asia Commercial Joint Stock Bank",
