@@ -652,6 +652,26 @@ def _after_tax_monthly(monthly_krw: int) -> str:
 _PT720_RANK_DIGITS = {2: 6, 3: 5, 4: 4, 5: 3, 6: 2, 7: 1}
 
 
+# 2026-09-03 실사고 계기 안전장치: 수동 정리 중 보너스 번호(bnsRnkVl)를
+# 검증 없이 잘못된 값("8")으로 덮어쓴 사고(id=126890) — 자동 파이프라인
+# 쪽에도 API 응답 필드 형식을 확인하는 가드를 추가한다. 조는 숫자 문자열,
+# 1등 번호·보너스 번호는 항상 6자리(연금복권720+ 공식 규정)여야 한다.
+def _pension720_fields_valid(latest: dict) -> bool:
+    bnd = str(latest.get("wnBndNo") or "")
+    num = str(latest.get("wnRnkVl") or "")
+    bonus = str(latest.get("bnsRnkVl") or "")
+    return bnd.isdigit() and num.isdigit() and len(num) == 6 and bonus.isdigit() and len(bonus) == 6
+
+
+# 등수별 정보(prizes)가 통째로 빠지면 build_pension720_article()이 첫 문장만
+# 남긴 채 조용히 짧은 기사를 반환한다(실사고 id=126890, 원인은 fetch_
+# pension720_prizes()의 일시적 실패 — 재시도 로직 추가로 이제 드물지만,
+# 방어적으로 발행 직전에도 분량을 확인해 비정상적으로 짧으면 이번 주기는
+# 건너뛰고 다음 크론 주기(already_published가 아직 False라 자동 재시도됨)에
+# 맡긴다.
+MIN_PENSION720_BODY_LEN = 300
+
+
 def build_pension720_article(latest: dict, prizes: list) -> tuple[str, str, str]:
     round_no = latest["psltEpsd"]
     draw_date = datetime.strptime(latest["psltRflYmd"], "%Y%m%d").date()
@@ -938,6 +958,10 @@ def run():
 
     # 연금복권720+
     latest = fetch_pension720_latest()
+    if latest and not _pension720_fields_valid(latest):
+        print(f"  ⚠️ 연금복권 데이터 형식 이상(조={latest.get('wnBndNo')!r}, "
+              f"번호={latest.get('wnRnkVl')!r}, 보너스={latest.get('bnsRnkVl')!r}) → 스킵")
+        latest = None
     if latest:
         p_round = latest["psltEpsd"]
         p_url = f"internal://pension720_{p_round}"
@@ -950,9 +974,13 @@ def run():
         else:
             prizes = fetch_pension720_prizes(p_round)
             title, body, url_key = build_pension720_article(latest, prizes)
-            image_url = get_pension720_image_url(p_round, p_bnd, p_num, p_bonus_num)
-            aid = insert_article(title, body, url_key, countries=["한국"], image_url=image_url)
-            print(f"  {'✓' if aid > 0 else '✗'} 연금복권 {p_round}회: id={aid}")
+            if len(body) < MIN_PENSION720_BODY_LEN:
+                print(f"  ⚠️ 연금복권 {p_round}회 본문이 비정상적으로 짧음({len(body)}자, "
+                      f"등수별 정보 누락 추정) → 이번 주기 발행 보류, 다음 주기 재시도")
+            else:
+                image_url = get_pension720_image_url(p_round, p_bnd, p_num, p_bonus_num)
+                aid = insert_article(title, body, url_key, countries=["한국"], image_url=image_url)
+                print(f"  {'✓' if aid > 0 else '✗'} 연금복권 {p_round}회: id={aid}")
     else:
         print("  → 연금복권 데이터 조회 실패")
 
