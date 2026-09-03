@@ -1694,8 +1694,16 @@ JSON 배열로만 응답하세요 (마크다운 없이):
 
         _will_publish = not (_mt_bad or _dg_bad)
         title_en, summary_en = "", ""
+        image_url, image_credit = "", ""
         if _will_publish:
             title_en, summary_en = translate_article(title, body, _call_gemini_for_translation)
+            # 2026-09-03 실사고(id=124782, 트럼프 관련 기사에 이미지 전혀 없음):
+            # run_trend_tracker()만 fetch_article_image()를 부르고 있었고, 이
+            # 실시간 트렌드 경로는 애초에 image_url을 payload에 넣지도 않아서
+            # 전부 이미지 없이 발행되고 있었다. entity 없이 호출하면 제목·본문
+            # 기반 Pixabay 키워드 추출로 폴백한다(article_image.py 참조).
+            from article_image import fetch_article_image
+            image_url, image_credit = fetch_article_image(title, body, "", call_gemini)
 
         payload = {
             "title_en": title_en or title, "title_ko": title,
@@ -1708,6 +1716,8 @@ JSON 배열로만 응답하세요 (마크다운 없이):
             "country": art_country,
             "country_flag": "",
             "countries": ([art_country] + [c for c in (art_countries or []) if c and c != art_country]) if art_country else (art_countries or []),
+            "image_url": image_url,
+            "image_credit": image_credit,
             "score": 2,
             "created_at": now_str,
             "first_published_at": now_str,
@@ -1989,8 +1999,13 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
             continue
 
         title_en, summary_en = "", ""
+        image_url, image_credit = "", ""
         if not _mt_bad:
             title_en, summary_en = translate_article(title, body, _call_gemini_for_translation)
+            # 2026-09-03 실사고(id=124782) — run_realtime_trend_tracker()와 동일한
+            # 원인(image_url을 payload에 아예 안 넣던 버그)이 이 경로에도 있었다.
+            from article_image import fetch_article_image
+            image_url, image_credit = fetch_article_image(title, body, "", call_gemini)
 
         payload = {
             "title_en": title_en or title, "title_ko": title,
@@ -2003,6 +2018,8 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
             "country": art_country,
             "country_flag": "",
             "countries": ([art_country] + [c for c in (art_countries or []) if c and c != art_country]) if art_country else (art_countries or []),
+            "image_url": image_url,
+            "image_credit": image_credit,
             "score": 2,
             "created_at": now_str,
             "first_published_at": now_str,

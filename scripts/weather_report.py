@@ -1473,7 +1473,11 @@ def build_korea_today_report_kma(cities: list, local_now: datetime):
 - 지역명을 제외한 나머지는 20자 내외
 - 쉼표(,)는 지역명 뒤 1개만. 그 외 나열은 가운뎃점(·)이나 말줄임표(…)를 쓸 것
 - 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
-- "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
+- "최고 N°C…비 소식" 같은 기계적 패턴 금지
+- ⚠️ "맑은 속", "흐린 속"처럼 형용사(맑은/흐린/추운 등)에 "속"을 바로 붙이는
+  어색한 표현 금지(2026-09-03 사용자 지적: "서울 맑은 속 늦더위라니"). "속"은
+  명사 뒤에만 쓸 것(예: "맑은 날씨 속", "폭염 속") — 형용사 바로 뒤라면
+  "~가운데"를 쓸 것(예: "맑은 가운데 늦더위")"""
 
     _raw_kma_today = call_gemini_weather(gemini_prompt)
     _title_kma_today, lede = _parse_gemini_weather_response(_raw_kma_today)

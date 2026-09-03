@@ -31,6 +31,7 @@ API가 반환한 숫자를 Python 문자열 포맷으로 그대로 꽂아 넣는
 """
 
 import os
+import time
 import requests
 from datetime import date, datetime, timedelta, timezone
 
@@ -139,6 +140,11 @@ def insert_article(title: str, body: str, url_key: str, countries=None, image_ur
         "country_flag": "",
         "countries": countries or ["한국"],
         "image_url": image_url,
+        # 2026-09-03 수정: 이 이미지는 동행복권 결과 페이지 캡처/자체 렌더링이지
+        # Pixabay가 아니다. image_credit을 비워두면 프론트가 R2 호스팅 URL만
+        # 보고 "이미지 출처: Pixabay"로 잘못 표시한다(같은 R2 버킷을 Pixabay
+        # 캐시에도 쓰기 때문 — image-credit.js 참조). 명시적으로 채워 오표기를 막는다.
+        "image_credit": "뉴스파이널",
         "score": 1,
         "created_at": now_str,
         "first_published_at": now_str,
@@ -567,19 +573,35 @@ def fetch_pension720_latest() -> dict | None:
 
 
 def fetch_pension720_prizes(round_no: int) -> list:
-    try:
-        res = requests.get(
-            "https://www.dhlottery.co.kr/pt720/selectPstPt720WnInfo.do",
-            params={"srchPsltEpsd": round_no},
-            headers={"User-Agent": "Mozilla/5.0", "Referer": "https://www.dhlottery.co.kr/pt720/result"},
-            timeout=15,
-        )
-        if res.status_code != 200:
+    # 2026-09-03 실사고(id=126890): 일시적 네트워크 오류로 이 호출이 빈 리스트를
+    # 반환하면 build_pension720_article()의 모든 등수 단락이 통째로 스킵돼
+    # "…추첨·발표했다." 한 문장짜리 기사가 나갔다(재호출 시 API 자체는 정상
+    # 응답 확인됨 — 일시적 문제였음). 재시도 1회 추가.
+    for attempt in range(2):
+        try:
+            res = requests.get(
+                "https://www.dhlottery.co.kr/pt720/selectPstPt720WnInfo.do",
+                params={"srchPsltEpsd": round_no},
+                headers={"User-Agent": "Mozilla/5.0", "Referer": "https://www.dhlottery.co.kr/pt720/result"},
+                timeout=15,
+            )
+            if res.status_code != 200:
+                if attempt == 0:
+                    time.sleep(3)
+                    continue
+                return []
+            result = res.json().get("data", {}).get("result", [])
+            if not result and attempt == 0:
+                time.sleep(3)
+                continue
+            return result
+        except Exception as e:
+            print(f"  [WARN] 연금복권 당첨금 조회 실패(시도 {attempt+1}): {e}")
+            if attempt == 0:
+                time.sleep(3)
+                continue
             return []
-        return res.json().get("data", {}).get("result", [])
-    except Exception as e:
-        print(f"  [WARN] 연금복권 당첨금 조회 실패: {e}")
-        return []
+    return []
 
 
 # 연금복권720+ 등수별 당첨금은 매 회차 고정이다(사용자 확인, 2026-08-21).
@@ -704,6 +726,28 @@ _PB_TIER_LABELS = {
 }
 
 
+def _usd_amount_to_kr(text: str) -> str:
+    """'$1,000,000' -> '100만 달러', '$50,000' -> '5만 달러', '$100' -> '100달러'.
+    2026-09-03 사용자 지적: "$1,000,000 이러면 가시성이 떨어지잖아. 100만달러라고
+    적어야지" — 원화 억/만 표시 규칙(feedback_korean_won_man_unit_format)을
+    달러 등수별 상금에도 동일 적용."""
+    import re as _re
+    m = _re.search(r"[\d,]+", text or "")
+    if not m:
+        return text or ""
+    n = int(m.group(0).replace(",", ""))
+    if n < 10_000:
+        return f"{n:,}달러"
+    eok, rem = divmod(n, 100_000_000)
+    man, _rem2 = divmod(rem, 10_000)
+    parts = []
+    if eok:
+        parts.append(f"{eok}억")
+    if man:
+        parts.append(f"{man}만")
+    return " ".join(parts) + " 달러"
+
+
 def _usd_million_to_kr(million: float) -> str:
     """119.0 -> '1억 1900만 달러' (억/만 단위는 format_amount와 동일한 방식)."""
     total_man = round(million * 100)
@@ -786,7 +830,16 @@ def _pb_prize_sentences(prize: dict) -> str:
         jackpot_line = groups[0] if len(groups) > 0 else ""
         match5_line = groups[2] if len(groups) > 2 else ""
 
-        sentences = [f"이번 추첨의 추정 잭팟은 {jackpot_kr}(현금가치 {cash_kr})였다."]
+        # 2026-09-03 사용자 지적: "잭팟이 1억5000만달러인데 현금가치 6520만달러?
+        # 이해를 못하겠는데" — 파워볼 잭팟은 29년 연금 분할 지급 기준 총액이고,
+        # 일시불(현금가치)은 그 미래 지급액을 현재가치로 할인한 금액이라 항상
+        # 더 작다(금리에 따라 대략 잭팟의 45~65% 수준). 숫자만 나열하면 오해하기
+        # 쉬워 한 줄로 설명을 덧붙인다.
+        sentences = [
+            f"이번 추첨의 추정 잭팟은 {jackpot_kr}(현금가치 {cash_kr})였다.",
+            "잭팟 금액은 29년에 걸쳐 나눠 받는 연금 지급 기준 총액이고, "
+            "현금가치는 당첨자가 한 번에 일시불로 받을 경우 받는 금액이라 잭팟보다 작다.",
+        ]
 
         if "none" in jackpot_line.lower():
             sentences.append("이번 추첨에서 1등(잭팟) 당첨자는 나오지 않았다.")
@@ -800,7 +853,7 @@ def _pb_prize_sentences(prize: dict) -> str:
         if m5 and len(m5) >= 3:
             m5_count = format_count(int(m5[1].replace(",", "")))
             states = match5_line.split("Winners")[-1].strip()
-            sentences.append(f"2등(5개 번호 일치)은 {m5_count}명으로 각자 {m5[2]}를 받는다.")
+            sentences.append(f"2등(5개 번호 일치)은 {m5_count}명으로 각자 {_usd_amount_to_kr(m5[2])}를 받는다.")
             if states and "none" not in states.lower():
                 sentences.append(f"2등 당첨 지역은 {states}다.")
 
@@ -811,7 +864,7 @@ def _pb_prize_sentences(prize: dict) -> str:
             if not row or len(row) < 3:
                 continue
             count = format_count(int(row[1].replace(",", "")))
-            etc_parts.append(f"{_PB_TIER_LABELS[key]} {count}명({row[2]})")
+            etc_parts.append(f"{_PB_TIER_LABELS[key]} {count}명({_usd_amount_to_kr(row[2])})")
         if etc_parts:
             sentences.append("이 밖에 " + ", ".join(etc_parts) + "이 당첨됐다.")
 
