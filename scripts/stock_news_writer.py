@@ -142,10 +142,75 @@ WATCHLIST = [
     ("AMD", "AMD", "나스닥"),
 ]
 
+# 티커 심볼 자체는 자유 텍스트 뉴스 제목에서 오탐이 잦다(V·AMD 등 일반 단어와
+# 겹침) — 회사명 영문 키워드로 매칭한다(2026-09-04, "무슨 기준으로 마이크로
+# 소프트가 나갔는지 모르겠다" 사용자 지적 대응).
+WATCHLIST_KEYWORDS = {
+    "AAPL": ["apple"],
+    "MSFT": ["microsoft"],
+    "NVDA": ["nvidia"],
+    "GOOGL": ["google", "alphabet"],
+    "AMZN": ["amazon"],
+    "META": ["meta platforms", " meta "],
+    "TSLA": ["tesla"],
+    "BRK-B": ["berkshire"],
+    "JPM": ["jpmorgan", "jp morgan"],
+    "V": ["visa inc", " visa "],
+    "NFLX": ["netflix"],
+    "AMD": [" amd ", "advanced micro devices"],
+}
 
-def pick_ticker(article_date: date) -> tuple[str, str, str]:
+
+def _recent_moneyfinal_headlines(hours: int = 48) -> list[str]:
+    """market_news_fetcher.py가 받아온 머니파이널(Finnhub) 원문 헤드라인.
+    오늘의 종목 선택 근거로 쓴다 — 실제 시장 뉴스가 언급하는 종목을 우선한다."""
+    from datetime import timedelta
+    since = (now_kst() - timedelta(hours=hours)).strftime("%Y-%m-%d %H:%M")
+    try:
+        res = requests.get(
+            _sb_url(),
+            headers=_sb_headers(),
+            params={
+                "select": "title_en",
+                "source": "ilike.*MoneyFinal*",
+                "created_at": f"gte.{since}",
+                "limit": "300",
+            },
+            timeout=15,
+        )
+        if res.status_code not in (200, 206):
+            return []
+        return [r.get("title_en", "") for r in res.json() if r.get("title_en")]
+    except Exception:
+        return []
+
+
+def pick_ticker(article_date: date) -> tuple[str, str, str, str, list[str]]:
+    """머니파이널 실시간 뉴스에 언급된 종목을 우선 선택하고, 언급이 하나도
+    없으면 날짜 기반 순환 선택으로 폴백한다. 4번째 반환값은 선택 사유(기사
+    update_log에 남겨 감사 가능하게 함), 5번째는 실제 근거 헤드라인(있으면
+    프롬프트에 그대로 인용시켜 "왜 지금 이 종목인지" 기사 본문에 못박는다
+    — "종목 동향 기사가 갑자기 튀어나온다" 2026-09-04 사용자 지적 대응)."""
+    headlines = _recent_moneyfinal_headlines()
+    if headlines:
+        counts, hits_by_ticker = {}, {}
+        for ticker, _, _ in WATCHLIST:
+            kws = WATCHLIST_KEYWORDS.get(ticker, [])
+            matched = [h for h in headlines if any(kw in h.lower() for kw in kws)]
+            if matched:
+                counts[ticker] = len(matched)
+                hits_by_ticker[ticker] = matched
+        if counts:
+            best = max(counts.items(), key=lambda kv: kv[1])[0]
+            for ticker, name_ko, exchange in WATCHLIST:
+                if ticker == best:
+                    return (ticker, name_ko, exchange,
+                            f"머니파이널 시장뉴스 {counts[best]}건 언급",
+                            hits_by_ticker[best][:3])
+
     idx = article_date.toordinal() % len(WATCHLIST)
-    return WATCHLIST[idx]
+    ticker, name_ko, exchange = WATCHLIST[idx]
+    return ticker, name_ko, exchange, "관련 뉴스 언급 없음 — 날짜 순환 선택", []
 
 
 def fetch_stock_data(symbol: str) -> dict | None:
@@ -165,16 +230,27 @@ def fetch_stock_data(symbol: str) -> dict | None:
 
 
 # ── 기사 프롬프트 ────────────────────────────────────────────
-def build_article_prompt(ticker: str, name_ko: str, exchange: str, data: dict) -> str:
+def build_article_prompt(ticker: str, name_ko: str, exchange: str, data: dict,
+                          hook_headlines: list[str] | None = None) -> str:
     today = get_target_market_date()
     today_str = today.strftime("%Y년 %m월 %d일")
     company = data.get("long_name") or name_ko
+
+    hook_block = ""
+    if hook_headlines:
+        joined = "\n".join(f"- {h}" for h in hook_headlines)
+        hook_block = f"""
+참고로 최근 실제 통신사(로이터 등) 시장 뉴스에 아래처럼 {name_ko} 관련
+헤드라인이 있었습니다. 이 내용이 오늘 주가와 관련 있다면 기사에 구체적으로
+반영하세요(관련 없어 보이면 무시하고 구글 검색으로 실제 원인을 찾으세요):
+{joined}
+"""
 
     return f"""당신은 미국 증시 개별 종목 전문 기자입니다. 구글 검색으로 오늘
 {name_ko}({ticker}) 주가를 움직인 실제 뉴스(실적, 신제품, 애널리스트 리포트,
 소송, 규제, 거시경제 이슈 등)를 찾아서, 아래 시세 데이터와 결합해 기사를
 작성하세요. 검색 없이 수치만 나열하지 마세요.
-
+{hook_block}
 오늘({today_str}) 기준 {name_ko}({ticker}, {exchange}) 시세 데이터:
 - 현재가: {data['price']:.2f}달러 (전일比 {data['pct']:+.2f}%)
 - 당일 거래 범위: {data.get('day_low', 0):.2f} ~ {data.get('day_high', 0):.2f}달러
@@ -303,7 +379,7 @@ def already_published(article_date: date) -> bool:
 
 
 def insert_article(ticker: str, name_ko: str, title_ko: str, summary_ko: str,
-                    article_date: date, image_url: str = "") -> int:
+                    article_date: date, image_url: str = "", pick_reason: str = "") -> int:
     if detect_script_leak(title_ko, summary_ko):
         print(f"  ⚠️ [문자 혼입 감지] 저장 차단: {title_ko[:60]}")
         return -1
@@ -341,7 +417,8 @@ def insert_article(ticker: str, name_ko: str, title_ko: str, summary_ko: str,
         "score": 1,
         "created_at": now_str,
         "first_published_at": now_str,
-        "update_log": [{"timestamp": now_str, "note": f"{name_ko}({ticker}) 종목 동향 자동 기사"}],
+        "update_log": [{"timestamp": now_str,
+                        "note": f"{name_ko}({ticker}) 종목 동향 자동 기사 — 선정 사유: {pick_reason}"}],
         "sent_telegram": 0,
         "is_published": True,
     }
@@ -369,8 +446,8 @@ def main():
         print(f"  → {article_date} 종목 동향 기사 이미 존재 → 스킵")
         return
 
-    ticker, name_ko, exchange = pick_ticker(article_date)
-    print(f"  → 오늘의 종목: {name_ko}({ticker}, {exchange})")
+    ticker, name_ko, exchange, pick_reason, hook_headlines = pick_ticker(article_date)
+    print(f"  → 오늘의 종목: {name_ko}({ticker}, {exchange}) — 선정 사유: {pick_reason}")
 
     print("  → 야후 파이낸스에서 시세 데이터 수집 중...")
     data = fetch_stock_data(ticker)
@@ -380,7 +457,7 @@ def main():
     print(f"  → {data['price']:.2f}달러 ({data['pct']:+.2f}%)")
 
     print("  → Gemini로 기사 생성 중...")
-    prompt = build_article_prompt(ticker, name_ko, exchange, data)
+    prompt = build_article_prompt(ticker, name_ko, exchange, data, hook_headlines)
     article_text = call_gemini_article(prompt)
 
     if not article_text:
@@ -396,7 +473,7 @@ def main():
 
     image_url = fetch_stock_image(article_date)
 
-    article_id = insert_article(ticker, name_ko, title, body, article_date, image_url)
+    article_id = insert_article(ticker, name_ko, title, body, article_date, image_url, pick_reason)
     if article_id > 0:
         print(f"  ✓ 기사 삽입 완료 (articles.id={article_id})")
     else:
