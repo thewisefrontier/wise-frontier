@@ -1,8 +1,10 @@
 name: DB 암호화 백업
 
 on:
-  schedule:
-    - cron: "0 18 * * *"   # 매일 03:00 KST
+  # GitHub 자체 schedule: 트리거는 이 저장소에서 반복적으로 무응답/지연
+  # 사고를 낸 전례가 있어 다른 워크플로와 동일하게 외부 크론(cron-job.org)의
+  # workflow_dispatch로 대체한다(2026-09-03 점검 — 이 워크플로만 옛날
+  # schedule: 그대로 남아있었음). 원래 주기: 매일 03:00 KST.
   workflow_dispatch:
 
 concurrency:
