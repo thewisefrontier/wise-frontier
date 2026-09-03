@@ -212,6 +212,7 @@
   import { esc } from '/js/esc.js';
   window.publicUpdateLog = publicUpdateLog;
   window.esc = esc;
+  window.dispatchEvent(new Event('nf-utils-ready'));
 </script>
 <script>
 
@@ -219,6 +220,10 @@
   // window.publicUpdateLog로 로드됨). 2026-09-01, 이 파일에 로컬 복붙본이 따로 있다가
   // export_articles.py/functions/article.js의 8/9 화이트리스트→블랙리스트 수정이 반영
   // 안 돼 재발(id=118417)한 걸 계기로 공용 모듈로 통합.
+  // ⚠️ 2026-09-04: 위 모듈은 defer되지만 이 일반 <script>는 즉시 실행돼
+  // window.esc 세팅보다 렌더링이 먼저 돌 수 있는 레이스가 있었다(article.html
+  // "오류가 발생했습니다" 제보와 동일 원인) — 진입점은 파일 맨 아래에서
+  // window.esc 준비 여부로 감싼다.
 
   function pad(n) { return String(n).padStart(2, '0'); }
   function nowKST() {
@@ -389,8 +394,11 @@ function cleanBody(text) {
     }).join('');
   }
 
-  loadTicker();
-  load();
+  function __startPage() {
+    loadTicker();
+    load();
+  }
+  if (window.esc) { __startPage(); } else { window.addEventListener('nf-utils-ready', __startPage, { once: true }); }
 </script>
 
 </body>

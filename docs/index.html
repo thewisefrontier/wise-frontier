@@ -485,8 +485,15 @@
   import { esc, safeUrl } from '/js/esc.js';
   window.esc = esc;
   window.safeUrl = safeUrl;
+  window.dispatchEvent(new Event('nf-utils-ready'));
 </script>
 <script>
+  // ⚠️ 2026-09-04: 위 모듈 스크립트는 defer되어 파싱 완료 후 실행되지만, 이
+  // 일반 <script>는 인라인이라 defer가 안 먹혀 즉시 실행된다 — window.esc가
+  // 아직 없을 때 렌더링 함수가 먼저 돌면 "window.esc is not a function"이
+  // 터져서 catch로 빠지고 "아직 기사 데이터가 없습니다" 폴백만 뜨는 레이스
+  // 컨디션이 있었다(사용자 제보, article.html의 "오류가 발생했습니다"와 동일
+  // 원인). 진입점 호출은 파일 맨 아래에서 window.esc 준비 여부로 감싼다.
   const PAGE_SIZE = 20;
 
   const STOPWORDS = new Set([
@@ -1272,9 +1279,12 @@ function cleanBody(text) {
     }
   }
 
-  loadMarketData();
-  loadArticles().then(applyUrlParams);
-  loadCalendarWidget();
+  function __startPage() {
+    loadMarketData();
+    loadArticles().then(applyUrlParams);
+    loadCalendarWidget();
+  }
+  if (window.esc) { __startPage(); } else { window.addEventListener('nf-utils-ready', __startPage, { once: true }); }
 </script>
 </body>
 </html>

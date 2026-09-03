@@ -253,8 +253,20 @@
   window.publicUpdateLog = publicUpdateLog;
   window.imageCreditLabel = imageCreditLabel;
   window.esc = esc;
+  // 아래 일반 <script>가 이미 실행을 시작해 이 이벤트를 놓쳤을 수도 있으니
+  // (그때는 window.esc가 이미 준비돼 있어 그쪽에서 직접 감지) 신호만 쏜다.
+  window.dispatchEvent(new Event('nf-utils-ready'));
 </script>
 <script>
+  // ⚠️ 2026-09-04: 모듈 스크립트(위)는 항상 defer되어 파싱 완료 후 실행되지만,
+  // 이 일반 <script>는 인라인이라 defer가 안 먹혀(스펙상 external에만 적용)
+  // 즉시 실행된다. loadArticle()의 await 구간(Supabase 응답)이 모듈 로딩보다
+  // 빠르게 끝나버리면 renderArticle() 안에서 "window.esc is not a function"이
+  // 터져 catch로 빠지면서 "오류가 발생했습니다"만 뜨는 레이스 컨디션이 있었다
+  // (사용자 제보 — 간헐적 재현이 정확히 이 증상과 일치). 페이지 진입점 호출을
+  // window.esc가 이미 준비됐으면 즉시, 아니면 위 이벤트를 기다렸다가 실행하는
+  // 걸로 감싸서 고침 — onclick 등에서 쓰는 전역 함수 선언 자체는 그대로 두고
+  // (모듈로 바꾸면 전부 window에 일일이 다시 붙여야 해서 누락 위험이 커짐).
   const SUPABASE_URL = 'https://fotdngseksqaghvtcvqh.supabase.co';
   const SUPABASE_ANON_KEY = 'sb_publishable_rT3kSEAAdM0DJlDW5fEWww_M37h6dDW';
 
@@ -626,8 +638,11 @@ function cleanBody(text) {
     `;
   }
 
-  loadMarketData();
-  loadArticle();
+  function __startPage() {
+    loadMarketData();
+    loadArticle();
+  }
+  if (window.esc) { __startPage(); } else { window.addEventListener('nf-utils-ready', __startPage, { once: true }); }
 </script>
 </body>
 </html>
