@@ -1,0 +1,30 @@
+name: NewsFinal - Cleanup Stale Raw Articles
+
+on:
+  # 원래 주기: 매일 UTC 16:20 = KST 01:20 (하루 1회면 충분한 배치 정리).
+  # 이 저장소는 GitHub 자체 schedule: 트리거가 반복적으로 무응답/지연 사고를
+  # 낸 전례가 있어(다른 워크플로와 동일) workflow_dispatch만 쓰고 외부
+  # 크론(cron-job.org)으로 호출한다.
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v5
+
+      - name: Python 설정
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: 패키지 설치
+        run: pip install -r requirements.txt
+
+      - name: 미발행 원자재(7일 초과) 정리
+        run: python scripts/cleanup_stale_raw.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
