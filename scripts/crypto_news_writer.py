@@ -206,6 +206,25 @@ def fetch_moneyfinal_crypto_context(symbol: str) -> dict | None:
     return None
 
 
+def _won_style_amount(n: float) -> str:
+    """91,256,495,759 같은 콤마 표기 대신 "912억5649만5759" 식 억/만
+    그룹핑으로 변환(2026-09-04 사용자 지적 — 리플 기사에서 시가총액이
+    콤마 원문 그대로 나가 "가시성이 너무 떨어진다"고 지적받음). 프롬프트에
+    넣는 참고자료 자체를 이 형식으로 만들어서, Gemini가 콤마 원본을
+    그대로 베낄 여지를 원천 차단한다."""
+    n = int(round(n))
+    eok, rest = divmod(n, 100_000_000)
+    man, remainder = divmod(rest, 10_000)
+    parts = []
+    if eok:
+        parts.append(f"{eok}억")
+    if man:
+        parts.append(f"{man}만")
+    if remainder or not parts:
+        parts.append(f"{remainder}")
+    return "".join(parts)
+
+
 # ── 기사 프롬프트 ────────────────────────────────────────────
 def build_article_prompt(symbol: str, name_ko: str, data: dict, mf_ctx: dict | None = None,
                           benchmarks: list | None = None) -> str:
@@ -236,7 +255,7 @@ def build_article_prompt(symbol: str, name_ko: str, data: dict, mf_ctx: dict | N
         if mf_ctx.get("market_cap_rank"):
             parts.append(f"시가총액 순위: {mf_ctx['market_cap_rank']}위")
         if mf_ctx.get("market_cap"):
-            parts.append(f"시가총액: {float(mf_ctx['market_cap']):,.0f}달러")
+            parts.append(f"시가총액: {_won_style_amount(float(mf_ctx['market_cap']))}달러")
         if mf_ctx.get("change_pct_7d") is not None:
             parts.append(f"7일 변동률: {float(mf_ctx['change_pct_7d']):+.2f}%")
         if parts:
@@ -297,7 +316,12 @@ BODY: <본문>
    뉴스도 실제 사실만 반영하고, 확인 안 되는 내용은 지어내지 마세요.
 5. ⚠️ [벤치마크 시세] 참고자료가 주어졌다면, 그 코인들의 시세를 본문에
    빠짐없이 언급하세요 — 생략 금지.
-6. 분량: 500자 이상.
+6. ⚠️ 숫자에 3자리마다 콤마(,)를 찍지 마세요. 시가총액·거래량처럼 큰
+   금액은 "912억5649만5759달러"처럼 억/만 단위로 풀어 쓰세요 — "91,256,
+   495,759달러"처럼 콤마로 구분된 원본 숫자를 그대로 베끼지 마세요. 위
+   [추가 참고] 자료의 시가총액은 이미 이 형식으로 변환돼 있으니 그대로
+   쓰면 됩니다.
+7. 분량: 500자 이상.
 """
 
 

@@ -145,7 +145,12 @@ def fetch_seeded_pixabay_image(keywords: list, seed: int, key_hint: str) -> str:
             print(f"  ⚠️ Pixabay 결과 없음: {query}")
             return ""
         hit = hits[seed % len(hits)]
-        raw_url = hit.get("largeImageURL", "")
+        # largeImageURL(최대 1280px)이 아니라 webformatURL(최대 640px)을 쓴다
+        # — 기사 히어로 이미지는 CSS상 max-height:420px라 1280px가 과잉이고,
+        # R2 저장 용량만 몇 배로 먹는다(2026-09-04 사용자 지적 — "사진이
+        # DB에 용량을 제법 차지할텐데, 최대한 아끼는 법을 찾아봐". DB 자체엔
+        # URL 문자열만 들어가 영향 없지만 R2 저장 용량은 실제로 아낄 수 있음).
+        raw_url = hit.get("webformatURL", "") or hit.get("largeImageURL", "")
         if not raw_url:
             return ""
         from image_store import store_image
@@ -200,8 +205,10 @@ def fetch_article_image(title: str, body: str, entity: str, call_gemini_fn) -> t
         if res.status_code == 200:
             hits = res.json().get("hits", [])
             if hits:
-                raw_url = hits[0].get("largeImageURL", "")
-                # Pixabay largeImageURL은 ~24시간 후 만료되는 임시 URL이라
+                # webformatURL(최대 640px) 사용 — largeImageURL(1280px)은 히어로
+                # 이미지 표시 크기(max-height:420px)에 과잉이라 R2 용량만 낭비.
+                raw_url = hits[0].get("webformatURL", "") or hits[0].get("largeImageURL", "")
+                # Pixabay 이미지 URL은 ~24시간 후 만료되는 임시 URL이라
                 # R2에 영구 저장해서 링크가 안 깨지게 한다(image_store.py 참조).
                 try:
                     from image_store import store_image

@@ -401,7 +401,7 @@ def fetch_article_image(title: str, body: str) -> str:
         if res.status_code == 200:
             hits = res.json().get("hits", [])
             if hits:
-                raw_url = hits[0].get("largeImageURL", "")
+                raw_url = hits[0].get("webformatURL", "") or hits[0].get("largeImageURL", "")
                 if raw_url:
                     # 임시 URL → R2 영구 URL. 실패 시 원본을 그대로 돌려받는다.
                     return store_image(

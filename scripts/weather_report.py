@@ -998,9 +998,9 @@ def fetch_country_image(country_name: str) -> str:
             # 적합한 후보를 모두 모은 뒤 날짜 기반으로 회전 선택한다.
             # (첫 hit 고정 선택 시 매일 같은 사진이 반복되는 문제 방지)
             candidates = [
-                h.get("largeImageURL", "")
+                h.get("webformatURL", "") or h.get("largeImageURL", "")
                 for h in hits
-                if _is_image_suitable(h, country_en) and h.get("largeImageURL")
+                if _is_image_suitable(h, country_en) and (h.get("webformatURL") or h.get("largeImageURL"))
             ]
             if candidates:
                 today = now_kst()
