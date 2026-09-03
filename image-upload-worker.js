@@ -6,13 +6,25 @@
  * Body: FormData { file: File } or JSON { base64: string, mimeType: string, filename: string }
  */
 
+// 2026-09-03 보안 점검: 이 워커는 자매 워커(pixabay-search-worker.js)와 달리
+// CORS를 '*'로 전면 개방하고 있었다. 업로드 자체는 UPLOAD_SECRET 인증이
+// 막아주지만(임의 사이트가 시크릿 없이 업로드는 못 함), 그래도 다른 워커와
+// 일관되게 origin을 우리 도메인으로 좁힌다.
+const ALLOWED_ORIGINS = [
+  'https://newsfinal.co.kr',
+  'https://www.newsfinal.co.kr',
+];
+
 export default {
   async fetch(request, env) {
+    const origin = request.headers.get('Origin') || '';
+    const corsOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+
     // CORS
     if (request.method === 'OPTIONS') {
       return new Response(null, {
         headers: {
-          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Origin': corsOrigin,
           'Access-Control-Allow-Methods': 'POST, OPTIONS',
           'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         }
@@ -60,13 +72,13 @@ export default {
       return new Response(JSON.stringify({ url: publicUrl }), {
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Origin': corsOrigin,
         }
       });
     } catch (e) {
       return new Response(JSON.stringify({ error: e.message }), {
         status: 500,
-        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': corsOrigin }
       });
     }
   }

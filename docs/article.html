@@ -249,8 +249,10 @@
 <script type="module">
   import { publicUpdateLog } from '/js/update-log-filter.js';
   import { imageCreditLabel } from '/js/image-credit.js';
+  import { esc } from '/js/esc.js';
   window.publicUpdateLog = publicUpdateLog;
   window.imageCreditLabel = imageCreditLabel;
+  window.esc = esc;
 </script>
 <script>
   const SUPABASE_URL = 'https://fotdngseksqaghvtcvqh.supabase.co';
@@ -449,8 +451,17 @@ function cleanBody(text) {
     cachedAllArticles = allArticles;
     const hasEnglish = !!(a.summary_en && a.summary_en.trim());
     const lang = (currentLang === 'en' && hasEnglish) ? 'en' : 'ko';
+    // title은 document.title/meta 등 "HTML을 파싱하지 않는" 컨텍스트에도 쓰이므로
+    // 원문 그대로 두고, innerHTML 템플릿에 넣을 때만 titleHtml(이스케이프됨)을 쓴다
+    // (2026-09-03 보안 점검 — esc()를 여기서 적용하면 document.title에 "&amp;"처럼
+    // 문자 그대로 보이는 이중 인코딩 버그가 생긴다).
     const title = lang === 'en' ? (a.title_en || a.title_ko || '') : (a.title_ko || a.title_en || '');
-    const body = cleanBody(lang === 'en' ? (a.summary_en || a.summary_ko || '') : (a.summary_ko || a.summary_en || ''));
+    const titleHtml = window.esc(title);
+    // 2026-09-03 보안 점검: DB 본문을 이스케이프 없이 innerHTML에 넣고 있었다(XSS).
+    // cleanBody() 직후, p/ul/h2 구조화·이미지 마크다운 변환보다 먼저 이스케이프해서
+    // 원문에 진짜 <script> 등이 있어도 텍스트로만 남게 한다 — 이스케이프는 <,>,&,",'만
+    // 건드리므로 마크다운에 쓰는 []()*  문자는 그대로 남아 이후 변환 로직에 영향 없다.
+    const body = window.esc(cleanBody(lang === 'en' ? (a.summary_en || a.summary_ko || '') : (a.summary_ko || a.summary_en || '')));
 
     // 문단(빈 줄) 단위로 먼저 블록을 나눈 뒤 블록별로 처리한다.
     // ⚠️ 실사고(2026-08-17, id=80581 다이제스트): 예전엔 \n\n을 플레이스홀더로
@@ -533,7 +544,7 @@ function cleanBody(text) {
       ${a.source === 'NewsFinal' && ['trend_','realtrend_','extrend_'].some(p=>(a.subcategory||'').startsWith(p)) ? `<div class="trend-badge"><span class="dot"></span>TREND</div>` : ''}
 
       <div class="article-tags">
-        ${a.category ? `<a class="tag" href="/?category=${encodeURIComponent(a.category)}">${a.category}</a>` : ''}
+        ${a.category ? `<a class="tag" href="/?category=${encodeURIComponent(a.category)}">${window.esc(a.category)}</a>` : ''}
         ${a.subcategory && a.subcategory !== a.category
           && !a.subcategory.startsWith('cluster_')
           && !a.subcategory.startsWith('solo_')
@@ -543,37 +554,37 @@ function cleanBody(text) {
           && !a.subcategory.startsWith('extrend_')
           && !a.subcategory.startsWith('weather_')
           && !a.subcategory.endsWith('briefing')
-          ? `<span class="tag">${a.subcategory}</span>` : ''}
-        ${a.region && regionKo(a.region) !== a.category ? `<span class="tag">${regionKo(a.region)}</span>` : ''}
+          ? `<span class="tag">${window.esc(a.subcategory)}</span>` : ''}
+        ${a.region && regionKo(a.region) !== a.category ? `<span class="tag">${window.esc(regionKo(a.region))}</span>` : ''}
         ${a.countries && a.countries.length > 0
-          ? a.countries.map(c => `<a class="tag" href="/?country=${encodeURIComponent(c)}">${c}</a>`).join('')
-          : (a.country ? `<a class="tag" href="/?country=${encodeURIComponent(a.country)}">${a.country}</a>` : '')}
+          ? a.countries.map(c => `<a class="tag" href="/?country=${encodeURIComponent(c)}">${window.esc(c)}</a>`).join('')
+          : (a.country ? `<a class="tag" href="/?country=${encodeURIComponent(a.country)}">${window.esc(a.country)}</a>` : '')}
       </div>
 
-      <h1 class="article-title">${title}</h1>
+      <h1 class="article-title">${titleHtml}</h1>
 
       ${hasEnglish ? `<button onclick="toggleLang()" style="margin:0 0 12px;background:none;border:1px solid var(--border);border-radius:6px;padding:4px 12px;cursor:pointer;color:var(--accent2);font-size:12px;">${lang === 'en' ? '🇰🇷 한국어로 보기' : '🇺🇸 Read in English'}</button>` : ''}
 
       <div class="article-meta">
-        <span>${a.byline || '뉴스파이널 편집국'}</span>
+        <span>${window.esc(a.byline || '뉴스파이널 편집국')}</span>
         ${a.first_published_at && a.first_published_at !== a.created_at
           ? `<span>🕐 최초 게시: ${formatDate(a.first_published_at)}</span><span>🔄 최종 업데이트: ${formatDate(a.created_at)}</span>`
           : `<span>🕐 ${formatDate(a.created_at)}</span>`}
-        ${a.region ? `<span>🌍 ${regionKo(a.region)}</span>` : ''}
-        ${a.country ? `<span>📍 ${a.country}</span>` : ''}
+        ${a.region ? `<span>🌍 ${window.esc(regionKo(a.region))}</span>` : ''}
+        ${a.country ? `<span>📍 ${window.esc(a.country)}</span>` : ''}
       </div>
 
       ${(prevArticle || nextArticle) ? `
         <div style="margin:12px 0;padding:10px 14px;background:rgba(26,95,168,0.06);border-radius:8px;border-left:3px solid var(--accent2);font-size:13px;line-height:1.7;">
-          ${prevArticle ? `<div>⬅️ 이전 보도: <a href="/article?id=${prevArticle.id}" style="color:var(--accent2);">${prevArticle.title_ko || prevArticle.title_en}</a></div>` : ''}
-          ${nextArticle ? `<div>➡️ 후속 기사: <a href="/article?id=${nextArticle.id}" style="color:var(--accent2);">${nextArticle.title_ko || nextArticle.title_en}</a></div>` : ''}
+          ${prevArticle ? `<div>⬅️ 이전 보도: <a href="/article?id=${prevArticle.id}" style="color:var(--accent2);">${window.esc(prevArticle.title_ko || prevArticle.title_en)}</a></div>` : ''}
+          ${nextArticle ? `<div>➡️ 후속 기사: <a href="/article?id=${nextArticle.id}" style="color:var(--accent2);">${window.esc(nextArticle.title_ko || nextArticle.title_en)}</a></div>` : ''}
         </div>` : ''}
 
       ${a.summary_3lines ? `
         <div style="margin:16px 0;padding:14px 16px;background:rgba(26,95,168,0.06);border-radius:8px;border-left:3px solid var(--accent2);">
           <div style="font-weight:700;color:var(--accent2);font-size:13px;margin-bottom:8px;">📌 3줄 요약</div>
           <ul style="margin:0;padding-left:18px;">
-            ${a.summary_3lines.split(/\\n|\n/).filter(l => l.trim()).map(l => `<li style="margin-bottom:4px;font-size:14px;line-height:1.6;">${l.trim().replace(/^[*\-•]\s*/,'')}</li>`).join('')}
+            ${a.summary_3lines.split(/\\n|\n/).filter(l => l.trim()).map(l => `<li style="margin-bottom:4px;font-size:14px;line-height:1.6;">${window.esc(l.trim().replace(/^[*\-•]\s*/,''))}</li>`).join('')}
           </ul>
         </div>` : ''}
 
@@ -583,11 +594,11 @@ function cleanBody(text) {
           ${publicUpdateLog(a.update_log).reverse().map((l, i) => `
             <div style="display:flex;gap:10px;padding:4px 10px;${i===0?'background:rgba(26,95,168,0.06);color:var(--text);font-weight:600;':'color:var(--muted);'}">
               <span style="min-width:78px;flex-shrink:0;">${formatUpdateTime(l.timestamp)}</span>
-              <span>${l.note || '업데이트'}</span>
+              <span>${window.esc(l.note || '업데이트')}</span>
             </div>`).join('')}
         </div>` : ''}
 
-      ${a.image_url ? `<img class="article-hero" src="${a.image_url}" alt="${title.replace(/"/g,'&quot;')}" loading="lazy" style="width:100%;max-height:420px;object-fit:cover;border-radius:8px;margin:16px 0 8px;display:block;">`+ (window.imageCreditLabel(a.image_url, a.image_credit) ? `<div style="font-size:12px;color:#888;margin:0 0 12px;text-align:right;">${String(window.imageCreditLabel(a.image_url, a.image_credit)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>` : '') : ''}
+      ${a.image_url ? `<img class="article-hero" src="${window.esc(a.image_url)}" alt="${titleHtml}" loading="lazy" style="width:100%;max-height:420px;object-fit:cover;border-radius:8px;margin:16px 0 8px;display:block;">`+ (window.imageCreditLabel(a.image_url, a.image_credit) ? `<div style="font-size:12px;color:#888;margin:0 0 12px;text-align:right;">${window.esc(window.imageCreditLabel(a.image_url, a.image_credit))}</div>` : '') : ''}
 
       <div class="article-body">
         ${bodyHtml}
@@ -596,7 +607,7 @@ function cleanBody(text) {
       ${a.investment_idea ? `
         <div style="margin:24px 0;padding:16px 18px;background:rgba(200,140,20,0.07);border-radius:8px;border-left:3px solid #c88c14;">
           <div style="font-weight:700;color:#c88c14;font-size:13px;margin-bottom:8px;">💡 투자 아이디어</div>
-          <div style="font-size:14px;line-height:1.8;color:var(--text);">${a.investment_idea.replace(/\\n|\n/g,'<br>')}</div>
+          <div style="font-size:14px;line-height:1.8;color:var(--text);">${window.esc(a.investment_idea).replace(/\\n|\n/g,'<br>')}</div>
         </div>` : ''}
 
       <div class="source-link">ⓒ NewsFinal <button onclick="shareArticle()" style="float:right;background:none;border:1px solid var(--border);border-radius:6px;padding:4px 12px;cursor:pointer;color:var(--text);font-size:12px;">🔗 공유</button></div>
@@ -606,7 +617,7 @@ function cleanBody(text) {
           <div class="related-title">관련 기사</div>
           ${related.map(r => `
             <div class="related-item">
-              <a class="related-item-title" href="/article?id=${r.id}">${r.title_ko || r.title_en}</a>
+              <a class="related-item-title" href="/article?id=${r.id}">${window.esc(r.title_ko || r.title_en)}</a>
               <div class="related-meta">NewsFinal · ${(r.created_at || '').slice(0,10)}</div>
             </div>
           `).join('')}

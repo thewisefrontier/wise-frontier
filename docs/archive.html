@@ -265,6 +265,10 @@
   </div>
 </footer>
 
+<script type="module">
+  import { esc } from '/js/esc.js';
+  window.esc = esc;
+</script>
 <script>
   function toggleRegionMenu() {
     document.getElementById('region-menu').classList.toggle('open');
@@ -422,12 +426,12 @@ function cleanBody(text) {
     }
 
     container.innerHTML = articles.map(a => {
-      const title = a.title_ko || a.title_en;
-      const summary = cleanBody(stripUpdates(a.summary_ko || '')).slice(0, 100);
-      const catTag = a.category ? `<span class="tag">${a.category}</span>` : '';
-      const regionTag = a.region ? `<span class="tag">${REGION_KO[a.region] || a.region}</span>` : '';
+      const title = window.esc(a.title_ko || a.title_en);
+      const summary = window.esc(cleanBody(stripUpdates(a.summary_ko || '')).slice(0, 100));
+      const catTag = a.category ? `<span class="tag">${window.esc(a.category)}</span>` : '';
+      const regionTag = a.region ? `<span class="tag">${window.esc(REGION_KO[a.region] || a.region)}</span>` : '';
       const countries = a.countries && a.countries.length ? a.countries : (a.country ? [a.country] : []);
-      const countryTags = [...new Set(countries)].filter(c=>c).map(c => `<span class="tag country">${c}</span>`).join('');
+      const countryTags = [...new Set(countries)].filter(c=>c).map(c => `<span class="tag country">${window.esc(c)}</span>`).join('');
 
       return `
         <div class="article-card" onclick="location.href='article?id=${a.id}'">
