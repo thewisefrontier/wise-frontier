@@ -126,21 +126,25 @@ WATCHLIST = [
     ("XRP-USD", "리플"),
 ]
 
-# 야후 심볼 → 머니파이널 crypto.json의 CoinGecko id 매핑(아래 참조).
+# 야후 심볼 → 머니파이널 응답의 coin id 매핑(CoinMarketCap 소스, id 필드는
+# "bitcoin"/"ethereum" 식 slug 그대로 유지됨).
 _YAHOO_TO_COINGECKO_ID = {
     "BTC-USD": "bitcoin",
     "ETH-USD": "ethereum",
     "SOL-USD": "solana",
-    "XRP-USD": "ripple",
+    "XRP-USD": "xrp",  # 실측 확인(2026-09-04): "ripple"이 아니라 "xrp"
 }
 
-# 머니파이널(D:\thewise\moneyfinal)이 CoinGecko 기준 시총 상위 20개 코인
-# 시세를 이 경로에 공개 정적 파일로 배포할 예정(2026-09-04, 사용자 공지 —
-# crypto.html 프론트엔드는 이미 배포돼 이 파일을 fetch하고 있지만 데이터
-# 파일 자체는 아직 없음, 요청하면 SPA 폴백 HTML이 200으로 옴). market_news
-# 테이블과 달리 이건 인증 없는 공개 정적 파일이라 게이트웨이가 필요 없다 —
-# 배포되는 즉시 아래 함수가 자동으로 살아난다(그 전까진 조용히 폴백).
-MONEYFINAL_CRYPTO_URL = "https://moneyfinal.pages.dev/data/crypto.json"
+# ⚠️ 2026-09-04 정정: 처음엔 data/crypto.json을 인증 없는 공개 정적
+# 파일이라고 안내받았는데, 머니파이널 쪽에서 뒤늦게 CoinMarketCap 이용약관상
+# 원본 데이터 재배포 금지 조항을 확인하고 정적 파일을 삭제, market_news와
+# 동일한 인증 게이트웨이(/api/crypto, X-Api-Key)로 전환했다(공식 정정 공지로
+# 통보받고, 응답이 실제로 20개 코인 실데이터를 반환하는지 직접 검증 후 반영
+# — MONEYFINAL_FEED_KEY는 market_news_fetcher.py가 쓰는 것과 동일한 키를
+# 재사용). us_company_info(/api/company-info)도 같은 방식으로 바뀌었으나
+# 그쪽은 아직 이 저장소에서 소비하는 코드가 없어 손대지 않았다.
+MONEYFINAL_CRYPTO_URL = "https://moneyfinal.pages.dev/api/crypto"
+MONEYFINAL_FEED_KEY = os.getenv("MONEYFINAL_FEED_KEY", "")
 
 
 def pick_coin(article_date: date) -> tuple[str, str]:
@@ -153,15 +157,18 @@ def fetch_coin_data(symbol: str) -> dict | None:
 
 
 def fetch_moneyfinal_crypto_context(symbol: str) -> dict | None:
-    """머니파이널 crypto.json에서 이 코인의 시총 순위·시총·7일 변동률을
-    가져온다(야후 시세엔 없는 정보). 파일이 아직 없거나(404→SPA 폴백 HTML)
-    형식이 안 맞으면 조용히 None — 실패해도 기사 생성 자체는 야후 데이터만
-    으로 계속 진행된다."""
+    """머니파이널 /api/crypto에서 이 코인의 시총 순위·시총·7일 변동률을
+    가져온다(야후 시세엔 없는 정보). 키 없거나 실패하면 조용히 None —
+    실패해도 기사 생성 자체는 야후 데이터만으로 계속 진행된다."""
     coin_id = _YAHOO_TO_COINGECKO_ID.get(symbol)
-    if not coin_id:
+    if not coin_id or not MONEYFINAL_FEED_KEY:
         return None
     try:
-        res = requests.get(MONEYFINAL_CRYPTO_URL, timeout=10, headers={"User-Agent": "Mozilla/5.0"})
+        res = requests.get(
+            MONEYFINAL_CRYPTO_URL,
+            headers={"X-Api-Key": MONEYFINAL_FEED_KEY},
+            timeout=10,
+        )
         if res.status_code != 200:
             return None
         if "json" not in (res.headers.get("content-type") or "").lower():
