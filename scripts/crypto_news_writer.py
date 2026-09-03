@@ -126,6 +126,12 @@ WATCHLIST = [
     ("XRP-USD", "리플"),
 ]
 
+# 비트코인/이더리움/솔라나는 오늘의 코인이 뭐든 항상 시세를 같이 보여준다
+# (2026-09-04 사용자 요청 — "코인 시세 쓸때는 비트코인, 이더리움, 솔라나
+# 시세를 무조건 넣어주도록"). 시장 벤치마크라 어떤 코인이 주인공이어도
+# 참고 시세로서 가치가 있음.
+BENCHMARK_COINS = [("BTC-USD", "비트코인"), ("ETH-USD", "이더리움"), ("SOL-USD", "솔라나")]
+
 # 야후 심볼 → 머니파이널 응답의 coin id 매핑(CoinMarketCap 소스, id 필드는
 # "bitcoin"/"ethereum" 식 slug 그대로 유지됨).
 _YAHOO_TO_COINGECKO_ID = {
@@ -156,6 +162,24 @@ def fetch_coin_data(symbol: str) -> dict | None:
     return fetch_yahoo_quote(symbol)
 
 
+def fetch_benchmark_data(featured_symbol: str, featured_data: dict) -> list[tuple[str, str, dict]]:
+    """BENCHMARK_COINS(BTC/ETH/SOL) 시세를 항상 가져온다. 오늘의 코인이
+    이미 이 셋 중 하나면 중복 조회하지 않고 재사용. 실패한 코인은 조용히
+    빠짐(있는 것만이라도 본문에 반영하면 되고, 전체 기사 생성을 막을
+    이유는 아님)."""
+    out = []
+    for symbol, name_ko in BENCHMARK_COINS:
+        if symbol == featured_symbol:
+            out.append((symbol, name_ko, featured_data))
+            continue
+        d = fetch_coin_data(symbol)
+        if d:
+            out.append((symbol, name_ko, d))
+        else:
+            print(f"  ⚠️ 벤치마크 시세 조회 실패: {name_ko}({symbol})")
+    return out
+
+
 def fetch_moneyfinal_crypto_context(symbol: str) -> dict | None:
     """머니파이널 /api/crypto에서 이 코인의 시총 순위·시총·7일 변동률을
     가져온다(야후 시세엔 없는 정보). 키 없거나 실패하면 조용히 None —
@@ -183,13 +207,28 @@ def fetch_moneyfinal_crypto_context(symbol: str) -> dict | None:
 
 
 # ── 기사 프롬프트 ────────────────────────────────────────────
-def build_article_prompt(symbol: str, name_ko: str, data: dict, mf_ctx: dict | None = None) -> str:
+def build_article_prompt(symbol: str, name_ko: str, data: dict, mf_ctx: dict | None = None,
+                          benchmarks: list | None = None) -> str:
     now = now_kst()
     today = now.date()
     today_str = today.strftime("%Y년 %m월 %d일")
     # 코인은 24시간 거래라 "N일"만으로는 언제 시점 가격인지 모호하다(하루
     # 안에서도 크게 움직임) — 사용자 지적(2026-09-04) 반영, 시:분까지 명시.
     time_str = now.strftime("%H:%M")
+
+    bench_block = ""
+    if benchmarks:
+        lines = [
+            f"- {bname}({bsym.replace('-USD','')}): {bd['price']:,.2f}달러 ({bd['pct']:+.2f}%)"
+            for bsym, bname, bd in benchmarks
+        ]
+        bench_block = (
+            "\n[벤치마크 시세 — 오늘의 주인공이 아니어도 본문에 반드시 언급]\n"
+            + "\n".join(lines)
+            + "\n이 시세들은 위 데이터와 같은 시각(같은 야후 파이낸스 조회) 기준입니다. "
+              "본문 아무 곳에나 자연스럽게(예: '한편 비트코인은 X달러, 이더리움은 Y달러에 "
+              "거래됐다') 넣으세요 — 이미 오늘의 주인공인 코인은 중복해서 다시 나열하지 마세요.\n"
+        )
 
     mf_block = ""
     if mf_ctx:
@@ -214,7 +253,7 @@ def build_article_prompt(symbol: str, name_ko: str, data: dict, mf_ctx: dict | N
 - 현재가: {data['price']:,.2f}달러 (전일比 {data['pct']:+.2f}%)
 - 당일 거래 범위: {data.get('day_low', 0):,.2f} ~ {data.get('day_high', 0):,.2f}달러
 - 52주 최고/최저: {data.get('fifty_two_week_high', 0):,.2f} / {data.get('fifty_two_week_low', 0):,.2f}달러
-{mf_block}
+{mf_block}{bench_block}
 
 [출력 형식] — 반드시 이 형식 그대로:
 TITLE: <제목>
@@ -247,14 +286,17 @@ BODY: <본문>
 
    ◆ 주요 지표
    당일 거래 범위, 52주 최고/최저 대비 현재 위치 등을 구체적 수치와 함께
-   서술하세요.
+   서술하세요. 벤치마크 시세(위 [벤치마크 시세] 참고자료가 있다면)도 이
+   섹션이나 가격 동향 섹션 어디든 자연스럽게 넣으세요.
 3. ⚠️ 날짜·시각·출처: 반드시 ◆ 가격 동향 섹션 앞부분에 "{today.day}일
    {time_str}(한국시간) 기준 야후 파이낸스 시세로" 형식으로 날짜·시각·
    데이터 출처를 함께 명시하세요(셋 중 하나라도 생략 금지). "오늘", "현재",
    절대연도(2026년 등)는 금지.
 4. 수치는 위 데이터를 그대로 사용하고 절대 지어내지 마세요. 검색으로 찾은
    뉴스도 실제 사실만 반영하고, 확인 안 되는 내용은 지어내지 마세요.
-5. 분량: 500자 이상.
+5. ⚠️ [벤치마크 시세] 참고자료가 주어졌다면, 그 코인들의 시세를 본문에
+   빠짐없이 언급하세요 — 생략 금지.
+6. 분량: 500자 이상.
 """
 
 
@@ -418,8 +460,11 @@ def main():
     if mf_ctx:
         print(f"  → 머니파이널 데이터 참조 (시총순위 {mf_ctx.get('market_cap_rank', '-')}위)")
 
+    print("  → 벤치마크(BTC/ETH/SOL) 시세 수집 중...")
+    benchmarks = fetch_benchmark_data(symbol, data)
+
     print("  → Gemini로 기사 생성 중...")
-    prompt = build_article_prompt(symbol, name_ko, data, mf_ctx)
+    prompt = build_article_prompt(symbol, name_ko, data, mf_ctx, benchmarks)
     article_text = call_gemini_article(prompt)
 
     if not article_text:
