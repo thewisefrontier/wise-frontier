@@ -1523,17 +1523,29 @@ def verify_no_fabricated_names(source_prompt: str, body: str) -> str:
 
 
 def call_gemini_article(prompt, max_tokens=1500, style_retries=1):
-    """기사 본문 생성 전용 호출. 논평/칼럼체·합쇼체·원문에 없는 고유명사 감지 시 최대 style_retries회 재생성."""
+    """기사 본문 생성 전용 호출. 논평/칼럼체·합쇼체·원문에 없는 고유명사·번역
+    누락 외국어 감지 시 최대 style_retries회 재생성.
+
+    ⚠️ 2026-09-04: detect_foreign_leftover는 원래 호출부(run() 두 곳)에서
+    감지 즉시 미발행 처리만 했었는데, 사용자 지적("미번역 감지 시 미발행이
+    아니라 기사를 다시 쓰도록 해야 하는거 아닌가") — has_column_style/
+    verify_no_fabricated_names처럼 여기 재생성 루프에 합류시켜, 감지되면
+    먼저 재작성을 시도하고 그래도 안 고쳐질 때만 호출부의 미발행 처리로
+    넘어가게 함. call_gemini_article 호출부 5곳(클러스터/후속보도/단독 등)
+    전부에 자동 적용됨."""
     content = call_gemini(prompt, max_tokens=max_tokens)
     attempt = 0
     fabricated = verify_no_fabricated_names(prompt, content) if content else ""
-    while content and (has_column_style(content) or has_polite_ending(content) or fabricated) and attempt < style_retries:
+    foreign_leftover = detect_foreign_leftover(content) if content else ""
+    while content and (has_column_style(content) or has_polite_ending(content) or fabricated or foreign_leftover) and attempt < style_retries:
         attempt += 1
         reasons = []
         if has_column_style(content) or has_polite_ending(content):
             reasons.append("논평/칼럼체" if has_column_style(content) else "합쇼체(-습니다/-입니다)")
         if fabricated:
             reasons.append(f"원문에 없는 고유명사({fabricated})")
+        if foreign_leftover:
+            reasons.append(f"번역 누락 외국어({foreign_leftover})")
         print(f"  ⚠️ {', '.join(reasons)} 감지 → 재생성 시도 ({attempt}/{style_retries})")
         retry_prompt = (
             prompt
@@ -1546,15 +1558,22 @@ def call_gemini_article(prompt, max_tokens=1500, style_retries=1):
                "영화·도서 등 작품 제목이나 고유명사는 원본 자료에 나온 표기를 그대로 옮기고, "
                "정확한 한국어 정식 명칭을 확신할 수 없으면 지어내지 말고 원문 표기를 그대로 쓰세요."
                if fabricated else "")
+            + (f"\n또한 다음 단어가 번역되지 않고 원문 외국어(스페인어·독일어·프랑스어 등) "
+               f"그대로 남아있었습니다: {foreign_leftover}. 인명·지명·기업명 등 고유명사를 "
+               "제외한 이 단어들을 빠짐없이 한국어로 번역해서 본문 전체를 다시 작성하세요."
+               if foreign_leftover else "")
         )
         retried = call_gemini(retry_prompt, max_tokens=max_tokens)
         if retried:
             content = retried
             fabricated = verify_no_fabricated_names(prompt, content)
+            foreign_leftover = detect_foreign_leftover(content)
     if content and (has_column_style(content) or has_polite_ending(content)):
         print("  ⚠️ 재생성 후에도 논평체·합쇼체 패턴이 남아있음 (파싱 단계에서 변환)")
     if content and fabricated:
         print(f"  ⚠️ 재생성 후에도 원문에 없는 고유명사 남아있음: {fabricated} (그대로 발행 — 수동 확인 필요)")
+    if content and foreign_leftover:
+        print(f"  ⚠️ 재생성 후에도 번역 누락 외국어 남아있음: {foreign_leftover} (호출부에서 미발행 처리)")
     return content
 
 
