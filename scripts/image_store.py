@@ -24,6 +24,7 @@ image_store.py — 외부 스톡 이미지의 R2 영구 저장 헬퍼
 """
 
 import base64
+import io
 import os
 import re
 import unicodedata
@@ -35,6 +36,14 @@ UPLOAD_SECRET = os.getenv("UPLOAD_SECRET", "")
 
 # 다운로드 상한(바이트). Worker의 base64 처리 부담을 막기 위한 안전장치.
 MAX_IMAGE_BYTES = 8 * 1024 * 1024
+
+# 히어로 이미지는 CSS상 max-height:420px로만 표시된다. 호출부(Pixabay
+# webformatURL/largeImageURL, 위키미디어 원본 등)가 이보다 큰 이미지를
+# 넘겨도 여기서 한 번 더 강제로 줄인다(2026-09-04 "구조적으로 고쳐놔"
+# 사용자 지시 — 호출부마다 URL 필드를 챙기는 방식은 새 스크립트가 추가될
+# 때마다 다시 놓칠 수 있어서, 실제로 R2에 올라가는 지점 하나에서 강제).
+MAX_IMAGE_WIDTH = 960
+JPEG_QUALITY = 82
 
 _EXT_BY_MIME = {
     "image/jpeg": "jpg",
@@ -83,6 +92,38 @@ def is_permanent(url: str) -> bool:
     """이미 R2 등 영구 저장소 URL인지 판정."""
     u = (url or "").lower()
     return bool(u) and any(h in u for h in _PERMANENT_HINTS)
+
+
+def _optimize_image(data: bytes, ext: str) -> tuple[bytes, str]:
+    """MAX_IMAGE_WIDTH보다 넓으면 축소하고 JPEG로 재압축해 용량을 최소화한다.
+    GIF(움짤 가능성)는 프레임이 깨지므로 건드리지 않는다. 실패하면 원본
+    바이트를 그대로 반환(최적화는 있으면 좋은 보강일 뿐, 업로드 자체를
+    막을 이유가 아니다)."""
+    if ext == "gif":
+        return data, ext
+    try:
+        from PIL import Image
+        img = Image.open(io.BytesIO(data))
+        img.load()
+        if img.width > MAX_IMAGE_WIDTH:
+            new_height = round(img.height * MAX_IMAGE_WIDTH / img.width)
+            img = img.resize((MAX_IMAGE_WIDTH, new_height), Image.LANCZOS)
+        if img.mode not in ("RGB", "L"):
+            # 알파 채널(RGBA/팔레트 등)은 JPEG가 지원 안 하니 흰 배경에 합성.
+            bg = Image.new("RGB", img.size, (255, 255, 255))
+            bg.paste(img, mask=img.split()[-1] if img.mode in ("RGBA", "LA") else None)
+            img = bg
+        out = io.BytesIO()
+        img.save(out, format="JPEG", quality=JPEG_QUALITY, optimize=True)
+        optimized = out.getvalue()
+        # 이미 작은 이미지를 재압축이 오히려 키우는 경우(고압축 원본 등)엔
+        # 원본을 그대로 쓴다.
+        if len(optimized) < len(data):
+            return optimized, "jpg"
+        return data, ext
+    except Exception as e:
+        print(f"  ⚠️ 이미지 최적화 실패(원본 그대로 사용): {e}")
+        return data, ext
 
 
 def store_image_bytes(data: bytes, ext: str, key_hint: str = "", fallback_url: str = "") -> str:
@@ -181,6 +222,7 @@ def store_image(src_url: str, key_hint: str = "", timeout: int = 30) -> str:
 
         content_type = res.headers.get("Content-Type", "")
         ext = _guess_ext(src_url, content_type)
+        data, ext = _optimize_image(data, ext)
         url = store_image_bytes(data, ext, key_hint, fallback_url=src_url)
         return url
 
