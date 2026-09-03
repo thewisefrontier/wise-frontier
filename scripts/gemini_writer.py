@@ -208,6 +208,25 @@ CLUSTER_MIN_SIZE        = 2
 ADVANCED_ECONOMIES      = {"미국", "일본", "독일", "영국", "이탈리아", "스페인", "네덜란드", "캐나다", "포르투갈", "뉴질랜드", "한국"}
 CLUSTER_MIN_SIZE_ADVANCED = 4
 
+# 정부기관·국제기구·대기업 뉴스룸 등 1차 공식 소스(2026-09-04, 사용자 요청 —
+# "정부기관, 대기업 해외지사도 소스로 넣으면... 그 자체로도 보도가 가능하고").
+# 일반 언론 보도는 선진국 이슈일 때 교차검증(4건 이상)을 요구하지만, 이런
+# 공식 소스는 발표 자체가 원천 사실이라 다른 매체가 받아쓸 때까지 기다릴
+# 필요가 없다 — ADVANCED_ECONOMIES 교차검증 요건과 단독기사화의 선진국
+# 제외 요건을 둘 다 우회시킨다. rss_sources 테이블의 name 컬럼과 정확히
+# 일치해야 한다(articles.source에 그대로 들어옴).
+OFFICIAL_SOURCE_NAMES = {
+    "Federal Reserve", "Federal Reserve 통화정책", "US SEC", "ECB 유럽중앙은행",
+    "Bank of England", "Pentagon DoD", "UN News", "UN Security Council",
+    "EU Commission", "UK Gov News", "ASEAN", "WHO",
+    "Samsung Newsroom", "SK Hynix Newsroom", "Amazon News", "Google Blog",
+    "Meta Newsroom",
+}
+
+
+def _has_official_source(cluster) -> bool:
+    return any((a.get("source") or "") in OFFICIAL_SOURCE_NAMES for a in cluster)
+
 STOPWORDS = {
     "the","a","an","in","on","at","to","of","for","and","or","is","are",
     "was","were","has","have","been","will","with","by","from","this","that",
@@ -2780,7 +2799,8 @@ def run():
                 print(f"  [SKIP] 기사 부족 ({cur_count}건)\n")
                 continue
 
-            if country in ADVANCED_ECONOMIES and cur_count < CLUSTER_MIN_SIZE_ADVANCED:
+            if (country in ADVANCED_ECONOMIES and cur_count < CLUSTER_MIN_SIZE_ADVANCED
+                    and not _has_official_source(cluster)):
                 print(f"  [SKIP] 선진국({country}) 저중복 이슈 ({cur_count}건 < {CLUSTER_MIN_SIZE_ADVANCED}건) — 프론티어마켓 편집방향상 제외\n")
                 continue
 
@@ -2931,12 +2951,16 @@ def run():
         processed += 1
 
     # ── 단독 기사화 ──
+    # 공식 소스(OFFICIAL_SOURCE_NAMES)는 선진국 제외 요건을 우회 — 백악관/
+    # 연준/삼성 뉴스룸 같은 1차 발표는 그 자체로 원천 사실이라 다른 매체가
+    # 받아쓸 때까지(선진국 요건상 사실상 무기한) 기다릴 필요가 없다.
     solo_candidates = [
         a for a in all_articles
         if len(a.get("full_text") or "") >= 1000
         and not is_multi_topic_title(a.get("title_en","") or a.get("title_ko",""))
         and not is_multi_topic_body(a.get("full_text","") or a.get("summary_en",""))
-        and (a.get("country") or "") not in ADVANCED_ECONOMIES
+        and ((a.get("country") or "") not in ADVANCED_ECONOMIES
+             or (a.get("source") or "") in OFFICIAL_SOURCE_NAMES)
     ]
 
     multi_topic_skipped = [
