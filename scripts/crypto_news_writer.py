@@ -126,6 +126,22 @@ WATCHLIST = [
     ("XRP-USD", "리플"),
 ]
 
+# 야후 심볼 → 머니파이널 crypto.json의 CoinGecko id 매핑(아래 참조).
+_YAHOO_TO_COINGECKO_ID = {
+    "BTC-USD": "bitcoin",
+    "ETH-USD": "ethereum",
+    "SOL-USD": "solana",
+    "XRP-USD": "ripple",
+}
+
+# 머니파이널(D:\thewise\moneyfinal)이 CoinGecko 기준 시총 상위 20개 코인
+# 시세를 이 경로에 공개 정적 파일로 배포할 예정(2026-09-04, 사용자 공지 —
+# crypto.html 프론트엔드는 이미 배포돼 이 파일을 fetch하고 있지만 데이터
+# 파일 자체는 아직 없음, 요청하면 SPA 폴백 HTML이 200으로 옴). market_news
+# 테이블과 달리 이건 인증 없는 공개 정적 파일이라 게이트웨이가 필요 없다 —
+# 배포되는 즉시 아래 함수가 자동으로 살아난다(그 전까진 조용히 폴백).
+MONEYFINAL_CRYPTO_URL = "https://moneyfinal.pages.dev/data/crypto.json"
+
 
 def pick_coin(article_date: date) -> tuple[str, str]:
     idx = article_date.toordinal() % len(WATCHLIST)
@@ -136,10 +152,45 @@ def fetch_coin_data(symbol: str) -> dict | None:
     return fetch_yahoo_quote(symbol)
 
 
+def fetch_moneyfinal_crypto_context(symbol: str) -> dict | None:
+    """머니파이널 crypto.json에서 이 코인의 시총 순위·시총·7일 변동률을
+    가져온다(야후 시세엔 없는 정보). 파일이 아직 없거나(404→SPA 폴백 HTML)
+    형식이 안 맞으면 조용히 None — 실패해도 기사 생성 자체는 야후 데이터만
+    으로 계속 진행된다."""
+    coin_id = _YAHOO_TO_COINGECKO_ID.get(symbol)
+    if not coin_id:
+        return None
+    try:
+        res = requests.get(MONEYFINAL_CRYPTO_URL, timeout=10, headers={"User-Agent": "Mozilla/5.0"})
+        if res.status_code != 200:
+            return None
+        if "json" not in (res.headers.get("content-type") or "").lower():
+            return None
+        data = res.json()
+        for c in data.get("coins", []):
+            if c.get("id") == coin_id:
+                return c
+    except Exception:
+        pass
+    return None
+
+
 # ── 기사 프롬프트 ────────────────────────────────────────────
-def build_article_prompt(symbol: str, name_ko: str, data: dict) -> str:
+def build_article_prompt(symbol: str, name_ko: str, data: dict, mf_ctx: dict | None = None) -> str:
     today = now_kst().date()
     today_str = today.strftime("%Y년 %m월 %d일")
+
+    mf_block = ""
+    if mf_ctx:
+        parts = []
+        if mf_ctx.get("market_cap_rank"):
+            parts.append(f"시가총액 순위: {mf_ctx['market_cap_rank']}위")
+        if mf_ctx.get("market_cap"):
+            parts.append(f"시가총액: {float(mf_ctx['market_cap']):,.0f}달러")
+        if mf_ctx.get("change_pct_7d") is not None:
+            parts.append(f"7일 변동률: {float(mf_ctx['change_pct_7d']):+.2f}%")
+        if parts:
+            mf_block = "\n추가 참고(머니파이널 CoinGecko 데이터): " + ", ".join(parts) + "\n"
 
     return f"""당신은 가상자산 시장 전문 기자입니다. 구글 검색으로 오늘
 {name_ko}({symbol.replace('-USD','')}) 가격을 움직인 실제 뉴스(규제 동향,
@@ -151,6 +202,7 @@ def build_article_prompt(symbol: str, name_ko: str, data: dict) -> str:
 - 현재가: {data['price']:,.2f}달러 (전일比 {data['pct']:+.2f}%)
 - 당일 거래 범위: {data.get('day_low', 0):,.2f} ~ {data.get('day_high', 0):,.2f}달러
 - 52주 최고/최저: {data.get('fifty_two_week_high', 0):,.2f} / {data.get('fifty_two_week_low', 0):,.2f}달러
+{mf_block}
 
 [출력 형식] — 반드시 이 형식 그대로:
 TITLE: <제목>
@@ -343,8 +395,12 @@ def main():
         return
     print(f"  → {data['price']:,.2f}달러 ({data['pct']:+.2f}%)")
 
+    mf_ctx = fetch_moneyfinal_crypto_context(symbol)
+    if mf_ctx:
+        print(f"  → 머니파이널 데이터 참조 (시총순위 {mf_ctx.get('market_cap_rank', '-')}위)")
+
     print("  → Gemini로 기사 생성 중...")
-    prompt = build_article_prompt(symbol, name_ko, data)
+    prompt = build_article_prompt(symbol, name_ko, data, mf_ctx)
     article_text = call_gemini_article(prompt)
 
     if not article_text:
