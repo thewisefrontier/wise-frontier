@@ -1266,6 +1266,69 @@ MAX_CLUSTER_SOURCES = 12  # 2026-08-30 사용자 지적: 소스가 6개 이상�
 # (완전 무제한은 아님 — 극단적으로 큰 클러스터의 프롬프트 폭주 방지).
 
 
+# ── 원자재 실시간 시세 그라운딩(2026-09-04) ────────────────────
+# 클러스터 소스 기사들이 "6주 만에 최고치" 같은 정성적 표현만 쓰고 구체적
+# 달러 수치를 안 담고 있는 경우가 흔하다(장중 로이터 마켓랩 기사 특성).
+# Gemini는 없는 숫자를 지어내지 않고 그냥 생략해버려서 기사에 실제 가격이
+# 전혀 안 남았다(사용자 제보, id=128194 — "국제유가가 기사에 전혀 표기가
+# 안 돼 있다"). build_issue_prompt는 전 카테고리 공용 프롬프트라, 스코프를
+# 클러스터 제목의 원자재 키워드 매치로 좁혀서 무관한 기사엔 영향이 없게 한다.
+# (브렌트를 먼저 검사 — "유가"/"oil" 같은 일반 키워드가 브렌트 기사에도
+# 흔히 같이 나오므로, 순서를 바꾸면 브렌트 기사가 WTI로 잘못 매치될 수 있음)
+_COMMODITY_INFO = [
+    ("BRENT",  ["브렌트", "brent"], "국제유가(브렌트유)", "달러/배럴", "BZ=F"),
+    ("WTI",    ["wti", "유가", "oil price", "crude oil", "원유", "유가가"], "국제유가(WTI)", "달러/배럴", "CL=F"),
+    ("NATGAS", ["천연가스", "natural gas"], "천연가스", "달러/MMBtu", "NG=F"),
+    ("GOLD",   ["금값", "gold price", "금 시세"], "국제 금값", "달러/온스", "GC=F"),
+]
+
+
+def _detect_commodity(cluster):
+    blob = " ".join(
+        f"{a.get('title_ko') or ''} {a.get('title_en') or ''}" for a in cluster
+    ).lower()
+    for key, keywords, label, unit, symbol in _COMMODITY_INFO:
+        if any(kw in blob for kw in keywords):
+            return label, unit, symbol
+    return None
+
+
+def _fetch_commodity_quote(symbol: str):
+    """야후 파이낸스 비공식 차트 API(키 불필요) — frontier_markets_writer.py의
+    fetch_yahoo_quote와 동일 패턴을 원자재 심볼(CL=F 등)로 재사용."""
+    try:
+        res = requests.get(
+            f"https://query1.finance.yahoo.com/v8/finance/chart/{symbol}?range=5d&interval=1d",
+            timeout=10, headers={"User-Agent": "Mozilla/5.0"},
+        )
+        if res.status_code != 200:
+            return None
+        meta = (res.json().get("chart", {}).get("result") or [{}])[0].get("meta", {})
+        price = meta.get("regularMarketPrice")
+        if price is None:
+            return None
+        return {"price": price, "pct": meta.get("regularMarketChangePercent")}
+    except Exception:
+        return None
+
+
+def build_commodity_grounding(cluster) -> str:
+    """클러스터 제목에 원자재 키워드가 있으면 야후 실시간 시세를 프롬프트
+    참고자료 블록으로 반환한다. 매치 없거나 시세 조회 실패 시 빈 문자열
+    (실패해도 기존 흐름 그대로 진행 — 이 그라운딩은 있으면 좋은 보강일 뿐)."""
+    detected = _detect_commodity(cluster)
+    if not detected:
+        return ""
+    label, unit, symbol = detected
+    q = _fetch_commodity_quote(symbol)
+    if not q:
+        return ""
+    pct_str = f" (전일比 {q['pct']:+.2f}%)" if q.get("pct") is not None else ""
+    return (f"\n[실시간 참고자료] {label} 현재가: {q['price']:.2f}{unit}{pct_str}. "
+            f"위 원문 기사들에 구체적 수치가 없으면 이 수치를 인용하세요. "
+            f"원문에 이미 다른 구체적 수치가 있으면 원문 수치를 우선하세요.\n")
+
+
 def build_issue_prompt(cluster, existing_summary=None, continuation_title=None, continuation_summary=None):
     sorted_cluster = sorted(cluster, key=lambda a: bool(a.get("full_text")), reverse=True)
     main_articles = sorted_cluster[:MAX_CLUSTER_SOURCES]
@@ -1293,6 +1356,7 @@ def build_issue_prompt(cluster, existing_summary=None, continuation_title=None, 
             article_list += f"- {t}\n"
 
     article_list += build_naming_hints(article_list)
+    article_list += build_commodity_grounding(cluster)
 
     today_str = now_kst().strftime("%Y년 %m월 %d일")
     country = cluster[0].get("country") or ""
