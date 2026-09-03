@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-03 14:48",
+  "updated_at": "2026-09-03 16:21",
   "indices": [
     {
       "name": "S&P 500",
@@ -18,58 +18,58 @@
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 53061.95,
+      "price": 53061.9,
       "change_pct": -0.23,
       "up": false
     },
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 6463.24,
-      "change_pct": -5.45,
+      "price": 6579.48,
+      "change_pct": -3.75,
       "up": false
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 783.95,
-      "change_pct": -4.54,
+      "price": 790.21,
+      "change_pct": -3.78,
       "up": false
     },
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 115082.06,
-      "change_pct": -0.67,
-      "up": false
+      "price": 115328.53,
+      "change_pct": 0.21,
+      "up": true
     },
     {
       "name": "EGX30 (이집트)",
       "symbol": "^CASE30",
-      "price": 55679.7,
-      "change_pct": 0.45,
-      "up": true
+      "price": 55677.1,
+      "change_pct": -0.0,
+      "up": false
     },
     {
       "name": "SET (태국)",
       "symbol": "^SET.BK",
-      "price": 1580.29,
-      "change_pct": 0.33,
+      "price": 1580.62,
+      "change_pct": 0.35,
       "up": true
     },
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 6663.56,
-      "change_pct": 1.03,
+      "price": 6650.81,
+      "change_pct": 0.83,
       "up": true
     },
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 6044.17,
-      "change_pct": -0.15,
-      "up": false
+      "price": 6069.42,
+      "change_pct": 0.27,
+      "up": true
     },
     {
       "name": "USD/NGN",
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.04,
-      "change_pct": -0.72,
+      "price": 16.05,
+      "change_pct": -0.66,
       "up": false
     }
   ],
@@ -112,7 +112,7 @@
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 53061.95,
+        "price": 53061.9,
         "change_pct": -0.23,
         "up": false
       }
@@ -121,15 +121,15 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 6463.24,
-        "change_pct": -5.45,
+        "price": 6579.48,
+        "change_pct": -3.75,
         "up": false
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 783.95,
-        "change_pct": -4.54,
+        "price": 790.21,
+        "change_pct": -3.78,
         "up": false
       }
     ],
@@ -137,37 +137,37 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 115082.06,
-        "change_pct": -0.67,
-        "up": false
+        "price": 115328.53,
+        "change_pct": 0.21,
+        "up": true
       },
       {
         "name": "EGX30 (이집트)",
         "symbol": "^CASE30",
-        "price": 55679.7,
-        "change_pct": 0.45,
-        "up": true
+        "price": 55677.1,
+        "change_pct": -0.0,
+        "up": false
       },
       {
         "name": "SET (태국)",
         "symbol": "^SET.BK",
-        "price": 1580.29,
-        "change_pct": 0.33,
+        "price": 1580.62,
+        "change_pct": 0.35,
         "up": true
       },
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 6663.56,
-        "change_pct": 1.03,
+        "price": 6650.81,
+        "change_pct": 0.83,
         "up": true
       },
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 6044.17,
-        "change_pct": -0.15,
-        "up": false
+        "price": 6069.42,
+        "change_pct": 0.27,
+        "up": true
       }
     ],
     "fx": [
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.04,
-        "change_pct": -0.72,
+        "price": 16.05,
+        "change_pct": -0.66,
         "up": false
       }
     ]
@@ -198,8 +198,8 @@
     "ANTM": {
       "name": "Aneka Tambang Tbk",
       "symbol": "ANTM.JK",
-      "price": 3100.0,
-      "change_pct": 2.31,
+      "price": 3090.0,
+      "change_pct": 1.98,
       "up": true
     },
     "ACB": {
