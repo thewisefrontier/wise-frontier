@@ -1586,9 +1586,38 @@ def verify_no_fabricated_names(source_prompt: str, body: str) -> str:
     return suspect
 
 
+_ARTICLE_FENCE_RE = re.compile(r"```(?:json)?", re.I)
+
+# 사용자 지적(2026-09-04, "기사 분량 하한이 2000자라고 해도 아직 짧은 기사들이
+# 보이던데"): writer_rules v36에 "표준 분량 2,000자 이상, 700자는 최소
+# 하한선"이 명시돼 있는데도(DB 프롬프트 확인 완료 — 정상 반영돼 있었음),
+# 실측(9/1~ 클러스터 경로 69건)해보니 평균 1,243자에 19건(28%)이 700자
+# 미만이었다. 프롬프트 지시만 있고 코드 레벨 강제가 전혀 없어서(has_column_
+# style/fabricated_names/foreign_leftover와 달리 분량은 이때까지 재시도
+# 대상이 아니었음) Gemini가 자주 못 지켰던 것 — 여기 재생성 루프에 합류.
+# 700자를 기준으로 삼은 건 "최소 하한선"이라는 프롬프트 자체 문구를 그대로
+# 따른 것(2,000자는 목표치라 강제하면 소스가 짧은 단신까지 억지로 부풀릴
+# 위험이 있어 제외).
+MIN_BODY_LEN_HARD_FLOOR = 700
+
+
+def _extract_body_len(content: str) -> int:
+    """JSON_OUTPUT_SPEC 응답에서 body 필드 길이만 추출(분량 재시도 판단용).
+    JSON 파싱 실패 시 전체 텍스트 길이로 대충 추정(임계값 비교용이라 정밀할
+    필요 없음)."""
+    if not content:
+        return 0
+    try:
+        cand = _ARTICLE_FENCE_RE.sub("", content.strip()).strip()
+        data = json.loads(cand)
+        return len(data.get("body") or "")
+    except Exception:
+        return len(content)
+
+
 def call_gemini_article(prompt, max_tokens=1500, style_retries=1):
     """기사 본문 생성 전용 호출. 논평/칼럼체·합쇼체·원문에 없는 고유명사·번역
-    누락 외국어 감지 시 최대 style_retries회 재생성.
+    누락 외국어·분량 미달 감지 시 최대 style_retries회 재생성.
 
     ⚠️ 2026-09-04: detect_foreign_leftover는 원래 호출부(run() 두 곳)에서
     감지 즉시 미발행 처리만 했었는데, 사용자 지적("미번역 감지 시 미발행이
@@ -1596,12 +1625,14 @@ def call_gemini_article(prompt, max_tokens=1500, style_retries=1):
     verify_no_fabricated_names처럼 여기 재생성 루프에 합류시켜, 감지되면
     먼저 재작성을 시도하고 그래도 안 고쳐질 때만 호출부의 미발행 처리로
     넘어가게 함. call_gemini_article 호출부 5곳(클러스터/후속보도/단독 등)
-    전부에 자동 적용됨."""
+    전부에 자동 적용됨. 분량 미달 재시도도 같은 방식으로 이어서 추가."""
     content = call_gemini(prompt, max_tokens=max_tokens)
     attempt = 0
     fabricated = verify_no_fabricated_names(prompt, content) if content else ""
     foreign_leftover = detect_foreign_leftover(content) if content else ""
-    while content and (has_column_style(content) or has_polite_ending(content) or fabricated or foreign_leftover) and attempt < style_retries:
+    body_len = _extract_body_len(content) if content else 0
+    too_short = 0 < body_len < MIN_BODY_LEN_HARD_FLOOR
+    while content and (has_column_style(content) or has_polite_ending(content) or fabricated or foreign_leftover or too_short) and attempt < style_retries:
         attempt += 1
         reasons = []
         if has_column_style(content) or has_polite_ending(content):
@@ -1610,6 +1641,8 @@ def call_gemini_article(prompt, max_tokens=1500, style_retries=1):
             reasons.append(f"원문에 없는 고유명사({fabricated})")
         if foreign_leftover:
             reasons.append(f"번역 누락 외국어({foreign_leftover})")
+        if too_short:
+            reasons.append(f"분량 부족({body_len}자)")
         print(f"  ⚠️ {', '.join(reasons)} 감지 → 재생성 시도 ({attempt}/{style_retries})")
         retry_prompt = (
             prompt
@@ -1626,18 +1659,27 @@ def call_gemini_article(prompt, max_tokens=1500, style_retries=1):
                f"그대로 남아있었습니다: {foreign_leftover}. 인명·지명·기업명 등 고유명사를 "
                "제외한 이 단어들을 빠짐없이 한국어로 번역해서 본문 전체를 다시 작성하세요."
                if foreign_leftover else "")
+            + (f"\n또한 방금 작성한 본문이 {body_len}자로 너무 짧습니다. 원문(소스 기사)에 "
+               "아직 반영 안 된 사실관계(배경·경위·수치·인용·맥락)가 있으면 압축하지 말고 "
+               "최대한 살려서 다시 쓰세요. 다만 원문 자체가 짧은 단신이라 정말 더 쓸 내용이 "
+               "없다면 억지로 늘리거나 없는 내용을 지어내지 마세요."
+               if too_short else "")
         )
         retried = call_gemini(retry_prompt, max_tokens=max_tokens)
         if retried:
             content = retried
             fabricated = verify_no_fabricated_names(prompt, content)
             foreign_leftover = detect_foreign_leftover(content)
+            body_len = _extract_body_len(content)
+            too_short = 0 < body_len < MIN_BODY_LEN_HARD_FLOOR
     if content and (has_column_style(content) or has_polite_ending(content)):
         print("  ⚠️ 재생성 후에도 논평체·합쇼체 패턴이 남아있음 (파싱 단계에서 변환)")
     if content and fabricated:
         print(f"  ⚠️ 재생성 후에도 원문에 없는 고유명사 남아있음: {fabricated} (그대로 발행 — 수동 확인 필요)")
     if content and foreign_leftover:
         print(f"  ⚠️ 재생성 후에도 번역 누락 외국어 남아있음: {foreign_leftover} (호출부에서 미발행 처리)")
+    if content and too_short:
+        print(f"  ⚠️ 재생성 후에도 분량 부족({body_len}자) — 원문 자체가 짧은 것으로 판단, 그대로 발행")
     return content
 
 
