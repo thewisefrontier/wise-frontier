@@ -5,11 +5,14 @@ NVIDIA NIM(build.nvidia.com) API의 얇은 클라이언트. "같은 모델(Gemin
 쓰고 같은 모델이 스스로 검증하면 맹점이 그대로 반복된다"는 문제(2026-08-24
 사용자 지적)를 줄이기 위해, 계열이 다른 모델로 2차 판단을 받는 용도로 쓴다.
 
-무료 티어는 월 1,000 크레딧 한도가 있어(RPM은 40으로 충분히 여유 있음) 매일
-500건씩 도는 gemini_client.py 규모로는 못 쓴다. 그래서 verify_entities.py는
-이 클라이언트를 "1차 판단(Gemini+위키)이 실제로 의심을 확정한 소수 건"에만
-선택적으로 호출해 크레딧 소모를 최소화한다(2026-08-24 사용자 결정: "1차 모델을
-더욱 고도화시켜서 최대한 나오는 걸 줄여야지").
+⚠️ 2026-09-03 정정: 이전엔 "무료 티어가 월 1,000 크레딧 한도"라고 알고
+있었는데(서드파티 블로그발 오정보), 사용자가 본인 build.nvidia.com 계정을
+직접 확인해보니 실제 표시되는 제한은 40RPM뿐이고 크레딧 한도는 없었다
+(memory: newsfinal_nvidia_cross_verification 참조). 그래서 verify_entities.py
+도 "1차 판단이 의심 확정한 소수 건"뿐 아니라 배치 전체를 독립 재검토하도록
+확대했고, gemini_summarizer.py의 트렌드 중복판정(_same_event_llm)도 여기로
+옮겼다 — 호출 빈도가 낮은(전체 배치 대상은 아닌) 곳부터 우선 적용, RPM만
+호출 간 sleep으로 지키면 된다.
 
 모델: nvidia/nemotron-3-ultra-550b-a55b (561B MoE, 월 5천만+ 콜로 안정적으로
 운영 중인 걸 확인, thinking 모델이라 enable_thinking=False 필수 — 켜두면 짧은

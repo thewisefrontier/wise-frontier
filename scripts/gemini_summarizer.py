@@ -802,10 +802,22 @@ def find_similar_trend(title: str, country: str | None = None,
     return None
 
 
+# 다른 모델 계열(Nemotron)로 판단 — 같은 모델(Gemini)이 트렌드 기사도 쓰고
+# 중복 판정도 하면 그 모델의 맹점이 양쪽에 반복된다는 문제의식(verify_entities.py
+# 의 엔비디아 교차검증과 같은 이유). 2026-09-03: 크레딧 한도가 아니라 RPM만
+# 제약이라는 게 확인돼(memory: newsfinal_nvidia_cross_verification 정정)
+# Gemini 대신 이쪽으로 옮김 — 호출 빈도도 낮아(최근 같은 국가 후보 최대 3건)
+# RPM 부담이 거의 없다.
+try:
+    from nvidia_client import call_nvidia
+except Exception:
+    def call_nvidia(prompt: str, max_tokens: int = 400, temperature: float = 0.2):
+        return None
+
+
 def _same_event_llm(new_title: str, new_body: str, existing_title: str, existing_body: str) -> bool:
     """토큰 유사도 지표가 전부 실패했을 때만 쓰는 최후 판정 — 두 기사가
-    같은 실제 사건을 다루는지 Gemini에게 직접 묻는다(위 find_similar_trend
-    4차 경로 참조). 비용 때문에 최근 소수 후보에만 호출된다."""
+    같은 실제 사건을 다루는지 묻는다(위 find_similar_trend 4차 경로 참조)."""
     prompt = f"""아래 두 기사가 같은 실제 사건(같은 날짜·같은 구체적 사건)을
 다루고 있습니까? 단순히 같은 나라·같은 종류의 사건(예: 둘 다 "쿠데타
 시도"이지만 서로 다른 날짜의 별개 사건)이면 "다름"입니다. 정확히 "같음"
@@ -819,7 +831,11 @@ def _same_event_llm(new_title: str, new_body: str, existing_title: str, existing
 
 답변:"""
     try:
-        result = call_gemini(prompt, max_tokens=10, start_tier=3)
+        result = call_nvidia(prompt, max_tokens=10)
+        if not result:
+            # 엔비디아 키 미설정 등으로 실패하면 Gemini로 폴백 — 판정 자체가
+            # 안 되는 것보다는 낫다(중복 탐지 4차 경로는 원래도 최후 수단).
+            result = call_gemini(prompt, max_tokens=10, start_tier=3)
     except Exception:
         return False
     return bool(result) and "같음" in result.strip()
