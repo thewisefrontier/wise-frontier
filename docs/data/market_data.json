@@ -1,25 +1,25 @@
 {
-  "updated_at": "2026-09-03 22:52",
+  "updated_at": "2026-09-03 22:55",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7714.89,
-      "change_pct": 1.09,
+      "price": 7711.67,
+      "change_pct": 1.05,
       "up": true
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 26468.64,
-      "change_pct": 1.41,
+      "price": 26446.04,
+      "change_pct": 1.33,
       "up": true
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 53527.42,
-      "change_pct": 1.44,
+      "price": 53477.27,
+      "change_pct": 1.35,
       "up": true
     },
     {
@@ -39,8 +39,8 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 116852.54,
-      "change_pct": 1.54,
+      "price": 116709.78,
+      "change_pct": 1.41,
       "up": true
     },
     {
@@ -89,7 +89,7 @@
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
       "price": 16.01,
-      "change_pct": -0.88,
+      "change_pct": -0.93,
       "up": false
     }
   ],
@@ -98,22 +98,22 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7714.89,
-        "change_pct": 1.09,
+        "price": 7711.67,
+        "change_pct": 1.05,
         "up": true
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 26468.64,
-        "change_pct": 1.41,
+        "price": 26446.04,
+        "change_pct": 1.33,
         "up": true
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 53527.42,
-        "change_pct": 1.44,
+        "price": 53477.27,
+        "change_pct": 1.35,
         "up": true
       }
     ],
@@ -137,8 +137,8 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 116852.54,
-        "change_pct": 1.54,
+        "price": 116709.78,
+        "change_pct": 1.41,
         "up": true
       },
       {
@@ -189,7 +189,7 @@
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
         "price": 16.01,
-        "change_pct": -0.88,
+        "change_pct": -0.93,
         "up": false
       }
     ]
