@@ -307,11 +307,23 @@ def generate_pension720_ball_image(bnd: str, num: str, bonus_num: str, round_no:
     draw.text((W / 2, 26), f"연금복권720+ 제{round_no}회 당첨번호", font=title_font, fill="#222222", anchor="mm")
 
     def draw_row(y: int, label: str, band: str, digits: str, color: str):
+        # 2026-09-03 실사고(id=126890): "조" 공과 번호 공 사이에 아무 구분이
+        # 없어 "3조 439582"가 "3439582"로 붙어 보였다(사용자 지적). "조" 공은
+        # 다른 색으로 칠하고, 사이에 "조" 글자와 여분 간격을 넣어 시각적으로
+        # 구분한다.
         draw.text((30, y), label, font=label_font, fill="#666666", anchor="lm")
-        chars = ([band] if band else []) + list(digits)
         r, gap = 20, 8
+        band_gap = 30  # "조" 라벨 자리 확보용 추가 간격
+        chars = list(digits)
         total_w = len(chars) * (2 * r) + (len(chars) - 1) * gap
+        if band:
+            total_w += 2 * r + band_gap
         x = W - 30 - total_w + r
+        if band:
+            draw.ellipse((x - r, y - r, x + r, y + r), fill="#F2A93B")
+            draw.text((x, y), band, font=num_font, fill="white", anchor="mm")
+            draw.text((x + r + band_gap / 2, y), "조", font=label_font, fill="#666666", anchor="mm")
+            x += 2 * r + band_gap
         for ch in chars:
             draw.ellipse((x - r, y - r, x + r, y + r), fill=color)
             draw.text((x, y), ch, font=num_font, fill="white", anchor="mm")
