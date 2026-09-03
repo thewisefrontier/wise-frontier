@@ -57,6 +57,12 @@ def fetch_wikimedia_image(query: str):
                 "action": "query", "generator": "search",
                 "gsrsearch": query, "gsrnamespace": 6, "gsrlimit": 8,
                 "prop": "imageinfo", "iiprop": "url|extmetadata|size|mime",
+                # 원본을 그대로 링크하면 히어로 이미지(max-height:420px)에
+                # 비해 과도하게 큰 파일(커먼즈 원본은 수 MB인 경우도 흔함)이
+                # 그대로 로드된다 — iiurlwidth로 960px 스케일 썸네일 URL을
+                # 같이 받아온다(2026-09-04 "최적화는 해둬야지" 사용자 지시,
+                # 공식 MediaWiki API 문서로 thumburl 필드 확인 후 반영).
+                "iiurlwidth": 960,
                 "format": "json",
             },
             headers={"User-Agent": "NewsFinalBot/1.0 (+https://newsfinal.co.kr)"},
@@ -89,7 +95,7 @@ def fetch_wikimedia_image(query: str):
             restrictions = (meta.get("Restrictions", {}).get("value") or "").strip()
             if restrictions or license_key not in _WIKI_LICENSE_ALLOW:
                 continue
-            url = info.get("url", "")
+            url = info.get("thumburl") or info.get("url", "")
             if not url:
                 continue
             attribution_required = (meta.get("AttributionRequired", {}).get("value") or "").lower() == "true"
