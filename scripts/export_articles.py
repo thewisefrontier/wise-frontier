@@ -57,6 +57,11 @@ EXPORT_EXCLUDE_FIELDS = (
     "dedup_reviewed",
 )
 
+# 목록용 카드 미리보기(120~180자)와 로컬 인스턴트 검색에 넉넉한 길이.
+# 전문 검색은 어차피 400ms 디바운스 후 Supabase 라이브 쿼리(summary_ko 전문)로
+# 넘어가므로(index.html searchSupabase), 여기 잘려도 최종 검색 정확도엔 영향 없음.
+SUMMARY_PREVIEW_LEN = 500
+
 # 실사고(2026-08-09): 예전엔 화이트리스트 방식이었는데, 실제 업데이트 경로들이 쓰는 노트
 # 문구("후속 정보 추가", generate_update_note()의 자유 문장 등)와 화이트리스트가 하나도
 # 안 맞아 진짜 업데이트가 있어도 로그에 항상 안 보였다. 블랙리스트로 뒤집음.
@@ -140,6 +145,16 @@ def export_articles(limit=9999):
             a["update_log"] = sanitize_update_log(a.get("update_log"))
         for k in EXPORT_EXCLUDE_FIELDS:
             a.pop(k, None)
+        # 실사고(2026-09-04, 사용자 지적 "로딩이 좀 느린 느낌"): index.html/
+        # live.html/archive.html/country.html/article.html의 관련기사 목록은
+        # 전부 카드 미리보기(120~180자)나 제목만 쓰는데, 8/9 분량 하한을
+        # 700자→2000자로 올린 뒤로 summary_ko가 기사당 평균 4.7KB까지 커져서
+        # (344건 기준 articles.json 1.7MB) 목록 페이지마다 안 쓰는 본문
+        # 전체를 매번 통째로 내려받고 있었다. 본문 전문은 article.html이
+        # Supabase에서 라이브로 따로 조회하므로(article.html 상단 주석 참조)
+        # 목록용 JSON에는 미리보기+로컬 검색에 충분한 길이만 남긴다.
+        if isinstance(a.get("summary_ko"), str) and len(a["summary_ko"]) > SUMMARY_PREVIEW_LEN:
+            a["summary_ko"] = a["summary_ko"][:SUMMARY_PREVIEW_LEN]
 
     final = all_articles
 
