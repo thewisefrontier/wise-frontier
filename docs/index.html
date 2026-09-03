@@ -481,6 +481,11 @@
   </div>
 </footer>
 
+<script type="module">
+  import { esc, safeUrl } from '/js/esc.js';
+  window.esc = esc;
+  window.safeUrl = safeUrl;
+</script>
 <script>
   const PAGE_SIZE = 20;
 
@@ -809,24 +814,24 @@
       return;
     }
     container.innerHTML = entries.map(([label, group]) => `
-      <div class="cluster" style="cursor:pointer;" onclick="showIssue('${label.replace(/'/g,"\\'")}')">
+      <div class="cluster" style="cursor:pointer;" onclick="showIssue(decodeURIComponent('${encodeURIComponent(label)}'))">
         <div class="cluster-header">
-          <div class="cluster-keywords"><span class="cluster-kw">${group[0].title_ko || group[0].title_en}</span></div>
+          <div class="cluster-keywords"><span class="cluster-kw">${window.esc(group[0].title_ko || group[0].title_en)}</span></div>
           <span style="color:var(--muted);font-size:10px;">관련 기사 ${group.length}건 →</span>
         </div>
         ${group.slice(0,2).map(a => `
-          <div class="article-card" onclick="event.stopPropagation();window.open('${a.url}','_blank')">
+          <div class="article-card" onclick="event.stopPropagation();window.open('${window.safeUrl(a.url)}','_blank')">
             <div class="article-header">
               <div class="article-tags">
-                <span class="tag">${a.category||''}</span>
-                ${a.country ? `<span class="tag country">${a.country}</span>` : ''}
+                <span class="tag">${window.esc(a.category||'')}</span>
+                ${a.country ? `<span class="tag country">${window.esc(a.country)}</span>` : ''}
               </div>
               <span class="article-time">${formatTime(a.created_at)}</span>
             </div>
-            <div class="article-title">${a.title_ko||a.title_en}</div>
+            <div class="article-title">${window.esc(a.title_ko||a.title_en)}</div>
             <div class="article-footer">
-              <span class="article-source">📎 ${a.source}</span>
-              <a class="article-link" href="${a.url}" target="_blank" onclick="event.stopPropagation()">원문 보기 →</a>
+              <span class="article-source">📎 ${window.esc(a.source)}</span>
+              <a class="article-link" href="${window.safeUrl(a.url)}" target="_blank" onclick="event.stopPropagation()">원문 보기 →</a>
             </div>
           </div>
         `).join('')}
@@ -1004,7 +1009,7 @@ function cleanBody(text) {
     const TREND_PREFIXES = ['trend_', 'realtrend_', 'extrend_'];
     const isTrend = TREND_PREFIXES.some(p => (a.subcategory || '').startsWith(p));
     const liveBadge = isTrend ? `<span style="color:var(--accent2);font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;margin-right:6px;">📈 트렌드</span>` : '';
-    const catTag = a.category ? `<span class="tag" style="cursor:pointer;" onclick="filterByTag('sector','${a.category}',event)">${a.category}</span>` : '';
+    const catTag = a.category ? `<span class="tag" style="cursor:pointer;" onclick="filterByTag('sector',decodeURIComponent('${encodeURIComponent(a.category)}'),event)">${window.esc(a.category)}</span>` : '';
     const subTag = a.subcategory && a.subcategory !== a.category
       && !a.subcategory.startsWith('cluster_')
       && !a.subcategory.startsWith('solo_')
@@ -1014,11 +1019,11 @@ function cleanBody(text) {
       && !a.subcategory.startsWith('extrend_')
       && !a.subcategory.startsWith('weather_')
       && !a.subcategory.endsWith('briefing')
-      ? `<span class="tag" style="cursor:pointer;" onclick="filterByTag('sector','${a.subcategory}',event)">${a.subcategory}</span>` : '';
-    const regionTag = a.region ? `<span class="tag">${regionKo(a.region)}</span>` : '';
+      ? `<span class="tag" style="cursor:pointer;" onclick="filterByTag('sector',decodeURIComponent('${encodeURIComponent(a.subcategory)}'),event)">${window.esc(a.subcategory)}</span>` : '';
+    const regionTag = a.region ? `<span class="tag">${window.esc(regionKo(a.region))}</span>` : '';
     const _allCountries = [...new Set([...(a.country ? [a.country] : []), ...((a.countries) || [])])].filter(c => c);
     const countryTag = _allCountries.length > 0
-      ? _allCountries.map(c => `<span class="tag country" style="cursor:pointer;" onclick="filterByTag('country','${c}',event)">${c}</span>`).join('')
+      ? _allCountries.map(c => `<span class="tag country" style="cursor:pointer;" onclick="filterByTag('country',decodeURIComponent('${encodeURIComponent(c)}'),event)">${window.esc(c)}</span>`).join('')
       : '';
 
     return `
@@ -1029,11 +1034,11 @@ function cleanBody(text) {
           </div>
           <span class="article-time" data-created="${a.created_at}">${formatTime(a.created_at)}</span>
         </div>
-        <div class="article-title">${a.title_ko||a.title_en}</div>
+        <div class="article-title">${window.esc(a.title_ko||a.title_en)}</div>
         <div class="card-media">
-          ${a.image_url ? `<img src="${a.image_url}" alt="" loading="lazy" class="card-thumb" onerror="this.remove()">` : ''}
+          ${a.image_url ? `<img src="${window.safeUrl(a.image_url)}" alt="" loading="lazy" class="card-thumb" onerror="this.remove()">` : ''}
           <div class="media-text">
-            ${a.summary_ko ? `<div class="article-summary">${cleanBody(stripUpdates(a.summary_ko)).slice(0,120)}${a.summary_ko.length>120?'…':''}</div>` : ''}
+            ${a.summary_ko ? `<div class="article-summary">${window.esc(cleanBody(stripUpdates(a.summary_ko)).slice(0,120))}${a.summary_ko.length>120?'…':''}</div>` : ''}
           </div>
         </div>
         <div class="article-footer">
@@ -1071,8 +1076,8 @@ function cleanBody(text) {
         .replace(/^\s*날씨[,\\s]*/, '')
         .trim();
       return `<div class="weather-item" onclick="location.href='article?id=${a.id}'">
-        <span class="weather-country">${a.country || '기타'}</span>
-        <span class="weather-desc">${desc || title}</span>
+        <span class="weather-country">${window.esc(a.country || '기타')}</span>
+        <span class="weather-desc">${window.esc(desc || title)}</span>
       </div>`;
     }).join('');
   }
@@ -1108,10 +1113,10 @@ function cleanBody(text) {
 
     const html = Object.entries(byCountry).slice(0, 8).map(([country, items]) => `
       <div class="briefing-item">
-        <div class="briefing-region">${country}</div>
+        <div class="briefing-region">${window.esc(country)}</div>
         ${items.map(a => {
           const title = a.title_ko || a.title_en;
-          return `<div class="briefing-title" style="cursor:pointer;" onclick="location.href='article?id=${a.id}'">· ${title}</div>`;
+          return `<div class="briefing-title" style="cursor:pointer;" onclick="location.href='article?id=${a.id}'">· ${window.esc(title)}</div>`;
         }).join('')}
       </div>`).join('');
 
@@ -1136,11 +1141,11 @@ function cleanBody(text) {
 
     box.innerHTML = `
       <div class="digest-label">📋 오늘의 다이제스트</div>
-      <div class="digest-title">${title}</div>
+      <div class="digest-title">${window.esc(title)}</div>
       <div class="digest-media">
-        ${digest.image_url ? `<img src="${digest.image_url}" alt="" loading="lazy" class="digest-thumb" onerror="this.remove()">` : ''}
+        ${digest.image_url ? `<img src="${window.safeUrl(digest.image_url)}" alt="" loading="lazy" class="digest-thumb" onerror="this.remove()">` : ''}
         <div class="media-text">
-          <div class="digest-preview">${preview}${body.length > 180 ? '…' : ''}</div>
+          <div class="digest-preview">${window.esc(preview)}${body.length > 180 ? '…' : ''}</div>
           <div class="digest-more">전체 보기 →</div>
         </div>
       </div>

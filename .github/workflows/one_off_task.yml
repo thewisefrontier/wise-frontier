@@ -29,10 +29,20 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: 스크립트 실행
+        # 2026-09-03 보안 점검: 워크플로 입력값을 run: 셸에 직접 치환하면
+        # script 입력에 셸 메타문자를 넣어 임의 명령 실행이 가능했다(GitHub
+        # 공식 문서가 경고하는 스크립트 인젝션 안티패턴 — 이 job은 모든
+        # 시크릿을 env로 갖고 있어 위험이 컸다). env로 받아 파일명 패턴을
+        # 검증한 뒤에만 실행한다.
         run: |
-          echo "실행: scripts/${{ inputs.script }}"
-          python scripts/${{ inputs.script }}
+          echo "실행: scripts/${SCRIPT}"
+          if [[ ! "$SCRIPT" =~ ^[A-Za-z0-9_./-]+\.py$ ]]; then
+            echo "::error::허용되지 않는 파일명 형식: $SCRIPT"
+            exit 1
+          fi
+          python "scripts/${SCRIPT}"
         env:
+          SCRIPT: ${{ inputs.script }}
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}

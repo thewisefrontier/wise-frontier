@@ -318,6 +318,10 @@
   </div>
 </footer>
 
+<script type="module">
+  import { esc } from '/js/esc.js';
+  window.esc = esc;
+</script>
 <script>
   function toggleRegionMenu() {
     document.getElementById('region-menu').classList.toggle('open');
@@ -580,7 +584,7 @@
       if (!events.length) { section.style.display = 'none'; return; }
       container.innerHTML = events.map(ev => {
         const d = new Date(ev.event_date + 'T00:00:00');
-        return `<div class="cal-item"><div class="cal-dot ${ev.importance || 'medium'}"></div><div><div class="cal-meta">${d.getMonth()+1}/${d.getDate()} ${ev.event_time || ''}</div><div>${ev.title}</div></div></div>`;
+        return `<div class="cal-item"><div class="cal-dot ${ev.importance || 'medium'}"></div><div><div class="cal-meta">${d.getMonth()+1}/${d.getDate()} ${window.esc(ev.event_time || '')}</div><div>${window.esc(ev.title)}</div></div></div>`;
       }).join('');
       section.style.display = 'block';
     } catch(e) { section.style.display = 'none'; }
@@ -657,8 +661,8 @@
         card.className = 'article-card';
         card.onclick = () => location.href = `article?id=${a.id}`;
         card.innerHTML = `
-          <div class="article-title">${title}</div>
-          <div class="article-meta">${a.category || ''} · ${formatTime(a.created_at)}</div>`;
+          <div class="article-title">${window.esc(title)}</div>
+          <div class="article-meta">${window.esc(a.category || '')} · ${formatTime(a.created_at)}</div>`;
         container.appendChild(card);
       });
 

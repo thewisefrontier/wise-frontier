@@ -16,6 +16,7 @@
 
 import { publicUpdateLog } from '../docs/js/update-log-filter.js';
 import { imageCreditLabel } from '../docs/js/image-credit.js';
+import { esc } from '../docs/js/esc.js';
 
 const SUPABASE_URL = 'https://fotdngseksqaghvtcvqh.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_rT3kSEAAdM0DJlDW5fEWww_M37h6dDW';
@@ -69,15 +70,6 @@ function cleanBody(text) {
   return text.trim();
 }
 
-// 표시용 텍스트 이스케이프(속성/텍스트 노드 공용)
-function esc(s) {
-  return String(s == null ? '' : s)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
 
 // created_at은 KST text("YYYY-MM-DD HH:MM"). 타임존 오차 없이 문자열 파싱.
 function formatDateKST(str) {

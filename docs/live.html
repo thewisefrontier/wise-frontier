@@ -209,7 +209,9 @@
 
 <script type="module">
   import { publicUpdateLog } from '/js/update-log-filter.js';
+  import { esc } from '/js/esc.js';
   window.publicUpdateLog = publicUpdateLog;
+  window.esc = esc;
 </script>
 <script>
 
@@ -349,12 +351,12 @@ function cleanBody(text) {
     }
 
     container.innerHTML = articles.map(a => {
-      const title = a.title_ko || a.title_en;
-      const preview = cleanBody(stripUpdates(a.summary_ko || '')).slice(0, 120);
-      const catTag = a.category ? `<span class="tag">${a.category}</span>` : '';
-      const regionTag = a.region ? `<span class="tag">${REGION_KO[a.region] || a.region}</span>` : '';
+      const title = window.esc(a.title_ko || a.title_en);
+      const preview = window.esc(cleanBody(stripUpdates(a.summary_ko || '')).slice(0, 120));
+      const catTag = a.category ? `<span class="tag">${window.esc(a.category)}</span>` : '';
+      const regionTag = a.region ? `<span class="tag">${window.esc(REGION_KO[a.region] || a.region)}</span>` : '';
       const countries = a.countries && a.countries.length ? a.countries : (a.country ? [a.country] : []);
-      const countryTags = [...new Set(countries)].filter(c=>c).map(c => `<span class="tag country">${c}</span>`).join('');
+      const countryTags = [...new Set(countries)].filter(c=>c).map(c => `<span class="tag country">${window.esc(c)}</span>`).join('');
 
       const firstPub = a.first_published_at ? formatDateTime(a.first_published_at) : formatDateTime(a.created_at);
       const lastUpdate = formatDateTime(a.created_at);
@@ -368,7 +370,7 @@ function cleanBody(text) {
           ${logs.map((l, i) => `
             <div class="update-log-item ${i === 0 ? 'latest' : ''}">
               <span class="update-log-time">${formatUpdateTime(l.timestamp)}</span>
-              <span class="update-log-note">${l.note || '업데이트'}</span>
+              <span class="update-log-note">${window.esc(l.note || '업데이트')}</span>
             </div>`).join('')}
         </div>` : '';
 
