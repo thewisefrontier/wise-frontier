@@ -336,11 +336,12 @@ def nvidia_cross_check(title: str, body: str, gemini_suspect: str) -> str:
 # 2026-09-03 사용자 지적: "2주간 6건이면 아예 안 쓰는 수준이나 다름없다" —
 # 기존엔 Gemini가 이미 의심 표시한 기사만 엔비디아로 넘겨서(1550건 중 6건),
 # Gemini 자체가 놓친 오류는 영원히 검증되지 않았다. Gemini가 "문제없음"이라고
-# 판단한 기사 중 일부도 실행마다 정해진 예산 안에서 독립적으로 엔비디아에
-# 넘겨 Gemini의 사각지대를 잡는다. 무료 크레딧(월 1000, 이 스크립트는 하루
-# 1회 실행)을 넘지 않도록 실행당 상한을 둔다 — 여유를 크게 남겨 다른 용도와도
-# 부딪히지 않게 한다.
-NVIDIA_INDEPENDENT_BUDGET = 25
+# 판단한 기사도 독립적으로 엔비디아에 넘겨 사각지대를 잡는다.
+# ⚠️ 처음엔 "월 1,000 크레딧이 한도"라는 서드파티 정리글을 믿고 실행당 25건
+# 상한을 뒀는데, 사용자가 본인 build.nvidia.com 계정을 직접 확인해보니 실제
+# 표시되는 제한은 40RPM뿐 크레딧 한도는 없었다(memory: newsfinal_nvidia_
+# cross_verification 정정). 그래서 건수 상한 대신 배치 전체(BATCH_SIZE)를
+# 대상으로 하고, RPM만 call 간 sleep(2초, 분당 30건 — 40RPM 이내)으로 지킨다.
 
 
 def build_nvidia_independent_prompt(title: str, body: str) -> str:
@@ -453,13 +454,14 @@ def run():
             suspect = wiki_cross_check(suspect)
             # 3차: 다른 모델 계열(Nemotron)로 독립 재검토. wiki_unconfirmed 단독
             # 신호는 노이즈가 많아 대상에서 제외 — Gemini가 실제로 뭔가 지적했을
-            # 때만 크레딧 한정적인 이 호출을 쓴다.
+            # 때만 이 경로(nvidia_cross_check, "이 지적이 타당한가" 검증)를 쓴다.
             nvidia_note = nvidia_cross_check(title, body, gemini_suspect)
             if nvidia_note:
                 suspect = suspect + "\n" + nvidia_note
             time.sleep(2)
-        elif nvidia_independent_used < NVIDIA_INDEPENDENT_BUDGET:
-            # Gemini가 "문제없음"으로 판단한 기사도 예산 안에서 독립 재검토
+        else:
+            # Gemini가 "문제없음"으로 판단한 기사도 독립적으로 재검토(2026-09-03
+            # 확대 — 제약이 크레딧 총량이 아니라 RPM뿐이라 배치 전체 대상 가능).
             nvidia_independent_used += 1
             nvidia_note = nvidia_independent_check(title, body)
             if nvidia_note:
@@ -482,7 +484,8 @@ def run():
 
         time.sleep(CALL_INTERVAL)
 
-    print(f"[고유명사 점검] 완료 — {checked}/{len(batch)}건 점검, {len(flagged)}건 의심")
+    print(f"[고유명사 점검] 완료 — {checked}/{len(batch)}건 점검, {len(flagged)}건 의심, "
+          f"엔비디아 독립검토 {nvidia_independent_used}건")
     send_flagged_alert(flagged)
 
 
