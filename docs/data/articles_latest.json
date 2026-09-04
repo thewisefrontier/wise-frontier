@@ -2314,56 +2314,5 @@
     },
     "image_credit": null,
     "continuation_of_id": null
-  },
-  {
-    "id": 128726,
-    "title_en": "[국제유가] WTI 배럴당 92달러…호르무즈 해협 봉쇄 우려",
-    "title_ko": "[국제유가] WTI 배럴당 92달러…호르무즈 해협 봉쇄 우려",
-    "summary_ko": "국제유가가 3일(현지시간) 상승했다. WTI 원유 선물은 뉴욕상업거래소(NYMEX)에서 전일 종가(85.76달러) 대비 6.96%(5.97달러) 오른 배럴당 91.73달러에 거래를 마쳤다.\n\n브렌트유 역시 상승세를 보였다. 브렌트유는 전일 종가(90.49달러) 대비 5.93%(5.37달러) 상승한 배럴당 95.86달러를 기록했다.\n\n이번 유가 상승은 중동 지역의 지정학적 긴장감이 고조된 데 따른 것이다. 이란이 호르무즈 해협을 폐쇄했다고 전해지면서 공급 차질 우려가 커졌고, 이는 곧바로 원유 가격의 급등세로 이어졌다. 시장에서는 이",
-    "url": "internal://oil_price_2026-09-03",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국제유가",
-    "region": "글로벌",
-    "country": "국제",
-    "country_flag": "🛢️",
-    "score": 1,
-    "created_at": "2026-09-04 06:07",
-    "countries": [
-      "미국",
-      "사우디아라비아",
-      "러시아"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/oil_2026_09_03.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T06:07:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 06:07",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "wti": {
-        "pct": 6.961287313432835,
-        "prev": 85.76,
-        "price": 91.73,
-        "change": 5.969999999999999
-      },
-      "date": "2026-09-03",
-      "brent": {
-        "pct": 5.934357387556641,
-        "prev": 90.49,
-        "price": 95.86,
-        "change": 5.3700000000000045
-      },
-      "source": "Yahoo Finance"
-    },
-    "image_credit": null,
-    "continuation_of_id": null
   }
 ]
