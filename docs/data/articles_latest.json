@@ -1,5 +1,68 @@
 [
   {
+    "id": 133058,
+    "title_en": "[국내유가] 휘발유 리터당 1859원…전일 대비 소폭 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1859원…전일 대비 소폭 하락",
+    "summary_ko": "국내 주유소 휘발유 평균 판매가격이 9월 5일 기준 리터당 1859원을 기록했다. 오피넷(한국석유공사에 따르면) 휘발유 가격은 리터당 1859.38원으로 전일 대비 0.10원 내렸다.\n\n경유와 LPG 등 다른 유종 가격도 일제히 하락세를 나타냈다. 경유는 리터당 1843.61원으로 전일보다 0.58원 하락했다. LPG(부탄) 역시 리터당 1098.57원을 기록해 전일 대비 0.06원 내린 것으로 집계됐다.\n\n이번 가격 변동은 최근 국제유가 흐름과 정유사 공급가 조정 여파가 복합적으로 작용한 결과로 분석된다. 국제 제품 가격 변동성 ",
+    "url": "internal://opinet_price_2026-09-05",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-09-05 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_09_05.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-09-05",
+      "prices": {
+        "B027": {
+          "diff": -0.1,
+          "name": "휘발유",
+          "price": 1859.38
+        },
+        "B034": {
+          "diff": -0.35,
+          "name": "고급휘발유",
+          "price": 2314.86
+        },
+        "C004": {
+          "diff": -0.17,
+          "name": "실내등유",
+          "price": 1577.16
+        },
+        "D047": {
+          "diff": -0.58,
+          "name": "경유",
+          "price": 1843.61
+        },
+        "K015": {
+          "diff": -0.06,
+          "name": "LPG(부탄)",
+          "price": 1098.57
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 133056,
     "title_en": "Lululemon Shares Plunge 20% After Cutting Annual Outlook Again",
     "title_ko": "룰루레몬, 연간 전망치 추가 하향 속 주가 20% 급락",
@@ -936,6 +999,41 @@
     "continuation_of_id": null
   },
   {
+    "id": 129718,
+    "title_en": "US Warns Threats to Democracy as Security Ties With Guatemala Deepen",
+    "title_ko": "미국, 과테말라와 안보 협력 강화 속 민주주의 위협 세력에 무관용 경고",
+    "summary_ko": "미국은 민주주의 제도와 안보를 위협하는 세력에 대해 비자 추가 취소 등 지속적인 조치를 취할 것이라고 3일(현지시간) 밝혔다. 주과테말라 미국 대사관은 아나 퀸타나 로베트 미국 국무부 중미 담당 부차관의 과테말라 방문을 계기로 이 같은 입장을 공개했다.\n\n방문 기간 아나 퀸타나 로베트 부차관은 베르나르도 아레발로 과테말라 대통령, 헨리 사엔스 라모스 국방장관, 가브리엘 에스투아도 가르시아 루나 검찰총장 겸 법무부 장관 등 고위 관료들과 연이어 회담을 가졌으며 양국 간 안보 및 협력 방안을 논의했다. 미국 대사관 측은 양국이 마약 밀",
+    "url": "internal://solo_20260904_624e0630",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "solo_20260904_624e0630",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-04 11:07",
+    "countries": [
+      "과테말라",
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_diplomatic_meeting_government_building_security_coop.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-04T11:07:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-04 11:07",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
     "id": 129717,
     "title_en": "Texas Court Acquits and Releases Former Guatemalan Aide on Cocaine Trafficking Charges",
     "title_ko": "텍사스 법원, 코카인 밀매 혐의 과테말라 출신 전직 보좌관 무죄 석방",
@@ -957,41 +1055,6 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_courthouse_law_court_judge_gavel.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T11:07:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 11:07",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 129718,
-    "title_en": "US Warns Threats to Democracy as Security Ties With Guatemala Deepen",
-    "title_ko": "미국, 과테말라와 안보 협력 강화 속 민주주의 위협 세력에 무관용 경고",
-    "summary_ko": "미국은 민주주의 제도와 안보를 위협하는 세력에 대해 비자 추가 취소 등 지속적인 조치를 취할 것이라고 3일(현지시간) 밝혔다. 주과테말라 미국 대사관은 아나 퀸타나 로베트 미국 국무부 중미 담당 부차관의 과테말라 방문을 계기로 이 같은 입장을 공개했다.\n\n방문 기간 아나 퀸타나 로베트 부차관은 베르나르도 아레발로 과테말라 대통령, 헨리 사엔스 라모스 국방장관, 가브리엘 에스투아도 가르시아 루나 검찰총장 겸 법무부 장관 등 고위 관료들과 연이어 회담을 가졌으며 양국 간 안보 및 협력 방안을 논의했다. 미국 대사관 측은 양국이 마약 밀",
-    "url": "internal://solo_20260904_624e0630",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "solo_20260904_624e0630",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-04 11:07",
-    "countries": [
-      "과테말라",
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_diplomatic_meeting_government_building_security_coop.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-04T11:07:00",
     "update_log": [
@@ -1042,6 +1105,43 @@
     "continuation_of_id": null
   },
   {
+    "id": 129685,
+    "title_en": "Kiaf Seoul and Frieze Seoul Open at COEX Featuring Global Galleries and Special Exhibitions",
+    "title_ko": "서울 코엑스에서 개최된 키아프 서울 2026과 프리즈 서울 2026의 주요 전시 부스 공개",
+    "summary_ko": "9월 2일(현지시간) 서울 강남구 코엑스에서 제25회 키아프 서울(Kiaf SEOUL)이 개막했다. 올해 행사는 18개국에서 175개의 전시업체가 참여했으며, 첫 외부 임명 크리에이티브 디렉터인 디자이너 구정아가 공동체(Coexistence)를 주제로 브랜딩을 총괄했다. 전시장에는 인간과 기술의 관계를 탐구하는 특별전시 휴말(HUMAL)과 QR코드로 접근하는 증강현실(AR) 작품이 포함된 인비저블(Invisible) 등이 마련되었다. 또한 행사장 위층에서는 프리즈 서울(Frieze Seoul)이 동시에 개최되어 방문객들이 두 행사를",
+    "url": "internal://realtrend_Busan_Tugboat_Accident_2026090410",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "realtrend_Busan_Tugboat_Accide",
+    "region": "africa",
+    "country": "한국",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-04 10:53",
+    "countries": [
+      "한국",
+      "대만",
+      "미국",
+      "프랑스"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_art_exhibition_modern_art_gallery_art_fair.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-04T10:53:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-04 10:53",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
     "id": 129684,
     "title_en": "US to Retroactively Bill Europe for Ukraine Aid, Steps Up Diplomatic Pressure on Iran",
     "title_ko": "미국, 우크라이나 지원금 유럽 소급 청구 및 이란 관련 외교적 압박 강화",
@@ -1064,43 +1164,6 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_white_house_foreign_policy_protest_rally.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T10:53:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 10:53",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 129685,
-    "title_en": "Kiaf Seoul and Frieze Seoul Open at COEX Featuring Global Galleries and Special Exhibitions",
-    "title_ko": "서울 코엑스에서 개최된 키아프 서울 2026과 프리즈 서울 2026의 주요 전시 부스 공개",
-    "summary_ko": "9월 2일(현지시간) 서울 강남구 코엑스에서 제25회 키아프 서울(Kiaf SEOUL)이 개막했다. 올해 행사는 18개국에서 175개의 전시업체가 참여했으며, 첫 외부 임명 크리에이티브 디렉터인 디자이너 구정아가 공동체(Coexistence)를 주제로 브랜딩을 총괄했다. 전시장에는 인간과 기술의 관계를 탐구하는 특별전시 휴말(HUMAL)과 QR코드로 접근하는 증강현실(AR) 작품이 포함된 인비저블(Invisible) 등이 마련되었다. 또한 행사장 위층에서는 프리즈 서울(Frieze Seoul)이 동시에 개최되어 방문객들이 두 행사를",
-    "url": "internal://realtrend_Busan_Tugboat_Accident_2026090410",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "realtrend_Busan_Tugboat_Accide",
-    "region": "africa",
-    "country": "한국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-04 10:53",
-    "countries": [
-      "한국",
-      "대만",
-      "미국",
-      "프랑스"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_art_exhibition_modern_art_gallery_art_fair.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-04T10:53:00",
     "update_log": [
@@ -1268,47 +1331,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 127487,
-    "title_en": "Romania, EU Member States Issue Joint Response to Russia Following Leipzig Airport Drone Incidents",
-    "title_ko": "독일 라이프치히 공항 드론 사건 이어져 루마니아 등 유럽연합 회원국 러시아에 공동 대응",
-    "summary_ko": "[업데이트]\n■ 9월 4일 08:17 — 한편 독일 당국은 라이프치히 공항 사건과 별개로 브란덴버그주와 노르트라인베스트팔렌주에서 발생한 전력망 대상 조직적인 방해 행위 가능성에 대한 조사를 진행하고 있다. 브란덴버그주 얀슈발데 발전소 인근에서 전력망 공격에 대한 책임을 주장하는 편지가 발견되었으나, 경찰은 아직 그 진위를 확인하거나 반박하지 못한 상태다. 경찰은 3일 오전 터노프프레이라크 변전소에서 조사를 이어갔으며 이로 인해 50번 지방도가 몇 시간 동안 다시 통제되었다. 수사 당국은 이번 전력망 파괴 행위와 관련해 테러 단체 결",
-    "url": "internal://realtrend_러시아의_괴테인스티투트(Goethe-Institut)_지사_폐쇄_2026090322",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "realtrend_러시아의_괴테인스티투트(Goethe-",
-    "region": "africa",
-    "country": "루마니아",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-04 08:17",
-    "countries": [
-      "루마니아",
-      "독일",
-      "러시아",
-      "우크라이나"
-    ],
-    "is_published": true,
-    "image_url": null,
-    "view_count": 0,
-    "first_published_at": "2026-09-03T22:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-03 22:27",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-09-04 08:17",
-        "note": "독일 당국, 전력망 대상 조직적 방해 행위 조사 중"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
     "id": 128674,
     "title_en": "Democratic Republic of Congo Rebels Establish Parallel Government in East as Kinshasa Steps Up Legal and Administrative Offensive",
     "title_ko": "콩고민주공화국 동부 분쟁 속 반군 평행 정부 수립과 킨샤사의 사법·행정 공세",
@@ -1353,6 +1375,47 @@
     "continuation_of_id": null
   },
   {
+    "id": 127487,
+    "title_en": "Romania, EU Member States Issue Joint Response to Russia Following Leipzig Airport Drone Incidents",
+    "title_ko": "독일 라이프치히 공항 드론 사건 이어져 루마니아 등 유럽연합 회원국 러시아에 공동 대응",
+    "summary_ko": "[업데이트]\n■ 9월 4일 08:17 — 한편 독일 당국은 라이프치히 공항 사건과 별개로 브란덴버그주와 노르트라인베스트팔렌주에서 발생한 전력망 대상 조직적인 방해 행위 가능성에 대한 조사를 진행하고 있다. 브란덴버그주 얀슈발데 발전소 인근에서 전력망 공격에 대한 책임을 주장하는 편지가 발견되었으나, 경찰은 아직 그 진위를 확인하거나 반박하지 못한 상태다. 경찰은 3일 오전 터노프프레이라크 변전소에서 조사를 이어갔으며 이로 인해 50번 지방도가 몇 시간 동안 다시 통제되었다. 수사 당국은 이번 전력망 파괴 행위와 관련해 테러 단체 결",
+    "url": "internal://realtrend_러시아의_괴테인스티투트(Goethe-Institut)_지사_폐쇄_2026090322",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "realtrend_러시아의_괴테인스티투트(Goethe-",
+    "region": "africa",
+    "country": "루마니아",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-04 08:17",
+    "countries": [
+      "루마니아",
+      "독일",
+      "러시아",
+      "우크라이나"
+    ],
+    "is_published": true,
+    "image_url": null,
+    "view_count": 0,
+    "first_published_at": "2026-09-03T22:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-03 22:27",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-09-04 08:17",
+        "note": "독일 당국, 전력망 대상 조직적 방해 행위 조사 중"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 129279,
     "title_en": "Carla Jeffery, 'Zombies' Star, Dies at 33",
     "title_ko": "디즈니 '좀비들' 출연 배우 카를라 제퍼리, 33세 일기로 별세",
@@ -1376,40 +1439,6 @@
     "update_log": [
       {
         "timestamp": "2026-09-04 08:16",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 129277,
-    "title_en": "Customized 'Airplane Car' Turns Heads on Guatemalan Roads, Goes Viral on Social Media",
-    "title_ko": "과테말라 산마르코스 달리는 ‘자동차 비행기’…SNS서 화제",
-    "summary_ko": "4일(현지시간) 과테말라 매체 프렌사 리브레에 따르면, 산마르코스주의 도로를 비행기 모양으로 개조한 자동차가 달리며 소셜미디어에서 큰 화제를 모으고 있다. 이 차량은 비록 하늘을 날 수는 없지만 비행기 동체와 날개 형태를 갖추고 도로를 주행하도록 제작됐다.\n\n이 차량을 만든 이는 만프레도 오르테가라는 인물로, 그는 세 명의 형제와 함께 수년간 자동차를 비행기 형태로 개조하겠다는 구상을 품어왔다. 지난 2020년부터 시작된 이 프로젝트는 인내와 창의력을 바탕으로 마침내 결실을 보게 됐다.\n\n만프레도 오르테가는 산마르코스주 테후틀라 시",
-    "url": "internal://solo_20260904_55647ddc",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "solo_20260904_55647ddc",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-04 08:15",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_custom_car_converted_airplane_highway_traffic.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T08:15:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 08:15",
         "note": "최초 게시"
       }
     ],
@@ -1453,6 +1482,40 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: 26D (CC BY-SA 4.0, Wikimedia Commons)",
+    "continuation_of_id": null
+  },
+  {
+    "id": 129277,
+    "title_en": "Customized 'Airplane Car' Turns Heads on Guatemalan Roads, Goes Viral on Social Media",
+    "title_ko": "과테말라 산마르코스 달리는 ‘자동차 비행기’…SNS서 화제",
+    "summary_ko": "4일(현지시간) 과테말라 매체 프렌사 리브레에 따르면, 산마르코스주의 도로를 비행기 모양으로 개조한 자동차가 달리며 소셜미디어에서 큰 화제를 모으고 있다. 이 차량은 비록 하늘을 날 수는 없지만 비행기 동체와 날개 형태를 갖추고 도로를 주행하도록 제작됐다.\n\n이 차량을 만든 이는 만프레도 오르테가라는 인물로, 그는 세 명의 형제와 함께 수년간 자동차를 비행기 형태로 개조하겠다는 구상을 품어왔다. 지난 2020년부터 시작된 이 프로젝트는 인내와 창의력을 바탕으로 마침내 결실을 보게 됐다.\n\n만프레도 오르테가는 산마르코스주 테후틀라 시",
+    "url": "internal://solo_20260904_55647ddc",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "solo_20260904_55647ddc",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-04 08:15",
+    "countries": [
+      "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_custom_car_converted_airplane_highway_traffic.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-04T08:15:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-04 08:15",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
     "continuation_of_id": null
   },
   {
@@ -1700,40 +1763,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 128729,
-    "title_en": "Apple Shares Rise 1.00% Amid Improving Technical Indicators",
-    "title_ko": "[종목 동향] 애플 주가 1.00% 상승…기술적 지표 개선세",
-    "summary_ko": "◆ 주가 동향\n나스닥에서 애플 주가는 3일(현지시간) 전일 대비 1.00% 상승한 328.21달러에 장을 마감했다. 최근 시장에서는 애플 주가가 지난 20년 동안 나타나지 않았던 이례적인 기술적 패턴을 보이고 있다는 분석이 제기되었다. 월가 애널리스트들은 애플의 주간 이동평균선이 장기 추세선을 상향 돌파하며 강력한 모멘텀을 형성하고 있다는 점에 주목했다. 특히 아이폰 18 시리즈의 초기 판매 데이터가 주요 시장에서 예상치를 상회하면서 투자 심리가 개선되었다. 또한, 애플이 추진 중인 자체 AI 모델 '애플 인텔리전스'의 서비스 범위",
-    "url": "internal://stock_news_2026-09-03",
-    "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "종목동향",
-    "region": "global",
-    "country": "미국",
-    "country_flag": "🇺🇸",
-    "score": 1,
-    "created_at": "2026-09-04 06:27",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/stock_news_2026_09_03.jpg",
-    "view_count": 1,
-    "first_published_at": "2026-09-04T06:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 06:27",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
     "id": 128730,
     "title_en": "한국, 전국·맑은 가운데 31도 안팎 늦더위…제주 강풍",
     "title_ko": "한국, 전국·맑은 가운데 31도 안팎 늦더위…제주 강풍",
@@ -1768,31 +1797,29 @@
     "continuation_of_id": null
   },
   {
-    "id": 128727,
-    "title_en": "동아시아, 베이징 34도 찜통더위 속 울란바토르 쌀쌀",
-    "title_ko": "동아시아, 베이징 34도 찜통더위 속 울란바토르 쌀쌀",
-    "summary_ko": "4일(현지시간) 동아시아 주요국 수도는 최저기온 9°C에서 최고기온 34°C 사이의 폭넓은 기온 분포를 보였다. 중국 베이징은 최고기온 34°C, 최저기온 22°C를 기록하며 동아시아 주요국 수도 중 가장 더운 곳으로 집계됐다. 반면 몽골 울란바토르는 최고기온 17°C, 최저기온 9°C에 머물러 가장 선선한 곳으로 나타났다. 베이징의 최고기온은 울란바토르보다 17°C나 높아 지역별 기온 격차가 뚜렷했다.\n\n중국 베이징은 흐린 날씨를 보인 가운데 강수확률 0%, 강수량 0.0mm를 기록했으며 자외선지수는 5.1로 측정됐다. 내일 베이",
-    "url": "internal://weather_group_동아시아_today20260904",
+    "id": 128729,
+    "title_en": "Apple Shares Rise 1.00% Amid Improving Technical Indicators",
+    "title_ko": "[종목 동향] 애플 주가 1.00% 상승…기술적 지표 개선세",
+    "summary_ko": "◆ 주가 동향\n나스닥에서 애플 주가는 3일(현지시간) 전일 대비 1.00% 상승한 328.21달러에 장을 마감했다. 최근 시장에서는 애플 주가가 지난 20년 동안 나타나지 않았던 이례적인 기술적 패턴을 보이고 있다는 분석이 제기되었다. 월가 애널리스트들은 애플의 주간 이동평균선이 장기 추세선을 상향 돌파하며 강력한 모멘텀을 형성하고 있다는 점에 주목했다. 특히 아이폰 18 시리즈의 초기 판매 데이터가 주요 시장에서 예상치를 상회하면서 투자 심리가 개선되었다. 또한, 애플이 추진 중인 자체 AI 모델 '애플 인텔리전스'의 서비스 범위",
+    "url": "internal://stock_news_2026-09-03",
     "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_동아시아_today20260904",
-    "region": "east_asia",
-    "country": "동아시아",
-    "country_flag": "",
+    "category": "금융",
+    "subcategory": "종목동향",
+    "region": "global",
+    "country": "미국",
+    "country_flag": "🇺🇸",
     "score": 1,
-    "created_at": "2026-09-04 06:26",
+    "created_at": "2026-09-04 06:27",
     "countries": [
-      "일본",
-      "중국",
-      "몽골"
+      "미국"
     ],
     "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_china_20260904.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T06:26:00",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/stock_news_2026_09_03.jpg",
+    "view_count": 1,
+    "first_published_at": "2026-09-04T06:27:00",
     "update_log": [
       {
-        "timestamp": "2026-09-04 06:26",
+        "timestamp": "2026-09-04 06:27",
         "note": "최초 게시"
       }
     ],
@@ -2168,6 +2195,42 @@
     "continuation_of_id": null
   },
   {
+    "id": 128727,
+    "title_en": "동아시아, 베이징 34도 찜통더위 속 울란바토르 쌀쌀",
+    "title_ko": "동아시아, 베이징 34도 찜통더위 속 울란바토르 쌀쌀",
+    "summary_ko": "4일(현지시간) 동아시아 주요국 수도는 최저기온 9°C에서 최고기온 34°C 사이의 폭넓은 기온 분포를 보였다. 중국 베이징은 최고기온 34°C, 최저기온 22°C를 기록하며 동아시아 주요국 수도 중 가장 더운 곳으로 집계됐다. 반면 몽골 울란바토르는 최고기온 17°C, 최저기온 9°C에 머물러 가장 선선한 곳으로 나타났다. 베이징의 최고기온은 울란바토르보다 17°C나 높아 지역별 기온 격차가 뚜렷했다.\n\n중국 베이징은 흐린 날씨를 보인 가운데 강수확률 0%, 강수량 0.0mm를 기록했으며 자외선지수는 5.1로 측정됐다. 내일 베이",
+    "url": "internal://weather_group_동아시아_today20260904",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_동아시아_today20260904",
+    "region": "east_asia",
+    "country": "동아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-04 06:26",
+    "countries": [
+      "일본",
+      "중국",
+      "몽골"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_china_20260904.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-04T06:26:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-04 06:26",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 128726,
     "title_en": "[국제유가] WTI 배럴당 92달러…호르무즈 해협 봉쇄 우려",
     "title_ko": "[국제유가] WTI 배럴당 92달러…호르무즈 해협 봉쇄 우려",
@@ -2458,104 +2521,6 @@
     "update_log": [
       {
         "timestamp": "2026-09-04 05:16",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 128676,
-    "title_en": "[국내유가] 휘발유 리터당 1860원…나흘째 하락",
-    "title_ko": "[국내유가] 휘발유 리터당 1860원…나흘째 하락",
-    "summary_ko": "국내 주유소 휘발유 평균 판매가격이 9월 4일 기준 리터당 1860원을 기록했다. 오피넷(한국석유공사)에 따르면 이날 전국 휘발유 평균 가격은 리터당 1,859.63원으로 전일 대비 0.03원 하락했다.\n\n경유와 LPG(부탄) 가격 역시 동반 하락세를 나타냈다. 경유는 리터당 1,843.86원으로 전일 대비 0.22원 내렸고, LPG 부탄은 리터당 1,098.59원을 기록해 전일보다 0.20원 하락했다.\n\n최근 유가 변동을 둘러싸고 국제 유가 흐름과 정유사 공급가 책정 방식을 원인으로 지목하는 목소리가 커지고 있다. 일각에서는 국제",
-    "url": "internal://opinet_price_2026-09-04",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국내유가",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "🇰🇷",
-    "score": 1,
-    "created_at": "2026-09-04 05:10",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pixabay.com/get/g4f4b895eeaf0741e3802abc8fe99327ec44c44ff22f4da5745cf0a42592efba124d835a79104b58f3c461de095ae28d19aacb65294f0eba72282c47ed1e83b39_1280.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T05:10:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 05:10",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "date": "2026-09-04",
-      "prices": {
-        "B027": {
-          "diff": -0.03,
-          "name": "휘발유",
-          "price": 1859.63
-        },
-        "B034": {
-          "diff": 0.11,
-          "name": "고급휘발유",
-          "price": 2315.41
-        },
-        "C004": {
-          "diff": -0.15,
-          "name": "실내등유",
-          "price": 1577.68
-        },
-        "D047": {
-          "diff": -0.22,
-          "name": "경유",
-          "price": 1843.86
-        },
-        "K015": {
-          "diff": -0.2,
-          "name": "LPG(부탄)",
-          "price": 1098.59
-        }
-      }
-    },
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 128675,
-    "title_en": "Kraken Delays IPO to Q2 2027, Partners With SoFi on Stablecoin",
-    "title_ko": "크라켄, 기업공개 시점 2027년 2분기로 연기…소파이와 스테이블코인 제휴 체결",
-    "summary_ko": "글로벌 암호화폐 거래소 크라켄의 모회사 페이워드가 소파이 테크놀로지스와 파트너십을 체결하고 디지털 자산 인프라 확장에 나섰다고 블록체인 매체들이 3일(현지시간) 보도했다.\n\n이번 제휴를 통해 크라켄은 소파이의 24시간 달러 결제 네트워크에 접속하며 자금 이동 속도를 높이게 됐다. 또한 플랫폼에 소파이유에스디를 상장하고, 크라켄 프라임을 통해 소파이의 암호화폐 고객을 위한 거래를 실행한다.\n\n페이워드는 암호화폐 거래를 넘어 결제와 파생상품, 토큰화된 주식 등으로 사업 영역을 확장하는 과정에서 기업공개 시점을 일찍어도 2027년 2분기",
-    "url": "internal://realtrend_Kraken_Crypto_IPO_Delay_2026090405",
-    "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "realtrend_Kraken_Crypto_IPO_De_crypto",
-    "region": "africa",
-    "country": "미국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-04 05:03",
-    "countries": [
-      "미국",
-      "유럽연합"
-    ],
-    "is_published": true,
-    "image_url": "https://pixabay.com/get/gfe49828e8f029a0984123db7c7052913dd8210f15bf81d01bddb700d81cdb96386ce061b4639fe064bbfec9456939d181d288289faf4f102e404ae3abca6e5ad_1280.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T05:03:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 05:03",
         "note": "최초 게시"
       }
     ],
