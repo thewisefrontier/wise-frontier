@@ -55,12 +55,21 @@ EXPORT_EXCLUDE_FIELDS = (
     "posted_blog",
     "company_scanned",
     "dedup_reviewed",
+    # 2026-09-04 추가: index.html/live.html/archive.html/country.html 전부
+    # grep으로 확인 — 이 두 필드를 쓰는 목록 페이지가 하나도 없다(둘 다
+    # article.html이 Supabase에서 라이브로 따로 조회해서 보여줌). 목록용
+    # JSON에 넣을 이유가 없는 순수 낭비(사용자 지적: "첫페이지 로딩에 데이터가
+    # 너무 많이 쓰이면 모바일로 들어오는 사람이 없어져").
+    "investment_idea",
+    "summary_3lines",
 )
 
-# 목록용 카드 미리보기(120~180자)와 로컬 인스턴트 검색에 넉넉한 길이.
-# 전문 검색은 어차피 400ms 디바운스 후 Supabase 라이브 쿼리(summary_ko 전문)로
-# 넘어가므로(index.html searchSupabase), 여기 잘려도 최종 검색 정확도엔 영향 없음.
-SUMMARY_PREVIEW_LEN = 500
+# 목록용 카드 미리보기(120~180자)와 로컬 인스턴트 검색에 쓸 길이. 500자에서
+# 300자로 더 줄임(2026-09-04, 모바일 로딩 부담 추가 지적) — 로컬 인스턴트
+# 검색은 어차피 400ms 디바운스 후 Supabase 라이브 쿼리(summary_ko 전문)로
+# 넘어가므로(index.html searchSupabase), 여기 더 잘려도 최종 검색 정확도엔
+# 영향 없음.
+SUMMARY_PREVIEW_LEN = 300
 
 # 실사고(2026-08-09): 예전엔 화이트리스트 방식이었는데, 실제 업데이트 경로들이 쓰는 노트
 # 문구("후속 정보 추가", generate_update_note()의 자유 문장 등)와 화이트리스트가 하나도
