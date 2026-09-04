@@ -1167,10 +1167,14 @@ function cleanBody(text) {
       // DB를 고쳐도 다음 export_articles.py 재생성 전까지 옛 내용이 남는 문제
       // (실사고 2026-08-17, id=80581)를 막기 위함. 목록/날씨/브리핑은 항목이 많아
       // 매번 라이브 조회하면 비용이 커서 기존대로 스냅샷을 쓴다.
+      // ⚠️ 2026-09-04: articles.json(7일치, ~400건)이 아니라 articles_latest.json
+      // (최근 24시간)을 쓴다 — 사용자 지적("첫 화면 20개만 보고 나가는 사람도
+      // 나머지 380개어치를 다 받는 구조"). 그보다 오래된 기사가 필요해지면
+      // (다음 페이지·필터) 이미 있는 loadMoreFromSupabase()가 라이브로 이어받는다.
       const SUPABASE_URL = 'https://fotdngseksqaghvtcvqh.supabase.co';
       const SUPABASE_ANON_KEY = 'sb_publishable_rT3kSEAAdM0DJlDW5fEWww_M37h6dDW';
       const [res, digestRes] = await Promise.all([
-        fetch('data/articles.json'),
+        fetch('data/articles_latest.json'),
         fetch(
           `${SUPABASE_URL}/rest/v1/articles?select=*&source=eq.NewsFinal&is_published=eq.true&subcategory=like.digest_*&order=created_at.desc&limit=1`,
           { headers: { apikey: SUPABASE_ANON_KEY } }

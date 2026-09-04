@@ -7,6 +7,13 @@ from datetime import datetime, timedelta, timezone
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 OUTPUT_FILE = "docs/data/articles.json"
+# index.html 초기 로딩용 소형 스냅샷(2026-09-04, 사용자 지적 — "첫 화면 20개만
+# 보고 나가는 사람도 나머지 380개어치를 다 받는 구조라면 느려질 수 밖에 없네").
+# articles.json(7일치, live.html 트렌드·article.html 관련기사가 의존)은
+# 그대로 두고, index.html만 이 작은 파일로 첫 로딩을 하게 하고 그 이후
+# 페이지는 이미 있는 loadMoreFromSupabase()가 라이브로 이어받는다.
+LATEST_OUTPUT_FILE = "docs/data/articles_latest.json"
+LATEST_WINDOW_HOURS = 24
 MARKET_FILE = "docs/data/market_data.json"
 
 def _headers():
@@ -171,6 +178,14 @@ def export_articles(limit=9999):
         json.dump(final[:limit], f, ensure_ascii=False, indent=2)
 
     print(f"[EXPORT] {len(final)}개 기사 → {OUTPUT_FILE}")
+
+    latest_since = (datetime.now(timezone.utc).astimezone(timezone(timedelta(hours=9)))
+                     - timedelta(hours=LATEST_WINDOW_HOURS)).strftime("%Y-%m-%d %H:%M")
+    latest = [a for a in final if (a.get("created_at") or "") >= latest_since]
+    with open(LATEST_OUTPUT_FILE, "w", encoding="utf-8") as f:
+        json.dump(latest, f, ensure_ascii=False, indent=2)
+    print(f"[EXPORT] {len(latest)}개 기사(최근 {LATEST_WINDOW_HOURS}시간) → {LATEST_OUTPUT_FILE}")
+
     return final[:limit]
 
 
