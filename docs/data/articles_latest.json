@@ -1,28 +1,70 @@
 [
   {
-    "id": 133063,
-    "title_en": "Nvidia Shares Rise 0.84% Amid Anticipation for Broadcom Earnings",
-    "title_ko": "[종목 동향] 엔비디아 주가 0.84% 상승…브로드컴 실적 발표 앞둔 기대감",
-    "summary_ko": "◆ 주가 동향\n나스닥에서 엔비디아 주가는 4일(현지시간) 전일 대비 0.84% 상승한 230.36달러에 거래를 마쳤다. 이번 주가 상승은 반도체 섹터 전반에 걸친 투자 심리 개선과 브로드컴의 실적 발표를 앞둔 시장의 기대감이 복합적으로 작용한 결과다. 최근 시장에서는 브로드컴이 인공지능(AI) 인프라 관련 매출에서 유의미한 성과를 거둘 것으로 예상하며, 이는 엔비디아를 필두로 한 AI 칩 생태계 전반의 수요가 견고함을 방증하는 지표로 해석된다. 또한, 엔비디아가 허깅페이스(Hugging Face)와 같은 AI 플랫폼 기업과의 협력 ",
-    "url": "internal://stock_news_2026-09-04",
+    "id": 133463,
+    "title_en": "Trump Hints at Strike on Iran's 'Ax Mountain' Nuclear Facility as Tensions Rise in Strait of Hormuz",
+    "title_ko": "트럼프, 이란 '액스마운틴' 핵시설 공격 시사…호르무즈 해협 긴장 고조",
+    "summary_ko": "도널드 트럼프 미국 대통령이 이란의 핵심 핵시설인 액스마운틴에 대한 새로운 군사적 타격 가능성을 공개적으로 시사했다고 CNN 아랍어(CNN Arabic) 등 주요 외신이 4일(현지시간) 보도했다.\n\n외신 보도에 따르면 트럼프 대통령은 호르무즈 해협 인근에 위치한 액스마운틴 핵시설을 겨냥해 새로운 공격을 가할 수 있다고 위협했다. 이와 관련해 미 육군 당국도 이란을 상대로 한 새로운 군사 작전 개시를 공식 발표했다.\n\n현지 언론과 외신들은 테헤란 정권이 심각한 안보적 타격과 고통에 직면해 있다고 분석했다. 이란 타스님(Tasnim) ",
+    "url": "internal://cluster_20260905_e9e92d18",
     "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "종목동향",
+    "category": "정치·외교",
+    "subcategory": "cluster_20260905_e9e92d18",
     "region": "global",
     "country": "미국",
-    "country_flag": "🇺🇸",
+    "country_flag": "",
     "score": 1,
-    "created_at": "2026-09-05 06:27",
+    "created_at": "2026-09-05 07:34",
     "countries": [
-      "미국"
+      "미국",
+      "이란"
     ],
     "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/stock_news_2026_09_04.jpg",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_nuclear_facility_military_jet_strait_of_hormuz.jpg",
     "view_count": 0,
-    "first_published_at": "2026-09-05T06:27:00",
+    "first_published_at": "2026-09-05T07:34:00",
     "update_log": [
       {
-        "timestamp": "2026-09-05 06:27",
+        "timestamp": "2026-09-05 07:34",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
+    "id": 133462,
+    "title_en": "동남아, 36도 무더위 속 우박·뇌우 강타",
+    "title_ko": "동남아, 36도 무더위 속 우박·뇌우 강타",
+    "summary_ko": "5일(현지시간) 동남아시아 주요 지역은 최저기온 23°C에서 최고기온 36°C의 기온 분포를 나타내는 가운데 베트남, 필리핀, 미얀마, 캄보디아, 말레이시아 등 다수 국가에서 비가 내린다. 인도네시아는 비 소식 없이 흐린 날씨가 이어지며, 지역 전반에 걸쳐 고온 다습한 기후와 함께 강한 비구름대의 영향이 나타난다.\n\n토요일에는 뇌우와 우박을 동반한 거친 날씨가 집중된다. 미얀마는 최저기온 24°C, 최고기온 30°C에 강수확률 88%를 기록하며 약한 우박을 동반한 뇌우가 내린다. 필리핀과 캄보디아는 각각 강수확률 100%로 뇌우가 ",
+    "url": "internal://weather_group_동남아시아_weekend20260905",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_동남아시아_weekend20260905",
+    "region": "southeast_asia",
+    "country": "동남아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-05 07:34",
+    "countries": [
+      "베트남",
+      "인도네시아",
+      "태국",
+      "필리핀",
+      "미얀마",
+      "캄보디아",
+      "말레이시아",
+      "싱가포르"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_indonesia_20260905.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T07:34:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 07:34",
         "note": "최초 게시"
       }
     ],
@@ -31,6 +73,114 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 133460,
+    "title_en": "US Stocks Fall on Strong Jobs Data and Rate Worries; Novartis and Ionis Plunge on Drug Trial Failure",
+    "title_ko": "미 증시, 고용 호조 속 금리 우려에 하락…노바티스·아이오니스 심장약 실패에 급락",
+    "summary_ko": "미국 증시가 4일(현지시간) 예상보다 강하게 나온 고용 보고서 여파로 중앙은행의 금리 인상 가능성에 대한 경계감이 커지고 도널드 트럼프(Donald Trump) 전 대통령의 무역 위협이 더해지면서 하락세를 보였다. 기술주 중심의 나스닥 종합지수는 0.3% 내렸으나 주간 기준으로는 0.4% 상승을 지켜냈다. 시장은 다음 주로 예정된 소비자물가지수(CPI) 데이터 발표를 앞두고 긴장감을 유지하고 있다.\n\n제약·바이오 섹터에서는 악재가 발생했다. 글로벌 제약사 노바티스(Novartis)와 파트너사인 아이오니스 파마슈티컬스(Ionis Ph",
+    "url": "internal://cluster_20260905_3ac194a6",
+    "source": "NewsFinal",
+    "category": "금융",
+    "subcategory": "cluster_20260905_3ac194a6",
+    "region": "global",
+    "country": "미국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-05 07:31",
+    "countries": [
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_stock_market_pharmaceutical_laboratory_biotechnology.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T07:31:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 07:31",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
+    "id": 133458,
+    "title_en": "Electric Vehicle Market Enters Critical Phase Amid BYD and Tesla Expansion",
+    "title_ko": "전기차 시장, 비와이디와 테슬라의 공세로 핵심 단계 진입",
+    "summary_ko": "디아리오 피난시에로(Diario Financiero)는 9월 4일(현지시간) 전기 자동차 시장이 비와이디(BYD)와 테슬라(Tesla)의 공세로 인해 핵심 단계에 진입했다고 보도했다. 비와이디와 테슬라는 글로벌 전기차 시장에서 점유율 확대를 위한 공격적인 전략을 전개하고 있다.\n\n유엔(UN)은 거대한 비율의 엘니뇨 현상에 대해 경고했으며 칠레를 비롯한 국가들은 이에 대한 영향에 대비하고 있다. 디아리오 피난시에로는 이번 엘니뇨 현상이 더욱 강력하고 오래 지속될 것이라고 전했다.\n\n디아리오 피난시에로는 엘니뇨가 미칠 예상 영향에 대해",
+    "url": "internal://realtrend_테슬라_사이버캡_실망_매물_2026090507",
+    "source": "NewsFinal",
+    "category": "산업·기업",
+    "subcategory": "realtrend_테슬라_사이버캡_실망_매물",
+    "region": "africa",
+    "country": "칠레",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-05 07:24",
+    "countries": [
+      "칠레",
+      "중국",
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_electric_vehicle_car_factory_battery_production.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T07:24:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 07:24",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
+    "id": 133457,
+    "title_en": "Russian Drone Strike Hits SBU Headquarters in Central Kyiv; Zelenskyy Warns of Threats to Civil Aviation Network",
+    "title_ko": "우크라이나 키예프 중심부 SBU 본부 러 군사 공격… 젤렌스키, 민간 항공망 타격 위협 경고",
+    "summary_ko": "러시아군이 4일(현지시간) 우크라이나 수도 키예프 중심부에 있는 우크라이나 보안국(SBU) 본부를 드론으로 공격해 5명이 부상을 입었다. 이번 공격은 대낮에 우크라이나 정보국과 블라디미르 젤렌스키 대통령 간의 무력 충돌 보도가 이어지는 가운데 발생했으며, SBU 본부 내 보안 서비스 국장 사무실 등이 직접적인 타격을 입은 것으로 전해졌다.\n\n러시아 외무부 대변인 마리야 자하로바는 2일(현지시간) 블라디미르 젤렌스키 우크라이나 대통령이 러시아의 민간 항공 인프라를 겨냥하겠다고 발언한 것과 관련해 입장을 표명했다. 그는 우크라이나 대통",
+    "url": "internal://realtrend_러시아_괴테인스티투트_폐쇄_2026090507",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "realtrend_러시아_괴테인스티투트_폐쇄",
+    "region": "africa",
+    "country": "러시아",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-05 07:23",
+    "countries": [
+      "러시아",
+      "우크라이나",
+      "독일",
+      "미국",
+      "이란"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_military_drone_attack_burning_government_building_wa.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T07:23:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 07:23",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
     "continuation_of_id": null
   },
   {
@@ -50,6 +200,40 @@
     "countries": [],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_09_05.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T06:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 06:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 133063,
+    "title_en": "Nvidia Shares Rise 0.84% Amid Anticipation for Broadcom Earnings",
+    "title_ko": "[종목 동향] 엔비디아 주가 0.84% 상승…브로드컴 실적 발표 앞둔 기대감",
+    "summary_ko": "◆ 주가 동향\n나스닥에서 엔비디아 주가는 4일(현지시간) 전일 대비 0.84% 상승한 230.36달러에 거래를 마쳤다. 이번 주가 상승은 반도체 섹터 전반에 걸친 투자 심리 개선과 브로드컴의 실적 발표를 앞둔 시장의 기대감이 복합적으로 작용한 결과다. 최근 시장에서는 브로드컴이 인공지능(AI) 인프라 관련 매출에서 유의미한 성과를 거둘 것으로 예상하며, 이는 엔비디아를 필두로 한 AI 칩 생태계 전반의 수요가 견고함을 방증하는 지표로 해석된다. 또한, 엔비디아가 허깅페이스(Hugging Face)와 같은 AI 플랫폼 기업과의 협력 ",
+    "url": "internal://stock_news_2026-09-04",
+    "source": "NewsFinal",
+    "category": "금융",
+    "subcategory": "종목동향",
+    "region": "global",
+    "country": "미국",
+    "country_flag": "🇺🇸",
+    "score": 1,
+    "created_at": "2026-09-05 06:27",
+    "countries": [
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/stock_news_2026_09_04.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T06:27:00",
     "update_log": [
@@ -568,40 +752,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 133056,
-    "title_en": "Lululemon Shares Plunge 20% After Cutting Annual Outlook Again",
-    "title_ko": "룰루레몬, 연간 전망치 추가 하향 속 주가 20% 급락",
-    "summary_ko": "4일(현지시간) 미국의 애슬레저 기업 룰루레몬 애슬레티카 주가가 연간 실적 전망치 하향 조정 여파로 20% 급락했다. 이번 주가 하락은 회사의 회계연도 2분기 수익이 월스트리트 예상치를 크게 밑돌고, 올해 들어 세 번째로 가이던스가 하향 조정되면서 발생했다. 이에 따라 주가는 8년 만의 최저 수준으로 떨어졌다.\n\n룰루레몬의 시그니처 상품인 레깅스 사업 부문에서 뚜렷한 매출 감소세가 확인됐다. 이번 분기 룰루레몬의 비교매출은 9% 감소해 대침체기 이후 최악의 실적 부진을 기록했다. 알로 요가와 부오리, 스킴스 등 경쟁 브랜드들이 애슬",
-    "url": "internal://realtrend_Lululemon_CEO_Transition_&_Slump_2026090504",
-    "source": "NewsFinal",
-    "category": "산업·기업",
-    "subcategory": "realtrend_Lululemon_CEO_Transi",
-    "region": "africa",
-    "country": "미국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-05 04:49",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_stock_market_retail_store_yoga_pants.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T04:49:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 04:49",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
     "id": 133055,
     "title_en": "Russian Forces Strike SBU Headquarters in Central Kyiv as US-Ukraine Tensions Rise",
     "title_ko": "러시아군, 키예프 중심부 SBU 본부 타격…미·우크라 긴장 고조",
@@ -621,6 +771,40 @@
     ],
     "is_published": true,
     "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/75/SBU_Headquarters.jpg/960px-SBU_Headquarters.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T04:49:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 04:49",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
+    "id": 133056,
+    "title_en": "Lululemon Shares Plunge 20% After Cutting Annual Outlook Again",
+    "title_ko": "룰루레몬, 연간 전망치 추가 하향 속 주가 20% 급락",
+    "summary_ko": "4일(현지시간) 미국의 애슬레저 기업 룰루레몬 애슬레티카 주가가 연간 실적 전망치 하향 조정 여파로 20% 급락했다. 이번 주가 하락은 회사의 회계연도 2분기 수익이 월스트리트 예상치를 크게 밑돌고, 올해 들어 세 번째로 가이던스가 하향 조정되면서 발생했다. 이에 따라 주가는 8년 만의 최저 수준으로 떨어졌다.\n\n룰루레몬의 시그니처 상품인 레깅스 사업 부문에서 뚜렷한 매출 감소세가 확인됐다. 이번 분기 룰루레몬의 비교매출은 9% 감소해 대침체기 이후 최악의 실적 부진을 기록했다. 알로 요가와 부오리, 스킴스 등 경쟁 브랜드들이 애슬",
+    "url": "internal://realtrend_Lululemon_CEO_Transition_&_Slump_2026090504",
+    "source": "NewsFinal",
+    "category": "산업·기업",
+    "subcategory": "realtrend_Lululemon_CEO_Transi",
+    "region": "africa",
+    "country": "미국",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-05 04:49",
+    "countries": [
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_stock_market_retail_store_yoga_pants.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T04:49:00",
     "update_log": [
@@ -842,7 +1026,7 @@
     "id": 130733,
     "title_en": "Two Hydropower Workers Rescued After 9 Days in Nepal Tunnel as Death Toll Exceeds 1,250",
     "title_ko": "네팔 수력발전 터널서 9일 만에 노동자 2명 구조…사망자는 1250명 넘어",
-    "summary_ko": "네팔 히말라야 산간 지역을 덮친 대규모 돌발홍수와 토사 붕괴 참사 현장에서 고립됐던 수력발전소 노동자 2명이 재해 발생 9일 만에 기적적으로 구조됐다. 앞서 1000명을 넘어섰던 공식 사망자 수는 1250명 이상으로 늘어났고, 실종자 수도 5000명을 넘어서며 인명 피해 규모가 계속 확대되고 있다.\n\n네팔 정부 당국은 4일(현지시간) 라수와(Rasuwa) 지구의 트리슐리 3A(Trishuli-3A) 수력발전 프로젝트 터널 잔해 속에 갇혀 있던 노동자 2명을 살아서 구출했다고 밝혔다. 이번에 구조된 생존자는 기계 반장으로 근무하던 산",
+    "summary_ko": "[업데이트]\n■ 9월 5일 07:23 — 네팔 당국이 집계한 사망자 수가 1287명으로 늘어났고, 뉴욕타임스 등 외신은 1300명이 넘는 실종자가 발생했다고 보도했다. 생존한 작업자 2명은 대피를 돕던 중 급류를 피하지 못해 지하 터널에 갇혔던 것으로 확인됐다.\n\n현지 군당국은 90도에 달하는 산악 지형과 뻘밭 등 위험 요소를 이유로 한국 구호대의 도보 수색을 불허했다. 국제사회 지원과 관련해 아랍에미리트는 대통령 지시로 에미레이트 구호단을 파견하고 세 번째 구호 비행기를 도착시켰으며, 베트남 정부는 30만 달러의 긴급구호금을 지원",
     "url": "internal://cluster_20260904_f21790ed",
     "source": "NewsFinal",
     "category": "사회",
@@ -864,6 +1048,10 @@
       {
         "timestamp": "2026-09-04 17:29",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-09-05 07:23",
+        "note": "네팔 대홍수 사망자 1287명으로 늘어"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -1836,6 +2024,47 @@
     "continuation_of_id": null
   },
   {
+    "id": 127487,
+    "title_en": "Romania, EU Member States Issue Joint Response to Russia Following Leipzig Airport Drone Incidents",
+    "title_ko": "독일 라이프치히 공항 드론 사건 이어져 루마니아 등 유럽연합 회원국 러시아에 공동 대응",
+    "summary_ko": "[업데이트]\n■ 9월 4일 08:17 — 한편 독일 당국은 라이프치히 공항 사건과 별개로 브란덴버그주와 노르트라인베스트팔렌주에서 발생한 전력망 대상 조직적인 방해 행위 가능성에 대한 조사를 진행하고 있다. 브란덴버그주 얀슈발데 발전소 인근에서 전력망 공격에 대한 책임을 주장하는 편지가 발견되었으나, 경찰은 아직 그 진위를 확인하거나 반박하지 못한 상태다. 경찰은 3일 오전 터노프프레이라크 변전소에서 조사를 이어갔으며 이로 인해 50번 지방도가 몇 시간 동안 다시 통제되었다. 수사 당국은 이번 전력망 파괴 행위와 관련해 테러 단체 결",
+    "url": "internal://realtrend_러시아의_괴테인스티투트(Goethe-Institut)_지사_폐쇄_2026090322",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "realtrend_러시아의_괴테인스티투트(Goethe-",
+    "region": "africa",
+    "country": "루마니아",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-04 08:17",
+    "countries": [
+      "루마니아",
+      "독일",
+      "러시아",
+      "우크라이나"
+    ],
+    "is_published": true,
+    "image_url": null,
+    "view_count": 0,
+    "first_published_at": "2026-09-03T22:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-03 22:27",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-09-04 08:17",
+        "note": "독일 당국, 전력망 대상 조직적 방해 행위 조사 중"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 128674,
     "title_en": "Democratic Republic of Congo Rebels Establish Parallel Government in East as Kinshasa Steps Up Legal and Administrative Offensive",
     "title_ko": "콩고민주공화국 동부 분쟁 속 반군 평행 정부 수립과 킨샤사의 사법·행정 공세",
@@ -1877,47 +2106,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: Foreign, Commonwealth &amp; Development Office (CC BY 4.0, Wikimedia Commons)",
-    "continuation_of_id": null
-  },
-  {
-    "id": 127487,
-    "title_en": "Romania, EU Member States Issue Joint Response to Russia Following Leipzig Airport Drone Incidents",
-    "title_ko": "독일 라이프치히 공항 드론 사건 이어져 루마니아 등 유럽연합 회원국 러시아에 공동 대응",
-    "summary_ko": "[업데이트]\n■ 9월 4일 08:17 — 한편 독일 당국은 라이프치히 공항 사건과 별개로 브란덴버그주와 노르트라인베스트팔렌주에서 발생한 전력망 대상 조직적인 방해 행위 가능성에 대한 조사를 진행하고 있다. 브란덴버그주 얀슈발데 발전소 인근에서 전력망 공격에 대한 책임을 주장하는 편지가 발견되었으나, 경찰은 아직 그 진위를 확인하거나 반박하지 못한 상태다. 경찰은 3일 오전 터노프프레이라크 변전소에서 조사를 이어갔으며 이로 인해 50번 지방도가 몇 시간 동안 다시 통제되었다. 수사 당국은 이번 전력망 파괴 행위와 관련해 테러 단체 결",
-    "url": "internal://realtrend_러시아의_괴테인스티투트(Goethe-Institut)_지사_폐쇄_2026090322",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "realtrend_러시아의_괴테인스티투트(Goethe-",
-    "region": "africa",
-    "country": "루마니아",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-04 08:17",
-    "countries": [
-      "루마니아",
-      "독일",
-      "러시아",
-      "우크라이나"
-    ],
-    "is_published": true,
-    "image_url": null,
-    "view_count": 0,
-    "first_published_at": "2026-09-03T22:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-03 22:27",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-09-04 08:17",
-        "note": "독일 당국, 전력망 대상 조직적 방해 행위 조사 중"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
     "continuation_of_id": null
   },
   {
