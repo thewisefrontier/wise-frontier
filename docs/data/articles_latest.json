@@ -1,5 +1,40 @@
 [
   {
+    "id": 133052,
+    "title_en": "오세아니아, 주말 내내 비 소식…수도권 궂은날씨 이어져",
+    "title_ko": "오세아니아, 주말 내내 비 소식…수도권 궂은날씨 이어져",
+    "summary_ko": "5일(현지시간) 오세아니아 주요국 주말 날씨 데이터에 따르면, 이번 주말 오세아니아 지역의 기온은 최저기온 7°C에서 최고기온 17°C 사이의 분포를 보이는 가운데 호주와 뉴질랜드 등 주요국 수도에 비 소식이 예고됐다. 주말 동안 두 국가의 수도권은 흐린 하늘과 함께 뇌우 및 이슬비가 번갈아 내리는 궂은날씨가 이어질 전망이다.\n\n호주 수도권의 토요일 날씨는 뇌우가 예보된 가운데 최고기온 17°C, 최저기온 9°C를 기록하겠으며 강수 확률은 100%에 달한다. 일요일에는 약한 이슬비가 이어지면서 최고기온 17°C, 최저기온 7°C를 ",
+    "url": "internal://weather_group_오세아니아_weekend20260905",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_오세아니아_weekend20260905",
+    "region": "oceania",
+    "country": "오세아니아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-05 04:27",
+    "countries": [
+      "호주",
+      "뉴질랜드"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_australia_20260905.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T04:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 04:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 132530,
     "title_en": "Cholera outbreaks persist across Africa as Nigeria, Sudan and Mozambique report rising cases",
     "title_ko": "아프리카 전역 콜레라 확산세 지속…나이지리아·수단·모잠비크 피해 심화",
@@ -1626,6 +1661,42 @@
     "continuation_of_id": null
   },
   {
+    "id": 128727,
+    "title_en": "동아시아, 베이징 34도 찜통더위 속 울란바토르 쌀쌀",
+    "title_ko": "동아시아, 베이징 34도 찜통더위 속 울란바토르 쌀쌀",
+    "summary_ko": "4일(현지시간) 동아시아 주요국 수도는 최저기온 9°C에서 최고기온 34°C 사이의 폭넓은 기온 분포를 보였다. 중국 베이징은 최고기온 34°C, 최저기온 22°C를 기록하며 동아시아 주요국 수도 중 가장 더운 곳으로 집계됐다. 반면 몽골 울란바토르는 최고기온 17°C, 최저기온 9°C에 머물러 가장 선선한 곳으로 나타났다. 베이징의 최고기온은 울란바토르보다 17°C나 높아 지역별 기온 격차가 뚜렷했다.\n\n중국 베이징은 흐린 날씨를 보인 가운데 강수확률 0%, 강수량 0.0mm를 기록했으며 자외선지수는 5.1로 측정됐다. 내일 베이",
+    "url": "internal://weather_group_동아시아_today20260904",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_동아시아_today20260904",
+    "region": "east_asia",
+    "country": "동아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-04 06:26",
+    "countries": [
+      "일본",
+      "중국",
+      "몽골"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_china_20260904.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-04T06:26:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-04 06:26",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 128728,
     "title_en": "Wall Street's three major indexes rally as tech stocks lead gains",
     "title_ko": "[글로벌 마켓 동향] 뉴욕증시 3대 지수 일제히 상승…기술주 강세 주도",
@@ -1986,42 +2057,6 @@
         }
       ]
     },
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 128727,
-    "title_en": "동아시아, 베이징 34도 찜통더위 속 울란바토르 쌀쌀",
-    "title_ko": "동아시아, 베이징 34도 찜통더위 속 울란바토르 쌀쌀",
-    "summary_ko": "4일(현지시간) 동아시아 주요국 수도는 최저기온 9°C에서 최고기온 34°C 사이의 폭넓은 기온 분포를 보였다. 중국 베이징은 최고기온 34°C, 최저기온 22°C를 기록하며 동아시아 주요국 수도 중 가장 더운 곳으로 집계됐다. 반면 몽골 울란바토르는 최고기온 17°C, 최저기온 9°C에 머물러 가장 선선한 곳으로 나타났다. 베이징의 최고기온은 울란바토르보다 17°C나 높아 지역별 기온 격차가 뚜렷했다.\n\n중국 베이징은 흐린 날씨를 보인 가운데 강수확률 0%, 강수량 0.0mm를 기록했으며 자외선지수는 5.1로 측정됐다. 내일 베이",
-    "url": "internal://weather_group_동아시아_today20260904",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_동아시아_today20260904",
-    "region": "east_asia",
-    "country": "동아시아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-04 06:26",
-    "countries": [
-      "일본",
-      "중국",
-      "몽골"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_china_20260904.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T06:26:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 06:26",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
     "image_credit": null,
     "continuation_of_id": null
   },
@@ -2422,41 +2457,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 128261,
-    "title_en": "오세아니아, 웰링턴 거센 바람·소나기…캔버라는 선선",
-    "title_ko": "오세아니아, 웰링턴 거센 바람·소나기…캔버라는 선선",
-    "summary_ko": "4일(현지시간) 오세아니아 주요국 수도의 기온은 최저 6°C에서 최고 17°C의 분포를 나타냈다. 지역 내에서는 뉴질랜드 웰링턴에 강풍과 함께 비 소식이 전해졌다. 웰링턴에서는 시속 40km 이상의 강한 바람이 부는 가운데 약한 소나기가 내리며 궂은 날씨가 이어졌다.\n\n뉴질랜드 웰링턴의 기온은 최고 17°C, 최저 12°C를 기록하며 오세아니아 주요 수도 중 가장 높은 낮 기온을 나타냈다. 웰링턴의 강수확률은 99%에 달했고 강수량은 1.9mm를 기록했다. 자외선지수는 4.8로 측정됐으며, 다음 날 최고기온은 15°C로 당일보다 2",
-    "url": "internal://weather_group_오세아니아_today20260904",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_오세아니아_today20260904",
-    "region": "oceania",
-    "country": "오세아니아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-04 04:22",
-    "countries": [
-      "호주",
-      "뉴질랜드"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_australia_20260904.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T04:22:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 04:22",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
     "continuation_of_id": null
   }
 ]

@@ -1,5 +1,40 @@
 [
   {
+    "id": 133052,
+    "title_en": "오세아니아, 주말 내내 비 소식…수도권 궂은날씨 이어져",
+    "title_ko": "오세아니아, 주말 내내 비 소식…수도권 궂은날씨 이어져",
+    "summary_ko": "5일(현지시간) 오세아니아 주요국 주말 날씨 데이터에 따르면, 이번 주말 오세아니아 지역의 기온은 최저기온 7°C에서 최고기온 17°C 사이의 분포를 보이는 가운데 호주와 뉴질랜드 등 주요국 수도에 비 소식이 예고됐다. 주말 동안 두 국가의 수도권은 흐린 하늘과 함께 뇌우 및 이슬비가 번갈아 내리는 궂은날씨가 이어질 전망이다.\n\n호주 수도권의 토요일 날씨는 뇌우가 예보된 가운데 최고기온 17°C, 최저기온 9°C를 기록하겠으며 강수 확률은 100%에 달한다. 일요일에는 약한 이슬비가 이어지면서 최고기온 17°C, 최저기온 7°C를 ",
+    "url": "internal://weather_group_오세아니아_weekend20260905",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_오세아니아_weekend20260905",
+    "region": "oceania",
+    "country": "오세아니아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-05 04:27",
+    "countries": [
+      "호주",
+      "뉴질랜드"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_australia_20260905.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T04:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 04:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 132530,
     "title_en": "Cholera outbreaks persist across Africa as Nigeria, Sudan and Mozambique report rising cases",
     "title_ko": "아프리카 전역 콜레라 확산세 지속…나이지리아·수단·모잠비크 피해 심화",
@@ -1626,6 +1661,42 @@
     "continuation_of_id": null
   },
   {
+    "id": 128727,
+    "title_en": "동아시아, 베이징 34도 찜통더위 속 울란바토르 쌀쌀",
+    "title_ko": "동아시아, 베이징 34도 찜통더위 속 울란바토르 쌀쌀",
+    "summary_ko": "4일(현지시간) 동아시아 주요국 수도는 최저기온 9°C에서 최고기온 34°C 사이의 폭넓은 기온 분포를 보였다. 중국 베이징은 최고기온 34°C, 최저기온 22°C를 기록하며 동아시아 주요국 수도 중 가장 더운 곳으로 집계됐다. 반면 몽골 울란바토르는 최고기온 17°C, 최저기온 9°C에 머물러 가장 선선한 곳으로 나타났다. 베이징의 최고기온은 울란바토르보다 17°C나 높아 지역별 기온 격차가 뚜렷했다.\n\n중국 베이징은 흐린 날씨를 보인 가운데 강수확률 0%, 강수량 0.0mm를 기록했으며 자외선지수는 5.1로 측정됐다. 내일 베이",
+    "url": "internal://weather_group_동아시아_today20260904",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_동아시아_today20260904",
+    "region": "east_asia",
+    "country": "동아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-04 06:26",
+    "countries": [
+      "일본",
+      "중국",
+      "몽골"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_china_20260904.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-04T06:26:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-04 06:26",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 128728,
     "title_en": "Wall Street's three major indexes rally as tech stocks lead gains",
     "title_ko": "[글로벌 마켓 동향] 뉴욕증시 3대 지수 일제히 상승…기술주 강세 주도",
@@ -1986,42 +2057,6 @@
         }
       ]
     },
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 128727,
-    "title_en": "동아시아, 베이징 34도 찜통더위 속 울란바토르 쌀쌀",
-    "title_ko": "동아시아, 베이징 34도 찜통더위 속 울란바토르 쌀쌀",
-    "summary_ko": "4일(현지시간) 동아시아 주요국 수도는 최저기온 9°C에서 최고기온 34°C 사이의 폭넓은 기온 분포를 보였다. 중국 베이징은 최고기온 34°C, 최저기온 22°C를 기록하며 동아시아 주요국 수도 중 가장 더운 곳으로 집계됐다. 반면 몽골 울란바토르는 최고기온 17°C, 최저기온 9°C에 머물러 가장 선선한 곳으로 나타났다. 베이징의 최고기온은 울란바토르보다 17°C나 높아 지역별 기온 격차가 뚜렷했다.\n\n중국 베이징은 흐린 날씨를 보인 가운데 강수확률 0%, 강수량 0.0mm를 기록했으며 자외선지수는 5.1로 측정됐다. 내일 베이",
-    "url": "internal://weather_group_동아시아_today20260904",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_동아시아_today20260904",
-    "region": "east_asia",
-    "country": "동아시아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-04 06:26",
-    "countries": [
-      "일본",
-      "중국",
-      "몽골"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_china_20260904.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T06:26:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 06:26",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
     "image_credit": null,
     "continuation_of_id": null
   },
@@ -4646,21 +4681,22 @@
     "continuation_of_id": null
   },
   {
-    "id": 123783,
-    "title_en": "장동혁 의원, 미래에셋 로비 의혹 제기하며 사의 표명... 정치권 파장 확대",
-    "title_ko": "장동혁 의원, 미래에셋 로비 의혹 제기하며 사의 표명... 정치권 파장 확대",
-    "summary_ko": "장동혁 의원은 2일(현지시간) 김용범 청와대 정책실장이 미래에셋의 로비를 받아 단일종목 레버리지 상장지수펀드(ETF) 도입을 추진했다는 의혹을 공개적으로 제기했다. 장동혁 의원은 이와 같은 의혹 제기와 함께 사의를 표명했다. 야당은 이번 사태를 'ETF 게이트'로 규정하고 철저한 진상 규명을 위한 특검 도입을 촉구하고 나섰다.\n\n김용범 정책실장은 개각 발표 다음 날인 1일(현지시간) 전격적으로 사의를 표명했다. 이 대통령은 사의 표명 하루 만에 김용범 실장의 사표를 수리했다. 이번 사퇴는 부동산 정책 책임론과 맞물려 경제 사령탑 라",
-    "url": "internal://realtrend_김용범_미래에셋_로비_및_단일종목_레버리지_ETF_의혹_2026090222",
+    "id": 123781,
+    "title_en": "미 국방부 피트 헤그세스 장관 캐나다 생도 프로그램 조롱 논란 속 육군 장관 사임",
+    "title_ko": "미 국방부 피트 헤그세스 장관 캐나다 생도 프로그램 조롱 논란 속 육군 장관 사임",
+    "summary_ko": "댄 드리스콜(Dan Driscoll) 육군 장관이 피트 헤그세스(Pete Hegseth) 국방부 장관과의 충돌로 사임한 이후 미국 국방부 내부의 혼란이 심화되었다. 파이낸셜 타임스(Financial Times)의 보도에 따르면 이번 사임은 국방부 최고위층 간의 마찰을 드러냈다.\n\n피트 헤그세스 장관은 1일(현지시간) 소셜미디어를 통해 캐나다의 청소년 생도 프로그램을 겨냥한 게시물을 올려 논란을 빚었다. CBC 등 외신 보도에 따르면 이 게시물은 캐나다 생도 프로그램을 경시하고 여성 청소년 생도 강사를 조롱하는 내용을 담았다. \n\n캐",
+    "url": "internal://realtrend_Pentagon_Leadership_Resignation_(Driscoll_&_Hegseth)_2026090222",
     "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "realtrend_김용범_미래에셋_로비_및_단일종목_레",
+    "category": "정치·외교",
+    "subcategory": "realtrend_Pentagon_Leadership_",
     "region": "africa",
-    "country": "한국",
+    "country": "미국",
     "country_flag": "",
     "score": 2,
     "created_at": "2026-09-02 22:46",
     "countries": [
-      "한국"
+      "미국",
+      "캐나다"
     ],
     "is_published": true,
     "image_url": null,
@@ -4680,22 +4716,21 @@
     "continuation_of_id": null
   },
   {
-    "id": 123781,
-    "title_en": "미 국방부 피트 헤그세스 장관 캐나다 생도 프로그램 조롱 논란 속 육군 장관 사임",
-    "title_ko": "미 국방부 피트 헤그세스 장관 캐나다 생도 프로그램 조롱 논란 속 육군 장관 사임",
-    "summary_ko": "댄 드리스콜(Dan Driscoll) 육군 장관이 피트 헤그세스(Pete Hegseth) 국방부 장관과의 충돌로 사임한 이후 미국 국방부 내부의 혼란이 심화되었다. 파이낸셜 타임스(Financial Times)의 보도에 따르면 이번 사임은 국방부 최고위층 간의 마찰을 드러냈다.\n\n피트 헤그세스 장관은 1일(현지시간) 소셜미디어를 통해 캐나다의 청소년 생도 프로그램을 겨냥한 게시물을 올려 논란을 빚었다. CBC 등 외신 보도에 따르면 이 게시물은 캐나다 생도 프로그램을 경시하고 여성 청소년 생도 강사를 조롱하는 내용을 담았다. \n\n캐",
-    "url": "internal://realtrend_Pentagon_Leadership_Resignation_(Driscoll_&_Hegseth)_2026090222",
+    "id": 123783,
+    "title_en": "장동혁 의원, 미래에셋 로비 의혹 제기하며 사의 표명... 정치권 파장 확대",
+    "title_ko": "장동혁 의원, 미래에셋 로비 의혹 제기하며 사의 표명... 정치권 파장 확대",
+    "summary_ko": "장동혁 의원은 2일(현지시간) 김용범 청와대 정책실장이 미래에셋의 로비를 받아 단일종목 레버리지 상장지수펀드(ETF) 도입을 추진했다는 의혹을 공개적으로 제기했다. 장동혁 의원은 이와 같은 의혹 제기와 함께 사의를 표명했다. 야당은 이번 사태를 'ETF 게이트'로 규정하고 철저한 진상 규명을 위한 특검 도입을 촉구하고 나섰다.\n\n김용범 정책실장은 개각 발표 다음 날인 1일(현지시간) 전격적으로 사의를 표명했다. 이 대통령은 사의 표명 하루 만에 김용범 실장의 사표를 수리했다. 이번 사퇴는 부동산 정책 책임론과 맞물려 경제 사령탑 라",
+    "url": "internal://realtrend_김용범_미래에셋_로비_및_단일종목_레버리지_ETF_의혹_2026090222",
     "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "realtrend_Pentagon_Leadership_",
+    "category": "경제",
+    "subcategory": "realtrend_김용범_미래에셋_로비_및_단일종목_레",
     "region": "africa",
-    "country": "미국",
+    "country": "한국",
     "country_flag": "",
     "score": 2,
     "created_at": "2026-09-02 22:46",
     "countries": [
-      "미국",
-      "캐나다"
+      "한국"
     ],
     "is_published": true,
     "image_url": null,
@@ -4988,40 +5023,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 122210,
-    "title_en": "캐나다 윌리스톤호에서 발견된 거대 부유섬…사라졌다가 30km 떨어진 곳서 재발견",
-    "title_ko": "캐나다 윌리스톤호에서 발견된 거대 부유섬…사라졌다가 30km 떨어진 곳서 재발견",
-    "summary_ko": "캐나다 브리티시컬럼비아주 북부의 거대한 호수에서 발견된 정체불명의 거대 부유섬이 행방이 묘연해진 지 수주 만에 다시 발견됐다. 이 섬은 지난 8월 초 윌리스톤호에서 항해하던 항해사들에 의해 처음 목격됐다. 당시 촬영된 영상이 소셜미디어를 통해 빠르게 확산되면서 전 세계적인 관심을 모았다.\n\n윌리스톤호는 브리티시컬럼비아주에서 가장 큰 인공 담수호다. 7월 말 촬영된 위성 사진에서도 축구장 약 1.5개 크기에 달하는 이 삼림 지대의 존재가 확인됐다. 그러나 불과 몇 주 뒤인 8월 5일 촬영된 위성 사진에서는 섬의 흔적이 온데간데없이 사",
-    "url": "internal://solo_20260902_d47d823f",
-    "source": "NewsFinal",
-    "category": "자원·에너지",
-    "subcategory": "solo_20260902_d47d823f",
-    "region": "global",
-    "country": "캐나다",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-02 13:06",
-    "countries": [
-      "캐나다"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_floating_island_mountain_lake_forest_aerial_view.jpg",
-    "view_count": 1,
-    "first_published_at": "2026-09-02T13:06:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-02 13:06",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
     "id": 119633,
     "title_en": "구 통일교 한학자 총재 1심서 징역 2년 선고… 금고 260억 원 압수",
     "title_ko": "구 통일교 한학자 총재 1심서 징역 2년 선고… 금고 260억 원 압수",
@@ -5062,6 +5063,40 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 122210,
+    "title_en": "캐나다 윌리스톤호에서 발견된 거대 부유섬…사라졌다가 30km 떨어진 곳서 재발견",
+    "title_ko": "캐나다 윌리스톤호에서 발견된 거대 부유섬…사라졌다가 30km 떨어진 곳서 재발견",
+    "summary_ko": "캐나다 브리티시컬럼비아주 북부의 거대한 호수에서 발견된 정체불명의 거대 부유섬이 행방이 묘연해진 지 수주 만에 다시 발견됐다. 이 섬은 지난 8월 초 윌리스톤호에서 항해하던 항해사들에 의해 처음 목격됐다. 당시 촬영된 영상이 소셜미디어를 통해 빠르게 확산되면서 전 세계적인 관심을 모았다.\n\n윌리스톤호는 브리티시컬럼비아주에서 가장 큰 인공 담수호다. 7월 말 촬영된 위성 사진에서도 축구장 약 1.5개 크기에 달하는 이 삼림 지대의 존재가 확인됐다. 그러나 불과 몇 주 뒤인 8월 5일 촬영된 위성 사진에서는 섬의 흔적이 온데간데없이 사",
+    "url": "internal://solo_20260902_d47d823f",
+    "source": "NewsFinal",
+    "category": "자원·에너지",
+    "subcategory": "solo_20260902_d47d823f",
+    "region": "global",
+    "country": "캐나다",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-02 13:06",
+    "countries": [
+      "캐나다"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_floating_island_mountain_lake_forest_aerial_view.jpg",
+    "view_count": 1,
+    "first_published_at": "2026-09-02T13:06:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-02 13:06",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
     "continuation_of_id": null
   },
   {
@@ -8613,6 +8648,46 @@
     "continuation_of_id": null
   },
   {
+    "id": 114537,
+    "title_en": "미국, 베네수엘라 석유 협정 체결…전략적 비축유 보충 추진",
+    "title_ko": "미국, 베네수엘라 석유 협정 체결…전략적 비축유 보충 추진",
+    "summary_ko": "[업데이트]\n■ 8월 31일 11:59 — 이번 합의를 둘러싸고 미국과 베네수엘라 양국이 내놓은 조건과 전망에는 시각차가 뚜렷하게 나타났다. 도널드 트럼프 대통령은 이번 협정으로 확보한 석유 공급을 미국 국민을 위한 선물로 규정하고, 미국이 베네수엘라의 650억 배럴에 달하는 막대한 매장량을 통제할 수 있게 되었다고 강조했다. 백악관 고위 관료들에 따르면 워싱턴은 신규 합작 법인 생산량의 55퍼센트에 대한 통제권을 쥐게 되며, 유전 개발을 위한 양허 기간 역시 25년이 아니라 100년에 이른다는 관측도 제기되었다. 트럼프 대통령은 ",
+    "url": "internal://realtrend_Venezuela_Oil_Deal_&_Maduro_Imprisonment_2026083106",
+    "source": "NewsFinal",
+    "category": "자원·에너지",
+    "subcategory": "realtrend_Venezuela_Oil_Deal_&",
+    "region": "africa",
+    "country": "미국",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-08-31 11:59",
+    "countries": [
+      "미국",
+      "베네수엘라",
+      "캐나다"
+    ],
+    "is_published": true,
+    "image_url": null,
+    "view_count": 1,
+    "first_published_at": "2026-08-31T06:19:00",
+    "update_log": [
+      {
+        "timestamp": "2026-08-31 06:19",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-08-31 11:59",
+        "note": "내용 업데이트"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 114536,
     "title_en": "아이티 켄스코프 갱단 습격 인질 일부 석방 속 유엔의 민간인 보호 촉구",
     "title_ko": "아이티 켄스코프 갱단 습격 인질 일부 석방 속 유엔의 민간인 보호 촉구",
@@ -8639,46 +8714,6 @@
     "update_log": [
       {
         "timestamp": "2026-08-31 06:17",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-08-31 11:59",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 114537,
-    "title_en": "미국, 베네수엘라 석유 협정 체결…전략적 비축유 보충 추진",
-    "title_ko": "미국, 베네수엘라 석유 협정 체결…전략적 비축유 보충 추진",
-    "summary_ko": "[업데이트]\n■ 8월 31일 11:59 — 이번 합의를 둘러싸고 미국과 베네수엘라 양국이 내놓은 조건과 전망에는 시각차가 뚜렷하게 나타났다. 도널드 트럼프 대통령은 이번 협정으로 확보한 석유 공급을 미국 국민을 위한 선물로 규정하고, 미국이 베네수엘라의 650억 배럴에 달하는 막대한 매장량을 통제할 수 있게 되었다고 강조했다. 백악관 고위 관료들에 따르면 워싱턴은 신규 합작 법인 생산량의 55퍼센트에 대한 통제권을 쥐게 되며, 유전 개발을 위한 양허 기간 역시 25년이 아니라 100년에 이른다는 관측도 제기되었다. 트럼프 대통령은 ",
-    "url": "internal://realtrend_Venezuela_Oil_Deal_&_Maduro_Imprisonment_2026083106",
-    "source": "NewsFinal",
-    "category": "자원·에너지",
-    "subcategory": "realtrend_Venezuela_Oil_Deal_&",
-    "region": "africa",
-    "country": "미국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-08-31 11:59",
-    "countries": [
-      "미국",
-      "베네수엘라",
-      "캐나다"
-    ],
-    "is_published": true,
-    "image_url": null,
-    "view_count": 1,
-    "first_published_at": "2026-08-31T06:19:00",
-    "update_log": [
-      {
-        "timestamp": "2026-08-31 06:19",
         "note": "최초 게시"
       },
       {
@@ -9981,22 +10016,21 @@
     "continuation_of_id": null
   },
   {
-    "id": 113486,
-    "title_en": "가나 은행, 국경 압수 외화 조사 위원회 출범 및 물류·무역 현안 대응 본격화",
-    "title_ko": "가나 은행, 국경 압수 외화 조사 위원회 출범 및 물류·무역 현안 대응 본격화",
-    "summary_ko": "가나 은행(BoG)은 가나 국경에서 압수된 외화에 대한 예비 조사위원회를 출범했다고 밝혔다. 가나 은행은 최근 국경 지역에서 발생한 외화 압수 사태를 해결하기 위한 일환으로 이번 위원회를 구성하고 조사를 진행한다.\n\n오로 오일 가나 리미티드(Oro Oil Ghana Limited)의 최고 경영자인 맥스웰 코미(Maxwell Commey)는 테마 항만 수리를 포함해 혼잡과 높은 물류 문제를 해결하기 위한 긴급하고 조율된 조치를 촉구했다. 테마 항만 수리는 물류 비용 절감과 무역 활성화를 목적으로 추진된다.\n\n세계은행(World Ban",
-    "url": "internal://realtrend_Ghana_Northshore_Apparel_Hub_2026083021",
+    "id": 113485,
+    "title_en": "태국 당국, 2026년 첫 7개월간 위조품 184만여 개 압수",
+    "title_ko": "태국 당국, 2026년 첫 7개월간 위조품 184만여 개 압수",
+    "summary_ko": "태국 당국이 2026년 첫 7개월 동안 지적재산권 침해 및 위조품 단속을 실시해 184만 개 이상의 위조품을 압수했다. 이번 단속은 지적재산권부와 태국 왕립 경찰, 관세청이 공동으로 진행했다.\n\n당국은 이 기간 동안 총 512건의 지적재산권 침해 사례를 적발했다. 압수된 위조품의 총 피해 규모는 8억 900만 바트 이상으로 집계됐다. 지적재산권부는 관련 기관들과 함께 실시한 단속 결과와 세부 수치를 공개했다.",
+    "url": "internal://realtrend_Thailand_Bangkok_Fire_2026083021",
     "source": "NewsFinal",
-    "category": "산업·기업",
-    "subcategory": "realtrend_Ghana_Northshore_App",
-    "region": "africa",
-    "country": "가나",
+    "category": "사회",
+    "subcategory": "realtrend_Thailand_Bangkok_Fir",
+    "region": "southeast_asia",
+    "country": "태국",
     "country_flag": "",
     "score": 2,
     "created_at": "2026-08-30 21:28",
     "countries": [
-      "가나",
-      "멕시코"
+      "태국"
     ],
     "is_published": true,
     "image_url": null,
@@ -10016,21 +10050,22 @@
     "continuation_of_id": null
   },
   {
-    "id": 113485,
-    "title_en": "태국 당국, 2026년 첫 7개월간 위조품 184만여 개 압수",
-    "title_ko": "태국 당국, 2026년 첫 7개월간 위조품 184만여 개 압수",
-    "summary_ko": "태국 당국이 2026년 첫 7개월 동안 지적재산권 침해 및 위조품 단속을 실시해 184만 개 이상의 위조품을 압수했다. 이번 단속은 지적재산권부와 태국 왕립 경찰, 관세청이 공동으로 진행했다.\n\n당국은 이 기간 동안 총 512건의 지적재산권 침해 사례를 적발했다. 압수된 위조품의 총 피해 규모는 8억 900만 바트 이상으로 집계됐다. 지적재산권부는 관련 기관들과 함께 실시한 단속 결과와 세부 수치를 공개했다.",
-    "url": "internal://realtrend_Thailand_Bangkok_Fire_2026083021",
+    "id": 113486,
+    "title_en": "가나 은행, 국경 압수 외화 조사 위원회 출범 및 물류·무역 현안 대응 본격화",
+    "title_ko": "가나 은행, 국경 압수 외화 조사 위원회 출범 및 물류·무역 현안 대응 본격화",
+    "summary_ko": "가나 은행(BoG)은 가나 국경에서 압수된 외화에 대한 예비 조사위원회를 출범했다고 밝혔다. 가나 은행은 최근 국경 지역에서 발생한 외화 압수 사태를 해결하기 위한 일환으로 이번 위원회를 구성하고 조사를 진행한다.\n\n오로 오일 가나 리미티드(Oro Oil Ghana Limited)의 최고 경영자인 맥스웰 코미(Maxwell Commey)는 테마 항만 수리를 포함해 혼잡과 높은 물류 문제를 해결하기 위한 긴급하고 조율된 조치를 촉구했다. 테마 항만 수리는 물류 비용 절감과 무역 활성화를 목적으로 추진된다.\n\n세계은행(World Ban",
+    "url": "internal://realtrend_Ghana_Northshore_Apparel_Hub_2026083021",
     "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "realtrend_Thailand_Bangkok_Fir",
-    "region": "southeast_asia",
-    "country": "태국",
+    "category": "산업·기업",
+    "subcategory": "realtrend_Ghana_Northshore_App",
+    "region": "africa",
+    "country": "가나",
     "country_flag": "",
     "score": 2,
     "created_at": "2026-08-30 21:28",
     "countries": [
-      "태국"
+      "가나",
+      "멕시코"
     ],
     "is_published": true,
     "image_url": null,
@@ -10283,21 +10318,22 @@
     "continuation_of_id": null
   },
   {
-    "id": 112949,
-    "title_en": "과테말라 국회, 2027년 총선 앞두고 선심성 입법 러시 우려",
-    "title_ko": "과테말라 국회, 2027년 총선 앞두고 선심성 입법 러시 우려",
-    "summary_ko": "과테말라 공화국 국회가 2027년 일반 선거를 11개월 앞두고 입법 시즌의 성수기를 맞이하고 있다고 현지 언론이 30일(현지시간) 보도했다.\n\n의원들은 재선이나 공직 진출을 위한 정치적 동기가 강화되면서 당장 대중의 환호를 이끌어낼 수 있는 법안 발의에 적극적으로 나서고 있다. 보조금, 면세 혜택, 보상금, 신규 지원금, 물가 인하 약속, 특정 집단에 대한 특전 등이 이에 해당하며, 향후 몇 달간 시민들은 대중의 필요와 우려에 직접적으로 부합하려는 법안이 급증하는 현상을 목격하게 될 것으로 예상된다.\n\n이러한 법안들은 당장은 좋아 ",
-    "url": "internal://solo_20260830_5412fbaf",
+    "id": 112948,
+    "title_en": "이스라엘 정착민들, 요르단강 서안 곳곳 습격…민간인·외신 기자 부상",
+    "title_ko": "이스라엘 정착민들, 요르단강 서안 곳곳 습격…민간인·외신 기자 부상",
+    "summary_ko": "무장한 이스라엘 정착민 대가족 수십 명이 29일(현지시간) 점령지 요르단강 서안 지구 여러 지역을 습격해 팔레스타인 민간인 다수와 외신 기자 2명이 부상을 입었다. 나블루스 남쪽 쿠스라 마을에서는 수십 명의 정착민이 라스 알아인 지역에 침입해 한 주택을 포위하고 돌을 던졌으며, 군인들은 최루탄을 발사했다. 팔레스타인 주민들이 이들에 맞섰으나 정착민들의 폭행으로 주민 2명이 타박상을 입었고, 군 병력이 현장에 증원되었다. 군과 정착민들은 구급차의 접근을 방해했으며, 구급대원들은 최루가스 흡입과 타박상을 입은 주민 7명에게 응급 치료를",
+    "url": "internal://solo_20260830_0f8e34ff",
     "source": "NewsFinal",
     "category": "정치·외교",
-    "subcategory": "solo_20260830_5412fbaf",
-    "region": "latin_america",
-    "country": "과테말라",
+    "subcategory": "solo_20260830_0f8e34ff",
+    "region": "global",
+    "country": "팔레스타인",
     "country_flag": "",
     "score": 1,
     "created_at": "2026-08-30 15:58",
     "countries": [
-      "과테말라"
+      "팔레스타인",
+      "이스라엘"
     ],
     "is_published": true,
     "image_url": "",
@@ -10310,7 +10346,7 @@
       }
     ],
     "byline": "뉴스파이널 편집국",
-    "is_travel": false,
+    "is_travel": true,
     "source_published_at": null,
     "source_data": null,
     "image_credit": null,
@@ -10352,22 +10388,21 @@
     "continuation_of_id": null
   },
   {
-    "id": 112948,
-    "title_en": "이스라엘 정착민들, 요르단강 서안 곳곳 습격…민간인·외신 기자 부상",
-    "title_ko": "이스라엘 정착민들, 요르단강 서안 곳곳 습격…민간인·외신 기자 부상",
-    "summary_ko": "무장한 이스라엘 정착민 대가족 수십 명이 29일(현지시간) 점령지 요르단강 서안 지구 여러 지역을 습격해 팔레스타인 민간인 다수와 외신 기자 2명이 부상을 입었다. 나블루스 남쪽 쿠스라 마을에서는 수십 명의 정착민이 라스 알아인 지역에 침입해 한 주택을 포위하고 돌을 던졌으며, 군인들은 최루탄을 발사했다. 팔레스타인 주민들이 이들에 맞섰으나 정착민들의 폭행으로 주민 2명이 타박상을 입었고, 군 병력이 현장에 증원되었다. 군과 정착민들은 구급차의 접근을 방해했으며, 구급대원들은 최루가스 흡입과 타박상을 입은 주민 7명에게 응급 치료를",
-    "url": "internal://solo_20260830_0f8e34ff",
+    "id": 112949,
+    "title_en": "과테말라 국회, 2027년 총선 앞두고 선심성 입법 러시 우려",
+    "title_ko": "과테말라 국회, 2027년 총선 앞두고 선심성 입법 러시 우려",
+    "summary_ko": "과테말라 공화국 국회가 2027년 일반 선거를 11개월 앞두고 입법 시즌의 성수기를 맞이하고 있다고 현지 언론이 30일(현지시간) 보도했다.\n\n의원들은 재선이나 공직 진출을 위한 정치적 동기가 강화되면서 당장 대중의 환호를 이끌어낼 수 있는 법안 발의에 적극적으로 나서고 있다. 보조금, 면세 혜택, 보상금, 신규 지원금, 물가 인하 약속, 특정 집단에 대한 특전 등이 이에 해당하며, 향후 몇 달간 시민들은 대중의 필요와 우려에 직접적으로 부합하려는 법안이 급증하는 현상을 목격하게 될 것으로 예상된다.\n\n이러한 법안들은 당장은 좋아 ",
+    "url": "internal://solo_20260830_5412fbaf",
     "source": "NewsFinal",
     "category": "정치·외교",
-    "subcategory": "solo_20260830_0f8e34ff",
-    "region": "global",
-    "country": "팔레스타인",
+    "subcategory": "solo_20260830_5412fbaf",
+    "region": "latin_america",
+    "country": "과테말라",
     "country_flag": "",
     "score": 1,
     "created_at": "2026-08-30 15:58",
     "countries": [
-      "팔레스타인",
-      "이스라엘"
+      "과테말라"
     ],
     "is_published": true,
     "image_url": "",
@@ -10380,7 +10415,7 @@
       }
     ],
     "byline": "뉴스파이널 편집국",
-    "is_travel": true,
+    "is_travel": false,
     "source_published_at": null,
     "source_data": null,
     "image_credit": null,
@@ -10602,40 +10637,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 112649,
-    "title_en": "에스와티니 8배트 무역박람회컵 개막…그린맘바, 첫 경기 상대 미정 속 혼돈",
-    "title_ko": "에스와티니 8배트 무역박람회컵 개막…그린맘바, 첫 경기 상대 미정 속 혼돈",
-    "summary_ko": "8배트 무역박람회컵(8Bet Trade Fair Cup)이 30일(현지시간) 개막했으나, 그린맘바(Green Mamba)는 화요일에 치를 첫 경기 상대로 어느 팀을 만나야 할지 아직 확정되지 않은 상태다. 이번 토너먼트에서 그린맘바는 1일(현지시간) 오후 5시 마부소 스포츠 센터(Mavuso Sports Centre)에서 16강전을 치를 예정이다. 당초 대진 추첨에서는 레드 리노스(Red Rhinos)와 맞붙는 것으로 결정되었으나, 만지니 원더러스(Manzini Wanderers)가 레드 리노스의 프리미어리그 자격 인수를 시도하면서",
-    "url": "internal://solo_20260830_0b4da1e5",
-    "source": "NewsFinal",
-    "category": "문화·예술",
-    "subcategory": "solo_20260830_0b4da1e5",
-    "region": "global",
-    "country": "에스와티니",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-08-30 13:23",
-    "countries": [
-      "에스와티니"
-    ],
-    "is_published": true,
-    "image_url": "",
-    "view_count": 0,
-    "first_published_at": "2026-08-30T13:23:00",
-    "update_log": [
-      {
-        "timestamp": "2026-08-30 13:23",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
     "id": 112648,
     "title_en": "음두두지 은쿠베·시미, 제58회 에스와티니 국제무역박람회 개막식 장악",
     "title_ko": "음두두지 은쿠베·시미, 제58회 에스와티니 국제무역박람회 개막식 장악",
@@ -10671,29 +10672,29 @@
     "continuation_of_id": null
   },
   {
-    "id": 112646,
-    "title_en": "에스와티니 투자 컨퍼런스 후속 사업 본격화…켈로그 톨라람 공장 확장 추진",
-    "title_ko": "에스와티니 투자 컨퍼런스 후속 사업 본격화…켈로그 톨라람 공장 확장 추진",
-    "summary_ko": "에스와티니의 첫 투자 컨퍼런스에서 발표된 투자 약속들이 단순한 서류 단계를 넘어 실제 건설과 생산 능력 확대, 경제적 기회 창출로 이어지고 있다. 켈로그 톨라람(Kellogg Tolaram)과 아프리칸 얼라이언스(African Alliance)는 지난해 열린 대규모 행사의 약속과 연계된 프로젝트를 본격적으로 추진하고 있다고 30일(현지시간) 밝혔다. 두 투자자의 최근 행보는 에스와티니의 투자 드라이브가 약속에서 공사와 생산 확대로 전환되는 다음 단계에 진입했음을 보여준다.\n\n에스와티니 정부는 상공업부(Ministry of Comme",
-    "url": "internal://solo_20260830_668b65d1",
+    "id": 112649,
+    "title_en": "에스와티니 8배트 무역박람회컵 개막…그린맘바, 첫 경기 상대 미정 속 혼돈",
+    "title_ko": "에스와티니 8배트 무역박람회컵 개막…그린맘바, 첫 경기 상대 미정 속 혼돈",
+    "summary_ko": "8배트 무역박람회컵(8Bet Trade Fair Cup)이 30일(현지시간) 개막했으나, 그린맘바(Green Mamba)는 화요일에 치를 첫 경기 상대로 어느 팀을 만나야 할지 아직 확정되지 않은 상태다. 이번 토너먼트에서 그린맘바는 1일(현지시간) 오후 5시 마부소 스포츠 센터(Mavuso Sports Centre)에서 16강전을 치를 예정이다. 당초 대진 추첨에서는 레드 리노스(Red Rhinos)와 맞붙는 것으로 결정되었으나, 만지니 원더러스(Manzini Wanderers)가 레드 리노스의 프리미어리그 자격 인수를 시도하면서",
+    "url": "internal://solo_20260830_0b4da1e5",
     "source": "NewsFinal",
-    "category": "산업·기업",
-    "subcategory": "solo_20260830_668b65d1",
+    "category": "문화·예술",
+    "subcategory": "solo_20260830_0b4da1e5",
     "region": "global",
     "country": "에스와티니",
     "country_flag": "",
     "score": 1,
-    "created_at": "2026-08-30 13:22",
+    "created_at": "2026-08-30 13:23",
     "countries": [
       "에스와티니"
     ],
     "is_published": true,
     "image_url": "",
     "view_count": 0,
-    "first_published_at": "2026-08-30T13:22:00",
+    "first_published_at": "2026-08-30T13:23:00",
     "update_log": [
       {
-        "timestamp": "2026-08-30 13:22",
+        "timestamp": "2026-08-30 13:23",
         "note": "최초 게시"
       }
     ],
@@ -10720,6 +10721,40 @@
     "created_at": "2026-08-30 13:22",
     "countries": [
       "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "",
+    "view_count": 0,
+    "first_published_at": "2026-08-30T13:22:00",
+    "update_log": [
+      {
+        "timestamp": "2026-08-30 13:22",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 112646,
+    "title_en": "에스와티니 투자 컨퍼런스 후속 사업 본격화…켈로그 톨라람 공장 확장 추진",
+    "title_ko": "에스와티니 투자 컨퍼런스 후속 사업 본격화…켈로그 톨라람 공장 확장 추진",
+    "summary_ko": "에스와티니의 첫 투자 컨퍼런스에서 발표된 투자 약속들이 단순한 서류 단계를 넘어 실제 건설과 생산 능력 확대, 경제적 기회 창출로 이어지고 있다. 켈로그 톨라람(Kellogg Tolaram)과 아프리칸 얼라이언스(African Alliance)는 지난해 열린 대규모 행사의 약속과 연계된 프로젝트를 본격적으로 추진하고 있다고 30일(현지시간) 밝혔다. 두 투자자의 최근 행보는 에스와티니의 투자 드라이브가 약속에서 공사와 생산 확대로 전환되는 다음 단계에 진입했음을 보여준다.\n\n에스와티니 정부는 상공업부(Ministry of Comme",
+    "url": "internal://solo_20260830_668b65d1",
+    "source": "NewsFinal",
+    "category": "산업·기업",
+    "subcategory": "solo_20260830_668b65d1",
+    "region": "global",
+    "country": "에스와티니",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-08-30 13:22",
+    "countries": [
+      "에스와티니"
     ],
     "is_published": true,
     "image_url": "",
@@ -11437,40 +11472,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 112199,
-    "title_en": "쿠웨이트 하왈리서 2만 디나르 상당 금고털이 발생…경찰 수사 착수",
-    "title_ko": "쿠웨이트 하왈리서 2만 디나르 상당 금고털이 발생…경찰 수사 착수",
-    "summary_ko": "쿠웨이트 하왈리 지역에서 약 2만 쿠웨이트 디나르 상당의 금지금이 도난당하는 사건이 발생해 현지 경찰이 수사에 착수했다고 29일(현지시간) 밝혔다.\n\n내무부 작전실은 쿠웨이트 국적의 의사 소유 주택에 침입이 발생했다는 신고를 접수했다. 경찰이 현장에 출동했을 당시 피해 여성은 퇴근 후 집에 돌아와 침실에 보관해 두었던 금괴와 금 장신구들이 사라진 사실을 확인했다고 진술했다.\n\n피해자는 최근 지속되는 금값 상승세에 대비해 자산 저축 형태로 오랫동안 모아온 금품 대부분을 도난당했다고 전했다. 피해자는 범행과 관련해 특정 용의자를 지목하",
-    "url": "internal://solo_20260830_70ddfcc4",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "solo_20260830_70ddfcc4",
-    "region": "middle_east",
-    "country": "쿠웨이트",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-08-30 08:30",
-    "countries": [
-      "쿠웨이트"
-    ],
-    "is_published": true,
-    "image_url": "",
-    "view_count": 1,
-    "first_published_at": "2026-08-30T08:30:00",
-    "update_log": [
-      {
-        "timestamp": "2026-08-30 08:30",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
     "id": 112200,
     "title_en": "우크라이나 자포리자 원전 일주일 넘게 외부 전력 중단…디젤 발전기 의존",
     "title_ko": "우크라이나 자포리자 원전 일주일 넘게 외부 전력 중단…디젤 발전기 의존",
@@ -11506,29 +11507,29 @@
     "continuation_of_id": null
   },
   {
-    "id": 112198,
-    "title_en": "쿠웨이트, 경제 전문 법원 설립 추진… 투자 유치 및 상업 분쟁 신속 해결",
-    "title_ko": "쿠웨이트, 경제 전문 법원 설립 추진… 투자 유치 및 상업 분쟁 신속 해결",
-    "summary_ko": "쿠웨이트가 국가 소득 다원화와 글로벌 자본 유치를 위한 개발 비전에 발맞춰 경제 및 입법 인프라 현대화에 속도를 내고 있다고 29일 밝혔다. 경제 전문가이자 변호사인 아트비 알타눈(Athbi Al-Tahnoon)은 정부의 전문 경제 법원 설립 추진이 경쟁 기업 간 분쟁이나 개인과 기업 간 분쟁 등 수년간 해결되지 못한 상업 사건들의 적체를 해소하기 위한 목적이라고 밝혔다.\n\n아트비 알타눈은 전문가 부족과 금융 사안의 복잡성으로 인해 소송 절차가 2년에서 4년까지 길어질 수 있다고 설명했다. 이로 인해 일부 기업이 자신을 방어하고 증",
-    "url": "internal://solo_20260830_79672f50",
+    "id": 112199,
+    "title_en": "쿠웨이트 하왈리서 2만 디나르 상당 금고털이 발생…경찰 수사 착수",
+    "title_ko": "쿠웨이트 하왈리서 2만 디나르 상당 금고털이 발생…경찰 수사 착수",
+    "summary_ko": "쿠웨이트 하왈리 지역에서 약 2만 쿠웨이트 디나르 상당의 금지금이 도난당하는 사건이 발생해 현지 경찰이 수사에 착수했다고 29일(현지시간) 밝혔다.\n\n내무부 작전실은 쿠웨이트 국적의 의사 소유 주택에 침입이 발생했다는 신고를 접수했다. 경찰이 현장에 출동했을 당시 피해 여성은 퇴근 후 집에 돌아와 침실에 보관해 두었던 금괴와 금 장신구들이 사라진 사실을 확인했다고 진술했다.\n\n피해자는 최근 지속되는 금값 상승세에 대비해 자산 저축 형태로 오랫동안 모아온 금품 대부분을 도난당했다고 전했다. 피해자는 범행과 관련해 특정 용의자를 지목하",
+    "url": "internal://solo_20260830_70ddfcc4",
     "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "solo_20260830_79672f50",
+    "category": "사회",
+    "subcategory": "solo_20260830_70ddfcc4",
     "region": "middle_east",
     "country": "쿠웨이트",
     "country_flag": "",
     "score": 1,
-    "created_at": "2026-08-30 08:28",
+    "created_at": "2026-08-30 08:30",
     "countries": [
       "쿠웨이트"
     ],
     "is_published": true,
     "image_url": "",
-    "view_count": 0,
-    "first_published_at": "2026-08-30T08:28:00",
+    "view_count": 1,
+    "first_published_at": "2026-08-30T08:30:00",
     "update_log": [
       {
-        "timestamp": "2026-08-30 08:28",
+        "timestamp": "2026-08-30 08:30",
         "note": "최초 게시"
       }
     ],
@@ -11555,6 +11556,40 @@
     "created_at": "2026-08-30 08:28",
     "countries": [
       "노르웨이"
+    ],
+    "is_published": true,
+    "image_url": "",
+    "view_count": 0,
+    "first_published_at": "2026-08-30T08:28:00",
+    "update_log": [
+      {
+        "timestamp": "2026-08-30 08:28",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 112198,
+    "title_en": "쿠웨이트, 경제 전문 법원 설립 추진… 투자 유치 및 상업 분쟁 신속 해결",
+    "title_ko": "쿠웨이트, 경제 전문 법원 설립 추진… 투자 유치 및 상업 분쟁 신속 해결",
+    "summary_ko": "쿠웨이트가 국가 소득 다원화와 글로벌 자본 유치를 위한 개발 비전에 발맞춰 경제 및 입법 인프라 현대화에 속도를 내고 있다고 29일 밝혔다. 경제 전문가이자 변호사인 아트비 알타눈(Athbi Al-Tahnoon)은 정부의 전문 경제 법원 설립 추진이 경쟁 기업 간 분쟁이나 개인과 기업 간 분쟁 등 수년간 해결되지 못한 상업 사건들의 적체를 해소하기 위한 목적이라고 밝혔다.\n\n아트비 알타눈은 전문가 부족과 금융 사안의 복잡성으로 인해 소송 절차가 2년에서 4년까지 길어질 수 있다고 설명했다. 이로 인해 일부 기업이 자신을 방어하고 증",
+    "url": "internal://solo_20260830_79672f50",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "solo_20260830_79672f50",
+    "region": "middle_east",
+    "country": "쿠웨이트",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-08-30 08:28",
+    "countries": [
+      "쿠웨이트"
     ],
     "is_published": true,
     "image_url": "",
@@ -12454,40 +12489,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 110234,
-    "title_en": "짐바브웨 내국경기장 VAR 도입 추진…FBC 홀딩스 상반기 순이익 증가",
-    "title_ko": "짐바브웨 내국경기장 VAR 도입 추진…FBC 홀딩스 상반기 순이익 증가",
-    "summary_ko": "짐바브웨의 석유 기업 사쿤다 홀딩스(Sakunda Holdings)가 28일(현지시간) 국가 스포츠 스타디움(National Sports Stadium)에 비디오 판독 시스템(VAR)을 연내에 설치하겠다고 약속했다.\n\n이번 조치로 짐바브웨 대형 경기장의 판정 공정성과 경기 운영 선진화가 한층 강화될 것으로 기대된다.\n\n한편 짐바브웨 금융서비스 그룹 FBC 홀딩스(FBC Holdings)는 28일(현지시간) 올해 상반기 실적을 발표했다.\n\nFBC 홀딩스는 6월 말까지 6개월 동안 세전 이익이 23.8퍼센트 증가한 4억 6,862만 Z",
-    "url": "internal://cluster_20260829_65de62e2",
-    "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "cluster_20260829_65de62e2",
-    "region": "africa",
-    "country": "짐바브웨",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-08-29 15:54",
-    "countries": [
-      "짐바브웨"
-    ],
-    "is_published": true,
-    "image_url": "",
-    "view_count": 0,
-    "first_published_at": "2026-08-29T15:54:00",
-    "update_log": [
-      {
-        "timestamp": "2026-08-29 15:54",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
     "id": 110233,
     "title_en": "필리핀 루손섬 북서부 해상에서 이동 중인 열대저압부 '네넹'…마닐라 등 수도권과 주요 지역에 홍수 경보 발령",
     "title_ko": "필리핀 루손섬 북서부 해상에서 이동 중인 열대저압부 '네넹'…마닐라 등 수도권과 주요 지역에 홍수 경보 발령",
@@ -12516,6 +12517,40 @@
     ],
     "byline": "뉴스파이널 편집국",
     "is_travel": true,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 110234,
+    "title_en": "짐바브웨 내국경기장 VAR 도입 추진…FBC 홀딩스 상반기 순이익 증가",
+    "title_ko": "짐바브웨 내국경기장 VAR 도입 추진…FBC 홀딩스 상반기 순이익 증가",
+    "summary_ko": "짐바브웨의 석유 기업 사쿤다 홀딩스(Sakunda Holdings)가 28일(현지시간) 국가 스포츠 스타디움(National Sports Stadium)에 비디오 판독 시스템(VAR)을 연내에 설치하겠다고 약속했다.\n\n이번 조치로 짐바브웨 대형 경기장의 판정 공정성과 경기 운영 선진화가 한층 강화될 것으로 기대된다.\n\n한편 짐바브웨 금융서비스 그룹 FBC 홀딩스(FBC Holdings)는 28일(현지시간) 올해 상반기 실적을 발표했다.\n\nFBC 홀딩스는 6월 말까지 6개월 동안 세전 이익이 23.8퍼센트 증가한 4억 6,862만 Z",
+    "url": "internal://cluster_20260829_65de62e2",
+    "source": "NewsFinal",
+    "category": "금융",
+    "subcategory": "cluster_20260829_65de62e2",
+    "region": "africa",
+    "country": "짐바브웨",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-08-29 15:54",
+    "countries": [
+      "짐바브웨"
+    ],
+    "is_published": true,
+    "image_url": "",
+    "view_count": 0,
+    "first_published_at": "2026-08-29T15:54:00",
+    "update_log": [
+      {
+        "timestamp": "2026-08-29 15:54",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
     "source_published_at": null,
     "source_data": null,
     "image_credit": null,
@@ -12927,40 +12962,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 109653,
-    "title_en": "카타르 하마드 의료공단, 전문의 첫 진료 대기 기간 16일로 단축",
-    "title_ko": "카타르 하마드 의료공단, 전문의 첫 진료 대기 기간 16일로 단축",
-    "summary_ko": "하마드 의료공단(HMC)이 환자들의 첫 전문의 진료 예약 대기 시간을 2024년 평균 58일에서 약 16일로 대단히 단축했다고 하마드 의료공단(HMC)의 모하메드 빈 칼리파 알수와이디(Mohamed bin Khalifa al-Suwaidi) 사무총장이 밝혔다. 이번 대기 시간 단축은 의료 접근성을 넓히고 효율성을 높이며 환자 경험을 개선하기 위해 추진된 일련의 운영 조치들에 따른 결과다. 모하메드 빈 칼리파 알수와이디(Mohamed bin Khalifa al-Suwaidi) 사무총장은 국가기획위원회가 주관하는 개발 팟캐스트 제4화에",
-    "url": "internal://solo_20260829_f1d06d30",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "solo_20260829_f1d06d30",
-    "region": "middle_east",
-    "country": "카타르",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-08-29 10:02",
-    "countries": [
-      "카타르"
-    ],
-    "is_published": true,
-    "image_url": "",
-    "view_count": 0,
-    "first_published_at": "2026-08-29T10:02:00",
-    "update_log": [
-      {
-        "timestamp": "2026-08-29 10:02",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
     "id": 109652,
     "title_en": "과테말라 국경 향하던 유조차서 1톤 넘는 코카인 적발…온두라스 경찰, 일당 검거",
     "title_ko": "과테말라 국경 향하던 유조차서 1톤 넘는 코카인 적발…온두라스 경찰, 일당 검거",
@@ -12996,31 +12997,29 @@
     "continuation_of_id": null
   },
   {
-    "id": 109650,
-    "title_en": "카타르 문화부, 연극인 사프와트 알가샴 회고록 출간…예멘과 카타르 무대 조명",
-    "title_ko": "카타르 문화부, 연극인 사프와트 알가샴 회고록 출간…예멘과 카타르 무대 조명",
-    "summary_ko": "카타르 문화부가 연극인이자 연출가인 사프와트 알가샴(Safwat al-Ghasham)의 무대 인생을 다룬 회고록 The Theatre That Dwelled Within Me... From Yemen to Qatar를 출간했다고 29일(현지시간) 밝혔다. 이 책은 개인적 기억과 예술적 역사를 결합하여 알가샴이 예멘에서 보낸 초기 경험과 카타르로의 이주, 그리고 그의 창작 시각에 영향을 미친 프로덕션과 관계, 문화적 환경을 추적한다. 연극은 단순한 직업이 아니라 그의 기억과 예술적 정체성이 형성된 공간으로 그려진다.\n\n알자스라 문화사",
-    "url": "internal://solo_20260829_3b789ed1",
+    "id": 109653,
+    "title_en": "카타르 하마드 의료공단, 전문의 첫 진료 대기 기간 16일로 단축",
+    "title_ko": "카타르 하마드 의료공단, 전문의 첫 진료 대기 기간 16일로 단축",
+    "summary_ko": "하마드 의료공단(HMC)이 환자들의 첫 전문의 진료 예약 대기 시간을 2024년 평균 58일에서 약 16일로 대단히 단축했다고 하마드 의료공단(HMC)의 모하메드 빈 칼리파 알수와이디(Mohamed bin Khalifa al-Suwaidi) 사무총장이 밝혔다. 이번 대기 시간 단축은 의료 접근성을 넓히고 효율성을 높이며 환자 경험을 개선하기 위해 추진된 일련의 운영 조치들에 따른 결과다. 모하메드 빈 칼리파 알수와이디(Mohamed bin Khalifa al-Suwaidi) 사무총장은 국가기획위원회가 주관하는 개발 팟캐스트 제4화에",
+    "url": "internal://solo_20260829_f1d06d30",
     "source": "NewsFinal",
-    "category": "문화·예술",
-    "subcategory": "solo_20260829_3b789ed1",
+    "category": "사회",
+    "subcategory": "solo_20260829_f1d06d30",
     "region": "middle_east",
     "country": "카타르",
     "country_flag": "",
     "score": 1,
-    "created_at": "2026-08-29 10:01",
+    "created_at": "2026-08-29 10:02",
     "countries": [
-      "카타르",
-      "예멘",
-      "쿠웨이트"
+      "카타르"
     ],
     "is_published": true,
     "image_url": "",
     "view_count": 0,
-    "first_published_at": "2026-08-29T10:01:00",
+    "first_published_at": "2026-08-29T10:02:00",
     "update_log": [
       {
-        "timestamp": "2026-08-29 10:01",
+        "timestamp": "2026-08-29 10:02",
         "note": "최초 게시"
       }
     ],
@@ -13047,6 +13046,42 @@
     "created_at": "2026-08-29 10:01",
     "countries": [
       "카타르"
+    ],
+    "is_published": true,
+    "image_url": "",
+    "view_count": 0,
+    "first_published_at": "2026-08-29T10:01:00",
+    "update_log": [
+      {
+        "timestamp": "2026-08-29 10:01",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 109650,
+    "title_en": "카타르 문화부, 연극인 사프와트 알가샴 회고록 출간…예멘과 카타르 무대 조명",
+    "title_ko": "카타르 문화부, 연극인 사프와트 알가샴 회고록 출간…예멘과 카타르 무대 조명",
+    "summary_ko": "카타르 문화부가 연극인이자 연출가인 사프와트 알가샴(Safwat al-Ghasham)의 무대 인생을 다룬 회고록 The Theatre That Dwelled Within Me... From Yemen to Qatar를 출간했다고 29일(현지시간) 밝혔다. 이 책은 개인적 기억과 예술적 역사를 결합하여 알가샴이 예멘에서 보낸 초기 경험과 카타르로의 이주, 그리고 그의 창작 시각에 영향을 미친 프로덕션과 관계, 문화적 환경을 추적한다. 연극은 단순한 직업이 아니라 그의 기억과 예술적 정체성이 형성된 공간으로 그려진다.\n\n알자스라 문화사",
+    "url": "internal://solo_20260829_3b789ed1",
+    "source": "NewsFinal",
+    "category": "문화·예술",
+    "subcategory": "solo_20260829_3b789ed1",
+    "region": "middle_east",
+    "country": "카타르",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-08-29 10:01",
+    "countries": [
+      "카타르",
+      "예멘",
+      "쿠웨이트"
     ],
     "is_published": true,
     "image_url": "",
@@ -13174,6 +13209,45 @@
     "continuation_of_id": null
   },
   {
+    "id": 108774,
+    "title_en": "히말라야 빙하 호수 범람으로 네팔과 티베트 대홍수 발생… 사망자 469명으로 증가",
+    "title_ko": "히말라야 빙하 호수 범람으로 네팔과 티베트 대홍수 발생… 사망자 469명으로 증가",
+    "summary_ko": "[업데이트]\n■ 8월 29일 07:34 — 27일(현지시간) 양국 당국은 지난 26일 오전 발생한 기저 빙하 붕괴로 거대한 바위와 얼음, 진흙, 잔해가 산악 하천 시스템을 타고 쏟아져 내리면서 카트만두와 티베트 라싸를 잇는 주요 도로와 인근 마을, 핵심 인프라를 덮쳤다고 밝혔다. 이번 사고로 실종된 인원 중 최소 540명은 외국인인 것으로 파악됐다. 네팔 당국은 헬리콥터를 동원해 생존자 수색 작업을 벌이는 한편, 고립된 수천 명의 주민과 여행객에게 긴급 구호품을 투하하고 있으며, 하류 평원 지역에서는 급류에 떠내려간 시신 수십 구가",
+    "url": "internal://realtrend_네팔·티베트_대홍수_2026082902",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "realtrend_네팔·티베트_대홍수",
+    "region": "africa",
+    "country": "네팔",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-08-29 07:34",
+    "countries": [
+      "네팔",
+      "중국"
+    ],
+    "is_published": true,
+    "image_url": null,
+    "view_count": 0,
+    "first_published_at": "2026-08-29T02:09:00",
+    "update_log": [
+      {
+        "timestamp": "2026-08-29 02:09",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-08-29 07:34",
+        "note": "내용 업데이트"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 107784,
     "title_en": "수단 교전 격화 속 구호품 차단과 난민 위기 심화",
     "title_ko": "수단 교전 격화 속 구호품 차단과 난민 위기 심화",
@@ -13199,45 +13273,6 @@
     "update_log": [
       {
         "timestamp": "2026-08-28 20:10",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-08-29 07:34",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 108774,
-    "title_en": "히말라야 빙하 호수 범람으로 네팔과 티베트 대홍수 발생… 사망자 469명으로 증가",
-    "title_ko": "히말라야 빙하 호수 범람으로 네팔과 티베트 대홍수 발생… 사망자 469명으로 증가",
-    "summary_ko": "[업데이트]\n■ 8월 29일 07:34 — 27일(현지시간) 양국 당국은 지난 26일 오전 발생한 기저 빙하 붕괴로 거대한 바위와 얼음, 진흙, 잔해가 산악 하천 시스템을 타고 쏟아져 내리면서 카트만두와 티베트 라싸를 잇는 주요 도로와 인근 마을, 핵심 인프라를 덮쳤다고 밝혔다. 이번 사고로 실종된 인원 중 최소 540명은 외국인인 것으로 파악됐다. 네팔 당국은 헬리콥터를 동원해 생존자 수색 작업을 벌이는 한편, 고립된 수천 명의 주민과 여행객에게 긴급 구호품을 투하하고 있으며, 하류 평원 지역에서는 급류에 떠내려간 시신 수십 구가",
-    "url": "internal://realtrend_네팔·티베트_대홍수_2026082902",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "realtrend_네팔·티베트_대홍수",
-    "region": "africa",
-    "country": "네팔",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-08-29 07:34",
-    "countries": [
-      "네팔",
-      "중국"
-    ],
-    "is_published": true,
-    "image_url": null,
-    "view_count": 0,
-    "first_published_at": "2026-08-29T02:09:00",
-    "update_log": [
-      {
-        "timestamp": "2026-08-29 02:09",
         "note": "최초 게시"
       },
       {
