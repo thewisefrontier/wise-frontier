@@ -1,5 +1,39 @@
 [
   {
+    "id": 133059,
+    "title_en": "주말 한국, 전국·내륙 쾌청한 하늘…제주·동해안 너울성 비",
+    "title_ko": "주말 한국, 전국·내륙 쾌청한 하늘…제주·동해안 너울성 비",
+    "summary_ko": "5일 이번 주말 한국의 날씨는 전국이 대체로 맑은 가운데 동해안과 제주도를 중심으로 가끔 비가 내릴 것으로 예상된다. 기상청에 따르면 서울을 비롯한 내륙 대부분 지역은 맑고 쾌청한 날씨가 이어지겠으나, 강원동해안과 산지, 경상권, 제주도는 대체로 흐리고 곳에 따라 비가 내린다. 당분간 동해안과 제주도를 중심으로 바람이 강하게 불고 해상에서 높은 물결과 함께 너울이 밀려오므로 해안가 안전사고에 유의해야 한다.\n\n토요일인 6일 서울은 오전과 오후 내내 맑은 하늘을 보이며 아침 최저기온 20도, 낮 최고기온 29도를 기록한다. 이날 전국",
+    "url": "internal://weather_한국_weekend20260905",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_한국_weekend20260905",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-05 05:53",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20260905.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T05:53:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 05:53",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 133058,
     "title_en": "[국내유가] 휘발유 리터당 1859원…전일 대비 소폭 하락",
     "title_ko": "[국내유가] 휘발유 리터당 1859원…전일 대비 소폭 하락",
@@ -1763,40 +1797,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 128730,
-    "title_en": "한국, 전국·맑은 가운데 31도 안팎 늦더위…제주 강풍",
-    "title_ko": "한국, 전국·맑은 가운데 31도 안팎 늦더위…제주 강풍",
-    "summary_ko": "4일 한국의 날씨는 전국이 대체로 맑은 가운데 낮 기온이 31도까지 오르는 등 완연한 더위를 보이겠으며, 제주 지역을 중심으로 강한 바람이 불 전망이다. 기상청에 따르면 전국적인 기상 특보는 발효되지 않았으나, 제주에서는 최대풍속 시속 47km에 달하는 강풍이 예상되어 시설물 관리와 안전사고에 각별한 주의가 요구된다. 강수확률이 60%를 넘는 지역은 없어 전국 대부분 지방에서 뚜렷한 비 소식 없이 쾌청한 하늘이 드러나겠다.\n\n주요 지역별 상세 날씨를 살펴보면, 서울은 오전과 오후 모두 맑은 날씨가 이어지겠으며 기온은 최저 21도에서",
-    "url": "internal://weather_한국_today20260904",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_한국_today20260904",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-04 06:27",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20260904.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T06:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 06:27",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
     "id": 128729,
     "title_en": "Apple Shares Rise 1.00% Amid Improving Technical Indicators",
     "title_ko": "[종목 동향] 애플 주가 1.00% 상승…기술적 지표 개선세",
@@ -1816,6 +1816,40 @@
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/stock_news_2026_09_03.jpg",
     "view_count": 1,
+    "first_published_at": "2026-09-04T06:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-04 06:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 128730,
+    "title_en": "한국, 전국·맑은 가운데 31도 안팎 늦더위…제주 강풍",
+    "title_ko": "한국, 전국·맑은 가운데 31도 안팎 늦더위…제주 강풍",
+    "summary_ko": "4일 한국의 날씨는 전국이 대체로 맑은 가운데 낮 기온이 31도까지 오르는 등 완연한 더위를 보이겠으며, 제주 지역을 중심으로 강한 바람이 불 전망이다. 기상청에 따르면 전국적인 기상 특보는 발효되지 않았으나, 제주에서는 최대풍속 시속 47km에 달하는 강풍이 예상되어 시설물 관리와 안전사고에 각별한 주의가 요구된다. 강수확률이 60%를 넘는 지역은 없어 전국 대부분 지방에서 뚜렷한 비 소식 없이 쾌청한 하늘이 드러나겠다.\n\n주요 지역별 상세 날씨를 살펴보면, 서울은 오전과 오후 모두 맑은 날씨가 이어지겠으며 기온은 최저 21도에서",
+    "url": "internal://weather_한국_today20260904",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_한국_today20260904",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-04 06:27",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20260904.jpg",
+    "view_count": 0,
     "first_published_at": "2026-09-04T06:27:00",
     "update_log": [
       {

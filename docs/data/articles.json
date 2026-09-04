@@ -1,5 +1,39 @@
 [
   {
+    "id": 133059,
+    "title_en": "주말 한국, 전국·내륙 쾌청한 하늘…제주·동해안 너울성 비",
+    "title_ko": "주말 한국, 전국·내륙 쾌청한 하늘…제주·동해안 너울성 비",
+    "summary_ko": "5일 이번 주말 한국의 날씨는 전국이 대체로 맑은 가운데 동해안과 제주도를 중심으로 가끔 비가 내릴 것으로 예상된다. 기상청에 따르면 서울을 비롯한 내륙 대부분 지역은 맑고 쾌청한 날씨가 이어지겠으나, 강원동해안과 산지, 경상권, 제주도는 대체로 흐리고 곳에 따라 비가 내린다. 당분간 동해안과 제주도를 중심으로 바람이 강하게 불고 해상에서 높은 물결과 함께 너울이 밀려오므로 해안가 안전사고에 유의해야 한다.\n\n토요일인 6일 서울은 오전과 오후 내내 맑은 하늘을 보이며 아침 최저기온 20도, 낮 최고기온 29도를 기록한다. 이날 전국",
+    "url": "internal://weather_한국_weekend20260905",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_한국_weekend20260905",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-05 05:53",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20260905.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T05:53:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 05:53",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 133058,
     "title_en": "[국내유가] 휘발유 리터당 1859원…전일 대비 소폭 하락",
     "title_ko": "[국내유가] 휘발유 리터당 1859원…전일 대비 소폭 하락",
@@ -1763,40 +1797,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 128730,
-    "title_en": "한국, 전국·맑은 가운데 31도 안팎 늦더위…제주 강풍",
-    "title_ko": "한국, 전국·맑은 가운데 31도 안팎 늦더위…제주 강풍",
-    "summary_ko": "4일 한국의 날씨는 전국이 대체로 맑은 가운데 낮 기온이 31도까지 오르는 등 완연한 더위를 보이겠으며, 제주 지역을 중심으로 강한 바람이 불 전망이다. 기상청에 따르면 전국적인 기상 특보는 발효되지 않았으나, 제주에서는 최대풍속 시속 47km에 달하는 강풍이 예상되어 시설물 관리와 안전사고에 각별한 주의가 요구된다. 강수확률이 60%를 넘는 지역은 없어 전국 대부분 지방에서 뚜렷한 비 소식 없이 쾌청한 하늘이 드러나겠다.\n\n주요 지역별 상세 날씨를 살펴보면, 서울은 오전과 오후 모두 맑은 날씨가 이어지겠으며 기온은 최저 21도에서",
-    "url": "internal://weather_한국_today20260904",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_한국_today20260904",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-04 06:27",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20260904.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T06:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 06:27",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
     "id": 128729,
     "title_en": "Apple Shares Rise 1.00% Amid Improving Technical Indicators",
     "title_ko": "[종목 동향] 애플 주가 1.00% 상승…기술적 지표 개선세",
@@ -1816,6 +1816,40 @@
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/stock_news_2026_09_03.jpg",
     "view_count": 1,
+    "first_published_at": "2026-09-04T06:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-04 06:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 128730,
+    "title_en": "한국, 전국·맑은 가운데 31도 안팎 늦더위…제주 강풍",
+    "title_ko": "한국, 전국·맑은 가운데 31도 안팎 늦더위…제주 강풍",
+    "summary_ko": "4일 한국의 날씨는 전국이 대체로 맑은 가운데 낮 기온이 31도까지 오르는 등 완연한 더위를 보이겠으며, 제주 지역을 중심으로 강한 바람이 불 전망이다. 기상청에 따르면 전국적인 기상 특보는 발효되지 않았으나, 제주에서는 최대풍속 시속 47km에 달하는 강풍이 예상되어 시설물 관리와 안전사고에 각별한 주의가 요구된다. 강수확률이 60%를 넘는 지역은 없어 전국 대부분 지방에서 뚜렷한 비 소식 없이 쾌청한 하늘이 드러나겠다.\n\n주요 지역별 상세 날씨를 살펴보면, 서울은 오전과 오후 모두 맑은 날씨가 이어지겠으며 기온은 최저 21도에서",
+    "url": "internal://weather_한국_today20260904",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_한국_today20260904",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-04 06:27",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20260904.jpg",
+    "view_count": 0,
     "first_published_at": "2026-09-04T06:27:00",
     "update_log": [
       {
@@ -2361,6 +2395,40 @@
     "continuation_of_id": null
   },
   {
+    "id": 128723,
+    "title_en": "Qatar Ministry of Interior Reaffirms Mandatory Residence Permit Carriage and Ban on Accident Site Photography",
+    "title_ko": "카타르 내무부, 거주허가증 상시 소지 의무 및 사고 현장 촬영 금지 재확인",
+    "summary_ko": "카타르 내무부가 중앙운영부 주관으로 개최한 웨비나를 통해 거주허가증(RP) 상시 소지 및 제시 의무를 재차 강조했다고 4일(현지시간) 밝혔다. 내무부는 이와 함께 대중이 안전 및 보안 관련 소식을 실시간으로 받아볼 수 있도록 내무부 왓츠앱 안내 그룹에 가입할 것을 권고했다.\n\n알파자 경찰서 소속 압둘라만 압둘라 알마리 중위는 웨비나 발표에서 외출 시 신분증(QID)을 항상 소지하는 것이 의무라고 설명했다. 알마리 중위는 경찰관이 제복을 입었든 사복을 입었든 신분을 밝히고 경찰 신분증을 제시할 경우 시민들은 반드시 신분증을 제시해야 ",
+    "url": "internal://solo_20260904_76b4b2a3",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "solo_20260904_76b4b2a3",
+    "region": "middle_east",
+    "country": "카타르",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-04 05:20",
+    "countries": [
+      "카타르"
+    ],
+    "is_published": true,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/e/e6/2016-03-03_Qatar_Interior_Ministry_delegation_meets_Bangladesh_Expatriates_Welfare_Minister_Nurul_Islam_in_Dhaka_%28PID-0055575%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "view_count": 0,
+    "first_published_at": "2026-09-04T05:20:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-04 05:20",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": true,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
     "id": 128724,
     "title_en": "US Offers $10 Million Reward for Senior Iranian Revolutionary Guard Cyber Official",
     "title_ko": "미국, 이란 혁명수비대 사이버 고위 간부 현상금 1,000만 달러",
@@ -2390,40 +2458,6 @@
     ],
     "byline": "뉴스파이널 편집국",
     "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 128723,
-    "title_en": "Qatar Ministry of Interior Reaffirms Mandatory Residence Permit Carriage and Ban on Accident Site Photography",
-    "title_ko": "카타르 내무부, 거주허가증 상시 소지 의무 및 사고 현장 촬영 금지 재확인",
-    "summary_ko": "카타르 내무부가 중앙운영부 주관으로 개최한 웨비나를 통해 거주허가증(RP) 상시 소지 및 제시 의무를 재차 강조했다고 4일(현지시간) 밝혔다. 내무부는 이와 함께 대중이 안전 및 보안 관련 소식을 실시간으로 받아볼 수 있도록 내무부 왓츠앱 안내 그룹에 가입할 것을 권고했다.\n\n알파자 경찰서 소속 압둘라만 압둘라 알마리 중위는 웨비나 발표에서 외출 시 신분증(QID)을 항상 소지하는 것이 의무라고 설명했다. 알마리 중위는 경찰관이 제복을 입었든 사복을 입었든 신분을 밝히고 경찰 신분증을 제시할 경우 시민들은 반드시 신분증을 제시해야 ",
-    "url": "internal://solo_20260904_76b4b2a3",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "solo_20260904_76b4b2a3",
-    "region": "middle_east",
-    "country": "카타르",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-04 05:20",
-    "countries": [
-      "카타르"
-    ],
-    "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/e/e6/2016-03-03_Qatar_Interior_Ministry_delegation_meets_Bangladesh_Expatriates_Welfare_Minister_Nurul_Islam_in_Dhaka_%28PID-0055575%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T05:20:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 05:20",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": true,
     "source_published_at": null,
     "source_data": null,
     "image_credit": "",
@@ -4266,6 +4300,40 @@
     "continuation_of_id": null
   },
   {
+    "id": 124811,
+    "title_en": "카타르 웹 서밋, 4회 행사 앞두고 70개 이상 글로벌 파트너사 확보",
+    "title_ko": "카타르 웹 서밋, 4회 행사 앞두고 70개 이상 글로벌 파트너사 확보",
+    "summary_ko": "카타르에서 개최되는 웹 서밋 카타르(Web Summit Qatar) 제4회 행사를 앞두고 70개 이상의 글로벌 파트너사가 참가 계약을 체결했다고 주최 측이 2일(현지시간) 밝혔다. 이번 행사는 중동 및 북아프리카 지역에서 가장 빠르게 성장하는 기술 행사로 자리잡고 있다.\n\n영구 웹 서밋 조직위원회는 정부커뮤니케이션국(GCO) 국장이자 위원회 위원장인 셰이크 자심 빈 만수르 빈 자보르 알 타니(Sheikh Jassim bin Mansour bin Jabor al-Thani)의 주재로 도하에서 정례 회의를 열고 2027년 행사의 준비 ",
+    "url": "internal://solo_20260903_3c4d4bca",
+    "source": "NewsFinal",
+    "category": "IT·과학",
+    "subcategory": "solo_20260903_3c4d4bca",
+    "region": "middle_east",
+    "country": "카타르",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-03 05:26",
+    "countries": [
+      "카타르"
+    ],
+    "is_published": true,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/c/c4/Aya_Atassi_Web_Summit_Speaker.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "view_count": 0,
+    "first_published_at": "2026-09-03T05:26:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-03 05:26",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
     "id": 124812,
     "title_en": "쿠웨이트 검찰, 농지 및 토지 조작 연루 71명 형사재판 회부",
     "title_ko": "쿠웨이트 검찰, 농지 및 토지 조작 연루 71명 형사재판 회부",
@@ -4300,29 +4368,29 @@
     "continuation_of_id": null
   },
   {
-    "id": 124811,
-    "title_en": "카타르 웹 서밋, 4회 행사 앞두고 70개 이상 글로벌 파트너사 확보",
-    "title_ko": "카타르 웹 서밋, 4회 행사 앞두고 70개 이상 글로벌 파트너사 확보",
-    "summary_ko": "카타르에서 개최되는 웹 서밋 카타르(Web Summit Qatar) 제4회 행사를 앞두고 70개 이상의 글로벌 파트너사가 참가 계약을 체결했다고 주최 측이 2일(현지시간) 밝혔다. 이번 행사는 중동 및 북아프리카 지역에서 가장 빠르게 성장하는 기술 행사로 자리잡고 있다.\n\n영구 웹 서밋 조직위원회는 정부커뮤니케이션국(GCO) 국장이자 위원회 위원장인 셰이크 자심 빈 만수르 빈 자보르 알 타니(Sheikh Jassim bin Mansour bin Jabor al-Thani)의 주재로 도하에서 정례 회의를 열고 2027년 행사의 준비 ",
-    "url": "internal://solo_20260903_3c4d4bca",
+    "id": 124809,
+    "title_en": "서울, 맑은 속 늦더위…부산·광주 비",
+    "title_ko": "서울, 맑은 가운데 늦더위…부산·광주 비",
+    "summary_ko": "3일 한국의 날씨는 전국이 대체로 구름이 많은 가운데, 서울을 비롯한 수도권은 맑고 남부지방과 제주도를 중심으로 비와 소나기가 내리는 날씨를 보인다. 기상청에 따르면 오늘 전국 최저기온은 22°C, 최고기온은 32°C의 분포를 나타내며, 지역별로 하늘 상태와 강수 양상이 엇갈린다.\n\n서울은 오전과 오후 모두 맑은 날씨가 이어지며, 최저기온 22°C, 최고기온 31°C를 기록할 것으로 예상된다. 서울의 오전과 오후 강수확률은 모두 0%이며, 최대풍속은 14km/h로 잔잔하다. 반면 부산과 광주는 오후 강수확률이 60% 이상으로 높아 ",
+    "url": "internal://weather_한국_today20260903",
     "source": "NewsFinal",
-    "category": "IT·과학",
-    "subcategory": "solo_20260903_3c4d4bca",
-    "region": "middle_east",
-    "country": "카타르",
+    "category": "날씨",
+    "subcategory": "weather_한국_today20260903",
+    "region": "global",
+    "country": "한국",
     "country_flag": "",
     "score": 1,
-    "created_at": "2026-09-03 05:26",
+    "created_at": "2026-09-03 05:25",
     "countries": [
-      "카타르"
+      "한국"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/c/c4/Aya_Atassi_Web_Summit_Speaker.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-    "view_count": 0,
-    "first_published_at": "2026-09-03T05:26:00",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20260903.jpg",
+    "view_count": 2,
+    "first_published_at": "2026-09-03T05:25:00",
     "update_log": [
       {
-        "timestamp": "2026-09-03 05:26",
+        "timestamp": "2026-09-03 05:25",
         "note": "최초 게시"
       }
     ],
@@ -4330,7 +4398,7 @@
     "is_travel": false,
     "source_published_at": null,
     "source_data": null,
-    "image_credit": "",
+    "image_credit": null,
     "continuation_of_id": null
   },
   {
@@ -4368,40 +4436,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: Chatham House (CC BY 2.0, Wikimedia Commons)",
-    "continuation_of_id": null
-  },
-  {
-    "id": 124809,
-    "title_en": "서울, 맑은 속 늦더위…부산·광주 비",
-    "title_ko": "서울, 맑은 가운데 늦더위…부산·광주 비",
-    "summary_ko": "3일 한국의 날씨는 전국이 대체로 구름이 많은 가운데, 서울을 비롯한 수도권은 맑고 남부지방과 제주도를 중심으로 비와 소나기가 내리는 날씨를 보인다. 기상청에 따르면 오늘 전국 최저기온은 22°C, 최고기온은 32°C의 분포를 나타내며, 지역별로 하늘 상태와 강수 양상이 엇갈린다.\n\n서울은 오전과 오후 모두 맑은 날씨가 이어지며, 최저기온 22°C, 최고기온 31°C를 기록할 것으로 예상된다. 서울의 오전과 오후 강수확률은 모두 0%이며, 최대풍속은 14km/h로 잔잔하다. 반면 부산과 광주는 오후 강수확률이 60% 이상으로 높아 ",
-    "url": "internal://weather_한국_today20260903",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_한국_today20260903",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-03 05:25",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20260903.jpg",
-    "view_count": 2,
-    "first_published_at": "2026-09-03T05:25:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-03 05:25",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
     "continuation_of_id": null
   },
   {
@@ -4855,22 +4889,21 @@
     "continuation_of_id": null
   },
   {
-    "id": 123781,
-    "title_en": "미 국방부 피트 헤그세스 장관 캐나다 생도 프로그램 조롱 논란 속 육군 장관 사임",
-    "title_ko": "미 국방부 피트 헤그세스 장관 캐나다 생도 프로그램 조롱 논란 속 육군 장관 사임",
-    "summary_ko": "댄 드리스콜(Dan Driscoll) 육군 장관이 피트 헤그세스(Pete Hegseth) 국방부 장관과의 충돌로 사임한 이후 미국 국방부 내부의 혼란이 심화되었다. 파이낸셜 타임스(Financial Times)의 보도에 따르면 이번 사임은 국방부 최고위층 간의 마찰을 드러냈다.\n\n피트 헤그세스 장관은 1일(현지시간) 소셜미디어를 통해 캐나다의 청소년 생도 프로그램을 겨냥한 게시물을 올려 논란을 빚었다. CBC 등 외신 보도에 따르면 이 게시물은 캐나다 생도 프로그램을 경시하고 여성 청소년 생도 강사를 조롱하는 내용을 담았다. \n\n캐",
-    "url": "internal://realtrend_Pentagon_Leadership_Resignation_(Driscoll_&_Hegseth)_2026090222",
+    "id": 123783,
+    "title_en": "장동혁 의원, 미래에셋 로비 의혹 제기하며 사의 표명... 정치권 파장 확대",
+    "title_ko": "장동혁 의원, 미래에셋 로비 의혹 제기하며 사의 표명... 정치권 파장 확대",
+    "summary_ko": "장동혁 의원은 2일(현지시간) 김용범 청와대 정책실장이 미래에셋의 로비를 받아 단일종목 레버리지 상장지수펀드(ETF) 도입을 추진했다는 의혹을 공개적으로 제기했다. 장동혁 의원은 이와 같은 의혹 제기와 함께 사의를 표명했다. 야당은 이번 사태를 'ETF 게이트'로 규정하고 철저한 진상 규명을 위한 특검 도입을 촉구하고 나섰다.\n\n김용범 정책실장은 개각 발표 다음 날인 1일(현지시간) 전격적으로 사의를 표명했다. 이 대통령은 사의 표명 하루 만에 김용범 실장의 사표를 수리했다. 이번 사퇴는 부동산 정책 책임론과 맞물려 경제 사령탑 라",
+    "url": "internal://realtrend_김용범_미래에셋_로비_및_단일종목_레버리지_ETF_의혹_2026090222",
     "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "realtrend_Pentagon_Leadership_",
+    "category": "경제",
+    "subcategory": "realtrend_김용범_미래에셋_로비_및_단일종목_레",
     "region": "africa",
-    "country": "미국",
+    "country": "한국",
     "country_flag": "",
     "score": 2,
     "created_at": "2026-09-02 22:46",
     "countries": [
-      "미국",
-      "캐나다"
+      "한국"
     ],
     "is_published": true,
     "image_url": null,
@@ -4890,21 +4923,22 @@
     "continuation_of_id": null
   },
   {
-    "id": 123783,
-    "title_en": "장동혁 의원, 미래에셋 로비 의혹 제기하며 사의 표명... 정치권 파장 확대",
-    "title_ko": "장동혁 의원, 미래에셋 로비 의혹 제기하며 사의 표명... 정치권 파장 확대",
-    "summary_ko": "장동혁 의원은 2일(현지시간) 김용범 청와대 정책실장이 미래에셋의 로비를 받아 단일종목 레버리지 상장지수펀드(ETF) 도입을 추진했다는 의혹을 공개적으로 제기했다. 장동혁 의원은 이와 같은 의혹 제기와 함께 사의를 표명했다. 야당은 이번 사태를 'ETF 게이트'로 규정하고 철저한 진상 규명을 위한 특검 도입을 촉구하고 나섰다.\n\n김용범 정책실장은 개각 발표 다음 날인 1일(현지시간) 전격적으로 사의를 표명했다. 이 대통령은 사의 표명 하루 만에 김용범 실장의 사표를 수리했다. 이번 사퇴는 부동산 정책 책임론과 맞물려 경제 사령탑 라",
-    "url": "internal://realtrend_김용범_미래에셋_로비_및_단일종목_레버리지_ETF_의혹_2026090222",
+    "id": 123781,
+    "title_en": "미 국방부 피트 헤그세스 장관 캐나다 생도 프로그램 조롱 논란 속 육군 장관 사임",
+    "title_ko": "미 국방부 피트 헤그세스 장관 캐나다 생도 프로그램 조롱 논란 속 육군 장관 사임",
+    "summary_ko": "댄 드리스콜(Dan Driscoll) 육군 장관이 피트 헤그세스(Pete Hegseth) 국방부 장관과의 충돌로 사임한 이후 미국 국방부 내부의 혼란이 심화되었다. 파이낸셜 타임스(Financial Times)의 보도에 따르면 이번 사임은 국방부 최고위층 간의 마찰을 드러냈다.\n\n피트 헤그세스 장관은 1일(현지시간) 소셜미디어를 통해 캐나다의 청소년 생도 프로그램을 겨냥한 게시물을 올려 논란을 빚었다. CBC 등 외신 보도에 따르면 이 게시물은 캐나다 생도 프로그램을 경시하고 여성 청소년 생도 강사를 조롱하는 내용을 담았다. \n\n캐",
+    "url": "internal://realtrend_Pentagon_Leadership_Resignation_(Driscoll_&_Hegseth)_2026090222",
     "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "realtrend_김용범_미래에셋_로비_및_단일종목_레",
+    "category": "정치·외교",
+    "subcategory": "realtrend_Pentagon_Leadership_",
     "region": "africa",
-    "country": "한국",
+    "country": "미국",
     "country_flag": "",
     "score": 2,
     "created_at": "2026-09-02 22:46",
     "countries": [
-      "한국"
+      "미국",
+      "캐나다"
     ],
     "is_published": true,
     "image_url": null,
@@ -5581,22 +5615,24 @@
     "continuation_of_id": null
   },
   {
-    "id": 121865,
-    "title_en": "메트로 퍼시픽 워터, 필리핀 및 베트남 인프라 개선에 230억 페소 투자",
-    "title_ko": "메트로 퍼시픽 워터, 필리핀 및 베트남 인프라 개선에 230억 페소 투자",
-    "summary_ko": "팡길리난이 주도하는 메트로 퍼시픽 인베스트먼츠 코프의 계열사인 메트로 퍼시픽 워터는 1일(현지시간) 필리핀과 베트남의 물 서비스 포트폴리오를 개선하기 위해 향후 5년 동안 230억 페소를 투자할 계획이라고 밝혔다.\n\n이번 자금은 양국 지역의 물 서비스 품질을 높이고 관련 인프라를 전반적으로 업그레이드하는 데 집중적으로 투입된다.",
-    "url": "internal://realtrend_필리핀_탈락(Tarlac)_교량_붕괴_2026090210",
+    "id": 121864,
+    "title_en": "독일, 라이프치히 하이브리드 공격 배후로 러시아 지목… 모스크바는 보복 경고",
+    "title_ko": "독일, 라이프치히 하이브리드 공격 배후로 러시아 지목… 모스크바는 보복 경고",
+    "summary_ko": "독일은 러시아가 라이프치히 공항에서 하이브리드 공격을 가했다고 1일(현지시간) 비난했다. 유럽 각국은 베를린 정부를 지지하고 나섰으며 모스크바는 이에 대해 보복을 약속했다.\n\n블라디미르 푸틴 러시아 대통령은 독일이 라이프치히 공항에서 폭발물을 탑재한 드론 사건에 대해 러시아에 책임을 묻기 위해 증거를 심었다고 주장했다.",
+    "url": "internal://realtrend_US_Army_Leadership_Crisis_(Hegseth_&_Driscoll)_2026090210",
     "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "realtrend_필리핀_탈락(Tarlac)_교량_붕괴",
-    "region": "southeast_asia",
-    "country": "필리핀",
+    "category": "정치·외교",
+    "subcategory": "realtrend_US_Army_Leadership_C",
+    "region": "africa",
+    "country": "독일",
     "country_flag": "",
     "score": 2,
     "created_at": "2026-09-02 10:15",
     "countries": [
-      "필리핀",
-      "베트남"
+      "독일",
+      "러시아",
+      "프랑스",
+      "영국"
     ],
     "is_published": true,
     "image_url": null,
@@ -5616,24 +5652,22 @@
     "continuation_of_id": null
   },
   {
-    "id": 121864,
-    "title_en": "독일, 라이프치히 하이브리드 공격 배후로 러시아 지목… 모스크바는 보복 경고",
-    "title_ko": "독일, 라이프치히 하이브리드 공격 배후로 러시아 지목… 모스크바는 보복 경고",
-    "summary_ko": "독일은 러시아가 라이프치히 공항에서 하이브리드 공격을 가했다고 1일(현지시간) 비난했다. 유럽 각국은 베를린 정부를 지지하고 나섰으며 모스크바는 이에 대해 보복을 약속했다.\n\n블라디미르 푸틴 러시아 대통령은 독일이 라이프치히 공항에서 폭발물을 탑재한 드론 사건에 대해 러시아에 책임을 묻기 위해 증거를 심었다고 주장했다.",
-    "url": "internal://realtrend_US_Army_Leadership_Crisis_(Hegseth_&_Driscoll)_2026090210",
+    "id": 121865,
+    "title_en": "메트로 퍼시픽 워터, 필리핀 및 베트남 인프라 개선에 230억 페소 투자",
+    "title_ko": "메트로 퍼시픽 워터, 필리핀 및 베트남 인프라 개선에 230억 페소 투자",
+    "summary_ko": "팡길리난이 주도하는 메트로 퍼시픽 인베스트먼츠 코프의 계열사인 메트로 퍼시픽 워터는 1일(현지시간) 필리핀과 베트남의 물 서비스 포트폴리오를 개선하기 위해 향후 5년 동안 230억 페소를 투자할 계획이라고 밝혔다.\n\n이번 자금은 양국 지역의 물 서비스 품질을 높이고 관련 인프라를 전반적으로 업그레이드하는 데 집중적으로 투입된다.",
+    "url": "internal://realtrend_필리핀_탈락(Tarlac)_교량_붕괴_2026090210",
     "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "realtrend_US_Army_Leadership_C",
-    "region": "africa",
-    "country": "독일",
+    "category": "사회",
+    "subcategory": "realtrend_필리핀_탈락(Tarlac)_교량_붕괴",
+    "region": "southeast_asia",
+    "country": "필리핀",
     "country_flag": "",
     "score": 2,
     "created_at": "2026-09-02 10:15",
     "countries": [
-      "독일",
-      "러시아",
-      "프랑스",
-      "영국"
+      "필리핀",
+      "베트남"
     ],
     "is_published": true,
     "image_url": null,
@@ -8826,6 +8860,47 @@
     "continuation_of_id": null
   },
   {
+    "id": 114536,
+    "title_en": "아이티 켄스코프 갱단 습격 인질 일부 석방 속 유엔의 민간인 보호 촉구",
+    "title_ko": "아이티 켄스코프 갱단 습격 인질 일부 석방 속 유엔의 민간인 보호 촉구",
+    "summary_ko": "[업데이트]\n■ 8월 31일 11:59 — 이번 인질 석방 과정에서는 현지 비영리단체 대표인 럭슨 잔(Luckson Jean)이 민간 협상가로 나서 갱단 점령 지역에 직접 진입한 것으로 확인됐다. 잔은 28일(현지시간) 유니세프와 사회복지연구소(IBERS) 등의 지원을 받아 갱단 소굴로 들어가 여성 7명과 어린이 6명의 석방을 이끌어냈다. 갱단원들은 오직 그만을 신뢰하여 인질을 넘겨주겠다고 요구한 것으로 알려졌으며, 이번 인질 석방은 몸값 없이 성사됐다. 그러나 국가 공권력이 아닌 민간 지도자가 무장 갱단 구역에 들어가 인질을 데려",
+    "url": "internal://trend_아이티_2026083106",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "trend_아이티",
+    "region": "caribbean",
+    "country": "아이티",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-08-31 11:59",
+    "countries": [
+      "아이티",
+      "미국",
+      "도미니카공화국",
+      "케냐"
+    ],
+    "is_published": true,
+    "image_url": null,
+    "view_count": 0,
+    "first_published_at": "2026-08-31T06:17:00",
+    "update_log": [
+      {
+        "timestamp": "2026-08-31 06:17",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-08-31 11:59",
+        "note": "내용 업데이트"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 114537,
     "title_en": "미국, 베네수엘라 석유 협정 체결…전략적 비축유 보충 추진",
     "title_ko": "미국, 베네수엘라 석유 협정 체결…전략적 비축유 보충 추진",
@@ -8866,37 +8941,28 @@
     "continuation_of_id": null
   },
   {
-    "id": 114536,
-    "title_en": "아이티 켄스코프 갱단 습격 인질 일부 석방 속 유엔의 민간인 보호 촉구",
-    "title_ko": "아이티 켄스코프 갱단 습격 인질 일부 석방 속 유엔의 민간인 보호 촉구",
-    "summary_ko": "[업데이트]\n■ 8월 31일 11:59 — 이번 인질 석방 과정에서는 현지 비영리단체 대표인 럭슨 잔(Luckson Jean)이 민간 협상가로 나서 갱단 점령 지역에 직접 진입한 것으로 확인됐다. 잔은 28일(현지시간) 유니세프와 사회복지연구소(IBERS) 등의 지원을 받아 갱단 소굴로 들어가 여성 7명과 어린이 6명의 석방을 이끌어냈다. 갱단원들은 오직 그만을 신뢰하여 인질을 넘겨주겠다고 요구한 것으로 알려졌으며, 이번 인질 석방은 몸값 없이 성사됐다. 그러나 국가 공권력이 아닌 민간 지도자가 무장 갱단 구역에 들어가 인질을 데려",
-    "url": "internal://trend_아이티_2026083106",
+    "id": 115107,
+    "title_en": "지루함이 부르는 턱의 움직임…인간이 심심할 때 껌을 씹는 이유",
+    "title_ko": "지루함이 부르는 턱의 움직임…인간이 심심할 때 껌을 씹는 이유",
+    "summary_ko": "심리학 연구에 따르면 많은 사람들이 껌을 씹는 행동은 영양 섭취나 공복감 때문이 아니라 지루함과 정신적 피로에 대한 신경 M 응답으로 나타난다. 연구원들은 이 반복적인 움직임이 각성 수준을 높이고 감정을 조절하며 단조로운 기간 동안 적절한 감각 자극으로 뇌를 바쁘게 만드는 데 기여한다고 강조한다.\n\n이 행동을 실천하는 개인의 동기는 다양하다. 일부 사람들은 향을 즐기는 반면 다른 사람들은 이를 무의식적인 대처나 진정 메커니즘으로 채택한다. 연구에 따르면 뇌는 5가지 주요 심리학적 이론과 이유를 바탕으로 지루함이 스며들 때 자동으로 ",
+    "url": "internal://solo_20260831_d5098f8e",
     "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "trend_아이티",
-    "region": "caribbean",
-    "country": "아이티",
+    "category": "글로벌",
+    "subcategory": "solo_20260831_d5098f8e",
+    "region": "global",
+    "country": "",
     "country_flag": "",
-    "score": 2,
-    "created_at": "2026-08-31 11:59",
-    "countries": [
-      "아이티",
-      "미국",
-      "도미니카공화국",
-      "케냐"
-    ],
+    "score": 1,
+    "created_at": "2026-08-31 11:58",
+    "countries": [],
     "is_published": true,
-    "image_url": null,
+    "image_url": "",
     "view_count": 0,
-    "first_published_at": "2026-08-31T06:17:00",
+    "first_published_at": "2026-08-31T11:58:00",
     "update_log": [
       {
-        "timestamp": "2026-08-31 06:17",
+        "timestamp": "2026-08-31 11:58",
         "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-08-31 11:59",
-        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -8957,38 +9023,6 @@
     "countries": [
       "과테말라"
     ],
-    "is_published": true,
-    "image_url": "",
-    "view_count": 0,
-    "first_published_at": "2026-08-31T11:58:00",
-    "update_log": [
-      {
-        "timestamp": "2026-08-31 11:58",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 115107,
-    "title_en": "지루함이 부르는 턱의 움직임…인간이 심심할 때 껌을 씹는 이유",
-    "title_ko": "지루함이 부르는 턱의 움직임…인간이 심심할 때 껌을 씹는 이유",
-    "summary_ko": "심리학 연구에 따르면 많은 사람들이 껌을 씹는 행동은 영양 섭취나 공복감 때문이 아니라 지루함과 정신적 피로에 대한 신경 M 응답으로 나타난다. 연구원들은 이 반복적인 움직임이 각성 수준을 높이고 감정을 조절하며 단조로운 기간 동안 적절한 감각 자극으로 뇌를 바쁘게 만드는 데 기여한다고 강조한다.\n\n이 행동을 실천하는 개인의 동기는 다양하다. 일부 사람들은 향을 즐기는 반면 다른 사람들은 이를 무의식적인 대처나 진정 메커니즘으로 채택한다. 연구에 따르면 뇌는 5가지 주요 심리학적 이론과 이유를 바탕으로 지루함이 스며들 때 자동으로 ",
-    "url": "internal://solo_20260831_d5098f8e",
-    "source": "NewsFinal",
-    "category": "글로벌",
-    "subcategory": "solo_20260831_d5098f8e",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-08-31 11:58",
-    "countries": [],
     "is_published": true,
     "image_url": "",
     "view_count": 0,
@@ -10496,6 +10530,41 @@
     "continuation_of_id": null
   },
   {
+    "id": 112947,
+    "title_en": "과테말라 농가 송금줄 차단…'슈퍼 엘니뇨' 식량 위기 직면",
+    "title_ko": "과테말라 농가 송금줄 차단…'슈퍼 엘니뇨' 식량 위기 직면",
+    "summary_ko": "과테말라 농촌 지역에서는 수십 년 동안 토지가 메마를 때 마땅한 탈출구가 존재했다. 그러나 오늘날 그 생존의 통로는 닫힌 상태다. 이 국가는 자연재해 위험과 재해 발생 시의 높은 취약성이 맞물려 있어 가뭄, 지진, 홍수, 허리케인 등에 크게 노출되어 있다. 지난 1976년 7.5 규모의 지진으로 수만 명이 사망한 바 있으며, 2010년 칠레에서는 더 강력한 지진으로 500명이 사망했다. 주민들의 생활 여건, 예방 법규, 사회적 사전 대응 능력이 결과를 좌우하는 결정적 역할을 한다.\n\n세계은행은 과테말라를 자연재해와 환경적 과제에 매",
+    "url": "internal://solo_20260830_e2574f93",
+    "source": "NewsFinal",
+    "category": "글로벌",
+    "subcategory": "solo_20260830_e2574f93",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-08-30 15:58",
+    "countries": [
+      "과테말라",
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "",
+    "view_count": 0,
+    "first_published_at": "2026-08-30T15:58:00",
+    "update_log": [
+      {
+        "timestamp": "2026-08-30 15:58",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 112949,
     "title_en": "과테말라 국회, 2027년 총선 앞두고 선심성 입법 러시 우려",
     "title_ko": "과테말라 국회, 2027년 총선 앞두고 선심성 입법 러시 우려",
@@ -10559,41 +10628,6 @@
     ],
     "byline": "뉴스파이널 편집국",
     "is_travel": true,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 112947,
-    "title_en": "과테말라 농가 송금줄 차단…'슈퍼 엘니뇨' 식량 위기 직면",
-    "title_ko": "과테말라 농가 송금줄 차단…'슈퍼 엘니뇨' 식량 위기 직면",
-    "summary_ko": "과테말라 농촌 지역에서는 수십 년 동안 토지가 메마를 때 마땅한 탈출구가 존재했다. 그러나 오늘날 그 생존의 통로는 닫힌 상태다. 이 국가는 자연재해 위험과 재해 발생 시의 높은 취약성이 맞물려 있어 가뭄, 지진, 홍수, 허리케인 등에 크게 노출되어 있다. 지난 1976년 7.5 규모의 지진으로 수만 명이 사망한 바 있으며, 2010년 칠레에서는 더 강력한 지진으로 500명이 사망했다. 주민들의 생활 여건, 예방 법규, 사회적 사전 대응 능력이 결과를 좌우하는 결정적 역할을 한다.\n\n세계은행은 과테말라를 자연재해와 환경적 과제에 매",
-    "url": "internal://solo_20260830_e2574f93",
-    "source": "NewsFinal",
-    "category": "글로벌",
-    "subcategory": "solo_20260830_e2574f93",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-08-30 15:58",
-    "countries": [
-      "과테말라",
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "",
-    "view_count": 0,
-    "first_published_at": "2026-08-30T15:58:00",
-    "update_log": [
-      {
-        "timestamp": "2026-08-30 15:58",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
     "source_published_at": null,
     "source_data": null,
     "image_credit": null,
@@ -10815,40 +10849,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 112649,
-    "title_en": "에스와티니 8배트 무역박람회컵 개막…그린맘바, 첫 경기 상대 미정 속 혼돈",
-    "title_ko": "에스와티니 8배트 무역박람회컵 개막…그린맘바, 첫 경기 상대 미정 속 혼돈",
-    "summary_ko": "8배트 무역박람회컵(8Bet Trade Fair Cup)이 30일(현지시간) 개막했으나, 그린맘바(Green Mamba)는 화요일에 치를 첫 경기 상대로 어느 팀을 만나야 할지 아직 확정되지 않은 상태다. 이번 토너먼트에서 그린맘바는 1일(현지시간) 오후 5시 마부소 스포츠 센터(Mavuso Sports Centre)에서 16강전을 치를 예정이다. 당초 대진 추첨에서는 레드 리노스(Red Rhinos)와 맞붙는 것으로 결정되었으나, 만지니 원더러스(Manzini Wanderers)가 레드 리노스의 프리미어리그 자격 인수를 시도하면서",
-    "url": "internal://solo_20260830_0b4da1e5",
-    "source": "NewsFinal",
-    "category": "문화·예술",
-    "subcategory": "solo_20260830_0b4da1e5",
-    "region": "global",
-    "country": "에스와티니",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-08-30 13:23",
-    "countries": [
-      "에스와티니"
-    ],
-    "is_published": true,
-    "image_url": "",
-    "view_count": 0,
-    "first_published_at": "2026-08-30T13:23:00",
-    "update_log": [
-      {
-        "timestamp": "2026-08-30 13:23",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
     "id": 112648,
     "title_en": "음두두지 은쿠베·시미, 제58회 에스와티니 국제무역박람회 개막식 장악",
     "title_ko": "음두두지 은쿠베·시미, 제58회 에스와티니 국제무역박람회 개막식 장악",
@@ -10884,29 +10884,29 @@
     "continuation_of_id": null
   },
   {
-    "id": 112646,
-    "title_en": "에스와티니 투자 컨퍼런스 후속 사업 본격화…켈로그 톨라람 공장 확장 추진",
-    "title_ko": "에스와티니 투자 컨퍼런스 후속 사업 본격화…켈로그 톨라람 공장 확장 추진",
-    "summary_ko": "에스와티니의 첫 투자 컨퍼런스에서 발표된 투자 약속들이 단순한 서류 단계를 넘어 실제 건설과 생산 능력 확대, 경제적 기회 창출로 이어지고 있다. 켈로그 톨라람(Kellogg Tolaram)과 아프리칸 얼라이언스(African Alliance)는 지난해 열린 대규모 행사의 약속과 연계된 프로젝트를 본격적으로 추진하고 있다고 30일(현지시간) 밝혔다. 두 투자자의 최근 행보는 에스와티니의 투자 드라이브가 약속에서 공사와 생산 확대로 전환되는 다음 단계에 진입했음을 보여준다.\n\n에스와티니 정부는 상공업부(Ministry of Comme",
-    "url": "internal://solo_20260830_668b65d1",
+    "id": 112649,
+    "title_en": "에스와티니 8배트 무역박람회컵 개막…그린맘바, 첫 경기 상대 미정 속 혼돈",
+    "title_ko": "에스와티니 8배트 무역박람회컵 개막…그린맘바, 첫 경기 상대 미정 속 혼돈",
+    "summary_ko": "8배트 무역박람회컵(8Bet Trade Fair Cup)이 30일(현지시간) 개막했으나, 그린맘바(Green Mamba)는 화요일에 치를 첫 경기 상대로 어느 팀을 만나야 할지 아직 확정되지 않은 상태다. 이번 토너먼트에서 그린맘바는 1일(현지시간) 오후 5시 마부소 스포츠 센터(Mavuso Sports Centre)에서 16강전을 치를 예정이다. 당초 대진 추첨에서는 레드 리노스(Red Rhinos)와 맞붙는 것으로 결정되었으나, 만지니 원더러스(Manzini Wanderers)가 레드 리노스의 프리미어리그 자격 인수를 시도하면서",
+    "url": "internal://solo_20260830_0b4da1e5",
     "source": "NewsFinal",
-    "category": "산업·기업",
-    "subcategory": "solo_20260830_668b65d1",
+    "category": "문화·예술",
+    "subcategory": "solo_20260830_0b4da1e5",
     "region": "global",
     "country": "에스와티니",
     "country_flag": "",
     "score": 1,
-    "created_at": "2026-08-30 13:22",
+    "created_at": "2026-08-30 13:23",
     "countries": [
       "에스와티니"
     ],
     "is_published": true,
     "image_url": "",
     "view_count": 0,
-    "first_published_at": "2026-08-30T13:22:00",
+    "first_published_at": "2026-08-30T13:23:00",
     "update_log": [
       {
-        "timestamp": "2026-08-30 13:22",
+        "timestamp": "2026-08-30 13:23",
         "note": "최초 게시"
       }
     ],
@@ -10933,6 +10933,40 @@
     "created_at": "2026-08-30 13:22",
     "countries": [
       "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "",
+    "view_count": 0,
+    "first_published_at": "2026-08-30T13:22:00",
+    "update_log": [
+      {
+        "timestamp": "2026-08-30 13:22",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 112646,
+    "title_en": "에스와티니 투자 컨퍼런스 후속 사업 본격화…켈로그 톨라람 공장 확장 추진",
+    "title_ko": "에스와티니 투자 컨퍼런스 후속 사업 본격화…켈로그 톨라람 공장 확장 추진",
+    "summary_ko": "에스와티니의 첫 투자 컨퍼런스에서 발표된 투자 약속들이 단순한 서류 단계를 넘어 실제 건설과 생산 능력 확대, 경제적 기회 창출로 이어지고 있다. 켈로그 톨라람(Kellogg Tolaram)과 아프리칸 얼라이언스(African Alliance)는 지난해 열린 대규모 행사의 약속과 연계된 프로젝트를 본격적으로 추진하고 있다고 30일(현지시간) 밝혔다. 두 투자자의 최근 행보는 에스와티니의 투자 드라이브가 약속에서 공사와 생산 확대로 전환되는 다음 단계에 진입했음을 보여준다.\n\n에스와티니 정부는 상공업부(Ministry of Comme",
+    "url": "internal://solo_20260830_668b65d1",
+    "source": "NewsFinal",
+    "category": "산업·기업",
+    "subcategory": "solo_20260830_668b65d1",
+    "region": "global",
+    "country": "에스와티니",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-08-30 13:22",
+    "countries": [
+      "에스와티니"
     ],
     "is_published": true,
     "image_url": "",
@@ -11326,6 +11360,40 @@
     "continuation_of_id": null
   },
   {
+    "id": 112406,
+    "title_en": "글로벌발전이니셔티브 성과 조명…베이징서 고위급 회의 개최",
+    "title_ko": "글로벌발전이니셔티브 성과 조명…베이징서 고위급 회의 개최",
+    "summary_ko": "유엔 2030 아젠다 진전을 위한 실용적 협력과 재정 공약, 국제적 합의를 조명하는 글로벌발전이니셔티브 고위급 회의가 최근 베이징에서 개최됐다.\n\n시진핑 중국 국가주석은 2021년 9월 제76차 유엔 총회 일반 토론 연설에서 글로벌발전이니셔티브를 제안했다. 지난 5년 동안 이 구상은 국제사회의 강력한 지지를 받으며 130여 개 국가와 국제기구가 참여하는 협력 체제로 성장했다. 중국과 협력 문서에 서명한 국가 및 기구는 100여 곳에 달하며, 글로벌발전이니셔티브 친구의 그룹 참여국은 88개국으로 확대됐다.\n\n중국은 중국-유엔 평화개발",
+    "url": "internal://solo_20260830_01396fc4",
+    "source": "NewsFinal",
+    "category": "글로벌",
+    "subcategory": "solo_20260830_01396fc4",
+    "region": "global",
+    "country": "중국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-08-30 10:51",
+    "countries": [
+      "중국"
+    ],
+    "is_published": true,
+    "image_url": "",
+    "view_count": 0,
+    "first_published_at": "2026-08-30T10:51:00",
+    "update_log": [
+      {
+        "timestamp": "2026-08-30 10:51",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 112407,
     "title_en": "미국, 홍수·산사태 덮친 네팔에 360만 달러 긴급 인도적 지원 발표",
     "title_ko": "미국, 홍수·산사태 덮친 네팔에 360만 달러 긴급 인도적 지원 발표",
@@ -11355,40 +11423,6 @@
     ],
     "byline": "뉴스파이널 편집국",
     "is_travel": true,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 112406,
-    "title_en": "글로벌발전이니셔티브 성과 조명…베이징서 고위급 회의 개최",
-    "title_ko": "글로벌발전이니셔티브 성과 조명…베이징서 고위급 회의 개최",
-    "summary_ko": "유엔 2030 아젠다 진전을 위한 실용적 협력과 재정 공약, 국제적 합의를 조명하는 글로벌발전이니셔티브 고위급 회의가 최근 베이징에서 개최됐다.\n\n시진핑 중국 국가주석은 2021년 9월 제76차 유엔 총회 일반 토론 연설에서 글로벌발전이니셔티브를 제안했다. 지난 5년 동안 이 구상은 국제사회의 강력한 지지를 받으며 130여 개 국가와 국제기구가 참여하는 협력 체제로 성장했다. 중국과 협력 문서에 서명한 국가 및 기구는 100여 곳에 달하며, 글로벌발전이니셔티브 친구의 그룹 참여국은 88개국으로 확대됐다.\n\n중국은 중국-유엔 평화개발",
-    "url": "internal://solo_20260830_01396fc4",
-    "source": "NewsFinal",
-    "category": "글로벌",
-    "subcategory": "solo_20260830_01396fc4",
-    "region": "global",
-    "country": "중국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-08-30 10:51",
-    "countries": [
-      "중국"
-    ],
-    "is_published": true,
-    "image_url": "",
-    "view_count": 0,
-    "first_published_at": "2026-08-30T10:51:00",
-    "update_log": [
-      {
-        "timestamp": "2026-08-30 10:51",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
     "source_published_at": null,
     "source_data": null,
     "image_credit": null,
@@ -11719,21 +11753,21 @@
     "continuation_of_id": null
   },
   {
-    "id": 112181,
-    "title_en": "노르웨이 새 국왕 하콘 8세 첫 연설…고(故) 하랄드 5세 추모하며 \"나만의 방식으로 통치할 것\"",
-    "title_ko": "노르웨이 새 국왕 하콘 8세 첫 연설…고(故) 하랄드 5세 추모하며 \"나만의 방식으로 통치할 것\"",
-    "summary_ko": "노르웨이의 새 국왕 하콘 8세(Haakon VIII)가 29일(현지시간) 왕궁에서 녹화된 TV 연설을 통해 서거한 아버지 하랄드 5세(Harald V) 국왕을 추모하고, 입헌군주로서 자신만의 방식으로 국정을 이끌어 나가겠다는 뜻을 밝혔다. 30년 이상 노르웨이를 이끈 개혁 군주인 하랄드 5세 국왕은 28일(현지시간) 89세를 일기로 세상을 떠났다.\n\n하콘 8세 국왕은 첫 대국민 연설에서 아버지를 따뜻한 가장이자 인자한 지도자로 기억했다. 그는 \"사랑하는 아버지, 여동생 마르타(Märtha)와 나에게 좋은 아버지가 되어주셔서 감사하다",
-    "url": "internal://cluster_20260830_62f83adf",
+    "id": 112198,
+    "title_en": "쿠웨이트, 경제 전문 법원 설립 추진… 투자 유치 및 상업 분쟁 신속 해결",
+    "title_ko": "쿠웨이트, 경제 전문 법원 설립 추진… 투자 유치 및 상업 분쟁 신속 해결",
+    "summary_ko": "쿠웨이트가 국가 소득 다원화와 글로벌 자본 유치를 위한 개발 비전에 발맞춰 경제 및 입법 인프라 현대화에 속도를 내고 있다고 29일 밝혔다. 경제 전문가이자 변호사인 아트비 알타눈(Athbi Al-Tahnoon)은 정부의 전문 경제 법원 설립 추진이 경쟁 기업 간 분쟁이나 개인과 기업 간 분쟁 등 수년간 해결되지 못한 상업 사건들의 적체를 해소하기 위한 목적이라고 밝혔다.\n\n아트비 알타눈은 전문가 부족과 금융 사안의 복잡성으로 인해 소송 절차가 2년에서 4년까지 길어질 수 있다고 설명했다. 이로 인해 일부 기업이 자신을 방어하고 증",
+    "url": "internal://solo_20260830_79672f50",
     "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "cluster_20260830_62f83adf",
-    "region": "global",
-    "country": "노르웨이",
+    "category": "경제",
+    "subcategory": "solo_20260830_79672f50",
+    "region": "middle_east",
+    "country": "쿠웨이트",
     "country_flag": "",
     "score": 1,
     "created_at": "2026-08-30 08:28",
     "countries": [
-      "노르웨이"
+      "쿠웨이트"
     ],
     "is_published": true,
     "image_url": "",
@@ -11753,21 +11787,21 @@
     "continuation_of_id": null
   },
   {
-    "id": 112198,
-    "title_en": "쿠웨이트, 경제 전문 법원 설립 추진… 투자 유치 및 상업 분쟁 신속 해결",
-    "title_ko": "쿠웨이트, 경제 전문 법원 설립 추진… 투자 유치 및 상업 분쟁 신속 해결",
-    "summary_ko": "쿠웨이트가 국가 소득 다원화와 글로벌 자본 유치를 위한 개발 비전에 발맞춰 경제 및 입법 인프라 현대화에 속도를 내고 있다고 29일 밝혔다. 경제 전문가이자 변호사인 아트비 알타눈(Athbi Al-Tahnoon)은 정부의 전문 경제 법원 설립 추진이 경쟁 기업 간 분쟁이나 개인과 기업 간 분쟁 등 수년간 해결되지 못한 상업 사건들의 적체를 해소하기 위한 목적이라고 밝혔다.\n\n아트비 알타눈은 전문가 부족과 금융 사안의 복잡성으로 인해 소송 절차가 2년에서 4년까지 길어질 수 있다고 설명했다. 이로 인해 일부 기업이 자신을 방어하고 증",
-    "url": "internal://solo_20260830_79672f50",
+    "id": 112181,
+    "title_en": "노르웨이 새 국왕 하콘 8세 첫 연설…고(故) 하랄드 5세 추모하며 \"나만의 방식으로 통치할 것\"",
+    "title_ko": "노르웨이 새 국왕 하콘 8세 첫 연설…고(故) 하랄드 5세 추모하며 \"나만의 방식으로 통치할 것\"",
+    "summary_ko": "노르웨이의 새 국왕 하콘 8세(Haakon VIII)가 29일(현지시간) 왕궁에서 녹화된 TV 연설을 통해 서거한 아버지 하랄드 5세(Harald V) 국왕을 추모하고, 입헌군주로서 자신만의 방식으로 국정을 이끌어 나가겠다는 뜻을 밝혔다. 30년 이상 노르웨이를 이끈 개혁 군주인 하랄드 5세 국왕은 28일(현지시간) 89세를 일기로 세상을 떠났다.\n\n하콘 8세 국왕은 첫 대국민 연설에서 아버지를 따뜻한 가장이자 인자한 지도자로 기억했다. 그는 \"사랑하는 아버지, 여동생 마르타(Märtha)와 나에게 좋은 아버지가 되어주셔서 감사하다",
+    "url": "internal://cluster_20260830_62f83adf",
     "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "solo_20260830_79672f50",
-    "region": "middle_east",
-    "country": "쿠웨이트",
+    "category": "정치·외교",
+    "subcategory": "cluster_20260830_62f83adf",
+    "region": "global",
+    "country": "노르웨이",
     "country_flag": "",
     "score": 1,
     "created_at": "2026-08-30 08:28",
     "countries": [
-      "쿠웨이트"
+      "노르웨이"
     ],
     "is_published": true,
     "image_url": "",
@@ -13068,6 +13102,40 @@
     "continuation_of_id": null
   },
   {
+    "id": 109654,
+    "title_en": "과테말라, 주거용 부동산 IUSI 면제와 납부 방식 개편…단계적 시행",
+    "title_ko": "과테말라, 주거용 부동산 IUSI 면제와 납부 방식 개편…단계적 시행",
+    "summary_ko": "과테말라에서 주거용 부동산과 소규모 사업장이 함께 있는 부동산에 대해 부동산통합세(IUSI) 면제를 골자로 하는 관련 규정 개정안이 28일(현지시간) 디아리오 데 센트로 아메리카(Diario de Centro América)에 공식 게재됐다. 이번 규정은 공화국 의회가 7월 29일에 승인한 총 5개 조항으로 구성된 법령 제18-2026호로 확정됐다.\n\n해당 법령의 제5조는 각 개정 조항의 발효 시기를 규정하고 있어 세부 변경 사항들이 단계적으로 적용될 예정이다. 2026년부터 2027년까지 의회 지도부 제1서기로 재임 중인 후안 카",
+    "url": "internal://solo_20260829_d32b4455",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "solo_20260829_d32b4455",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-08-29 10:03",
+    "countries": [
+      "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "",
+    "view_count": 0,
+    "first_published_at": "2026-08-29T10:03:00",
+    "update_log": [
+      {
+        "timestamp": "2026-08-29 10:03",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 104299,
     "title_en": "미국 대(對)이란 경제 압박 강화 속 호르무즈 해협 리스크 고조",
     "title_ko": "미국 대(對)이란 경제 압박 강화 속 호르무즈 해협 리스크 고조",
@@ -13095,40 +13163,6 @@
     "update_log": [
       {
         "timestamp": "2026-08-27 20:00",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 109654,
-    "title_en": "과테말라, 주거용 부동산 IUSI 면제와 납부 방식 개편…단계적 시행",
-    "title_ko": "과테말라, 주거용 부동산 IUSI 면제와 납부 방식 개편…단계적 시행",
-    "summary_ko": "과테말라에서 주거용 부동산과 소규모 사업장이 함께 있는 부동산에 대해 부동산통합세(IUSI) 면제를 골자로 하는 관련 규정 개정안이 28일(현지시간) 디아리오 데 센트로 아메리카(Diario de Centro América)에 공식 게재됐다. 이번 규정은 공화국 의회가 7월 29일에 승인한 총 5개 조항으로 구성된 법령 제18-2026호로 확정됐다.\n\n해당 법령의 제5조는 각 개정 조항의 발효 시기를 규정하고 있어 세부 변경 사항들이 단계적으로 적용될 예정이다. 2026년부터 2027년까지 의회 지도부 제1서기로 재임 중인 후안 카",
-    "url": "internal://solo_20260829_d32b4455",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "solo_20260829_d32b4455",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-08-29 10:03",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "",
-    "view_count": 0,
-    "first_published_at": "2026-08-29T10:03:00",
-    "update_log": [
-      {
-        "timestamp": "2026-08-29 10:03",
         "note": "최초 게시"
       }
     ],
