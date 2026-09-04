@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04 09:14",
+  "updated_at": "2026-09-04 09:25",
   "indices": [
     {
       "name": "S&P 500",
@@ -25,16 +25,16 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 6579.48,
-      "change_pct": 0.26,
+      "price": 6676.28,
+      "change_pct": 1.73,
       "up": true
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 790.21,
-      "change_pct": -1.71,
-      "up": false
+      "price": 804.26,
+      "change_pct": 0.03,
+      "up": true
     },
     {
       "name": "JSE (남아공)",
@@ -121,16 +121,16 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 6579.48,
-        "change_pct": 0.26,
+        "price": 6676.28,
+        "change_pct": 1.73,
         "up": true
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 790.21,
-        "change_pct": -1.71,
-        "up": false
+        "price": 804.26,
+        "change_pct": 0.03,
+        "up": true
       }
     ],
     "frontier": [
