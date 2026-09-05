@@ -1,5 +1,43 @@
 [
   {
+    "id": 136793,
+    "title_en": "남아시아, 후텁지근한 더위 속 전역에 빗줄기",
+    "title_ko": "남아시아, 후텁지근한 더위 속 전역에 빗줄기",
+    "summary_ko": "6일(현지시간) 남아시아 전역의 기온은 최저 24°C에서 최고 34°C의 분포를 나타내는 가운데 인도, 방글라데시, 스리랑카 등 주요 국가 전반에 걸쳐 비 소식이 이어진다. 지역 전체 최저기온 24°C와 최고기온 34°C를 중심으로 넓은 기온 범위가 형성되며, 해당 권역에 속한 주요 3개국 모두에서 강수 현상이 나타난다.\n\n국가별 세부 기온과 강수 예보를 살펴보면 인도는 주간 최고기온 34°C, 주간 최저기온 25°C를 기록하며 비 소식이 확인된다. 방글라데시는 주간 최고기온이 33°C까지 오르고 주간 최저기온은 25°C를 나타내는",
+    "url": "internal://weather_group_남아시아_weekly20260906",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_남아시아_weekly20260906",
+    "region": "south_asia",
+    "country": "남아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-06 08:38",
+    "countries": [
+      "인도",
+      "방글라데시",
+      "파키스탄",
+      "스리랑카",
+      "네팔"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_india_20260906.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-06T08:38:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-06 08:38",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 136759,
     "title_en": "동남아시아, 37도 무더위 속 전역에 걸쳐 비",
     "title_ko": "동남아시아, 37도 무더위 속 전역에 걸쳐 비",
@@ -214,46 +252,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 135569,
-    "title_en": "India and Myanmar Push to Strengthen Rare Earths Supply Chain Cooperation",
-    "title_ko": "인도와 미얀마, 희토류 공급망 협력 강화 추진",
-    "summary_ko": "[업데이트]\n■ 9월 6일 04:37 — 중국 희토류 기업들이 지정학적 우려와 베이징 당국의 보복을 피하기 위해 미국으로의 일부 선적을 중단하고 있다고 3세기초 소식통들을 인용해 4일(현지시간) 보도됐다. 지난 8월 초 미국 공급망 감시 기관인 RBA에 대해 중국이 제재를 부과한 이후, 일부 중국 공급업체들은 RBA와 연계된 글로벌 광물 공급망 감사 프로그램인 RMI의 실사 프레임워크를 준수할 경우 베이징으로부터 처벌을 받을 것을 우려해 미국 기업으로의 희토류 선적을 거부하고 있다. 다른 일부 중국 기업들도 최근 몇 달간 금지된 사",
-    "url": "internal://extrend_Rare_earths_collabor_2026090522",
-    "source": "NewsFinal",
-    "category": "자원·에너지",
-    "subcategory": "extrend_Rare_earths_collabor",
-    "region": "southeast_asia",
-    "country": "인도",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-06 04:37",
-    "countries": [
-      "인도",
-      "미얀마",
-      "중국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_rare_earth_mine_mineral_processing_industrial_mining.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T22:42:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 22:42",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-09-06 04:37",
-        "note": "중국 희토류 기업, 미국행 선적 중단"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
     "id": 135993,
     "title_en": "Intense Fighting Between Sudan's Military and Paramilitary Forces and Spread of Cholera",
     "title_ko": "수단 군부와 준군사조직 교전 격화 및 콜레라 확산",
@@ -286,6 +284,46 @@
       {
         "timestamp": "2026-09-06 04:37",
         "note": "남수단, 심각한 식량 불안정으로 긴급 대책 요구됨"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
+    "id": 135569,
+    "title_en": "India and Myanmar Push to Strengthen Rare Earths Supply Chain Cooperation",
+    "title_ko": "인도와 미얀마, 희토류 공급망 협력 강화 추진",
+    "summary_ko": "[업데이트]\n■ 9월 6일 04:37 — 중국 희토류 기업들이 지정학적 우려와 베이징 당국의 보복을 피하기 위해 미국으로의 일부 선적을 중단하고 있다고 3세기초 소식통들을 인용해 4일(현지시간) 보도됐다. 지난 8월 초 미국 공급망 감시 기관인 RBA에 대해 중국이 제재를 부과한 이후, 일부 중국 공급업체들은 RBA와 연계된 글로벌 광물 공급망 감사 프로그램인 RMI의 실사 프레임워크를 준수할 경우 베이징으로부터 처벌을 받을 것을 우려해 미국 기업으로의 희토류 선적을 거부하고 있다. 다른 일부 중국 기업들도 최근 몇 달간 금지된 사",
+    "url": "internal://extrend_Rare_earths_collabor_2026090522",
+    "source": "NewsFinal",
+    "category": "자원·에너지",
+    "subcategory": "extrend_Rare_earths_collabor",
+    "region": "southeast_asia",
+    "country": "인도",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-06 04:37",
+    "countries": [
+      "인도",
+      "미얀마",
+      "중국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_rare_earth_mine_mineral_processing_industrial_mining.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T22:42:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 22:42",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-09-06 04:37",
+        "note": "중국 희토류 기업, 미국행 선적 중단"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -549,40 +587,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 136384,
-    "title_en": "Colombian Intelligence Operation Kills Criminal Figures 'Bendito Menor' and 'La Bebesita' in La Guajira",
-    "title_ko": "콜롬비아 라과히라 지역서 정보 당국 작전 중 범죄 조직 인물 '벤디토 메노르' 등 사살",
-    "summary_ko": "콜롬비아 라과히라 지역 리오하차에서 정보 당국의 합동 작전이 진행됐다. 이 과정에서 범죄 조직 인물인 알리아스 '벤디토 메노르'와 '라 베베시타'가 사살됐다. 당국은 이들을 겨냥한 작전을 수행했으며, 현장에서는 관련 사진과 작전 경과가 공개됐다.\n\n사망한 벤디토 메노르는 과거 당국으로부터 10억 페소의 현상금이 걸려 있던 인물이다. 범죄 조직 활동뿐만 아니라 소셜 미디어 등을 통해 인플루언서로도 알려져 있던 이들의 사망 이후, 현상금 처리 문제와 함께 향후 치안 대책에 대한 논의가 이어지고 있다.\n\n유족 측은 이들이 작전 당시 무장",
-    "url": "internal://realtrend_Colombia_Security_Operation_against_'Bendito_Menor'_and_'La_Bebecita'_2026090604",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "realtrend_Colombia_Security_Op",
-    "region": "africa",
-    "country": "콜롬비아",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-06 04:19",
-    "countries": [
-      "콜롬비아"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_military_operation_police_raid_crime_scene.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-06T04:19:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-06 04:19",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
     "id": 136385,
     "title_en": "Robinhood Chain Daily DEX Volume Surges Past $3B in Q3 as Uniswap Burns Tokens",
     "title_ko": "로빈후드 체인 일일 DEX 거래량 3분기 30억 달러 돌파... 유니스왑 소각량 급증",
@@ -601,6 +605,40 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_cryptocurrency_trading_blockchain_network_digital_cu.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-06T04:19:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-06 04:19",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
+    "id": 136384,
+    "title_en": "Colombian Intelligence Operation Kills Criminal Figures 'Bendito Menor' and 'La Bebesita' in La Guajira",
+    "title_ko": "콜롬비아 라과히라 지역서 정보 당국 작전 중 범죄 조직 인물 '벤디토 메노르' 등 사살",
+    "summary_ko": "콜롬비아 라과히라 지역 리오하차에서 정보 당국의 합동 작전이 진행됐다. 이 과정에서 범죄 조직 인물인 알리아스 '벤디토 메노르'와 '라 베베시타'가 사살됐다. 당국은 이들을 겨냥한 작전을 수행했으며, 현장에서는 관련 사진과 작전 경과가 공개됐다.\n\n사망한 벤디토 메노르는 과거 당국으로부터 10억 페소의 현상금이 걸려 있던 인물이다. 범죄 조직 활동뿐만 아니라 소셜 미디어 등을 통해 인플루언서로도 알려져 있던 이들의 사망 이후, 현상금 처리 문제와 함께 향후 치안 대책에 대한 논의가 이어지고 있다.\n\n유족 측은 이들이 작전 당시 무장",
+    "url": "internal://realtrend_Colombia_Security_Operation_against_'Bendito_Menor'_and_'La_Bebecita'_2026090604",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "realtrend_Colombia_Security_Op",
+    "region": "africa",
+    "country": "콜롬비아",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-06 04:19",
+    "countries": [
+      "콜롬비아"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_military_operation_police_raid_crime_scene.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-06T04:19:00",
     "update_log": [
@@ -1719,6 +1757,41 @@
     "continuation_of_id": null
   },
   {
+    "id": 133888,
+    "title_en": "Green Mamba Faces Scheduling Dilemma Ahead of African Tournament",
+    "title_ko": "아프리카대회 앞둔 그린 맘바, 국내 컵대회 일정 겹쳐 딜레마",
+    "summary_ko": "총에너지스 아프리카축구연맹(CAF) 컨페더레이션컵 출전을 앞둔 그린 맘바가 4일(현지시간) 기준 국내 컵대회 일정과 겹치면서 극심한 경기 밀림 현상에 직면했다.\n\n만지니의 마주소 스포츠 센터에서 전날 열린 8벳 트레이드 페어 컵 16강전에서 그린 맘바는 레드 리노스를 3대 0으로 완파했다. 당초 이 경기는 화요일에 열릴 예정이었으나 레드 리노스가 불참하면서 취소됐고, 이후 에스와티니 축구협회 징계위원회가 레드 리노스의 손을 들어주면서 전날로 재경기 일정이 잡혔다.\n\n경기 시작 5분 만에 그린 맘바의 데뷔전 선수 마차웨 을라미니가 올",
+    "url": "internal://solo_20260905_f474daa6",
+    "source": "NewsFinal",
+    "category": "글로벌",
+    "subcategory": "solo_20260905_f474daa6",
+    "region": "global",
+    "country": "에스와티니",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-05 10:36",
+    "countries": [
+      "에스와티니",
+      "앙골라"
+    ],
+    "is_published": true,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/3/3b/Dendroaspis_angusticeps--_the_Green_Mamba_%2821812342209%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T10:36:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 10:36",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "사진: Dick Culbert from Gibsons, B.C., Canada (CC BY 2.0, Wikimedia Commons)",
+    "continuation_of_id": null
+  },
+  {
     "id": 133887,
     "title_en": "Qatar Rejects Iran’s Justifications for Territorial Attacks in Letter to UN Security Council",
     "title_ko": "카타르, 이란의 영토 공격 정당화 주장 반박…유엔 안보리에 서한 발송",
@@ -1752,41 +1825,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 133888,
-    "title_en": "Green Mamba Faces Scheduling Dilemma Ahead of African Tournament",
-    "title_ko": "아프리카대회 앞둔 그린 맘바, 국내 컵대회 일정 겹쳐 딜레마",
-    "summary_ko": "총에너지스 아프리카축구연맹(CAF) 컨페더레이션컵 출전을 앞둔 그린 맘바가 4일(현지시간) 기준 국내 컵대회 일정과 겹치면서 극심한 경기 밀림 현상에 직면했다.\n\n만지니의 마주소 스포츠 센터에서 전날 열린 8벳 트레이드 페어 컵 16강전에서 그린 맘바는 레드 리노스를 3대 0으로 완파했다. 당초 이 경기는 화요일에 열릴 예정이었으나 레드 리노스가 불참하면서 취소됐고, 이후 에스와티니 축구협회 징계위원회가 레드 리노스의 손을 들어주면서 전날로 재경기 일정이 잡혔다.\n\n경기 시작 5분 만에 그린 맘바의 데뷔전 선수 마차웨 을라미니가 올",
-    "url": "internal://solo_20260905_f474daa6",
-    "source": "NewsFinal",
-    "category": "글로벌",
-    "subcategory": "solo_20260905_f474daa6",
-    "region": "global",
-    "country": "에스와티니",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-05 10:36",
-    "countries": [
-      "에스와티니",
-      "앙골라"
-    ],
-    "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/3/3b/Dendroaspis_angusticeps--_the_Green_Mamba_%2821812342209%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T10:36:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 10:36",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "사진: Dick Culbert from Gibsons, B.C., Canada (CC BY 2.0, Wikimedia Commons)",
     "continuation_of_id": null
   },
   {
