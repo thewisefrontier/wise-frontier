@@ -1,5 +1,46 @@
 [
   {
+    "id": 133890,
+    "title_en": "중동, 최고 45도 펄펄 끓는 불볕더위…주말 내내 비 없이 맑음",
+    "title_ko": "중동, 최고 45도 펄펄 끓는 불볕더위…주말 내내 비 없이 맑음",
+    "summary_ko": "5일(현지시간) 중동 주요국은 전반적으로 비 소식 없이 맑거나 구름이 다소 낀 날씨를 보이는 가운데, 지역에 따라 최저기온 15°C에서 최고기온 45°C에 달하는 극심한 기온 분포를 기록하고 있다. 이번 주말 전체 최저기온은 튀르키예에서 15°C로 가장 낮게 나타났으며, 최고기온은 이라크에서 45°C까지 치솟아 강한 더위가 이어질 전망이다.\n\n토요일 주요국 수도 주말 예보를 보면 사우디아라비아(최고 41°C/최저 30°C)와 이스라엘(최고 30°C/최저 19°C)은 대체로 맑고, 아랍에미리트(최고 42°C/최저 31°C), 튀르키예",
+    "url": "internal://weather_group_중동_weekend20260905",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_중동_weekend20260905",
+    "region": "middle_east",
+    "country": "중동",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-05 11:18",
+    "countries": [
+      "사우디아라비아",
+      "아랍에미리트",
+      "튀르키예",
+      "이스라엘",
+      "이란",
+      "이라크",
+      "카타르",
+      "요르단"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_saudi_arabia_20260905.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T11:18:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 11:18",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 133889,
     "title_en": "South African Cultural Activist Ndabandaba Visits Eswatini, Emphasizes Border and Law Compliance",
     "title_ko": "남아프리카공화국 문화 운동가 은다반다바, 에스와티니 방문해 국경과 법 준수 강조",
@@ -607,6 +648,38 @@
     "continuation_of_id": null
   },
   {
+    "id": 133064,
+    "title_en": "Bitcoin falls 2.23% as U.S. labor market uncertainty weighs on sentiment",
+    "title_ko": "[가상자산 동향] 비트코인 2.23% 하락…미 고용지표 경계감 확산",
+    "summary_ko": "◆ 가격 동향\n\n5일 06:27(한국시간) 야후 파이낸스에 따르면 비트코인 가격은 79783.08달러로 전일 대비 2.23% 하락했다. 이번 하락세는 미국 노동시장의 불확실성이 커지면서 위험 자산에 대한 투자 심리가 위축된 결과다. 최근 발표된 미국 고용 지표가 시장의 예상치를 하회하거나 상회하는 등 혼조세를 보이면서 연방준비제도의 금리 인하 경로에 대한 의구심이 시장에 반영됐다. 거시경제적 불확실성이 가중되자 기관 투자자들은 차익 실현 매물을 출회하며 포트폴리오를 조정했다. 또한 미국 증권거래위원회의 가상자산 관련 규제 강화 움직",
+    "url": "internal://crypto_news_2026-09-05",
+    "source": "NewsFinal",
+    "category": "금융",
+    "subcategory": "가상자산동향_crypto",
+    "region": "global",
+    "country": "글로벌",
+    "country_flag": "🌐",
+    "score": 1,
+    "created_at": "2026-09-05 06:27",
+    "countries": [],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_09_05.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T06:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 06:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 133063,
     "title_en": "Nvidia Shares Rise 0.84% Amid Anticipation for Broadcom Earnings",
     "title_ko": "[종목 동향] 엔비디아 주가 0.84% 상승…브로드컴 실적 발표 앞둔 기대감",
@@ -625,38 +698,6 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/stock_news_2026_09_04.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T06:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 06:27",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 133064,
-    "title_en": "Bitcoin falls 2.23% as U.S. labor market uncertainty weighs on sentiment",
-    "title_ko": "[가상자산 동향] 비트코인 2.23% 하락…미 고용지표 경계감 확산",
-    "summary_ko": "◆ 가격 동향\n\n5일 06:27(한국시간) 야후 파이낸스에 따르면 비트코인 가격은 79783.08달러로 전일 대비 2.23% 하락했다. 이번 하락세는 미국 노동시장의 불확실성이 커지면서 위험 자산에 대한 투자 심리가 위축된 결과다. 최근 발표된 미국 고용 지표가 시장의 예상치를 하회하거나 상회하는 등 혼조세를 보이면서 연방준비제도의 금리 인하 경로에 대한 의구심이 시장에 반영됐다. 거시경제적 불확실성이 가중되자 기관 투자자들은 차익 실현 매물을 출회하며 포트폴리오를 조정했다. 또한 미국 증권거래위원회의 가상자산 관련 규제 강화 움직",
-    "url": "internal://crypto_news_2026-09-05",
-    "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "가상자산동향_crypto",
-    "region": "global",
-    "country": "글로벌",
-    "country_flag": "🌐",
-    "score": 1,
-    "created_at": "2026-09-05 06:27",
-    "countries": [],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_09_05.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T06:27:00",
     "update_log": [
@@ -2451,47 +2492,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 127487,
-    "title_en": "Romania, EU Member States Issue Joint Response to Russia Following Leipzig Airport Drone Incidents",
-    "title_ko": "독일 라이프치히 공항 드론 사건 이어져 루마니아 등 유럽연합 회원국 러시아에 공동 대응",
-    "summary_ko": "[업데이트]\n■ 9월 4일 08:17 — 한편 독일 당국은 라이프치히 공항 사건과 별개로 브란덴버그주와 노르트라인베스트팔렌주에서 발생한 전력망 대상 조직적인 방해 행위 가능성에 대한 조사를 진행하고 있다. 브란덴버그주 얀슈발데 발전소 인근에서 전력망 공격에 대한 책임을 주장하는 편지가 발견되었으나, 경찰은 아직 그 진위를 확인하거나 반박하지 못한 상태다. 경찰은 3일 오전 터노프프레이라크 변전소에서 조사를 이어갔으며 이로 인해 50번 지방도가 몇 시간 동안 다시 통제되었다. 수사 당국은 이번 전력망 파괴 행위와 관련해 테러 단체 결",
-    "url": "internal://realtrend_러시아의_괴테인스티투트(Goethe-Institut)_지사_폐쇄_2026090322",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "realtrend_러시아의_괴테인스티투트(Goethe-",
-    "region": "africa",
-    "country": "루마니아",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-04 08:17",
-    "countries": [
-      "루마니아",
-      "독일",
-      "러시아",
-      "우크라이나"
-    ],
-    "is_published": true,
-    "image_url": null,
-    "view_count": 0,
-    "first_published_at": "2026-09-03T22:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-03 22:27",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-09-04 08:17",
-        "note": "독일 당국, 전력망 대상 조직적 방해 행위 조사 중"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
     "id": 128674,
     "title_en": "Democratic Republic of Congo Rebels Establish Parallel Government in East as Kinshasa Steps Up Legal and Administrative Offensive",
     "title_ko": "콩고민주공화국 동부 분쟁 속 반군 평행 정부 수립과 킨샤사의 사법·행정 공세",
@@ -2533,6 +2533,47 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: Foreign, Commonwealth &amp; Development Office (CC BY 4.0, Wikimedia Commons)",
+    "continuation_of_id": null
+  },
+  {
+    "id": 127487,
+    "title_en": "Romania, EU Member States Issue Joint Response to Russia Following Leipzig Airport Drone Incidents",
+    "title_ko": "독일 라이프치히 공항 드론 사건 이어져 루마니아 등 유럽연합 회원국 러시아에 공동 대응",
+    "summary_ko": "[업데이트]\n■ 9월 4일 08:17 — 한편 독일 당국은 라이프치히 공항 사건과 별개로 브란덴버그주와 노르트라인베스트팔렌주에서 발생한 전력망 대상 조직적인 방해 행위 가능성에 대한 조사를 진행하고 있다. 브란덴버그주 얀슈발데 발전소 인근에서 전력망 공격에 대한 책임을 주장하는 편지가 발견되었으나, 경찰은 아직 그 진위를 확인하거나 반박하지 못한 상태다. 경찰은 3일 오전 터노프프레이라크 변전소에서 조사를 이어갔으며 이로 인해 50번 지방도가 몇 시간 동안 다시 통제되었다. 수사 당국은 이번 전력망 파괴 행위와 관련해 테러 단체 결",
+    "url": "internal://realtrend_러시아의_괴테인스티투트(Goethe-Institut)_지사_폐쇄_2026090322",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "realtrend_러시아의_괴테인스티투트(Goethe-",
+    "region": "africa",
+    "country": "루마니아",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-04 08:17",
+    "countries": [
+      "루마니아",
+      "독일",
+      "러시아",
+      "우크라이나"
+    ],
+    "is_published": true,
+    "image_url": null,
+    "view_count": 0,
+    "first_published_at": "2026-09-03T22:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-03 22:27",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-09-04 08:17",
+        "note": "독일 당국, 전력망 대상 조직적 방해 행위 조사 중"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
     "continuation_of_id": null
   },
   {
@@ -4585,40 +4626,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 125544,
-    "title_en": "김성수 대법관 후보자, 처남 명의 강남 아파트 저가 전세 거주 논란 확산",
-    "title_ko": "김성수 대법관 후보자, 처남 명의 강남 아파트 저가 전세 거주 논란 확산",
-    "summary_ko": "동아일보, KBS 뉴스, 한겨레 등 주요 언론 보도에 따르면 2일(현지시간) 김성수 대법관 후보자가 처남이 임차한 서울 강남 아파트에 시세보다 저렴한 전세로 장기간 거주해 온 사실이 드러났다.\n\n논란이 된 아파트는 서울 강남구 도곡동에 위치한 도곡렉슬 43평 규모로, 해당 주택의 전세 시세는 15억 원에 달한다. 그러나 김 후보자는 처남이 임차한 이 아파트에 보증금 3억 5천만 원과 월세 80만 원 조건으로 거주한 것으로 확인됐다.\n\n야당은 이를 명백한 '처남 찬스'를 이용한 편법 전전대 거래로 규정했다. 국회 법제사법위원회 소속 ",
-    "url": "internal://realtrend_김성수_대법관_후보_2026090310",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "realtrend_김성수_대법관_후보",
-    "region": "africa",
-    "country": "한국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-03 10:49",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": null,
-    "view_count": 0,
-    "first_published_at": "2026-09-03T10:49:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-03 10:49",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
     "id": 125543,
     "title_en": "가나 뉴 위네바 지역 토지 소송 관련 폭력 사태로 3명 사망·17명 부상",
     "title_ko": "가나 뉴 위네바 지역 토지 소송 관련 폭력 사태로 3명 사망·17명 부상",
@@ -4647,6 +4654,40 @@
       {
         "timestamp": "2026-09-03 19:10",
         "note": "토지 분쟁 폭력 사태 관련 용의자 6명 체포 구금"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 125544,
+    "title_en": "김성수 대법관 후보자, 처남 명의 강남 아파트 저가 전세 거주 논란 확산",
+    "title_ko": "김성수 대법관 후보자, 처남 명의 강남 아파트 저가 전세 거주 논란 확산",
+    "summary_ko": "동아일보, KBS 뉴스, 한겨레 등 주요 언론 보도에 따르면 2일(현지시간) 김성수 대법관 후보자가 처남이 임차한 서울 강남 아파트에 시세보다 저렴한 전세로 장기간 거주해 온 사실이 드러났다.\n\n논란이 된 아파트는 서울 강남구 도곡동에 위치한 도곡렉슬 43평 규모로, 해당 주택의 전세 시세는 15억 원에 달한다. 그러나 김 후보자는 처남이 임차한 이 아파트에 보증금 3억 5천만 원과 월세 80만 원 조건으로 거주한 것으로 확인됐다.\n\n야당은 이를 명백한 '처남 찬스'를 이용한 편법 전전대 거래로 규정했다. 국회 법제사법위원회 소속 ",
+    "url": "internal://realtrend_김성수_대법관_후보_2026090310",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "realtrend_김성수_대법관_후보",
+    "region": "africa",
+    "country": "한국",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-03 10:49",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": null,
+    "view_count": 0,
+    "first_published_at": "2026-09-03T10:49:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-03 10:49",
+        "note": "최초 게시"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -5390,40 +5431,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 124811,
-    "title_en": "카타르 웹 서밋, 4회 행사 앞두고 70개 이상 글로벌 파트너사 확보",
-    "title_ko": "카타르 웹 서밋, 4회 행사 앞두고 70개 이상 글로벌 파트너사 확보",
-    "summary_ko": "카타르에서 개최되는 웹 서밋 카타르(Web Summit Qatar) 제4회 행사를 앞두고 70개 이상의 글로벌 파트너사가 참가 계약을 체결했다고 주최 측이 2일(현지시간) 밝혔다. 이번 행사는 중동 및 북아프리카 지역에서 가장 빠르게 성장하는 기술 행사로 자리잡고 있다.\n\n영구 웹 서밋 조직위원회는 정부커뮤니케이션국(GCO) 국장이자 위원회 위원장인 셰이크 자심 빈 만수르 빈 자보르 알 타니(Sheikh Jassim bin Mansour bin Jabor al-Thani)의 주재로 도하에서 정례 회의를 열고 2027년 행사의 준비 ",
-    "url": "internal://solo_20260903_3c4d4bca",
-    "source": "NewsFinal",
-    "category": "IT·과학",
-    "subcategory": "solo_20260903_3c4d4bca",
-    "region": "middle_east",
-    "country": "카타르",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-03 05:26",
-    "countries": [
-      "카타르"
-    ],
-    "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/c/c4/Aya_Atassi_Web_Summit_Speaker.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-    "view_count": 0,
-    "first_published_at": "2026-09-03T05:26:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-03 05:26",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
     "id": 124812,
     "title_en": "쿠웨이트 검찰, 농지 및 토지 조작 연루 71명 형사재판 회부",
     "title_ko": "쿠웨이트 검찰, 농지 및 토지 조작 연루 71명 형사재판 회부",
@@ -5442,6 +5449,40 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_farmland_government_building_court_trial.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-03T05:26:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-03 05:26",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
+    "id": 124811,
+    "title_en": "카타르 웹 서밋, 4회 행사 앞두고 70개 이상 글로벌 파트너사 확보",
+    "title_ko": "카타르 웹 서밋, 4회 행사 앞두고 70개 이상 글로벌 파트너사 확보",
+    "summary_ko": "카타르에서 개최되는 웹 서밋 카타르(Web Summit Qatar) 제4회 행사를 앞두고 70개 이상의 글로벌 파트너사가 참가 계약을 체결했다고 주최 측이 2일(현지시간) 밝혔다. 이번 행사는 중동 및 북아프리카 지역에서 가장 빠르게 성장하는 기술 행사로 자리잡고 있다.\n\n영구 웹 서밋 조직위원회는 정부커뮤니케이션국(GCO) 국장이자 위원회 위원장인 셰이크 자심 빈 만수르 빈 자보르 알 타니(Sheikh Jassim bin Mansour bin Jabor al-Thani)의 주재로 도하에서 정례 회의를 열고 2027년 행사의 준비 ",
+    "url": "internal://solo_20260903_3c4d4bca",
+    "source": "NewsFinal",
+    "category": "IT·과학",
+    "subcategory": "solo_20260903_3c4d4bca",
+    "region": "middle_east",
+    "country": "카타르",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-03 05:26",
+    "countries": [
+      "카타르"
+    ],
+    "is_published": true,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/c/c4/Aya_Atassi_Web_Summit_Speaker.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
     "view_count": 0,
     "first_published_at": "2026-09-03T05:26:00",
     "update_log": [
@@ -6721,22 +6762,24 @@
     "continuation_of_id": null
   },
   {
-    "id": 121865,
-    "title_en": "메트로 퍼시픽 워터, 필리핀 및 베트남 인프라 개선에 230억 페소 투자",
-    "title_ko": "메트로 퍼시픽 워터, 필리핀 및 베트남 인프라 개선에 230억 페소 투자",
-    "summary_ko": "팡길리난이 주도하는 메트로 퍼시픽 인베스트먼츠 코프의 계열사인 메트로 퍼시픽 워터는 1일(현지시간) 필리핀과 베트남의 물 서비스 포트폴리오를 개선하기 위해 향후 5년 동안 230억 페소를 투자할 계획이라고 밝혔다.\n\n이번 자금은 양국 지역의 물 서비스 품질을 높이고 관련 인프라를 전반적으로 업그레이드하는 데 집중적으로 투입된다.",
-    "url": "internal://realtrend_필리핀_탈락(Tarlac)_교량_붕괴_2026090210",
+    "id": 121864,
+    "title_en": "독일, 라이프치히 하이브리드 공격 배후로 러시아 지목… 모스크바는 보복 경고",
+    "title_ko": "독일, 라이프치히 하이브리드 공격 배후로 러시아 지목… 모스크바는 보복 경고",
+    "summary_ko": "독일은 러시아가 라이프치히 공항에서 하이브리드 공격을 가했다고 1일(현지시간) 비난했다. 유럽 각국은 베를린 정부를 지지하고 나섰으며 모스크바는 이에 대해 보복을 약속했다.\n\n블라디미르 푸틴 러시아 대통령은 독일이 라이프치히 공항에서 폭발물을 탑재한 드론 사건에 대해 러시아에 책임을 묻기 위해 증거를 심었다고 주장했다.",
+    "url": "internal://realtrend_US_Army_Leadership_Crisis_(Hegseth_&_Driscoll)_2026090210",
     "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "realtrend_필리핀_탈락(Tarlac)_교량_붕괴",
-    "region": "southeast_asia",
-    "country": "필리핀",
+    "category": "정치·외교",
+    "subcategory": "realtrend_US_Army_Leadership_C",
+    "region": "africa",
+    "country": "독일",
     "country_flag": "",
     "score": 2,
     "created_at": "2026-09-02 10:15",
     "countries": [
-      "필리핀",
-      "베트남"
+      "독일",
+      "러시아",
+      "프랑스",
+      "영국"
     ],
     "is_published": true,
     "image_url": null,
@@ -6756,24 +6799,22 @@
     "continuation_of_id": null
   },
   {
-    "id": 121864,
-    "title_en": "독일, 라이프치히 하이브리드 공격 배후로 러시아 지목… 모스크바는 보복 경고",
-    "title_ko": "독일, 라이프치히 하이브리드 공격 배후로 러시아 지목… 모스크바는 보복 경고",
-    "summary_ko": "독일은 러시아가 라이프치히 공항에서 하이브리드 공격을 가했다고 1일(현지시간) 비난했다. 유럽 각국은 베를린 정부를 지지하고 나섰으며 모스크바는 이에 대해 보복을 약속했다.\n\n블라디미르 푸틴 러시아 대통령은 독일이 라이프치히 공항에서 폭발물을 탑재한 드론 사건에 대해 러시아에 책임을 묻기 위해 증거를 심었다고 주장했다.",
-    "url": "internal://realtrend_US_Army_Leadership_Crisis_(Hegseth_&_Driscoll)_2026090210",
+    "id": 121865,
+    "title_en": "메트로 퍼시픽 워터, 필리핀 및 베트남 인프라 개선에 230억 페소 투자",
+    "title_ko": "메트로 퍼시픽 워터, 필리핀 및 베트남 인프라 개선에 230억 페소 투자",
+    "summary_ko": "팡길리난이 주도하는 메트로 퍼시픽 인베스트먼츠 코프의 계열사인 메트로 퍼시픽 워터는 1일(현지시간) 필리핀과 베트남의 물 서비스 포트폴리오를 개선하기 위해 향후 5년 동안 230억 페소를 투자할 계획이라고 밝혔다.\n\n이번 자금은 양국 지역의 물 서비스 품질을 높이고 관련 인프라를 전반적으로 업그레이드하는 데 집중적으로 투입된다.",
+    "url": "internal://realtrend_필리핀_탈락(Tarlac)_교량_붕괴_2026090210",
     "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "realtrend_US_Army_Leadership_C",
-    "region": "africa",
-    "country": "독일",
+    "category": "사회",
+    "subcategory": "realtrend_필리핀_탈락(Tarlac)_교량_붕괴",
+    "region": "southeast_asia",
+    "country": "필리핀",
     "country_flag": "",
     "score": 2,
     "created_at": "2026-09-02 10:15",
     "countries": [
-      "독일",
-      "러시아",
-      "프랑스",
-      "영국"
+      "필리핀",
+      "베트남"
     ],
     "is_published": true,
     "image_url": null,
@@ -10051,6 +10092,40 @@
     "continuation_of_id": null
   },
   {
+    "id": 115109,
+    "title_en": "과테말라 국립 마르임바 페스티벌 개최…전통 잇는 음악가 80여 명 한자리에",
+    "title_ko": "과테말라 국립 마르임바 페스티벌 개최…전통 잇는 음악가 80여 명 한자리에",
+    "summary_ko": "과테말라의 전통 악기 마르임바의 유산을 기리기 위한 제46회 파이즈 마르임바 페스티벌(Festival de Marimba Paiz)이 30일(현지시간) 수도 과테말라시티의 미겔 앙헬 아스투리아스 문화센터 내 에프라인 레시노스 대극장에서 개최됐다.\n\n이날 행사에는 음악가, 가수, 연주자, 무용수 등 80명이 넘는 예술가들이 참여해 두 차례의 공연을 선보였다. 행사는 북과 종소리와 함께 예술가들이 관중 사이를 걸어 나와 마르임바 선율에 맞춰 사슴의 춤(Danza del Venado)을 선보이는 것으로 막을 올렸다. 이어서 마르임바 차핀",
+    "url": "internal://solo_20260831_66c3af5c",
+    "source": "NewsFinal",
+    "category": "문화·예술",
+    "subcategory": "solo_20260831_66c3af5c",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-08-31 11:58",
+    "countries": [
+      "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "",
+    "view_count": 0,
+    "first_published_at": "2026-08-31T11:58:00",
+    "update_log": [
+      {
+        "timestamp": "2026-08-31 11:58",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 115107,
     "title_en": "지루함이 부르는 턱의 움직임…인간이 심심할 때 껌을 씹는 이유",
     "title_ko": "지루함이 부르는 턱의 움직임…인간이 심심할 때 껌을 씹는 이유",
@@ -10091,40 +10166,6 @@
     "source": "NewsFinal",
     "category": "글로벌",
     "subcategory": "solo_20260831_ecde5b4e",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-08-31 11:58",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "",
-    "view_count": 0,
-    "first_published_at": "2026-08-31T11:58:00",
-    "update_log": [
-      {
-        "timestamp": "2026-08-31 11:58",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 115109,
-    "title_en": "과테말라 국립 마르임바 페스티벌 개최…전통 잇는 음악가 80여 명 한자리에",
-    "title_ko": "과테말라 국립 마르임바 페스티벌 개최…전통 잇는 음악가 80여 명 한자리에",
-    "summary_ko": "과테말라의 전통 악기 마르임바의 유산을 기리기 위한 제46회 파이즈 마르임바 페스티벌(Festival de Marimba Paiz)이 30일(현지시간) 수도 과테말라시티의 미겔 앙헬 아스투리아스 문화센터 내 에프라인 레시노스 대극장에서 개최됐다.\n\n이날 행사에는 음악가, 가수, 연주자, 무용수 등 80명이 넘는 예술가들이 참여해 두 차례의 공연을 선보였다. 행사는 북과 종소리와 함께 예술가들이 관중 사이를 걸어 나와 마르임바 선율에 맞춰 사슴의 춤(Danza del Venado)을 선보이는 것으로 막을 올렸다. 이어서 마르임바 차핀",
-    "url": "internal://solo_20260831_66c3af5c",
-    "source": "NewsFinal",
-    "category": "문화·예술",
-    "subcategory": "solo_20260831_66c3af5c",
     "region": "latin_america",
     "country": "과테말라",
     "country_flag": "",
@@ -11675,40 +11716,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 112949,
-    "title_en": "과테말라 국회, 2027년 총선 앞두고 선심성 입법 러시 우려",
-    "title_ko": "과테말라 국회, 2027년 총선 앞두고 선심성 입법 러시 우려",
-    "summary_ko": "과테말라 공화국 국회가 2027년 일반 선거를 11개월 앞두고 입법 시즌의 성수기를 맞이하고 있다고 현지 언론이 30일(현지시간) 보도했다.\n\n의원들은 재선이나 공직 진출을 위한 정치적 동기가 강화되면서 당장 대중의 환호를 이끌어낼 수 있는 법안 발의에 적극적으로 나서고 있다. 보조금, 면세 혜택, 보상금, 신규 지원금, 물가 인하 약속, 특정 집단에 대한 특전 등이 이에 해당하며, 향후 몇 달간 시민들은 대중의 필요와 우려에 직접적으로 부합하려는 법안이 급증하는 현상을 목격하게 될 것으로 예상된다.\n\n이러한 법안들은 당장은 좋아 ",
-    "url": "internal://solo_20260830_5412fbaf",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "solo_20260830_5412fbaf",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-08-30 15:58",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "",
-    "view_count": 0,
-    "first_published_at": "2026-08-30T15:58:00",
-    "update_log": [
-      {
-        "timestamp": "2026-08-30 15:58",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": true,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
     "id": 112948,
     "title_en": "이스라엘 정착민들, 요르단강 서안 곳곳 습격…민간인·외신 기자 부상",
     "title_ko": "이스라엘 정착민들, 요르단강 서안 곳곳 습격…민간인·외신 기자 부상",
@@ -11738,6 +11745,40 @@
     ],
     "byline": "뉴스파이널 편집국",
     "is_travel": true,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 112949,
+    "title_en": "과테말라 국회, 2027년 총선 앞두고 선심성 입법 러시 우려",
+    "title_ko": "과테말라 국회, 2027년 총선 앞두고 선심성 입법 러시 우려",
+    "summary_ko": "과테말라 공화국 국회가 2027년 일반 선거를 11개월 앞두고 입법 시즌의 성수기를 맞이하고 있다고 현지 언론이 30일(현지시간) 보도했다.\n\n의원들은 재선이나 공직 진출을 위한 정치적 동기가 강화되면서 당장 대중의 환호를 이끌어낼 수 있는 법안 발의에 적극적으로 나서고 있다. 보조금, 면세 혜택, 보상금, 신규 지원금, 물가 인하 약속, 특정 집단에 대한 특전 등이 이에 해당하며, 향후 몇 달간 시민들은 대중의 필요와 우려에 직접적으로 부합하려는 법안이 급증하는 현상을 목격하게 될 것으로 예상된다.\n\n이러한 법안들은 당장은 좋아 ",
+    "url": "internal://solo_20260830_5412fbaf",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "solo_20260830_5412fbaf",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-08-30 15:58",
+    "countries": [
+      "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "",
+    "view_count": 0,
+    "first_published_at": "2026-08-30T15:58:00",
+    "update_log": [
+      {
+        "timestamp": "2026-08-30 15:58",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
     "source_published_at": null,
     "source_data": null,
     "image_credit": null,
@@ -12470,6 +12511,40 @@
     "continuation_of_id": null
   },
   {
+    "id": 112406,
+    "title_en": "글로벌발전이니셔티브 성과 조명…베이징서 고위급 회의 개최",
+    "title_ko": "글로벌발전이니셔티브 성과 조명…베이징서 고위급 회의 개최",
+    "summary_ko": "유엔 2030 아젠다 진전을 위한 실용적 협력과 재정 공약, 국제적 합의를 조명하는 글로벌발전이니셔티브 고위급 회의가 최근 베이징에서 개최됐다.\n\n시진핑 중국 국가주석은 2021년 9월 제76차 유엔 총회 일반 토론 연설에서 글로벌발전이니셔티브를 제안했다. 지난 5년 동안 이 구상은 국제사회의 강력한 지지를 받으며 130여 개 국가와 국제기구가 참여하는 협력 체제로 성장했다. 중국과 협력 문서에 서명한 국가 및 기구는 100여 곳에 달하며, 글로벌발전이니셔티브 친구의 그룹 참여국은 88개국으로 확대됐다.\n\n중국은 중국-유엔 평화개발",
+    "url": "internal://solo_20260830_01396fc4",
+    "source": "NewsFinal",
+    "category": "글로벌",
+    "subcategory": "solo_20260830_01396fc4",
+    "region": "global",
+    "country": "중국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-08-30 10:51",
+    "countries": [
+      "중국"
+    ],
+    "is_published": true,
+    "image_url": "",
+    "view_count": 0,
+    "first_published_at": "2026-08-30T10:51:00",
+    "update_log": [
+      {
+        "timestamp": "2026-08-30 10:51",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 112407,
     "title_en": "미국, 홍수·산사태 덮친 네팔에 360만 달러 긴급 인도적 지원 발표",
     "title_ko": "미국, 홍수·산사태 덮친 네팔에 360만 달러 긴급 인도적 지원 발표",
@@ -12499,40 +12574,6 @@
     ],
     "byline": "뉴스파이널 편집국",
     "is_travel": true,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 112406,
-    "title_en": "글로벌발전이니셔티브 성과 조명…베이징서 고위급 회의 개최",
-    "title_ko": "글로벌발전이니셔티브 성과 조명…베이징서 고위급 회의 개최",
-    "summary_ko": "유엔 2030 아젠다 진전을 위한 실용적 협력과 재정 공약, 국제적 합의를 조명하는 글로벌발전이니셔티브 고위급 회의가 최근 베이징에서 개최됐다.\n\n시진핑 중국 국가주석은 2021년 9월 제76차 유엔 총회 일반 토론 연설에서 글로벌발전이니셔티브를 제안했다. 지난 5년 동안 이 구상은 국제사회의 강력한 지지를 받으며 130여 개 국가와 국제기구가 참여하는 협력 체제로 성장했다. 중국과 협력 문서에 서명한 국가 및 기구는 100여 곳에 달하며, 글로벌발전이니셔티브 친구의 그룹 참여국은 88개국으로 확대됐다.\n\n중국은 중국-유엔 평화개발",
-    "url": "internal://solo_20260830_01396fc4",
-    "source": "NewsFinal",
-    "category": "글로벌",
-    "subcategory": "solo_20260830_01396fc4",
-    "region": "global",
-    "country": "중국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-08-30 10:51",
-    "countries": [
-      "중국"
-    ],
-    "is_published": true,
-    "image_url": "",
-    "view_count": 0,
-    "first_published_at": "2026-08-30T10:51:00",
-    "update_log": [
-      {
-        "timestamp": "2026-08-30 10:51",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
     "source_published_at": null,
     "source_data": null,
     "image_credit": null,
@@ -13634,40 +13675,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 110254,
-    "title_en": "인도 케라라주 콩그레스 간부, 주총리 행렬 가로막아 체포… 당내 계파 갈등 표면화",
-    "title_ko": "인도 케라라주 콩그레스 간부, 주총리 행렬 가로막아 체포… 당내 계파 갈등 표면화",
-    "summary_ko": "인도 케라라주 티루바난타푸람에서 29일(현지시간) 콩그레스당 간부가 브이디 사테산(V D Satheesan) 케라라주 총리의 차량 행렬을 가로막은 혐의로 경찰에 체포됐다. 이번 체포로 지역 당내 간부들 사이에서 강한 불만이 터져 나오며 당내 계파 갈등으로 번지고 있다.\n\n경찰에 따르면 티루바난타푸람 지구 콩그레스위원회(DCC) 간부인 아닐 쿠마르(Anil Kumar)는 29일 저녁 쳄파잔티에서 열리는 사회개혁가 스리 나라야나 구루(Sree Narayana Guru) 탄생 기념 행사에 참석하러 가던 사테산 총리의 차량 행렬을 가로막은",
-    "url": "internal://solo_20260829_b50e1402",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "solo_20260829_b50e1402",
-    "region": "global",
-    "country": "인도",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-08-29 15:57",
-    "countries": [
-      "인도"
-    ],
-    "is_published": true,
-    "image_url": "",
-    "view_count": 0,
-    "first_published_at": "2026-08-29T15:57:00",
-    "update_log": [
-      {
-        "timestamp": "2026-08-29 15:57",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
     "id": 110253,
     "title_en": "서안지구 알무가이야르서 이스라엘 정착민 폭력…부상·가축 피해 잇따라",
     "title_ko": "서안지구 알무가이야르서 이스라엘 정착민 폭력…부상·가축 피해 잇따라",
@@ -13703,29 +13710,29 @@
     "continuation_of_id": null
   },
   {
-    "id": 110252,
-    "title_en": "과테말라 사법부 무기 보관소 허술한 관리로 압수 총기 무더기 사라져",
-    "title_ko": "과테말라 사법부 무기 보관소 허술한 관리로 압수 총기 무더기 사라져",
-    "summary_ko": "사법부 무기 보관소의 허술한 관리와 방관 속에 압수된 총기류가 대거 사라지는 사건이 발생해 충격을 주고 있다. 경찰과 검찰 수사관들이 목숨을 걸고 수개월간의 추적 끝에 압수한 무기들이 사법부(OJ) 내부의 안일한 관리와 사법적 불처벌 속에 방치되면서 이번 스캔들이 수면 위로 드러났다. 이번 사건은 대법원장을 포함한 13명의 현직 대법관을 비롯해 사법부 전체의 기강 해이와 연루 의혹을 낳고 있다.\n\n사건의 발단은 무기 보관소를 담당하던 전임 관리자의 갑작스럽고 형식적인 사임이었다. 신원이 공개되지 않은 전임 관리자는 막중한 책임이 따",
-    "url": "internal://solo_20260829_05e8dc67",
+    "id": 110254,
+    "title_en": "인도 케라라주 콩그레스 간부, 주총리 행렬 가로막아 체포… 당내 계파 갈등 표면화",
+    "title_ko": "인도 케라라주 콩그레스 간부, 주총리 행렬 가로막아 체포… 당내 계파 갈등 표면화",
+    "summary_ko": "인도 케라라주 티루바난타푸람에서 29일(현지시간) 콩그레스당 간부가 브이디 사테산(V D Satheesan) 케라라주 총리의 차량 행렬을 가로막은 혐의로 경찰에 체포됐다. 이번 체포로 지역 당내 간부들 사이에서 강한 불만이 터져 나오며 당내 계파 갈등으로 번지고 있다.\n\n경찰에 따르면 티루바난타푸람 지구 콩그레스위원회(DCC) 간부인 아닐 쿠마르(Anil Kumar)는 29일 저녁 쳄파잔티에서 열리는 사회개혁가 스리 나라야나 구루(Sree Narayana Guru) 탄생 기념 행사에 참석하러 가던 사테산 총리의 차량 행렬을 가로막은",
+    "url": "internal://solo_20260829_b50e1402",
     "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "solo_20260829_05e8dc67",
-    "region": "latin_america",
-    "country": "과테말라",
+    "category": "정치·외교",
+    "subcategory": "solo_20260829_b50e1402",
+    "region": "global",
+    "country": "인도",
     "country_flag": "",
     "score": 1,
-    "created_at": "2026-08-29 15:56",
+    "created_at": "2026-08-29 15:57",
     "countries": [
-      "과테말라"
+      "인도"
     ],
     "is_published": true,
     "image_url": "",
     "view_count": 0,
-    "first_published_at": "2026-08-29T15:56:00",
+    "first_published_at": "2026-08-29T15:57:00",
     "update_log": [
       {
-        "timestamp": "2026-08-29 15:56",
+        "timestamp": "2026-08-29 15:57",
         "note": "최초 게시"
       }
     ],
@@ -13755,6 +13762,40 @@
       "태국",
       "홍콩",
       "파키스탄"
+    ],
+    "is_published": true,
+    "image_url": "",
+    "view_count": 0,
+    "first_published_at": "2026-08-29T15:56:00",
+    "update_log": [
+      {
+        "timestamp": "2026-08-29 15:56",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 110252,
+    "title_en": "과테말라 사법부 무기 보관소 허술한 관리로 압수 총기 무더기 사라져",
+    "title_ko": "과테말라 사법부 무기 보관소 허술한 관리로 압수 총기 무더기 사라져",
+    "summary_ko": "사법부 무기 보관소의 허술한 관리와 방관 속에 압수된 총기류가 대거 사라지는 사건이 발생해 충격을 주고 있다. 경찰과 검찰 수사관들이 목숨을 걸고 수개월간의 추적 끝에 압수한 무기들이 사법부(OJ) 내부의 안일한 관리와 사법적 불처벌 속에 방치되면서 이번 스캔들이 수면 위로 드러났다. 이번 사건은 대법원장을 포함한 13명의 현직 대법관을 비롯해 사법부 전체의 기강 해이와 연루 의혹을 낳고 있다.\n\n사건의 발단은 무기 보관소를 담당하던 전임 관리자의 갑작스럽고 형식적인 사임이었다. 신원이 공개되지 않은 전임 관리자는 막중한 책임이 따",
+    "url": "internal://solo_20260829_05e8dc67",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "solo_20260829_05e8dc67",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-08-29 15:56",
+    "countries": [
+      "과테말라"
     ],
     "is_published": true,
     "image_url": "",
@@ -14212,40 +14253,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 109654,
-    "title_en": "과테말라, 주거용 부동산 IUSI 면제와 납부 방식 개편…단계적 시행",
-    "title_ko": "과테말라, 주거용 부동산 IUSI 면제와 납부 방식 개편…단계적 시행",
-    "summary_ko": "과테말라에서 주거용 부동산과 소규모 사업장이 함께 있는 부동산에 대해 부동산통합세(IUSI) 면제를 골자로 하는 관련 규정 개정안이 28일(현지시간) 디아리오 데 센트로 아메리카(Diario de Centro América)에 공식 게재됐다. 이번 규정은 공화국 의회가 7월 29일에 승인한 총 5개 조항으로 구성된 법령 제18-2026호로 확정됐다.\n\n해당 법령의 제5조는 각 개정 조항의 발효 시기를 규정하고 있어 세부 변경 사항들이 단계적으로 적용될 예정이다. 2026년부터 2027년까지 의회 지도부 제1서기로 재임 중인 후안 카",
-    "url": "internal://solo_20260829_d32b4455",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "solo_20260829_d32b4455",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-08-29 10:03",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "",
-    "view_count": 0,
-    "first_published_at": "2026-08-29T10:03:00",
-    "update_log": [
-      {
-        "timestamp": "2026-08-29 10:03",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
     "id": 104299,
     "title_en": "미국 대(對)이란 경제 압박 강화 속 호르무즈 해협 리스크 고조",
     "title_ko": "미국 대(對)이란 경제 압박 강화 속 호르무즈 해협 리스크 고조",
@@ -14273,6 +14280,40 @@
     "update_log": [
       {
         "timestamp": "2026-08-27 20:00",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 109654,
+    "title_en": "과테말라, 주거용 부동산 IUSI 면제와 납부 방식 개편…단계적 시행",
+    "title_ko": "과테말라, 주거용 부동산 IUSI 면제와 납부 방식 개편…단계적 시행",
+    "summary_ko": "과테말라에서 주거용 부동산과 소규모 사업장이 함께 있는 부동산에 대해 부동산통합세(IUSI) 면제를 골자로 하는 관련 규정 개정안이 28일(현지시간) 디아리오 데 센트로 아메리카(Diario de Centro América)에 공식 게재됐다. 이번 규정은 공화국 의회가 7월 29일에 승인한 총 5개 조항으로 구성된 법령 제18-2026호로 확정됐다.\n\n해당 법령의 제5조는 각 개정 조항의 발효 시기를 규정하고 있어 세부 변경 사항들이 단계적으로 적용될 예정이다. 2026년부터 2027년까지 의회 지도부 제1서기로 재임 중인 후안 카",
+    "url": "internal://solo_20260829_d32b4455",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "solo_20260829_d32b4455",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-08-29 10:03",
+    "countries": [
+      "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "",
+    "view_count": 0,
+    "first_published_at": "2026-08-29T10:03:00",
+    "update_log": [
+      {
+        "timestamp": "2026-08-29 10:03",
         "note": "최초 게시"
       }
     ],
@@ -14353,21 +14394,23 @@
     "continuation_of_id": null
   },
   {
-    "id": 109651,
-    "title_en": "카타르항공, 우버 포 비즈니스와 제휴…기업 출장 서비스 확대",
-    "title_ko": "카타르항공, 우버 포 비즈니스와 제휴…기업 출장 서비스 확대",
-    "summary_ko": "카타르항공이 기업 출장 경험을 향상하고 전 세계 기업과 출장자들에게 더 큰 유연성과 편의를 제공하기 위해 우버 포 비즈니스(Uber for Business)와의 새로운 파트너십을 29일(현지시간) 발표했다.\n\n이번 파트너십을 통해 카타르항공의 기업 여행 프로그램인 비욘드 비즈니스(Beyond Business) 회원들은 크레딧을 우버(Uber) 탑승 바우처로 교환할 수 있다. 이 바우처는 사용자의 우버 지갑에 직접 적립되어 글로벌 출장 시 이용할 수 있다.\n\n우버 포 비즈니스는 기업 지상 교통수단과 직원 이동성을 혁신하여 현대 근로자",
-    "url": "internal://solo_20260829_04f36f94",
+    "id": 109650,
+    "title_en": "카타르 문화부, 연극인 사프와트 알가샴 회고록 출간…예멘과 카타르 무대 조명",
+    "title_ko": "카타르 문화부, 연극인 사프와트 알가샴 회고록 출간…예멘과 카타르 무대 조명",
+    "summary_ko": "카타르 문화부가 연극인이자 연출가인 사프와트 알가샴(Safwat al-Ghasham)의 무대 인생을 다룬 회고록 The Theatre That Dwelled Within Me... From Yemen to Qatar를 출간했다고 29일(현지시간) 밝혔다. 이 책은 개인적 기억과 예술적 역사를 결합하여 알가샴이 예멘에서 보낸 초기 경험과 카타르로의 이주, 그리고 그의 창작 시각에 영향을 미친 프로덕션과 관계, 문화적 환경을 추적한다. 연극은 단순한 직업이 아니라 그의 기억과 예술적 정체성이 형성된 공간으로 그려진다.\n\n알자스라 문화사",
+    "url": "internal://solo_20260829_3b789ed1",
     "source": "NewsFinal",
-    "category": "산업·기업",
-    "subcategory": "solo_20260829_04f36f94",
+    "category": "문화·예술",
+    "subcategory": "solo_20260829_3b789ed1",
     "region": "middle_east",
     "country": "카타르",
     "country_flag": "",
     "score": 1,
     "created_at": "2026-08-29 10:01",
     "countries": [
-      "카타르"
+      "카타르",
+      "예멘",
+      "쿠웨이트"
     ],
     "is_published": true,
     "image_url": "",
@@ -14387,23 +14430,21 @@
     "continuation_of_id": null
   },
   {
-    "id": 109650,
-    "title_en": "카타르 문화부, 연극인 사프와트 알가샴 회고록 출간…예멘과 카타르 무대 조명",
-    "title_ko": "카타르 문화부, 연극인 사프와트 알가샴 회고록 출간…예멘과 카타르 무대 조명",
-    "summary_ko": "카타르 문화부가 연극인이자 연출가인 사프와트 알가샴(Safwat al-Ghasham)의 무대 인생을 다룬 회고록 The Theatre That Dwelled Within Me... From Yemen to Qatar를 출간했다고 29일(현지시간) 밝혔다. 이 책은 개인적 기억과 예술적 역사를 결합하여 알가샴이 예멘에서 보낸 초기 경험과 카타르로의 이주, 그리고 그의 창작 시각에 영향을 미친 프로덕션과 관계, 문화적 환경을 추적한다. 연극은 단순한 직업이 아니라 그의 기억과 예술적 정체성이 형성된 공간으로 그려진다.\n\n알자스라 문화사",
-    "url": "internal://solo_20260829_3b789ed1",
+    "id": 109651,
+    "title_en": "카타르항공, 우버 포 비즈니스와 제휴…기업 출장 서비스 확대",
+    "title_ko": "카타르항공, 우버 포 비즈니스와 제휴…기업 출장 서비스 확대",
+    "summary_ko": "카타르항공이 기업 출장 경험을 향상하고 전 세계 기업과 출장자들에게 더 큰 유연성과 편의를 제공하기 위해 우버 포 비즈니스(Uber for Business)와의 새로운 파트너십을 29일(현지시간) 발표했다.\n\n이번 파트너십을 통해 카타르항공의 기업 여행 프로그램인 비욘드 비즈니스(Beyond Business) 회원들은 크레딧을 우버(Uber) 탑승 바우처로 교환할 수 있다. 이 바우처는 사용자의 우버 지갑에 직접 적립되어 글로벌 출장 시 이용할 수 있다.\n\n우버 포 비즈니스는 기업 지상 교통수단과 직원 이동성을 혁신하여 현대 근로자",
+    "url": "internal://solo_20260829_04f36f94",
     "source": "NewsFinal",
-    "category": "문화·예술",
-    "subcategory": "solo_20260829_3b789ed1",
+    "category": "산업·기업",
+    "subcategory": "solo_20260829_04f36f94",
     "region": "middle_east",
     "country": "카타르",
     "country_flag": "",
     "score": 1,
     "created_at": "2026-08-29 10:01",
     "countries": [
-      "카타르",
-      "예멘",
-      "쿠웨이트"
+      "카타르"
     ],
     "is_published": true,
     "image_url": "",
@@ -14536,6 +14577,40 @@
     "continuation_of_id": null
   },
   {
+    "id": 109425,
+    "title_en": "엘살바도르 수도 일대서 연이은 지중 진동…당국 \"화산 활동과 무관\"",
+    "title_ko": "엘살바도르 수도 일대서 연이은 지중 진동…당국 \"화산 활동과 무관\"",
+    "summary_ko": "엘살바도르 수도인 산살바도르 대도시권과 라리베르타드주 일대에서 26일(현지시간)과 27일 양일간 아침 시간대에 강력한 지하 굉음과 진동이 발생했다.\n\n엘살바도르 환경자원부(MARN)에 따르면 이번 소음과 진동은 메히카노스, 일로팡고, 산마르코스 등 여러 지방자치단체에서 집중적으로 감지됐다. 특히 산하신토 언덕과 일로팡고 호수 인근 지역에서 주민들이 일정한 시간대와 소리 패턴을 보이는 현상을 겪었다.\n\n엘살바도르 대학교 소속 화산학자이자 지질학자인 미겔 에르난데스는 이 같은 지하 소음이 새로운 현상이 아니라고 설명했다. 지각의 미소 ",
+    "url": "internal://solo_20260829_ce733247",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "solo_20260829_ce733247",
+    "region": "latin_america",
+    "country": "엘살바도르",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-08-29 07:34",
+    "countries": [
+      "엘살바도르"
+    ],
+    "is_published": true,
+    "image_url": "",
+    "view_count": 0,
+    "first_published_at": "2026-08-29T07:34:00",
+    "update_log": [
+      {
+        "timestamp": "2026-08-29 07:34",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": true,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 107784,
     "title_en": "수단 교전 격화 속 구호품 차단과 난민 위기 심화",
     "title_ko": "수단 교전 격화 속 구호품 차단과 난민 위기 심화",
@@ -14570,40 +14645,6 @@
     ],
     "byline": "뉴스파이널 편집국",
     "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 109425,
-    "title_en": "엘살바도르 수도 일대서 연이은 지중 진동…당국 \"화산 활동과 무관\"",
-    "title_ko": "엘살바도르 수도 일대서 연이은 지중 진동…당국 \"화산 활동과 무관\"",
-    "summary_ko": "엘살바도르 수도인 산살바도르 대도시권과 라리베르타드주 일대에서 26일(현지시간)과 27일 양일간 아침 시간대에 강력한 지하 굉음과 진동이 발생했다.\n\n엘살바도르 환경자원부(MARN)에 따르면 이번 소음과 진동은 메히카노스, 일로팡고, 산마르코스 등 여러 지방자치단체에서 집중적으로 감지됐다. 특히 산하신토 언덕과 일로팡고 호수 인근 지역에서 주민들이 일정한 시간대와 소리 패턴을 보이는 현상을 겪었다.\n\n엘살바도르 대학교 소속 화산학자이자 지질학자인 미겔 에르난데스는 이 같은 지하 소음이 새로운 현상이 아니라고 설명했다. 지각의 미소 ",
-    "url": "internal://solo_20260829_ce733247",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "solo_20260829_ce733247",
-    "region": "latin_america",
-    "country": "엘살바도르",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-08-29 07:34",
-    "countries": [
-      "엘살바도르"
-    ],
-    "is_published": true,
-    "image_url": "",
-    "view_count": 0,
-    "first_published_at": "2026-08-29T07:34:00",
-    "update_log": [
-      {
-        "timestamp": "2026-08-29 07:34",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": true,
     "source_published_at": null,
     "source_data": null,
     "image_credit": null,
@@ -14646,40 +14687,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 109423,
-    "title_en": "과테말라 운송업계, 버스 기사 연이은 살해에 정부 대책 촉구",
-    "title_ko": "과테말라 운송업계, 버스 기사 연이은 살해에 정부 대책 촉구",
-    "summary_ko": "과테말라 여객운송조합(Gretexpa)은 28일(현지시간) 정부의 치안 부재를 강하게 비판하며 버스 운전기사 대상 폭력 사태에 대한 구체적 대책 마련을 촉구했다. 조합에 따르면 이날 기준 올해 들어 총 37명의 버스 기사가 살해당했다.\n\n과테말라 여객운송조합(Gretexpa)은 베르나르도 아레발로(Bernardo Arévalo) 대통령과 마르코 안토니오 빌레다(Marco Antonio Villeda) 내무부 장관에게 보낸 성명을 통해 운송 노동자들을 향한 폭력에 깊은 분노와 고통, 무기력함을 표명했다. 성명에 따르면 전날인 27일 ",
-    "url": "internal://solo_20260829_ae500800",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "solo_20260829_ae500800",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-08-29 07:32",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "",
-    "view_count": 0,
-    "first_published_at": "2026-08-29T07:32:00",
-    "update_log": [
-      {
-        "timestamp": "2026-08-29 07:32",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": true,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
     "id": 109422,
     "title_en": "이란·오만, 호르무즈 해협 통항 합의…미국 이슬라마바드 합의 이행 촉구",
     "title_ko": "이란·오만, 호르무즈 해협 통항 합의…미국 이슬라마바드 합의 이행 촉구",
@@ -14711,6 +14718,40 @@
     ],
     "byline": "뉴스파이널 편집국",
     "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 109423,
+    "title_en": "과테말라 운송업계, 버스 기사 연이은 살해에 정부 대책 촉구",
+    "title_ko": "과테말라 운송업계, 버스 기사 연이은 살해에 정부 대책 촉구",
+    "summary_ko": "과테말라 여객운송조합(Gretexpa)은 28일(현지시간) 정부의 치안 부재를 강하게 비판하며 버스 운전기사 대상 폭력 사태에 대한 구체적 대책 마련을 촉구했다. 조합에 따르면 이날 기준 올해 들어 총 37명의 버스 기사가 살해당했다.\n\n과테말라 여객운송조합(Gretexpa)은 베르나르도 아레발로(Bernardo Arévalo) 대통령과 마르코 안토니오 빌레다(Marco Antonio Villeda) 내무부 장관에게 보낸 성명을 통해 운송 노동자들을 향한 폭력에 깊은 분노와 고통, 무기력함을 표명했다. 성명에 따르면 전날인 27일 ",
+    "url": "internal://solo_20260829_ae500800",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "solo_20260829_ae500800",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-08-29 07:32",
+    "countries": [
+      "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "",
+    "view_count": 0,
+    "first_published_at": "2026-08-29T07:32:00",
+    "update_log": [
+      {
+        "timestamp": "2026-08-29 07:32",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": true,
     "source_published_at": null,
     "source_data": null,
     "image_credit": null,

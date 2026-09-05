@@ -1,5 +1,46 @@
 [
   {
+    "id": 133890,
+    "title_en": "중동, 최고 45도 펄펄 끓는 불볕더위…주말 내내 비 없이 맑음",
+    "title_ko": "중동, 최고 45도 펄펄 끓는 불볕더위…주말 내내 비 없이 맑음",
+    "summary_ko": "5일(현지시간) 중동 주요국은 전반적으로 비 소식 없이 맑거나 구름이 다소 낀 날씨를 보이는 가운데, 지역에 따라 최저기온 15°C에서 최고기온 45°C에 달하는 극심한 기온 분포를 기록하고 있다. 이번 주말 전체 최저기온은 튀르키예에서 15°C로 가장 낮게 나타났으며, 최고기온은 이라크에서 45°C까지 치솟아 강한 더위가 이어질 전망이다.\n\n토요일 주요국 수도 주말 예보를 보면 사우디아라비아(최고 41°C/최저 30°C)와 이스라엘(최고 30°C/최저 19°C)은 대체로 맑고, 아랍에미리트(최고 42°C/최저 31°C), 튀르키예",
+    "url": "internal://weather_group_중동_weekend20260905",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_중동_weekend20260905",
+    "region": "middle_east",
+    "country": "중동",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-05 11:18",
+    "countries": [
+      "사우디아라비아",
+      "아랍에미리트",
+      "튀르키예",
+      "이스라엘",
+      "이란",
+      "이라크",
+      "카타르",
+      "요르단"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_saudi_arabia_20260905.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T11:18:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 11:18",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 133889,
     "title_en": "South African Cultural Activist Ndabandaba Visits Eswatini, Emphasizes Border and Law Compliance",
     "title_ko": "남아프리카공화국 문화 운동가 은다반다바, 에스와티니 방문해 국경과 법 준수 강조",
@@ -607,6 +648,38 @@
     "continuation_of_id": null
   },
   {
+    "id": 133064,
+    "title_en": "Bitcoin falls 2.23% as U.S. labor market uncertainty weighs on sentiment",
+    "title_ko": "[가상자산 동향] 비트코인 2.23% 하락…미 고용지표 경계감 확산",
+    "summary_ko": "◆ 가격 동향\n\n5일 06:27(한국시간) 야후 파이낸스에 따르면 비트코인 가격은 79783.08달러로 전일 대비 2.23% 하락했다. 이번 하락세는 미국 노동시장의 불확실성이 커지면서 위험 자산에 대한 투자 심리가 위축된 결과다. 최근 발표된 미국 고용 지표가 시장의 예상치를 하회하거나 상회하는 등 혼조세를 보이면서 연방준비제도의 금리 인하 경로에 대한 의구심이 시장에 반영됐다. 거시경제적 불확실성이 가중되자 기관 투자자들은 차익 실현 매물을 출회하며 포트폴리오를 조정했다. 또한 미국 증권거래위원회의 가상자산 관련 규제 강화 움직",
+    "url": "internal://crypto_news_2026-09-05",
+    "source": "NewsFinal",
+    "category": "금융",
+    "subcategory": "가상자산동향_crypto",
+    "region": "global",
+    "country": "글로벌",
+    "country_flag": "🌐",
+    "score": 1,
+    "created_at": "2026-09-05 06:27",
+    "countries": [],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_09_05.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T06:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 06:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 133063,
     "title_en": "Nvidia Shares Rise 0.84% Amid Anticipation for Broadcom Earnings",
     "title_ko": "[종목 동향] 엔비디아 주가 0.84% 상승…브로드컴 실적 발표 앞둔 기대감",
@@ -625,38 +698,6 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/stock_news_2026_09_04.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T06:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 06:27",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 133064,
-    "title_en": "Bitcoin falls 2.23% as U.S. labor market uncertainty weighs on sentiment",
-    "title_ko": "[가상자산 동향] 비트코인 2.23% 하락…미 고용지표 경계감 확산",
-    "summary_ko": "◆ 가격 동향\n\n5일 06:27(한국시간) 야후 파이낸스에 따르면 비트코인 가격은 79783.08달러로 전일 대비 2.23% 하락했다. 이번 하락세는 미국 노동시장의 불확실성이 커지면서 위험 자산에 대한 투자 심리가 위축된 결과다. 최근 발표된 미국 고용 지표가 시장의 예상치를 하회하거나 상회하는 등 혼조세를 보이면서 연방준비제도의 금리 인하 경로에 대한 의구심이 시장에 반영됐다. 거시경제적 불확실성이 가중되자 기관 투자자들은 차익 실현 매물을 출회하며 포트폴리오를 조정했다. 또한 미국 증권거래위원회의 가상자산 관련 규제 강화 움직",
-    "url": "internal://crypto_news_2026-09-05",
-    "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "가상자산동향_crypto",
-    "region": "global",
-    "country": "글로벌",
-    "country_flag": "🌐",
-    "score": 1,
-    "created_at": "2026-09-05 06:27",
-    "countries": [],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_09_05.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T06:27:00",
     "update_log": [
@@ -1952,428 +1993,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 129720,
-    "title_en": "중동, 44도 폭염 맹위…사우디 등 찜통더위",
-    "title_ko": "중동, 44도 폭염 맹위…사우디 등 찜통더위",
-    "summary_ko": "4일(현지시간) 중동 주요국 수도는 최저기온 17°C에서 최고기온 44°C의 분포를 보이며 극심한 더위가 이어졌다. 이라크 바그다드가 44°C를 기록하며 가장 더운 곳으로 집계된 반면, 튀르키예 앙카라는 최고기온 28°C, 최저기온 17°C로 가장 선선한 날씨를 보였다. 바그다드의 최고기온은 앙카라보다 16°C 높아 지역별로 큰 기온 차를 나타냈다.\n\n특히 사우디아라비아의 주요 도시들은 38°C를 웃도는 폭염 지역으로 분류됐다. 사우디아라비아 리야드와 아랍에미리트 아부다비는 최고기온 41°C, 최저기온 31°~32°C를 기록하며 흐",
-    "url": "internal://weather_group_중동_today20260904",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_중동_today20260904",
-    "region": "middle_east",
-    "country": "중동",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-04 11:17",
-    "countries": [
-      "사우디아라비아",
-      "아랍에미리트",
-      "튀르키예",
-      "이스라엘",
-      "이란",
-      "이라크",
-      "카타르",
-      "요르단"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_saudi_arabia_20260904.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T11:17:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 11:17",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 127486,
-    "title_en": "Thousands Protest Spanish Government's Handling of Ceuta Migrant Crisis",
-    "title_ko": "스페인, 세우타 이주민 위기 대응 규탄 대규모 시위 발생",
-    "summary_ko": "[업데이트]\n■ 9월 4일 11:10 — 스페인 의회 하원 본회의에 출석한 페드로 산체스 총리는 지난 7월 말 세우타 영토로 8만 명에 달하는 이주민이 유입된 사태와 관련해 어떤 정보기관도 사태의 규모를 경고하지 않았다고 밝혔다. 페드로 산체스는 당시 상황에 대해 당시 30일에 모로코 헌병대가 국경 통과를 허용했다고 인정하면서도, 모로코 정부의 개입에 대한 명확한 증거가 부족해 그동안 신중한 입장을 유지해 왔다고 설명했다. 아울러 지난 8월 21일에는 두 명의 모로코 장관이 세우타와 멜리야 영토에 대한 영유권 주장을 제기하자 스페인",
-    "url": "internal://realtrend_스페인_세우타_이주민_위기_및_정부_대응_항의_시위_2026090322",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "realtrend_스페인_세우타_이주민_위기_및_정부_",
-    "region": "africa",
-    "country": "스페인",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-04 11:10",
-    "countries": [
-      "스페인",
-      "모로코"
-    ],
-    "is_published": true,
-    "image_url": null,
-    "view_count": 1,
-    "first_published_at": "2026-09-03T22:25:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-03 22:25",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-09-04 05:22",
-        "note": "세우타 주택서 모로코인 사망한 채 발견"
-      },
-      {
-        "timestamp": "2026-09-04 11:10",
-        "note": "야권의 연대 결성과 산체스 총리 비난"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 129254,
-    "title_en": "Trump Claims Strait of Hormuz Renaming Remark Was a Joke Amid Controversy",
-    "title_ko": "트럼프 미국 대통령, 호르무즈 해협 개칭 발언 논란 뒤 농담이라 주장",
-    "summary_ko": "[업데이트]\n■ 9월 4일 11:09 — 이란이 호르무즈 해협에 새로운 해군 기뢰를 추가로 매설했다고 주장하면서 해상 물류 차질과 안보 위협이 가중되고 있다. 국제 해운업계 관계자들은 현재의 기뢰 제거 작업만으로는 정상적인 상선 운항을 재개하기에 역부족이라는 입장을 나타냈으며, 이란은 미국의 해협 통제 움직임에 맞서 군사적 긴장을 고조시키고 있다. 중동발 지정학적 리스크로 글로벌 에너지 공급망 불안이 심화하는 가운데, 로이터는 호주의 외딴 셰일가스 분지가 이러한 호르무즈 안보 우려에 대한 대체 공급원으로 주목받고 있다고 보도했다.\n",
-    "url": "internal://realtrend_트럼프_해협_2026090407",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "realtrend_트럼프_해협",
-    "region": "africa",
-    "country": "미국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-04 11:09",
-    "countries": [
-      "미국",
-      "이란",
-      "쿠웨이트",
-      "아랍에미리트"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_strait_cargo_ship_ocean_tanker.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T07:58:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 07:58",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-09-04 11:09",
-        "note": "한국 정부, 호르무즈 해역 파병 검토 착수"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 129719,
-    "title_en": "Israeli Strikes and Shelling Across Gaza Kill 4, Including Children",
-    "title_ko": "가자지구 전역 이스라엘 공습·포격…어린이 포함 4명 사망",
-    "summary_ko": "4일(현지시간) 가자지구 전역에서 이스라엘의 연쇄적인 공격과 포격으로 어린이를 포함해 4명이 숨졌다고 의료 소식통들이 전했다. 이전의 이스라엘 공습 당시 입은 부상을 이기지 못하고 숨진 팔레스타인인도 1명 늘어났으며 다수의 부상자가 발생했다.\n\n가자시티 알리말 구역의 타우라 거리 소재 교회 연합 건물 인근에서는 이스라엘군의 드론이 민간인들을 향해 최소 2발의 미사일을 발사했다. 이 공격으로 팔레스타인인 1명이 사망하고 여러 명이 다쳤으며, 부상자들은 시파 의료 센터로 옮겨져 일부가 위중한 상태인 것으로 전해졌다. 이어 같은 타우라 ",
-    "url": "internal://solo_20260904_d4e9b609",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "solo_20260904_d4e9b609",
-    "region": "global",
-    "country": "팔레스타인",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-04 11:08",
-    "countries": [
-      "팔레스타인",
-      "이스라엘"
-    ],
-    "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/73/Fires_in_Israel_and_the_Gaza_strip_-_7_October_2023_%2853245908850%29.jpg/960px-Fires_in_Israel_and_the_Gaza_strip_-_7_October_2023_%2853245908850%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T11:08:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 11:08",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": true,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "사진: Pierre Markuse (CC BY 2.0, Wikimedia Commons)",
-    "continuation_of_id": null
-  },
-  {
-    "id": 129718,
-    "title_en": "US Warns Threats to Democracy as Security Ties With Guatemala Deepen",
-    "title_ko": "미국, 과테말라와 안보 협력 강화 속 민주주의 위협 세력에 무관용 경고",
-    "summary_ko": "미국은 민주주의 제도와 안보를 위협하는 세력에 대해 비자 추가 취소 등 지속적인 조치를 취할 것이라고 3일(현지시간) 밝혔다. 주과테말라 미국 대사관은 아나 퀸타나 로베트 미국 국무부 중미 담당 부차관의 과테말라 방문을 계기로 이 같은 입장을 공개했다.\n\n방문 기간 아나 퀸타나 로베트 부차관은 베르나르도 아레발로 과테말라 대통령, 헨리 사엔스 라모스 국방장관, 가브리엘 에스투아도 가르시아 루나 검찰총장 겸 법무부 장관 등 고위 관료들과 연이어 회담을 가졌으며 양국 간 안보 및 협력 방안을 논의했다. 미국 대사관 측은 양국이 마약 밀",
-    "url": "internal://solo_20260904_624e0630",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "solo_20260904_624e0630",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-04 11:07",
-    "countries": [
-      "과테말라",
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_diplomatic_meeting_government_building_security_coop.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T11:07:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 11:07",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 129717,
-    "title_en": "Texas Court Acquits and Releases Former Guatemalan Aide on Cocaine Trafficking Charges",
-    "title_ko": "텍사스 법원, 코카인 밀매 혐의 과테말라 출신 전직 보좌관 무죄 석방",
-    "summary_ko": "미국 텍사스주 동부 연방법원에서 2026년 8월 25일 코카인 밀매 및 제조 공모 혐의로 기소된 과테말라 국적의 발테르 알프레도 키로아 레예스에 대한 재판이 무죄 판결로 종결됐다. 연방 판사 숀 D. 조단은 피고인에게 무죄를 선고하고 석방과 보석금 면제를 명령했다.\n\n키로아 레예스는 과테말라 산마르코스주 아유틀라의 사망한 전 시장 에릭 살바도르 수니가 로드리게스의 전직 보좌관이자 자문관으로 활동했다. 그는 과테말라, 멕시코, 온두라스, 콜롬비아에서 활동하는 코카인 밀반출 조직에 가담해 미국으로 마약을 불법 수입하려 한 혐의로 202",
-    "url": "internal://solo_20260904_24a054b8",
-    "source": "NewsFinal",
-    "category": "글로벌",
-    "subcategory": "solo_20260904_24a054b8",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-04 11:07",
-    "countries": [
-      "과테말라",
-      "미국",
-      "멕시코",
-      "콜롬비아"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_courthouse_law_court_judge_gavel.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T11:07:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 11:07",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 129716,
-    "title_en": "Guatemala’s Anti-Corruption Prosecutor’s Office Seeks to Strip Immunity of Antigua Mayor",
-    "title_ko": "과테말라 안티구아 시장 상대로 반부패 검찰청의 기소 면책 특권 박탈 청구",
-    "summary_ko": "과테말라 공공부패방지검찰청(Fiscalía contra la Corrupción del Ministerio Público)이 안티구아과테말라(Antigua Guatemala)의 후안 마누엘 아스투리아스 수에이라스(Juan Manuel Asturias Sueiras) 시장을 상대로 기소 면책 특권(antejuicio) 박탈을 청구했다고 3일(현지시간) 밝혔다. 이번 조치는 회계총국(Contraloría General de Cuentas, CGC)이 제기한 고발에 따른 것이다.\n\n검찰에 따르면 이번 사건은 지방 자치단체가 건축 허가를 ",
-    "url": "internal://solo_20260904_52928789",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "solo_20260904_52928789",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-04 11:06",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_protest_courtroom_city_hall.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T11:06:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 11:06",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 129685,
-    "title_en": "Kiaf Seoul and Frieze Seoul Open at COEX Featuring Global Galleries and Special Exhibitions",
-    "title_ko": "서울 코엑스에서 개최된 키아프 서울 2026과 프리즈 서울 2026의 주요 전시 부스 공개",
-    "summary_ko": "9월 2일(현지시간) 서울 강남구 코엑스에서 제25회 키아프 서울(Kiaf SEOUL)이 개막했다. 올해 행사는 18개국에서 175개의 전시업체가 참여했으며, 첫 외부 임명 크리에이티브 디렉터인 디자이너 구정아가 공동체(Coexistence)를 주제로 브랜딩을 총괄했다. 전시장에는 인간과 기술의 관계를 탐구하는 특별전시 휴말(HUMAL)과 QR코드로 접근하는 증강현실(AR) 작품이 포함된 인비저블(Invisible) 등이 마련되었다. 또한 행사장 위층에서는 프리즈 서울(Frieze Seoul)이 동시에 개최되어 방문객들이 두 행사를",
-    "url": "internal://realtrend_Busan_Tugboat_Accident_2026090410",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "realtrend_Busan_Tugboat_Accide",
-    "region": "africa",
-    "country": "한국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-04 10:53",
-    "countries": [
-      "한국",
-      "대만",
-      "미국",
-      "프랑스"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_art_exhibition_modern_art_gallery_art_fair.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T10:53:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 10:53",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 129684,
-    "title_en": "US to Retroactively Bill Europe for Ukraine Aid, Steps Up Diplomatic Pressure on Iran",
-    "title_ko": "미국, 우크라이나 지원금 유럽 소급 청구 및 이란 관련 외교적 압박 강화",
-    "summary_ko": "도널드 트럼프(Donald Trump) 미국 대통령은 3일(현지시간) 미국이 우크라이나에 제공한 지원금에 대해 유럽 국가들에 소급하여 비용을 청구할 계획이라고 밝혔다. 트럼프는 그동안 유럽이 우크라이나 지원에 더 많은 재정을 부담해야 한다고 주장해 왔으며, 이번 조치는 유럽 동맹국들을 상대로 과거 지원분에 대한 정산을 요구하겠다는 의도를 드러낸 것이다. 관련 경제 및 외교 사안에 대한 구체적인 청구 방식과 유럽 국가들의 반응은 아직 전해지지 않았다.\n\n동시에 트럼프 행정부는 이란을 겨냥한 외교 및 안보 압박 수위를 높이고 있다. 트",
-    "url": "internal://realtrend_Trump_Strait_Proposal_2026090410",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "realtrend_Trump_Strait_Proposa",
-    "region": "africa",
-    "country": "미국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-04 10:53",
-    "countries": [
-      "미국",
-      "우크라이나",
-      "이란",
-      "영국",
-      "아르헨티나"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_white_house_foreign_policy_protest_rally.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T10:53:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 10:53",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 129683,
-    "title_en": "Central African Republic Faces Controversy Over Wagner Group's Illegal Alcohol Trade and Reliance on Mercenaries",
-    "title_ko": "중앙아프리카공화국, 바그너그룹의 불법 알코올 유통과 용병 의존 논란 확산",
-    "summary_ko": "중앙아프리카공화국에서 러시아 민간군사기업 바그너그룹이 2023년부터 저소득층을 대상으로 불순물이 함유된 저가 알코올 비닐봉지를 제조 및 유통하고 있다. 바그너그룹은 정부에 압력을 넣어 카메룬과 나이지리아 등 인근 국가로부터의 유사 제품 수입을 금지한 뒤, 단속 권한을 이용해 자사 제품만 시장에 유통시켰다. 현지 주민들과 언론의 증언에 따르면 이 알코올을 마신 소비자들은 심각한 두통과 하지 마비 증상을 겪었으며, 이러한 현상이 젊은층의 사회적 통제를 용이하게 하기 위한 의도라는 지적이 제기되었다. 바그너그룹은 이미 금광, 다이아몬드,",
-    "url": "internal://trend_중앙아프리카_2026090410",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "trend_중앙아프리카",
-    "region": "africa",
-    "country": "중앙아프리카공화국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-04 10:50",
-    "countries": [
-      "중앙아프리카공화국",
-      "러시아",
-      "카메룬",
-      "니제르"
-    ],
-    "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/19/Central_African_Republic_2012_Battles-en.svg/960px-Central_African_Republic_2012_Battles-en.svg.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T10:50:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 10:50",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "사진: Keitsist (CC BY-SA 3.0, Wikimedia Commons)",
-    "continuation_of_id": null
-  },
-  {
-    "id": 129682,
-    "title_en": "Deepening Food and Health Crises Amid Intensifying Conflict in Sudan",
-    "title_ko": "수단 분쟁 격화 속 식량·보건 위기 심화",
-    "summary_ko": "[업데이트]\n■ 9월 5일 10:15 — 유엔 인권 이사회 산하 독립 국제사실조사단은 4일 양측 모두 민간인과 기반시설을 향해 전쟁 범죄에 해당하는 드론 공격을 감행했다고 발표했다. 에티오피아 베니샨굴구무즈 지역의 아소사 기지에서는 7월 이후 차량, 탄약, 군수 물자의 대규모 집적이 포착되었으며, 이는 신속지원군과 반군 동맹의 보급로로 악용되고 있다는 우려를 낳고 있다.\n\n신속지원군과 수단인민해방운동 동맹군은 블루나일주의 바코리와 시르쿠움을 점령한 뒤 수도 다마진 방향으로 공세를 압박하고 있다. 하르툼에서는 군정이 주도하는 정치적 ",
-    "url": "internal://trend_수단 분쟁_2026090410",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "trend_수단 분쟁",
-    "region": "africa",
-    "country": "수단",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-04 10:47",
-    "countries": [
-      "수단",
-      "에티오피아",
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a9/20250130_Sudan_Conflict_and_pop_displ.png/960px-20250130_Sudan_Conflict_and_pop_displ.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T10:47:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 10:47",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-09-05 04:34",
-        "note": "신속지원군 정보 책임자 200명과 함께 투항"
-      },
-      {
-        "timestamp": "2026-09-05 10:15",
-        "note": "신속지원군과 반군 동맹이 공세를 확대함"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
     "continuation_of_id": null
   }
 ]
