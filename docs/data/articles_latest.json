@@ -1,5 +1,41 @@
 [
   {
+    "id": 136425,
+    "title_en": "동아시아, 한여름 무더위 속 비구름…몽골은 쌀쌀",
+    "title_ko": "동아시아, 한여름 무더위 속 비구름…몽골은 쌀쌀",
+    "summary_ko": "6일(현지시간) 동아시아 지역은 최저기온 2°C에서 최고기온 31°C의 기온 분포를 기록하는 가운데 국가별로 뚜렷한 기온 차이와 강수 현상이 나타난다. 일본과 중국에는 비 소식이 전해진 반면, 몽골은 최저기온이 2°C까지 떨어지며 쌀쌀한 날씨를 형성한다. 지역 전체적으로 남부와 해안 인접 국가를 중심으로는 낮 기온이 31°C까지 치솟는 무더위가 이어지지만, 내륙 고원 지역은 최저 2°C의 낮은 기온을 형성해 지역 내 기온 편차가 크게 벌어진다.\n\n비 소식이 있는 일본은 주간 최고기온이 31°C까지 상승하고 최저기온은 19°C를 기록",
+    "url": "internal://weather_group_동아시아_weekly20260906",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_동아시아_weekly20260906",
+    "region": "east_asia",
+    "country": "동아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-06 06:24",
+    "countries": [
+      "일본",
+      "중국",
+      "몽골"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_china_20260906.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-06T06:24:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-06 06:24",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 136424,
     "title_en": "서울, 맑은 하늘 속 29도 늦더위",
     "title_ko": "서울, 맑은 하늘 속 29도 늦더위",
@@ -137,6 +173,46 @@
     "continuation_of_id": null
   },
   {
+    "id": 135569,
+    "title_en": "India and Myanmar Push to Strengthen Rare Earths Supply Chain Cooperation",
+    "title_ko": "인도와 미얀마, 희토류 공급망 협력 강화 추진",
+    "summary_ko": "[업데이트]\n■ 9월 6일 04:37 — 중국 희토류 기업들이 지정학적 우려와 베이징 당국의 보복을 피하기 위해 미국으로의 일부 선적을 중단하고 있다고 3세기초 소식통들을 인용해 4일(현지시간) 보도됐다. 지난 8월 초 미국 공급망 감시 기관인 RBA에 대해 중국이 제재를 부과한 이후, 일부 중국 공급업체들은 RBA와 연계된 글로벌 광물 공급망 감사 프로그램인 RMI의 실사 프레임워크를 준수할 경우 베이징으로부터 처벌을 받을 것을 우려해 미국 기업으로의 희토류 선적을 거부하고 있다. 다른 일부 중국 기업들도 최근 몇 달간 금지된 사",
+    "url": "internal://extrend_Rare_earths_collabor_2026090522",
+    "source": "NewsFinal",
+    "category": "자원·에너지",
+    "subcategory": "extrend_Rare_earths_collabor",
+    "region": "southeast_asia",
+    "country": "인도",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-06 04:37",
+    "countries": [
+      "인도",
+      "미얀마",
+      "중국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_rare_earth_mine_mineral_processing_industrial_mining.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T22:42:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 22:42",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-09-06 04:37",
+        "note": "중국 희토류 기업, 미국행 선적 중단"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
     "id": 135993,
     "title_en": "Intense Fighting Between Sudan's Military and Paramilitary Forces and Spread of Cholera",
     "title_ko": "수단 군부와 준군사조직 교전 격화 및 콜레라 확산",
@@ -169,46 +245,6 @@
       {
         "timestamp": "2026-09-06 04:37",
         "note": "남수단, 심각한 식량 불안정으로 긴급 대책 요구됨"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 135569,
-    "title_en": "India and Myanmar Push to Strengthen Rare Earths Supply Chain Cooperation",
-    "title_ko": "인도와 미얀마, 희토류 공급망 협력 강화 추진",
-    "summary_ko": "[업데이트]\n■ 9월 6일 04:37 — 중국 희토류 기업들이 지정학적 우려와 베이징 당국의 보복을 피하기 위해 미국으로의 일부 선적을 중단하고 있다고 3세기초 소식통들을 인용해 4일(현지시간) 보도됐다. 지난 8월 초 미국 공급망 감시 기관인 RBA에 대해 중국이 제재를 부과한 이후, 일부 중국 공급업체들은 RBA와 연계된 글로벌 광물 공급망 감사 프로그램인 RMI의 실사 프레임워크를 준수할 경우 베이징으로부터 처벌을 받을 것을 우려해 미국 기업으로의 희토류 선적을 거부하고 있다. 다른 일부 중국 기업들도 최근 몇 달간 금지된 사",
-    "url": "internal://extrend_Rare_earths_collabor_2026090522",
-    "source": "NewsFinal",
-    "category": "자원·에너지",
-    "subcategory": "extrend_Rare_earths_collabor",
-    "region": "southeast_asia",
-    "country": "인도",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-06 04:37",
-    "countries": [
-      "인도",
-      "미얀마",
-      "중국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_rare_earth_mine_mineral_processing_industrial_mining.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T22:42:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 22:42",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-09-06 04:37",
-        "note": "중국 희토류 기업, 미국행 선적 중단"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -2585,93 +2621,6 @@
           "fifty_two_week_high": 10.89
         }
       ]
-    },
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 133061,
-    "title_en": "동아시아, 도쿄·울란바토르 비…베이징은 33도 흐림",
-    "title_ko": "동아시아, 도쿄·울란바토르 비…베이징은 33도 흐림",
-    "summary_ko": "5일(현지시간) 예보된 동아시아 주요국의 주말 날씨는 지역별로 큰 기온 차와 함께 일본과 몽골을 중심으로 비 소식이 이어지는 흐름을 보인다. 이번 주말 동아시아 전역의 기온은 최저 5°C에서 최고 33°C의 넓은 분포를 나타내며, 국가별 수도의 기상 상황은 강수 여부에 따라 뚜렷한 대비를 이룬다.\n\n토요일인 내일 일본 도쿄는 강수 확률 100%를 기록하며 비가 내리고 최고 26도·최저 20도를 기록하겠고, 일요일에도 강수 확률 84% 속에서 약한 비가 이어져 최고 23도·최저 21도를 나타낸다. 몽골 울란바토르는 토요일에 강수 확률",
-    "url": "internal://weather_group_동아시아_weekend20260905",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_동아시아_weekend20260905",
-    "region": "east_asia",
-    "country": "동아시아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-05 06:25",
-    "countries": [
-      "일본",
-      "중국",
-      "몽골"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_china_20260905.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T06:25:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 06:25",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 133060,
-    "title_en": "[국제유가] WTI 배럴당 91달러…지정학적 리스크 심화",
-    "title_ko": "[국제유가] WTI 배럴당 91달러…지정학적 리스크 심화",
-    "summary_ko": "국제유가가 4일(현지시간) 상승했다. 시장 집계에 따르면 WTI 원유 선물은 뉴욕상업거래소(NYMEX)에서 배럴당 91.31달러에 거래를 마쳤으며, 전일 종가(85.76달러) 대비 6.47%(5.55달러) 올랐다.\n\n브렌트유 역시 상승세를 보였다. 브렌트유는 배럴당 95.88달러로 마감해 전일 종가(90.49달러) 대비 5.96%(5.39달러) 상승했다.\n\n이 같은 유가 급등은 중동 지역을 둘러싼 지정학적 위기가 고조된 데 따른 것이다. 외신 보도에 따르면 이란 관련 핵 협상 타결 여부와 맞물려 원유 공급 차질 우려가 커졌으며, 특",
-    "url": "internal://oil_price_2026-09-04",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국제유가",
-    "region": "글로벌",
-    "country": "국제",
-    "country_flag": "🛢️",
-    "score": 1,
-    "created_at": "2026-09-05 06:05",
-    "countries": [
-      "미국",
-      "사우디아라비아",
-      "러시아"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/oil_2026_09_04.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T06:05:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 06:05",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "wti": {
-        "pct": 6.471548507462682,
-        "prev": 85.76,
-        "price": 91.31,
-        "change": 5.549999999999997
-      },
-      "date": "2026-09-04",
-      "brent": {
-        "pct": 5.956459277268207,
-        "prev": 90.49,
-        "price": 95.88,
-        "change": 5.390000000000001
-      },
-      "source": "Yahoo Finance"
     },
     "image_credit": null,
     "continuation_of_id": null
