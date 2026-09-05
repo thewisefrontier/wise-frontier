@@ -1,5 +1,102 @@
 [
   {
+    "id": 136424,
+    "title_en": "서울, 맑은 하늘 속 29도 늦더위",
+    "title_ko": "서울, 맑은 하늘 속 29도 늦더위",
+    "summary_ko": "6일 기준 다음 주 한국의 날씨는 전국적으로 맑은 하늘이 이어지는 가운데 서울을 비롯한 지역별로 일교차 큰 완연한 가을 기후를 보일 전망이다. 한국 기상청에 따르면 이번 예보 기간 동안 서울은 비 소식 없이 대체로 맑은 날씨가 지속되며, 요일별 구체적인 기온 분포는 뚜렷한 흐름을 나타낸다.\n\n서울의 요일별 날씨를 살펴보면 월요일과 화요일에는 최고기온 29도, 최저기온 19도로 가장 높은 기온 분포를 보이며 맑은 하늘이 펼쳐진다. 이어 수요일에는 최고기온 27도, 최저기온 20도로 기온이 소폭 하락하며, 목요일과 금요일에는 최고기온 ",
+    "url": "internal://weather_한국_weekly20260906",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_한국_weekly20260906",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-06 05:28",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20260906.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-06T05:28:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-06 05:28",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 136423,
+    "title_en": "[국내유가] 휘발유 리터당 1859원…보합세 지속",
+    "title_ko": "[국내유가] 휘발유 리터당 1859원…보합세 지속",
+    "summary_ko": "국내 주유소 휘발유 평균 판매가격이 9월 6일 기준 리터당 1859원을 기록했다.\n\n오피넷(한국석유공사)에 따르면 9월 6일 전국 주유소 휘발유 평균 가격은 리터당 1,859.37원으로 전일 대비 변동 없이 보합세를 나타냈다. 반면 경유는 리터당 1,843.69원으로 전일보다 0.24원 하락했으며, LPG(부탄)는 리터당 1,098.49원으로 전일 대비 0.21원 내렸다.\n\n최근 기름값 변동을 둘러싸고 국제유가 흐름과 함께 정유사 공급가격의 영향이 주요 요인으로 작용하고 있다는 분석이 제기된다. 일각에서는 기름값 상승의 1차 원인이",
+    "url": "internal://opinet_price_2026-09-06",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-09-06 05:10",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_09_06.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-06T05:10:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-06 05:10",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-09-06",
+      "prices": {
+        "B027": {
+          "diff": 0.0,
+          "name": "휘발유",
+          "price": 1859.37
+        },
+        "B034": {
+          "diff": 0.23,
+          "name": "고급휘발유",
+          "price": 2314.66
+        },
+        "C004": {
+          "diff": -0.24,
+          "name": "실내등유",
+          "price": 1576.77
+        },
+        "D047": {
+          "diff": -0.24,
+          "name": "경유",
+          "price": 1843.69
+        },
+        "K015": {
+          "diff": -0.21,
+          "name": "LPG(부탄)",
+          "price": 1098.49
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 135568,
     "title_en": "Shooting and Mutiny Attempt Hit Niger Capital; Military Junta Claims Control",
     "title_ko": "니제르 수도 총격과 반란 시도 발생… 군부 정권 \"통제 유지\" 발표",
@@ -2109,6 +2206,38 @@
     "continuation_of_id": null
   },
   {
+    "id": 133064,
+    "title_en": "Bitcoin falls 2.23% as U.S. labor market uncertainty weighs on sentiment",
+    "title_ko": "[가상자산 동향] 비트코인 2.23% 하락…미 고용지표 경계감 확산",
+    "summary_ko": "◆ 가격 동향\n\n5일 06:27(한국시간) 야후 파이낸스에 따르면 비트코인 가격은 79783.08달러로 전일 대비 2.23% 하락했다. 이번 하락세는 미국 노동시장의 불확실성이 커지면서 위험 자산에 대한 투자 심리가 위축된 결과다. 최근 발표된 미국 고용 지표가 시장의 예상치를 하회하거나 상회하는 등 혼조세를 보이면서 연방준비제도의 금리 인하 경로에 대한 의구심이 시장에 반영됐다. 거시경제적 불확실성이 가중되자 기관 투자자들은 차익 실현 매물을 출회하며 포트폴리오를 조정했다. 또한 미국 증권거래위원회의 가상자산 관련 규제 강화 움직",
+    "url": "internal://crypto_news_2026-09-05",
+    "source": "NewsFinal",
+    "category": "금융",
+    "subcategory": "가상자산동향_crypto",
+    "region": "global",
+    "country": "글로벌",
+    "country_flag": "🌐",
+    "score": 1,
+    "created_at": "2026-09-05 06:27",
+    "countries": [],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_09_05.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T06:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 06:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 133063,
     "title_en": "Nvidia Shares Rise 0.84% Amid Anticipation for Broadcom Earnings",
     "title_ko": "[종목 동향] 엔비디아 주가 0.84% 상승…브로드컴 실적 발표 앞둔 기대감",
@@ -2127,38 +2256,6 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/stock_news_2026_09_04.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T06:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 06:27",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 133064,
-    "title_en": "Bitcoin falls 2.23% as U.S. labor market uncertainty weighs on sentiment",
-    "title_ko": "[가상자산 동향] 비트코인 2.23% 하락…미 고용지표 경계감 확산",
-    "summary_ko": "◆ 가격 동향\n\n5일 06:27(한국시간) 야후 파이낸스에 따르면 비트코인 가격은 79783.08달러로 전일 대비 2.23% 하락했다. 이번 하락세는 미국 노동시장의 불확실성이 커지면서 위험 자산에 대한 투자 심리가 위축된 결과다. 최근 발표된 미국 고용 지표가 시장의 예상치를 하회하거나 상회하는 등 혼조세를 보이면서 연방준비제도의 금리 인하 경로에 대한 의구심이 시장에 반영됐다. 거시경제적 불확실성이 가중되자 기관 투자자들은 차익 실현 매물을 출회하며 포트폴리오를 조정했다. 또한 미국 증권거래위원회의 가상자산 관련 규제 강화 움직",
-    "url": "internal://crypto_news_2026-09-05",
-    "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "가상자산동향_crypto",
-    "region": "global",
-    "country": "글로벌",
-    "country_flag": "🌐",
-    "score": 1,
-    "created_at": "2026-09-05 06:27",
-    "countries": [],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_09_05.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T06:27:00",
     "update_log": [
@@ -2610,69 +2707,6 @@
     "is_travel": false,
     "source_published_at": null,
     "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 133058,
-    "title_en": "[국내유가] 휘발유 리터당 1859원…전일 대비 소폭 하락",
-    "title_ko": "[국내유가] 휘발유 리터당 1859원…전일 대비 소폭 하락",
-    "summary_ko": "국내 주유소 휘발유 평균 판매가격이 9월 5일 기준 리터당 1859원을 기록했다. 오피넷(한국석유공사에 따르면) 휘발유 가격은 리터당 1859.38원으로 전일 대비 0.10원 내렸다.\n\n경유와 LPG 등 다른 유종 가격도 일제히 하락세를 나타냈다. 경유는 리터당 1843.61원으로 전일보다 0.58원 하락했다. LPG(부탄) 역시 리터당 1098.57원을 기록해 전일 대비 0.06원 내린 것으로 집계됐다.\n\n이번 가격 변동은 최근 국제유가 흐름과 정유사 공급가 조정 여파가 복합적으로 작용한 결과로 분석된다. 국제 제품 가격 변동성 ",
-    "url": "internal://opinet_price_2026-09-05",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국내유가",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "🇰🇷",
-    "score": 1,
-    "created_at": "2026-09-05 05:11",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_09_05.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T05:11:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 05:11",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "date": "2026-09-05",
-      "prices": {
-        "B027": {
-          "diff": -0.1,
-          "name": "휘발유",
-          "price": 1859.38
-        },
-        "B034": {
-          "diff": -0.35,
-          "name": "고급휘발유",
-          "price": 2314.86
-        },
-        "C004": {
-          "diff": -0.17,
-          "name": "실내등유",
-          "price": 1577.16
-        },
-        "D047": {
-          "diff": -0.58,
-          "name": "경유",
-          "price": 1843.61
-        },
-        "K015": {
-          "diff": -0.06,
-          "name": "LPG(부탄)",
-          "price": 1098.57
-        }
-      }
-    },
     "image_credit": null,
     "continuation_of_id": null
   }
