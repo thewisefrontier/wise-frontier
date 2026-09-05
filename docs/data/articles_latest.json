@@ -1,5 +1,41 @@
 [
   {
+    "id": 133509,
+    "title_en": "중앙아시아, 완연한 가을 기운…우즈베크 33도 늦더위",
+    "title_ko": "중앙아시아, 완연한 가을 기운…우즈베크 33도 늦더위",
+    "summary_ko": "5일(현지시간) 중앙아시아 주요국은 전반적으로 대체로 맑거나 흐린 가운데 지역별로 기온 차가 뚜렷한 주말 날씨를 보이고 있다. 이번 주말 중앙아시아 전체의 기온 분포는 최저기온 11°C에서 최고기온 33°C 사이를 기록하며 일교차가 큰 환절기 양상을 나타낸다.\n\n카자흐스탄 수도 아스타나는 토요일과 일요일 모두 흐린 날씨가 이어지는 가운데, 토요일 최고 25°C·최저 12°C에 이어 일요일에는 최고 27°C·최저 13°C의 기온 분포를 보인다. 우즈베키스탄 수도 타슈켄트는 토요일 맑은 날씨 속에서 최고 31°C, 최저 18°C를 기록",
+    "url": "internal://weather_group_중앙아시아_weekend20260905",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_중앙아시아_weekend20260905",
+    "region": "central_asia",
+    "country": "중앙아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-05 09:12",
+    "countries": [
+      "카자흐스탄",
+      "우즈베키스탄",
+      "키르기스스탄"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_kazakhstan_20260905.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T09:12:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 09:12",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 133508,
     "title_en": "남아시아, 벼락 치는 주말…네팔 최저 18도",
     "title_ko": "남아시아, 벼락 치는 주말…네팔 최저 18도",
@@ -176,6 +212,41 @@
     "continuation_of_id": null
   },
   {
+    "id": 133463,
+    "title_en": "Trump Hints at Strike on Iran's 'Ax Mountain' Nuclear Facility as Tensions Rise in Strait of Hormuz",
+    "title_ko": "트럼프, 이란 '액스마운틴' 핵시설 공격 시사…호르무즈 해협 긴장 고조",
+    "summary_ko": "도널드 트럼프 미국 대통령이 이란의 핵심 핵시설인 액스마운틴에 대한 새로운 군사적 타격 가능성을 공개적으로 시사했다고 CNN 아랍어(CNN Arabic) 등 주요 외신이 4일(현지시간) 보도했다.\n\n외신 보도에 따르면 트럼프 대통령은 호르무즈 해협 인근에 위치한 액스마운틴 핵시설을 겨냥해 새로운 공격을 가할 수 있다고 위협했다. 이와 관련해 미 육군 당국도 이란을 상대로 한 새로운 군사 작전 개시를 공식 발표했다.\n\n현지 언론과 외신들은 테헤란 정권이 심각한 안보적 타격과 고통에 직면해 있다고 분석했다. 이란 타스님(Tasnim) ",
+    "url": "internal://cluster_20260905_e9e92d18",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "cluster_20260905_e9e92d18",
+    "region": "global",
+    "country": "미국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-05 07:34",
+    "countries": [
+      "미국",
+      "이란"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_nuclear_facility_military_jet_strait_of_hormuz.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T07:34:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 07:34",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
     "id": 133462,
     "title_en": "동남아, 36도 무더위 속 우박·뇌우 강타",
     "title_ko": "동남아, 36도 무더위 속 우박·뇌우 강타",
@@ -214,41 +285,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 133463,
-    "title_en": "Trump Hints at Strike on Iran's 'Ax Mountain' Nuclear Facility as Tensions Rise in Strait of Hormuz",
-    "title_ko": "트럼프, 이란 '액스마운틴' 핵시설 공격 시사…호르무즈 해협 긴장 고조",
-    "summary_ko": "도널드 트럼프 미국 대통령이 이란의 핵심 핵시설인 액스마운틴에 대한 새로운 군사적 타격 가능성을 공개적으로 시사했다고 CNN 아랍어(CNN Arabic) 등 주요 외신이 4일(현지시간) 보도했다.\n\n외신 보도에 따르면 트럼프 대통령은 호르무즈 해협 인근에 위치한 액스마운틴 핵시설을 겨냥해 새로운 공격을 가할 수 있다고 위협했다. 이와 관련해 미 육군 당국도 이란을 상대로 한 새로운 군사 작전 개시를 공식 발표했다.\n\n현지 언론과 외신들은 테헤란 정권이 심각한 안보적 타격과 고통에 직면해 있다고 분석했다. 이란 타스님(Tasnim) ",
-    "url": "internal://cluster_20260905_e9e92d18",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "cluster_20260905_e9e92d18",
-    "region": "global",
-    "country": "미국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-05 07:34",
-    "countries": [
-      "미국",
-      "이란"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_nuclear_facility_military_jet_strait_of_hormuz.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T07:34:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 07:34",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
     "continuation_of_id": null
   },
   {
@@ -322,38 +358,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 133064,
-    "title_en": "Bitcoin falls 2.23% as U.S. labor market uncertainty weighs on sentiment",
-    "title_ko": "[가상자산 동향] 비트코인 2.23% 하락…미 고용지표 경계감 확산",
-    "summary_ko": "◆ 가격 동향\n\n5일 06:27(한국시간) 야후 파이낸스에 따르면 비트코인 가격은 79783.08달러로 전일 대비 2.23% 하락했다. 이번 하락세는 미국 노동시장의 불확실성이 커지면서 위험 자산에 대한 투자 심리가 위축된 결과다. 최근 발표된 미국 고용 지표가 시장의 예상치를 하회하거나 상회하는 등 혼조세를 보이면서 연방준비제도의 금리 인하 경로에 대한 의구심이 시장에 반영됐다. 거시경제적 불확실성이 가중되자 기관 투자자들은 차익 실현 매물을 출회하며 포트폴리오를 조정했다. 또한 미국 증권거래위원회의 가상자산 관련 규제 강화 움직",
-    "url": "internal://crypto_news_2026-09-05",
-    "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "가상자산동향_crypto",
-    "region": "global",
-    "country": "글로벌",
-    "country_flag": "🌐",
-    "score": 1,
-    "created_at": "2026-09-05 06:27",
-    "countries": [],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_09_05.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T06:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 06:27",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
     "id": 133063,
     "title_en": "Nvidia Shares Rise 0.84% Amid Anticipation for Broadcom Earnings",
     "title_ko": "[종목 동향] 엔비디아 주가 0.84% 상승…브로드컴 실적 발표 앞둔 기대감",
@@ -372,6 +376,38 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/stock_news_2026_09_04.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T06:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 06:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 133064,
+    "title_en": "Bitcoin falls 2.23% as U.S. labor market uncertainty weighs on sentiment",
+    "title_ko": "[가상자산 동향] 비트코인 2.23% 하락…미 고용지표 경계감 확산",
+    "summary_ko": "◆ 가격 동향\n\n5일 06:27(한국시간) 야후 파이낸스에 따르면 비트코인 가격은 79783.08달러로 전일 대비 2.23% 하락했다. 이번 하락세는 미국 노동시장의 불확실성이 커지면서 위험 자산에 대한 투자 심리가 위축된 결과다. 최근 발표된 미국 고용 지표가 시장의 예상치를 하회하거나 상회하는 등 혼조세를 보이면서 연방준비제도의 금리 인하 경로에 대한 의구심이 시장에 반영됐다. 거시경제적 불확실성이 가중되자 기관 투자자들은 차익 실현 매물을 출회하며 포트폴리오를 조정했다. 또한 미국 증권거래위원회의 가상자산 관련 규제 강화 움직",
+    "url": "internal://crypto_news_2026-09-05",
+    "source": "NewsFinal",
+    "category": "금융",
+    "subcategory": "가상자산동향_crypto",
+    "region": "global",
+    "country": "글로벌",
+    "country_flag": "🌐",
+    "score": 1,
+    "created_at": "2026-09-05 06:27",
+    "countries": [],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_09_05.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T06:27:00",
     "update_log": [
@@ -890,40 +926,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 133056,
-    "title_en": "Lululemon Shares Plunge 20% After Cutting Annual Outlook Again",
-    "title_ko": "룰루레몬, 연간 전망치 추가 하향 속 주가 20% 급락",
-    "summary_ko": "4일(현지시간) 미국의 애슬레저 기업 룰루레몬 애슬레티카 주가가 연간 실적 전망치 하향 조정 여파로 20% 급락했다. 이번 주가 하락은 회사의 회계연도 2분기 수익이 월스트리트 예상치를 크게 밑돌고, 올해 들어 세 번째로 가이던스가 하향 조정되면서 발생했다. 이에 따라 주가는 8년 만의 최저 수준으로 떨어졌다.\n\n룰루레몬의 시그니처 상품인 레깅스 사업 부문에서 뚜렷한 매출 감소세가 확인됐다. 이번 분기 룰루레몬의 비교매출은 9% 감소해 대침체기 이후 최악의 실적 부진을 기록했다. 알로 요가와 부오리, 스킴스 등 경쟁 브랜드들이 애슬",
-    "url": "internal://realtrend_Lululemon_CEO_Transition_&_Slump_2026090504",
-    "source": "NewsFinal",
-    "category": "산업·기업",
-    "subcategory": "realtrend_Lululemon_CEO_Transi",
-    "region": "africa",
-    "country": "미국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-05 04:49",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_stock_market_retail_store_yoga_pants.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T04:49:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 04:49",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
     "id": 133055,
     "title_en": "Russian Forces Strike SBU Headquarters in Central Kyiv as US-Ukraine Tensions Rise",
     "title_ko": "러시아군, 키예프 중심부 SBU 본부 타격…미·우크라 긴장 고조",
@@ -943,6 +945,40 @@
     ],
     "is_published": true,
     "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/75/SBU_Headquarters.jpg/960px-SBU_Headquarters.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T04:49:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 04:49",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
+    "id": 133056,
+    "title_en": "Lululemon Shares Plunge 20% After Cutting Annual Outlook Again",
+    "title_ko": "룰루레몬, 연간 전망치 추가 하향 속 주가 20% 급락",
+    "summary_ko": "4일(현지시간) 미국의 애슬레저 기업 룰루레몬 애슬레티카 주가가 연간 실적 전망치 하향 조정 여파로 20% 급락했다. 이번 주가 하락은 회사의 회계연도 2분기 수익이 월스트리트 예상치를 크게 밑돌고, 올해 들어 세 번째로 가이던스가 하향 조정되면서 발생했다. 이에 따라 주가는 8년 만의 최저 수준으로 떨어졌다.\n\n룰루레몬의 시그니처 상품인 레깅스 사업 부문에서 뚜렷한 매출 감소세가 확인됐다. 이번 분기 룰루레몬의 비교매출은 9% 감소해 대침체기 이후 최악의 실적 부진을 기록했다. 알로 요가와 부오리, 스킴스 등 경쟁 브랜드들이 애슬",
+    "url": "internal://realtrend_Lululemon_CEO_Transition_&_Slump_2026090504",
+    "source": "NewsFinal",
+    "category": "산업·기업",
+    "subcategory": "realtrend_Lululemon_CEO_Transi",
+    "region": "africa",
+    "country": "미국",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-05 04:49",
+    "countries": [
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_stock_market_retail_store_yoga_pants.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T04:49:00",
     "update_log": [
@@ -1830,6 +1866,41 @@
     "continuation_of_id": null
   },
   {
+    "id": 129718,
+    "title_en": "US Warns Threats to Democracy as Security Ties With Guatemala Deepen",
+    "title_ko": "미국, 과테말라와 안보 협력 강화 속 민주주의 위협 세력에 무관용 경고",
+    "summary_ko": "미국은 민주주의 제도와 안보를 위협하는 세력에 대해 비자 추가 취소 등 지속적인 조치를 취할 것이라고 3일(현지시간) 밝혔다. 주과테말라 미국 대사관은 아나 퀸타나 로베트 미국 국무부 중미 담당 부차관의 과테말라 방문을 계기로 이 같은 입장을 공개했다.\n\n방문 기간 아나 퀸타나 로베트 부차관은 베르나르도 아레발로 과테말라 대통령, 헨리 사엔스 라모스 국방장관, 가브리엘 에스투아도 가르시아 루나 검찰총장 겸 법무부 장관 등 고위 관료들과 연이어 회담을 가졌으며 양국 간 안보 및 협력 방안을 논의했다. 미국 대사관 측은 양국이 마약 밀",
+    "url": "internal://solo_20260904_624e0630",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "solo_20260904_624e0630",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-04 11:07",
+    "countries": [
+      "과테말라",
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_diplomatic_meeting_government_building_security_coop.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-04T11:07:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-04 11:07",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
     "id": 129717,
     "title_en": "Texas Court Acquits and Releases Former Guatemalan Aide on Cocaine Trafficking Charges",
     "title_ko": "텍사스 법원, 코카인 밀매 혐의 과테말라 출신 전직 보좌관 무죄 석방",
@@ -1851,41 +1922,6 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_courthouse_law_court_judge_gavel.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T11:07:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 11:07",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 129718,
-    "title_en": "US Warns Threats to Democracy as Security Ties With Guatemala Deepen",
-    "title_ko": "미국, 과테말라와 안보 협력 강화 속 민주주의 위협 세력에 무관용 경고",
-    "summary_ko": "미국은 민주주의 제도와 안보를 위협하는 세력에 대해 비자 추가 취소 등 지속적인 조치를 취할 것이라고 3일(현지시간) 밝혔다. 주과테말라 미국 대사관은 아나 퀸타나 로베트 미국 국무부 중미 담당 부차관의 과테말라 방문을 계기로 이 같은 입장을 공개했다.\n\n방문 기간 아나 퀸타나 로베트 부차관은 베르나르도 아레발로 과테말라 대통령, 헨리 사엔스 라모스 국방장관, 가브리엘 에스투아도 가르시아 루나 검찰총장 겸 법무부 장관 등 고위 관료들과 연이어 회담을 가졌으며 양국 간 안보 및 협력 방안을 논의했다. 미국 대사관 측은 양국이 마약 밀",
-    "url": "internal://solo_20260904_624e0630",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "solo_20260904_624e0630",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-04 11:07",
-    "countries": [
-      "과테말라",
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_diplomatic_meeting_government_building_security_coop.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-04T11:07:00",
     "update_log": [
@@ -2085,80 +2121,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 129281,
-    "title_en": "중앙아시아, 타슈켄트 30도 더위 속 비 내리는 비슈케크",
-    "title_ko": "중앙아시아, 타슈켄트 30도 더위 속 비 내리는 비슈케크",
-    "summary_ko": "4일(현지시간) 중앙아시아 주요국 수도 지역은 최저기온 14°C에서 최고기온 30°C 사이의 기온 분포를 보였다. 우즈베키스탄 타슈켄트는 최고기온 30°C, 최저기온 19°C를 기록하며 가장 더운 곳으로 집계됐다. 반면 키르기스스탄 비슈케크는 최고기온 24°C, 최저기온 14°C로 가장 선선한 곳으로 나타났다. 타슈켄트의 최고기온은 비슈케크보다 6°C 높고 최저기온 역시 5°C 높아 두 수도 간의 온도 차이를 드러냈다. 아시아 전역에서 극단적인 강수와 홍수 피해가 이어지는 가운데, 키르기스스탄에는 비 소식이 전해졌다. 키르기스스탄 ",
-    "url": "internal://weather_group_중앙아시아_today20260904",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_중앙아시아_today20260904",
-    "region": "central_asia",
-    "country": "중앙아시아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-04 09:13",
-    "countries": [
-      "카자흐스탄",
-      "우즈베키스탄",
-      "키르기스스탄"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_kazakhstan_20260904.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T09:13:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 09:13",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 129280,
-    "title_en": "남아시아, 뇌우와 폭염 속 엇갈린 기상…주요국 날씨",
-    "title_ko": "남아시아, 뇌우와 폭염 속 엇갈린 기상…주요국 날씨",
-    "summary_ko": "4일(현지시간) 남아시아 주요국 수도 지역은 최저기온 22°C에서 최고기온 31°C 사이의 기온 분포를 보이고 있다. 아시아 전역에 걸쳐 극심한 강수와 홍수, 그리고 강력한 엘니뇨 현상에 따른 기상 이변이 이어지는 가운데, 각 지역별로 대조적인 날씨 양상이 뚜렷하게 나타나는 중이다.\n\n파키스탄 이슬라마바드는 이번 조사에서 가장 더운 곳이자 가장 선선한 곳으로 동시에 기록되었으며 최저 22°C, 최고 31°C를 나타냈다. 이슬라마바드는 약한 우박을 동반한 뇌우가 예보되었고 강수확률 99%, 강수량 9.4mm를 기록했으며 자외선지수는 ",
-    "url": "internal://weather_group_남아시아_today20260904",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_남아시아_today20260904",
-    "region": "south_asia",
-    "country": "남아시아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-04 08:49",
-    "countries": [
-      "인도",
-      "방글라데시",
-      "파키스탄",
-      "스리랑카",
-      "네팔"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_india_20260904.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T08:49:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 08:49",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
     "continuation_of_id": null
   }
 ]
