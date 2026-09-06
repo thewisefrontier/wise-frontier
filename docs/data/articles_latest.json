@@ -1,5 +1,46 @@
 [
   {
+    "id": 137678,
+    "title_en": "중남미, 30도 웃도는 열기와 서늘함 속 곳곳 빗줄기",
+    "title_ko": "중남미, 30도 웃도는 열기와 서늘함 속 곳곳 빗줄기",
+    "summary_ko": "6일(현지시간) 중남미 지역은 최저기온 5°C에서 최고기온 32°C의 기온 분포를 나타내는 가운데 대다수 국가에서 비가 내린다. 브라질, 멕시코, 아르헨티나, 칠레, 콜롬비아, 쿠바, 도미니카공화국 등 광범위한 지역에 걸쳐 강수 현상이 나타난다. 전반적으로 카리브해 연안을 중심으로는 30°C를 웃도는 무더위가 이어지는 반면, 남부 및 산악 권역에서는 최저기온이 한 자릿수까지 떨어지는 등 지역별 기온 편차가 크게 벌어진다.\n\n카리브해와 열대 권역에 속한 국가들은 높은 기온과 함께 비가 이어진다. 쿠바는 최저기온 24°C, 최고기온 3",
+    "url": "internal://weather_group_중남미_weekly20260906",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_중남미_weekly20260906",
+    "region": "latin_america",
+    "country": "중남미",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-06 17:13",
+    "countries": [
+      "브라질",
+      "멕시코",
+      "아르헨티나",
+      "칠레",
+      "콜롬비아",
+      "페루",
+      "쿠바",
+      "도미니카공화국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_brazil_20260906.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-06T17:13:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-06 17:13",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 137672,
     "title_en": "Fuel Tanker Explosion on Western Iran Road Leaves 11 Dead",
     "title_ko": "이란 서부 도로에서 연료 탱크로리 폭발해 11명 사망",
@@ -593,40 +634,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 137099,
-    "title_en": "Kevin García Debuts as Comunicaciones Interim Manager with Draw in Guatemala's Primera División",
-    "title_ko": "과테말라 프리메라 디비시온…케빈 가르시아, 코무니카시오네스 임시 감독 데뷔전서 무승부",
-    "summary_ko": "과테말라 프로축구 클럽 코무니카시오네스의 임시 감독으로 부임한 케빈 가르시아가 6일(현지시간) 산토 도밍고 데 구스만 경기장에서 열린 믹스코와의 아페르투라 2026 토너먼트 7라운드 경기에서 1대 1 무승부를 기록하며 데뷔전을 치렀다.\n\n구단 유소년 팀에서 지도자 경력을 쌓아온 케빈 가르시아는 알보스(코무니카시오네스의 별칭) 팀을 이끄는 막중한 책임을 맡아 굳은 의지로 도전 과제에 임했다. 가르시아는 임시 감독이라는 직함이 책임을 덜어주지 않는다며 전적으로 책임을 지고 임하고 있다고 밝혔다.\n\n가르시아는 선수단을 잘 알고 있다는 점",
-    "url": "internal://solo_20260906_e226c99a",
-    "source": "NewsFinal",
-    "category": "글로벌",
-    "subcategory": "solo_20260906_e226c99a",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-06 10:27",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/17/0578_kevin_borlee_reeksen_400m_%2828541002155%29.jpg/960px-0578_kevin_borlee_reeksen_400m_%2828541002155%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-    "view_count": 0,
-    "first_published_at": "2026-09-06T10:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-06 10:27",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "사진: filip bossuyt from Kortrijk, Belgium (CC BY 2.0, Wikimedia Commons)",
-    "continuation_of_id": null
-  },
-  {
     "id": 137098,
     "title_en": "Eswatini Railway Joins South African, Mozambican Operators for Joint Exhibition at Trade Fair",
     "title_ko": "에스바티니 철도공사, 무역박람회서 남아공·모잠비크 철도 운영사들과 연합 전시",
@@ -660,6 +667,40 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: Htonl (CC BY-SA 2.0, Wikimedia Commons)",
+    "continuation_of_id": null
+  },
+  {
+    "id": 137099,
+    "title_en": "Kevin García Debuts as Comunicaciones Interim Manager with Draw in Guatemala's Primera División",
+    "title_ko": "과테말라 프리메라 디비시온…케빈 가르시아, 코무니카시오네스 임시 감독 데뷔전서 무승부",
+    "summary_ko": "과테말라 프로축구 클럽 코무니카시오네스의 임시 감독으로 부임한 케빈 가르시아가 6일(현지시간) 산토 도밍고 데 구스만 경기장에서 열린 믹스코와의 아페르투라 2026 토너먼트 7라운드 경기에서 1대 1 무승부를 기록하며 데뷔전을 치렀다.\n\n구단 유소년 팀에서 지도자 경력을 쌓아온 케빈 가르시아는 알보스(코무니카시오네스의 별칭) 팀을 이끄는 막중한 책임을 맡아 굳은 의지로 도전 과제에 임했다. 가르시아는 임시 감독이라는 직함이 책임을 덜어주지 않는다며 전적으로 책임을 지고 임하고 있다고 밝혔다.\n\n가르시아는 선수단을 잘 알고 있다는 점",
+    "url": "internal://solo_20260906_e226c99a",
+    "source": "NewsFinal",
+    "category": "글로벌",
+    "subcategory": "solo_20260906_e226c99a",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-06 10:27",
+    "countries": [
+      "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/17/0578_kevin_borlee_reeksen_400m_%2828541002155%29.jpg/960px-0578_kevin_borlee_reeksen_400m_%2828541002155%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "view_count": 0,
+    "first_published_at": "2026-09-06T10:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-06 10:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "사진: filip bossuyt from Kortrijk, Belgium (CC BY 2.0, Wikimedia Commons)",
     "continuation_of_id": null
   },
   {
@@ -1850,193 +1891,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 134643,
-    "title_en": "Guatemala Submits Q192.0B Budget for 2027 with Focus on Infrastructure",
-    "title_ko": "과테말라 정부, 1920억 케찰 규모 2027년 예산안 의회 제출…항만·도로 등 인프라 집중",
-    "summary_ko": "과테말라 행정부가 베르나르도 아레발로(Bernardo Arévalo) 대통령 임기 마지막 해를 운용할 2027 회계연도 세입·세출 예산안을 의회에 제출했다. 이번 예산안 규모는 총 1920억 4513만 3039케찰이다.\n\n호나탄 멩코스(Jonathan Menkos) 과테말라 공공재정부 장관은 이번 예산안이 조세 행정 강화와 공공 지출 및 투자의 질적 효율성 제고, 국가 부채의 지속가능성 확보, 유리한 조건의 채무 조달을 통한 리스크 최소화 및 투자 적격 등급 유지를 목표로 설계됐다고 밝혔다. 멩코스 장관은 사회 복지 지출과 연금 보",
-    "url": "internal://solo_20260905_68de2ccb",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "solo_20260905_68de2ccb",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-05 16:56",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_national_parliament_highway_infrastructure_commercia.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T16:56:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 16:56",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 134642,
-    "title_en": "Red Flags for US Democrats in House Bid Despite Trump's 40% Approval",
-    "title_ko": "미 민주당 하원 탈환 '빨간불'…트럼프 지지율 40%에도 선거구 조정·박빙 구도 발목",
-    "summary_ko": "도널드 트럼프(Donald Trump) 미국 대통령의 직무 지지율이 40%대로 하락하고 의회 정당 지지도 조사에서 민주당이 6.4%포인트 앞서고 있으나, 선거구 획정 변화와 지역별 구도로 인해 민주당의 연방 하원 다수당 탈환이 예상보다 난항을 겪고 있다.\n\n과거 중간선거에서는 대통령 지지율이 40%대를 기록할 경우 여당이 대패하는 양상이 나타났다. 2018년 중간선거 당시 트럼프 대통령의 지지율은 출구조사 기준 45%였으며 공화당은 하원에서 40석을 잃었다. 2010년 선거에서도 버락 오바마(Barack Obama) 전 대통령의 지",
-    "url": "internal://solo_20260905_ca34023f",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "solo_20260905_ca34023f",
-    "region": "global",
-    "country": "미국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-05 16:54",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_us_capitol_voting_booth_political_campaign.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T16:54:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 16:54",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 134624,
-    "title_en": "Nepal Flood Death Toll Exceeds 1,300 as Rescuers Pull Survivors from Hydropower Tunnels",
-    "title_ko": "네팔 홍수 사망자 1300명 넘어… 수력발전소 터널서 생존자 구조 이어져",
-    "summary_ko": "[업데이트]\n■ 9월 6일 15:29 — 6일(현지시간) 싱가포르 경찰 법의학 전문가들이 네팔 현지에 합류해 DNA, 지문, 사진 등을 활용한 사망자 식별 작업에 동참했다. 네팔 내 실종자는 4900명에 육박하며 이 가운데 호주 국적자 36명이 포함되어 있다.\n\n이번 홍수가 경제적으로 중요한 축제 시즌을 앞두고 발생해 소상공인들이 영업 기반을 상실하고 타격을 입었으며, 히말라야 지역의 빙하 붕괴 징후를 감지하기 어려웠던 원인에 대한 분석도 제기됐다.\n\n■ 9월 6일 01:22 — 네팔에서 홍수 발생 10일 만에 수력발전소 터널과 매",
-    "url": "internal://realtrend_네팔_수력발전소_구조_2026090516",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "realtrend_네팔_수력발전소_구조",
-    "region": "africa",
-    "country": "네팔",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-05 16:51",
-    "countries": [
-      "네팔",
-      "인도",
-      "중국",
-      "호주",
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_flood_disaster_hydroelectric_power_plant_rescue_oper.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T16:51:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 16:51",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-09-06 01:22",
-        "note": "홍수 발생 10일 만에 생존자 2명 극적 구조"
-      },
-      {
-        "timestamp": "2026-09-06 15:29",
-        "note": "싱가포르 법의학 전문가 사망자 식별 동참"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 134622,
-    "title_en": "Trump Hints at Strike on Iran's Fordow Facility, Downplays War Aftermath",
-    "title_ko": "트럼프, 이란 핵시설 곡괭이산 공습 시사하며 이란전 여파 축소",
-    "summary_ko": "도널드 트럼프 미국 대통령은 5일(현지시간) 이란의 핵시설인 곡괭이산을 곧 공격할 수도 있다고 밝혔다. 트럼프 대통령은 이란전이 사소한 일에 불과하다고 평가하며 이란의 핵무기 개발을 저지했다고 강조했다. 제이디 밴스(JD Vance) 미국 부통령 후보 측은 트럼프와 미군이 이란 전쟁 기간 동안 에너지 위기를 막아냈다고 언급했다. 이란은 쿠웨이트에 위치한 미군기지를 대상으로 미사일 공격을 감행하며 미국의 군사적 개입에 대응했다.\n\n한국 정부는 호르무즈 해협에 군함과 초계기를 지원하는 파병 방안을 검토하며 구체적인 실무 절차에 착수했다",
-    "url": "internal://realtrend_이란전_및_파병_2026090516",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "realtrend_이란전_및_파병",
-    "region": "africa",
-    "country": "미국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-05 16:50",
-    "countries": [
-      "미국",
-      "이란",
-      "한국",
-      "쿠웨이트"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_nuclear_facility_military_base_warship.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T16:50:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 16:50",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 134618,
-    "title_en": "Israeli Airstrikes in Southern Lebanon Kill 3; Typhoon Saudel Landslide Leaves 12 Dead or Missing in China",
-    "title_ko": "이스라엘 레바논 남부 공습에 3명 사망…중국선 태풍 사우델 산사태로 12명 사상·실종",
-    "summary_ko": "이스라엘군이 5일(현지시간) 레바논 남부 여러 지역을 공습해 최소 3명이 숨지고 여러 명이 다쳤다. 레바논 보건부는 이날 오전 나바티예주 크파르 룸만 마을에서 오토바이를 겨냥한 직접 폭격으로 2명이 사망했다고 발표했다. 레바논 국영통신은 티레주 람마디야 마을의 주택 한 채가 공습을 받아 1명이 숨지고 다수의 부상자가 발생해 인근 병원으로 긴급 이송됐다고 전했다. 이스라엘 전투기는 나바티예 외곽 루웨이스 지구에도 공습을 단행했다.\n\n중국 중부 장시성에서는 5일(현지시간) 태풍 사우델의 영향으로 산사태가 발생해 인명 피해가 잇따랐다. ",
-    "url": "internal://cluster_20260905_3c6b6033",
-    "source": "NewsFinal",
-    "category": "글로벌",
-    "subcategory": "cluster_20260905_3c6b6033",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-05 16:44",
-    "countries": [
-      "레바논",
-      "중국",
-      "인도"
-    ],
-    "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Typhoon_Saudel_%28MODIS_2020-10-23%29.jpg/960px-Typhoon_Saudel_%28MODIS_2020-10-23%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T16:44:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 16:44",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": true,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
     "continuation_of_id": null
   }
 ]

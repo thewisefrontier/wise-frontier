@@ -1,5 +1,46 @@
 [
   {
+    "id": 137678,
+    "title_en": "중남미, 30도 웃도는 열기와 서늘함 속 곳곳 빗줄기",
+    "title_ko": "중남미, 30도 웃도는 열기와 서늘함 속 곳곳 빗줄기",
+    "summary_ko": "6일(현지시간) 중남미 지역은 최저기온 5°C에서 최고기온 32°C의 기온 분포를 나타내는 가운데 대다수 국가에서 비가 내린다. 브라질, 멕시코, 아르헨티나, 칠레, 콜롬비아, 쿠바, 도미니카공화국 등 광범위한 지역에 걸쳐 강수 현상이 나타난다. 전반적으로 카리브해 연안을 중심으로는 30°C를 웃도는 무더위가 이어지는 반면, 남부 및 산악 권역에서는 최저기온이 한 자릿수까지 떨어지는 등 지역별 기온 편차가 크게 벌어진다.\n\n카리브해와 열대 권역에 속한 국가들은 높은 기온과 함께 비가 이어진다. 쿠바는 최저기온 24°C, 최고기온 3",
+    "url": "internal://weather_group_중남미_weekly20260906",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_중남미_weekly20260906",
+    "region": "latin_america",
+    "country": "중남미",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-06 17:13",
+    "countries": [
+      "브라질",
+      "멕시코",
+      "아르헨티나",
+      "칠레",
+      "콜롬비아",
+      "페루",
+      "쿠바",
+      "도미니카공화국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_brazil_20260906.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-06T17:13:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-06 17:13",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 137672,
     "title_en": "Fuel Tanker Explosion on Western Iran Road Leaves 11 Dead",
     "title_ko": "이란 서부 도로에서 연료 탱크로리 폭발해 11명 사망",
@@ -593,40 +634,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 137099,
-    "title_en": "Kevin García Debuts as Comunicaciones Interim Manager with Draw in Guatemala's Primera División",
-    "title_ko": "과테말라 프리메라 디비시온…케빈 가르시아, 코무니카시오네스 임시 감독 데뷔전서 무승부",
-    "summary_ko": "과테말라 프로축구 클럽 코무니카시오네스의 임시 감독으로 부임한 케빈 가르시아가 6일(현지시간) 산토 도밍고 데 구스만 경기장에서 열린 믹스코와의 아페르투라 2026 토너먼트 7라운드 경기에서 1대 1 무승부를 기록하며 데뷔전을 치렀다.\n\n구단 유소년 팀에서 지도자 경력을 쌓아온 케빈 가르시아는 알보스(코무니카시오네스의 별칭) 팀을 이끄는 막중한 책임을 맡아 굳은 의지로 도전 과제에 임했다. 가르시아는 임시 감독이라는 직함이 책임을 덜어주지 않는다며 전적으로 책임을 지고 임하고 있다고 밝혔다.\n\n가르시아는 선수단을 잘 알고 있다는 점",
-    "url": "internal://solo_20260906_e226c99a",
-    "source": "NewsFinal",
-    "category": "글로벌",
-    "subcategory": "solo_20260906_e226c99a",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-06 10:27",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/17/0578_kevin_borlee_reeksen_400m_%2828541002155%29.jpg/960px-0578_kevin_borlee_reeksen_400m_%2828541002155%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-    "view_count": 0,
-    "first_published_at": "2026-09-06T10:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-06 10:27",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "사진: filip bossuyt from Kortrijk, Belgium (CC BY 2.0, Wikimedia Commons)",
-    "continuation_of_id": null
-  },
-  {
     "id": 137098,
     "title_en": "Eswatini Railway Joins South African, Mozambican Operators for Joint Exhibition at Trade Fair",
     "title_ko": "에스바티니 철도공사, 무역박람회서 남아공·모잠비크 철도 운영사들과 연합 전시",
@@ -660,6 +667,40 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: Htonl (CC BY-SA 2.0, Wikimedia Commons)",
+    "continuation_of_id": null
+  },
+  {
+    "id": 137099,
+    "title_en": "Kevin García Debuts as Comunicaciones Interim Manager with Draw in Guatemala's Primera División",
+    "title_ko": "과테말라 프리메라 디비시온…케빈 가르시아, 코무니카시오네스 임시 감독 데뷔전서 무승부",
+    "summary_ko": "과테말라 프로축구 클럽 코무니카시오네스의 임시 감독으로 부임한 케빈 가르시아가 6일(현지시간) 산토 도밍고 데 구스만 경기장에서 열린 믹스코와의 아페르투라 2026 토너먼트 7라운드 경기에서 1대 1 무승부를 기록하며 데뷔전을 치렀다.\n\n구단 유소년 팀에서 지도자 경력을 쌓아온 케빈 가르시아는 알보스(코무니카시오네스의 별칭) 팀을 이끄는 막중한 책임을 맡아 굳은 의지로 도전 과제에 임했다. 가르시아는 임시 감독이라는 직함이 책임을 덜어주지 않는다며 전적으로 책임을 지고 임하고 있다고 밝혔다.\n\n가르시아는 선수단을 잘 알고 있다는 점",
+    "url": "internal://solo_20260906_e226c99a",
+    "source": "NewsFinal",
+    "category": "글로벌",
+    "subcategory": "solo_20260906_e226c99a",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-06 10:27",
+    "countries": [
+      "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/17/0578_kevin_borlee_reeksen_400m_%2828541002155%29.jpg/960px-0578_kevin_borlee_reeksen_400m_%2828541002155%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "view_count": 0,
+    "first_published_at": "2026-09-06T10:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-06 10:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "사진: filip bossuyt from Kortrijk, Belgium (CC BY 2.0, Wikimedia Commons)",
     "continuation_of_id": null
   },
   {
@@ -2185,6 +2226,40 @@
     "continuation_of_id": null
   },
   {
+    "id": 134221,
+    "title_en": "Guatemala Labor Ministry Clarifies Pro-Rata Severance, Benefits Required Even During Probation",
+    "title_ko": "과테말라 노동부, 수습 기간 퇴직 시에도 비례 퇴직금 지급 의무 명시",
+    "summary_ko": "과테말라 노동사회보장부(Mintrab) 근로감독관들은 고용 관계가 종료될 때 근로 기간이 단 몇 주에 불과하거나 수습 기간 중이더라도 고용주는 이에 상응하는 비례적 수당을 정산금에 포함해야 한다고 5일(현지시간) 밝혔다. 이는 휴가, 연말 보너스인 아기날도, 그리고 보너스 14를 포함하는 조치다.\n\n최근 한 달에서 한 달 반 동안 근무하거나 두 달의 수습 기간을 마친 직후 해고된 과테말라 근로자들이 본지에 제보한 바에 따르면, 이들 기업은 계약 종료를 통보하면서 30일 후에 정산 수표를 받게 될 것이라고 안내했다. 그러나 일부 근로",
+    "url": "internal://solo_20260905_358e5d17",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "solo_20260905_358e5d17",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-05 13:33",
+    "countries": [
+      "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_employment_contract_workplace_office_worker.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T13:33:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 13:33",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
     "id": 134222,
     "title_en": "Missing Belizean Found on Guatemala Street Reunited with Family After 13 Hours Amid Communication Hurdles",
     "title_ko": "과테말라 거리서 발견된 실종 벨리즈인, 13시간 만에 가족 품으로…소통 한계 지적",
@@ -2204,40 +2279,6 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_homeless_person_city_street_family_reunion.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T13:33:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 13:33",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 134221,
-    "title_en": "Guatemala Labor Ministry Clarifies Pro-Rata Severance, Benefits Required Even During Probation",
-    "title_ko": "과테말라 노동부, 수습 기간 퇴직 시에도 비례 퇴직금 지급 의무 명시",
-    "summary_ko": "과테말라 노동사회보장부(Mintrab) 근로감독관들은 고용 관계가 종료될 때 근로 기간이 단 몇 주에 불과하거나 수습 기간 중이더라도 고용주는 이에 상응하는 비례적 수당을 정산금에 포함해야 한다고 5일(현지시간) 밝혔다. 이는 휴가, 연말 보너스인 아기날도, 그리고 보너스 14를 포함하는 조치다.\n\n최근 한 달에서 한 달 반 동안 근무하거나 두 달의 수습 기간을 마친 직후 해고된 과테말라 근로자들이 본지에 제보한 바에 따르면, 이들 기업은 계약 종료를 통보하면서 30일 후에 정산 수표를 받게 될 것이라고 안내했다. 그러나 일부 근로",
-    "url": "internal://solo_20260905_358e5d17",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "solo_20260905_358e5d17",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-05 13:33",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_employment_contract_workplace_office_worker.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T13:33:00",
     "update_log": [
