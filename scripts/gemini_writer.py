@@ -363,12 +363,56 @@ def _strip_numbers(text: str) -> str:
     return re.sub(r'\s+', ' ', text).strip()
 
 
-def find_similar_article(title: str, own_articles: list, threshold: int = 70):
+def _fuzzy_keyword_overlap(kws_a: set, kws_b: set) -> int:
+    """두 키워드 집합의 "공통 개수"를 정확 일치 + 부분 문자열 포함까지
+    합쳐서 센다. "카르그"/"카르그섬"처럼 한쪽이 다른 쪽에 포함되는 경우도
+    실질적으로 같은 개념을 가리키므로 공통으로 인정한다. 매칭된 쪽은
+    중복 카운트되지 않게 소진시킨다."""
+    exact = kws_a & kws_b
+    count = len(exact)
+    remaining_a = kws_a - exact
+    remaining_b = list(kws_b - exact)
+    used_b = set()
+    for wa in remaining_a:
+        for wb in remaining_b:
+            if wb in used_b:
+                continue
+            if wa in wb or wb in wa:
+                count += 1
+                used_b.add(wb)
+                break
+    return count
+
+
+def _same_headline_event_llm(title_a: str, body_a: str, title_b: str, body_b: str) -> bool:
+    """토큰/키워드 기반 지표가 근소하게 갈릴 때만 쓰는 최종 판정 — 두 기사가
+    같은 사건을 다루는지 LLM에게 직접 묻는다(gemini_summarizer.py의
+    _same_event_llm과 같은 철학, gemini_writer.py 쪽엔 이 안전망이 없어서
+    2026-09-06 카르그 유조선 중복(id=135075/137073)을 놓쳤다 — 두 제목이
+    표현·구조가 달라 rapidfuzz 유사도가 낮게 나왔지만 실제로는 같은 사건)."""
+    prompt = f"""아래 두 뉴스 기사가 완전히 같은 사건(같은 시점의 같은 구체적
+사건)을 다루고 있습니까? 같은 큰 이슈의 다른 시점/다른 세부사건이면
+"다름"입니다.
+
+[기사 A 제목] {title_a}
+[기사 A 본문 앞부분] {(body_a or '')[:300]}
+
+[기사 B 제목] {title_b}
+[기사 B 본문 앞부분] {(body_b or '')[:300]}
+
+"같음" 또는 "다름"으로만 답하세요."""
+    result = call_gemini(prompt, max_tokens=10, start_tier=3)
+    return bool(result) and result.strip().startswith("같음")
+
+
+def find_similar_article(title: str, own_articles: list, threshold: int = 70, body: str | None = None):
     """
-    중복 기사 탐색 — 2단계:
+    중복 기사 탐색 — 3단계:
     1차: DB RPC(find_duplicate_title) — pg_trgm 유사도 기반
     2차: 숫자 제거 후 같은 국가·날짜 기사와 키워드 재비교
          (사망자 수 등 수치가 바뀐 후속 보도 감지용)
+    3차: 2차 기준을 근소하게 못 채운 최선의 후보를 LLM으로 최종 판정
+         (body를 넘겨준 호출부에서만 동작 — 2026-09-06 실사고 대응)
     """
     if not title:
         return None, 0
@@ -404,7 +448,7 @@ def find_similar_article(title: str, own_articles: list, threshold: int = 70):
             _sb_url(),
             headers=_sb_headers(),
             params={
-                "select": "id,title_ko,country",
+                "select": "id,title_ko,country,summary_ko",
                 "source": "eq.NewsFinal",
                 "is_published": "eq.true",
                 "created_at": f"gte.{since_72h}",
@@ -419,17 +463,39 @@ def find_similar_article(title: str, own_articles: list, threshold: int = 70):
         candidates = res2.json()
         title_kws = set(w for w in re.sub(r'[^\w가-힣]', ' ', title_stripped).split() if len(w) >= 2)
 
+        best_near_miss, best_near_score = None, 0
         for cand in candidates:
             cand_title = cand.get("title_ko") or ""
             cand_stripped = _strip_numbers(cand_title)
             cand_kws = set(w for w in re.sub(r'[^\w가-힣]', ' ', cand_stripped).split() if len(w) >= 2)
 
-            common = title_kws & cand_kws
-            # 공통 키워드 4개 이상 + rapidfuzz 유사도 50 이상이면 중복
+            # 공통 키워드 4개 이상 + rapidfuzz 유사도 50 이상이면 중복. 정확히
+            # 같은 토큰뿐 아니라 부분 문자열 포함 관계도 공통으로 친다
+            # (2026-09-06 실사고, id=135075 vs 137073 "카르그 유조선 피격"
+            # 중복 — "카르그 섬"(공백 있음)과 "카르그섬"(붙여씀)처럼 복합
+            # 지명 표기가 갈리면 정확 일치 기준으로 겹치는 키워드가 "유조선"
+            # "피격" 2개뿐이라 4개 미달로 놓쳤다. 호르무즈/카르그처럼 자주
+            # 나오는 지명이 매번 붙여쓰기가 갈릴 수 있어 일반적인 패턴).
+            common_count = _fuzzy_keyword_overlap(title_kws, cand_kws)
             sim = fuzz.token_sort_ratio(title_stripped, cand_stripped)
-            if len(common) >= 4 and sim >= 50:
-                print(f"  [2차 중복감지] 숫자제거 유사도 {sim}%, 공통키워드 {len(common)}개 → {cand_title[:50]}")
+            if common_count >= 4 and sim >= 50:
+                print(f"  [2차 중복감지] 숫자제거 유사도 {sim}%, 공통키워드 {common_count}개 → {cand_title[:50]}")
                 return {"id": cand["id"], "title_ko": cand_title, "score": sim / 100}, sim
+
+            # 3차: 위 기준을 근소하게 못 채운 최선의 후보 하나만 기억해뒀다가
+            # LLM에게 최종 판정을 맡긴다(위 카르그 사례처럼 문장 구조 자체가
+            # 달라 sim이 낮게 나오는 동일 사건은 숫자 임계값을 더 낮추는 것
+            # 만으로는 다른 오탐을 늘릴 위험이 있음 — find_similar_trend()의
+            # 4차 LLM 판정과 동일한 철학). 근소 기준: 공통키워드 3개 이상.
+            if common_count >= 3 and common_count > best_near_score:
+                best_near_miss, best_near_score = cand, common_count
+
+        if best_near_miss and body:
+            cand_title = best_near_miss.get("title_ko") or ""
+            cand_body = best_near_miss.get("summary_ko") or ""
+            if cand_body and _same_headline_event_llm(title, body, cand_title, cand_body):
+                print(f"  [3차 중복감지-LLM] 공통키워드 {best_near_score}개, LLM 동일사건 판정 → {cand_title[:50]}")
+                return {"id": best_near_miss["id"], "title_ko": cand_title, "score": 0.6}, 60
 
     except Exception as e:
         print(f"  ⚠️ [2차 중복체크 경고] {e}")
@@ -2886,7 +2952,7 @@ def run():
                 else:
                     final_subcategory = cluster_key
 
-                similar, sim_score = find_similar_article(full_title, today_own_articles)
+                similar, sim_score = find_similar_article(full_title, today_own_articles, body=gen_body)
                 if similar:
                     print(f"  ⚠️ 유사 기사 재발견 (유사도 {sim_score}%) → 미발행으로 저장: {similar.get('title_ko','')[:40]}")
                     published = False
@@ -3105,7 +3171,7 @@ def run():
                 time.sleep(CALL_INTERVAL)
                 continue
 
-            similar, sim_score = find_similar_article(full_title, today_own_articles)
+            similar, sim_score = find_similar_article(full_title, today_own_articles, body=gen_body)
             if similar:
                 print(f"  ⚠️ 유사 기사 재발견 (유사도 {sim_score}%) → 미발행으로 저장")
                 published = False
