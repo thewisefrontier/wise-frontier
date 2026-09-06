@@ -1224,6 +1224,35 @@ def run_trend_tracker():
         if not title:
             title = f"{group_name} 동향 — {today_str}"
 
+        # 종합 리드 누락 재시도(2026-09-07 실사고, id=139084) — 프롬프트가
+        # 이미 "여러 국가면 첫 문단은 종합 리드로 시작하라"를 지시하지만
+        # 강제가 없어 안 지켜질 때가 있었다("수단과 모잠비크 등 각국에서
+        # 콜레라 확산 및 종식 선언 잇달아"라는 제목인데 리드는 수단 한
+        # 구역 얘기로 바로 들어가 제목-리드가 안 맞음). 소스 기사가 2개국
+        # 이상 걸쳐 있는데 본문 첫 문단에 그중 2개 미만만 언급되면 1회
+        # 재작성 시도 — has_column_style 등과 동일한 재생성 패턴.
+        source_countries = set(a.get("country") or "" for a in top) - {""}
+        if len(source_countries) >= 2:
+            first_para = (body or "").split("\n\n", 1)[0]
+            mentioned = sum(1 for c in source_countries if c in first_para)
+            if mentioned < 2:
+                print(f"  [{group_name}] ⚠️ 종합 리드 누락 감지(첫 문단에 {mentioned}개국만 언급) → 재작성 시도")
+                retried = call_gemini_article(
+                    prompt + f"\n\n[재작성 지시] 방금 작성한 본문의 첫 문단이 제목이 약속하는 "
+                    f"여러 국가({', '.join(source_countries)} 등) 종합 상황을 요약하지 않고 "
+                    f"한 나라의 세부 사건으로 바로 들어갔습니다. 첫 문단을 반드시 이 여러 "
+                    f"국가·기관에서 동시에 벌어지는 상황을 압축 요약하는 리드 문장으로 다시 "
+                    f"쓰세요. 나머지 문단은 그대로 유지해도 됩니다.",
+                    max_tokens=2000,
+                )
+                if retried and "본문:" in retried:
+                    idx_r = retried.find("본문:")
+                    retried_body = _ensure_paragraphs(retried[idx_r + 3:].strip())
+                    retried_first_para = retried_body.split("\n\n", 1)[0]
+                    if sum(1 for c in source_countries if c in retried_first_para) >= 2:
+                        body = retried_body
+                        content = retried
+
         # 지역 추론
         region_map = {
             "아프리카": "africa", "나이지리아": "africa", "케냐": "africa",
