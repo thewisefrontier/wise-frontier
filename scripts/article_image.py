@@ -35,6 +35,21 @@ _WIKI_LICENSE_ALLOW = {
 }
 _HTML_TAG_RE = re.compile(r'<[^>]+>')
 
+# 위키미디어 커먼즈 검색이 가끔 실제 환자의 얼굴이 나온 노골적인 임상
+# 사진을 골라오는 문제(2026-09-07, 사용자 재제보 — "이 기사 사진 전에
+# 마음에 안든다고 얘기했던건데 또 올라왔네". "trend_콜레라" 기사가 4일
+# 연속 업데이트되면서 같은 사진(Adult_cholera_patient.jpg, 실제 환자
+# 임상사진)이 매번 다시 선택됐음 — fetch_wikimedia_image는 시드/회전이
+# 없어 같은 검색어에 항상 같은 1등 결과를 반환하기 때문). 확실히 알려진
+# 파일은 제목으로 직접 차단하고, "patient"가 파일 제목에 들어간 경우는
+# 일반 병원·의료진 사진이 아니라 환자 본인을 찍은 사진일 가능성이 높아
+# 통째로 배제한다(위생상 보수적으로 접근 — 놓치는 것보다 잘못 쓰는 게
+# 더 나쁨).
+_WIKI_TITLE_BLOCKLIST = {
+    "file:adult cholera patient.jpg",
+}
+_WIKI_TITLE_AVOID_WORDS = ("patient", "autopsy", "cadaver", "corpse")
+
 
 def fetch_wikimedia_image(query: str):
     """위키미디어 커먼즈에서 CC/PD 라이선스 이미지를 검색한다.
@@ -86,7 +101,12 @@ def fetch_wikimedia_image(query: str):
             info = infos[0]
             if info.get("mime") not in ("image/jpeg", "image/png", "image/webp", "image/svg+xml"):
                 continue
-            if anchor and anchor not in (page.get("title") or "").lower():
+            title_lower = (page.get("title") or "").lower()
+            if title_lower in _WIKI_TITLE_BLOCKLIST:
+                continue
+            if any(w in title_lower for w in _WIKI_TITLE_AVOID_WORDS):
+                continue
+            if anchor and anchor not in title_lower:
                 continue
             if (info.get("width") or 0) < 300 or (info.get("height") or 0) < 200:
                 continue
