@@ -1670,6 +1670,7 @@ JSON 배열로만 응답하세요 (마크다운 없이):
 
 이 기사들을 종합해 완성도 높은 한국어 기사를 작성하세요.
 - 반드시 하나의 토픽만 다루세요.
+- 여러 국가·기관에서 같은 사안이 동시에 벌어지고 있다면, 첫 문단은 그 사실을 압축해 요약하는 리드로 시작하세요(예: "나이지리아와 남수단 등 아프리카 여러 국가에서 콜레라 확산이 이어지며 방역 당국이 대응에 나섰다"). 이 리드는 반드시 구체적 사실(무엇이 몇 개국·몇 곳에서 벌어지고 있는지)을 담아야 하며, 화자 없는 추상적 개관 문장이어서는 안 됩니다. 리드 다음 문단부터 국가·기관별 구체적 내용을 전개하세요. 나라가 하나뿐이면 이 리드는 필요 없습니다.
 - 본문은 부가가치 문단을 포함해 3개 문단 이상으로 충분히 작성하세요. 일반적인 스트레이트 기사의 표준 분량은 200자 원고지 10매, 즉 대략 2,000자 이상입니다(2026-08-26 사용자 지적: "죄다 단신급의 기사" → "적어도 기사 하나마다 분량이 2천자 정도는 됐으면", "더 길어도 상관 없다") — 700자는 최소 하한선이지 목표치가 아니니 그 근처에서 서둘러 마무리하지 마세요. 2,000자는 상한이 아니라 하한이라 소스에 사실관계가 더 있으면 넘어가도 됩니다. 배경·경과·전망(또는 파급 효과)을 각각 다루어 분량을 채우세요. 관련 기사에 나온 내용이 부족하면 배경 설명이나 맥락으로 보완하되, 소스에 없는 내용을 지어내 채우지는 마세요 — 소스가 짧은 단신이면 억지로 채우지 말고 가능한 만큼만 쓰세요. ⚠️ 분량 확보보다 환각 방지가 항상 우선입니다("핵심은 환각 현상이 일어나지 않도록 하는거야", "너무 길게 만들다가 헛소리가 나가면 안돼") — 분량과 정확성이 충돌하면 무조건 정확성을 택해 짧게 쓰세요.
 - 문단을 나눌 때는 반드시 빈 줄(줄바꿈 2번)로 구분하세요. 한 문단에 모든 문장을 붙여 쓰지 마세요.
 - 수치, 인명, 날짜, 기관명 등 구체적 팩트를 최대한 살리세요.
@@ -1724,6 +1725,32 @@ JSON 배열로만 응답하세요 (마크다운 없이):
 
         if not title:
             title = f"{issue_ko} — {today_str}"
+
+        # 종합 리드 누락 재시도(2026-09-07, run_trend_tracker와 동일 대응 —
+        # 사용자 지시로 다른 트렌드 함수도 같은 방식으로 점검). 소스 기사가
+        # 2개국 이상 걸쳐 있는데 본문 첫 문단에 그중 2개 미만만 언급되면
+        # 1회 재작성 시도.
+        source_countries_rt = set(countries_in_articles) - {""}
+        if len(source_countries_rt) >= 2:
+            first_para = (body or "").split("\n\n", 1)[0]
+            mentioned = sum(1 for c in source_countries_rt if c in first_para)
+            if mentioned < 2:
+                print(f"  [{topic}] ⚠️ 종합 리드 누락 감지(첫 문단에 {mentioned}개국만 언급) → 재작성 시도")
+                retried = call_gemini_article(
+                    write_prompt + f"\n\n[재작성 지시] 방금 작성한 본문의 첫 문단이 제목이 약속하는 "
+                    f"여러 국가({', '.join(source_countries_rt)} 등) 종합 상황을 요약하지 않고 "
+                    f"한 나라의 세부 사건으로 바로 들어갔습니다. 첫 문단을 반드시 이 여러 "
+                    f"국가·기관에서 동시에 벌어지는 상황을 압축 요약하는 리드 문장으로 다시 "
+                    f"쓰세요. 나머지 문단은 그대로 유지해도 됩니다.",
+                    max_tokens=2000,
+                )
+                if retried and "본문:" in retried:
+                    idx_r = retried.find("본문:")
+                    retried_body = _ensure_paragraphs(retried[idx_r + 3:].strip())
+                    retried_first_para = retried_body.split("\n\n", 1)[0]
+                    if sum(1 for c in source_countries_rt if c in retried_first_para) >= 2:
+                        body = retried_body
+                        content_text = retried
 
         if detect_script_leak(title, body):
             print(f"  [{topic}] ⚠️ [문자 혼입 감지] 미발행: {title[:50]}")
@@ -1985,6 +2012,7 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
 
 이 이슈에 대해 한국 투자자/독자를 위한 완성도 높은 기사를 작성하세요.
 - 이슈의 배경, 현재 상황, 의미를 사실 서술형으로 담으세요.
+- 여러 국가·기관에서 같은 사안이 동시에 벌어지고 있다면, 첫 문단은 그 사실을 압축해 요약하는 리드로 시작하세요(예: "나이지리아와 남수단 등 아프리카 여러 국가에서 콜레라 확산이 이어지며 방역 당국이 대응에 나섰다"). 이 리드는 반드시 구체적 사실(무엇이 몇 개국·몇 곳에서 벌어지고 있는지)을 담아야 하며, 화자 없는 추상적 개관 문장이어서는 안 됩니다. 리드 다음 문단부터 국가·기관별 구체적 내용을 전개하세요. 나라가 하나뿐이면 이 리드는 필요 없습니다.
 - 본문은 부가가치 문단을 포함해 3개 문단 이상으로 작성하세요. 일반적인 스트레이트 기사의 표준 분량은 200자 원고지 10매, 즉 대략 2,000자 이상입니다 — 700자는 최소 하한선이지 목표치가 아니니 그 근처에서 서둘러 마무리하지 마세요. 2,000자는 상한이 아니라 하한이라 소스에 사실관계가 더 있으면 넘어가도 됩니다. 배경·경과·의미(또는 파급 효과)를 각각 풀어서 서술하되, 소스가 짧은 단신이면 억지로 채우지 말고 가능한 만큼만 쓰세요. ⚠️ 분량 확보보다 환각 방지가 항상 우선입니다 — 분량과 정확성이 충돌하면 무조건 정확성을 택해 짧게 쓰세요.
 - 문단을 나눌 때는 반드시 빈 줄(줄바꿈 2번)로 구분하세요. 한 문단에 모든 문장을 붙여 쓰지 마세요.
 - 확인된 팩트 중심으로, 추측은 최소화하세요.
@@ -2040,6 +2068,32 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
 
         if not title:
             title = f"{issue_ko} — {today_str}"
+
+        # 종합 리드 누락 재시도(2026-09-07, run_trend_tracker와 동일 대응).
+        # 이 함수는 소스가 Google Trends/Reddit/GDELT 신호(제목 문자열만)라
+        # 다른 두 함수처럼 소스별 country 필드가 없다 — 대신 Gemini가 직접
+        # 뽑은 "관련국가"(art_countries)를 신호로 쓴다.
+        source_countries_ext = set(art_countries or []) - {""}
+        if len(source_countries_ext) >= 2:
+            first_para = (body or "").split("\n\n", 1)[0]
+            mentioned = sum(1 for c in source_countries_ext if c in first_para)
+            if mentioned < 2:
+                print(f"  [{topic}] ⚠️ 종합 리드 누락 감지(첫 문단에 {mentioned}개국만 언급) → 재작성 시도")
+                retried = call_gemini_article(
+                    write_prompt + f"\n\n[재작성 지시] 방금 작성한 본문의 첫 문단이 제목이 약속하는 "
+                    f"여러 국가({', '.join(source_countries_ext)} 등) 종합 상황을 요약하지 않고 "
+                    f"한 나라의 세부 사건으로 바로 들어갔습니다. 첫 문단을 반드시 이 여러 "
+                    f"국가·기관에서 동시에 벌어지는 상황을 압축 요약하는 리드 문장으로 다시 "
+                    f"쓰세요. 나머지 문단은 그대로 유지해도 됩니다.",
+                    max_tokens=2000,
+                )
+                if retried and "본문:" in retried:
+                    idx_r = retried.find("본문:")
+                    retried_body = _ensure_paragraphs(retried[idx_r + 3:].strip())
+                    retried_first_para = retried_body.split("\n\n", 1)[0]
+                    if sum(1 for c in source_countries_ext if c in retried_first_para) >= 2:
+                        body = retried_body
+                        content_text = retried
 
         if detect_script_leak(title, body):
             print(f"  [{topic}] ⚠️ [문자 혼입 감지] 미발행: {title[:50]}")
