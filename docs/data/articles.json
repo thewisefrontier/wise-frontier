@@ -1,5 +1,46 @@
 [
   {
+    "id": 139855,
+    "title_en": "동남아시아, 최고 36도 폭염 속 곳곳 뇌우·비",
+    "title_ko": "동남아시아, 최고 36도 폭염 속 곳곳 뇌우·비",
+    "summary_ko": "7일(현지시간) 동남아시아 주요국 수도는 최저기온 24°C에서 최고기온 36°C의 기온 분포를 보이며 지역별로 큰 편차를 나타냈다. 말레이시아 쿠알라룸푸르는 최고기온이 36°C까지 치솟아 가장 더운 지역으로 기록된 반면, 필리핀 마닐라는 최고기온 28°C, 최저기온 26°C로 가장 선선한 날씨를 보였다. 쿠알라룸푸르는 마닐라보다 최고기온이 8°C 높아 극심한 대조를 이뤘으며, 베트남의 하노이·호치민·다낭·하이퐁·껀터 등은 최고기온이 38°C를 웃도는 폭염 지역으로 분류됐다. 수퍼 엘니뇨와 기후 변화 여파로 아시아 전역에 극단적인 날",
+    "url": "internal://weather_group_동남아시아_today20260907",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_동남아시아_today20260907",
+    "region": "southeast_asia",
+    "country": "동남아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-07 07:33",
+    "countries": [
+      "베트남",
+      "인도네시아",
+      "태국",
+      "필리핀",
+      "미얀마",
+      "캄보디아",
+      "말레이시아",
+      "싱가포르"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_indonesia_20260907.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-07T07:33:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-07 07:33",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 136384,
     "title_en": "Colombian Intelligence Operation Kills Criminal Figures 'Bendito Menor' and 'La Bebesita' in La Guajira",
     "title_ko": "콜롬비아 라과히라 지역서 정보 당국 작전 중 범죄 조직 인물 '벤디토 메노르' 등 사살",
@@ -129,38 +170,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 139854,
-    "title_en": "Solana Rises 2.37% as Network Activity Recovers",
-    "title_ko": "[가상자산 동향] 솔라나 2.37% 상승…네트워크 활성도 회복 영향",
-    "summary_ko": "◆ 가격 동향\n\n7일 06:25(한국시간) 야후 파이낸스에 따르면 솔라나 가격은 전일 대비 2.37% 상승한 106.22달러를 기록했다. 최근 솔라나 생태계 내 탈중앙화 거래소의 거래량이 증가하고 스테이블코인 결제 솔루션이 확장되면서 네트워크 활성도가 개선된 점이 매수세를 견인했다. 특히 주요 기관 투자자들이 솔라나 기반의 온체인 데이터 분석 툴을 도입하며 생태계 신뢰도가 높아진 상황이 가격 방어에 기여했다. 거시경제 측면에서는 미국 연방준비제도의 금리 정책 방향성에 대한 시장의 불확실성이 지속되고 있으나, 솔라나는 상대적으로 견고",
-    "url": "internal://crypto_news_2026-09-07",
-    "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "가상자산동향_crypto",
-    "region": "global",
-    "country": "글로벌",
-    "country_flag": "🌐",
-    "score": 1,
-    "created_at": "2026-09-07 06:26",
-    "countries": [],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_09_07.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-07T06:26:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-07 06:26",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
     "id": 139472,
     "title_en": "At Least 25 Dead in Cabo Verde School Bus Crash; National Mourning Declared",
     "title_ko": "카보베르데 포고섬 스쿨버스 추락 사고로 최소 25명 사망 및 국가 애도 선포",
@@ -196,6 +205,38 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
+    "id": 139854,
+    "title_en": "Solana Rises 2.37% as Network Activity Recovers",
+    "title_ko": "[가상자산 동향] 솔라나 2.37% 상승…네트워크 활성도 회복 영향",
+    "summary_ko": "◆ 가격 동향\n\n7일 06:25(한국시간) 야후 파이낸스에 따르면 솔라나 가격은 전일 대비 2.37% 상승한 106.22달러를 기록했다. 최근 솔라나 생태계 내 탈중앙화 거래소의 거래량이 증가하고 스테이블코인 결제 솔루션이 확장되면서 네트워크 활성도가 개선된 점이 매수세를 견인했다. 특히 주요 기관 투자자들이 솔라나 기반의 온체인 데이터 분석 툴을 도입하며 생태계 신뢰도가 높아진 상황이 가격 방어에 기여했다. 거시경제 측면에서는 미국 연방준비제도의 금리 정책 방향성에 대한 시장의 불확실성이 지속되고 있으나, 솔라나는 상대적으로 견고",
+    "url": "internal://crypto_news_2026-09-07",
+    "source": "NewsFinal",
+    "category": "금융",
+    "subcategory": "가상자산동향_crypto",
+    "region": "global",
+    "country": "글로벌",
+    "country_flag": "🌐",
+    "score": 1,
+    "created_at": "2026-09-07 06:26",
+    "countries": [],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_09_07.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-07T06:26:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-07 06:26",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
     "continuation_of_id": null
   },
   {
