@@ -797,6 +797,40 @@ def find_similar_trend(title: str, country: str | None = None,
                 if _same_event_llm(title, body, existing_title, existing_body):
                     print(f"    → 유사 트렌드 루트 발견[LLM 판정] (id={a['id']}): {existing_title[:40]}")
                     return a
+
+        # 5차 경로(2026-09-06 실사고, id=137073 vs 137353 "미-이란 유조선
+        # 피격" 중복): 일반 클러스터링 경로는 country="이란", 트렌드 트래커는
+        # country="미국"으로 서로 다르게 뽑아서, 위 country=eq. 하드 필터가
+        # candidates 자체에서 서로를 걸러내버렸다(4차 LLM 판정까지도 이
+        # candidates 안에서만 돎). 양자 충돌·분쟁 사건은 "어느 나라가
+        # 주체냐"가 파이프라인마다 다르게 뽑힐 수 있어 country 필터가
+        # 구조적으로 뚫린다. country 필터 없이 아주 짧은 시간창(최근 8시간)만
+        # 별도로 다시 조회해 LLM으로 재확인 — 창을 짧게 잡아 무관한 기사와의
+        # 오탐 위험을 낮춘다(중복은 거의 항상 몇 시간 내 재탕이라 8시간이면
+        # 충분히 좁음).
+        if country and body:
+            since_narrow = (now_kst() - timedelta(hours=8)).strftime("%Y-%m-%d %H:%M")
+            narrow_res = requests.get(
+                _sb_url(), headers=_sb_headers(),
+                params={
+                    "select": "id,title_ko,summary_ko,country,created_at",
+                    "source": "eq.NewsFinal", "is_published": "eq.true",
+                    "created_at": f"gte.{since_narrow}",
+                    "order": "id.desc", "limit": "20",
+                },
+                timeout=10,
+            )
+            if narrow_res.status_code in (200, 206):
+                for a in narrow_res.json():
+                    if (a.get("country") or "") == country:
+                        continue  # 같은 국가면 이미 위에서 검사됨
+                    existing_title = a.get("title_ko") or ""
+                    existing_body = a.get("summary_ko") or ""
+                    if not existing_title or not existing_body:
+                        continue
+                    if _same_event_llm(title, body, existing_title, existing_body):
+                        print(f"    → 유사 트렌드 루트 발견[LLM 판정, 국가불일치] (id={a['id']}): {existing_title[:40]}")
+                        return a
     except Exception as e:
         print(f"    → 유사도 체크 실패: {e}")
     return None
