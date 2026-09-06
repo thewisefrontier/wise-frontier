@@ -2192,22 +2192,6 @@
     "updated_at": "2026-08-09 07:08"
   },
   {
-    "id": "stoneco",
-    "name": "StoneCo Ltd.",
-    "name_ko": "스톤코",
-    "country": "브라질",
-    "country_flag": "🌍",
-    "exchange": "NASDAQ",
-    "ticker": "STNE",
-    "sector": "핀테크",
-    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
-    "founded_year": 2012,
-    "headquarters": "상파울루, 브라질",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-29 20:49"
-  },
-  {
     "id": "stone_co",
     "name": "StoneCo Ltd.",
     "name_ko": "스톤",
@@ -2222,6 +2206,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-22 23:37"
+  },
+  {
+    "id": "stoneco",
+    "name": "StoneCo Ltd.",
+    "name_ko": "스톤코",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "NASDAQ",
+    "ticker": "STNE",
+    "sector": "핀테크",
+    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
+    "founded_year": 2012,
+    "headquarters": "상파울루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-29 20:49"
   },
   {
     "id": "xp_inc",
@@ -2750,6 +2750,38 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-09-04 05:19"
+  },
+  {
+    "id": "egyptair",
+    "name": "EgyptAir",
+    "name_ko": "이집트에어",
+    "country": "알제리",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "항공",
+    "description": "1932년에 설립된 이집트의 국영 항공사로, 카이로 국제공항을 허브로 삼아 중동, 아프리카, 유럽, 아시아 등 글로벌 노선을 운영합니다. 아프리카 대륙에서 가장 오래된 항공사 중 하나로 높은 인지도와 방대한 네트워크를 보유하고 있습니다. 이집트 민간항공부 산하의 국영 기업으로 아프리카와 중동 간 하늘길을 연결하는 주요 플레이어입니다.",
+    "founded_year": 1932,
+    "headquarters": "카이로, 이집트",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-09-07 03:42"
+  },
+  {
+    "id": "royal_air_maroc",
+    "name": "Royal Air Maroc",
+    "name_ko": "로열 에어 모로크",
+    "country": "알제리",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "항공",
+    "description": "1953년에 설립된 모로코의 국영 항공사로, 카사블랑카의 무함마드 5세 국제공항을 거점으로 아프리카, 유럽, 북미 등을 연결합니다. 원월드(oneworld) 동맹의 정회원으로 아프리카와 서구권을 잇는 핵심적인 가교 역할을 수행하고 있습니다. 모로코 정부가 대주주로 참여하고 있는 아프리카 대표 대형 항공 기업입니다.",
+    "founded_year": 1953,
+    "headquarters": "카사블랑카, 모로코",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-09-07 03:42"
   },
   {
     "id": "african_alliance",
@@ -3840,22 +3872,6 @@
     "updated_at": "2026-07-30 14:14"
   },
   {
-    "id": "lic",
-    "name": "Life Insurance Corporation of India",
-    "name_ko": "인도생명보험공사",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "BSE",
-    "ticker": "LICI",
-    "sector": "보험",
-    "description": "1956년 설립된 인도의 국영 보험사로, 인도 생명보험 시장에서 압도적인 점유율을 차지하고 있는 최대 규모의 보험 기업입니다. 방대한 판매망과 자산 규모를 바탕으로 인도 금융 시장에서 핵심적인 역할을 수행하고 있습니다. 인도 정부가 대주주로 있으며, 인도 증권거래소에 상장된 주요 금융 기업 중 하나입니다.",
-    "founded_year": 1956,
-    "headquarters": "뭄바이, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-04 16:21"
-  },
-  {
     "id": "lic_india",
     "name": "Life Insurance Corporation of India",
     "name_ko": "인도 생명보험공사",
@@ -3870,6 +3886,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-20 15:32"
+  },
+  {
+    "id": "lic",
+    "name": "Life Insurance Corporation of India",
+    "name_ko": "인도생명보험공사",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "BSE",
+    "ticker": "LICI",
+    "sector": "보험",
+    "description": "1956년 설립된 인도의 국영 보험사로, 인도 생명보험 시장에서 압도적인 점유율을 차지하고 있는 최대 규모의 보험 기업입니다. 방대한 판매망과 자산 규모를 바탕으로 인도 금융 시장에서 핵심적인 역할을 수행하고 있습니다. 인도 정부가 대주주로 있으며, 인도 증권거래소에 상장된 주요 금융 기업 중 하나입니다.",
+    "founded_year": 1956,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-04 16:21"
   },
   {
     "id": "lumitime_technologies",
@@ -4480,22 +4512,6 @@
     "updated_at": "2026-08-02 21:12"
   },
   {
-    "id": "tcs",
-    "name": "Tata Consultancy Services Limited",
-    "name_ko": "타타 컨설턴시 서비시스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "TCS",
-    "sector": "IT 서비스",
-    "description": "1968년에 설립된 인도 타타 그룹 산하의 세계적인 IT 서비스 및 컨설팅 기업입니다. 전 세계 기업들을 상대로 디지털 전환, 소프트웨어 개발 및 아웃소싱 서비스를 제공합니다.",
-    "founded_year": 1968,
-    "headquarters": "뭄바이, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-02 17:22"
-  },
-  {
     "id": "tata_consultancy_services",
     "name": "Tata Consultancy Services Limited",
     "name_ko": "타타 컨설턴시 서비스",
@@ -4510,6 +4526,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-19 01:21"
+  },
+  {
+    "id": "tcs",
+    "name": "Tata Consultancy Services Limited",
+    "name_ko": "타타 컨설턴시 서비시스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "TCS",
+    "sector": "IT 서비스",
+    "description": "1968년에 설립된 인도 타타 그룹 산하의 세계적인 IT 서비스 및 컨설팅 기업입니다. 전 세계 기업들을 상대로 디지털 전환, 소프트웨어 개발 및 아웃소싱 서비스를 제공합니다.",
+    "founded_year": 1968,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-02 17:22"
   },
   {
     "id": "tata_motors",
@@ -4544,22 +4576,6 @@
     "updated_at": "2026-08-14 23:23"
   },
   {
-    "id": "singareni_collieries",
-    "name": "The Singareni Collieries Company Limited",
-    "name_ko": "싱가레니 콜리어리스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "",
-    "sector": "에너지",
-    "description": "싱가레니 콜리어리스는 인도의 국영 탄광 및 에너지 기업으로, 주로 텔랑가나주에서 석탄 채굴 및 화력 발전 사업을 수행하고 있습니다. 1920년에 설립되었으며, 인도 남부 지역의 전력 공급과 산업 성장에 필수적인 에너지 자원을 안정적으로 공급하는 핵심적인 역할을 담당하고 있습니다. 인도 정부와 텔랑가나주 정부가 공동으로 소유하고 있는 대형 민간 및 공공 성격의 기업입니다.",
-    "founded_year": 1920,
-    "headquarters": "하이드라바드, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-30 17:03"
-  },
-  {
     "id": "singareni_collieries_company",
     "name": "The Singareni Collieries Company Limited",
     "name_ko": "싱가레니 콜리어리스",
@@ -4574,6 +4590,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-08 01:12"
+  },
+  {
+    "id": "singareni_collieries",
+    "name": "The Singareni Collieries Company Limited",
+    "name_ko": "싱가레니 콜리어리스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "싱가레니 콜리어리스는 인도의 국영 탄광 및 에너지 기업으로, 주로 텔랑가나주에서 석탄 채굴 및 화력 발전 사업을 수행하고 있습니다. 1920년에 설립되었으며, 인도 남부 지역의 전력 공급과 산업 성장에 필수적인 에너지 자원을 안정적으로 공급하는 핵심적인 역할을 담당하고 있습니다. 인도 정부와 텔랑가나주 정부가 공동으로 소유하고 있는 대형 민간 및 공공 성격의 기업입니다.",
+    "founded_year": 1920,
+    "headquarters": "하이드라바드, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-30 17:03"
   },
   {
     "id": "tata_power",
