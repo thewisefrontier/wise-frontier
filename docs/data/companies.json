@@ -5136,6 +5136,22 @@
     "updated_at": "2026-08-01 17:20"
   },
   {
+    "id": "singapore_airlines",
+    "name": "Singapore Airlines Limited",
+    "name_ko": "싱가포르항공",
+    "country": "인도네시아",
+    "country_flag": "🇮🇩",
+    "exchange": "SGX",
+    "ticker": "C6L",
+    "sector": "항공운송",
+    "description": "1947년에 설립된 싱가포르의 국적 항공사이자 세계적인 프리미엄 항공사이다. 여객 및 화물 운송 서비스를 주력으로 하며, 뛰어난 서비스 품질과 높은 브랜드 가치로 글로벌 항공 시장에서 선도적인 위상을 차지하고 있다. 자회사로 저비용 항공사인 스쿠트 등을 보유하고 있다.",
+    "founded_year": 1947,
+    "headquarters": "싱가포르, 싱가포르",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-09-06 21:44"
+  },
+  {
     "id": "telkom_indonesia",
     "name": "Telkom Indonesia (TLKM)",
     "name_ko": null,
@@ -5888,22 +5904,6 @@
     "updated_at": null
   },
   {
-    "id": "bank_of_the_philippines_islands",
-    "name": "Bank of the Philippine Islands",
-    "name_ko": "필리핀 제도은행",
-    "country": "필리핀",
-    "country_flag": "🇵🇭",
-    "exchange": "PSE",
-    "ticker": "BPI",
-    "sector": "은행",
-    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 종합 금융 서비스를 제공하며 필리핀 금융 시장에서 높은 신뢰와 견고한 입지를 다지고 있다. 본 기사에서는 공공 인프라 지출 감소 추정을 발표한 주요 금융기관으로 언급되었다.",
-    "founded_year": 1851,
-    "headquarters": "마카티, 필리핀",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-07 13:12"
-  },
-  {
     "id": "bank_of_the_philippine_islands",
     "name": "Bank of the Philippine Islands",
     "name_ko": "필리핀 제도은행",
@@ -5918,6 +5918,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-30 02:38"
+  },
+  {
+    "id": "bank_of_the_philippines_islands",
+    "name": "Bank of the Philippine Islands",
+    "name_ko": "필리핀 제도은행",
+    "country": "필리핀",
+    "country_flag": "🇵🇭",
+    "exchange": "PSE",
+    "ticker": "BPI",
+    "sector": "은행",
+    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 종합 금융 서비스를 제공하며 필리핀 금융 시장에서 높은 신뢰와 견고한 입지를 다지고 있다. 본 기사에서는 공공 인프라 지출 감소 추정을 발표한 주요 금융기관으로 언급되었다.",
+    "founded_year": 1851,
+    "headquarters": "마카티, 필리핀",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-07 13:12"
   },
   {
     "id": "basel_tiles",
