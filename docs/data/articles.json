@@ -1,5 +1,46 @@
 [
   {
+    "id": 137102,
+    "title_en": "중동, 최고 46도 극심한 더위…비 없는 맑은 날씨",
+    "title_ko": "중동, 최고 46도 극심한 더위…비 없는 맑은 날씨",
+    "summary_ko": "6일(현지시간) 예보된 중동 주요국의 다음주(월~금) 날씨는 최저기온 10°C에서 최고기온 46°C 사이의 기온 분포를 보일 것으로 예상된다. 이번 주간 전 지역에 걸쳐 비 소식은 전혀 예보되지 않아 대체로 맑고 건조한 기후가 지속될 전망이다.\n\n국가별 주간 기온을 보면 사우디아라비아는 최고 44°C와 최저 31°C, 아랍에미리트는 최고 42°C와 최저 31°C, 카타르는 최고 46°C와 최저 32°C, 이라크는 최고 43°C와 최저 26°C를 기록하며 매우 높은 기온을 나타낸다.\n\n반면 튀르키예는 최고 32°C와 최저 10°C로 ",
+    "url": "internal://weather_group_중동_weekly20260906",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_중동_weekly20260906",
+    "region": "middle_east",
+    "country": "중동",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-06 11:17",
+    "countries": [
+      "사우디아라비아",
+      "아랍에미리트",
+      "튀르키예",
+      "이스라엘",
+      "이란",
+      "이라크",
+      "카타르",
+      "요르단"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_saudi_arabia_20260906.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-06T11:17:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-06 11:17",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 136385,
     "title_en": "Robinhood Chain Daily DEX Volume Surges Past $3B in Q3 as Uniswap Burns Tokens",
     "title_ko": "로빈후드 체인 일일 DEX 거래량 3분기 30억 달러 돌파... 유니스왑 소각량 급증",
@@ -107,6 +148,40 @@
     "continuation_of_id": null
   },
   {
+    "id": 137099,
+    "title_en": "Kevin García Debuts as Comunicaciones Interim Manager with Draw in Guatemala's Primera División",
+    "title_ko": "과테말라 프리메라 디비시온…케빈 가르시아, 코무니카시오네스 임시 감독 데뷔전서 무승부",
+    "summary_ko": "과테말라 프로축구 클럽 코무니카시오네스의 임시 감독으로 부임한 케빈 가르시아가 6일(현지시간) 산토 도밍고 데 구스만 경기장에서 열린 믹스코와의 아페르투라 2026 토너먼트 7라운드 경기에서 1대 1 무승부를 기록하며 데뷔전을 치렀다.\n\n구단 유소년 팀에서 지도자 경력을 쌓아온 케빈 가르시아는 알보스(코무니카시오네스의 별칭) 팀을 이끄는 막중한 책임을 맡아 굳은 의지로 도전 과제에 임했다. 가르시아는 임시 감독이라는 직함이 책임을 덜어주지 않는다며 전적으로 책임을 지고 임하고 있다고 밝혔다.\n\n가르시아는 선수단을 잘 알고 있다는 점",
+    "url": "internal://solo_20260906_e226c99a",
+    "source": "NewsFinal",
+    "category": "글로벌",
+    "subcategory": "solo_20260906_e226c99a",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-06 10:27",
+    "countries": [
+      "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/17/0578_kevin_borlee_reeksen_400m_%2828541002155%29.jpg/960px-0578_kevin_borlee_reeksen_400m_%2828541002155%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "view_count": 0,
+    "first_published_at": "2026-09-06T10:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-06 10:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "사진: filip bossuyt from Kortrijk, Belgium (CC BY 2.0, Wikimedia Commons)",
+    "continuation_of_id": null
+  },
+  {
     "id": 137098,
     "title_en": "Eswatini Railway Joins South African, Mozambican Operators for Joint Exhibition at Trade Fair",
     "title_ko": "에스바티니 철도공사, 무역박람회서 남아공·모잠비크 철도 운영사들과 연합 전시",
@@ -140,40 +215,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: Htonl (CC BY-SA 2.0, Wikimedia Commons)",
-    "continuation_of_id": null
-  },
-  {
-    "id": 137099,
-    "title_en": "Kevin García Debuts as Comunicaciones Interim Manager with Draw in Guatemala's Primera División",
-    "title_ko": "과테말라 프리메라 디비시온…케빈 가르시아, 코무니카시오네스 임시 감독 데뷔전서 무승부",
-    "summary_ko": "과테말라 프로축구 클럽 코무니카시오네스의 임시 감독으로 부임한 케빈 가르시아가 6일(현지시간) 산토 도밍고 데 구스만 경기장에서 열린 믹스코와의 아페르투라 2026 토너먼트 7라운드 경기에서 1대 1 무승부를 기록하며 데뷔전을 치렀다.\n\n구단 유소년 팀에서 지도자 경력을 쌓아온 케빈 가르시아는 알보스(코무니카시오네스의 별칭) 팀을 이끄는 막중한 책임을 맡아 굳은 의지로 도전 과제에 임했다. 가르시아는 임시 감독이라는 직함이 책임을 덜어주지 않는다며 전적으로 책임을 지고 임하고 있다고 밝혔다.\n\n가르시아는 선수단을 잘 알고 있다는 점",
-    "url": "internal://solo_20260906_e226c99a",
-    "source": "NewsFinal",
-    "category": "글로벌",
-    "subcategory": "solo_20260906_e226c99a",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-06 10:27",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/17/0578_kevin_borlee_reeksen_400m_%2828541002155%29.jpg/960px-0578_kevin_borlee_reeksen_400m_%2828541002155%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-    "view_count": 0,
-    "first_published_at": "2026-09-06T10:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-06 10:27",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "사진: filip bossuyt from Kortrijk, Belgium (CC BY 2.0, Wikimedia Commons)",
     "continuation_of_id": null
   },
   {
@@ -640,46 +681,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 135569,
-    "title_en": "India and Myanmar Push to Strengthen Rare Earths Supply Chain Cooperation",
-    "title_ko": "인도와 미얀마, 희토류 공급망 협력 강화 추진",
-    "summary_ko": "[업데이트]\n■ 9월 6일 04:37 — 중국 희토류 기업들이 지정학적 우려와 베이징 당국의 보복을 피하기 위해 미국으로의 일부 선적을 중단하고 있다고 3세기초 소식통들을 인용해 4일(현지시간) 보도됐다. 지난 8월 초 미국 공급망 감시 기관인 RBA에 대해 중국이 제재를 부과한 이후, 일부 중국 공급업체들은 RBA와 연계된 글로벌 광물 공급망 감사 프로그램인 RMI의 실사 프레임워크를 준수할 경우 베이징으로부터 처벌을 받을 것을 우려해 미국 기업으로의 희토류 선적을 거부하고 있다. 다른 일부 중국 기업들도 최근 몇 달간 금지된 사",
-    "url": "internal://extrend_Rare_earths_collabor_2026090522",
-    "source": "NewsFinal",
-    "category": "자원·에너지",
-    "subcategory": "extrend_Rare_earths_collabor",
-    "region": "southeast_asia",
-    "country": "인도",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-06 04:37",
-    "countries": [
-      "인도",
-      "미얀마",
-      "중국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_rare_earth_mine_mineral_processing_industrial_mining.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T22:42:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 22:42",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-09-06 04:37",
-        "note": "중국 희토류 기업, 미국행 선적 중단"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
     "id": 135993,
     "title_en": "Intense Fighting Between Sudan's Military and Paramilitary Forces and Spread of Cholera",
     "title_ko": "수단 군부와 준군사조직 교전 격화 및 콜레라 확산",
@@ -712,6 +713,46 @@
       {
         "timestamp": "2026-09-06 04:37",
         "note": "남수단, 심각한 식량 불안정으로 긴급 대책 요구됨"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
+    "id": 135569,
+    "title_en": "India and Myanmar Push to Strengthen Rare Earths Supply Chain Cooperation",
+    "title_ko": "인도와 미얀마, 희토류 공급망 협력 강화 추진",
+    "summary_ko": "[업데이트]\n■ 9월 6일 04:37 — 중국 희토류 기업들이 지정학적 우려와 베이징 당국의 보복을 피하기 위해 미국으로의 일부 선적을 중단하고 있다고 3세기초 소식통들을 인용해 4일(현지시간) 보도됐다. 지난 8월 초 미국 공급망 감시 기관인 RBA에 대해 중국이 제재를 부과한 이후, 일부 중국 공급업체들은 RBA와 연계된 글로벌 광물 공급망 감사 프로그램인 RMI의 실사 프레임워크를 준수할 경우 베이징으로부터 처벌을 받을 것을 우려해 미국 기업으로의 희토류 선적을 거부하고 있다. 다른 일부 중국 기업들도 최근 몇 달간 금지된 사",
+    "url": "internal://extrend_Rare_earths_collabor_2026090522",
+    "source": "NewsFinal",
+    "category": "자원·에너지",
+    "subcategory": "extrend_Rare_earths_collabor",
+    "region": "southeast_asia",
+    "country": "인도",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-06 04:37",
+    "countries": [
+      "인도",
+      "미얀마",
+      "중국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_rare_earth_mine_mineral_processing_industrial_mining.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T22:42:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 22:42",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-09-06 04:37",
+        "note": "중국 희토류 기업, 미국행 선적 중단"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -1669,6 +1710,40 @@
     "continuation_of_id": null
   },
   {
+    "id": 134224,
+    "title_en": "Antigua GFC Edges Aurora FC to Reclaim Apertura 2026 Lead",
+    "title_ko": "안티구아 GFC, 아우로라 FC 꺾고 아페르투라 2026 선두 복귀",
+    "summary_ko": "과테말라 프로축구 아페르투라 2026 토너먼트에서 안티구아 GFC가 5일(현지시간) 펜사티보 경기장에서 열린 개막 7라운드 경기에서 아우로라 FC를 상대로 2대 1 승리를 거뒀다.\n\n양 팀은 경기 초반부터 공방전을 벌이며 기회를 노렸으나 안티구아 GFC의 거센 공세는 아우로라 FC의 골키퍼 디에고 나바스의 선방에 막혀 쉽게 결실을 맺지 못했다. 팽팽하던 균형은 후반 들어 깨졌으며 후반 6분 케빈 로페스가 강력한 프리킥 슈팅으로 골키퍼의 실책을 유도해 선제골을 터뜨렸다.\n\n반격에 나선 아우로라 FC는 후반 26분 카를로스 몬테로스의 ",
+    "url": "internal://solo_20260905_0ba51e43",
+    "source": "NewsFinal",
+    "category": "글로벌",
+    "subcategory": "solo_20260905_0ba51e43",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-05 13:35",
+    "countries": [
+      "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/69/WikiConf26_Argentina_-_Panel_de_apertura_%282026-04-18%29_-_02.jpg/960px-WikiConf26_Argentina_-_Panel_de_apertura_%282026-04-18%29_-_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T13:35:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 13:35",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "사진: Mauricio V. Genta (CC BY-SA 4.0, Wikimedia Commons)",
+    "continuation_of_id": null
+  },
+  {
     "id": 134225,
     "title_en": "Israeli Military Issues Emergency Order to Seize Palestinian Land in West Bank",
     "title_ko": "이스라엘군, 요르단강 서안 제닌 남동쪽 팔레스타인 토지 긴급 압류",
@@ -1701,40 +1776,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 134224,
-    "title_en": "Antigua GFC Edges Aurora FC to Reclaim Apertura 2026 Lead",
-    "title_ko": "안티구아 GFC, 아우로라 FC 꺾고 아페르투라 2026 선두 복귀",
-    "summary_ko": "과테말라 프로축구 아페르투라 2026 토너먼트에서 안티구아 GFC가 5일(현지시간) 펜사티보 경기장에서 열린 개막 7라운드 경기에서 아우로라 FC를 상대로 2대 1 승리를 거뒀다.\n\n양 팀은 경기 초반부터 공방전을 벌이며 기회를 노렸으나 안티구아 GFC의 거센 공세는 아우로라 FC의 골키퍼 디에고 나바스의 선방에 막혀 쉽게 결실을 맺지 못했다. 팽팽하던 균형은 후반 들어 깨졌으며 후반 6분 케빈 로페스가 강력한 프리킥 슈팅으로 골키퍼의 실책을 유도해 선제골을 터뜨렸다.\n\n반격에 나선 아우로라 FC는 후반 26분 카를로스 몬테로스의 ",
-    "url": "internal://solo_20260905_0ba51e43",
-    "source": "NewsFinal",
-    "category": "글로벌",
-    "subcategory": "solo_20260905_0ba51e43",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-05 13:35",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/69/WikiConf26_Argentina_-_Panel_de_apertura_%282026-04-18%29_-_02.jpg/960px-WikiConf26_Argentina_-_Panel_de_apertura_%282026-04-18%29_-_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T13:35:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 13:35",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "사진: Mauricio V. Genta (CC BY-SA 4.0, Wikimedia Commons)",
     "continuation_of_id": null
   },
   {
@@ -1773,40 +1814,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 134221,
-    "title_en": "Guatemala Labor Ministry Clarifies Pro-Rata Severance, Benefits Required Even During Probation",
-    "title_ko": "과테말라 노동부, 수습 기간 퇴직 시에도 비례 퇴직금 지급 의무 명시",
-    "summary_ko": "과테말라 노동사회보장부(Mintrab) 근로감독관들은 고용 관계가 종료될 때 근로 기간이 단 몇 주에 불과하거나 수습 기간 중이더라도 고용주는 이에 상응하는 비례적 수당을 정산금에 포함해야 한다고 5일(현지시간) 밝혔다. 이는 휴가, 연말 보너스인 아기날도, 그리고 보너스 14를 포함하는 조치다.\n\n최근 한 달에서 한 달 반 동안 근무하거나 두 달의 수습 기간을 마친 직후 해고된 과테말라 근로자들이 본지에 제보한 바에 따르면, 이들 기업은 계약 종료를 통보하면서 30일 후에 정산 수표를 받게 될 것이라고 안내했다. 그러나 일부 근로",
-    "url": "internal://solo_20260905_358e5d17",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "solo_20260905_358e5d17",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-05 13:33",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_employment_contract_workplace_office_worker.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T13:33:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 13:33",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
     "id": 134222,
     "title_en": "Missing Belizean Found on Guatemala Street Reunited with Family After 13 Hours Amid Communication Hurdles",
     "title_ko": "과테말라 거리서 발견된 실종 벨리즈인, 13시간 만에 가족 품으로…소통 한계 지적",
@@ -1826,6 +1833,40 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_homeless_person_city_street_family_reunion.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T13:33:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 13:33",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
+    "id": 134221,
+    "title_en": "Guatemala Labor Ministry Clarifies Pro-Rata Severance, Benefits Required Even During Probation",
+    "title_ko": "과테말라 노동부, 수습 기간 퇴직 시에도 비례 퇴직금 지급 의무 명시",
+    "summary_ko": "과테말라 노동사회보장부(Mintrab) 근로감독관들은 고용 관계가 종료될 때 근로 기간이 단 몇 주에 불과하거나 수습 기간 중이더라도 고용주는 이에 상응하는 비례적 수당을 정산금에 포함해야 한다고 5일(현지시간) 밝혔다. 이는 휴가, 연말 보너스인 아기날도, 그리고 보너스 14를 포함하는 조치다.\n\n최근 한 달에서 한 달 반 동안 근무하거나 두 달의 수습 기간을 마친 직후 해고된 과테말라 근로자들이 본지에 제보한 바에 따르면, 이들 기업은 계약 종료를 통보하면서 30일 후에 정산 수표를 받게 될 것이라고 안내했다. 그러나 일부 근로",
+    "url": "internal://solo_20260905_358e5d17",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "solo_20260905_358e5d17",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-05 13:33",
+    "countries": [
+      "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_employment_contract_workplace_office_worker.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T13:33:00",
     "update_log": [
@@ -3255,40 +3296,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 133056,
-    "title_en": "Lululemon Shares Plunge 20% After Cutting Annual Outlook Again",
-    "title_ko": "룰루레몬, 연간 전망치 추가 하향 속 주가 20% 급락",
-    "summary_ko": "4일(현지시간) 미국의 애슬레저 기업 룰루레몬 애슬레티카 주가가 연간 실적 전망치 하향 조정 여파로 20% 급락했다. 이번 주가 하락은 회사의 회계연도 2분기 수익이 월스트리트 예상치를 크게 밑돌고, 올해 들어 세 번째로 가이던스가 하향 조정되면서 발생했다. 이에 따라 주가는 8년 만의 최저 수준으로 떨어졌다.\n\n룰루레몬의 시그니처 상품인 레깅스 사업 부문에서 뚜렷한 매출 감소세가 확인됐다. 이번 분기 룰루레몬의 비교매출은 9% 감소해 대침체기 이후 최악의 실적 부진을 기록했다. 알로 요가와 부오리, 스킴스 등 경쟁 브랜드들이 애슬",
-    "url": "internal://realtrend_Lululemon_CEO_Transition_&_Slump_2026090504",
-    "source": "NewsFinal",
-    "category": "산업·기업",
-    "subcategory": "realtrend_Lululemon_CEO_Transi",
-    "region": "africa",
-    "country": "미국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-05 04:49",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_stock_market_retail_store_yoga_pants.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T04:49:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 04:49",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
     "id": 133055,
     "title_en": "Russian Forces Strike SBU Headquarters in Central Kyiv as US-Ukraine Tensions Rise",
     "title_ko": "러시아군, 키예프 중심부 SBU 본부 타격…미·우크라 긴장 고조",
@@ -3308,6 +3315,40 @@
     ],
     "is_published": true,
     "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/75/SBU_Headquarters.jpg/960px-SBU_Headquarters.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T04:49:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 04:49",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
+    "id": 133056,
+    "title_en": "Lululemon Shares Plunge 20% After Cutting Annual Outlook Again",
+    "title_ko": "룰루레몬, 연간 전망치 추가 하향 속 주가 20% 급락",
+    "summary_ko": "4일(현지시간) 미국의 애슬레저 기업 룰루레몬 애슬레티카 주가가 연간 실적 전망치 하향 조정 여파로 20% 급락했다. 이번 주가 하락은 회사의 회계연도 2분기 수익이 월스트리트 예상치를 크게 밑돌고, 올해 들어 세 번째로 가이던스가 하향 조정되면서 발생했다. 이에 따라 주가는 8년 만의 최저 수준으로 떨어졌다.\n\n룰루레몬의 시그니처 상품인 레깅스 사업 부문에서 뚜렷한 매출 감소세가 확인됐다. 이번 분기 룰루레몬의 비교매출은 9% 감소해 대침체기 이후 최악의 실적 부진을 기록했다. 알로 요가와 부오리, 스킴스 등 경쟁 브랜드들이 애슬",
+    "url": "internal://realtrend_Lululemon_CEO_Transition_&_Slump_2026090504",
+    "source": "NewsFinal",
+    "category": "산업·기업",
+    "subcategory": "realtrend_Lululemon_CEO_Transi",
+    "region": "africa",
+    "country": "미국",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-05 04:49",
+    "countries": [
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_stock_market_retail_store_yoga_pants.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T04:49:00",
     "update_log": [
@@ -4166,6 +4207,41 @@
     "continuation_of_id": null
   },
   {
+    "id": 129718,
+    "title_en": "US Warns Threats to Democracy as Security Ties With Guatemala Deepen",
+    "title_ko": "미국, 과테말라와 안보 협력 강화 속 민주주의 위협 세력에 무관용 경고",
+    "summary_ko": "미국은 민주주의 제도와 안보를 위협하는 세력에 대해 비자 추가 취소 등 지속적인 조치를 취할 것이라고 3일(현지시간) 밝혔다. 주과테말라 미국 대사관은 아나 퀸타나 로베트 미국 국무부 중미 담당 부차관의 과테말라 방문을 계기로 이 같은 입장을 공개했다.\n\n방문 기간 아나 퀸타나 로베트 부차관은 베르나르도 아레발로 과테말라 대통령, 헨리 사엔스 라모스 국방장관, 가브리엘 에스투아도 가르시아 루나 검찰총장 겸 법무부 장관 등 고위 관료들과 연이어 회담을 가졌으며 양국 간 안보 및 협력 방안을 논의했다. 미국 대사관 측은 양국이 마약 밀",
+    "url": "internal://solo_20260904_624e0630",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "solo_20260904_624e0630",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-04 11:07",
+    "countries": [
+      "과테말라",
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_diplomatic_meeting_government_building_security_coop.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-04T11:07:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-04 11:07",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
     "id": 129717,
     "title_en": "Texas Court Acquits and Releases Former Guatemalan Aide on Cocaine Trafficking Charges",
     "title_ko": "텍사스 법원, 코카인 밀매 혐의 과테말라 출신 전직 보좌관 무죄 석방",
@@ -4187,41 +4263,6 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_courthouse_law_court_judge_gavel.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T11:07:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 11:07",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 129718,
-    "title_en": "US Warns Threats to Democracy as Security Ties With Guatemala Deepen",
-    "title_ko": "미국, 과테말라와 안보 협력 강화 속 민주주의 위협 세력에 무관용 경고",
-    "summary_ko": "미국은 민주주의 제도와 안보를 위협하는 세력에 대해 비자 추가 취소 등 지속적인 조치를 취할 것이라고 3일(현지시간) 밝혔다. 주과테말라 미국 대사관은 아나 퀸타나 로베트 미국 국무부 중미 담당 부차관의 과테말라 방문을 계기로 이 같은 입장을 공개했다.\n\n방문 기간 아나 퀸타나 로베트 부차관은 베르나르도 아레발로 과테말라 대통령, 헨리 사엔스 라모스 국방장관, 가브리엘 에스투아도 가르시아 루나 검찰총장 겸 법무부 장관 등 고위 관료들과 연이어 회담을 가졌으며 양국 간 안보 및 협력 방안을 논의했다. 미국 대사관 측은 양국이 마약 밀",
-    "url": "internal://solo_20260904_624e0630",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "solo_20260904_624e0630",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-04 11:07",
-    "countries": [
-      "과테말라",
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_diplomatic_meeting_government_building_security_coop.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-04T11:07:00",
     "update_log": [
@@ -4633,40 +4674,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 129277,
-    "title_en": "Customized 'Airplane Car' Turns Heads on Guatemalan Roads, Goes Viral on Social Media",
-    "title_ko": "과테말라 산마르코스 달리는 ‘자동차 비행기’…SNS서 화제",
-    "summary_ko": "4일(현지시간) 과테말라 매체 프렌사 리브레에 따르면, 산마르코스주의 도로를 비행기 모양으로 개조한 자동차가 달리며 소셜미디어에서 큰 화제를 모으고 있다. 이 차량은 비록 하늘을 날 수는 없지만 비행기 동체와 날개 형태를 갖추고 도로를 주행하도록 제작됐다.\n\n이 차량을 만든 이는 만프레도 오르테가라는 인물로, 그는 세 명의 형제와 함께 수년간 자동차를 비행기 형태로 개조하겠다는 구상을 품어왔다. 지난 2020년부터 시작된 이 프로젝트는 인내와 창의력을 바탕으로 마침내 결실을 보게 됐다.\n\n만프레도 오르테가는 산마르코스주 테후틀라 시",
-    "url": "internal://solo_20260904_55647ddc",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "solo_20260904_55647ddc",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-04 08:15",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_custom_car_converted_airplane_highway_traffic.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T08:15:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 08:15",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
     "id": 129278,
     "title_en": "Qatar Museums Launches Special Exhibitions on Uzbek Heritage at Museum of Islamic Art",
     "title_ko": "카타르 국립박물관, 이슬람 예술 박물관서 우즈베키스탄 문화유산 특별전 개막",
@@ -4699,6 +4706,40 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: 26D (CC BY-SA 4.0, Wikimedia Commons)",
+    "continuation_of_id": null
+  },
+  {
+    "id": 129277,
+    "title_en": "Customized 'Airplane Car' Turns Heads on Guatemalan Roads, Goes Viral on Social Media",
+    "title_ko": "과테말라 산마르코스 달리는 ‘자동차 비행기’…SNS서 화제",
+    "summary_ko": "4일(현지시간) 과테말라 매체 프렌사 리브레에 따르면, 산마르코스주의 도로를 비행기 모양으로 개조한 자동차가 달리며 소셜미디어에서 큰 화제를 모으고 있다. 이 차량은 비록 하늘을 날 수는 없지만 비행기 동체와 날개 형태를 갖추고 도로를 주행하도록 제작됐다.\n\n이 차량을 만든 이는 만프레도 오르테가라는 인물로, 그는 세 명의 형제와 함께 수년간 자동차를 비행기 형태로 개조하겠다는 구상을 품어왔다. 지난 2020년부터 시작된 이 프로젝트는 인내와 창의력을 바탕으로 마침내 결실을 보게 됐다.\n\n만프레도 오르테가는 산마르코스주 테후틀라 시",
+    "url": "internal://solo_20260904_55647ddc",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "solo_20260904_55647ddc",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-04 08:15",
+    "countries": [
+      "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_custom_car_converted_airplane_highway_traffic.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-04T08:15:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-04 08:15",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
     "continuation_of_id": null
   },
   {
@@ -4946,6 +4987,40 @@
     "continuation_of_id": null
   },
   {
+    "id": 128730,
+    "title_en": "한국, 전국·맑은 가운데 31도 안팎 늦더위…제주 강풍",
+    "title_ko": "한국, 전국·맑은 가운데 31도 안팎 늦더위…제주 강풍",
+    "summary_ko": "4일 한국의 날씨는 전국이 대체로 맑은 가운데 낮 기온이 31도까지 오르는 등 완연한 더위를 보이겠으며, 제주 지역을 중심으로 강한 바람이 불 전망이다. 기상청에 따르면 전국적인 기상 특보는 발효되지 않았으나, 제주에서는 최대풍속 시속 47km에 달하는 강풍이 예상되어 시설물 관리와 안전사고에 각별한 주의가 요구된다. 강수확률이 60%를 넘는 지역은 없어 전국 대부분 지방에서 뚜렷한 비 소식 없이 쾌청한 하늘이 드러나겠다.\n\n주요 지역별 상세 날씨를 살펴보면, 서울은 오전과 오후 모두 맑은 날씨가 이어지겠으며 기온은 최저 21도에서",
+    "url": "internal://weather_한국_today20260904",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_한국_today20260904",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-04 06:27",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20260904.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-04T06:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-04 06:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 128729,
     "title_en": "Apple Shares Rise 1.00% Amid Improving Technical Indicators",
     "title_ko": "[종목 동향] 애플 주가 1.00% 상승…기술적 지표 개선세",
@@ -4980,29 +5055,31 @@
     "continuation_of_id": null
   },
   {
-    "id": 128730,
-    "title_en": "한국, 전국·맑은 가운데 31도 안팎 늦더위…제주 강풍",
-    "title_ko": "한국, 전국·맑은 가운데 31도 안팎 늦더위…제주 강풍",
-    "summary_ko": "4일 한국의 날씨는 전국이 대체로 맑은 가운데 낮 기온이 31도까지 오르는 등 완연한 더위를 보이겠으며, 제주 지역을 중심으로 강한 바람이 불 전망이다. 기상청에 따르면 전국적인 기상 특보는 발효되지 않았으나, 제주에서는 최대풍속 시속 47km에 달하는 강풍이 예상되어 시설물 관리와 안전사고에 각별한 주의가 요구된다. 강수확률이 60%를 넘는 지역은 없어 전국 대부분 지방에서 뚜렷한 비 소식 없이 쾌청한 하늘이 드러나겠다.\n\n주요 지역별 상세 날씨를 살펴보면, 서울은 오전과 오후 모두 맑은 날씨가 이어지겠으며 기온은 최저 21도에서",
-    "url": "internal://weather_한국_today20260904",
+    "id": 128727,
+    "title_en": "동아시아, 베이징 34도 찜통더위 속 울란바토르 쌀쌀",
+    "title_ko": "동아시아, 베이징 34도 찜통더위 속 울란바토르 쌀쌀",
+    "summary_ko": "4일(현지시간) 동아시아 주요국 수도는 최저기온 9°C에서 최고기온 34°C 사이의 폭넓은 기온 분포를 보였다. 중국 베이징은 최고기온 34°C, 최저기온 22°C를 기록하며 동아시아 주요국 수도 중 가장 더운 곳으로 집계됐다. 반면 몽골 울란바토르는 최고기온 17°C, 최저기온 9°C에 머물러 가장 선선한 곳으로 나타났다. 베이징의 최고기온은 울란바토르보다 17°C나 높아 지역별 기온 격차가 뚜렷했다.\n\n중국 베이징은 흐린 날씨를 보인 가운데 강수확률 0%, 강수량 0.0mm를 기록했으며 자외선지수는 5.1로 측정됐다. 내일 베이",
+    "url": "internal://weather_group_동아시아_today20260904",
     "source": "NewsFinal",
     "category": "날씨",
-    "subcategory": "weather_한국_today20260904",
-    "region": "global",
-    "country": "한국",
+    "subcategory": "weather_group_동아시아_today20260904",
+    "region": "east_asia",
+    "country": "동아시아",
     "country_flag": "",
     "score": 1,
-    "created_at": "2026-09-04 06:27",
+    "created_at": "2026-09-04 06:26",
     "countries": [
-      "한국"
+      "일본",
+      "중국",
+      "몽골"
     ],
     "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20260904.jpg",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_china_20260904.jpg",
     "view_count": 0,
-    "first_published_at": "2026-09-04T06:27:00",
+    "first_published_at": "2026-09-04T06:26:00",
     "update_log": [
       {
-        "timestamp": "2026-09-04 06:27",
+        "timestamp": "2026-09-04 06:26",
         "note": "최초 게시"
       }
     ],
@@ -5374,42 +5451,6 @@
         }
       ]
     },
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 128727,
-    "title_en": "동아시아, 베이징 34도 찜통더위 속 울란바토르 쌀쌀",
-    "title_ko": "동아시아, 베이징 34도 찜통더위 속 울란바토르 쌀쌀",
-    "summary_ko": "4일(현지시간) 동아시아 주요국 수도는 최저기온 9°C에서 최고기온 34°C 사이의 폭넓은 기온 분포를 보였다. 중국 베이징은 최고기온 34°C, 최저기온 22°C를 기록하며 동아시아 주요국 수도 중 가장 더운 곳으로 집계됐다. 반면 몽골 울란바토르는 최고기온 17°C, 최저기온 9°C에 머물러 가장 선선한 곳으로 나타났다. 베이징의 최고기온은 울란바토르보다 17°C나 높아 지역별 기온 격차가 뚜렷했다.\n\n중국 베이징은 흐린 날씨를 보인 가운데 강수확률 0%, 강수량 0.0mm를 기록했으며 자외선지수는 5.1로 측정됐다. 내일 베이",
-    "url": "internal://weather_group_동아시아_today20260904",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_동아시아_today20260904",
-    "region": "east_asia",
-    "country": "동아시아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-04 06:26",
-    "countries": [
-      "일본",
-      "중국",
-      "몽골"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_china_20260904.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T06:26:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 06:26",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
     "image_credit": null,
     "continuation_of_id": null
   },
@@ -6648,40 +6689,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 125544,
-    "title_en": "김성수 대법관 후보자, 처남 명의 강남 아파트 저가 전세 거주 논란 확산",
-    "title_ko": "김성수 대법관 후보자, 처남 명의 강남 아파트 저가 전세 거주 논란 확산",
-    "summary_ko": "동아일보, KBS 뉴스, 한겨레 등 주요 언론 보도에 따르면 2일(현지시간) 김성수 대법관 후보자가 처남이 임차한 서울 강남 아파트에 시세보다 저렴한 전세로 장기간 거주해 온 사실이 드러났다.\n\n논란이 된 아파트는 서울 강남구 도곡동에 위치한 도곡렉슬 43평 규모로, 해당 주택의 전세 시세는 15억 원에 달한다. 그러나 김 후보자는 처남이 임차한 이 아파트에 보증금 3억 5천만 원과 월세 80만 원 조건으로 거주한 것으로 확인됐다.\n\n야당은 이를 명백한 '처남 찬스'를 이용한 편법 전전대 거래로 규정했다. 국회 법제사법위원회 소속 ",
-    "url": "internal://realtrend_김성수_대법관_후보_2026090310",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "realtrend_김성수_대법관_후보",
-    "region": "africa",
-    "country": "한국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-03 10:49",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": null,
-    "view_count": 0,
-    "first_published_at": "2026-09-03T10:49:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-03 10:49",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
     "id": 125543,
     "title_en": "가나 뉴 위네바 지역 토지 소송 관련 폭력 사태로 3명 사망·17명 부상",
     "title_ko": "가나 뉴 위네바 지역 토지 소송 관련 폭력 사태로 3명 사망·17명 부상",
@@ -6710,6 +6717,40 @@
       {
         "timestamp": "2026-09-03 19:10",
         "note": "토지 분쟁 폭력 사태 관련 용의자 6명 체포 구금"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 125544,
+    "title_en": "김성수 대법관 후보자, 처남 명의 강남 아파트 저가 전세 거주 논란 확산",
+    "title_ko": "김성수 대법관 후보자, 처남 명의 강남 아파트 저가 전세 거주 논란 확산",
+    "summary_ko": "동아일보, KBS 뉴스, 한겨레 등 주요 언론 보도에 따르면 2일(현지시간) 김성수 대법관 후보자가 처남이 임차한 서울 강남 아파트에 시세보다 저렴한 전세로 장기간 거주해 온 사실이 드러났다.\n\n논란이 된 아파트는 서울 강남구 도곡동에 위치한 도곡렉슬 43평 규모로, 해당 주택의 전세 시세는 15억 원에 달한다. 그러나 김 후보자는 처남이 임차한 이 아파트에 보증금 3억 5천만 원과 월세 80만 원 조건으로 거주한 것으로 확인됐다.\n\n야당은 이를 명백한 '처남 찬스'를 이용한 편법 전전대 거래로 규정했다. 국회 법제사법위원회 소속 ",
+    "url": "internal://realtrend_김성수_대법관_후보_2026090310",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "realtrend_김성수_대법관_후보",
+    "region": "africa",
+    "country": "한국",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-03 10:49",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": null,
+    "view_count": 0,
+    "first_published_at": "2026-09-03T10:49:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-03 10:49",
+        "note": "최초 게시"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -7457,40 +7498,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 124812,
-    "title_en": "쿠웨이트 검찰, 농지 및 토지 조작 연루 71명 형사재판 회부",
-    "title_ko": "쿠웨이트 검찰, 농지 및 토지 조작 연루 71명 형사재판 회부",
-    "summary_ko": "쿠웨이트 공공농업수산청(PAAAFR)이 관할하는 농업용지와 토지 관련 절차를 조작한 혐의로 피고인 71명이 형사재판에 회부됐다. 공공기소국은 2일(현지시간) 이 같은 내용을 밝혔다.\n\n검찰은 공공농업수산청이 소유한 농업용지와 토지의 절차 조작, 그리고 그로 인한 혜택과 용익권을 둘러싸고 벌어진 범죄를 대상으로 자금세탁 사건 153/2026호 및 형사수사 사건 16/2026호에 대한 수사를 진행했다. 이번 사건에 연루된 피고인 71명에는 공공 부문 직원들이 포함됐으며, 이들 중 일부는 지도 및 감독 직책을 맡고 있거나 다양한 공공기관",
-    "url": "internal://solo_20260903_6dce28f2",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "solo_20260903_6dce28f2",
-    "region": "middle_east",
-    "country": "쿠웨이트",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-03 05:26",
-    "countries": [
-      "쿠웨이트"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_farmland_government_building_court_trial.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-03T05:26:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-03 05:26",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
     "id": 124811,
     "title_en": "카타르 웹 서밋, 4회 행사 앞두고 70개 이상 글로벌 파트너사 확보",
     "title_ko": "카타르 웹 서밋, 4회 행사 앞두고 70개 이상 글로벌 파트너사 확보",
@@ -7509,6 +7516,40 @@
     ],
     "is_published": true,
     "image_url": "https://upload.wikimedia.org/wikipedia/commons/c/c4/Aya_Atassi_Web_Summit_Speaker.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "view_count": 0,
+    "first_published_at": "2026-09-03T05:26:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-03 05:26",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
+    "id": 124812,
+    "title_en": "쿠웨이트 검찰, 농지 및 토지 조작 연루 71명 형사재판 회부",
+    "title_ko": "쿠웨이트 검찰, 농지 및 토지 조작 연루 71명 형사재판 회부",
+    "summary_ko": "쿠웨이트 공공농업수산청(PAAAFR)이 관할하는 농업용지와 토지 관련 절차를 조작한 혐의로 피고인 71명이 형사재판에 회부됐다. 공공기소국은 2일(현지시간) 이 같은 내용을 밝혔다.\n\n검찰은 공공농업수산청이 소유한 농업용지와 토지의 절차 조작, 그리고 그로 인한 혜택과 용익권을 둘러싸고 벌어진 범죄를 대상으로 자금세탁 사건 153/2026호 및 형사수사 사건 16/2026호에 대한 수사를 진행했다. 이번 사건에 연루된 피고인 71명에는 공공 부문 직원들이 포함됐으며, 이들 중 일부는 지도 및 감독 직책을 맡고 있거나 다양한 공공기관",
+    "url": "internal://solo_20260903_6dce28f2",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "solo_20260903_6dce28f2",
+    "region": "middle_east",
+    "country": "쿠웨이트",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-03 05:26",
+    "countries": [
+      "쿠웨이트"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_farmland_government_building_court_trial.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-03T05:26:00",
     "update_log": [
@@ -8066,21 +8107,22 @@
     "continuation_of_id": null
   },
   {
-    "id": 123783,
-    "title_en": "장동혁 의원, 미래에셋 로비 의혹 제기하며 사의 표명... 정치권 파장 확대",
-    "title_ko": "장동혁 의원, 미래에셋 로비 의혹 제기하며 사의 표명... 정치권 파장 확대",
-    "summary_ko": "장동혁 의원은 2일(현지시간) 김용범 청와대 정책실장이 미래에셋의 로비를 받아 단일종목 레버리지 상장지수펀드(ETF) 도입을 추진했다는 의혹을 공개적으로 제기했다. 장동혁 의원은 이와 같은 의혹 제기와 함께 사의를 표명했다. 야당은 이번 사태를 'ETF 게이트'로 규정하고 철저한 진상 규명을 위한 특검 도입을 촉구하고 나섰다.\n\n김용범 정책실장은 개각 발표 다음 날인 1일(현지시간) 전격적으로 사의를 표명했다. 이 대통령은 사의 표명 하루 만에 김용범 실장의 사표를 수리했다. 이번 사퇴는 부동산 정책 책임론과 맞물려 경제 사령탑 라",
-    "url": "internal://realtrend_김용범_미래에셋_로비_및_단일종목_레버리지_ETF_의혹_2026090222",
+    "id": 123781,
+    "title_en": "미 국방부 피트 헤그세스 장관 캐나다 생도 프로그램 조롱 논란 속 육군 장관 사임",
+    "title_ko": "미 국방부 피트 헤그세스 장관 캐나다 생도 프로그램 조롱 논란 속 육군 장관 사임",
+    "summary_ko": "댄 드리스콜(Dan Driscoll) 육군 장관이 피트 헤그세스(Pete Hegseth) 국방부 장관과의 충돌로 사임한 이후 미국 국방부 내부의 혼란이 심화되었다. 파이낸셜 타임스(Financial Times)의 보도에 따르면 이번 사임은 국방부 최고위층 간의 마찰을 드러냈다.\n\n피트 헤그세스 장관은 1일(현지시간) 소셜미디어를 통해 캐나다의 청소년 생도 프로그램을 겨냥한 게시물을 올려 논란을 빚었다. CBC 등 외신 보도에 따르면 이 게시물은 캐나다 생도 프로그램을 경시하고 여성 청소년 생도 강사를 조롱하는 내용을 담았다. \n\n캐",
+    "url": "internal://realtrend_Pentagon_Leadership_Resignation_(Driscoll_&_Hegseth)_2026090222",
     "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "realtrend_김용범_미래에셋_로비_및_단일종목_레",
+    "category": "정치·외교",
+    "subcategory": "realtrend_Pentagon_Leadership_",
     "region": "africa",
-    "country": "한국",
+    "country": "미국",
     "country_flag": "",
     "score": 2,
     "created_at": "2026-09-02 22:46",
     "countries": [
-      "한국"
+      "미국",
+      "캐나다"
     ],
     "is_published": true,
     "image_url": null,
@@ -8100,22 +8142,21 @@
     "continuation_of_id": null
   },
   {
-    "id": 123781,
-    "title_en": "미 국방부 피트 헤그세스 장관 캐나다 생도 프로그램 조롱 논란 속 육군 장관 사임",
-    "title_ko": "미 국방부 피트 헤그세스 장관 캐나다 생도 프로그램 조롱 논란 속 육군 장관 사임",
-    "summary_ko": "댄 드리스콜(Dan Driscoll) 육군 장관이 피트 헤그세스(Pete Hegseth) 국방부 장관과의 충돌로 사임한 이후 미국 국방부 내부의 혼란이 심화되었다. 파이낸셜 타임스(Financial Times)의 보도에 따르면 이번 사임은 국방부 최고위층 간의 마찰을 드러냈다.\n\n피트 헤그세스 장관은 1일(현지시간) 소셜미디어를 통해 캐나다의 청소년 생도 프로그램을 겨냥한 게시물을 올려 논란을 빚었다. CBC 등 외신 보도에 따르면 이 게시물은 캐나다 생도 프로그램을 경시하고 여성 청소년 생도 강사를 조롱하는 내용을 담았다. \n\n캐",
-    "url": "internal://realtrend_Pentagon_Leadership_Resignation_(Driscoll_&_Hegseth)_2026090222",
+    "id": 123783,
+    "title_en": "장동혁 의원, 미래에셋 로비 의혹 제기하며 사의 표명... 정치권 파장 확대",
+    "title_ko": "장동혁 의원, 미래에셋 로비 의혹 제기하며 사의 표명... 정치권 파장 확대",
+    "summary_ko": "장동혁 의원은 2일(현지시간) 김용범 청와대 정책실장이 미래에셋의 로비를 받아 단일종목 레버리지 상장지수펀드(ETF) 도입을 추진했다는 의혹을 공개적으로 제기했다. 장동혁 의원은 이와 같은 의혹 제기와 함께 사의를 표명했다. 야당은 이번 사태를 'ETF 게이트'로 규정하고 철저한 진상 규명을 위한 특검 도입을 촉구하고 나섰다.\n\n김용범 정책실장은 개각 발표 다음 날인 1일(현지시간) 전격적으로 사의를 표명했다. 이 대통령은 사의 표명 하루 만에 김용범 실장의 사표를 수리했다. 이번 사퇴는 부동산 정책 책임론과 맞물려 경제 사령탑 라",
+    "url": "internal://realtrend_김용범_미래에셋_로비_및_단일종목_레버리지_ETF_의혹_2026090222",
     "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "realtrend_Pentagon_Leadership_",
+    "category": "경제",
+    "subcategory": "realtrend_김용범_미래에셋_로비_및_단일종목_레",
     "region": "africa",
-    "country": "미국",
+    "country": "한국",
     "country_flag": "",
     "score": 2,
     "created_at": "2026-09-02 22:46",
     "countries": [
-      "미국",
-      "캐나다"
+      "한국"
     ],
     "is_published": true,
     "image_url": null,
@@ -8424,40 +8465,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 122210,
-    "title_en": "캐나다 윌리스톤호에서 발견된 거대 부유섬…사라졌다가 30km 떨어진 곳서 재발견",
-    "title_ko": "캐나다 윌리스톤호에서 발견된 거대 부유섬…사라졌다가 30km 떨어진 곳서 재발견",
-    "summary_ko": "캐나다 브리티시컬럼비아주 북부의 거대한 호수에서 발견된 정체불명의 거대 부유섬이 행방이 묘연해진 지 수주 만에 다시 발견됐다. 이 섬은 지난 8월 초 윌리스톤호에서 항해하던 항해사들에 의해 처음 목격됐다. 당시 촬영된 영상이 소셜미디어를 통해 빠르게 확산되면서 전 세계적인 관심을 모았다.\n\n윌리스톤호는 브리티시컬럼비아주에서 가장 큰 인공 담수호다. 7월 말 촬영된 위성 사진에서도 축구장 약 1.5개 크기에 달하는 이 삼림 지대의 존재가 확인됐다. 그러나 불과 몇 주 뒤인 8월 5일 촬영된 위성 사진에서는 섬의 흔적이 온데간데없이 사",
-    "url": "internal://solo_20260902_d47d823f",
-    "source": "NewsFinal",
-    "category": "자원·에너지",
-    "subcategory": "solo_20260902_d47d823f",
-    "region": "global",
-    "country": "캐나다",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-02 13:06",
-    "countries": [
-      "캐나다"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_floating_island_mountain_lake_forest_aerial_view.jpg",
-    "view_count": 1,
-    "first_published_at": "2026-09-02T13:06:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-02 13:06",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
     "id": 119633,
     "title_en": "구 통일교 한학자 총재 1심서 징역 2년 선고… 금고 260억 원 압수",
     "title_ko": "구 통일교 한학자 총재 1심서 징역 2년 선고… 금고 260억 원 압수",
@@ -8498,6 +8505,40 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 122210,
+    "title_en": "캐나다 윌리스톤호에서 발견된 거대 부유섬…사라졌다가 30km 떨어진 곳서 재발견",
+    "title_ko": "캐나다 윌리스톤호에서 발견된 거대 부유섬…사라졌다가 30km 떨어진 곳서 재발견",
+    "summary_ko": "캐나다 브리티시컬럼비아주 북부의 거대한 호수에서 발견된 정체불명의 거대 부유섬이 행방이 묘연해진 지 수주 만에 다시 발견됐다. 이 섬은 지난 8월 초 윌리스톤호에서 항해하던 항해사들에 의해 처음 목격됐다. 당시 촬영된 영상이 소셜미디어를 통해 빠르게 확산되면서 전 세계적인 관심을 모았다.\n\n윌리스톤호는 브리티시컬럼비아주에서 가장 큰 인공 담수호다. 7월 말 촬영된 위성 사진에서도 축구장 약 1.5개 크기에 달하는 이 삼림 지대의 존재가 확인됐다. 그러나 불과 몇 주 뒤인 8월 5일 촬영된 위성 사진에서는 섬의 흔적이 온데간데없이 사",
+    "url": "internal://solo_20260902_d47d823f",
+    "source": "NewsFinal",
+    "category": "자원·에너지",
+    "subcategory": "solo_20260902_d47d823f",
+    "region": "global",
+    "country": "캐나다",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-02 13:06",
+    "countries": [
+      "캐나다"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_floating_island_mountain_lake_forest_aerial_view.jpg",
+    "view_count": 1,
+    "first_published_at": "2026-09-02T13:06:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-02 13:06",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
     "continuation_of_id": null
   },
   {
@@ -8812,22 +8853,24 @@
     "continuation_of_id": null
   },
   {
-    "id": 121865,
-    "title_en": "메트로 퍼시픽 워터, 필리핀 및 베트남 인프라 개선에 230억 페소 투자",
-    "title_ko": "메트로 퍼시픽 워터, 필리핀 및 베트남 인프라 개선에 230억 페소 투자",
-    "summary_ko": "팡길리난이 주도하는 메트로 퍼시픽 인베스트먼츠 코프의 계열사인 메트로 퍼시픽 워터는 1일(현지시간) 필리핀과 베트남의 물 서비스 포트폴리오를 개선하기 위해 향후 5년 동안 230억 페소를 투자할 계획이라고 밝혔다.\n\n이번 자금은 양국 지역의 물 서비스 품질을 높이고 관련 인프라를 전반적으로 업그레이드하는 데 집중적으로 투입된다.",
-    "url": "internal://realtrend_필리핀_탈락(Tarlac)_교량_붕괴_2026090210",
+    "id": 121864,
+    "title_en": "독일, 라이프치히 하이브리드 공격 배후로 러시아 지목… 모스크바는 보복 경고",
+    "title_ko": "독일, 라이프치히 하이브리드 공격 배후로 러시아 지목… 모스크바는 보복 경고",
+    "summary_ko": "독일은 러시아가 라이프치히 공항에서 하이브리드 공격을 가했다고 1일(현지시간) 비난했다. 유럽 각국은 베를린 정부를 지지하고 나섰으며 모스크바는 이에 대해 보복을 약속했다.\n\n블라디미르 푸틴 러시아 대통령은 독일이 라이프치히 공항에서 폭발물을 탑재한 드론 사건에 대해 러시아에 책임을 묻기 위해 증거를 심었다고 주장했다.",
+    "url": "internal://realtrend_US_Army_Leadership_Crisis_(Hegseth_&_Driscoll)_2026090210",
     "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "realtrend_필리핀_탈락(Tarlac)_교량_붕괴",
-    "region": "southeast_asia",
-    "country": "필리핀",
+    "category": "정치·외교",
+    "subcategory": "realtrend_US_Army_Leadership_C",
+    "region": "africa",
+    "country": "독일",
     "country_flag": "",
     "score": 2,
     "created_at": "2026-09-02 10:15",
     "countries": [
-      "필리핀",
-      "베트남"
+      "독일",
+      "러시아",
+      "프랑스",
+      "영국"
     ],
     "is_published": true,
     "image_url": null,
@@ -8847,24 +8890,22 @@
     "continuation_of_id": null
   },
   {
-    "id": 121864,
-    "title_en": "독일, 라이프치히 하이브리드 공격 배후로 러시아 지목… 모스크바는 보복 경고",
-    "title_ko": "독일, 라이프치히 하이브리드 공격 배후로 러시아 지목… 모스크바는 보복 경고",
-    "summary_ko": "독일은 러시아가 라이프치히 공항에서 하이브리드 공격을 가했다고 1일(현지시간) 비난했다. 유럽 각국은 베를린 정부를 지지하고 나섰으며 모스크바는 이에 대해 보복을 약속했다.\n\n블라디미르 푸틴 러시아 대통령은 독일이 라이프치히 공항에서 폭발물을 탑재한 드론 사건에 대해 러시아에 책임을 묻기 위해 증거를 심었다고 주장했다.",
-    "url": "internal://realtrend_US_Army_Leadership_Crisis_(Hegseth_&_Driscoll)_2026090210",
+    "id": 121865,
+    "title_en": "메트로 퍼시픽 워터, 필리핀 및 베트남 인프라 개선에 230억 페소 투자",
+    "title_ko": "메트로 퍼시픽 워터, 필리핀 및 베트남 인프라 개선에 230억 페소 투자",
+    "summary_ko": "팡길리난이 주도하는 메트로 퍼시픽 인베스트먼츠 코프의 계열사인 메트로 퍼시픽 워터는 1일(현지시간) 필리핀과 베트남의 물 서비스 포트폴리오를 개선하기 위해 향후 5년 동안 230억 페소를 투자할 계획이라고 밝혔다.\n\n이번 자금은 양국 지역의 물 서비스 품질을 높이고 관련 인프라를 전반적으로 업그레이드하는 데 집중적으로 투입된다.",
+    "url": "internal://realtrend_필리핀_탈락(Tarlac)_교량_붕괴_2026090210",
     "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "realtrend_US_Army_Leadership_C",
-    "region": "africa",
-    "country": "독일",
+    "category": "사회",
+    "subcategory": "realtrend_필리핀_탈락(Tarlac)_교량_붕괴",
+    "region": "southeast_asia",
+    "country": "필리핀",
     "country_flag": "",
     "score": 2,
     "created_at": "2026-09-02 10:15",
     "countries": [
-      "독일",
-      "러시아",
-      "프랑스",
-      "영국"
+      "필리핀",
+      "베트남"
     ],
     "is_published": true,
     "image_url": null,
@@ -11768,21 +11809,21 @@
     "continuation_of_id": null
   },
   {
-    "id": 116440,
-    "title_en": "나이지리아 시멘트 산업, 가격 급등으로 FCCPC 조사 착수",
-    "title_ko": "나이지리아 시멘트 산업, 가격 급등으로 FCCPC 조사 착수",
-    "summary_ko": "나이지리아 경쟁 소비자 보호 위원회(FCCPC)가 31일(현지시간) 댕고테(Dangote)와 비유에이(BUA) 등 국내 주요 시멘트 제조업체를 상대로 조사에 착수했다. 이번 조사는 최근 시멘트 50킬로그램 한 포대 가격이 1만 5000나이라를 넘어선 현상을 계기로 시작됐다.\n\n위원회의 가격 조사 배경에는 심화하는 주택 위기와 시장 내 독과점적 격차가 자리 잡고 있다. 당국은 건설 자재의 핵심인 시멘트 가격이 이처럼 급등한 원인과 실제 생산 비용 간의 연관성을 들여다보고 있다.\n\n나이지리아 시멘트 시장은 소수 대기업이 공급을 주도하는",
-    "url": "internal://realtrend_나이지리아_전력망_송전_결함_2026083120",
+    "id": 116439,
+    "title_en": "이 대통령 지지율 취임 후 최저치 기록…부동산 정책 투톱 교체 단행",
+    "title_ko": "이 대통령 지지율 취임 후 최저치 기록…부동산 정책 투톱 교체 단행",
+    "summary_ko": "한국경제신문 보도에 따르면 50대를 중심으로 지지율이 크게 돌아서면서 대통령 지지율이 취임 후 최저치를 경신했다. 리얼미터 조사 결과 대통령 지지율은 38.9퍼센트를 기록하며 7주 연속 하락세를 나타냈고 부정평가는 58.7퍼센트로 집계됐다. \n\n경제와 부동산 난맥상을 타개하기 위해 이른바 부동산 정책 투톱을 비롯한 참모진 교체가 단행됐다. 정부는 강경파와 범여권 인사를 전진 배치하는 개각을 통해 집권 2년 차 국정 쇄신 의지를 드러냈다. 경제팀에 현장형 관료를 전진 배치하고 진영 포용을 시도했으나 일각에서는 깜짝 개각 과정에서 부총",
+    "url": "internal://realtrend_한국_정계_개각_및_비례대표_입각_논란_2026083120",
     "source": "NewsFinal",
-    "category": "자원·에너지",
-    "subcategory": "realtrend_나이지리아_전력망_송전_결함",
+    "category": "정치·외교",
+    "subcategory": "realtrend_한국_정계_개각_및_비례대표_입각_논",
     "region": "africa",
-    "country": "나이지리아",
+    "country": "한국",
     "country_flag": "",
     "score": 2,
     "created_at": "2026-08-31 20:30",
     "countries": [
-      "나이지리아"
+      "한국"
     ],
     "is_published": true,
     "image_url": null,
@@ -11802,21 +11843,21 @@
     "continuation_of_id": null
   },
   {
-    "id": 116439,
-    "title_en": "이 대통령 지지율 취임 후 최저치 기록…부동산 정책 투톱 교체 단행",
-    "title_ko": "이 대통령 지지율 취임 후 최저치 기록…부동산 정책 투톱 교체 단행",
-    "summary_ko": "한국경제신문 보도에 따르면 50대를 중심으로 지지율이 크게 돌아서면서 대통령 지지율이 취임 후 최저치를 경신했다. 리얼미터 조사 결과 대통령 지지율은 38.9퍼센트를 기록하며 7주 연속 하락세를 나타냈고 부정평가는 58.7퍼센트로 집계됐다. \n\n경제와 부동산 난맥상을 타개하기 위해 이른바 부동산 정책 투톱을 비롯한 참모진 교체가 단행됐다. 정부는 강경파와 범여권 인사를 전진 배치하는 개각을 통해 집권 2년 차 국정 쇄신 의지를 드러냈다. 경제팀에 현장형 관료를 전진 배치하고 진영 포용을 시도했으나 일각에서는 깜짝 개각 과정에서 부총",
-    "url": "internal://realtrend_한국_정계_개각_및_비례대표_입각_논란_2026083120",
+    "id": 116440,
+    "title_en": "나이지리아 시멘트 산업, 가격 급등으로 FCCPC 조사 착수",
+    "title_ko": "나이지리아 시멘트 산업, 가격 급등으로 FCCPC 조사 착수",
+    "summary_ko": "나이지리아 경쟁 소비자 보호 위원회(FCCPC)가 31일(현지시간) 댕고테(Dangote)와 비유에이(BUA) 등 국내 주요 시멘트 제조업체를 상대로 조사에 착수했다. 이번 조사는 최근 시멘트 50킬로그램 한 포대 가격이 1만 5000나이라를 넘어선 현상을 계기로 시작됐다.\n\n위원회의 가격 조사 배경에는 심화하는 주택 위기와 시장 내 독과점적 격차가 자리 잡고 있다. 당국은 건설 자재의 핵심인 시멘트 가격이 이처럼 급등한 원인과 실제 생산 비용 간의 연관성을 들여다보고 있다.\n\n나이지리아 시멘트 시장은 소수 대기업이 공급을 주도하는",
+    "url": "internal://realtrend_나이지리아_전력망_송전_결함_2026083120",
     "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "realtrend_한국_정계_개각_및_비례대표_입각_논",
+    "category": "자원·에너지",
+    "subcategory": "realtrend_나이지리아_전력망_송전_결함",
     "region": "africa",
-    "country": "한국",
+    "country": "나이지리아",
     "country_flag": "",
     "score": 2,
     "created_at": "2026-08-31 20:30",
     "countries": [
-      "한국"
+      "나이지리아"
     ],
     "is_published": true,
     "image_url": null,
@@ -12154,6 +12195,40 @@
     "continuation_of_id": null
   },
   {
+    "id": 115109,
+    "title_en": "과테말라 국립 마르임바 페스티벌 개최…전통 잇는 음악가 80여 명 한자리에",
+    "title_ko": "과테말라 국립 마르임바 페스티벌 개최…전통 잇는 음악가 80여 명 한자리에",
+    "summary_ko": "과테말라의 전통 악기 마르임바의 유산을 기리기 위한 제46회 파이즈 마르임바 페스티벌(Festival de Marimba Paiz)이 30일(현지시간) 수도 과테말라시티의 미겔 앙헬 아스투리아스 문화센터 내 에프라인 레시노스 대극장에서 개최됐다.\n\n이날 행사에는 음악가, 가수, 연주자, 무용수 등 80명이 넘는 예술가들이 참여해 두 차례의 공연을 선보였다. 행사는 북과 종소리와 함께 예술가들이 관중 사이를 걸어 나와 마르임바 선율에 맞춰 사슴의 춤(Danza del Venado)을 선보이는 것으로 막을 올렸다. 이어서 마르임바 차핀",
+    "url": "internal://solo_20260831_66c3af5c",
+    "source": "NewsFinal",
+    "category": "문화·예술",
+    "subcategory": "solo_20260831_66c3af5c",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-08-31 11:58",
+    "countries": [
+      "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "",
+    "view_count": 0,
+    "first_published_at": "2026-08-31T11:58:00",
+    "update_log": [
+      {
+        "timestamp": "2026-08-31 11:58",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 115107,
     "title_en": "지루함이 부르는 턱의 움직임…인간이 심심할 때 껌을 씹는 이유",
     "title_ko": "지루함이 부르는 턱의 움직임…인간이 심심할 때 껌을 씹는 이유",
@@ -12220,29 +12295,30 @@
     "continuation_of_id": null
   },
   {
-    "id": 115109,
-    "title_en": "과테말라 국립 마르임바 페스티벌 개최…전통 잇는 음악가 80여 명 한자리에",
-    "title_ko": "과테말라 국립 마르임바 페스티벌 개최…전통 잇는 음악가 80여 명 한자리에",
-    "summary_ko": "과테말라의 전통 악기 마르임바의 유산을 기리기 위한 제46회 파이즈 마르임바 페스티벌(Festival de Marimba Paiz)이 30일(현지시간) 수도 과테말라시티의 미겔 앙헬 아스투리아스 문화센터 내 에프라인 레시노스 대극장에서 개최됐다.\n\n이날 행사에는 음악가, 가수, 연주자, 무용수 등 80명이 넘는 예술가들이 참여해 두 차례의 공연을 선보였다. 행사는 북과 종소리와 함께 예술가들이 관중 사이를 걸어 나와 마르임바 선율에 맞춰 사슴의 춤(Danza del Venado)을 선보이는 것으로 막을 올렸다. 이어서 마르임바 차핀",
-    "url": "internal://solo_20260831_66c3af5c",
+    "id": 115105,
+    "title_en": "이스라엘군, 라마라 서쪽 베이트우니아 3만 7천여㎡ 팔레스타인 토지 군사 명령으로 압류",
+    "title_ko": "이스라엘군, 라마라 서쪽 베이트우니아 3만 7천여㎡ 팔레스타인 토지 군사 명령으로 압류",
+    "summary_ko": "이스라엘 점령 당국이 31일(현지시간) 요르단강 서안 지구 중부 라마라 서쪽 베이트우니아 지역의 팔레스타인 토지 37.481두남을 압류하는 새로운 군사 명령을 발령했다. 이번 조치는 불법 베이트 호론 정착촌 인근 도시 지역에 설치된 군사 시설을 확장하기 위한 목적에서 이루어졌다.\n\n벽·식민지저항위원회는 군사 명령 T/101/26이 토지 정착 절차가 아직 완료되지 않은 분할지 30과 36 내의 토지를 겨냥하고 있다고 밝혔다. 피해를 본 구역에는 여러 필지와 그 필지들을 연결하는 진입로들이 포함되어 있다. 명령서에 첨부된 지도는 압류된",
+    "url": "internal://solo_20260831_b567c4b4",
     "source": "NewsFinal",
-    "category": "문화·예술",
-    "subcategory": "solo_20260831_66c3af5c",
-    "region": "latin_america",
-    "country": "과테말라",
+    "category": "정치·외교",
+    "subcategory": "solo_20260831_b567c4b4",
+    "region": "global",
+    "country": "팔레스타인",
     "country_flag": "",
     "score": 1,
-    "created_at": "2026-08-31 11:58",
+    "created_at": "2026-08-31 11:57",
     "countries": [
-      "과테말라"
+      "팔레스타인",
+      "이스라엘"
     ],
     "is_published": true,
     "image_url": "",
     "view_count": 0,
-    "first_published_at": "2026-08-31T11:58:00",
+    "first_published_at": "2026-08-31T11:57:00",
     "update_log": [
       {
-        "timestamp": "2026-08-31 11:58",
+        "timestamp": "2026-08-31 11:57",
         "note": "최초 게시"
       }
     ],
@@ -12271,41 +12347,6 @@
     "is_published": true,
     "image_url": "",
     "view_count": 1,
-    "first_published_at": "2026-08-31T11:57:00",
-    "update_log": [
-      {
-        "timestamp": "2026-08-31 11:57",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 115105,
-    "title_en": "이스라엘군, 라마라 서쪽 베이트우니아 3만 7천여㎡ 팔레스타인 토지 군사 명령으로 압류",
-    "title_ko": "이스라엘군, 라마라 서쪽 베이트우니아 3만 7천여㎡ 팔레스타인 토지 군사 명령으로 압류",
-    "summary_ko": "이스라엘 점령 당국이 31일(현지시간) 요르단강 서안 지구 중부 라마라 서쪽 베이트우니아 지역의 팔레스타인 토지 37.481두남을 압류하는 새로운 군사 명령을 발령했다. 이번 조치는 불법 베이트 호론 정착촌 인근 도시 지역에 설치된 군사 시설을 확장하기 위한 목적에서 이루어졌다.\n\n벽·식민지저항위원회는 군사 명령 T/101/26이 토지 정착 절차가 아직 완료되지 않은 분할지 30과 36 내의 토지를 겨냥하고 있다고 밝혔다. 피해를 본 구역에는 여러 필지와 그 필지들을 연결하는 진입로들이 포함되어 있다. 명령서에 첨부된 지도는 압류된",
-    "url": "internal://solo_20260831_b567c4b4",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "solo_20260831_b567c4b4",
-    "region": "global",
-    "country": "팔레스타인",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-08-31 11:57",
-    "countries": [
-      "팔레스타인",
-      "이스라엘"
-    ],
-    "is_published": true,
-    "image_url": "",
-    "view_count": 0,
     "first_published_at": "2026-08-31T11:57:00",
     "update_log": [
       {
@@ -12648,42 +12689,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 114799,
-    "title_en": "중앙아시아, 타슈켄트 36도 불볕더위…일교차 뚜렷",
-    "title_ko": "중앙아시아, 타슈켄트 36도 불볕더위…일교차 뚜렷",
-    "summary_ko": "31일(현지시간) 중앙아시아 주요국 수도의 기온은 최저 7도에서 최고 36도 사이의 분포를 보이며 지역별로 큰 편차를 나타냈다. 우즈베키스탄의 수도 타슈켄트는 최고기온이 36도까지 치솟아 이번 조사 지역 가운데 가장 더운 곳으로 기록된 반면, 카자흐스탄의 수도 아스타나는 최고 14도, 최저 7도에 머물러 가장 선선한 날씨를 보였다. 타슈켄트의 최고기온은 아스타나보다 22도나 높아 국가 간 뚜렷한 기온 차를 드러냈다.\n\n우즈베키스탄 타슈켄트는 맑은 날씨 속에 자외선지수 6.7을 기록했으며 내일 최고기온은 오늘보다 4도가량 내려간 32",
-    "url": "internal://weather_group_중앙아시아_today20260831",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_중앙아시아_today20260831",
-    "region": "central_asia",
-    "country": "중앙아시아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-08-31 09:10",
-    "countries": [
-      "카자흐스탄",
-      "우즈베키스탄",
-      "키르기스스탄"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_kazakhstan_20260831.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-08-31T09:10:00",
-    "update_log": [
-      {
-        "timestamp": "2026-08-31 09:10",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
     "id": 114800,
     "title_en": "콩고민주공화국 정부, 반군 장악 지역 대학 통제권 유지를 위한 행정 조치 단행",
     "title_ko": "콩고민주공화국 정부, 반군 장악 지역 대학 통제권 유지를 위한 행정 조치 단행",
@@ -12722,6 +12727,42 @@
       {
         "timestamp": "2026-09-02 22:41",
         "note": "반군의 학교 운영 독려와 중앙정부의 급여 지급 유지"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 114799,
+    "title_en": "중앙아시아, 타슈켄트 36도 불볕더위…일교차 뚜렷",
+    "title_ko": "중앙아시아, 타슈켄트 36도 불볕더위…일교차 뚜렷",
+    "summary_ko": "31일(현지시간) 중앙아시아 주요국 수도의 기온은 최저 7도에서 최고 36도 사이의 분포를 보이며 지역별로 큰 편차를 나타냈다. 우즈베키스탄의 수도 타슈켄트는 최고기온이 36도까지 치솟아 이번 조사 지역 가운데 가장 더운 곳으로 기록된 반면, 카자흐스탄의 수도 아스타나는 최고 14도, 최저 7도에 머물러 가장 선선한 날씨를 보였다. 타슈켄트의 최고기온은 아스타나보다 22도나 높아 국가 간 뚜렷한 기온 차를 드러냈다.\n\n우즈베키스탄 타슈켄트는 맑은 날씨 속에 자외선지수 6.7을 기록했으며 내일 최고기온은 오늘보다 4도가량 내려간 32",
+    "url": "internal://weather_group_중앙아시아_today20260831",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_중앙아시아_today20260831",
+    "region": "central_asia",
+    "country": "중앙아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-08-31 09:10",
+    "countries": [
+      "카자흐스탄",
+      "우즈베키스탄",
+      "키르기스스탄"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_kazakhstan_20260831.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-08-31T09:10:00",
+    "update_log": [
+      {
+        "timestamp": "2026-08-31 09:10",
+        "note": "최초 게시"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -13743,21 +13784,22 @@
     "continuation_of_id": null
   },
   {
-    "id": 112949,
-    "title_en": "과테말라 국회, 2027년 총선 앞두고 선심성 입법 러시 우려",
-    "title_ko": "과테말라 국회, 2027년 총선 앞두고 선심성 입법 러시 우려",
-    "summary_ko": "과테말라 공화국 국회가 2027년 일반 선거를 11개월 앞두고 입법 시즌의 성수기를 맞이하고 있다고 현지 언론이 30일(현지시간) 보도했다.\n\n의원들은 재선이나 공직 진출을 위한 정치적 동기가 강화되면서 당장 대중의 환호를 이끌어낼 수 있는 법안 발의에 적극적으로 나서고 있다. 보조금, 면세 혜택, 보상금, 신규 지원금, 물가 인하 약속, 특정 집단에 대한 특전 등이 이에 해당하며, 향후 몇 달간 시민들은 대중의 필요와 우려에 직접적으로 부합하려는 법안이 급증하는 현상을 목격하게 될 것으로 예상된다.\n\n이러한 법안들은 당장은 좋아 ",
-    "url": "internal://solo_20260830_5412fbaf",
+    "id": 112947,
+    "title_en": "과테말라 농가 송금줄 차단…'슈퍼 엘니뇨' 식량 위기 직면",
+    "title_ko": "과테말라 농가 송금줄 차단…'슈퍼 엘니뇨' 식량 위기 직면",
+    "summary_ko": "과테말라 농촌 지역에서는 수십 년 동안 토지가 메마를 때 마땅한 탈출구가 존재했다. 그러나 오늘날 그 생존의 통로는 닫힌 상태다. 이 국가는 자연재해 위험과 재해 발생 시의 높은 취약성이 맞물려 있어 가뭄, 지진, 홍수, 허리케인 등에 크게 노출되어 있다. 지난 1976년 7.5 규모의 지진으로 수만 명이 사망한 바 있으며, 2010년 칠레에서는 더 강력한 지진으로 500명이 사망했다. 주민들의 생활 여건, 예방 법규, 사회적 사전 대응 능력이 결과를 좌우하는 결정적 역할을 한다.\n\n세계은행은 과테말라를 자연재해와 환경적 과제에 매",
+    "url": "internal://solo_20260830_e2574f93",
     "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "solo_20260830_5412fbaf",
+    "category": "글로벌",
+    "subcategory": "solo_20260830_e2574f93",
     "region": "latin_america",
     "country": "과테말라",
     "country_flag": "",
     "score": 1,
     "created_at": "2026-08-30 15:58",
     "countries": [
-      "과테말라"
+      "과테말라",
+      "미국"
     ],
     "is_published": true,
     "image_url": "",
@@ -13777,22 +13819,21 @@
     "continuation_of_id": null
   },
   {
-    "id": 112947,
-    "title_en": "과테말라 농가 송금줄 차단…'슈퍼 엘니뇨' 식량 위기 직면",
-    "title_ko": "과테말라 농가 송금줄 차단…'슈퍼 엘니뇨' 식량 위기 직면",
-    "summary_ko": "과테말라 농촌 지역에서는 수십 년 동안 토지가 메마를 때 마땅한 탈출구가 존재했다. 그러나 오늘날 그 생존의 통로는 닫힌 상태다. 이 국가는 자연재해 위험과 재해 발생 시의 높은 취약성이 맞물려 있어 가뭄, 지진, 홍수, 허리케인 등에 크게 노출되어 있다. 지난 1976년 7.5 규모의 지진으로 수만 명이 사망한 바 있으며, 2010년 칠레에서는 더 강력한 지진으로 500명이 사망했다. 주민들의 생활 여건, 예방 법규, 사회적 사전 대응 능력이 결과를 좌우하는 결정적 역할을 한다.\n\n세계은행은 과테말라를 자연재해와 환경적 과제에 매",
-    "url": "internal://solo_20260830_e2574f93",
+    "id": 112949,
+    "title_en": "과테말라 국회, 2027년 총선 앞두고 선심성 입법 러시 우려",
+    "title_ko": "과테말라 국회, 2027년 총선 앞두고 선심성 입법 러시 우려",
+    "summary_ko": "과테말라 공화국 국회가 2027년 일반 선거를 11개월 앞두고 입법 시즌의 성수기를 맞이하고 있다고 현지 언론이 30일(현지시간) 보도했다.\n\n의원들은 재선이나 공직 진출을 위한 정치적 동기가 강화되면서 당장 대중의 환호를 이끌어낼 수 있는 법안 발의에 적극적으로 나서고 있다. 보조금, 면세 혜택, 보상금, 신규 지원금, 물가 인하 약속, 특정 집단에 대한 특전 등이 이에 해당하며, 향후 몇 달간 시민들은 대중의 필요와 우려에 직접적으로 부합하려는 법안이 급증하는 현상을 목격하게 될 것으로 예상된다.\n\n이러한 법안들은 당장은 좋아 ",
+    "url": "internal://solo_20260830_5412fbaf",
     "source": "NewsFinal",
-    "category": "글로벌",
-    "subcategory": "solo_20260830_e2574f93",
+    "category": "정치·외교",
+    "subcategory": "solo_20260830_5412fbaf",
     "region": "latin_america",
     "country": "과테말라",
     "country_flag": "",
     "score": 1,
     "created_at": "2026-08-30 15:58",
     "countries": [
-      "과테말라",
-      "미국"
+      "과테말라"
     ],
     "is_published": true,
     "image_url": "",
@@ -14897,6 +14938,40 @@
     "continuation_of_id": null
   },
   {
+    "id": 112199,
+    "title_en": "쿠웨이트 하왈리서 2만 디나르 상당 금고털이 발생…경찰 수사 착수",
+    "title_ko": "쿠웨이트 하왈리서 2만 디나르 상당 금고털이 발생…경찰 수사 착수",
+    "summary_ko": "쿠웨이트 하왈리 지역에서 약 2만 쿠웨이트 디나르 상당의 금지금이 도난당하는 사건이 발생해 현지 경찰이 수사에 착수했다고 29일(현지시간) 밝혔다.\n\n내무부 작전실은 쿠웨이트 국적의 의사 소유 주택에 침입이 발생했다는 신고를 접수했다. 경찰이 현장에 출동했을 당시 피해 여성은 퇴근 후 집에 돌아와 침실에 보관해 두었던 금괴와 금 장신구들이 사라진 사실을 확인했다고 진술했다.\n\n피해자는 최근 지속되는 금값 상승세에 대비해 자산 저축 형태로 오랫동안 모아온 금품 대부분을 도난당했다고 전했다. 피해자는 범행과 관련해 특정 용의자를 지목하",
+    "url": "internal://solo_20260830_70ddfcc4",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "solo_20260830_70ddfcc4",
+    "region": "middle_east",
+    "country": "쿠웨이트",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-08-30 08:30",
+    "countries": [
+      "쿠웨이트"
+    ],
+    "is_published": true,
+    "image_url": "",
+    "view_count": 1,
+    "first_published_at": "2026-08-30T08:30:00",
+    "update_log": [
+      {
+        "timestamp": "2026-08-30 08:30",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 112200,
     "title_en": "우크라이나 자포리자 원전 일주일 넘게 외부 전력 중단…디젤 발전기 의존",
     "title_ko": "우크라이나 자포리자 원전 일주일 넘게 외부 전력 중단…디젤 발전기 의존",
@@ -14932,29 +15007,29 @@
     "continuation_of_id": null
   },
   {
-    "id": 112199,
-    "title_en": "쿠웨이트 하왈리서 2만 디나르 상당 금고털이 발생…경찰 수사 착수",
-    "title_ko": "쿠웨이트 하왈리서 2만 디나르 상당 금고털이 발생…경찰 수사 착수",
-    "summary_ko": "쿠웨이트 하왈리 지역에서 약 2만 쿠웨이트 디나르 상당의 금지금이 도난당하는 사건이 발생해 현지 경찰이 수사에 착수했다고 29일(현지시간) 밝혔다.\n\n내무부 작전실은 쿠웨이트 국적의 의사 소유 주택에 침입이 발생했다는 신고를 접수했다. 경찰이 현장에 출동했을 당시 피해 여성은 퇴근 후 집에 돌아와 침실에 보관해 두었던 금괴와 금 장신구들이 사라진 사실을 확인했다고 진술했다.\n\n피해자는 최근 지속되는 금값 상승세에 대비해 자산 저축 형태로 오랫동안 모아온 금품 대부분을 도난당했다고 전했다. 피해자는 범행과 관련해 특정 용의자를 지목하",
-    "url": "internal://solo_20260830_70ddfcc4",
+    "id": 112198,
+    "title_en": "쿠웨이트, 경제 전문 법원 설립 추진… 투자 유치 및 상업 분쟁 신속 해결",
+    "title_ko": "쿠웨이트, 경제 전문 법원 설립 추진… 투자 유치 및 상업 분쟁 신속 해결",
+    "summary_ko": "쿠웨이트가 국가 소득 다원화와 글로벌 자본 유치를 위한 개발 비전에 발맞춰 경제 및 입법 인프라 현대화에 속도를 내고 있다고 29일 밝혔다. 경제 전문가이자 변호사인 아트비 알타눈(Athbi Al-Tahnoon)은 정부의 전문 경제 법원 설립 추진이 경쟁 기업 간 분쟁이나 개인과 기업 간 분쟁 등 수년간 해결되지 못한 상업 사건들의 적체를 해소하기 위한 목적이라고 밝혔다.\n\n아트비 알타눈은 전문가 부족과 금융 사안의 복잡성으로 인해 소송 절차가 2년에서 4년까지 길어질 수 있다고 설명했다. 이로 인해 일부 기업이 자신을 방어하고 증",
+    "url": "internal://solo_20260830_79672f50",
     "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "solo_20260830_70ddfcc4",
+    "category": "경제",
+    "subcategory": "solo_20260830_79672f50",
     "region": "middle_east",
     "country": "쿠웨이트",
     "country_flag": "",
     "score": 1,
-    "created_at": "2026-08-30 08:30",
+    "created_at": "2026-08-30 08:28",
     "countries": [
       "쿠웨이트"
     ],
     "is_published": true,
     "image_url": "",
-    "view_count": 1,
-    "first_published_at": "2026-08-30T08:30:00",
+    "view_count": 0,
+    "first_published_at": "2026-08-30T08:28:00",
     "update_log": [
       {
-        "timestamp": "2026-08-30 08:30",
+        "timestamp": "2026-08-30 08:28",
         "note": "최초 게시"
       }
     ],
@@ -14981,40 +15056,6 @@
     "created_at": "2026-08-30 08:28",
     "countries": [
       "노르웨이"
-    ],
-    "is_published": true,
-    "image_url": "",
-    "view_count": 0,
-    "first_published_at": "2026-08-30T08:28:00",
-    "update_log": [
-      {
-        "timestamp": "2026-08-30 08:28",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 112198,
-    "title_en": "쿠웨이트, 경제 전문 법원 설립 추진… 투자 유치 및 상업 분쟁 신속 해결",
-    "title_ko": "쿠웨이트, 경제 전문 법원 설립 추진… 투자 유치 및 상업 분쟁 신속 해결",
-    "summary_ko": "쿠웨이트가 국가 소득 다원화와 글로벌 자본 유치를 위한 개발 비전에 발맞춰 경제 및 입법 인프라 현대화에 속도를 내고 있다고 29일 밝혔다. 경제 전문가이자 변호사인 아트비 알타눈(Athbi Al-Tahnoon)은 정부의 전문 경제 법원 설립 추진이 경쟁 기업 간 분쟁이나 개인과 기업 간 분쟁 등 수년간 해결되지 못한 상업 사건들의 적체를 해소하기 위한 목적이라고 밝혔다.\n\n아트비 알타눈은 전문가 부족과 금융 사안의 복잡성으로 인해 소송 절차가 2년에서 4년까지 길어질 수 있다고 설명했다. 이로 인해 일부 기업이 자신을 방어하고 증",
-    "url": "internal://solo_20260830_79672f50",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "solo_20260830_79672f50",
-    "region": "middle_east",
-    "country": "쿠웨이트",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-08-30 08:28",
-    "countries": [
-      "쿠웨이트"
     ],
     "is_published": true,
     "image_url": "",
