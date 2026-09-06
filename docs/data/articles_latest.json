@@ -1,5 +1,43 @@
 [
   {
+    "id": 140131,
+    "title_en": "남아시아, 폭염 속 뇌우·이슬비… 곳곳 궂은날씨",
+    "title_ko": "남아시아, 폭염 속 뇌우·이슬비… 곳곳 궂은날씨",
+    "summary_ko": "7일(현지시간) 남아시아 주요국 수도는 최저기온 19°C에서 최고기온 32°C 사이의 기온 분포를 보이며 지역별로 뚜렷한 기상 차이를 나타냈다. 역내에서 가장 더운 곳은 최고기온 32°C를 기록한 인도 뉴델리와 방글라데시 다카인 반면, 가장 선선한 곳은 최고기온 27°C, 최저기온 19°C를 기록한 네팔 카트만두로 나타났다. 특히 네팔 카트만두는 가장 더운 인도 뉴델리보다 최고기온이 5°C 낮아 대조를 이뤘으며, 강수확률 100%와 함께 7.8mm의 가장 많은 비가 내리면서 뇌우가 동반되는 등 아시아 전역을 강타한 극단적 기상 현상",
+    "url": "internal://weather_group_남아시아_today20260907",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_남아시아_today20260907",
+    "region": "south_asia",
+    "country": "남아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-07 08:38",
+    "countries": [
+      "인도",
+      "방글라데시",
+      "파키스탄",
+      "스리랑카",
+      "네팔"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_india_20260907.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-07T08:38:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-07 08:38",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 139855,
     "title_en": "동남아시아, 최고 36도 폭염 속 곳곳 뇌우·비",
     "title_ko": "동남아시아, 최고 36도 폭염 속 곳곳 뇌우·비",
@@ -170,35 +208,41 @@
     "continuation_of_id": null
   },
   {
-    "id": 139854,
-    "title_en": "Solana Rises 2.37% as Network Activity Recovers",
-    "title_ko": "[가상자산 동향] 솔라나 2.37% 상승…네트워크 활성도 회복 영향",
-    "summary_ko": "◆ 가격 동향\n\n7일 06:25(한국시간) 야후 파이낸스에 따르면 솔라나 가격은 전일 대비 2.37% 상승한 106.22달러를 기록했다. 최근 솔라나 생태계 내 탈중앙화 거래소의 거래량이 증가하고 스테이블코인 결제 솔루션이 확장되면서 네트워크 활성도가 개선된 점이 매수세를 견인했다. 특히 주요 기관 투자자들이 솔라나 기반의 온체인 데이터 분석 툴을 도입하며 생태계 신뢰도가 높아진 상황이 가격 방어에 기여했다. 거시경제 측면에서는 미국 연방준비제도의 금리 정책 방향성에 대한 시장의 불확실성이 지속되고 있으나, 솔라나는 상대적으로 견고",
-    "url": "internal://crypto_news_2026-09-07",
+    "id": 139472,
+    "title_en": "At Least 25 Dead in Cabo Verde School Bus Crash; National Mourning Declared",
+    "title_ko": "카보베르데 포고섬 스쿨버스 추락 사고로 최소 25명 사망 및 국가 애도 선포",
+    "summary_ko": "[업데이트]\n■ 9월 7일 06:26 — 사고 버스에 탑승했던 승객들은 쿠랄 그란드(Curral Grande)와 폰타 베르드(Ponta Verde) 지역 3·4군 소속 중등학생들로, 샤 다스 칼데이라스(Chã das Caldeiras)로 견학을 다녀오던 길이었던 것으로 확인됐다. 차량은 샤 다스 칼데이라스에서 캄파나스로 향하던 도로에서 이탈해 약 30미터 높이의 협곡 아래로 굴러떨어졌다. 추락 당시 최소 10명의 승객이 차 밖으로 튕겨져 나갔으며, 일부 승객은 찌그러진 차체 잔해 속에 갇혔다. 전체 사망자 25명 가운데 20명은 사",
+    "url": "internal://realtrend_Cabo_Verde_Bus_Crash_2026090703",
     "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "가상자산동향_crypto",
-    "region": "global",
-    "country": "글로벌",
-    "country_flag": "🌐",
-    "score": 1,
+    "category": "사회",
+    "subcategory": "realtrend_Cabo_Verde_Bus_Crash",
+    "region": "africa",
+    "country": "카보베르데",
+    "country_flag": "",
+    "score": 2,
     "created_at": "2026-09-07 06:26",
-    "countries": [],
+    "countries": [
+      "카보베르데"
+    ],
     "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_09_07.jpg",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_school_bus_accident_canyon_road_emergency_rescue.jpg",
     "view_count": 0,
-    "first_published_at": "2026-09-07T06:26:00",
+    "first_published_at": "2026-09-07T03:22:00",
     "update_log": [
       {
-        "timestamp": "2026-09-07 06:26",
+        "timestamp": "2026-09-07 03:22",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-09-07 06:26",
+        "note": "사고 버스 승객은 견학 다녀오던 중학생들"
       }
     ],
     "byline": "뉴스파이널 편집국",
     "is_travel": false,
     "source_published_at": null,
     "source_data": null,
-    "image_credit": null,
+    "image_credit": "",
     "continuation_of_id": null
   },
   {
@@ -238,41 +282,35 @@
     "continuation_of_id": null
   },
   {
-    "id": 139472,
-    "title_en": "At Least 25 Dead in Cabo Verde School Bus Crash; National Mourning Declared",
-    "title_ko": "카보베르데 포고섬 스쿨버스 추락 사고로 최소 25명 사망 및 국가 애도 선포",
-    "summary_ko": "[업데이트]\n■ 9월 7일 06:26 — 사고 버스에 탑승했던 승객들은 쿠랄 그란드(Curral Grande)와 폰타 베르드(Ponta Verde) 지역 3·4군 소속 중등학생들로, 샤 다스 칼데이라스(Chã das Caldeiras)로 견학을 다녀오던 길이었던 것으로 확인됐다. 차량은 샤 다스 칼데이라스에서 캄파나스로 향하던 도로에서 이탈해 약 30미터 높이의 협곡 아래로 굴러떨어졌다. 추락 당시 최소 10명의 승객이 차 밖으로 튕겨져 나갔으며, 일부 승객은 찌그러진 차체 잔해 속에 갇혔다. 전체 사망자 25명 가운데 20명은 사",
-    "url": "internal://realtrend_Cabo_Verde_Bus_Crash_2026090703",
+    "id": 139854,
+    "title_en": "Solana Rises 2.37% as Network Activity Recovers",
+    "title_ko": "[가상자산 동향] 솔라나 2.37% 상승…네트워크 활성도 회복 영향",
+    "summary_ko": "◆ 가격 동향\n\n7일 06:25(한국시간) 야후 파이낸스에 따르면 솔라나 가격은 전일 대비 2.37% 상승한 106.22달러를 기록했다. 최근 솔라나 생태계 내 탈중앙화 거래소의 거래량이 증가하고 스테이블코인 결제 솔루션이 확장되면서 네트워크 활성도가 개선된 점이 매수세를 견인했다. 특히 주요 기관 투자자들이 솔라나 기반의 온체인 데이터 분석 툴을 도입하며 생태계 신뢰도가 높아진 상황이 가격 방어에 기여했다. 거시경제 측면에서는 미국 연방준비제도의 금리 정책 방향성에 대한 시장의 불확실성이 지속되고 있으나, 솔라나는 상대적으로 견고",
+    "url": "internal://crypto_news_2026-09-07",
     "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "realtrend_Cabo_Verde_Bus_Crash",
-    "region": "africa",
-    "country": "카보베르데",
-    "country_flag": "",
-    "score": 2,
+    "category": "금융",
+    "subcategory": "가상자산동향_crypto",
+    "region": "global",
+    "country": "글로벌",
+    "country_flag": "🌐",
+    "score": 1,
     "created_at": "2026-09-07 06:26",
-    "countries": [
-      "카보베르데"
-    ],
+    "countries": [],
     "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_school_bus_accident_canyon_road_emergency_rescue.jpg",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_09_07.jpg",
     "view_count": 0,
-    "first_published_at": "2026-09-07T03:22:00",
+    "first_published_at": "2026-09-07T06:26:00",
     "update_log": [
       {
-        "timestamp": "2026-09-07 03:22",
-        "note": "최초 게시"
-      },
-      {
         "timestamp": "2026-09-07 06:26",
-        "note": "사고 버스 승객은 견학 다녀오던 중학생들"
+        "note": "최초 게시"
       }
     ],
     "byline": "뉴스파이널 편집국",
     "is_travel": false,
     "source_published_at": null,
     "source_data": null,
-    "image_credit": "",
+    "image_credit": null,
     "continuation_of_id": null
   },
   {
@@ -1269,40 +1307,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 137376,
-    "title_en": "71-Year-Old Woman Shot and Killed After Opening Fire at Florida Police Station",
-    "title_ko": "미 플로리다 경찰서서 71세 여성 총격 후 사살",
-    "summary_ko": "미국 플로리다주 포트 오렌지 경찰서에서 71세 여성이 무장 난동을 부리다 경찰의 총에 맞아 숨지는 사건이 발생했다. 사건은 3일(현지시간) 오전 8시 30분 직전 포트 오렌지 경찰서 민원 접수 구역에서 일어났다.\n\n경찰에 따르면 린다 진 크로토(Linda Jean Croteau)는 총기를 소지한 채 경찰서 로비로 진입했다. 그는 직원들과 대화하던 중 갑자기 직원들이 있는 방향을 향해 총구를 겨누고 발포했다. 다행히 현장에 있던 직원과 경찰관 중 부상자는 발생하지 않았다.\n\n총격을 가한 뒤 크로토는 총을 든 채 주차장 쪽으로 걸어 나",
-    "url": "internal://solo_20260906_a4264f3c",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "solo_20260906_a4264f3c",
-    "region": "global",
-    "country": "미국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-06 13:04",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_police_station_police_car_police_lobby.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-06T13:04:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-06 13:04",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
     "id": 137377,
     "title_en": "Weekend Traffic Accidents Across Guatemala Leave Two Dead, Cause Major Congestion",
     "title_ko": "과테말라 전국서 주말 교통사고 잇따라…2명 사망·부상 및 정체 극심",
@@ -1337,29 +1341,29 @@
     "continuation_of_id": null
   },
   {
-    "id": 137374,
-    "title_en": "Eswatini Stock Exchange Unveils 'Kwakhanya 2030' Capital Market Strategy",
-    "title_ko": "에스와티니증권거래소, 자본시장 전략 콰칸야 2030 발표",
-    "summary_ko": "에스와티니증권거래소(ESE)는 6일(현지시간) 국가 자본시장을 재정립하기 위한 새로운 기업 전략인 콰칸야 2030(Kwakhanya 2030)을 공식 발표했다. 이번 전략은 증권거래소를 단순한 주식 거래소를 넘어 부의 창출, 사업 확장, 경제적 변혁을 이끄는 국가적 엔진으로 자리매김하기 위해 마련됐다.\n\n시망가 엠둘리(Simanga Mdluli) ESE 최고경영자(CEO)는 지난 목요일 에스와티니 국제무역박람회(EITF)에서 열린 비즈니스 세미나에서 이 전략을 공개했다. 이번 세미나는 자본시장을 통한 사업 성장 촉진을 주제로 비즈니",
-    "url": "internal://solo_20260906_b27157b1",
+    "id": 137376,
+    "title_en": "71-Year-Old Woman Shot and Killed After Opening Fire at Florida Police Station",
+    "title_ko": "미 플로리다 경찰서서 71세 여성 총격 후 사살",
+    "summary_ko": "미국 플로리다주 포트 오렌지 경찰서에서 71세 여성이 무장 난동을 부리다 경찰의 총에 맞아 숨지는 사건이 발생했다. 사건은 3일(현지시간) 오전 8시 30분 직전 포트 오렌지 경찰서 민원 접수 구역에서 일어났다.\n\n경찰에 따르면 린다 진 크로토(Linda Jean Croteau)는 총기를 소지한 채 경찰서 로비로 진입했다. 그는 직원들과 대화하던 중 갑자기 직원들이 있는 방향을 향해 총구를 겨누고 발포했다. 다행히 현장에 있던 직원과 경찰관 중 부상자는 발생하지 않았다.\n\n총격을 가한 뒤 크로토는 총을 든 채 주차장 쪽으로 걸어 나",
+    "url": "internal://solo_20260906_a4264f3c",
     "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "solo_20260906_b27157b1",
+    "category": "사회",
+    "subcategory": "solo_20260906_a4264f3c",
     "region": "global",
-    "country": "에스와티니",
+    "country": "미국",
     "country_flag": "",
     "score": 1,
-    "created_at": "2026-09-06 13:02",
+    "created_at": "2026-09-06 13:04",
     "countries": [
-      "에스와티니"
+      "미국"
     ],
     "is_published": true,
-    "image_url": "https://pixabay.com/get/g7eb7cc33ce779f35eaec1959b0a99e9959d414335da238c1bb508921cc5aa4af75676a030c7660a8c42fee48b5695346_640.jpg",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_police_station_police_car_police_lobby.jpg",
     "view_count": 0,
-    "first_published_at": "2026-09-06T13:02:00",
+    "first_published_at": "2026-09-06T13:04:00",
     "update_log": [
       {
-        "timestamp": "2026-09-06 13:02",
+        "timestamp": "2026-09-06 13:04",
         "note": "최초 게시"
       }
     ],
@@ -1389,6 +1393,40 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_drought_affected_farmland_withered_crops_dried_agric.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-06T13:02:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-06 13:02",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
+    "id": 137374,
+    "title_en": "Eswatini Stock Exchange Unveils 'Kwakhanya 2030' Capital Market Strategy",
+    "title_ko": "에스와티니증권거래소, 자본시장 전략 콰칸야 2030 발표",
+    "summary_ko": "에스와티니증권거래소(ESE)는 6일(현지시간) 국가 자본시장을 재정립하기 위한 새로운 기업 전략인 콰칸야 2030(Kwakhanya 2030)을 공식 발표했다. 이번 전략은 증권거래소를 단순한 주식 거래소를 넘어 부의 창출, 사업 확장, 경제적 변혁을 이끄는 국가적 엔진으로 자리매김하기 위해 마련됐다.\n\n시망가 엠둘리(Simanga Mdluli) ESE 최고경영자(CEO)는 지난 목요일 에스와티니 국제무역박람회(EITF)에서 열린 비즈니스 세미나에서 이 전략을 공개했다. 이번 세미나는 자본시장을 통한 사업 성장 촉진을 주제로 비즈니",
+    "url": "internal://solo_20260906_b27157b1",
+    "source": "NewsFinal",
+    "category": "금융",
+    "subcategory": "solo_20260906_b27157b1",
+    "region": "global",
+    "country": "에스와티니",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-06 13:02",
+    "countries": [
+      "에스와티니"
+    ],
+    "is_published": true,
+    "image_url": "https://pixabay.com/get/g7eb7cc33ce779f35eaec1959b0a99e9959d414335da238c1bb508921cc5aa4af75676a030c7660a8c42fee48b5695346_640.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-06T13:02:00",
     "update_log": [
@@ -1666,40 +1704,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 137099,
-    "title_en": "Kevin García Debuts as Comunicaciones Interim Manager with Draw in Guatemala's Primera División",
-    "title_ko": "과테말라 프리메라 디비시온…케빈 가르시아, 코무니카시오네스 임시 감독 데뷔전서 무승부",
-    "summary_ko": "과테말라 프로축구 클럽 코무니카시오네스의 임시 감독으로 부임한 케빈 가르시아가 6일(현지시간) 산토 도밍고 데 구스만 경기장에서 열린 믹스코와의 아페르투라 2026 토너먼트 7라운드 경기에서 1대 1 무승부를 기록하며 데뷔전을 치렀다.\n\n구단 유소년 팀에서 지도자 경력을 쌓아온 케빈 가르시아는 알보스(코무니카시오네스의 별칭) 팀을 이끄는 막중한 책임을 맡아 굳은 의지로 도전 과제에 임했다. 가르시아는 임시 감독이라는 직함이 책임을 덜어주지 않는다며 전적으로 책임을 지고 임하고 있다고 밝혔다.\n\n가르시아는 선수단을 잘 알고 있다는 점",
-    "url": "internal://solo_20260906_e226c99a",
-    "source": "NewsFinal",
-    "category": "글로벌",
-    "subcategory": "solo_20260906_e226c99a",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-06 10:27",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/17/0578_kevin_borlee_reeksen_400m_%2828541002155%29.jpg/960px-0578_kevin_borlee_reeksen_400m_%2828541002155%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-    "view_count": 0,
-    "first_published_at": "2026-09-06T10:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-06 10:27",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "사진: filip bossuyt from Kortrijk, Belgium (CC BY 2.0, Wikimedia Commons)",
-    "continuation_of_id": null
-  },
-  {
     "id": 137098,
     "title_en": "Eswatini Railway Joins South African, Mozambican Operators for Joint Exhibition at Trade Fair",
     "title_ko": "에스바티니 철도공사, 무역박람회서 남아공·모잠비크 철도 운영사들과 연합 전시",
@@ -1733,6 +1737,40 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: Htonl (CC BY-SA 2.0, Wikimedia Commons)",
+    "continuation_of_id": null
+  },
+  {
+    "id": 137099,
+    "title_en": "Kevin García Debuts as Comunicaciones Interim Manager with Draw in Guatemala's Primera División",
+    "title_ko": "과테말라 프리메라 디비시온…케빈 가르시아, 코무니카시오네스 임시 감독 데뷔전서 무승부",
+    "summary_ko": "과테말라 프로축구 클럽 코무니카시오네스의 임시 감독으로 부임한 케빈 가르시아가 6일(현지시간) 산토 도밍고 데 구스만 경기장에서 열린 믹스코와의 아페르투라 2026 토너먼트 7라운드 경기에서 1대 1 무승부를 기록하며 데뷔전을 치렀다.\n\n구단 유소년 팀에서 지도자 경력을 쌓아온 케빈 가르시아는 알보스(코무니카시오네스의 별칭) 팀을 이끄는 막중한 책임을 맡아 굳은 의지로 도전 과제에 임했다. 가르시아는 임시 감독이라는 직함이 책임을 덜어주지 않는다며 전적으로 책임을 지고 임하고 있다고 밝혔다.\n\n가르시아는 선수단을 잘 알고 있다는 점",
+    "url": "internal://solo_20260906_e226c99a",
+    "source": "NewsFinal",
+    "category": "글로벌",
+    "subcategory": "solo_20260906_e226c99a",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-06 10:27",
+    "countries": [
+      "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/17/0578_kevin_borlee_reeksen_400m_%2828541002155%29.jpg/960px-0578_kevin_borlee_reeksen_400m_%2828541002155%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "view_count": 0,
+    "first_published_at": "2026-09-06T10:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-06 10:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "사진: filip bossuyt from Kortrijk, Belgium (CC BY 2.0, Wikimedia Commons)",
     "continuation_of_id": null
   },
   {
@@ -1948,44 +1986,6 @@
     "update_log": [
       {
         "timestamp": "2026-09-06 09:12",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 136793,
-    "title_en": "남아시아, 후텁지근한 더위 속 전역에 빗줄기",
-    "title_ko": "남아시아, 후텁지근한 더위 속 전역에 빗줄기",
-    "summary_ko": "6일(현지시간) 남아시아 전역의 기온은 최저 24°C에서 최고 34°C의 분포를 나타내는 가운데 인도, 방글라데시, 스리랑카 등 주요 국가 전반에 걸쳐 비 소식이 이어진다. 지역 전체 최저기온 24°C와 최고기온 34°C를 중심으로 넓은 기온 범위가 형성되며, 해당 권역에 속한 주요 3개국 모두에서 강수 현상이 나타난다.\n\n국가별 세부 기온과 강수 예보를 살펴보면 인도는 주간 최고기온 34°C, 주간 최저기온 25°C를 기록하며 비 소식이 확인된다. 방글라데시는 주간 최고기온이 33°C까지 오르고 주간 최저기온은 25°C를 나타내는",
-    "url": "internal://weather_group_남아시아_weekly20260906",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_남아시아_weekly20260906",
-    "region": "south_asia",
-    "country": "남아시아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-06 08:38",
-    "countries": [
-      "인도",
-      "방글라데시",
-      "파키스탄",
-      "스리랑카",
-      "네팔"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_india_20260906.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-06T08:38:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-06 08:38",
         "note": "최초 게시"
       }
     ],
