@@ -1,5 +1,102 @@
 [
   {
+    "id": 139510,
+    "title_en": "한국, 전국·쾌청한 맑은 날씨 속 남부·제주 곳곳 빗방울",
+    "title_ko": "한국, 전국·쾌청한 맑은 날씨 속 남부·제주 곳곳 빗방울",
+    "summary_ko": "7일 한국의 날씨는 전국이 대체로 맑은 가운데 일부 남부 지역과 제주도를 중심으로 비가 내린다. 기상청에 따르면 서울은 종일 맑은 날씨를 나타내며 쾌청한 하늘이 이어진다. 서울의 아침 최저기온은 19도, 낮 최고기온은 29도로 예보됐으며 강수확률은 오전과 오후 모두 0%다. 최대풍속은 시속 9km로 바람도 잔잔하게 분다. 내륙 주요 지역 역시 대체로 맑은 날씨가 나타난다. 광주는 하루 종일 맑은 하늘 아래 최저기온 18도, 최고기온 30도를 기록하며, 강수확률은 0%, 최대풍속은 시속 8km다. 대구 또한 오전과 오후 모두 맑겠고 ",
+    "url": "internal://weather_한국_today20260907",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_한국_today20260907",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-07 05:22",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20260907.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-07T05:22:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-07 05:22",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 139509,
+    "title_en": "[국내유가] 휘발유 리터당 1859원…정유사 공급가 논쟁 속 소폭 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1859원…정유사 공급가 논쟁 속 소폭 하락",
+    "summary_ko": "국내 주유소 휘발유 평균 판매가격이 9월 7일 기준 리터당 1859원을 기록했다. 오피넷(한국석유공사)에 따르면 이날 전국 휘발유 평균 가격은 리터당 1,859.25원으로 전일 대비 0.08원 하락했다.\n\n경유와 LPG(부탄) 가격도 동반 하락세를 나타냈다. 경유는 리터당 1,843.72원으로 전일 대비 0.01원 내렸고, LPG는 리터당 1,098.39원으로 전일보다 0.18원 하락했다.\n\n최근 기름값 급등의 원인을 두고 주유소 업계가 정유사의 공급가격 책정 방식을 지적하는 등 정유사 공급가를 둘러싼 논쟁이 이어지고 있다. 이에 ",
+    "url": "internal://opinet_price_2026-09-07",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-09-07 05:10",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_09_07.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-07T05:10:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-07 05:10",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-09-07",
+      "prices": {
+        "B027": {
+          "diff": -0.08,
+          "name": "휘발유",
+          "price": 1859.25
+        },
+        "B034": {
+          "diff": 0.15,
+          "name": "고급휘발유",
+          "price": 2314.68
+        },
+        "C004": {
+          "diff": -0.19,
+          "name": "실내등유",
+          "price": 1576.63
+        },
+        "D047": {
+          "diff": -0.01,
+          "name": "경유",
+          "price": 1843.72
+        },
+        "K015": {
+          "diff": -0.18,
+          "name": "LPG(부탄)",
+          "price": 1098.39
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 139508,
     "title_en": "오세아니아, 캔버라 17도 완연…웰링턴 거센 비바람",
     "title_ko": "오세아니아, 캔버라 17도 완연…웰링턴 거센 비바람",
@@ -355,7 +452,7 @@
     "id": 139084,
     "title_en": "Sudan, Mozambique and Other Nations See Conflicting Cholera Trends Amid Outbreaks and Declarations",
     "title_ko": "수단과 모잠비크 등 각국에서 콜레라 확산 및 종식 선언 잇달아",
-    "summary_ko": "수단 서부 코르도판 지역의 엘 이다이 구역에서 콜레라가 확산되어 최소 10명이 사망하고 40명 이상이 감염되었다고 코르도판 인권 관측소가 3일(현지시간) 밝혔다. 세계보건기구는 8월 초까지 수단 여러 주에서 2,600건 이상의 콜레라 사례가 보고된 가운데 코르도판을 최신 발병 핫스팟으로 지정했다. 세계보건기구는 서다푸르와 서코르도판에서 92만 8,000명을 대상으로 한 백신 접종 캠페인을 발표했으며, 엘나후드, 디반다, 엘풀라 등에서 예방 접종이 진행 중이다. 코르도판 인권 관측소는 엘이아이 구역의 움작, 하미르, 움라킬, 샤크엘키",
+    "summary_ko": "수단과 모잠비크 등 아프리카 여러 국가에서 콜레라 확산과 종식 선언이 동시에 이어지고 있다. 수단 서부 코르도판 지역의 엘 이다이 구역에서는 콜레라가 확산되어 최소 10명이 사망하고 40명 이상이 감염되었다고 코르도판 인권 관측소가 3일(현지시간) 밝혔다. 세계보건기구는 8월 초까지 수단 여러 주에서 2,600건 이상의 콜레라 사례가 보고된 가운데 코르도판을 최신 발병 핫스팟으로 지정했다. 세계보건기구는 서다푸르와 서코르도판에서 92만 8,000명을 대상으로 한 백신 접종 캠페인을 발표했으며, 엘나후드, 디반다, 엘풀라 등에서 예방",
     "url": "internal://trend_콜레라_2026090700",
     "source": "NewsFinal",
     "category": "사회",
@@ -373,7 +470,7 @@
     ],
     "is_published": true,
     "image_url": "https://upload.wikimedia.org/wikipedia/commons/d/da/1853_Copenhagen_cholera_outbreak_-_tent_camp.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
-    "view_count": 2,
+    "view_count": 3,
     "first_published_at": "2026-09-07T00:38:00",
     "update_log": [
       {
@@ -1841,69 +1938,6 @@
     "is_travel": false,
     "source_published_at": null,
     "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 136423,
-    "title_en": "[국내유가] 휘발유 리터당 1859원…보합세 지속",
-    "title_ko": "[국내유가] 휘발유 리터당 1859원…보합세 지속",
-    "summary_ko": "국내 주유소 휘발유 평균 판매가격이 9월 6일 기준 리터당 1859원을 기록했다.\n\n오피넷(한국석유공사)에 따르면 9월 6일 전국 주유소 휘발유 평균 가격은 리터당 1,859.37원으로 전일 대비 변동 없이 보합세를 나타냈다. 반면 경유는 리터당 1,843.69원으로 전일보다 0.24원 하락했으며, LPG(부탄)는 리터당 1,098.49원으로 전일 대비 0.21원 내렸다.\n\n최근 기름값 변동을 둘러싸고 국제유가 흐름과 함께 정유사 공급가격의 영향이 주요 요인으로 작용하고 있다는 분석이 제기된다. 일각에서는 기름값 상승의 1차 원인이",
-    "url": "internal://opinet_price_2026-09-06",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국내유가",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "🇰🇷",
-    "score": 1,
-    "created_at": "2026-09-06 05:10",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_09_06.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-06T05:10:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-06 05:10",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "date": "2026-09-06",
-      "prices": {
-        "B027": {
-          "diff": 0.0,
-          "name": "휘발유",
-          "price": 1859.37
-        },
-        "B034": {
-          "diff": 0.23,
-          "name": "고급휘발유",
-          "price": 2314.66
-        },
-        "C004": {
-          "diff": -0.24,
-          "name": "실내등유",
-          "price": 1576.77
-        },
-        "D047": {
-          "diff": -0.24,
-          "name": "경유",
-          "price": 1843.69
-        },
-        "K015": {
-          "diff": -0.21,
-          "name": "LPG(부탄)",
-          "price": 1098.49
-        }
-      }
-    },
     "image_credit": null,
     "continuation_of_id": null
   }
