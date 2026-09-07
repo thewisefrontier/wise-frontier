@@ -592,23 +592,22 @@ def _extract_section(text: str, label: str) -> str:
     return "\n".join(collected).strip()
 
 
-def _ensure_paragraphs(text: str, target: int = 3) -> str:
-    """Gemini가 프롬프트의 '문단으로 나누어 작성' 지시를 어기고
-    \\n\\n 없이 한 덩어리로 응답하는 경우가 있어(강제성 없는 지시라 준수율이
-    들쭉날쭉함), 코드 단에서 문장(-다.) 단위로 강제 분할하는 안전장치.
-    이미 \\n\\n이 있으면(모델이 지시를 따른 경우) 손대지 않고 그대로 반환.
-    문장이 2개 이상이면 항상 최소 2개 문단으로 분할한다(짧은 리드 문단도 포함)."""
-    if not text or "\n\n" in text:
-        return text
-    sentences = [s.strip() for s in re.split(r"(?<=다\.)\s+", text.strip()) if s.strip()]
-    if len(sentences) < 2:
-        return text  # 문장이 1개뿐이면 분할 불가
-    actual_target = min(target, len(sentences) - 1)
-    actual_target = max(actual_target, 2)
-    n = len(sentences)
-    size = math.ceil(n / actual_target)
-    groups = [sentences[i:i + size] for i in range(0, n, size)]
-    return "\n\n".join(" ".join(g) for g in groups)
+# 2026-09-08 공용화("공용모듈이 필요한 시스템이 더 있는지 점검해줘") —
+# style_guard.ensure_paragraphs()로 이식(4개 파일에 동일 코드 복붙).
+try:
+    from style_guard import ensure_paragraphs as _ensure_paragraphs
+except Exception:
+    def _ensure_paragraphs(text: str, target: int = 3) -> str:
+        if not text or "\n\n" in text:
+            return text
+        sentences = [s.strip() for s in re.split(r"(?<=다\.)\s+", text.strip()) if s.strip()]
+        if len(sentences) < 2:
+            return text
+        actual_target = max(min(target, len(sentences) - 1), 2)
+        n = len(sentences)
+        size = math.ceil(n / actual_target)
+        groups = [sentences[i:i + size] for i in range(0, n, size)]
+        return "\n\n".join(" ".join(g) for g in groups)
 
 
 # 추적할 키워드 그룹 — (그룹명, 카테고리, [키워드 목록])

@@ -380,21 +380,23 @@ def enforce_title_prefix(title: str) -> str:
     return f"{TITLE_PREFIX} {t}" if t else TITLE_PREFIX
 
 
-def _ensure_paragraphs(text: str, target: int = 4) -> str:
-    """Gemini가 문단 구분(빈 줄) 지시를 어기고 한 덩어리로 응답하는 경우가 있어
-    (2026-08-26 실사고, id=100254 — 프롬프트에 문단 구분 지시 자체가 없었음을
-    확인 후 gemini_writer.py와 동일한 로직 이식) 문장(-다.) 단위로 강제 분할한다."""
-    if not text or "\n\n" in text:
-        return text
-    sentences = [s.strip() for s in re.split(r"(?<=다\.)\s+", text.strip()) if s.strip()]
-    if len(sentences) < 2:
-        return text
-    actual_target = min(target, len(sentences) - 1)
-    actual_target = max(actual_target, 2)
-    n = len(sentences)
-    size = math.ceil(n / actual_target)
-    groups = [sentences[i:i + size] for i in range(0, n, size)]
-    return "\n\n".join(" ".join(g) for g in groups)
+# 2026-09-08 공용화("공용모듈이 필요한 시스템이 더 있는지 점검해줘") —
+# style_guard.ensure_paragraphs()로 이식(target=4는 이 파일 고유 기본값,
+# 2026-08-26 실사고 id=100254 대응으로 유지).
+try:
+    from style_guard import ensure_paragraphs as _ensure_paragraphs
+except Exception:
+    def _ensure_paragraphs(text: str, target: int = 4) -> str:
+        if not text or "\n\n" in text:
+            return text
+        sentences = [s.strip() for s in re.split(r"(?<=다\.)\s+", text.strip()) if s.strip()]
+        if len(sentences) < 2:
+            return text
+        actual_target = max(min(target, len(sentences) - 1), 2)
+        n = len(sentences)
+        size = math.ceil(n / actual_target)
+        groups = [sentences[i:i + size] for i in range(0, n, size)]
+        return "\n\n".join(" ".join(g) for g in groups)
 
 
 def parse_article_output(text: str) -> tuple[str, str]:
@@ -404,7 +406,7 @@ def parse_article_output(text: str) -> tuple[str, str]:
     if m_title:
         title = m_title.group(1).strip()
     if m_body:
-        body = _ensure_paragraphs(m_body.group(1).strip())
+        body = _ensure_paragraphs(m_body.group(1).strip(), target=4)
     return title, body
 
 

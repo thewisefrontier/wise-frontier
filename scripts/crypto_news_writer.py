@@ -384,15 +384,20 @@ def enforce_title_prefix(title: str) -> str:
     return f"{TITLE_PREFIX} {t}" if t else TITLE_PREFIX
 
 
-def parse_article_output(text: str) -> tuple[str, str]:
-    title, body = "", ""
-    m_title = re.search(r"TITLE:\s*(.+?)(?:\n|$)", text)
-    if m_title:
-        title = m_title.group(1).strip()
-    m_body = re.search(r"BODY:\s*(.+)$", text, re.S)
-    if m_body:
-        body = m_body.group(1).strip()
-    return title, body
+# 2026-09-08 공용화("공용모듈이 필요한 시스템이 더 있는지 점검해줘") —
+# style_guard.parse_article_output()로 이식(8개 파일에 동일 코드 복붙).
+try:
+    from style_guard import parse_article_output
+except Exception:
+    def parse_article_output(text: str) -> tuple[str, str]:
+        title, body = "", ""
+        m_title = re.search(r"TITLE:\s*(.+?)(?:\n|$)", text)
+        if m_title:
+            title = m_title.group(1).strip()
+        m_body = re.search(r"BODY:\s*(.+)$", text, re.S)
+        if m_body:
+            body = m_body.group(1).strip()
+        return title, body
 
 
 def call_gemini_article(prompt: str, max_tokens: int = 3000) -> str | None:

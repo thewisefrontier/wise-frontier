@@ -430,12 +430,17 @@ except Exception:
 
 
 # ── TITLE / BODY 파싱 ────────────────────────────────────────
-def parse_article_output(text: str) -> tuple[str, str]:
-    m_title = re.search(r"TITLE:\s*(.+)", text)
-    m_body  = re.search(r"BODY:\s*([\s\S]+)", text)
-    title   = m_title.group(1).strip() if m_title else ""
-    body    = m_body.group(1).strip()  if m_body  else ""
-    return title, body
+# 2026-09-08 공용화("공용모듈이 필요한 시스템이 더 있는지 점검해줘") —
+# style_guard.parse_article_output()로 이식(8개 파일에 동일 코드 복붙).
+try:
+    from style_guard import parse_article_output
+except Exception:
+    def parse_article_output(text: str) -> tuple[str, str]:
+        m_title = re.search(r"TITLE:\s*(.+)", text)
+        m_body  = re.search(r"BODY:\s*([\s\S]+)", text)
+        title   = m_title.group(1).strip() if m_title else ""
+        body    = m_body.group(1).strip()  if m_body  else ""
+        return title, body
 
 
 # ── 메인 ─────────────────────────────────────────────────────

@@ -16,11 +16,17 @@ verify_single_topic()만 Gemini 호출이 필요해서 call_gemini_fn을 주입�
 
 사용:
     from style_guard import has_column_style, has_polite_ending, to_plain_style, \
-        _pub_day_label, verify_single_topic
+        _pub_day_label, verify_single_topic, ensure_paragraphs, parse_article_output
     ...
     verify_single_topic(title, body, call_gemini)
+
+ensure_paragraphs()/parse_article_output()는 2026-09-08 감사("공용모듈이
+필요한 시스템이 더 있는지 점검해줘")로 추가 공용화 — 각각 4개·8개 파일에
+기능적으로 동일한 코드가 복붙돼 있었다(버그로 인한 드리프트는 아니고
+순수 중복). 둘 다 Gemini 호출이 없는 순수 텍스트 처리라 주입이 필요 없다.
 """
 
+import math
 import re
 
 # ── 논평/칼럼체 검출 ────────────────────────────
@@ -142,3 +148,36 @@ def verify_single_topic(title: str, body: str, call_gemini_fn) -> bool:
     if not result:
         return True
     return "YES" in result.upper()
+
+
+def ensure_paragraphs(text: str, target: int = 3) -> str:
+    """Gemini가 프롬프트의 '문단으로 나누어 작성' 지시를 어기고
+    \\n\\n 없이 한 덩어리로 응답하는 경우가 있어(강제성 없는 지시라 준수율이
+    들쭉날쭉함), 코드 단에서 문장(-다.) 단위로 강제 분할하는 안전장치.
+    이미 \\n\\n이 있으면(모델이 지시를 따른 경우) 손대지 않고 그대로 반환.
+    문장이 2개 이상이면 항상 최소 2개 문단으로 분할한다(짧은 리드 문단도 포함)."""
+    if not text or "\n\n" in text:
+        return text
+    sentences = [s.strip() for s in re.split(r"(?<=다\.)\s+", text.strip()) if s.strip()]
+    if len(sentences) < 2:
+        return text  # 문장이 1개뿐이면 분할 불가
+    actual_target = min(target, len(sentences) - 1)
+    actual_target = max(actual_target, 2)
+    n = len(sentences)
+    size = math.ceil(n / actual_target)
+    groups = [sentences[i:i + size] for i in range(0, n, size)]
+    return "\n\n".join(" ".join(g) for g in groups)
+
+
+def parse_article_output(text: str) -> tuple[str, str]:
+    """"TITLE: ...\\nBODY: ..." 형식의 Gemini 응답을 (title, body)로 분리."""
+    title, body = "", ""
+    if not text:
+        return title, body
+    m_title = re.search(r"TITLE:\s*(.+?)(?:\n|$)", text)
+    if m_title:
+        title = m_title.group(1).strip()
+    m_body = re.search(r"BODY:\s*(.+)$", text, re.S)
+    if m_body:
+        body = m_body.group(1).strip()
+    return title, body

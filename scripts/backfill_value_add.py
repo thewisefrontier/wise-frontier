@@ -32,6 +32,14 @@ except Exception:
     def detect_script_leak(title, body):
         return []
 
+# 저장 시점 raw JSON 본문 차단(2026-09-08, 사용자 지적 — "공용모듈이 필요한
+# 시스템이 더 있는지 점검해줘" 감사로 이 파일에 빠져있던 걸 발견).
+try:
+    from json_body_guard import unwrap_json_body
+except Exception:
+    def unwrap_json_body(text, _depth=0):
+        return None
+
 GEMINI_MODELS = [
     "gemini-3.8-flash",
     "gemini-3.7-flash",
@@ -173,6 +181,20 @@ def update_article(article_id: int, summary_3lines: str, investment_idea: str) -
     if detect_script_leak(summary_3lines, investment_idea):
         print(f"  ⚠️ [문자 혼입 감지] id={article_id} 업데이트 차단")
         return False
+    _u3 = unwrap_json_body(summary_3lines)
+    if _u3 is not None:
+        if _u3:
+            summary_3lines = _u3
+        else:
+            print(f"  ⛔ [raw JSON 본문] id={article_id} summary_3lines 업데이트 차단")
+            return False
+    _ui = unwrap_json_body(investment_idea)
+    if _ui is not None:
+        if _ui:
+            investment_idea = _ui
+        else:
+            print(f"  ⛔ [raw JSON 본문] id={article_id} investment_idea 업데이트 차단")
+            return False
     # 저장 직전 최종 방어. 프롬프트가 지켜지지 않아도 DB에는 '-다' 체만 들어간다.
     if has_polite_ending(summary_3lines) or has_polite_ending(investment_idea):
         print(f"  🔧 id={article_id} 합쇼체 감지 → 자동 변환")
