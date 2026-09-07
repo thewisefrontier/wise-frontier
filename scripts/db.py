@@ -54,8 +54,7 @@ def is_url_exists(url: str) -> bool:
 def insert_article(
     title_en, title_ko, summary_en, summary_ko,
     url, source, category, subcategory, region, country, country_flag, score,
-    full_text="", countries=None, is_published=False, source_published_at=None,
-    image_url=""
+    full_text="", countries=None, is_published=False, source_published_at=None
 ) -> int:
     payload = {
         "title_en": title_en or "",
@@ -80,11 +79,6 @@ def insert_article(
     # 원문(RSS) 발행일 — 값이 있을 때만 실어 기존 동작에 영향 없게 한다
     if source_published_at:
         payload["source_published_at"] = source_published_at
-    # RSS 자체 제공 이미지(2026-09-07) — 있을 때만 실어 기존 동작에 영향 없게 한다.
-    # 이 값은 원자재 단계의 "출처가 준 실제 사진" 표시일 뿐, R2 영구 저장은
-    # 실제로 기사화(단독 기사 생성)될 때 gemini_writer.py가 처리한다.
-    if image_url:
-        payload["image_url"] = image_url
     headers = {**_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
     res = requests.post(_url(), headers=headers, json=payload, timeout=15)
     if res.status_code in (200, 201):

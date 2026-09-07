@@ -2171,7 +2171,6 @@ def generate_update_note(existing_summary: str, new_summary: str) -> str:
 # 공용화(다른 writer 스크립트도 쓸 수 있도록 -- script_leak.py/gemini_client.py와
 # 같은 이유). 호출부(수십 곳) 코드는 안 바뀌도록 같은 시그니처의 얇은 wrapper만 남긴다.
 from article_image import fetch_article_image as _fetch_article_image_base
-from image_store import store_image
 
 
 def fetch_article_image(title: str, body: str, entity: str = "") -> tuple:
@@ -3244,26 +3243,13 @@ def run():
                     published = False
                     _dg_reason = f"번역 누락 — 외국어 잔존: {_fl}"
 
-            image_url, image_credit = "", ""
-            if published:
-                # 2026-09-07 도입(사용자 지적: "미술쪽 글은 이미지가 중요...
-                # 특정 그림을 다루는 글은 그 그림의 사진을 넣어야 한다는 거야.
-                # 반드시"). ArchDaily·Dezeen·My Modern Met 등은 그 기사가
-                # 다루는 실제 대상(신축 건물·신작) 사진을 RSS 자체에 이미
-                # 신고 있다(rss_fetcher.py의 extract_rss_image()가 수집).
-                # 이런 대상은 애초에 Wikimedia/Pixabay 일반 검색으로는 나올
-                # 수 없어(공개 라이선스 저장소에 있을 리 없는 신작·신축물)
-                # 출처가 준 실제 사진을 최우선으로 쓴다.
-                _src_image = a.get("image_url") or ""
-                if _src_image:
-                    _stored = store_image(_src_image, key_hint=f"rss_{a.get('id')}")
-                    if _stored:
-                        image_url = _stored
-                        image_credit = f"사진: {a.get('source', '')}"
-                if not image_url:
-                    image_url, image_credit = fetch_article_image(
-                        full_title, gen_body or _strip_leaked_labels(content), gen_keyword_en
-                    )
+            # 2026-09-07: RSS 원본 이미지(ArchDaily/Dezeen 등)를 재호스팅하는
+            # 방안을 검토했으나 저작권 문제로 보류(사용자 판단) — 현대미술·
+            # 건축 콘텐츠는 당분간 이미지 없이 발행하고, 기존 Wikimedia/
+            # Pixabay 검색으로 못 찾으면 이미지 없이 둔다.
+            image_url, image_credit = fetch_article_image(
+                full_title, gen_body or _strip_leaked_labels(content), gen_keyword_en
+            ) if published else ("", "")
 
             article_id = save_article(
                 unpub_reason=_dg_reason,
