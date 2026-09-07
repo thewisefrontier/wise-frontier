@@ -87,6 +87,15 @@ from frontier_markets_writer import (
     wikipedia_confirms, extract_candidate_names, verify_no_fabricated_names,
 )
 
+# NYSE 휴장일 캘린더(market_calendar.py 공용화, 2026-09-07). import 실패해도
+# 죽지 않도록 폴백은 주말만 거른다(기존 동작과 동일 — 휴장일 오탐 방지보다
+# 스크립트 자체가 안 죽는 게 우선).
+try:
+    from market_calendar import is_us_market_closed
+except Exception:
+    def is_us_market_closed(d) -> bool:
+        return d.weekday() >= 5
+
 GEMINI_MODELS = [
     "gemini-3.8-flash",
     "gemini-3.7-flash",
@@ -148,7 +157,11 @@ MARKET_OPEN_WINDOW_MINUTES = 30    # 09:30 ~ 09:59
 
 def market_just_opened() -> bool:
     now = now_edt()
-    if now.weekday() >= 5:
+    # 2026-09-07 실사고: 주말(weekday>=5)만 걸러내고 평일 NYSE 휴장일(노동절 등)은
+    # 못 걸러내, 휴장 당일 09:30~09:59 창 동안 cron 호출마다 매번 개장 데이터
+    # 수집을 시도하다 실패를 반복했다(시장이 안 열렸으니 정상 데이터가 없음) —
+    # market_calendar.py의 공식 NYSE 캘린더로 휴장일도 함께 걸러낸다.
+    if is_us_market_closed(now.date()):
         return False
     minutes = now.hour * 60 + now.minute
     return MARKET_OPEN_MINUTES <= minutes < MARKET_OPEN_MINUTES + MARKET_OPEN_WINDOW_MINUTES

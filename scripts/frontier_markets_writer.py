@@ -114,6 +114,19 @@ EDT = ZoneInfo("America/New_York")  # 뉴욕 시장 기준
 # 뉴욕 시장 종가 기준: 현지 17:00 이후에만 실행(oil_price_writer.py와 동일 패턴)
 MARKET_CLOSE_HOUR_LOCAL = 17
 
+# NYSE 휴장일 캘린더(market_calendar.py 공용화, 2026-09-07). import 실패해도
+# 죽지 않도록 폴백은 주말만 거른다(기존 동작과 동일).
+try:
+    from market_calendar import is_us_market_closed, previous_trading_date
+except Exception:
+    def is_us_market_closed(d) -> bool:
+        return d.weekday() >= 5
+    def previous_trading_date(from_date):
+        d = from_date - timedelta(days=1)
+        while d.weekday() >= 5:
+            d -= timedelta(days=1)
+        return d
+
 
 def now_kst() -> datetime:
     return datetime.now(timezone.utc).astimezone(KST)
@@ -131,25 +144,28 @@ def now_edt() -> datetime:
 # market_is_closed()/get_target_price_date() 패턴을 그대로 가져와, 뉴욕
 # 종가가 실제로 존재하는 시점에만 실행하고 그 날짜를 정확히 쓴다.
 def market_is_closed() -> bool:
-    """뉴욕 현지 17:00 이후인지 확인 (주말은 금요일 종가 사용)."""
+    """뉴욕 현지 17:00 이후인지 확인 (주말·NYSE 휴장일은 직전 영업일 종가 사용)."""
     now = now_edt()
-    if now.weekday() >= 5:
+    # 2026-09-07: 주말과 마찬가지로 평일 NYSE 휴장일(노동절 등)도 "이미 닫혀
+    # 있다" — 이 함수의 True는 "수집해도 되는 종가가 있다"는 뜻인데, 휴장일
+    # 자체엔 그날 종가가 없으므로 get_target_market_date()가 직전 영업일로
+    # 굴려주는 이 분기를 함께 타야 한다(market_calendar.py 공용화).
+    if is_us_market_closed(now.date()):
         return True
     return now.hour >= MARKET_CLOSE_HOUR_LOCAL
 
 
 def get_target_market_date() -> date:
-    """수집 대상 날짜 결정. 뉴욕 17:00 이후 → 당일, 그 전 → 전 영업일."""
+    """수집 대상 날짜 결정. 뉴욕 17:00 이후 → 당일, 그 전 → 전 영업일.
+
+    주말·NYSE 휴장일에는 그날 종가 자체가 없으므로 직전 영업일로 굴린다
+    (2026-09-07: 휴장일도 주말과 동일하게 취급 — market_calendar.py 공용화)."""
     now = now_edt()
-    if now.weekday() >= 5:
-        days_back = now.weekday() - 4
-        return (now - timedelta(days=days_back)).date()
+    if is_us_market_closed(now.date()):
+        return previous_trading_date(now.date())
     if now.hour >= MARKET_CLOSE_HOUR_LOCAL:
         return now.date()
-    prev = now - timedelta(days=1)
-    while prev.weekday() >= 5:
-        prev -= timedelta(days=1)
-    return prev.date()
+    return previous_trading_date(now.date())
 
 
 # Supabase 헤더/URL 헬퍼는 article_store.py로 공용화(2026-09-02).

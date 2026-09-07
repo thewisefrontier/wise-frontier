@@ -87,59 +87,14 @@ def now_edt() -> datetime:
     return datetime.now(timezone.utc).astimezone(EDT)
 
 
-# ── NYSE 휴장일 캘린더(공식 확인, 조기 폐장일 제외) ──────────────
-# 출처: https://www.nyse.com/markets/hours-calendars (2026-09-07 확인)
-# ⚠️ 매년 초 NYSE 공식 캘린더에서 재확인 후 다음 연도분을 추가할 것.
-HOLIDAYS_BY_YEAR = {
-    2026: [
-        (date(2026, 1, 1), "신정(New Year's Day)"),
-        (date(2026, 1, 19), "마틴 루서 킹 데이(Martin Luther King, Jr. Day)"),
-        (date(2026, 2, 16), "워싱턴 탄생일(Presidents' Day)"),
-        (date(2026, 4, 3), "성금요일(Good Friday)"),
-        (date(2026, 5, 25), "메모리얼 데이(Memorial Day)"),
-        (date(2026, 6, 19), "노예해방기념일(Juneteenth)"),
-        (date(2026, 9, 7), "노동절(Labor Day)"),
-        (date(2026, 11, 26), "추수감사절(Thanksgiving Day)"),
-        (date(2026, 12, 25), "크리스마스(Christmas Day)"),
-    ],
-    2027: [
-        (date(2027, 1, 1), "신정(New Year's Day)"),
-        (date(2027, 1, 18), "마틴 루서 킹 데이(Martin Luther King, Jr. Day)"),
-        (date(2027, 2, 15), "워싱턴 탄생일(Presidents' Day)"),
-        (date(2027, 3, 26), "성금요일(Good Friday)"),
-        (date(2027, 5, 31), "메모리얼 데이(Memorial Day)"),
-        (date(2027, 6, 18), "노예해방기념일(Juneteenth)"),
-        (date(2027, 9, 6), "노동절(Labor Day)"),
-        (date(2027, 11, 25), "추수감사절(Thanksgiving Day)"),
-        (date(2027, 12, 24), "크리스마스(Christmas Day)"),
-    ],
-}
+# NYSE 휴장일 캘린더는 market_calendar.py로 공용화(2026-09-07,
+# ny_market_open_writer.py도 같은 캘린더가 필요해 분리).
+from market_calendar import holiday_name as _holiday_name, previous_trading_date
 
 
 def today_holiday_name() -> str | None:
-    """오늘(뉴욕 기준)이 NYSE 휴장일이면 휴장 사유명을, 아니면 None을 반환.
-
-    연도가 HOLIDAYS_BY_YEAR에 없으면(캘린더 갱신 누락) 조용히 실패하는 대신
-    경고를 남기고 None을 반환한다 — 틀린 날짜를 지어내는 것보다 그냥
-    기사를 안 내는 게 낫다."""
-    today = now_edt().date()
-    year_holidays = HOLIDAYS_BY_YEAR.get(today.year)
-    if year_holidays is None:
-        print(f"  ⚠️ {today.year}년 NYSE 휴장일 캘린더 미등록 — HOLIDAYS_BY_YEAR 갱신 필요")
-        return None
-    for d, name in year_holidays:
-        if d == today:
-            return name
-    return None
-
-
-def previous_trading_date(from_date: date) -> date:
-    """from_date 이전의 가장 최근 영업일(주말·NYSE 휴장일 제외)을 찾는다."""
-    all_holidays = {d for holidays in HOLIDAYS_BY_YEAR.values() for d, _ in holidays}
-    d = from_date - timedelta(days=1)
-    while d.weekday() >= 5 or d in all_holidays:
-        d -= timedelta(days=1)
-    return d
+    """오늘(뉴욕 기준)이 NYSE 휴장일이면 휴장 사유명을, 아니면 None을 반환."""
+    return _holiday_name(now_edt().date())
 
 
 # ── 시세 데이터 ──────────────────────────────────────────────
