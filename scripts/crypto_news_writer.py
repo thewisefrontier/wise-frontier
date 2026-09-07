@@ -206,6 +206,30 @@ def fetch_moneyfinal_crypto_context(symbol: str) -> dict | None:
     return None
 
 
+def _won_style_decimal(n: float) -> str:
+    """79,979.98 같은 콤마 표기 대신 "7만9979.98" 식 억/만 그룹핑(소수부는
+    그대로 유지)으로 변환. 벤치마크·현재가처럼 센트 단위가 있는 가격
+    표시에 쓴다(2026-09-07 사용자 지적 — "79979.98달러"가 "7만9979.98달러"
+    여야 한다고 지적, _won_style_amount는 정수 전용이라 별도로 둔다)."""
+    sign = "-" if n < 0 else ""
+    n = abs(n)
+    int_part = int(n)
+    frac = round((n - int_part) * 100)
+    if frac == 100:
+        int_part += 1
+        frac = 0
+    eok, rest = divmod(int_part, 100_000_000)
+    man, remainder = divmod(rest, 10_000)
+    parts = []
+    if eok:
+        parts.append(f"{eok}억")
+    if man:
+        parts.append(f"{man}만")
+    if remainder or not parts:
+        parts.append(f"{remainder}")
+    return f"{sign}{''.join(parts)}.{frac:02d}"
+
+
 def _won_style_amount(n: float) -> str:
     """91,256,495,759 같은 콤마 표기 대신 "912억5649만5759" 식 억/만
     그룹핑으로 변환(2026-09-04 사용자 지적 — 리플 기사에서 시가총액이
@@ -238,15 +262,17 @@ def build_article_prompt(symbol: str, name_ko: str, data: dict, mf_ctx: dict | N
     bench_block = ""
     if benchmarks:
         lines = [
-            f"- {bname}({bsym.replace('-USD','')}): {bd['price']:,.2f}달러 ({bd['pct']:+.2f}%)"
+            f"- {bname}({bsym.replace('-USD','')}): {_won_style_decimal(bd['price'])}달러 ({bd['pct']:+.2f}%)"
             for bsym, bname, bd in benchmarks
         ]
         bench_block = (
             "\n[벤치마크 시세 — 오늘의 주인공이 아니어도 본문에 반드시 언급]\n"
             + "\n".join(lines)
             + "\n이 시세들은 위 데이터와 같은 시각(같은 야후 파이낸스 조회) 기준입니다. "
-              "본문 아무 곳에나 자연스럽게(예: '한편 비트코인은 X달러, 이더리움은 Y달러에 "
-              "거래됐다') 넣으세요 — 이미 오늘의 주인공인 코인은 중복해서 다시 나열하지 마세요.\n"
+              "본문 아무 곳에나 자연스럽게 전일 대비 등락률까지 포함해서(예: '한편 비트코인은 "
+              "7만9979.98달러(-1.2%), 이더리움은 2510.62달러(+0.8%)에 거래됐다') 넣으세요 — "
+              "이미 오늘의 주인공인 코인은 중복해서 다시 나열하지 마세요. 숫자에 3자리마다 "
+              "콤마(,)를 찍지 말고 위 표기처럼 억/만 단위로 풀어 쓰세요.\n"
         )
 
     mf_block = ""
@@ -269,10 +295,11 @@ def build_article_prompt(symbol: str, name_ko: str, data: dict, mf_ctx: dict | N
 오늘({today_str} {time_str} 한국시간) 기준 {name_ko}({symbol.replace('-USD','')}) 시세 데이터
 (24시간 거래 기준, 달러 — 코인은 하루 안에서도 가격이 크게 움직이니 이
 시각 기준 데이터임에 유의):
-- 현재가: {data['price']:,.2f}달러 (전일比 {data['pct']:+.2f}%)
-- 당일 거래 범위: {data.get('day_low', 0):,.2f} ~ {data.get('day_high', 0):,.2f}달러
-- 52주 최고/최저: {data.get('fifty_two_week_high', 0):,.2f} / {data.get('fifty_two_week_low', 0):,.2f}달러
+- 현재가: {_won_style_decimal(data['price'])}달러 (전일比 {data['pct']:+.2f}%)
+- 당일 거래 범위: {_won_style_decimal(data.get('day_low', 0))} ~ {_won_style_decimal(data.get('day_high', 0))}달러
+- 52주 최고/최저: {_won_style_decimal(data.get('fifty_two_week_high', 0))} / {_won_style_decimal(data.get('fifty_two_week_low', 0))}달러
 {mf_block}{bench_block}
+⚠️ 위 시세 수치는 이미 억/만 단위로 풀어 쓴 표기입니다. 본문에 옮길 때 3자리마다 콤마(,)를 찍지 말고 위 표기 그대로(예: "7만9979.98") 쓰세요.
 
 [출력 형식] — 반드시 이 형식 그대로:
 TITLE: <제목>

@@ -167,6 +167,37 @@ except Exception:
         return f"{SUPABASE_URL}/rest/v1/articles"
 
 
+# gemini_writer.py의 save_article_keywords()와 동일한 목적(2026-09-07 도입) —
+# 이 파일(트렌드 트래커 3종)이 만든 기사는 지금까지 article_keywords를 전혀
+# 채우지 않아서, gemini_writer.py의 search_followup()이 매번 구조화 키워드
+# 없는 fallback(제목 첫 단어 파싱)으로 빠졌다. 트렌드 기사 제목은 "국가명, 본문"
+# 쉼표 형식이 아니라 "이란 서부 도로에서..." 식 일반 문장형이라 그 fallback이
+# 국가명("이란")을 그대로 키워드로 골라버렸고, 그 국가명 하나로 완전히 무관한
+# 기사가 "후속 정보"로 잘못 붙었다(실사고 id=137672, 138097). topic/group_name은
+# 이미 트렌드 트래커가 스스로 뽑은 구체적 주제어라 이걸 구조화 키워드로 저장해두면
+# search_followup()이 fallback을 아예 탈 필요가 없어진다.
+def save_article_keywords(article_id, keyword_ko: str = "", keyword_en: str = "") -> bool:
+    if not article_id or article_id <= 0:
+        return False
+    if not (keyword_ko or "").strip() and not (keyword_en or "").strip():
+        return True
+    try:
+        res = requests.post(
+            f"{SUPABASE_URL}/rest/v1/article_keywords",
+            headers={**_sb_headers(), "Prefer": "resolution=merge-duplicates"},
+            json={
+                "article_id": article_id,
+                "keyword_ko": (keyword_ko or "").strip()[:200],
+                "keyword_en": (keyword_en or "").strip()[:200],
+            },
+            timeout=15,
+        )
+        return res.status_code in (200, 201, 204)
+    except Exception as e:
+        print(f"  ⚠️ id={article_id} 키워드 저장 실패(무시하고 계속): {e}")
+        return False
+
+
 def get_articles_to_summarize(limit: int) -> list:
     since = (now_kst() - timedelta(hours=24)).strftime("%Y-%m-%d %H:%M")
     res = requests.get(
@@ -1117,7 +1148,9 @@ def save_trend_article(group_name: str, title: str, body: str,
         "summary_3lines": summary_3lines,
         "investment_idea": investment_idea,
     }
-    return insert_final_article(payload)
+    _art_id = insert_final_article(payload)
+    save_article_keywords(_art_id, keyword_ko=group_name)
+    return _art_id
 
 
 def run_trend_tracker():
@@ -1842,6 +1875,9 @@ JSON 배열로만 응답하세요 (마크다운 없이):
         if art_id > 0:
             print(f"  [{topic}] ✅ 실시간 트렌드 기사 생성 (id={art_id}): {title}")
             generated += 1
+            _is_ko_topic = any("가" <= c <= "힣" for c in topic)
+            save_article_keywords(art_id, keyword_ko=topic if _is_ko_topic else "",
+                                   keyword_en=topic if not _is_ko_topic else "")
 
             # 텔레그램 발송
             if TELEGRAM_TOKEN:
@@ -2170,6 +2206,9 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
         if art_id > 0:
             print(f"  [{topic}] ✅ 외부 트렌드 기사 생성 (id={art_id}): {title}")
             generated += 1
+            _is_ko_topic = any("가" <= c <= "힣" for c in topic)
+            save_article_keywords(art_id, keyword_ko=topic if _is_ko_topic else "",
+                                   keyword_en=topic if not _is_ko_topic else "")
             if TELEGRAM_TOKEN:
                 try:
                     preview = body[:300]
