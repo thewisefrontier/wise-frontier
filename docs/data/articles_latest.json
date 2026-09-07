@@ -1,5 +1,102 @@
 [
   {
+    "id": 143884,
+    "title_en": "한국, 전국·맑은 하늘 속 30도 안팎 늦더위…동해안 비",
+    "title_ko": "한국, 전국·맑은 하늘 속 30도 안팎 늦더위…동해안 비",
+    "summary_ko": "8일 한국의 날씨는 전국이 대체로 맑은 가운데 낮 기온이 30도 안팎까지 오르며 늦더위가 이어질 것으로 예보됐다. 기상청에 따르면 전국 대부분 지역에서 쾌청한 하늘이 펼쳐지겠으나, 동해안과 일부 산지에는 오후부터 차차 흐려지며 가끔 비가 내리겠다. 서울은 종일 맑은 하늘이 이어지겠으며, 아침 최저기온 18도에서 낮 최고기온은 30도까지 올라 다소 덥겠다. 서울의 오전과 오후 강수확률은 모두 0%이며, 최대풍속은 시속 11km로 바람도 잔잔하게 불겠다.\n\n주요 지역별로는 부산이 아침 최저기온 20도, 낮 최고기온 29도를 기록하겠다.",
+    "url": "internal://weather_한국_today20260908",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_한국_today20260908",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-08 05:23",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20260908.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-08T05:23:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-08 05:23",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 143807,
+    "title_en": "[국내유가] 휘발유 리터당 1859원…전일 대비 소폭 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1859원…전일 대비 소폭 하락",
+    "summary_ko": "국내 주유소 휘발유 평균 판매가격이 9월 8일 기준 리터당 1859원을 기록했다. 오피넷(한국석유공사)에 따르면 이날 휘발유 판매가격은 리터당 1859.20원으로 전일 대비 0.11원 내렸다.\n\n경유와 LPG 부탄 가격도 동반 하락세를 나타냈다. 경유는 리터당 1843.56원으로 전일보다 0.66원 하락했으며, LPG 부탄은 리터당 1098.15원으로 전일 대비 0.24원 내린 것으로 집계됐다.\n\n이번 유가 하락은 국제유가 흐름과 연동된 정유사 공급가격 변동이 주된 요인으로 작용하고 있다는 분석이다. 일각에서는 기름값 변동의 책임을",
+    "url": "internal://opinet_price_2026-09-08",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-09-08 05:10",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_09_08.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-08T05:10:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-08 05:10",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-09-08",
+      "prices": {
+        "B027": {
+          "diff": -0.11,
+          "name": "휘발유",
+          "price": 1859.2
+        },
+        "B034": {
+          "diff": 0.01,
+          "name": "고급휘발유",
+          "price": 2314.26
+        },
+        "C004": {
+          "diff": 0.02,
+          "name": "실내등유",
+          "price": 1577.03
+        },
+        "D047": {
+          "diff": -0.66,
+          "name": "경유",
+          "price": 1843.56
+        },
+        "K015": {
+          "diff": -0.24,
+          "name": "LPG(부탄)",
+          "price": 1098.15
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 143429,
     "title_en": "오세아니아, 쌀쌀한 흐린 날씨…캔버라 16도",
     "title_ko": "오세아니아, 쌀쌀한 흐린 날씨…캔버라 16도",
@@ -53,7 +150,7 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_anak_krakatau_2c_indonesia_2.jpg",
-    "view_count": 0,
+    "view_count": 1,
     "first_published_at": "2026-09-06T12:55:00",
     "update_log": [
       {
@@ -95,7 +192,7 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_small_business_office_business_meeting_corporate_off.jpg",
-    "view_count": 0,
+    "view_count": 1,
     "first_published_at": "2026-09-08T02:39:00",
     "update_log": [
       {
@@ -172,7 +269,7 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_airport_terminal_presidential_palace_west_africa_cit.jpg",
-    "view_count": 0,
+    "view_count": 1,
     "first_published_at": "2026-09-08T02:38:00",
     "update_log": [
       {
@@ -204,7 +301,7 @@
     "countries": [],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_cryptocurrency_bitcoin_mining_digital_server_room.jpg",
-    "view_count": 0,
+    "view_count": 1,
     "first_published_at": "2026-09-07T23:46:00",
     "update_log": [
       {
@@ -276,7 +373,7 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_ancient_wooden_chair_bronze_age_artifact_archaeologi.jpg",
-    "view_count": 0,
+    "view_count": 2,
     "first_published_at": "2026-09-07T20:25:00",
     "update_log": [
       {
@@ -412,7 +509,7 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_bitcoin_hardware_wallet_cryptocurrency_hacking_compu.jpg",
-    "view_count": 2,
+    "view_count": 3,
     "first_published_at": "2026-09-07T20:08:00",
     "update_log": [
       {
@@ -949,42 +1046,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 137672,
-    "title_en": "Fuel Tanker Explosion on Western Iran Road Leaves 11 Dead",
-    "title_ko": "이란 서부 도로에서 연료 탱크로리 폭발해 11명 사망",
-    "summary_ko": "이란 서부 지역에서 교통사고로 연료 탱크로리가 폭발해 최소 11명이 숨지고 7명이 부상했다고 5일(현지시간) 국영 IRIB 통신 등이 보도했다.\n\n이번 사고는 이란 서부 쿠르데스탄주 산아다지 카운티와 하메단주 하메단 카운티를 연결하는 도시 간 도로에서 발생했다. 쿠르데스탄 대학교 의과대학 응급의료 서비스 책임자 바바크 호다에이에 따르면 사고 당시 충격으로 인근 차량 여러 대에도 불이 붙었으며, 구조대는 부상자들을 산아다지의 병원으로 이송했다.\n\n앞서 7월에는 호르무즈 해협에서 해군 기뢰와 충돌한 유조선이 폭발하는 사고가 발생했다. ",
-    "url": "internal://realtrend_UN_Mercator_Map_Resolution_2026090615",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "realtrend_UN_Mercator_Map_Reso",
-    "region": "africa",
-    "country": "이란",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-07 09:05",
-    "countries": [
-      "이란",
-      "미국",
-      "아랍에미리트"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_fuel_tanker_explosion_highway_traffic_accident_burni.jpg",
-    "view_count": 1,
-    "first_published_at": "2026-09-06T15:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-06 15:27",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
     "id": 138097,
     "title_en": "Mpox Spreads Across African Nations While Others Declare End to Outbreaks, Strain Public Health Systems",
     "title_ko": "아프리카 각국서 엠폭스 확산 및 종식 교차... 방역 체계 혼선 지속",
@@ -1022,6 +1083,42 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: OWID (CC BY 4.0, Wikimedia Commons)",
+    "continuation_of_id": null
+  },
+  {
+    "id": 137672,
+    "title_en": "Fuel Tanker Explosion on Western Iran Road Leaves 11 Dead",
+    "title_ko": "이란 서부 도로에서 연료 탱크로리 폭발해 11명 사망",
+    "summary_ko": "이란 서부 지역에서 교통사고로 연료 탱크로리가 폭발해 최소 11명이 숨지고 7명이 부상했다고 5일(현지시간) 국영 IRIB 통신 등이 보도했다.\n\n이번 사고는 이란 서부 쿠르데스탄주 산아다지 카운티와 하메단주 하메단 카운티를 연결하는 도시 간 도로에서 발생했다. 쿠르데스탄 대학교 의과대학 응급의료 서비스 책임자 바바크 호다에이에 따르면 사고 당시 충격으로 인근 차량 여러 대에도 불이 붙었으며, 구조대는 부상자들을 산아다지의 병원으로 이송했다.\n\n앞서 7월에는 호르무즈 해협에서 해군 기뢰와 충돌한 유조선이 폭발하는 사고가 발생했다. ",
+    "url": "internal://realtrend_UN_Mercator_Map_Resolution_2026090615",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "realtrend_UN_Mercator_Map_Reso",
+    "region": "africa",
+    "country": "이란",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-07 09:05",
+    "countries": [
+      "이란",
+      "미국",
+      "아랍에미리트"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_fuel_tanker_explosion_highway_traffic_accident_burni.jpg",
+    "view_count": 1,
+    "first_published_at": "2026-09-06T15:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-06 15:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
     "continuation_of_id": null
   },
   {
@@ -1128,6 +1225,40 @@
     "continuation_of_id": null
   },
   {
+    "id": 140159,
+    "title_en": "Qatar’s Ministry of Municipality Adds 38 E-Services for Veterinary, Agriculture Sectors to Oun App",
+    "title_ko": "카타르 자치부, 오운 앱에 수의·농업 등 전자 서비스 38개 추가",
+    "summary_ko": "카타르 자치부가 스마트폰 애플리케이션 오운(Oun)을 통해 38개의 새로운 전자 서비스를 대거 도입하며 디지털 서비스 확장에 나섰다고 7일(현지시간) 밝혔다. 이번 조치는 관련 민원 처리 과정을 간소화하고 절차를 가속화하기 위한 차원에서 단행됐다.\n\n이번 서비스 확대에 따라 거주자와 기업들은 정부 청사를 직접 방문하지 않고도 수의, 농업, 무역 관련 절차를 온라인으로 완전히 마칠 수 있게 됐다. 자치부가 공식 엑스(X) 계정을 통해 공유한 이번 발표는 지속적인 디지털 전환 추진의 일환이다. 자치부는 이러한 디지털화 노력을 인정받아 ",
+    "url": "internal://solo_20260907_2f707897",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "solo_20260907_2f707897",
+    "region": "middle_east",
+    "country": "카타르",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-07 09:01",
+    "countries": [
+      "카타르"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_doha_west_bay_skyline.jpg",
+    "view_count": 2,
+    "first_published_at": "2026-09-07T09:01:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-07 09:01",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "사진: Thameur Belghith (CC BY-SA 4.0, Wikimedia Commons)",
+    "continuation_of_id": null
+  },
+  {
     "id": 140160,
     "title_en": "Celine Dion Overcomes Illness to Kick Off 26-Show Paris Concert Residency on Sept. 12",
     "title_ko": "셀린 디옹, 투병 딛고 9월 12일 파리서 26회 콘서트 개막",
@@ -1160,40 +1291,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: RepliCarter (CC BY-SA 3.0, Wikimedia Commons)",
-    "continuation_of_id": null
-  },
-  {
-    "id": 140159,
-    "title_en": "Qatar’s Ministry of Municipality Adds 38 E-Services for Veterinary, Agriculture Sectors to Oun App",
-    "title_ko": "카타르 자치부, 오운 앱에 수의·농업 등 전자 서비스 38개 추가",
-    "summary_ko": "카타르 자치부가 스마트폰 애플리케이션 오운(Oun)을 통해 38개의 새로운 전자 서비스를 대거 도입하며 디지털 서비스 확장에 나섰다고 7일(현지시간) 밝혔다. 이번 조치는 관련 민원 처리 과정을 간소화하고 절차를 가속화하기 위한 차원에서 단행됐다.\n\n이번 서비스 확대에 따라 거주자와 기업들은 정부 청사를 직접 방문하지 않고도 수의, 농업, 무역 관련 절차를 온라인으로 완전히 마칠 수 있게 됐다. 자치부가 공식 엑스(X) 계정을 통해 공유한 이번 발표는 지속적인 디지털 전환 추진의 일환이다. 자치부는 이러한 디지털화 노력을 인정받아 ",
-    "url": "internal://solo_20260907_2f707897",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "solo_20260907_2f707897",
-    "region": "middle_east",
-    "country": "카타르",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-07 09:01",
-    "countries": [
-      "카타르"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_doha_west_bay_skyline.jpg",
-    "view_count": 2,
-    "first_published_at": "2026-09-07T09:01:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-07 09:01",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "사진: Thameur Belghith (CC BY-SA 4.0, Wikimedia Commons)",
     "continuation_of_id": null
   },
   {
@@ -1537,103 +1634,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: Lukt64 (CC BY-SA 4.0, Wikimedia Commons)",
-    "continuation_of_id": null
-  },
-  {
-    "id": 139510,
-    "title_en": "한국, 전국·쾌청한 맑은 날씨 속 남부·제주 곳곳 빗방울",
-    "title_ko": "한국, 전국·쾌청한 맑은 날씨 속 남부·제주 곳곳 빗방울",
-    "summary_ko": "7일 한국의 날씨는 전국이 대체로 맑은 가운데 일부 남부 지역과 제주도를 중심으로 비가 내린다. 기상청에 따르면 서울은 종일 맑은 날씨를 나타내며 쾌청한 하늘이 이어진다. 서울의 아침 최저기온은 19도, 낮 최고기온은 29도로 예보됐으며 강수확률은 오전과 오후 모두 0%다. 최대풍속은 시속 9km로 바람도 잔잔하게 분다. 내륙 주요 지역 역시 대체로 맑은 날씨가 나타난다. 광주는 하루 종일 맑은 하늘 아래 최저기온 18도, 최고기온 30도를 기록하며, 강수확률은 0%, 최대풍속은 시속 8km다. 대구 또한 오전과 오후 모두 맑겠고 ",
-    "url": "internal://weather_한국_today20260907",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_한국_today20260907",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-07 05:22",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20260907.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-07T05:22:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-07 05:22",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 139509,
-    "title_en": "[국내유가] 휘발유 리터당 1859원…정유사 공급가 논쟁 속 소폭 하락",
-    "title_ko": "[국내유가] 휘발유 리터당 1859원…정유사 공급가 논쟁 속 소폭 하락",
-    "summary_ko": "국내 주유소 휘발유 평균 판매가격이 9월 7일 기준 리터당 1859원을 기록했다. 오피넷(한국석유공사)에 따르면 이날 전국 휘발유 평균 가격은 리터당 1859.25원으로 전일 대비 0.08원 하락했다.\n\n경유와 LPG(부탄) 가격도 동반 하락세를 나타냈다. 경유는 리터당 1843.72원으로 전일 대비 0.01원 내렸고, LPG는 리터당 1098.39원으로 전일보다 0.18원 하락했다.\n\n최근 기름값 급등의 원인을 두고 주유소 업계가 정유사의 공급가격 책정 방식을 지적하는 등 정유사 공급가를 둘러싼 논쟁이 이어지고 있다. 이에 따라 ",
-    "url": "internal://opinet_price_2026-09-07",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국내유가",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "🇰🇷",
-    "score": 1,
-    "created_at": "2026-09-07 05:10",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_09_07.jpg",
-    "view_count": 2,
-    "first_published_at": "2026-09-07T05:10:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-07 05:10",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "date": "2026-09-07",
-      "prices": {
-        "B027": {
-          "diff": -0.08,
-          "name": "휘발유",
-          "price": 1859.25
-        },
-        "B034": {
-          "diff": 0.15,
-          "name": "고급휘발유",
-          "price": 2314.68
-        },
-        "C004": {
-          "diff": -0.19,
-          "name": "실내등유",
-          "price": 1576.63
-        },
-        "D047": {
-          "diff": -0.01,
-          "name": "경유",
-          "price": 1843.72
-        },
-        "K015": {
-          "diff": -0.18,
-          "name": "LPG(부탄)",
-          "price": 1098.39
-        }
-      }
-    },
-    "image_credit": null,
     "continuation_of_id": null
   }
 ]

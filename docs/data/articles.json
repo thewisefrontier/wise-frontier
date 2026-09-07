@@ -1,5 +1,102 @@
 [
   {
+    "id": 143884,
+    "title_en": "한국, 전국·맑은 하늘 속 30도 안팎 늦더위…동해안 비",
+    "title_ko": "한국, 전국·맑은 하늘 속 30도 안팎 늦더위…동해안 비",
+    "summary_ko": "8일 한국의 날씨는 전국이 대체로 맑은 가운데 낮 기온이 30도 안팎까지 오르며 늦더위가 이어질 것으로 예보됐다. 기상청에 따르면 전국 대부분 지역에서 쾌청한 하늘이 펼쳐지겠으나, 동해안과 일부 산지에는 오후부터 차차 흐려지며 가끔 비가 내리겠다. 서울은 종일 맑은 하늘이 이어지겠으며, 아침 최저기온 18도에서 낮 최고기온은 30도까지 올라 다소 덥겠다. 서울의 오전과 오후 강수확률은 모두 0%이며, 최대풍속은 시속 11km로 바람도 잔잔하게 불겠다.\n\n주요 지역별로는 부산이 아침 최저기온 20도, 낮 최고기온 29도를 기록하겠다.",
+    "url": "internal://weather_한국_today20260908",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_한국_today20260908",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-08 05:23",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20260908.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-08T05:23:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-08 05:23",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 143807,
+    "title_en": "[국내유가] 휘발유 리터당 1859원…전일 대비 소폭 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1859원…전일 대비 소폭 하락",
+    "summary_ko": "국내 주유소 휘발유 평균 판매가격이 9월 8일 기준 리터당 1859원을 기록했다. 오피넷(한국석유공사)에 따르면 이날 휘발유 판매가격은 리터당 1859.20원으로 전일 대비 0.11원 내렸다.\n\n경유와 LPG 부탄 가격도 동반 하락세를 나타냈다. 경유는 리터당 1843.56원으로 전일보다 0.66원 하락했으며, LPG 부탄은 리터당 1098.15원으로 전일 대비 0.24원 내린 것으로 집계됐다.\n\n이번 유가 하락은 국제유가 흐름과 연동된 정유사 공급가격 변동이 주된 요인으로 작용하고 있다는 분석이다. 일각에서는 기름값 변동의 책임을",
+    "url": "internal://opinet_price_2026-09-08",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-09-08 05:10",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_09_08.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-08T05:10:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-08 05:10",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-09-08",
+      "prices": {
+        "B027": {
+          "diff": -0.11,
+          "name": "휘발유",
+          "price": 1859.2
+        },
+        "B034": {
+          "diff": 0.01,
+          "name": "고급휘발유",
+          "price": 2314.26
+        },
+        "C004": {
+          "diff": 0.02,
+          "name": "실내등유",
+          "price": 1577.03
+        },
+        "D047": {
+          "diff": -0.66,
+          "name": "경유",
+          "price": 1843.56
+        },
+        "K015": {
+          "diff": -0.24,
+          "name": "LPG(부탄)",
+          "price": 1098.15
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 143429,
     "title_en": "오세아니아, 쌀쌀한 흐린 날씨…캔버라 16도",
     "title_ko": "오세아니아, 쌀쌀한 흐린 날씨…캔버라 16도",
@@ -53,7 +150,7 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_anak_krakatau_2c_indonesia_2.jpg",
-    "view_count": 0,
+    "view_count": 1,
     "first_published_at": "2026-09-06T12:55:00",
     "update_log": [
       {
@@ -95,7 +192,7 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_small_business_office_business_meeting_corporate_off.jpg",
-    "view_count": 0,
+    "view_count": 1,
     "first_published_at": "2026-09-08T02:39:00",
     "update_log": [
       {
@@ -172,7 +269,7 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_airport_terminal_presidential_palace_west_africa_cit.jpg",
-    "view_count": 0,
+    "view_count": 1,
     "first_published_at": "2026-09-08T02:38:00",
     "update_log": [
       {
@@ -204,7 +301,7 @@
     "countries": [],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_cryptocurrency_bitcoin_mining_digital_server_room.jpg",
-    "view_count": 0,
+    "view_count": 1,
     "first_published_at": "2026-09-07T23:46:00",
     "update_log": [
       {
@@ -276,7 +373,7 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_ancient_wooden_chair_bronze_age_artifact_archaeologi.jpg",
-    "view_count": 0,
+    "view_count": 2,
     "first_published_at": "2026-09-07T20:25:00",
     "update_log": [
       {
@@ -412,7 +509,7 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_bitcoin_hardware_wallet_cryptocurrency_hacking_compu.jpg",
-    "view_count": 2,
+    "view_count": 3,
     "first_published_at": "2026-09-07T20:08:00",
     "update_log": [
       {
@@ -949,42 +1046,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 137672,
-    "title_en": "Fuel Tanker Explosion on Western Iran Road Leaves 11 Dead",
-    "title_ko": "이란 서부 도로에서 연료 탱크로리 폭발해 11명 사망",
-    "summary_ko": "이란 서부 지역에서 교통사고로 연료 탱크로리가 폭발해 최소 11명이 숨지고 7명이 부상했다고 5일(현지시간) 국영 IRIB 통신 등이 보도했다.\n\n이번 사고는 이란 서부 쿠르데스탄주 산아다지 카운티와 하메단주 하메단 카운티를 연결하는 도시 간 도로에서 발생했다. 쿠르데스탄 대학교 의과대학 응급의료 서비스 책임자 바바크 호다에이에 따르면 사고 당시 충격으로 인근 차량 여러 대에도 불이 붙었으며, 구조대는 부상자들을 산아다지의 병원으로 이송했다.\n\n앞서 7월에는 호르무즈 해협에서 해군 기뢰와 충돌한 유조선이 폭발하는 사고가 발생했다. ",
-    "url": "internal://realtrend_UN_Mercator_Map_Resolution_2026090615",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "realtrend_UN_Mercator_Map_Reso",
-    "region": "africa",
-    "country": "이란",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-07 09:05",
-    "countries": [
-      "이란",
-      "미국",
-      "아랍에미리트"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_fuel_tanker_explosion_highway_traffic_accident_burni.jpg",
-    "view_count": 1,
-    "first_published_at": "2026-09-06T15:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-06 15:27",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
     "id": 138097,
     "title_en": "Mpox Spreads Across African Nations While Others Declare End to Outbreaks, Strain Public Health Systems",
     "title_ko": "아프리카 각국서 엠폭스 확산 및 종식 교차... 방역 체계 혼선 지속",
@@ -1022,6 +1083,42 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: OWID (CC BY 4.0, Wikimedia Commons)",
+    "continuation_of_id": null
+  },
+  {
+    "id": 137672,
+    "title_en": "Fuel Tanker Explosion on Western Iran Road Leaves 11 Dead",
+    "title_ko": "이란 서부 도로에서 연료 탱크로리 폭발해 11명 사망",
+    "summary_ko": "이란 서부 지역에서 교통사고로 연료 탱크로리가 폭발해 최소 11명이 숨지고 7명이 부상했다고 5일(현지시간) 국영 IRIB 통신 등이 보도했다.\n\n이번 사고는 이란 서부 쿠르데스탄주 산아다지 카운티와 하메단주 하메단 카운티를 연결하는 도시 간 도로에서 발생했다. 쿠르데스탄 대학교 의과대학 응급의료 서비스 책임자 바바크 호다에이에 따르면 사고 당시 충격으로 인근 차량 여러 대에도 불이 붙었으며, 구조대는 부상자들을 산아다지의 병원으로 이송했다.\n\n앞서 7월에는 호르무즈 해협에서 해군 기뢰와 충돌한 유조선이 폭발하는 사고가 발생했다. ",
+    "url": "internal://realtrend_UN_Mercator_Map_Resolution_2026090615",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "realtrend_UN_Mercator_Map_Reso",
+    "region": "africa",
+    "country": "이란",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-07 09:05",
+    "countries": [
+      "이란",
+      "미국",
+      "아랍에미리트"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_fuel_tanker_explosion_highway_traffic_accident_burni.jpg",
+    "view_count": 1,
+    "first_published_at": "2026-09-06T15:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-06 15:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
     "continuation_of_id": null
   },
   {
@@ -1128,6 +1225,40 @@
     "continuation_of_id": null
   },
   {
+    "id": 140159,
+    "title_en": "Qatar’s Ministry of Municipality Adds 38 E-Services for Veterinary, Agriculture Sectors to Oun App",
+    "title_ko": "카타르 자치부, 오운 앱에 수의·농업 등 전자 서비스 38개 추가",
+    "summary_ko": "카타르 자치부가 스마트폰 애플리케이션 오운(Oun)을 통해 38개의 새로운 전자 서비스를 대거 도입하며 디지털 서비스 확장에 나섰다고 7일(현지시간) 밝혔다. 이번 조치는 관련 민원 처리 과정을 간소화하고 절차를 가속화하기 위한 차원에서 단행됐다.\n\n이번 서비스 확대에 따라 거주자와 기업들은 정부 청사를 직접 방문하지 않고도 수의, 농업, 무역 관련 절차를 온라인으로 완전히 마칠 수 있게 됐다. 자치부가 공식 엑스(X) 계정을 통해 공유한 이번 발표는 지속적인 디지털 전환 추진의 일환이다. 자치부는 이러한 디지털화 노력을 인정받아 ",
+    "url": "internal://solo_20260907_2f707897",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "solo_20260907_2f707897",
+    "region": "middle_east",
+    "country": "카타르",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-07 09:01",
+    "countries": [
+      "카타르"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_doha_west_bay_skyline.jpg",
+    "view_count": 2,
+    "first_published_at": "2026-09-07T09:01:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-07 09:01",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "사진: Thameur Belghith (CC BY-SA 4.0, Wikimedia Commons)",
+    "continuation_of_id": null
+  },
+  {
     "id": 140160,
     "title_en": "Celine Dion Overcomes Illness to Kick Off 26-Show Paris Concert Residency on Sept. 12",
     "title_ko": "셀린 디옹, 투병 딛고 9월 12일 파리서 26회 콘서트 개막",
@@ -1160,40 +1291,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: RepliCarter (CC BY-SA 3.0, Wikimedia Commons)",
-    "continuation_of_id": null
-  },
-  {
-    "id": 140159,
-    "title_en": "Qatar’s Ministry of Municipality Adds 38 E-Services for Veterinary, Agriculture Sectors to Oun App",
-    "title_ko": "카타르 자치부, 오운 앱에 수의·농업 등 전자 서비스 38개 추가",
-    "summary_ko": "카타르 자치부가 스마트폰 애플리케이션 오운(Oun)을 통해 38개의 새로운 전자 서비스를 대거 도입하며 디지털 서비스 확장에 나섰다고 7일(현지시간) 밝혔다. 이번 조치는 관련 민원 처리 과정을 간소화하고 절차를 가속화하기 위한 차원에서 단행됐다.\n\n이번 서비스 확대에 따라 거주자와 기업들은 정부 청사를 직접 방문하지 않고도 수의, 농업, 무역 관련 절차를 온라인으로 완전히 마칠 수 있게 됐다. 자치부가 공식 엑스(X) 계정을 통해 공유한 이번 발표는 지속적인 디지털 전환 추진의 일환이다. 자치부는 이러한 디지털화 노력을 인정받아 ",
-    "url": "internal://solo_20260907_2f707897",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "solo_20260907_2f707897",
-    "region": "middle_east",
-    "country": "카타르",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-07 09:01",
-    "countries": [
-      "카타르"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_doha_west_bay_skyline.jpg",
-    "view_count": 2,
-    "first_published_at": "2026-09-07T09:01:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-07 09:01",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "사진: Thameur Belghith (CC BY-SA 4.0, Wikimedia Commons)",
     "continuation_of_id": null
   },
   {
@@ -2440,40 +2537,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 137376,
-    "title_en": "71-Year-Old Woman Shot and Killed After Opening Fire at Florida Police Station",
-    "title_ko": "미 플로리다 경찰서서 71세 여성 총격 후 사살",
-    "summary_ko": "미국 플로리다주 포트 오렌지 경찰서에서 71세 여성이 무장 난동을 부리다 경찰의 총에 맞아 숨지는 사건이 발생했다. 사건은 3일(현지시간) 오전 8시 30분 직전 포트 오렌지 경찰서 민원 접수 구역에서 일어났다.\n\n경찰에 따르면 린다 진 크로토(Linda Jean Croteau)는 총기를 소지한 채 경찰서 로비로 진입했다. 그는 직원들과 대화하던 중 갑자기 직원들이 있는 방향을 향해 총구를 겨누고 발포했다. 다행히 현장에 있던 직원과 경찰관 중 부상자는 발생하지 않았다.\n\n총격을 가한 뒤 크로토는 총을 든 채 주차장 쪽으로 걸어 나",
-    "url": "internal://solo_20260906_a4264f3c",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "solo_20260906_a4264f3c",
-    "region": "global",
-    "country": "미국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-06 13:04",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_police_station_police_car_police_lobby.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-06T13:04:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-06 13:04",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
     "id": 137377,
     "title_en": "Weekend Traffic Accidents Across Guatemala Leave Two Dead, Cause Major Congestion",
     "title_ko": "과테말라 전국서 주말 교통사고 잇따라…2명 사망·부상 및 정체 극심",
@@ -2502,6 +2565,40 @@
     ],
     "byline": "뉴스파이널 편집국",
     "is_travel": true,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
+    "id": 137376,
+    "title_en": "71-Year-Old Woman Shot and Killed After Opening Fire at Florida Police Station",
+    "title_ko": "미 플로리다 경찰서서 71세 여성 총격 후 사살",
+    "summary_ko": "미국 플로리다주 포트 오렌지 경찰서에서 71세 여성이 무장 난동을 부리다 경찰의 총에 맞아 숨지는 사건이 발생했다. 사건은 3일(현지시간) 오전 8시 30분 직전 포트 오렌지 경찰서 민원 접수 구역에서 일어났다.\n\n경찰에 따르면 린다 진 크로토(Linda Jean Croteau)는 총기를 소지한 채 경찰서 로비로 진입했다. 그는 직원들과 대화하던 중 갑자기 직원들이 있는 방향을 향해 총구를 겨누고 발포했다. 다행히 현장에 있던 직원과 경찰관 중 부상자는 발생하지 않았다.\n\n총격을 가한 뒤 크로토는 총을 든 채 주차장 쪽으로 걸어 나",
+    "url": "internal://solo_20260906_a4264f3c",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "solo_20260906_a4264f3c",
+    "region": "global",
+    "country": "미국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-06 13:04",
+    "countries": [
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_police_station_police_car_police_lobby.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-06T13:04:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-06 13:04",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
     "source_published_at": null,
     "source_data": null,
     "image_credit": "",
@@ -2823,6 +2920,40 @@
     "continuation_of_id": null
   },
   {
+    "id": 137099,
+    "title_en": "Kevin García Debuts as Comunicaciones Interim Manager with Draw in Guatemala's Primera División",
+    "title_ko": "과테말라 프리메라 디비시온…케빈 가르시아, 코무니카시오네스 임시 감독 데뷔전서 무승부",
+    "summary_ko": "과테말라 프로축구 클럽 코무니카시오네스의 임시 감독으로 부임한 케빈 가르시아가 6일(현지시간) 산토 도밍고 데 구스만 경기장에서 열린 믹스코와의 아페르투라 2026 토너먼트 7라운드 경기에서 1대 1 무승부를 기록하며 데뷔전을 치렀다.\n\n구단 유소년 팀에서 지도자 경력을 쌓아온 케빈 가르시아는 알보스(코무니카시오네스의 별칭) 팀을 이끄는 막중한 책임을 맡아 굳은 의지로 도전 과제에 임했다. 가르시아는 임시 감독이라는 직함이 책임을 덜어주지 않는다며 전적으로 책임을 지고 임하고 있다고 밝혔다.\n\n가르시아는 선수단을 잘 알고 있다는 점",
+    "url": "internal://solo_20260906_e226c99a",
+    "source": "NewsFinal",
+    "category": "글로벌",
+    "subcategory": "solo_20260906_e226c99a",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-06 10:27",
+    "countries": [
+      "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_football_stadium_soccer_match_soccer_players.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-06T10:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-06 10:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
     "id": 137098,
     "title_en": "Eswatini Railway Joins South African, Mozambican Operators for Joint Exhibition at Trade Fair",
     "title_ko": "에스바티니 철도공사, 무역박람회서 남아공·모잠비크 철도 운영사들과 연합 전시",
@@ -2856,40 +2987,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: Htonl (CC BY-SA 2.0, Wikimedia Commons)",
-    "continuation_of_id": null
-  },
-  {
-    "id": 137099,
-    "title_en": "Kevin García Debuts as Comunicaciones Interim Manager with Draw in Guatemala's Primera División",
-    "title_ko": "과테말라 프리메라 디비시온…케빈 가르시아, 코무니카시오네스 임시 감독 데뷔전서 무승부",
-    "summary_ko": "과테말라 프로축구 클럽 코무니카시오네스의 임시 감독으로 부임한 케빈 가르시아가 6일(현지시간) 산토 도밍고 데 구스만 경기장에서 열린 믹스코와의 아페르투라 2026 토너먼트 7라운드 경기에서 1대 1 무승부를 기록하며 데뷔전을 치렀다.\n\n구단 유소년 팀에서 지도자 경력을 쌓아온 케빈 가르시아는 알보스(코무니카시오네스의 별칭) 팀을 이끄는 막중한 책임을 맡아 굳은 의지로 도전 과제에 임했다. 가르시아는 임시 감독이라는 직함이 책임을 덜어주지 않는다며 전적으로 책임을 지고 임하고 있다고 밝혔다.\n\n가르시아는 선수단을 잘 알고 있다는 점",
-    "url": "internal://solo_20260906_e226c99a",
-    "source": "NewsFinal",
-    "category": "글로벌",
-    "subcategory": "solo_20260906_e226c99a",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-06 10:27",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_football_stadium_soccer_match_soccer_players.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-06T10:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-06 10:27",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
     "continuation_of_id": null
   },
   {
@@ -4447,6 +4544,40 @@
     "continuation_of_id": null
   },
   {
+    "id": 134221,
+    "title_en": "Guatemala Labor Ministry Clarifies Pro-Rata Severance, Benefits Required Even During Probation",
+    "title_ko": "과테말라 노동부, 수습 기간 퇴직 시에도 비례 퇴직금 지급 의무 명시",
+    "summary_ko": "과테말라 노동사회보장부(Mintrab) 근로감독관들은 고용 관계가 종료될 때 근로 기간이 단 몇 주에 불과하거나 수습 기간 중이더라도 고용주는 이에 상응하는 비례적 수당을 정산금에 포함해야 한다고 5일(현지시간) 밝혔다. 이는 휴가, 연말 보너스인 아기날도, 그리고 보너스 14를 포함하는 조치다.\n\n최근 한 달에서 한 달 반 동안 근무하거나 두 달의 수습 기간을 마친 직후 해고된 과테말라 근로자들이 본지에 제보한 바에 따르면, 이들 기업은 계약 종료를 통보하면서 30일 후에 정산 수표를 받게 될 것이라고 안내했다. 그러나 일부 근로",
+    "url": "internal://solo_20260905_358e5d17",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "solo_20260905_358e5d17",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-05 13:33",
+    "countries": [
+      "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_employment_contract_workplace_office_worker.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T13:33:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 13:33",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
     "id": 134222,
     "title_en": "Missing Belizean Found on Guatemala Street Reunited with Family After 13 Hours Amid Communication Hurdles",
     "title_ko": "과테말라 거리서 발견된 실종 벨리즈인, 13시간 만에 가족 품으로…소통 한계 지적",
@@ -4466,40 +4597,6 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_homeless_person_city_street_family_reunion.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T13:33:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 13:33",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 134221,
-    "title_en": "Guatemala Labor Ministry Clarifies Pro-Rata Severance, Benefits Required Even During Probation",
-    "title_ko": "과테말라 노동부, 수습 기간 퇴직 시에도 비례 퇴직금 지급 의무 명시",
-    "summary_ko": "과테말라 노동사회보장부(Mintrab) 근로감독관들은 고용 관계가 종료될 때 근로 기간이 단 몇 주에 불과하거나 수습 기간 중이더라도 고용주는 이에 상응하는 비례적 수당을 정산금에 포함해야 한다고 5일(현지시간) 밝혔다. 이는 휴가, 연말 보너스인 아기날도, 그리고 보너스 14를 포함하는 조치다.\n\n최근 한 달에서 한 달 반 동안 근무하거나 두 달의 수습 기간을 마친 직후 해고된 과테말라 근로자들이 본지에 제보한 바에 따르면, 이들 기업은 계약 종료를 통보하면서 30일 후에 정산 수표를 받게 될 것이라고 안내했다. 그러나 일부 근로",
-    "url": "internal://solo_20260905_358e5d17",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "solo_20260905_358e5d17",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-05 13:33",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_employment_contract_workplace_office_worker.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T13:33:00",
     "update_log": [
@@ -5361,6 +5458,38 @@
     "continuation_of_id": null
   },
   {
+    "id": 133064,
+    "title_en": "Bitcoin falls 2.23% as U.S. labor market uncertainty weighs on sentiment",
+    "title_ko": "[가상자산 동향] 비트코인 2.23% 하락…미 고용지표 경계감 확산",
+    "summary_ko": "◆ 가격 동향\n\n5일 06:27(한국시간) 야후 파이낸스에 따르면 비트코인 가격은 79783.08달러로 전일 대비 2.23% 하락했다. 이번 하락세는 미국 노동시장의 불확실성이 커지면서 위험 자산에 대한 투자 심리가 위축된 결과다. 최근 발표된 미국 고용 지표가 시장의 예상치를 하회하거나 상회하는 등 혼조세를 보이면서 연방준비제도의 금리 인하 경로에 대한 의구심이 시장에 반영됐다. 거시경제적 불확실성이 가중되자 기관 투자자들은 차익 실현 매물을 출회하며 포트폴리오를 조정했다. 또한 미국 증권거래위원회의 가상자산 관련 규제 강화 움직",
+    "url": "internal://crypto_news_2026-09-05",
+    "source": "NewsFinal",
+    "category": "금융",
+    "subcategory": "가상자산동향_crypto",
+    "region": "global",
+    "country": "글로벌",
+    "country_flag": "🌐",
+    "score": 1,
+    "created_at": "2026-09-05 06:27",
+    "countries": [],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_09_05.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T06:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 06:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 133063,
     "title_en": "Nvidia Shares Rise 0.84% Amid Anticipation for Broadcom Earnings",
     "title_ko": "[종목 동향] 엔비디아 주가 0.84% 상승…브로드컴 실적 발표 앞둔 기대감",
@@ -5379,38 +5508,6 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/stock_news_2026_09_04.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T06:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 06:27",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 133064,
-    "title_en": "Bitcoin falls 2.23% as U.S. labor market uncertainty weighs on sentiment",
-    "title_ko": "[가상자산 동향] 비트코인 2.23% 하락…미 고용지표 경계감 확산",
-    "summary_ko": "◆ 가격 동향\n\n5일 06:27(한국시간) 야후 파이낸스에 따르면 비트코인 가격은 79783.08달러로 전일 대비 2.23% 하락했다. 이번 하락세는 미국 노동시장의 불확실성이 커지면서 위험 자산에 대한 투자 심리가 위축된 결과다. 최근 발표된 미국 고용 지표가 시장의 예상치를 하회하거나 상회하는 등 혼조세를 보이면서 연방준비제도의 금리 인하 경로에 대한 의구심이 시장에 반영됐다. 거시경제적 불확실성이 가중되자 기관 투자자들은 차익 실현 매물을 출회하며 포트폴리오를 조정했다. 또한 미국 증권거래위원회의 가상자산 관련 규제 강화 움직",
-    "url": "internal://crypto_news_2026-09-05",
-    "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "가상자산동향_crypto",
-    "region": "global",
-    "country": "글로벌",
-    "country_flag": "🌐",
-    "score": 1,
-    "created_at": "2026-09-05 06:27",
-    "countries": [],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_09_05.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T06:27:00",
     "update_log": [
@@ -5929,40 +6026,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 133056,
-    "title_en": "Lululemon Shares Plunge 20% After Cutting Annual Outlook Again",
-    "title_ko": "룰루레몬, 연간 전망치 추가 하향 속 주가 20% 급락",
-    "summary_ko": "4일(현지시간) 미국의 애슬레저 기업 룰루레몬 애슬레티카 주가가 연간 실적 전망치 하향 조정 여파로 20% 급락했다. 이번 주가 하락은 회사의 회계연도 2분기 수익이 월스트리트 예상치를 크게 밑돌고, 올해 들어 세 번째로 가이던스가 하향 조정되면서 발생했다. 이에 따라 주가는 8년 만의 최저 수준으로 떨어졌다.\n\n룰루레몬의 시그니처 상품인 레깅스 사업 부문에서 뚜렷한 매출 감소세가 확인됐다. 이번 분기 룰루레몬의 비교매출은 9% 감소해 대침체기 이후 최악의 실적 부진을 기록했다. 알로 요가와 부오리, 스킴스 등 경쟁 브랜드들이 애슬",
-    "url": "internal://realtrend_Lululemon_CEO_Transition_&_Slump_2026090504",
-    "source": "NewsFinal",
-    "category": "산업·기업",
-    "subcategory": "realtrend_Lululemon_CEO_Transi",
-    "region": "africa",
-    "country": "미국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-05 04:49",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_stock_market_retail_store_yoga_pants.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T04:49:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 04:49",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
     "id": 133055,
     "title_en": "Russian Forces Strike SBU Headquarters in Central Kyiv as US-Ukraine Tensions Rise",
     "title_ko": "러시아군, 키예프 중심부 SBU 본부 타격…미·우크라 긴장 고조",
@@ -5982,6 +6045,40 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_sbu_headquarters.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T04:49:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 04:49",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
+    "id": 133056,
+    "title_en": "Lululemon Shares Plunge 20% After Cutting Annual Outlook Again",
+    "title_ko": "룰루레몬, 연간 전망치 추가 하향 속 주가 20% 급락",
+    "summary_ko": "4일(현지시간) 미국의 애슬레저 기업 룰루레몬 애슬레티카 주가가 연간 실적 전망치 하향 조정 여파로 20% 급락했다. 이번 주가 하락은 회사의 회계연도 2분기 수익이 월스트리트 예상치를 크게 밑돌고, 올해 들어 세 번째로 가이던스가 하향 조정되면서 발생했다. 이에 따라 주가는 8년 만의 최저 수준으로 떨어졌다.\n\n룰루레몬의 시그니처 상품인 레깅스 사업 부문에서 뚜렷한 매출 감소세가 확인됐다. 이번 분기 룰루레몬의 비교매출은 9% 감소해 대침체기 이후 최악의 실적 부진을 기록했다. 알로 요가와 부오리, 스킴스 등 경쟁 브랜드들이 애슬",
+    "url": "internal://realtrend_Lululemon_CEO_Transition_&_Slump_2026090504",
+    "source": "NewsFinal",
+    "category": "산업·기업",
+    "subcategory": "realtrend_Lululemon_CEO_Transi",
+    "region": "africa",
+    "country": "미국",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-05 04:49",
+    "countries": [
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_stock_market_retail_store_yoga_pants.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T04:49:00",
     "update_log": [
@@ -7632,40 +7729,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 128730,
-    "title_en": "한국, 전국·맑은 가운데 31도 안팎 늦더위…제주 강풍",
-    "title_ko": "한국, 전국·맑은 가운데 31도 안팎 늦더위…제주 강풍",
-    "summary_ko": "4일 한국의 날씨는 전국이 대체로 맑은 가운데 낮 기온이 31도까지 오르는 등 완연한 더위를 보이겠으며, 제주 지역을 중심으로 강한 바람이 불 전망이다. 기상청에 따르면 전국적인 기상 특보는 발효되지 않았으나, 제주에서는 최대풍속 시속 47km에 달하는 강풍이 예상되어 시설물 관리와 안전사고에 각별한 주의가 요구된다. 강수확률이 60%를 넘는 지역은 없어 전국 대부분 지방에서 뚜렷한 비 소식 없이 쾌청한 하늘이 드러나겠다.\n\n주요 지역별 상세 날씨를 살펴보면, 서울은 오전과 오후 모두 맑은 날씨가 이어지겠으며 기온은 최저 21도에서",
-    "url": "internal://weather_한국_today20260904",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_한국_today20260904",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-04 06:27",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20260904.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T06:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 06:27",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
     "id": 128729,
     "title_en": "Apple Shares Rise 1.00% Amid Improving Technical Indicators",
     "title_ko": "[종목 동향] 애플 주가 1.00% 상승…기술적 지표 개선세",
@@ -7700,31 +7763,29 @@
     "continuation_of_id": null
   },
   {
-    "id": 128727,
-    "title_en": "동아시아, 베이징 34도 찜통더위 속 울란바토르 쌀쌀",
-    "title_ko": "동아시아, 베이징 34도 찜통더위 속 울란바토르 쌀쌀",
-    "summary_ko": "4일(현지시간) 동아시아 주요국 수도는 최저기온 9°C에서 최고기온 34°C 사이의 폭넓은 기온 분포를 보였다. 중국 베이징은 최고기온 34°C, 최저기온 22°C를 기록하며 동아시아 주요국 수도 중 가장 더운 곳으로 집계됐다. 반면 몽골 울란바토르는 최고기온 17°C, 최저기온 9°C에 머물러 가장 선선한 곳으로 나타났다. 베이징의 최고기온은 울란바토르보다 17°C나 높아 지역별 기온 격차가 뚜렷했다.\n\n중국 베이징은 흐린 날씨를 보인 가운데 강수확률 0%, 강수량 0.0mm를 기록했으며 자외선지수는 5.1로 측정됐다. 내일 베이",
-    "url": "internal://weather_group_동아시아_today20260904",
+    "id": 128730,
+    "title_en": "한국, 전국·맑은 가운데 31도 안팎 늦더위…제주 강풍",
+    "title_ko": "한국, 전국·맑은 가운데 31도 안팎 늦더위…제주 강풍",
+    "summary_ko": "4일 한국의 날씨는 전국이 대체로 맑은 가운데 낮 기온이 31도까지 오르는 등 완연한 더위를 보이겠으며, 제주 지역을 중심으로 강한 바람이 불 전망이다. 기상청에 따르면 전국적인 기상 특보는 발효되지 않았으나, 제주에서는 최대풍속 시속 47km에 달하는 강풍이 예상되어 시설물 관리와 안전사고에 각별한 주의가 요구된다. 강수확률이 60%를 넘는 지역은 없어 전국 대부분 지방에서 뚜렷한 비 소식 없이 쾌청한 하늘이 드러나겠다.\n\n주요 지역별 상세 날씨를 살펴보면, 서울은 오전과 오후 모두 맑은 날씨가 이어지겠으며 기온은 최저 21도에서",
+    "url": "internal://weather_한국_today20260904",
     "source": "NewsFinal",
     "category": "날씨",
-    "subcategory": "weather_group_동아시아_today20260904",
-    "region": "east_asia",
-    "country": "동아시아",
+    "subcategory": "weather_한국_today20260904",
+    "region": "global",
+    "country": "한국",
     "country_flag": "",
     "score": 1,
-    "created_at": "2026-09-04 06:26",
+    "created_at": "2026-09-04 06:27",
     "countries": [
-      "일본",
-      "중국",
-      "몽골"
+      "한국"
     ],
     "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_china_20260904.jpg",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20260904.jpg",
     "view_count": 0,
-    "first_published_at": "2026-09-04T06:26:00",
+    "first_published_at": "2026-09-04T06:27:00",
     "update_log": [
       {
-        "timestamp": "2026-09-04 06:26",
+        "timestamp": "2026-09-04 06:27",
         "note": "최초 게시"
       }
     ],
@@ -8100,6 +8161,42 @@
     "continuation_of_id": null
   },
   {
+    "id": 128727,
+    "title_en": "동아시아, 베이징 34도 찜통더위 속 울란바토르 쌀쌀",
+    "title_ko": "동아시아, 베이징 34도 찜통더위 속 울란바토르 쌀쌀",
+    "summary_ko": "4일(현지시간) 동아시아 주요국 수도는 최저기온 9°C에서 최고기온 34°C 사이의 폭넓은 기온 분포를 보였다. 중국 베이징은 최고기온 34°C, 최저기온 22°C를 기록하며 동아시아 주요국 수도 중 가장 더운 곳으로 집계됐다. 반면 몽골 울란바토르는 최고기온 17°C, 최저기온 9°C에 머물러 가장 선선한 곳으로 나타났다. 베이징의 최고기온은 울란바토르보다 17°C나 높아 지역별 기온 격차가 뚜렷했다.\n\n중국 베이징은 흐린 날씨를 보인 가운데 강수확률 0%, 강수량 0.0mm를 기록했으며 자외선지수는 5.1로 측정됐다. 내일 베이",
+    "url": "internal://weather_group_동아시아_today20260904",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_동아시아_today20260904",
+    "region": "east_asia",
+    "country": "동아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-04 06:26",
+    "countries": [
+      "일본",
+      "중국",
+      "몽골"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_china_20260904.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-04T06:26:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-04 06:26",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 128726,
     "title_en": "[국제유가] WTI 배럴당 92달러…호르무즈 해협 봉쇄 우려",
     "title_ko": "[국제유가] WTI 배럴당 92달러…호르무즈 해협 봉쇄 우려",
@@ -8230,6 +8327,40 @@
     "continuation_of_id": null
   },
   {
+    "id": 128723,
+    "title_en": "Qatar Ministry of Interior Reaffirms Mandatory Residence Permit Carriage and Ban on Accident Site Photography",
+    "title_ko": "카타르 내무부, 거주허가증 상시 소지 의무 및 사고 현장 촬영 금지 재확인",
+    "summary_ko": "카타르 내무부가 중앙운영부 주관으로 개최한 웨비나를 통해 거주허가증(RP) 상시 소지 및 제시 의무를 재차 강조했다고 4일(현지시간) 밝혔다. 내무부는 이와 함께 대중이 안전 및 보안 관련 소식을 실시간으로 받아볼 수 있도록 내무부 왓츠앱 안내 그룹에 가입할 것을 권고했다.\n\n알파자 경찰서 소속 압둘라만 압둘라 알마리 중위는 웨비나 발표에서 외출 시 신분증(QID)을 항상 소지하는 것이 의무라고 설명했다. 알마리 중위는 경찰관이 제복을 입었든 사복을 입었든 신분을 밝히고 경찰 신분증을 제시할 경우 시민들은 반드시 신분증을 제시해야 ",
+    "url": "internal://solo_20260904_76b4b2a3",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "solo_20260904_76b4b2a3",
+    "region": "middle_east",
+    "country": "카타르",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-04 05:20",
+    "countries": [
+      "카타르"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_2016_03_03_qatar_interior_ministry_deleg.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-04T05:20:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-04 05:20",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": true,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
     "id": 128724,
     "title_en": "US Offers $10 Million Reward for Senior Iranian Revolutionary Guard Cyber Official",
     "title_ko": "미국, 이란 혁명수비대 사이버 고위 간부 현상금 1,000만 달러",
@@ -8259,40 +8390,6 @@
     ],
     "byline": "뉴스파이널 편집국",
     "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 128723,
-    "title_en": "Qatar Ministry of Interior Reaffirms Mandatory Residence Permit Carriage and Ban on Accident Site Photography",
-    "title_ko": "카타르 내무부, 거주허가증 상시 소지 의무 및 사고 현장 촬영 금지 재확인",
-    "summary_ko": "카타르 내무부가 중앙운영부 주관으로 개최한 웨비나를 통해 거주허가증(RP) 상시 소지 및 제시 의무를 재차 강조했다고 4일(현지시간) 밝혔다. 내무부는 이와 함께 대중이 안전 및 보안 관련 소식을 실시간으로 받아볼 수 있도록 내무부 왓츠앱 안내 그룹에 가입할 것을 권고했다.\n\n알파자 경찰서 소속 압둘라만 압둘라 알마리 중위는 웨비나 발표에서 외출 시 신분증(QID)을 항상 소지하는 것이 의무라고 설명했다. 알마리 중위는 경찰관이 제복을 입었든 사복을 입었든 신분을 밝히고 경찰 신분증을 제시할 경우 시민들은 반드시 신분증을 제시해야 ",
-    "url": "internal://solo_20260904_76b4b2a3",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "solo_20260904_76b4b2a3",
-    "region": "middle_east",
-    "country": "카타르",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-04 05:20",
-    "countries": [
-      "카타르"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_2016_03_03_qatar_interior_ministry_deleg.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T05:20:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 05:20",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": true,
     "source_published_at": null,
     "source_data": null,
     "image_credit": "",
@@ -10788,22 +10885,21 @@
     "continuation_of_id": null
   },
   {
-    "id": 123781,
-    "title_en": "미 국방부 피트 헤그세스 장관 캐나다 생도 프로그램 조롱 논란 속 육군 장관 사임",
-    "title_ko": "미 국방부 피트 헤그세스 장관 캐나다 생도 프로그램 조롱 논란 속 육군 장관 사임",
-    "summary_ko": "댄 드리스콜(Dan Driscoll) 육군 장관이 피트 헤그세스(Pete Hegseth) 국방부 장관과의 충돌로 사임한 이후 미국 국방부 내부의 혼란이 심화되었다. 파이낸셜 타임스(Financial Times)의 보도에 따르면 이번 사임은 국방부 최고위층 간의 마찰을 드러냈다.\n\n피트 헤그세스 장관은 1일(현지시간) 소셜미디어를 통해 캐나다의 청소년 생도 프로그램을 겨냥한 게시물을 올려 논란을 빚었다. CBC 등 외신 보도에 따르면 이 게시물은 캐나다 생도 프로그램을 경시하고 여성 청소년 생도 강사를 조롱하는 내용을 담았다. \n\n캐",
-    "url": "internal://realtrend_Pentagon_Leadership_Resignation_(Driscoll_&_Hegseth)_2026090222",
+    "id": 123783,
+    "title_en": "장동혁 의원, 미래에셋 로비 의혹 제기하며 사의 표명... 정치권 파장 확대",
+    "title_ko": "장동혁 의원, 미래에셋 로비 의혹 제기하며 사의 표명... 정치권 파장 확대",
+    "summary_ko": "장동혁 의원은 2일(현지시간) 김용범 청와대 정책실장이 미래에셋의 로비를 받아 단일종목 레버리지 상장지수펀드(ETF) 도입을 추진했다는 의혹을 공개적으로 제기했다. 장동혁 의원은 이와 같은 의혹 제기와 함께 사의를 표명했다. 야당은 이번 사태를 'ETF 게이트'로 규정하고 철저한 진상 규명을 위한 특검 도입을 촉구하고 나섰다.\n\n김용범 정책실장은 개각 발표 다음 날인 1일(현지시간) 전격적으로 사의를 표명했다. 이 대통령은 사의 표명 하루 만에 김용범 실장의 사표를 수리했다. 이번 사퇴는 부동산 정책 책임론과 맞물려 경제 사령탑 라",
+    "url": "internal://realtrend_김용범_미래에셋_로비_및_단일종목_레버리지_ETF_의혹_2026090222",
     "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "realtrend_Pentagon_Leadership_",
+    "category": "경제",
+    "subcategory": "realtrend_김용범_미래에셋_로비_및_단일종목_레",
     "region": "africa",
-    "country": "미국",
+    "country": "한국",
     "country_flag": "",
     "score": 2,
     "created_at": "2026-09-02 22:46",
     "countries": [
-      "미국",
-      "캐나다"
+      "한국"
     ],
     "is_published": true,
     "image_url": null,
@@ -10823,21 +10919,22 @@
     "continuation_of_id": null
   },
   {
-    "id": 123783,
-    "title_en": "장동혁 의원, 미래에셋 로비 의혹 제기하며 사의 표명... 정치권 파장 확대",
-    "title_ko": "장동혁 의원, 미래에셋 로비 의혹 제기하며 사의 표명... 정치권 파장 확대",
-    "summary_ko": "장동혁 의원은 2일(현지시간) 김용범 청와대 정책실장이 미래에셋의 로비를 받아 단일종목 레버리지 상장지수펀드(ETF) 도입을 추진했다는 의혹을 공개적으로 제기했다. 장동혁 의원은 이와 같은 의혹 제기와 함께 사의를 표명했다. 야당은 이번 사태를 'ETF 게이트'로 규정하고 철저한 진상 규명을 위한 특검 도입을 촉구하고 나섰다.\n\n김용범 정책실장은 개각 발표 다음 날인 1일(현지시간) 전격적으로 사의를 표명했다. 이 대통령은 사의 표명 하루 만에 김용범 실장의 사표를 수리했다. 이번 사퇴는 부동산 정책 책임론과 맞물려 경제 사령탑 라",
-    "url": "internal://realtrend_김용범_미래에셋_로비_및_단일종목_레버리지_ETF_의혹_2026090222",
+    "id": 123781,
+    "title_en": "미 국방부 피트 헤그세스 장관 캐나다 생도 프로그램 조롱 논란 속 육군 장관 사임",
+    "title_ko": "미 국방부 피트 헤그세스 장관 캐나다 생도 프로그램 조롱 논란 속 육군 장관 사임",
+    "summary_ko": "댄 드리스콜(Dan Driscoll) 육군 장관이 피트 헤그세스(Pete Hegseth) 국방부 장관과의 충돌로 사임한 이후 미국 국방부 내부의 혼란이 심화되었다. 파이낸셜 타임스(Financial Times)의 보도에 따르면 이번 사임은 국방부 최고위층 간의 마찰을 드러냈다.\n\n피트 헤그세스 장관은 1일(현지시간) 소셜미디어를 통해 캐나다의 청소년 생도 프로그램을 겨냥한 게시물을 올려 논란을 빚었다. CBC 등 외신 보도에 따르면 이 게시물은 캐나다 생도 프로그램을 경시하고 여성 청소년 생도 강사를 조롱하는 내용을 담았다. \n\n캐",
+    "url": "internal://realtrend_Pentagon_Leadership_Resignation_(Driscoll_&_Hegseth)_2026090222",
     "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "realtrend_김용범_미래에셋_로비_및_단일종목_레",
+    "category": "정치·외교",
+    "subcategory": "realtrend_Pentagon_Leadership_",
     "region": "africa",
-    "country": "한국",
+    "country": "미국",
     "country_flag": "",
     "score": 2,
     "created_at": "2026-09-02 22:46",
     "countries": [
-      "한국"
+      "미국",
+      "캐나다"
     ],
     "is_published": true,
     "image_url": null,
@@ -11146,6 +11243,40 @@
     "continuation_of_id": null
   },
   {
+    "id": 122210,
+    "title_en": "캐나다 윌리스톤호에서 발견된 거대 부유섬…사라졌다가 30km 떨어진 곳서 재발견",
+    "title_ko": "캐나다 윌리스톤호에서 발견된 거대 부유섬…사라졌다가 30km 떨어진 곳서 재발견",
+    "summary_ko": "캐나다 브리티시컬럼비아주 북부의 거대한 호수에서 발견된 정체불명의 거대 부유섬이 행방이 묘연해진 지 수주 만에 다시 발견됐다. 이 섬은 지난 8월 초 윌리스톤호에서 항해하던 항해사들에 의해 처음 목격됐다. 당시 촬영된 영상이 소셜미디어를 통해 빠르게 확산되면서 전 세계적인 관심을 모았다.\n\n윌리스톤호는 브리티시컬럼비아주에서 가장 큰 인공 담수호다. 7월 말 촬영된 위성 사진에서도 축구장 약 1.5개 크기에 달하는 이 삼림 지대의 존재가 확인됐다. 그러나 불과 몇 주 뒤인 8월 5일 촬영된 위성 사진에서는 섬의 흔적이 온데간데없이 사",
+    "url": "internal://solo_20260902_d47d823f",
+    "source": "NewsFinal",
+    "category": "자원·에너지",
+    "subcategory": "solo_20260902_d47d823f",
+    "region": "global",
+    "country": "캐나다",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-02 13:06",
+    "countries": [
+      "캐나다"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_floating_island_mountain_lake_forest_aerial_view.jpg",
+    "view_count": 1,
+    "first_published_at": "2026-09-02T13:06:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-02 13:06",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
     "id": 119633,
     "title_en": "구 통일교 한학자 총재 1심서 징역 2년 선고… 금고 260억 원 압수",
     "title_ko": "구 통일교 한학자 총재 1심서 징역 2년 선고… 금고 260억 원 압수",
@@ -11186,40 +11317,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 122210,
-    "title_en": "캐나다 윌리스톤호에서 발견된 거대 부유섬…사라졌다가 30km 떨어진 곳서 재발견",
-    "title_ko": "캐나다 윌리스톤호에서 발견된 거대 부유섬…사라졌다가 30km 떨어진 곳서 재발견",
-    "summary_ko": "캐나다 브리티시컬럼비아주 북부의 거대한 호수에서 발견된 정체불명의 거대 부유섬이 행방이 묘연해진 지 수주 만에 다시 발견됐다. 이 섬은 지난 8월 초 윌리스톤호에서 항해하던 항해사들에 의해 처음 목격됐다. 당시 촬영된 영상이 소셜미디어를 통해 빠르게 확산되면서 전 세계적인 관심을 모았다.\n\n윌리스톤호는 브리티시컬럼비아주에서 가장 큰 인공 담수호다. 7월 말 촬영된 위성 사진에서도 축구장 약 1.5개 크기에 달하는 이 삼림 지대의 존재가 확인됐다. 그러나 불과 몇 주 뒤인 8월 5일 촬영된 위성 사진에서는 섬의 흔적이 온데간데없이 사",
-    "url": "internal://solo_20260902_d47d823f",
-    "source": "NewsFinal",
-    "category": "자원·에너지",
-    "subcategory": "solo_20260902_d47d823f",
-    "region": "global",
-    "country": "캐나다",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-02 13:06",
-    "countries": [
-      "캐나다"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_floating_island_mountain_lake_forest_aerial_view.jpg",
-    "view_count": 1,
-    "first_published_at": "2026-09-02T13:06:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-02 13:06",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
     "continuation_of_id": null
   },
   {
