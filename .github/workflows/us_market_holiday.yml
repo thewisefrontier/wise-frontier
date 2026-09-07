@@ -1,0 +1,69 @@
+name: NewsFinal - US Market Holiday Notice
+
+# 미국 증시(NYSE/NASDAQ) 휴장일 안내 기사. 사용자 요청(2026-09-07): "주말은
+# 당연히 쉬는 거지만 근로자의 날 같은 연휴는 기사화할만 하다".
+#
+# 수치는 전부 야후 파이낸스 실측값을 그대로 쓰는 결정론적 템플릿이라
+# GEMINI_API_KEY가 필요 없다(us_market_holiday_writer.py 참고).
+#
+# 휴장일은 1년에 9번뿐이라 ny_market_open.yml처럼 좁은 시간창을 자주 찌를
+# 필요는 없지만, 이 저장소의 GitHub 자체 schedule 트리거 무응답/지연 전례
+# (run.yml/frontier_markets.yml/lotto.yml 참고) 때문에 여기서도 외부 크론
+# (cron-job.org)의 workflow_dispatch로 호출한다. 뉴욕 09:00 ET 전후
+# (22:00 KST EDT / 23:00 KST EST) 1회면 충분 — already_published()가 같은
+# 날짜 중복 발행을 막으므로 여러 번 호출돼도 안전하다.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: newsfinal-us-market-holiday
+  cancel-in-progress: false
+
+jobs:
+  us_market_holiday:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v5
+
+      - name: Python 설정
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: 패키지 설치
+        run: pip install -r requirements.txt
+
+      - name: 미국 증시 휴장 안내 기사 생성
+        run: python scripts/us_market_holiday_writer.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
+          UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
+
+      - name: 웹사이트 데이터 내보내기
+        run: python scripts/export_articles.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+
+      - name: 변경사항 커밋 및 푸시
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add -A
+          git diff --staged --quiet || git commit -m "Update US market holiday article"
+          for i in 1 2 3 4 5; do
+            git pull origin main -X ours --no-rebase
+            git push && break
+            echo "push failed (attempt $i) - another workflow pushed first, retrying"
+            sleep $((RANDOM % 8 + 3))
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
