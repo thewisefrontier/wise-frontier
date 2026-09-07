@@ -2171,6 +2171,7 @@ def generate_update_note(existing_summary: str, new_summary: str) -> str:
 # 공용화(다른 writer 스크립트도 쓸 수 있도록 -- script_leak.py/gemini_client.py와
 # 같은 이유). 호출부(수십 곳) 코드는 안 바뀌도록 같은 시그니처의 얇은 wrapper만 남긴다.
 from article_image import fetch_article_image as _fetch_article_image_base
+from image_store import store_image
 
 
 def fetch_article_image(title: str, body: str, entity: str = "") -> tuple:
@@ -3038,13 +3039,38 @@ def run():
     # 공식 소스(OFFICIAL_SOURCE_NAMES)는 선진국 제외 요건을 우회 — 백악관/
     # 연준/삼성 뉴스룸 같은 1차 발표는 그 자체로 원천 사실이라 다른 매체가
     # 받아쓸 때까지(선진국 요건상 사실상 무기한) 기다릴 필요가 없다.
+    #
+    # 2026-09-07 도입(사용자 지적: "미술쪽 기사는 좀 올라왔나?" → 소스는
+    # 추가했는데 발행 0건). 원인 두 가지를 같이 고친다:
+    # (b) Dezeen·designboom은 크롤러가 본문(full_text)을 아예 못 가져온다
+    #     (사이트 구조상 RSS 요약이 사실상 유일한 재료) — 이런 소스는 RSS
+    #     요약(summary_en)만으로도 단독기사화를 허용한다.
+    # (a) 그렇게 자격을 얻어도 매 실행 상위 5건에 물량이 훨씬 많은 프론티어
+    #     마켓 뉴스가 항상 먼저 채워 순번이 영영 안 온다 — 문화·예술 소스에
+    #     최소 쿼터를 별도로 확보한다.
+    CULTURE_SOURCE_NAMES = {
+        "Variety", "IndieWire", "Pitchfork", "Playbill", "ArchDaily", "Dezeen", "designboom",
+        "My Modern Met", "Artlyst", "Creative Boom", "Booooooom", "Art in America", "Juxtapoz",
+        "BBC Culture", "Guardian Culture", "LitHub", "Paris Review",
+    }
+    CULTURE_QUOTA = 2  # 단독기사 슬롯(5개) 중 문화·예술 소스에 배정하는 최소 개수
+
+    def _has_enough_material(a):
+        ft = a.get("full_text") or ""
+        if len(ft) >= 1000:
+            return True
+        if not ft and (a.get("source") or "") in CULTURE_SOURCE_NAMES:
+            return len((a.get("summary_en") or "")) >= 200
+        return False
+
     solo_candidates = [
         a for a in all_articles
-        if len(a.get("full_text") or "") >= 1000
+        if _has_enough_material(a)
         and not is_multi_topic_title(a.get("title_en","") or a.get("title_ko",""))
         and not is_multi_topic_body(a.get("full_text","") or a.get("summary_en",""))
         and ((a.get("country") or "") not in ADVANCED_ECONOMIES
-             or (a.get("source") or "") in OFFICIAL_SOURCE_NAMES)
+             or (a.get("source") or "") in OFFICIAL_SOURCE_NAMES
+             or (a.get("source") or "") in CULTURE_SOURCE_NAMES)
     ]
 
     multi_topic_skipped = [
@@ -3059,8 +3085,15 @@ def run():
 
     print(f"\n[단독 기사] 원문 충분한 기사 {len(solo_candidates)}건")
 
+    _culture_pool = [a for a in solo_candidates if (a.get("source") or "") in CULTURE_SOURCE_NAMES]
+    _other_pool = [a for a in solo_candidates if (a.get("source") or "") not in CULTURE_SOURCE_NAMES]
+    _picked_culture = _culture_pool[:CULTURE_QUOTA]
+    solo_selected = _picked_culture + _other_pool[:5 - len(_picked_culture)]
+    if _picked_culture:
+        print(f"  [쿼터] 문화·예술 소스 {len(_picked_culture)}건 확보")
+
     solo_generated = 0
-    for a in solo_candidates[:5]:
+    for a in solo_selected:
         if processed >= MAX_CLUSTERS_PER_RUN + 5:
             break
 
@@ -3211,9 +3244,26 @@ def run():
                     published = False
                     _dg_reason = f"번역 누락 — 외국어 잔존: {_fl}"
 
-            image_url, image_credit = fetch_article_image(
-                full_title, gen_body or _strip_leaked_labels(content), gen_keyword_en
-            ) if published else ("", "")
+            image_url, image_credit = "", ""
+            if published:
+                # 2026-09-07 도입(사용자 지적: "미술쪽 글은 이미지가 중요...
+                # 특정 그림을 다루는 글은 그 그림의 사진을 넣어야 한다는 거야.
+                # 반드시"). ArchDaily·Dezeen·My Modern Met 등은 그 기사가
+                # 다루는 실제 대상(신축 건물·신작) 사진을 RSS 자체에 이미
+                # 신고 있다(rss_fetcher.py의 extract_rss_image()가 수집).
+                # 이런 대상은 애초에 Wikimedia/Pixabay 일반 검색으로는 나올
+                # 수 없어(공개 라이선스 저장소에 있을 리 없는 신작·신축물)
+                # 출처가 준 실제 사진을 최우선으로 쓴다.
+                _src_image = a.get("image_url") or ""
+                if _src_image:
+                    _stored = store_image(_src_image, key_hint=f"rss_{a.get('id')}")
+                    if _stored:
+                        image_url = _stored
+                        image_credit = f"사진: {a.get('source', '')}"
+                if not image_url:
+                    image_url, image_credit = fetch_article_image(
+                        full_title, gen_body or _strip_leaked_labels(content), gen_keyword_en
+                    )
 
             article_id = save_article(
                 unpub_reason=_dg_reason,
