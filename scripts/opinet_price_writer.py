@@ -349,8 +349,8 @@ def build_article_prompt(prices: dict) -> str:
         item = p[code]
         direction = "상승" if item["diff"] > 0 else ("하락" if item["diff"] < 0 else "보합")
         lines.append(
-            f"- {item['name']}: 리터당 {item['price']:,.2f}원 "
-            f"(전일比 {'+' if item['diff']>0 else ''}{item['diff']:,.2f}원, {direction})"
+            f"- {item['name']}: 리터당 {item['price']:.2f}원 "
+            f"(전일比 {'+' if item['diff']>0 else ''}{item['diff']:.2f}원, {direction})"
         )
     price_lines = "\n".join(lines)
 
@@ -396,7 +396,7 @@ BODY: <본문>
 [제목]
 - 반드시 "[국내유가] "로 시작. 대괄호 포함 그대로 출력.
 - "[국내유가] 휘발유 리터당 {gasoline_price}원…<핵심 동인>" 형태, 대괄호 포함 50자 이내
-- 예: "[국내유가] 휘발유 리터당 1,650원…나흘째 {gasoline_dir}"
+- 예: "[국내유가] 휘발유 리터당 1650원…나흘째 {gasoline_dir}"
 
 [본문]
 1. 뉴스 스타일. 모든 문장 "-다" 종결. 감정·논평 표현 금지.

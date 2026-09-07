@@ -19,6 +19,7 @@ call_gemini_fn 인자로 각 스크립트 자신의 call_gemini() 래퍼를 주�
     image_url, image_credit = fetch_article_image(title, body, entity, call_gemini)
 """
 
+import html
 import os
 import re
 
@@ -121,8 +122,8 @@ def fetch_wikimedia_image(query: str):
             attribution_required = (meta.get("AttributionRequired", {}).get("value") or "").lower() == "true"
             credit = ""
             if attribution_required:
-                artist = _HTML_TAG_RE.sub("", meta.get("Artist", {}).get("value", "")).strip()[:80]
-                license_name = meta.get("LicenseShortName", {}).get("value", "")
+                artist = html.unescape(_HTML_TAG_RE.sub("", meta.get("Artist", {}).get("value", ""))).strip()[:80]
+                license_name = html.unescape(meta.get("LicenseShortName", {}).get("value", ""))
                 credit = f"사진: {artist} ({license_name}, Wikimedia Commons)" if artist \
                     else f"사진: Wikimedia Commons ({license_name})"
             return url, credit
