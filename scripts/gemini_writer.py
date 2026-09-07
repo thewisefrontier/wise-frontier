@@ -3217,6 +3217,22 @@ def run():
                     time.sleep(CALL_INTERVAL)
                     continue
 
+                # 병합 후 재검증(2026-09-08, 사용자 지적 — "중복기사 검출, 다른
+                # 기사가 업데이트로 들어가는 문제 등을 재차 점검해봐"): 이 병합
+                # 경로는 find_similar_article()이 후보 하나를 찾으면 무조건
+                # "새로 들어온 기사의 팩트를 기존 기사에 통합"하도록 프롬프트가
+                # 지시하고, 병합 결과에 대한 재검증이 전혀 없었다 — find_similar_article
+                # 판정이 오탐이면 무관한 기사 내용이 그대로 기존 기사에 섞여
+                # 저장된다. gemini_summarizer.py의 merge_trend_article()이 병합
+                # 후 verify_single_topic()으로 재검증하는 것과 동일한 안전장치를
+                # 여기에도 추가한다 — 실패하면 병합을 포기하고(별도 기사로도
+                # 발행하지 않음, 무관한 기사가 이미 하나로 합쳐진 상태라 분리가
+                # 불가능하므로) 이번 실행에서는 건너뛴다.
+                if not verify_single_topic(new_title, gen_body or _strip_leaked_labels(content)):
+                    print(f"  ⛔ [복수 토픽 혼입] 병합 후 재검증 실패 → 병합 취소: {new_title[:50]}")
+                    time.sleep(CALL_INTERVAL)
+                    continue
+
                 existing_sum = existing_full.get("summary_ko") if existing_full else None
                 note = generate_update_note(existing_sum, gen_body or _strip_leaked_labels(content))
                 update_article(similar_existing["id"], new_title, gen_body or _strip_leaked_labels(content), note=note, countries=gen_countries if gen_countries else None, country=gen_country or "", summary_3lines=gen_summary3 or None, investment_idea=gen_investment or None)

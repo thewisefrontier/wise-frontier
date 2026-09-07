@@ -967,7 +967,17 @@ def find_similar_trend(title: str, country: str | None = None,
     시도를 하지 않는다.
     """
     if tags and body:
-        match = _dg_find_by_tags(title, body, tags, hours=days * 24, order="asc", gemini_fallback=call_gemini)
+        # 2026-09-08 재점검("중복기사 검출, 다른 기사가 업데이트로 들어가는
+        # 문제 등을 재차 점검해봐"): 처음엔 days(기본 14일=336시간) 창을
+        # 그대로 썼는데, 태그 경로는 country/제목유사도 같은 추가 확인 없이
+        # "태그 단어 하나 겹침"만으로 최대 200건까지 LLM 판정을 돌린다.
+        # 이 파일의 다른 LLM 기반 경로(find_by_llm_scan, gemini_writer의
+        # find_similar_article)는 전부 72시간 이하로 좁혀서 오탐 누적을
+        # 막는데, 여기만 14일 전체를 쓰면 "bitcoin"처럼 자주 겹치는 태그가
+        # 후보를 많이 끌고 와 LLM 판정 오류가 누적될 위험이 커진다. 실제
+        # 중복 사례(리퀴드 네트워크, 3시간45분 간격)도 며칠씩 떨어져 나온 적이
+        # 없으므로 72시간이면 충분하다.
+        match = _dg_find_by_tags(title, body, tags, hours=72, order="asc", gemini_fallback=call_gemini)
         if match:
             return match
 
@@ -1100,6 +1110,12 @@ def _summarize_delta(root_summary: str, new_title: str, new_body: str) -> str:
 무슨 일이 있었는지 충분히 이해되는 완결된 문단이어야 합니다. 새 기사에 담긴
 사실 관계(배경·경위·수치·전망)를 빠짐없이 살려 쓰되, 새 기사에 없는 내용을
 지어내지는 마세요 — 팩트에 근거하는 한 길이는 제한하지 않습니다.
+- ⚠️ 가장 먼저 확인할 것: 두 기사가 정말로 같은 구체적 사건을 다루고
+  있습니까? 앞선 판정(같은 사건으로 추정됨)이 틀렸을 수 있습니다 — 같은
+  인물·같은 나라·같은 범주의 사건이라는 이유만으로 실제로는 별개의 사건을
+  같은 것으로 착각하지 마세요. 조금이라도 다른 사건이라는 의심이 들면
+  아래 어떤 항목에도 해당하지 않더라도 정확히 "관련없음" 한 단어만 답하고
+  멈추세요.
 - ⚠️ 기존 기사 텍스트에 문자 그대로 없다고 해서 전부 "새 전개"는 아닙니다
   (2026-08-25 id=97425 실사고 — 리튬 시장 시세·산업 배경 설명이 애초에
   최초 기사에 들어갔어야 할 정보인데 나중에 "업데이트"로 잘못 분류됨).
@@ -1169,6 +1185,17 @@ def merge_trend_article(existing: dict, new_title: str, new_body: str, note: str
     if not delta or delta.replace(".", "").strip() == "없음":
         print(f"    → 새 전개 없음, append 생략 (id={art_id})")
         return True  # 병합 성공 처리 → 신규 중복 생성 방지
+
+    # 2026-09-08 재점검("다른 기사가 업데이트로 들어가는 문제") — 여기까지
+    # 오는 동안(태그 공유·LLM 동일사건 판정 등) 이미 "같은 사건"으로 확인은
+    # 됐지만, 그 판정이 틀렸을 가능성에 대비해 실제 델타를 뽑는 이 단계에서
+    # 한 번 더 "정말 같은 사건이냐"를 명시적으로 되묻는다(위 _summarize_delta
+    # 프롬프트 참고). "관련없음"이면 병합을 포기 — 별도 기사로 새로 발행하지
+    # 않고 이번 실행에서는 건너뛴다(이미 다른 판정들도 통과한 애매한 경우라
+    # 무리하게 별도 발행하면 또 다른 형태의 중복이 될 위험).
+    if delta.strip().startswith("관련없음"):
+        print(f"    → [병합 재확인] 실제로는 다른 사건으로 판단 → 병합 취소 (id={art_id})")
+        return False
 
     # delta 자체가 raw JSON이면 concat 후엔 "{"로 시작 안 해서 아래 new_summary
     # 검사로는 못 잡는다 — append되기 전, delta 단독일 때 확인해야 한다.
