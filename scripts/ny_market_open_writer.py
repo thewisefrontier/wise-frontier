@@ -91,10 +91,12 @@ from frontier_markets_writer import (
 # 죽지 않도록 폴백은 주말만 거른다(기존 동작과 동일 — 휴장일 오탐 방지보다
 # 스크립트 자체가 안 죽는 게 우선).
 try:
-    from market_calendar import is_us_market_closed
+    from market_calendar import is_us_market_closed, holiday_name as _us_holiday_name
 except Exception:
     def is_us_market_closed(d) -> bool:
         return d.weekday() >= 5
+    def _us_holiday_name(d):
+        return None
 
 GEMINI_MODELS = [
     "gemini-3.8-flash",
@@ -163,6 +165,25 @@ def market_just_opened() -> bool:
     # market_calendar.py의 공식 NYSE 캘린더로 휴장일도 함께 걸러낸다.
     if is_us_market_closed(now.date()):
         return False
+    minutes = now.hour * 60 + now.minute
+    return MARKET_OPEN_MINUTES <= minutes < MARKET_OPEN_MINUTES + MARKET_OPEN_WINDOW_MINUTES
+
+
+def us_holiday_today() -> str | None:
+    """오늘이 미국 증시 휴장일(평일 한정 — 주말은 별개)이면 휴장 사유명 반환."""
+    now = now_edt()
+    if now.weekday() >= 5:
+        return None
+    return _us_holiday_name(now.date())
+
+
+def europe_focus_window() -> bool:
+    """미국 증시 휴장일에 같은 09:30~09:59 ET 시간대를 유럽·아시아 동향
+    기사로 대체할지 판단(사용자 요청 2026-09-07: "미국 증시 휴장인 날은
+    유럽하고 다른 나라 위주로 쓰면 되는거 아닌가")."""
+    if not us_holiday_today():
+        return False
+    now = now_edt()
     minutes = now.hour * 60 + now.minute
     return MARKET_OPEN_MINUTES <= minutes < MARKET_OPEN_MINUTES + MARKET_OPEN_WINDOW_MINUTES
 
@@ -285,6 +306,100 @@ def enforce_title_prefix(title: str) -> str:
     return f"{TITLE_PREFIX} {t}" if t else TITLE_PREFIX
 
 
+# ── 미국 증시 휴장일 대체 콘텐츠(유럽·아시아 위주) ──────────────────
+# 사용자 요청(2026-09-07): "미국 증시 휴장인 날은 유럽하고 다른 나라
+# 위주로 쓰면 되는거 아닌가?" — 뉴욕이 안 열리는 날, 같은 09:30 ET
+# 시간대(유럽은 이미 개장 후 몇 시간 지난 장중, 아시아는 이미 마감)를
+# "뉴욕 개장 프리뷰" 대신 "유럽 증시 동향"으로 채운다. futures 없이
+# _OVERNIGHT_INDICES(미국 제외 주요국)만 쓴다.
+EUROPE_TITLE_PREFIX = "[유럽증시]"
+
+
+def fetch_europe_data() -> dict:
+    overnight = []
+    for country, name, symbol, exchange in _OVERNIGHT_INDICES:
+        q = fetch_yahoo_quote(symbol)
+        time.sleep(0.5)
+        if not q or q.pop("_suspect", False):
+            continue
+        overnight.append({"country": country, "name": name, "exchange": exchange, **q})
+    overnight.sort(key=lambda x: abs(x["pct"]), reverse=True)
+    return {"overnight": overnight}
+
+
+def build_europe_article_prompt(data: dict, today: date, holiday_name: str) -> str:
+    today_str = today.strftime("%Y년 %m월 %d일")
+    overnight_lines = "\n".join(
+        f"- {i['country']} {i['name']} ({i['exchange']}): {i['price']:.2f} (전일比 {i['pct']:+.2f}%)"
+        for i in data["overnight"]
+    )
+    top_str = ", ".join(f"{i['country']} {i['name']} {i['pct']:+.1f}%" for i in data["overnight"][:3])
+
+    return f"""당신은 글로벌 마켓 전문 경제 기자입니다. 오늘은 미국 증시가
+'{holiday_name}'으로 휴장하는 날입니다. 구글 검색으로 유럽·아시아 증시를
+움직이는 실제 뉴스(ECB·BOE 발언, 유럽 경제지표, 아시아 마감 요인, 지정학
+이슈 등)를 찾아서, 아래 데이터와 결합해 미국 증시가 쉬는 날의 "유럽·아시아
+증시 동향" 기사를 작성하세요. 검색 없이 수치만 나열하지 마세요.
+
+오늘({today_str}) 오전(한국시간 기준, 유럽은 장중·아시아는 마감 이후) 데이터:
+
+[유럽·아시아 주요 증시]
+{overnight_lines}
+
+[변동폭 상위]
+{top_str}
+
+[출력 형식] — 반드시 이 형식 그대로:
+TITLE: <제목>
+BODY: <본문>
+
+[제목]
+- 반드시 "{EUROPE_TITLE_PREFIX} "로 시작. 대괄호 포함 그대로 출력.
+- 유럽 증시 방향(상승/하락/혼조)이 핵심 소재여야 합니다. 50자 이내로.
+- 예: "{EUROPE_TITLE_PREFIX} 미국 휴장 속 유럽 증시 강세…ECB 발언 주목"
+
+[본문]
+1. 뉴스 스타일. 모든 문장 "-다" 종결. 감정·논평 표현 절대 금지.
+   금지어: '주목됩니다', '기대됩니다', '보여줍니다', '지켜볼 필요가 있습니다'
+2. 구조 — 아래 섹션을 이 순서대로 다루세요. 각 섹션은 "◆ 섹션명" 한 줄로
+   시작하고, 그 다음 줄부터 내용을 쓰세요. 섹션 제목 줄 앞에는 빈 줄을
+   하나씩 두세요. 섹션명 뒤 설명은 지시일 뿐이니 본문에 옮기지 마세요.
+
+   ◆ 미국 증시 휴장
+   "{today.day}일(현지시간) 미국 금융시장은 '{holiday_name}'을 맞아 휴장한다"는
+   사실을 짧게 한 문단으로 먼저 밝히세요.
+
+   ◆ 유럽 증시
+   ⚠️ 반드시 유럽 주요 지수(FTSE100·DAX·CAC40·유로스톡스50 등) 등락 방향으로
+   시작하세요. 검색으로 찾은 실제 이유(ECB·BOE 발언, 경제지표, 개별 종목
+   이슈 등)를 반영하세요. 거래소명을 포함하세요.
+
+   ◆ 아시아 마감
+   닛케이225 등 아시아 주요 증시의 이날 마감 상황을 실제 이유와 함께
+   서술하세요.
+
+   ◆ 오늘의 관전 포인트
+   검색으로 찾은 그날 예정된 유럽 경제지표 발표·중앙은행 인사 발언 등
+   시장을 움직일 만한 일정을 서술하세요. 못 찾으면 이 섹션 전체를
+   생략하세요(섹션 제목도 쓰지 마세요).
+3. ⚠️ 날짜: 반드시 ◆ 미국 증시 휴장 섹션에 "{today.day}일(현지시간)" 형식으로
+   날짜를 명시하세요. "오늘", "현재", 절대연도(2026년 등)는 금지.
+4. 수치는 위 데이터를 그대로 사용하고 절대 지어내지 마세요.
+5. 비라틴 문자 국가명·지수명·기업명은 정확한 한국어 표기로.
+6. 분량: 500자 이상.
+"""
+
+
+def enforce_europe_title_prefix(title: str) -> str:
+    t = (title or "").strip()
+    if not t:
+        return t
+    m = re.match(r"^\s*\[\s*유럽증시\s*\]\s*(.*)$", t)
+    if m:
+        t = m.group(1).strip()
+    return f"{EUROPE_TITLE_PREFIX} {t}" if t else EUROPE_TITLE_PREFIX
+
+
 def parse_article_output(text: str) -> tuple[str, str]:
     title, body = "", ""
     m_title = re.search(r"TITLE:\s*(.+?)(?:\n|$)", text)
@@ -346,8 +461,8 @@ def fetch_open_image(article_date: date) -> str:
 
 
 # ── 기사 삽입 ────────────────────────────────────────────────
-def already_published(article_date: date) -> bool:
-    internal_url = f"internal://ny_market_open_{article_date.isoformat()}"
+def already_published(article_date: date, url_key: str = "ny_market_open") -> bool:
+    internal_url = f"internal://{url_key}_{article_date.isoformat()}"
     res = requests.get(
         _sb_url(),
         headers=_sb_headers(),
@@ -357,7 +472,10 @@ def already_published(article_date: date) -> bool:
     return res.status_code in (200, 206) and len(res.json()) > 0
 
 
-def insert_article(title_ko: str, summary_ko: str, article_date: date, image_url: str = "") -> int:
+def insert_article(title_ko: str, summary_ko: str, article_date: date, image_url: str = "",
+                    url_key: str = "ny_market_open", subcategory: str = "뉴욕증시개장",
+                    country: str = "미국", country_flag: str = "🇺🇸",
+                    note: str = "뉴욕증시 개장 자동 기사") -> int:
     if detect_script_leak(title_ko, summary_ko):
         print(f"  ⚠️ [문자 혼입 감지] 저장 차단: {title_ko[:60]}")
         return -1
@@ -371,7 +489,7 @@ def insert_article(title_ko: str, summary_ko: str, article_date: date, image_url
             return -1
 
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
-    internal_url = f"internal://ny_market_open_{article_date.isoformat()}"
+    internal_url = f"internal://{url_key}_{article_date.isoformat()}"
 
     print("  → 영어 번역 생성 중...")
     title_en, summary_en = translate_article(title_ko, summary_ko, call_gemini)
@@ -386,16 +504,16 @@ def insert_article(title_ko: str, summary_ko: str, article_date: date, image_url
         "url": internal_url,
         "source": "NewsFinal",
         "category": "금융",
-        "subcategory": "뉴욕증시개장",
+        "subcategory": subcategory,
         "region": "global",
-        "country": "미국",
-        "country_flag": "🇺🇸",
-        "countries": ["미국"],
+        "country": country,
+        "country_flag": country_flag,
+        "countries": [country] if country else [],
         "image_url": image_url,
         "score": 1,
         "created_at": now_str,
         "first_published_at": now_str,
-        "update_log": [{"timestamp": now_str, "note": "뉴욕증시 개장 자동 기사"}],
+        "update_log": [{"timestamp": now_str, "note": note}],
         "sent_telegram": 0,
         "is_published": True,
     }
@@ -413,9 +531,17 @@ def main():
         print("  [SKIP] SUPABASE 환경변수 없음")
         return
 
+    if europe_focus_window():
+        _run_europe_focus()
+        return
+
     if not market_just_opened():
         edt_now = now_edt()
-        print(f"  → 뉴욕 개장 시각(09:30 ET) 아님 ({edt_now.strftime('%H:%M')} EDT/EST) → 스킵")
+        holiday = us_holiday_today()
+        if holiday:
+            print(f"  → 미국 증시 휴장일({holiday}), 유럽 포커스 시간대도 아님 → 스킵")
+        else:
+            print(f"  → 뉴욕 개장 시각(09:30 ET) 아님 ({edt_now.strftime('%H:%M')} EDT/EST) → 스킵")
         return
 
     article_date = now_edt().date()
@@ -449,6 +575,51 @@ def main():
     image_url = fetch_open_image(article_date)
 
     article_id = insert_article(title, body, article_date, image_url)
+    if article_id > 0:
+        print(f"  ✓ 기사 삽입 완료 (articles.id={article_id})")
+    else:
+        print("  [ERROR] 기사 삽입 실패")
+
+
+def _run_europe_focus():
+    holiday = us_holiday_today()
+    article_date = now_edt().date()
+    url_key = "ny_market_open_europe"
+
+    if already_published(article_date, url_key=url_key):
+        print(f"  → {article_date} 유럽증시 동향 기사 이미 존재 → 스킵")
+        return
+
+    print(f"  → 미국 증시 휴장일({holiday}) → 유럽·아시아 동향으로 대체")
+    print("  → 야후 파이낸스에서 유럽·아시아 증시 데이터 수집 중...")
+    data = fetch_europe_data()
+    if len(data["overnight"]) < 2:
+        print(f"  [ERROR] 데이터 수집 부족(해외증시 {len(data['overnight'])}건) → 종료")
+        return
+    print(f"  → 해외증시 {len(data['overnight'])}건 수집 완료")
+
+    print("  → Gemini로 기사 생성 중...")
+    prompt = build_europe_article_prompt(data, article_date, holiday)
+    article_text = call_gemini_article(prompt)
+
+    if not article_text:
+        print("  [ERROR] 기사 생성 실패")
+        return
+
+    title, body = parse_article_output(article_text)
+    title = enforce_europe_title_prefix(title)
+
+    if not title or not body:
+        print("  [ERROR] 응답 파싱 실패")
+        return
+
+    image_url = fetch_open_image(article_date)
+
+    article_id = insert_article(
+        title, body, article_date, image_url,
+        url_key=url_key, subcategory="유럽증시동향", country="", country_flag="",
+        note="유럽증시 동향 자동 기사(미국 증시 휴장일 대체)",
+    )
     if article_id > 0:
         print(f"  ✓ 기사 삽입 완료 (articles.id={article_id})")
     else:
