@@ -60,6 +60,19 @@ except Exception:
             return data[0].get("id", -1) if data else -1
         return -1
 
+# 복수 주제(그랩백/다이제스트) 원문 감지 공용 모듈(2026-09-07, gemini_summarizer.py의
+# 트렌드 추적기도 같은 필터가 필요해 topic_guard.py로 분리). import 실패해도 죽지
+# 않도록 전부 통과(복수 주제 아님)로 폴백한다.
+try:
+    from topic_guard import split_multi_topic_title, is_multi_topic_title, is_multi_topic_body
+except Exception:
+    def split_multi_topic_title(title: str) -> list:
+        return []
+    def is_multi_topic_title(title: str) -> bool:
+        return False
+    def is_multi_topic_body(text: str) -> bool:
+        return False
+
 KST = timezone(timedelta(hours=9))
 
 def now_kst() -> datetime:
@@ -831,23 +844,8 @@ def get_keywords_for_ids(ids: list) -> dict:
 
 # ── 클러스터링 ────────────────────────────────────────────
 
-def split_multi_topic_title(title: str) -> list:
-    """
-    복수 주제 제목을 개별 토픽으로 분리.
-    예: "우간다 군 수뇌부 갈등 및 나이지리아 채용 사기 주의보"
-    → ["우간다 군 수뇌부 갈등", "나이지리아 채용 사기 주의보"]
-    단일 주제면 빈 리스트 반환.
-    """
-    if not title:
-        return []
-    separators = [' 및 ', ' and ', ' & ', ' et ', '…및', ', and ', '; ']
-    for sep in separators:
-        if sep.lower() in title.lower():
-            parts = [p.strip() for p in title.split(sep) if p.strip() and len(p.strip()) > 5]
-            if len(parts) >= 2:
-                return parts
-    return []
-
+# split_multi_topic_title/is_multi_topic_title/is_multi_topic_body는
+# topic_guard.py에서 import(파일 상단 참고).
 
 # 2026-09-01 사용자 지시: "칼럼, 데스크칼럼, 기자수첩은 기사화 금지". 원문(제목/
 # 본문 첫머리)에 오피니언 장르 표식이 명시적으로 붙어 있는 경우만 잡는다 —
@@ -869,59 +867,6 @@ def is_opinion_column(title: str, text: str = "") -> bool:
     if text and _OPINION_LABEL_RE.search(text[:200].strip()):
         return True
     return False
-
-
-def is_multi_topic_title(title: str) -> bool:
-    """복수 주제 제목 여부 — 분리 가능한 패턴 + 글로벌 종합 제목"""
-    import re
-    if not title:
-        return False
-    if len(split_multi_topic_title(title)) >= 2:
-        return True
-    if re.match(r'^글로벌\s+\S+.+(?:변화|동향|행보|흐름|속에서|격화|가속화)', title):
-        return True
-    if re.search(r'각국의?\s+(경제|사회|정치|행보|대응|현안)', title):
-        return True
-    if re.match(r'^전\s+세계\s+주요국', title):
-        return True
-    if '등 글로벌' in title or '등 주요 단신' in title or '등 주요 현안' in title:
-        return True
-    country_names = ['나이지리아','케냐','가나','에티오피아','필리핀','베트남',
-                     '인도네시아','태국','이집트','우간다','탄자니아','수단',
-                     '키르기스스탄','미얀마','캄보디아','인도','중국','미국',
-                     '방글라데시','파키스탄','카자흐스탄','라오스','캄보디아']
-    hits = [c for c in country_names if c in title]
-    if len(hits) >= 3:
-        return True
-    return False
-
-
-def is_multi_topic_body(text: str) -> bool:
-    """
-    본문 앞 3문단이 서로 다른 국가/주제를 다루는지 감지.
-    각 문단에서 국가명을 추출해서 3개 이상 다른 국가가 나오면 복수 주제로 판단.
-    """
-    if not text:
-        return False
-    import re
-    # 앞 600자만 분석
-    lead = text[:600]
-    paragraphs = [p.strip() for p in re.split(r'[.!?。]\s+', lead) if len(p.strip()) > 20][:6]
-
-    country_names = ['나이지리아','케냐','가나','에티오피아','필리핀','베트남',
-                     '인도네시아','태국','이집트','우간다','탄자니아','수단',
-                     '키르기스스탄','미얀마','캄보디아','방글라데시','파키스탄',
-                     '카자흐스탄','라오스','카메룬','코트디부아르','세네갈',
-                     '잠비아','짐바브웨','앙골라','모잠비크','르완다']
-
-    found_countries = set()
-    for para in paragraphs:
-        for c in country_names:
-            if c in para:
-                found_countries.add(c)
-
-    # 3개 이상 다른 국가가 앞부분에 나오면 복수 주제
-    return len(found_countries) >= 3
 
 
 def extract_keywords(text):

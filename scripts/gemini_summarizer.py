@@ -94,6 +94,21 @@ except Exception:
     def normalize_category(raw, default="글로벌"):
         return "" if raw is None else str(raw).strip()
 
+# 복수 주제(그랩백/다이제스트) 원문 감지 — gemini_writer.py의 단독 기사화
+# 경로엔 있었지만 이 파일의 get_trend_articles()엔 없었다(2026-09-07, 사용자
+# 지적으로 트렌드 그룹 전수 확인 중 발견). "인도네시아 무역 적자·국제 범죄
+# 조직 검거 등 주요 사건 일지"류 다국가 다이제스트 원문이 키워드 하나만
+# 우연히 걸려도 그대로 후보에 들어와, 트렌드 합성 시 무관한 문단까지 섞여
+# 들어가는 사고가 반복됐다(id=20360, 49012 등 다수). import 실패해도 죽지
+# 않도록 전부 통과(복수 주제 아님)로 폴백한다.
+try:
+    from topic_guard import is_multi_topic_title, is_multi_topic_body
+except Exception:
+    def is_multi_topic_title(title: str) -> bool:
+        return False
+    def is_multi_topic_body(text: str) -> bool:
+        return False
+
 # 영어 번역(2026-09-03) — "다른 기사도 [번역]해야지" 요청으로 트렌드 3개
 # 경로(run_trend_tracker/run_realtime_trend_tracker/run_external_trend_articles)
 # 전부에 확대. 이 파일은 전량 해외 이슈 트렌드라 국내 전용 콘텐츠 제외 대상이
@@ -692,16 +707,30 @@ def get_trend_articles(keywords: list, days: int = 7) -> list:
             seen.add(a["id"])
             unique.append(a)
 
+    # 복수 주제(다국가 다이제스트) 원문 제외 — 키워드 하나만 우연히 걸려도
+    # 본문 전체(무관한 다른 나라 문단 포함)가 트렌드 합성 재료로 들어가는 걸 막는다.
+    multi_dropped = 0
+    filtered = []
+    for a in unique:
+        title = a.get("title_ko") or a.get("title_en") or ""
+        body = a.get("full_text") or a.get("summary_en") or a.get("summary_ko") or ""
+        if is_multi_topic_title(title) or is_multi_topic_body(body):
+            multi_dropped += 1
+            continue
+        filtered.append(a)
+    if multi_dropped:
+        print(f"  ↳ 복수 주제 원문 제외: {multi_dropped}건")
+
     # 관련도 재검증 — 조회는 부분문자열이므로 여기서 단어경계로 걸러낸다.
     scored = []
-    for a in unique:
+    for a in filtered:
         sc = _trend_relevance(a, keywords)
         if sc <= 0:
             continue
         a["_trend_score"] = sc
         scored.append(a)
-    if len(unique) != len(scored):
-        print(f"  ↳ 관련도 필터: {len(unique)}건 → {len(scored)}건 ({len(unique)-len(scored)}건 제외)")
+    if len(filtered) != len(scored):
+        print(f"  ↳ 관련도 필터: {len(filtered)}건 → {len(scored)}건 ({len(filtered)-len(scored)}건 제외)")
     return scored
 
 
