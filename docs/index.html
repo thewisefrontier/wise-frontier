@@ -416,22 +416,11 @@
         <span id="sector-label">전체</span>
         <span class="arrow">▼</span>
       </button>
-      <nav class="nav-sector" id="nav-sector">
-      <a href="/live.html" style="color:var(--accent2);font-weight:700;">트렌드</a>
-      <a href="#" class="active" onclick="setSector('all',this);return false;">전체</a>
-      <a href="#" onclick="setSector('경제',this);return false;" data-sector>경제</a>
-      <a href="#" onclick="setSector('금융',this);return false;" data-sector>금융</a>
-      <a href="#" onclick="setSector('자원·에너지',this);return false;" data-sector>자원·에너지</a>
-      <a href="#" onclick="setSector('산업·기업',this);return false;" data-sector>산업·기업</a>
-      <a href="#" onclick="setSector('정치·외교',this);return false;" data-sector>정치·외교</a>
-      <a href="#" onclick="setSector('사회',this);return false;" data-sector>사회</a>
-      <a href="#" onclick="setSector('IT·과학',this);return false;" data-sector>IT·과학</a>
-      <a href="/archive.html">아카이브</a>
-      <a href="/calendar.html">경제 일정</a>
-      <a href="/markets.html">마켓</a>
-      <a href="/country.html">국가별</a>
-      <a href="/weather.html">날씨</a>
-      </nav>
+      <nav class="nav-sector" id="nav-sector"></nav>
+      <script type="module">
+        import { renderSectorNav } from '/js/site-nav.js';
+        renderSectorNav(document.getElementById('nav-sector'), { includeAll: true, activeAll: true });
+      </script>
     </div>
   </div>
 
