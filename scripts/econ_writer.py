@@ -32,6 +32,16 @@ except Exception:
     def detect_script_leak(title, body):
         return []
 
+# Gemini 거부/placeholder 응답 감지(2026-09-08, 사용자 지적 — "메인툴에는
+# 도입된 안전장치가 서브툴에 도입이 안된게 있는지 확인해봐"). id=142060
+# 실사고(gemini_writer.py) 이후 만든 안전장치인데 이 파일엔 연결이 안
+# 돼 있었다.
+try:
+    from content_guard import is_placeholder_response
+except Exception:
+    def is_placeholder_response(title, body):
+        return False
+
 # articles 테이블 삽입 공용 로직(2026-09-02, article_store.py로 공용화).
 try:
     from article_store import insert_final_article
@@ -394,6 +404,9 @@ def insert_article(title_ko: str, summary_ko: str,
     if detect_script_leak(title_ko, summary_ko):
         print(f"  ⚠️ [문자 혼입 감지] 저장 차단: {title_ko[:60]}")
         return -1
+    if is_placeholder_response(title_ko, summary_ko):
+        print(f"  ❌ Gemini 응답이 실제 기사가 아님(원문 부재 등 거부 응답) → 저장 차단: {title_ko[:60]}")
+        return -1
     now_str     = now_kst().strftime("%Y-%m-%d %H:%M")
     cluster_key = f"econ_rate_{event_id}"
     flag        = COUNTRY_FLAG_MAP.get(country, "")
@@ -448,15 +461,26 @@ def article_exists(event_id: int) -> bool:
 
 
 # ── 논평체 검사 ──────────────────────────────────────────────
-BANNED_STYLE_PATTERNS = [
-    r"보여줍니다", r"보여주고 있습니다", r"도모하고 있습니다",
-    r"강조하고 있습니다", r"시사합니다", r"주목됩니다",
-    r"평가된다", r"평가받고 있습니다", r"기대됩니다",
-    r"지켜볼 필요가 있습니다", r"지켜봐야 할 것입니다",
-]
-
-def has_column_style(text: str) -> bool:
-    return bool(text and any(re.search(p, text) for p in BANNED_STYLE_PATTERNS))
+# 2026-09-08 수정("메인툴에는 도입된 안전장치가 서브툴에 도입이 안된게
+# 있는지 확인해봐"): 이 파일이 style_guard.py 공용화(2026-09-02) 이전부터
+# 있던 로컬 사본을 계속 쓰고 있어서, 그 뒤 추가된 패턴(화자 없는 전망/분석형
+# 마무리 문장 7종, 2026-07-28)과 합쇼체(-습니다) 감지·자동변환을 못 받고
+# 있었다.
+try:
+    from style_guard import has_column_style, has_polite_ending, to_plain_style
+except Exception:
+    BANNED_STYLE_PATTERNS = [
+        r"보여줍니다", r"보여주고 있습니다", r"도모하고 있습니다",
+        r"강조하고 있습니다", r"시사합니다", r"주목됩니다",
+        r"평가된다", r"평가받고 있습니다", r"기대됩니다",
+        r"지켜볼 필요가 있습니다", r"지켜봐야 할 것입니다",
+    ]
+    def has_column_style(text: str) -> bool:
+        return bool(text and any(re.search(p, text) for p in BANNED_STYLE_PATTERNS))
+    def has_polite_ending(text: str) -> bool:
+        return False
+    def to_plain_style(text: str) -> str:
+        return text
 
 
 # ── TITLE / BODY 파싱 ────────────────────────────────────────
@@ -596,6 +620,12 @@ def main():
             )
             article_text = call_gemini(retry_prompt2, max_tokens=1500, use_search=False) or article_text
             time.sleep(5)
+
+        if has_polite_ending(article_text):
+            converted = to_plain_style(article_text)
+            if converted != article_text:
+                print("    🔧 합쇼체(-습니다) 감지 → 자동 변환 적용")
+                article_text = converted
 
         art_title, art_body = parse_article_output(article_text)
 

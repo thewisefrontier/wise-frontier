@@ -30,6 +30,16 @@ except Exception:
     def detect_script_leak(title, body):
         return []
 
+# Gemini 거부/placeholder 응답 감지(2026-09-08, 사용자 지적 — "메인툴에는
+# 도입된 안전장치가 서브툴에 도입이 안된게 있는지 확인해봐"). id=142060
+# 실사고(gemini_writer.py) 이후 만든 안전장치인데 이 파일엔 연결이 안
+# 돼 있었다.
+try:
+    from content_guard import is_placeholder_response
+except Exception:
+    def is_placeholder_response(title, body):
+        return False
+
 # articles 테이블 삽입 공용 로직(2026-09-02, article_store.py로 공용화).
 try:
     from article_store import insert_final_article
@@ -174,22 +184,30 @@ def call_gemini(prompt, max_tokens=3000, start_tier=0):
 
 # ── 논평/칼럼체 검출 및 재생성 (다이제스트는 "통찰/분석"을 요구하는 특성상
 # 논평체가 특히 섞이기 쉬워 재생성 안전장치를 둔다) ──────────────
-BANNED_STYLE_PATTERNS = [
-    r"보여줍니다", r"보여주고 있습니다", r"보여준다",
-    r"도모하고 있습니다", r"도모한다",
-    r"강조하고 있습니다", r"강조한다",
-    r"시사합니다", r"시사한다",
-    r"주목됩니다", r"주목된다", r"주목받고 있습니다",
-    r"평가된다", r"평가받고 있습니다", r"라는 평가다", r"라는 분석이다",
-    r"필요해 보입니다", r"필요할 것으로 보입니다",
-    r"지켜볼 필요가 있습니다", r"지켜봐야 할 것입니다",
-    r"기대됩니다", r"기대해 볼 만합니다",
-]
-
-def has_column_style(text: str) -> bool:
-    if not text:
+# 2026-09-08 수정("메인툴에는 도입된 안전장치가 서브툴에 도입이 안된게
+# 있는지 확인해봐"): style_guard.py 공용화(2026-09-02) 이전부터 있던 로컬
+# 사본이라 그 뒤 추가된 패턴(화자 없는 전망/분석형 마무리 문장 7종,
+# 2026-07-28)과 합쇼체(-습니다) 감지·자동변환을 못 받고 있었다.
+try:
+    from style_guard import has_column_style, has_polite_ending, to_plain_style
+except Exception:
+    BANNED_STYLE_PATTERNS = [
+        r"보여줍니다", r"보여주고 있습니다", r"보여준다",
+        r"도모하고 있습니다", r"도모한다",
+        r"강조하고 있습니다", r"강조한다",
+        r"시사합니다", r"시사한다",
+        r"주목됩니다", r"주목된다", r"주목받고 있습니다",
+        r"평가된다", r"평가받고 있습니다", r"라는 평가다", r"라는 분석이다",
+        r"필요해 보입니다", r"필요할 것으로 보입니다",
+        r"지켜볼 필요가 있습니다", r"지켜봐야 할 것입니다",
+        r"기대됩니다", r"기대해 볼 만합니다",
+    ]
+    def has_column_style(text: str) -> bool:
+        return bool(text and any(re.search(p, text) for p in BANNED_STYLE_PATTERNS))
+    def has_polite_ending(text: str) -> bool:
         return False
-    return any(re.search(p, text) for p in BANNED_STYLE_PATTERNS)
+    def to_plain_style(text: str) -> str:
+        return text
 
 
 def wikipedia_confirms(name: str, threshold: int = 70) -> bool:
@@ -303,6 +321,11 @@ def call_gemini_article(prompt, max_tokens=3000, style_retries=1):
         print("  ⚠️ 재생성 후에도 논평체 패턴이 남아있음 (그대로 진행)")
     if content and fabricated:
         print(f"  ⚠️ 재생성 후에도 원문에 없는 고유명사 남아있음: {fabricated} (그대로 발행 — 수동 확인 필요)")
+    if content and has_polite_ending(content):
+        converted = to_plain_style(content)
+        if converted != content:
+            print("  🔧 합쇼체(-습니다) 감지 → 자동 변환 적용")
+            content = converted
     return content
 
 
@@ -439,6 +462,9 @@ def _digest_sources(articles: list) -> list:
 def save_digest(title, body, article_count, image_url="", published=True, guard_note=""):
     if detect_script_leak(title, body):
         print(f"  ⚠️ [문자 혼입 감지] 저장 차단: {title[:60]}")
+        return -1
+    if is_placeholder_response(title, body):
+        print(f"  ❌ Gemini 응답이 실제 기사가 아님(원문 부재 등 거부 응답) → 저장 차단: {title[:60]}")
         return -1
     today_key = f"digest_{now_kst().strftime('%Y%m%d')}"
     payload = {

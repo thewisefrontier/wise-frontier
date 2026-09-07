@@ -49,6 +49,17 @@ except Exception:
     def has_column_style(text: str) -> bool:
         return False
 
+# Gemini 거부/placeholder 응답 감지(2026-09-08, 사용자 지적 — "메인툴에는
+# 도입된 안전장치가 서브툴에 도입이 안된게 있는지 확인해봐"). id=142060
+# 실사고(gemini_writer.py) 이후 만든 안전장치인데 이 파일엔 연결이 안
+# 돼 있었다 — 이 스크립트도 검색 그라운딩(use_search)으로 원문을 못
+# 찾으면 Gemini가 거부 응답을 낼 수 있다.
+try:
+    from content_guard import is_placeholder_response
+except Exception:
+    def is_placeholder_response(title, body):
+        return False
+
 # articles 테이블 삽입 및 Supabase 헤더/URL 공용 로직(article_store.py).
 try:
     from article_store import insert_final_article, sb_headers as _sb_headers, sb_url as _sb_url
@@ -478,6 +489,9 @@ def insert_article(title_ko: str, summary_ko: str, article_date: date, image_url
                     note: str = "뉴욕증시 개장 자동 기사") -> int:
     if detect_script_leak(title_ko, summary_ko):
         print(f"  ⚠️ [문자 혼입 감지] 저장 차단: {title_ko[:60]}")
+        return -1
+    if is_placeholder_response(title_ko, summary_ko):
+        print(f"  ❌ Gemini 응답이 실제 기사가 아님(원문 부재 등 거부 응답) → 저장 차단: {title_ko[:60]}")
         return -1
     _unwrapped = unwrap_json_body(summary_ko)
     if _unwrapped is not None:

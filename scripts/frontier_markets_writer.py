@@ -485,19 +485,33 @@ def verify_no_fabricated_names(source_prompt: str, body: str) -> str:
     return suspect
 
 
-# ── 논평/칼럼체 검출 ─────────────────────────────────────────
-BANNED_STYLE_PATTERNS = [
-    r"보여줍니다", r"보여주고 있습니다", r"보여준다",
-    r"주목됩니다", r"주목된다", r"주목받고 있습니다",
-    r"필요해 보입니다", r"필요할 것으로 보입니다",
-    r"지켜볼 필요가 있습니다", r"기대됩니다",
-]
-
-
-def has_column_style(text: str) -> bool:
-    if not text:
+# ── 논평/칼럼체 검출·합쇼체 변환 ─────────────────────────────
+# 2026-09-08 수정("메인툴에는 도입된 안전장치가 서브툴에 도입이 안된게
+# 있는지 확인해봐"): 이 파일이 style_guard.py 공용화(2026-09-02) 이전부터
+# 있던 로컬 사본을 계속 쓰고 있어서, 그 뒤 style_guard.py에 추가된 패턴
+# (화자 없는 전망/분석형 마무리 문장 7종, 2026-07-28)과 합쇼체(-습니다)
+# 감지·자동변환 기능을 전혀 못 받고 있었다.
+try:
+    from style_guard import has_column_style, has_polite_ending, to_plain_style
+except Exception:
+    BANNED_STYLE_PATTERNS = [
+        r"보여줍니다", r"보여주고 있습니다", r"보여준다",
+        r"주목됩니다", r"주목된다", r"주목받고 있습니다",
+        r"필요해 보입니다", r"필요할 것으로 보입니다",
+        r"지켜볼 필요가 있습니다", r"기대됩니다",
+    ]
+    def has_column_style(text: str) -> bool:
+        return bool(text and any(re.search(p, text) for p in BANNED_STYLE_PATTERNS))
+    def has_polite_ending(text: str) -> bool:
         return False
-    return any(re.search(p, text) for p in BANNED_STYLE_PATTERNS)
+    def to_plain_style(text: str) -> str:
+        return text
+
+try:
+    from content_guard import is_placeholder_response
+except Exception:
+    def is_placeholder_response(title, body):
+        return False
 
 
 # ── 기사 프롬프트 ────────────────────────────────────────────
@@ -670,6 +684,12 @@ def call_gemini_article(prompt: str, max_tokens: int = 3500) -> str | None:
             text = retried
         time.sleep(5)
 
+    if has_polite_ending(text):
+        converted = to_plain_style(text)
+        if converted != text:
+            print("  🔧 합쇼체(-습니다) 감지 → 자동 변환 적용")
+            text = converted
+
     return text
 
 
@@ -703,6 +723,9 @@ def already_published(article_date: date) -> bool:
 def insert_article(title_ko: str, summary_ko: str, data: dict, article_date: date, image_url: str = "") -> int:
     if detect_script_leak(title_ko, summary_ko):
         print(f"  ⚠️ [문자 혼입 감지] 저장 차단: {title_ko[:60]}")
+        return -1
+    if is_placeholder_response(title_ko, summary_ko):
+        print(f"  ❌ Gemini 응답이 실제 기사가 아님(원문 부재 등 거부 응답) → 저장 차단: {title_ko[:60]}")
         return -1
     _unwrapped = unwrap_json_body(summary_ko)
     if _unwrapped is not None:
