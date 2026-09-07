@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-07 08:55",
+  "updated_at": "2026-09-07 09:05",
   "indices": [
     {
       "name": "S&P 500",
@@ -26,14 +26,14 @@
       "name": "코스피",
       "symbol": "^KS11",
       "price": 6687.21,
-      "change_pct": 1.9,
+      "change_pct": 1.64,
       "up": true
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
       "price": 813.5,
-      "change_pct": 1.18,
+      "change_pct": 2.95,
       "up": true
     },
     {
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 15.95,
-      "change_pct": -0.19,
+      "price": 15.96,
+      "change_pct": -0.13,
       "up": false
     }
   ],
@@ -122,14 +122,14 @@
         "name": "코스피",
         "symbol": "^KS11",
         "price": 6687.21,
-        "change_pct": 1.9,
+        "change_pct": 1.64,
         "up": true
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
         "price": 813.5,
-        "change_pct": 1.18,
+        "change_pct": 2.95,
         "up": true
       }
     ],
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 15.95,
-        "change_pct": -0.19,
+        "price": 15.96,
+        "change_pct": -0.13,
         "up": false
       }
     ]
