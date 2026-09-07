@@ -25,15 +25,15 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 6884.52,
-      "change_pct": 4.64,
+      "price": 6886.07,
+      "change_pct": 4.66,
       "up": true
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 827.41,
-      "change_pct": 4.71,
+      "price": 827.56,
+      "change_pct": 4.73,
       "up": true
     },
     {
@@ -60,8 +60,8 @@
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 6656.62,
-      "change_pct": 0.3,
+      "price": 6656.75,
+      "change_pct": 0.31,
       "up": true
     },
     {
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 15.98,
-      "change_pct": -0.01,
+      "price": 15.97,
+      "change_pct": -0.03,
       "up": false
     }
   ],
@@ -121,15 +121,15 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 6884.52,
-        "change_pct": 4.64,
+        "price": 6886.07,
+        "change_pct": 4.66,
         "up": true
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 827.41,
-        "change_pct": 4.71,
+        "price": 827.56,
+        "change_pct": 4.73,
         "up": true
       }
     ],
@@ -158,8 +158,8 @@
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 6656.62,
-        "change_pct": 0.3,
+        "price": 6656.75,
+        "change_pct": 0.31,
         "up": true
       },
       {
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 15.98,
-        "change_pct": -0.01,
+        "price": 15.97,
+        "change_pct": -0.03,
         "up": false
       }
     ]
@@ -198,9 +198,9 @@
     "ANTM": {
       "name": "Aneka Tambang Tbk",
       "symbol": "ANTM.JK",
-      "price": 3110.0,
-      "change_pct": -0.32,
-      "up": false
+      "price": 3120.0,
+      "change_pct": 0.0,
+      "up": true
     },
     "ACB": {
       "name": "Asia Commercial Joint Stock Bank",
