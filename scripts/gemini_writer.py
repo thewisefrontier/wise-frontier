@@ -73,6 +73,14 @@ except Exception:
     def is_multi_topic_body(text: str) -> bool:
         return False
 
+# Gemini의 "원문 부재로 작성 불가" 거부 응답 감지(실사고 id=142060). import
+# 실패해도 죽지 않도록 전부 통과(거부 응답 아님)로 폴백한다.
+try:
+    from content_guard import is_placeholder_response
+except Exception:
+    def is_placeholder_response(title: str, body: str) -> bool:
+        return False
+
 KST = timezone(timedelta(hours=9))
 
 def now_kst() -> datetime:
@@ -83,6 +91,7 @@ load_dotenv()
 
 # RPD 낮은 고품질 모델부터 순서대로 소진시키고, RPD 500인 lite 모델을 마지막 안전망으로 둔다
 GEMINI_MODELS = [
+    "gemini-3.8-flash",
     "gemini-3.7-flash",
     "gemini-3.6-flash",
     "gemini-3.5-flash",
@@ -3167,6 +3176,12 @@ def run():
                 gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel, gen_summary3, gen_investment, gen_keyword_ko, gen_keyword_en = parse_title_and_body(content)
                 gen_body = _ensure_paragraphs(gen_body)
                 new_title = gen_title if gen_title else title[:50]
+
+                if is_placeholder_response(new_title, gen_body or _strip_leaked_labels(content)):
+                    print(f"  ❌ Gemini 응답이 실제 기사가 아님(원문 부재 등 거부 응답) — 병합 스킵: {new_title[:50]}")
+                    time.sleep(CALL_INTERVAL)
+                    continue
+
                 existing_sum = existing_full.get("summary_ko") if existing_full else None
                 note = generate_update_note(existing_sum, gen_body or _strip_leaked_labels(content))
                 update_article(similar_existing["id"], new_title, gen_body or _strip_leaked_labels(content), note=note, countries=gen_countries if gen_countries else None, country=gen_country or "", summary_3lines=gen_summary3 or None, investment_idea=gen_investment or None)
@@ -3206,12 +3221,20 @@ def run():
 원문이 길면 기사도 충분히 길게 쓰세요. 억지로 줄이지 마세요.
 {rules}""")
 
+        # 2026-09-07 실사고(id=142060): _has_enough_material()는 full_text가
+        # 없어도 QUOTA_SOURCE_NAMES 소스는 summary_en(>=200자)만으로 자격을
+        # 주는데, 정작 프롬프트엔 항상 full_text만 넣고 있어 그 경우 [원문]이
+        # 빈 채로 Gemini에 전달됐다. Gemini가 "원문 정보 부재에 따른 기사 작성
+        # 대기"라는 플레이스홀더 응답을 그대로 냈고, 아무 가드도 이를 걸러내지
+        # 못해 그대로 발행됐다. full_text가 비어 있으면 summary_en으로 대체한다.
+        _material_text = a.get('full_text') or a.get('summary_en') or ''
+
         prompt = template.format(
             source=a.get('source', ''),
             today_str=now_kst().strftime('%Y년 %m월 %d일'),
             country=a.get('country', ''),
             category=a.get('category', ''),
-            full_text=a.get('full_text', ''),
+            full_text=_material_text,
             rules=rules,
         )
 
@@ -3220,6 +3243,11 @@ def run():
             gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel, gen_summary3, gen_investment, gen_keyword_ko, gen_keyword_en = parse_title_and_body(content)
             gen_body = _ensure_paragraphs(gen_body)
             full_title = gen_title if gen_title else title[:50]
+
+            if is_placeholder_response(full_title, gen_body or _strip_leaked_labels(content)):
+                print(f"  ❌ Gemini 응답이 실제 기사가 아님(원문 부재 등 거부 응답) — 스킵: {full_title[:50]}")
+                time.sleep(CALL_INTERVAL)
+                continue
 
             final_country = normalize_country(gen_country or a.get("country") or "")
             final_category = gen_category or a.get("category") or "종합"

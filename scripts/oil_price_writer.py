@@ -56,6 +56,7 @@ except Exception:
 
 # ── 설정 ────────────────────────────────────────────────────
 GEMINI_MODELS = [
+    "gemini-3.8-flash",
     "gemini-3.7-flash",
     "gemini-3.6-flash",
     "gemini-3.5-flash",
