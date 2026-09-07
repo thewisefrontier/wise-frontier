@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-07 11:16",
+  "updated_at": "2026-09-07 11:25",
   "indices": [
     {
       "name": "S&P 500",
@@ -25,15 +25,15 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 6887.2,
-      "change_pct": 4.68,
+      "price": 6884.6,
+      "change_pct": 4.64,
       "up": true
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 826.39,
-      "change_pct": 4.58,
+      "price": 826.95,
+      "change_pct": 4.65,
       "up": true
     },
     {
@@ -60,15 +60,15 @@
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 6631.46,
-      "change_pct": -0.08,
-      "up": false
+      "price": 6648.52,
+      "change_pct": 0.18,
+      "up": true
     },
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 6076.96,
-      "change_pct": -0.22,
+      "price": 6080.06,
+      "change_pct": -0.17,
       "up": false
     },
     {
@@ -121,15 +121,15 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 6887.2,
-        "change_pct": 4.68,
+        "price": 6884.6,
+        "change_pct": 4.64,
         "up": true
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 826.39,
-        "change_pct": 4.58,
+        "price": 826.95,
+        "change_pct": 4.65,
         "up": true
       }
     ],
@@ -158,15 +158,15 @@
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 6631.46,
-        "change_pct": -0.08,
-        "up": false
+        "price": 6648.52,
+        "change_pct": 0.18,
+        "up": true
       },
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 6076.96,
-        "change_pct": -0.22,
+        "price": 6080.06,
+        "change_pct": -0.17,
         "up": false
       }
     ],
@@ -198,8 +198,8 @@
     "ANTM": {
       "name": "Aneka Tambang Tbk",
       "symbol": "ANTM.JK",
-      "price": 3090.0,
-      "change_pct": -0.96,
+      "price": 3110.0,
+      "change_pct": -0.32,
       "up": false
     },
     "ACB": {
