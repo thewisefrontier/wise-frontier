@@ -486,8 +486,17 @@ TREND_KEYWORDS = [
     ("에볼라",       "사회",    ["ebola", "에볼라", "hemorrhagic fever", "출혈열", "MVD", "marburg"], "Ebola virus disease"),
     ("mpox",        "사회",    ["mpox", "monkeypox", "원숭이두창"], "Mpox"),
     ("콜레라",       "사회",    ["cholera", "콜레라"], "Cholera"),
-    ("수단 분쟁",    "정치·외교", ["sudan", "rapid support forces", "수단", "다르푸르", "darfur", "khartoum", "신속지원군"], "Sudan conflict"),
-    ("DRC 분쟁",    "정치·외교", ["DRC", "congo", "콩고", "M23", "키부", "kivu"], "Democratic Republic of the Congo conflict"),
+    # 2026-09-07: 국가명(sudan/수단)·지명(다르푸르/darfur/khartoum)만으로도 걸려 있어
+    # 무관한 콜레라 확산 뉴스(trend_콜레라에 별도로 이미 존재하는 내용, id=139084)가
+    # 그대로 섞여 들어와 "내전+무기지원+콜레라"가 한 기사에 뒤섞이는 사고 발견
+    # (id=139470, 사용자 지적). 소말리아·사헬·중앙아프리카와 같은 패턴 — 국가명·
+    # 지명은 빼고 실제 분쟁 행위자·사건으로 좁힌다.
+    ("수단 분쟁",    "정치·외교", ["rapid support forces", "신속지원군", "수단군",
+                                "알부르한", "부르한", "하미다티", "헤메티", "hemedti", "hemeti",
+                                "다르푸르 전쟁", "다르푸르 학살"], "Sudan conflict"),
+    # 2026-09-07: 위와 동일 패턴(국가명 DRC/congo/콩고만으로 매칭) — 아직 실제 사고
+    # 표본은 못 찾았지만 구조가 동일해 선제적으로 좁힌다.
+    ("DRC 분쟁",    "정치·외교", ["M23", "키부", "kivu", "고마", "goma", "FARDC", "르완다 지원"], "Democratic Republic of the Congo conflict"),
     # 2026-08-31: 국가명(somalia/소말리아)만으로도 걸려 있어 인권위 회의·AU
     # 정상회의 참석·민간항공-UN 회담처럼 무관한 행정 기사가 선거무효화·
     # 알샤바브·가뭄 기아 위기와 섞이는 사고 발견(id=116437, 실제 운영
