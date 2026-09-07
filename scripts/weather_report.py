@@ -1493,7 +1493,7 @@ def build_korea_today_report_kma(cities: list, local_now: datetime):
     title = _title_kma_today if _title_kma_today else f"한국, {_weather_phrase(lede, max_temp)}"
     title = _ensure_region_prefix(title, "한국")
     legend = "[지역별 날씨 전망] [오전/오후](최저∼최고기온) | 강수확률"
-    body = lede + "\n\n" + legend + "\n\n" + "\n".join(lines)
+    body = lede + "\n\n" + legend + "\n\n" + "\n\n".join(lines)
     return title, body
 
 
@@ -1609,7 +1609,7 @@ def build_korea_weekend_report_kma(cities: list, local_now: datetime):
     title = _title_kma_wknd if _title_kma_wknd else f"주말 한국, {_weekend_phrase(sat_f, sun_f)}"
     title = _ensure_region_prefix(title, "한국", "주말")
     legend = "다음은 지역별 주말 날씨 전망입니다.\n[토요일, 일요일](최저∼최고기온) <오전 강수확률, 오후 강수확률>"
-    body = lede + "\n\n" + legend + "\n\n" + "\n".join(lines)
+    body = lede + "\n\n" + legend + "\n\n" + "\n\n".join(lines)
     return title, body
 
 
@@ -1830,7 +1830,7 @@ def build_korea_weekly_report_kma(cities: list, local_now: datetime):
     summary = _ensure_kma_attribution(_strip_local_time_kr(summary))
     title = _title_kma_wkly if _title_kma_wkly else f"다음주 한국, {_weekly_phrase(summary, fmt_num(max(tmax_all)) if tmax_all else '?')}"
     title = _ensure_region_prefix(title, "한국", "다음주")
-    body = summary + "\n\n다음은 지역별 날씨 전망입니다.\n\n" + "\n".join(lines)
+    body = summary + "\n\n다음은 지역별 날씨 전망입니다.\n\n" + "\n\n".join(lines)
     return title, body
 
 
@@ -2046,7 +2046,7 @@ def build_today_report(country_name, weather_list, local_now: datetime):
     max_temp = fmt_num(max([k["tmax"] for _, _, k in valid]))
     title = _title_today if _title_today else f"{country_name}, {_weather_phrase(summary, max_temp)}"
     title = _ensure_region_prefix(title, country_name)
-    body = summary + "\n\n" + "\n".join(lines)
+    body = summary + "\n\n" + "\n\n".join(lines)
     return title, body
 
 
@@ -2134,7 +2134,7 @@ def build_weekend_report(country_name, weather_list, local_now: datetime):
     sun_f = "맑음" if sun_info and WEATHER_CODE_KO.get(sun_info.get("code"), "") in ("맑음", "구름조금") else ("비" if sun_info and sun_info.get("precip_prob", 0) >= 50 else "흐림")
     title = _title_wknd if _title_wknd else f"주말 {country_name}, {_weekend_phrase(sat_f, sun_f)}"
     title = _ensure_region_prefix(title, country_name, "주말")
-    body = summary + "\n\n" + "\n".join(lines)
+    body = summary + "\n\n" + "\n\n".join(lines)
     return title, body
 
 
@@ -2218,7 +2218,7 @@ def build_weekly_report(country_name, weather_list, local_now: datetime):
     max_cap = fmt_num(max(tmax_all_cap)) if tmax_all_cap else "?"
     title = _title_wkly if _title_wkly else f"다음주 {country_name}, {_weekly_phrase(summary, max_cap)}"
     title = _ensure_region_prefix(title, country_name, "다음주")
-    body = summary + "\n\n" + "\n".join(lines)
+    body = summary + "\n\n" + "\n\n".join(lines)
     return title, body
 
 
@@ -2262,7 +2262,7 @@ def build_group_today_report(group_name, countries_data, local_now: datetime):
                     # 데이터다(2026-08-25, 사용자 지적: "그냥 데이터만 늘어놨다").
                     tomorrow_key = dates[1] if len(dates) > 1 else None
                     cap_tomorrow = w["daily"].get(tomorrow_key) if tomorrow_key else None
-        country_blocks.append("\n".join(lines))
+        country_blocks.append("\n\n".join(lines))
         capitals_info.append((country_name, cap_name, cap_today, cap_tomorrow))
 
     if not any_success:
@@ -2409,7 +2409,7 @@ def build_group_weekend_report(group_name, countries_data, local_now: datetime):
                     if is_capital:
                         cap_sun = sun_info
             lines.append(format_multi_day_line(label, entries))
-        country_blocks.append("\n".join(lines))
+        country_blocks.append("\n\n".join(lines))
         capitals_info.append((country_name, cap_sat, cap_sun))
 
     if not any_success:
@@ -2504,7 +2504,7 @@ def build_group_weekly_report(group_name, countries_data, local_now: datetime):
                     if is_capital:
                         cap_days.append(info)
             lines.append(format_multi_day_line(label, entries))
-        country_blocks.append("\n".join(lines))
+        country_blocks.append("\n\n".join(lines))
         capitals_ranges.append((country_name, cap_days))
 
     if not any_success:
