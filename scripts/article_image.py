@@ -120,12 +120,17 @@ def fetch_wikimedia_image(query: str):
             if not url:
                 continue
             attribution_required = (meta.get("AttributionRequired", {}).get("value") or "").lower() == "true"
-            credit = ""
             if attribution_required:
                 artist = html.unescape(_HTML_TAG_RE.sub("", meta.get("Artist", {}).get("value", ""))).strip()[:80]
                 license_name = html.unescape(meta.get("LicenseShortName", {}).get("value", ""))
                 credit = f"사진: {artist} ({license_name}, Wikimedia Commons)" if artist \
                     else f"사진: Wikimedia Commons ({license_name})"
+            else:
+                # 표기 의무는 없지만 credit을 빈 문자열로 두면, 위키미디어
+                # 이미지도 R2에 재업로드되어 URL만으로는 출처를 구분 못 하는
+                # 프론트엔드(docs/js/image-credit.js)가 "Pixabay"로 잘못
+                # 추정한다(2026-09-08 발견). 명시적으로 채워서 오추정을 막는다.
+                credit = "이미지 출처: Wikimedia Commons"
             return url, credit
     except Exception as e:
         print(f"  ⚠️ 위키미디어 검색 실패: {e}")
@@ -245,14 +250,23 @@ def fetch_article_image(title: str, body: str, entity: str, call_gemini_fn) -> t
                 # webformatURL(최대 640px) 사용 — largeImageURL(1280px)은 히어로
                 # 이미지 표시 크기(max-height:420px)에 과잉이라 R2 용량만 낭비.
                 raw_url = hits[0].get("webformatURL", "") or hits[0].get("largeImageURL", "")
+                # 2026-09-08 사용자 지적(id=140448, 과테말라 가수 파올라 페를롭
+                # 기사에 무관한 여성 기타리스트 스톡사진이 붙음 — "저 사진이
+                # 파올라 페를롭 본인이 아니니까"): 이 경로는 프롬프트 자체가
+                # "인명·기업명·구체적 지명은 제외"하고 일반 시각 소재 키워드로만
+                # 검색하므로, 이 함수가 고른 사진은 애초에 기사 속 특정 인물·
+                # 사건을 담은 사진일 수가 없다(위키미디어 경로처럼 개체명으로
+                # 찾은 게 아님). 특정 인물 기사에 실리면 마치 본인 사진처럼
+                # 오인될 위험이 있으므로 명확히 면책 문구를 credit에 넣는다.
+                disclaimer = "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)"
                 # Pixabay 이미지 URL은 ~24시간 후 만료되는 임시 URL이라
                 # R2에 영구 저장해서 링크가 안 깨지게 한다(image_store.py 참조).
                 try:
                     from image_store import store_image
-                    return store_image(raw_url, key_hint=f"article_{query}"), ""
+                    return store_image(raw_url, key_hint=f"article_{query}"), disclaimer
                 except Exception as e:
                     print(f"  ⚠️ R2 저장 실패, 원본 URL 사용: {e}")
-                    return raw_url, ""
+                    return raw_url, disclaimer
         else:
             print(f"  ⚠️ Pixabay {res.status_code}: {res.text[:100]}")
     except Exception as e:
