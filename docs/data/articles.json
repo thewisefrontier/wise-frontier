@@ -1,5 +1,40 @@
 [
   {
+    "id": 141385,
+    "title_en": "북미, 흐린 날씨 속 일교차 주의…워싱턴 28도",
+    "title_ko": "북미, 흐린 날씨 속 일교차 주의…워싱턴 28도",
+    "summary_ko": "7일(현지시간) 북미 주요국 수도 지역은 최저기온 12도에서 최고기온 28도의 기온 범위를 기록했다. 미국 워싱턴DC는 최저 16도, 최고 28도로 나타났으며 날씨는 흐렸다. 강수확률은 0%이며 강수량은 0.0mm를 기록했고 자외선지수는 6.6이다. 캐나다 오타와는 최저 12도, 최고 24도로 흐린 날씨를 보였다. 강수확률은 2%, 강수량은 0.0mm이며 자외선지수는 5.7로 집계됐다.\n\n북미 수도 중 가장 더운 곳은 28도를 기록한 미국의 워싱턴DC이며, 가장 선선한 곳은 24도를 기록한 캐나다의 오타와다. 워싱턴DC는 오타와보다",
+    "url": "internal://weather_group_북미_today20260907",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_북미_today20260907",
+    "region": "north_america",
+    "country": "북미",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-07 18:11",
+    "countries": [
+      "미국",
+      "캐나다"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_united_states_20260907.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-07T18:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-07 18:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 141383,
     "title_en": "Ebola Surges in DRC's North Kivu as Political and Social Tensions Deepen",
     "title_ko": "콩고민주공화국 북키부 지역 에볼라 확산 및 정치·사회적 갈등 심화",
@@ -240,40 +275,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 140447,
-    "title_en": "Guatemala City Warns of Major Traffic Delays Ahead of Protests Against Rising Fuel and Food Prices",
-    "title_ko": "과테말라시티, 연료 및 생필품 가격 인상 반대 대규모 행진 예고",
-    "summary_ko": "지속적인 연료 가격 상승에 항의하기 위해 과테말라 사회 각계가 수도 과테말라시티에서 대규모 이동 시위를 예고함에 따라 7일(현지시간) 교통 당국이 혼잡 가중을 경고하고 나섰다.\n\n토토니카판의 48개 칸톤(Los 48 Cantones de Totonicapán) 이사회 및 지역 촌장 협의회는 오는 8일 수도에서 평화 행진을 개최한다고 발표했다. 이들은 끊임없이 오르는 연료비와 기본 식료품 가격 상승에 항의하기 위해 이번 집회를 기획했으며, 원주민 지도부는 시위가 순수한 평화 행진으로 진행될 예정이며 시립 도로와 지방 도로의 어떠한 도",
-    "url": "internal://solo_20260907_a2bcf6ed",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "solo_20260907_a2bcf6ed",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-07 11:27",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_protest_march_fuel_station_grocery_store_prices.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-07T11:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-07 11:27",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": true,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
     "id": 140446,
     "title_en": "Oasis Reunion Documentary Premieres at Venice Film Festival",
     "title_ko": "오아시스 재결합 다룬 다큐멘터리, 베니스영화제서 첫 공개",
@@ -305,6 +306,40 @@
     ],
     "byline": "뉴스파이널 편집국",
     "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
+    "id": 140447,
+    "title_en": "Guatemala City Warns of Major Traffic Delays Ahead of Protests Against Rising Fuel and Food Prices",
+    "title_ko": "과테말라시티, 연료 및 생필품 가격 인상 반대 대규모 행진 예고",
+    "summary_ko": "지속적인 연료 가격 상승에 항의하기 위해 과테말라 사회 각계가 수도 과테말라시티에서 대규모 이동 시위를 예고함에 따라 7일(현지시간) 교통 당국이 혼잡 가중을 경고하고 나섰다.\n\n토토니카판의 48개 칸톤(Los 48 Cantones de Totonicapán) 이사회 및 지역 촌장 협의회는 오는 8일 수도에서 평화 행진을 개최한다고 발표했다. 이들은 끊임없이 오르는 연료비와 기본 식료품 가격 상승에 항의하기 위해 이번 집회를 기획했으며, 원주민 지도부는 시위가 순수한 평화 행진으로 진행될 예정이며 시립 도로와 지방 도로의 어떠한 도",
+    "url": "internal://solo_20260907_a2bcf6ed",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "solo_20260907_a2bcf6ed",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-07 11:27",
+    "countries": [
+      "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_protest_march_fuel_station_grocery_store_prices.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-07T11:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-07 11:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": true,
     "source_published_at": null,
     "source_data": null,
     "image_credit": "",
@@ -490,42 +525,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 138097,
-    "title_en": "Mpox Spreads Across African Nations While Others Declare End to Outbreaks, Strain Public Health Systems",
-    "title_ko": "아프리카 각국서 엠폭스 확산 및 종식 교차... 방역 체계 혼선 지속",
-    "summary_ko": "콩고민주공화국 카사이주의 루에보 보건 구역에서 엠폭스(Mpox) 의심 사례 22건과 사망 3건이 보고되었다. 해당 지역 보건 책임자인 모이스 루쿠나는 환자들의 임상 증상이 해당 질병과 일치한다고 밝혔다. 보건 당국은 환자들로부터 시료를 채취해 국립생의학연구소(INRB)로 보내 분석을 의뢰했으나, 아직 결과는 나오지 않았다. 루쿠나 구역장은 실험실 확정 전까지는 이를 확진 사례가 아닌 의심 사례로 분류한다고 설명했다. 이와 함께 당국은 결과가 나올 때까지 주민들에게 주의와 경계를 당부했다.\n\n말라위 보건 당국은 콜레라와 엠폭스 유행의",
-    "url": "internal://trend_mpox_2026090618",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "trend_mpox",
-    "region": "africa",
-    "country": "콩고민주공화국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-07 09:05",
-    "countries": [
-      "콩고민주공화국",
-      "말라위",
-      "중앙아프리카공화국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_mpox_daily_confirmed_cases.jpg",
-    "view_count": 1,
-    "first_published_at": "2026-09-06T18:21:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-06 18:21",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "사진: OWID (CC BY 4.0, Wikimedia Commons)",
-    "continuation_of_id": null
-  },
-  {
     "id": 137672,
     "title_en": "Fuel Tanker Explosion on Western Iran Road Leaves 11 Dead",
     "title_ko": "이란 서부 도로에서 연료 탱크로리 폭발해 11명 사망",
@@ -559,6 +558,42 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
+    "id": 138097,
+    "title_en": "Mpox Spreads Across African Nations While Others Declare End to Outbreaks, Strain Public Health Systems",
+    "title_ko": "아프리카 각국서 엠폭스 확산 및 종식 교차... 방역 체계 혼선 지속",
+    "summary_ko": "콩고민주공화국 카사이주의 루에보 보건 구역에서 엠폭스(Mpox) 의심 사례 22건과 사망 3건이 보고되었다. 해당 지역 보건 책임자인 모이스 루쿠나는 환자들의 임상 증상이 해당 질병과 일치한다고 밝혔다. 보건 당국은 환자들로부터 시료를 채취해 국립생의학연구소(INRB)로 보내 분석을 의뢰했으나, 아직 결과는 나오지 않았다. 루쿠나 구역장은 실험실 확정 전까지는 이를 확진 사례가 아닌 의심 사례로 분류한다고 설명했다. 이와 함께 당국은 결과가 나올 때까지 주민들에게 주의와 경계를 당부했다.\n\n말라위 보건 당국은 콜레라와 엠폭스 유행의",
+    "url": "internal://trend_mpox_2026090618",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "trend_mpox",
+    "region": "africa",
+    "country": "콩고민주공화국",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-07 09:05",
+    "countries": [
+      "콩고민주공화국",
+      "말라위",
+      "중앙아프리카공화국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_mpox_daily_confirmed_cases.jpg",
+    "view_count": 1,
+    "first_published_at": "2026-09-06T18:21:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-06 18:21",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "사진: OWID (CC BY 4.0, Wikimedia Commons)",
     "continuation_of_id": null
   },
   {
@@ -930,6 +965,42 @@
     "continuation_of_id": null
   },
   {
+    "id": 139853,
+    "title_en": "동아시아, 도쿄 폭우 속 베이징 늦더위·울란바토르 쌀쌀",
+    "title_ko": "동아시아, 도쿄 폭우 속 베이징 늦더위·울란바토르 쌀쌀",
+    "summary_ko": "7일(현지시간) 동아시아 주요국 수도는 최저기온 2°C에서 최고기온 31°C 사이의 폭넓은 기온 분포를 보이며 지역별로 극심한 날씨 편차를 나타냈다. 세계 곳곳에서 이어진 기상 충격의 여파 속에서 각국 수도는 아시아 지역의 물폭탄과 극단적인 기온 차를 고스란히 반영하며 뚜렷한 대조를 이루었다.\n\n가장 더운 곳은 최고기온 31°C, 최저기온 20°C를 기록한 중국 베이징으로 강한 이슬비가 내렸으며 강수확률은 65%, 강수량은 5.8mm, 자외선지수는 6.0으로 집계됐다. 베이징의 내일 최고기온은 21°C로 급격히 떨어질 전망이다. 반",
+    "url": "internal://weather_group_동아시아_today20260907",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_동아시아_today20260907",
+    "region": "east_asia",
+    "country": "동아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-07 06:26",
+    "countries": [
+      "일본",
+      "중국",
+      "몽골"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_china_20260907.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-07T06:26:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-07 06:26",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 139854,
     "title_en": "Solana Rises 2.37% as Network Activity Recovers",
     "title_ko": "[가상자산 동향] 솔라나 2.37% 상승…네트워크 활성도 회복 영향",
@@ -997,42 +1068,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 139853,
-    "title_en": "동아시아, 도쿄 폭우 속 베이징 늦더위·울란바토르 쌀쌀",
-    "title_ko": "동아시아, 도쿄 폭우 속 베이징 늦더위·울란바토르 쌀쌀",
-    "summary_ko": "7일(현지시간) 동아시아 주요국 수도는 최저기온 2°C에서 최고기온 31°C 사이의 폭넓은 기온 분포를 보이며 지역별로 극심한 날씨 편차를 나타냈다. 세계 곳곳에서 이어진 기상 충격의 여파 속에서 각국 수도는 아시아 지역의 물폭탄과 극단적인 기온 차를 고스란히 반영하며 뚜렷한 대조를 이루었다.\n\n가장 더운 곳은 최고기온 31°C, 최저기온 20°C를 기록한 중국 베이징으로 강한 이슬비가 내렸으며 강수확률은 65%, 강수량은 5.8mm, 자외선지수는 6.0으로 집계됐다. 베이징의 내일 최고기온은 21°C로 급격히 떨어질 전망이다. 반",
-    "url": "internal://weather_group_동아시아_today20260907",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_동아시아_today20260907",
-    "region": "east_asia",
-    "country": "동아시아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-07 06:26",
-    "countries": [
-      "일본",
-      "중국",
-      "몽골"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_china_20260907.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-07T06:26:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-07 06:26",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
     "continuation_of_id": null
   },
   {
@@ -2041,40 +2076,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 137373,
-    "title_en": "Guatemala Extends Monitoring to 377,000 Farming Households Amid Drought and Crop Losses",
-    "title_ko": "과테말라 가뭄과 장기 건기 속 농작물 피해 확산…농식품부, 37만여 농가 모니터링",
-    "summary_ko": "과테말라에서 강수량 부족과 장기화된 건기로 인해 농작물 피해가 확산하고 있는 가운데, 농업축산식품부(Maga)가 2026년 기후 변동성에 대응하기 위한 모니터링 결과를 공개했다. 농업축산식품부는 6일(현지시간) 발표를 통해 기후 변동성으로 인한 잠재적 피해 대상이 37만 7575가구의 생산자와 17만 8336헥타르 규모의 농경지에 이른다고 밝혔다.\n\n농업축산식품부는 농업 기후 조건을 상시 모니터링하여 가뭄과 고온, 집중호우에 취약한 지역을 식별하고 예방 조치와 지원을 유도하고 있다. 영토 분석 결과 매우 높은 취약성을 가진 지역은 ",
-    "url": "internal://solo_20260906_ec99f090",
-    "source": "NewsFinal",
-    "category": "자원·에너지",
-    "subcategory": "solo_20260906_ec99f090",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-06 13:02",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_drought_affected_farmland_withered_crops_dried_agric.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-06T13:02:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-06 13:02",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
     "id": 137374,
     "title_en": "Eswatini Stock Exchange Unveils 'Kwakhanya 2030' Capital Market Strategy",
     "title_ko": "에스와티니증권거래소, 자본시장 전략 콰칸야 2030 발표",
@@ -2093,6 +2094,40 @@
     ],
     "is_published": true,
     "image_url": "https://pixabay.com/get/g7eb7cc33ce779f35eaec1959b0a99e9959d414335da238c1bb508921cc5aa4af75676a030c7660a8c42fee48b5695346_640.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-06T13:02:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-06 13:02",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
+    "id": 137373,
+    "title_en": "Guatemala Extends Monitoring to 377,000 Farming Households Amid Drought and Crop Losses",
+    "title_ko": "과테말라 가뭄과 장기 건기 속 농작물 피해 확산…농식품부, 37만여 농가 모니터링",
+    "summary_ko": "과테말라에서 강수량 부족과 장기화된 건기로 인해 농작물 피해가 확산하고 있는 가운데, 농업축산식품부(Maga)가 2026년 기후 변동성에 대응하기 위한 모니터링 결과를 공개했다. 농업축산식품부는 6일(현지시간) 발표를 통해 기후 변동성으로 인한 잠재적 피해 대상이 37만 7575가구의 생산자와 17만 8336헥타르 규모의 농경지에 이른다고 밝혔다.\n\n농업축산식품부는 농업 기후 조건을 상시 모니터링하여 가뭄과 고온, 집중호우에 취약한 지역을 식별하고 예방 조치와 지원을 유도하고 있다. 영토 분석 결과 매우 높은 취약성을 가진 지역은 ",
+    "url": "internal://solo_20260906_ec99f090",
+    "source": "NewsFinal",
+    "category": "자원·에너지",
+    "subcategory": "solo_20260906_ec99f090",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-06 13:02",
+    "countries": [
+      "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_drought_affected_farmland_withered_crops_dried_agric.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-06T13:02:00",
     "update_log": [
@@ -3894,6 +3929,40 @@
     "continuation_of_id": null
   },
   {
+    "id": 134224,
+    "title_en": "Antigua GFC Edges Aurora FC to Reclaim Apertura 2026 Lead",
+    "title_ko": "안티구아 GFC, 아우로라 FC 꺾고 아페르투라 2026 선두 복귀",
+    "summary_ko": "과테말라 프로축구 아페르투라 2026 토너먼트에서 안티구아 GFC가 5일(현지시간) 펜사티보 경기장에서 열린 개막 7라운드 경기에서 아우로라 FC를 상대로 2대 1 승리를 거뒀다.\n\n양 팀은 경기 초반부터 공방전을 벌이며 기회를 노렸으나 안티구아 GFC의 거센 공세는 아우로라 FC의 골키퍼 디에고 나바스의 선방에 막혀 쉽게 결실을 맺지 못했다. 팽팽하던 균형은 후반 들어 깨졌으며 후반 6분 케빈 로페스가 강력한 프리킥 슈팅으로 골키퍼의 실책을 유도해 선제골을 터뜨렸다.\n\n반격에 나선 아우로라 FC는 후반 26분 카를로스 몬테로스의 ",
+    "url": "internal://solo_20260905_0ba51e43",
+    "source": "NewsFinal",
+    "category": "글로벌",
+    "subcategory": "solo_20260905_0ba51e43",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-05 13:35",
+    "countries": [
+      "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_football_stadium_soccer_match_soccer_players.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T13:35:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 13:35",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
     "id": 134225,
     "title_en": "Israeli Military Issues Emergency Order to Seize Palestinian Land in West Bank",
     "title_ko": "이스라엘군, 요르단강 서안 제닌 남동쪽 팔레스타인 토지 긴급 압류",
@@ -3913,40 +3982,6 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_military_checkpoint_barbed_wire_fence_occupied_terri.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T13:35:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 13:35",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 134224,
-    "title_en": "Antigua GFC Edges Aurora FC to Reclaim Apertura 2026 Lead",
-    "title_ko": "안티구아 GFC, 아우로라 FC 꺾고 아페르투라 2026 선두 복귀",
-    "summary_ko": "과테말라 프로축구 아페르투라 2026 토너먼트에서 안티구아 GFC가 5일(현지시간) 펜사티보 경기장에서 열린 개막 7라운드 경기에서 아우로라 FC를 상대로 2대 1 승리를 거뒀다.\n\n양 팀은 경기 초반부터 공방전을 벌이며 기회를 노렸으나 안티구아 GFC의 거센 공세는 아우로라 FC의 골키퍼 디에고 나바스의 선방에 막혀 쉽게 결실을 맺지 못했다. 팽팽하던 균형은 후반 들어 깨졌으며 후반 6분 케빈 로페스가 강력한 프리킥 슈팅으로 골키퍼의 실책을 유도해 선제골을 터뜨렸다.\n\n반격에 나선 아우로라 FC는 후반 26분 카를로스 몬테로스의 ",
-    "url": "internal://solo_20260905_0ba51e43",
-    "source": "NewsFinal",
-    "category": "글로벌",
-    "subcategory": "solo_20260905_0ba51e43",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-05 13:35",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_football_stadium_soccer_match_soccer_players.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T13:35:00",
     "update_log": [
@@ -3998,6 +4033,40 @@
     "continuation_of_id": null
   },
   {
+    "id": 134221,
+    "title_en": "Guatemala Labor Ministry Clarifies Pro-Rata Severance, Benefits Required Even During Probation",
+    "title_ko": "과테말라 노동부, 수습 기간 퇴직 시에도 비례 퇴직금 지급 의무 명시",
+    "summary_ko": "과테말라 노동사회보장부(Mintrab) 근로감독관들은 고용 관계가 종료될 때 근로 기간이 단 몇 주에 불과하거나 수습 기간 중이더라도 고용주는 이에 상응하는 비례적 수당을 정산금에 포함해야 한다고 5일(현지시간) 밝혔다. 이는 휴가, 연말 보너스인 아기날도, 그리고 보너스 14를 포함하는 조치다.\n\n최근 한 달에서 한 달 반 동안 근무하거나 두 달의 수습 기간을 마친 직후 해고된 과테말라 근로자들이 본지에 제보한 바에 따르면, 이들 기업은 계약 종료를 통보하면서 30일 후에 정산 수표를 받게 될 것이라고 안내했다. 그러나 일부 근로",
+    "url": "internal://solo_20260905_358e5d17",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "solo_20260905_358e5d17",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-05 13:33",
+    "countries": [
+      "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_employment_contract_workplace_office_worker.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T13:33:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 13:33",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
     "id": 134222,
     "title_en": "Missing Belizean Found on Guatemala Street Reunited with Family After 13 Hours Amid Communication Hurdles",
     "title_ko": "과테말라 거리서 발견된 실종 벨리즈인, 13시간 만에 가족 품으로…소통 한계 지적",
@@ -4017,40 +4086,6 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_homeless_person_city_street_family_reunion.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T13:33:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 13:33",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 134221,
-    "title_en": "Guatemala Labor Ministry Clarifies Pro-Rata Severance, Benefits Required Even During Probation",
-    "title_ko": "과테말라 노동부, 수습 기간 퇴직 시에도 비례 퇴직금 지급 의무 명시",
-    "summary_ko": "과테말라 노동사회보장부(Mintrab) 근로감독관들은 고용 관계가 종료될 때 근로 기간이 단 몇 주에 불과하거나 수습 기간 중이더라도 고용주는 이에 상응하는 비례적 수당을 정산금에 포함해야 한다고 5일(현지시간) 밝혔다. 이는 휴가, 연말 보너스인 아기날도, 그리고 보너스 14를 포함하는 조치다.\n\n최근 한 달에서 한 달 반 동안 근무하거나 두 달의 수습 기간을 마친 직후 해고된 과테말라 근로자들이 본지에 제보한 바에 따르면, 이들 기업은 계약 종료를 통보하면서 30일 후에 정산 수표를 받게 될 것이라고 안내했다. 그러나 일부 근로",
-    "url": "internal://solo_20260905_358e5d17",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "solo_20260905_358e5d17",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-05 13:33",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_employment_contract_workplace_office_worker.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T13:33:00",
     "update_log": [
@@ -4340,41 +4375,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 133888,
-    "title_en": "Green Mamba Faces Scheduling Dilemma Ahead of African Tournament",
-    "title_ko": "아프리카대회 앞둔 그린 맘바, 국내 컵대회 일정 겹쳐 딜레마",
-    "summary_ko": "총에너지스 아프리카축구연맹(CAF) 컨페더레이션컵 출전을 앞둔 그린 맘바가 4일(현지시간) 기준 국내 컵대회 일정과 겹치면서 극심한 경기 밀림 현상에 직면했다.\n\n만지니의 마주소 스포츠 센터에서 전날 열린 8벳 트레이드 페어 컵 16강전에서 그린 맘바는 레드 리노스를 3대 0으로 완파했다. 당초 이 경기는 화요일에 열릴 예정이었으나 레드 리노스가 불참하면서 취소됐고, 이후 에스와티니 축구협회 징계위원회가 레드 리노스의 손을 들어주면서 전날로 재경기 일정이 잡혔다.\n\n경기 시작 5분 만에 그린 맘바의 데뷔전 선수 마차웨 을라미니가 올",
-    "url": "internal://solo_20260905_f474daa6",
-    "source": "NewsFinal",
-    "category": "글로벌",
-    "subcategory": "solo_20260905_f474daa6",
-    "region": "global",
-    "country": "에스와티니",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-05 10:36",
-    "countries": [
-      "에스와티니",
-      "앙골라"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_football_stadium_soccer_match_soccer_players.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T10:36:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 10:36",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
     "id": 133887,
     "title_en": "Qatar Rejects Iran’s Justifications for Territorial Attacks in Letter to UN Security Council",
     "title_ko": "카타르, 이란의 영토 공격 정당화 주장 반박…유엔 안보리에 서한 발송",
@@ -4395,6 +4395,41 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_united_nations_diplomatic_meeting_official_letter.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T10:36:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 10:36",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
+    "id": 133888,
+    "title_en": "Green Mamba Faces Scheduling Dilemma Ahead of African Tournament",
+    "title_ko": "아프리카대회 앞둔 그린 맘바, 국내 컵대회 일정 겹쳐 딜레마",
+    "summary_ko": "총에너지스 아프리카축구연맹(CAF) 컨페더레이션컵 출전을 앞둔 그린 맘바가 4일(현지시간) 기준 국내 컵대회 일정과 겹치면서 극심한 경기 밀림 현상에 직면했다.\n\n만지니의 마주소 스포츠 센터에서 전날 열린 8벳 트레이드 페어 컵 16강전에서 그린 맘바는 레드 리노스를 3대 0으로 완파했다. 당초 이 경기는 화요일에 열릴 예정이었으나 레드 리노스가 불참하면서 취소됐고, 이후 에스와티니 축구협회 징계위원회가 레드 리노스의 손을 들어주면서 전날로 재경기 일정이 잡혔다.\n\n경기 시작 5분 만에 그린 맘바의 데뷔전 선수 마차웨 을라미니가 올",
+    "url": "internal://solo_20260905_f474daa6",
+    "source": "NewsFinal",
+    "category": "글로벌",
+    "subcategory": "solo_20260905_f474daa6",
+    "region": "global",
+    "country": "에스와티니",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-05 10:36",
+    "countries": [
+      "에스와티니",
+      "앙골라"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_football_stadium_soccer_match_soccer_players.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T10:36:00",
     "update_log": [
@@ -4912,6 +4947,38 @@
     "continuation_of_id": null
   },
   {
+    "id": 133064,
+    "title_en": "Bitcoin falls 2.23% as U.S. labor market uncertainty weighs on sentiment",
+    "title_ko": "[가상자산 동향] 비트코인 2.23% 하락…미 고용지표 경계감 확산",
+    "summary_ko": "◆ 가격 동향\n\n5일 06:27(한국시간) 야후 파이낸스에 따르면 비트코인 가격은 79783.08달러로 전일 대비 2.23% 하락했다. 이번 하락세는 미국 노동시장의 불확실성이 커지면서 위험 자산에 대한 투자 심리가 위축된 결과다. 최근 발표된 미국 고용 지표가 시장의 예상치를 하회하거나 상회하는 등 혼조세를 보이면서 연방준비제도의 금리 인하 경로에 대한 의구심이 시장에 반영됐다. 거시경제적 불확실성이 가중되자 기관 투자자들은 차익 실현 매물을 출회하며 포트폴리오를 조정했다. 또한 미국 증권거래위원회의 가상자산 관련 규제 강화 움직",
+    "url": "internal://crypto_news_2026-09-05",
+    "source": "NewsFinal",
+    "category": "금융",
+    "subcategory": "가상자산동향_crypto",
+    "region": "global",
+    "country": "글로벌",
+    "country_flag": "🌐",
+    "score": 1,
+    "created_at": "2026-09-05 06:27",
+    "countries": [],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_09_05.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T06:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 06:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 133063,
     "title_en": "Nvidia Shares Rise 0.84% Amid Anticipation for Broadcom Earnings",
     "title_ko": "[종목 동향] 엔비디아 주가 0.84% 상승…브로드컴 실적 발표 앞둔 기대감",
@@ -4930,38 +4997,6 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/stock_news_2026_09_04.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T06:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 06:27",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 133064,
-    "title_en": "Bitcoin falls 2.23% as U.S. labor market uncertainty weighs on sentiment",
-    "title_ko": "[가상자산 동향] 비트코인 2.23% 하락…미 고용지표 경계감 확산",
-    "summary_ko": "◆ 가격 동향\n\n5일 06:27(한국시간) 야후 파이낸스에 따르면 비트코인 가격은 79783.08달러로 전일 대비 2.23% 하락했다. 이번 하락세는 미국 노동시장의 불확실성이 커지면서 위험 자산에 대한 투자 심리가 위축된 결과다. 최근 발표된 미국 고용 지표가 시장의 예상치를 하회하거나 상회하는 등 혼조세를 보이면서 연방준비제도의 금리 인하 경로에 대한 의구심이 시장에 반영됐다. 거시경제적 불확실성이 가중되자 기관 투자자들은 차익 실현 매물을 출회하며 포트폴리오를 조정했다. 또한 미국 증권거래위원회의 가상자산 관련 규제 강화 움직",
-    "url": "internal://crypto_news_2026-09-05",
-    "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "가상자산동향_crypto",
-    "region": "global",
-    "country": "글로벌",
-    "country_flag": "🌐",
-    "score": 1,
-    "created_at": "2026-09-05 06:27",
-    "countries": [],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_09_05.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T06:27:00",
     "update_log": [
@@ -6391,6 +6426,41 @@
     "continuation_of_id": null
   },
   {
+    "id": 129718,
+    "title_en": "US Warns Threats to Democracy as Security Ties With Guatemala Deepen",
+    "title_ko": "미국, 과테말라와 안보 협력 강화 속 민주주의 위협 세력에 무관용 경고",
+    "summary_ko": "미국은 민주주의 제도와 안보를 위협하는 세력에 대해 비자 추가 취소 등 지속적인 조치를 취할 것이라고 3일(현지시간) 밝혔다. 주과테말라 미국 대사관은 아나 퀸타나 로베트 미국 국무부 중미 담당 부차관의 과테말라 방문을 계기로 이 같은 입장을 공개했다.\n\n방문 기간 아나 퀸타나 로베트 부차관은 베르나르도 아레발로 과테말라 대통령, 헨리 사엔스 라모스 국방장관, 가브리엘 에스투아도 가르시아 루나 검찰총장 겸 법무부 장관 등 고위 관료들과 연이어 회담을 가졌으며 양국 간 안보 및 협력 방안을 논의했다. 미국 대사관 측은 양국이 마약 밀",
+    "url": "internal://solo_20260904_624e0630",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "solo_20260904_624e0630",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-04 11:07",
+    "countries": [
+      "과테말라",
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_diplomatic_meeting_government_building_security_coop.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-04T11:07:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-04 11:07",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
     "id": 129717,
     "title_en": "Texas Court Acquits and Releases Former Guatemalan Aide on Cocaine Trafficking Charges",
     "title_ko": "텍사스 법원, 코카인 밀매 혐의 과테말라 출신 전직 보좌관 무죄 석방",
@@ -6412,41 +6482,6 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_courthouse_law_court_judge_gavel.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T11:07:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 11:07",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 129718,
-    "title_en": "US Warns Threats to Democracy as Security Ties With Guatemala Deepen",
-    "title_ko": "미국, 과테말라와 안보 협력 강화 속 민주주의 위협 세력에 무관용 경고",
-    "summary_ko": "미국은 민주주의 제도와 안보를 위협하는 세력에 대해 비자 추가 취소 등 지속적인 조치를 취할 것이라고 3일(현지시간) 밝혔다. 주과테말라 미국 대사관은 아나 퀸타나 로베트 미국 국무부 중미 담당 부차관의 과테말라 방문을 계기로 이 같은 입장을 공개했다.\n\n방문 기간 아나 퀸타나 로베트 부차관은 베르나르도 아레발로 과테말라 대통령, 헨리 사엔스 라모스 국방장관, 가브리엘 에스투아도 가르시아 루나 검찰총장 겸 법무부 장관 등 고위 관료들과 연이어 회담을 가졌으며 양국 간 안보 및 협력 방안을 논의했다. 미국 대사관 측은 양국이 마약 밀",
-    "url": "internal://solo_20260904_624e0630",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "solo_20260904_624e0630",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-04 11:07",
-    "countries": [
-      "과테말라",
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_diplomatic_meeting_government_building_security_coop.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-04T11:07:00",
     "update_log": [
@@ -6743,6 +6778,47 @@
     "continuation_of_id": null
   },
   {
+    "id": 127487,
+    "title_en": "Romania, EU Member States Issue Joint Response to Russia Following Leipzig Airport Drone Incidents",
+    "title_ko": "독일 라이프치히 공항 드론 사건 이어져 루마니아 등 유럽연합 회원국 러시아에 공동 대응",
+    "summary_ko": "[업데이트]\n■ 9월 4일 08:17 — 한편 독일 당국은 라이프치히 공항 사건과 별개로 브란덴버그주와 노르트라인베스트팔렌주에서 발생한 전력망 대상 조직적인 방해 행위 가능성에 대한 조사를 진행하고 있다. 브란덴버그주 얀슈발데 발전소 인근에서 전력망 공격에 대한 책임을 주장하는 편지가 발견되었으나, 경찰은 아직 그 진위를 확인하거나 반박하지 못한 상태다. 경찰은 3일 오전 터노프프레이라크 변전소에서 조사를 이어갔으며 이로 인해 50번 지방도가 몇 시간 동안 다시 통제되었다. 수사 당국은 이번 전력망 파괴 행위와 관련해 테러 단체 결",
+    "url": "internal://realtrend_러시아의_괴테인스티투트(Goethe-Institut)_지사_폐쇄_2026090322",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "realtrend_러시아의_괴테인스티투트(Goethe-",
+    "region": "africa",
+    "country": "루마니아",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-04 08:17",
+    "countries": [
+      "루마니아",
+      "독일",
+      "러시아",
+      "우크라이나"
+    ],
+    "is_published": true,
+    "image_url": null,
+    "view_count": 0,
+    "first_published_at": "2026-09-03T22:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-03 22:27",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-09-04 08:17",
+        "note": "독일 당국, 전력망 대상 조직적 방해 행위 조사 중"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 128674,
     "title_en": "Democratic Republic of Congo Rebels Establish Parallel Government in East as Kinshasa Steps Up Legal and Administrative Offensive",
     "title_ko": "콩고민주공화국 동부 분쟁 속 반군 평행 정부 수립과 킨샤사의 사법·행정 공세",
@@ -6792,47 +6868,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: Foreign, Commonwealth & Development Office (CC BY 4.0, Wikimedia Commons)",
-    "continuation_of_id": null
-  },
-  {
-    "id": 127487,
-    "title_en": "Romania, EU Member States Issue Joint Response to Russia Following Leipzig Airport Drone Incidents",
-    "title_ko": "독일 라이프치히 공항 드론 사건 이어져 루마니아 등 유럽연합 회원국 러시아에 공동 대응",
-    "summary_ko": "[업데이트]\n■ 9월 4일 08:17 — 한편 독일 당국은 라이프치히 공항 사건과 별개로 브란덴버그주와 노르트라인베스트팔렌주에서 발생한 전력망 대상 조직적인 방해 행위 가능성에 대한 조사를 진행하고 있다. 브란덴버그주 얀슈발데 발전소 인근에서 전력망 공격에 대한 책임을 주장하는 편지가 발견되었으나, 경찰은 아직 그 진위를 확인하거나 반박하지 못한 상태다. 경찰은 3일 오전 터노프프레이라크 변전소에서 조사를 이어갔으며 이로 인해 50번 지방도가 몇 시간 동안 다시 통제되었다. 수사 당국은 이번 전력망 파괴 행위와 관련해 테러 단체 결",
-    "url": "internal://realtrend_러시아의_괴테인스티투트(Goethe-Institut)_지사_폐쇄_2026090322",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "realtrend_러시아의_괴테인스티투트(Goethe-",
-    "region": "africa",
-    "country": "루마니아",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-04 08:17",
-    "countries": [
-      "루마니아",
-      "독일",
-      "러시아",
-      "우크라이나"
-    ],
-    "is_published": true,
-    "image_url": null,
-    "view_count": 0,
-    "first_published_at": "2026-09-03T22:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-03 22:27",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-09-04 08:17",
-        "note": "독일 당국, 전력망 대상 조직적 방해 행위 조사 중"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
     "continuation_of_id": null
   },
   {
@@ -7183,40 +7218,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 128729,
-    "title_en": "Apple Shares Rise 1.00% Amid Improving Technical Indicators",
-    "title_ko": "[종목 동향] 애플 주가 1.00% 상승…기술적 지표 개선세",
-    "summary_ko": "◆ 주가 동향\n나스닥에서 애플 주가는 3일(현지시간) 전일 대비 1.00% 상승한 328.21달러에 장을 마감했다. 최근 시장에서는 애플 주가가 지난 20년 동안 나타나지 않았던 이례적인 기술적 패턴을 보이고 있다는 분석이 제기되었다. 월가 애널리스트들은 애플의 주간 이동평균선이 장기 추세선을 상향 돌파하며 강력한 모멘텀을 형성하고 있다는 점에 주목했다. 특히 아이폰 18 시리즈의 초기 판매 데이터가 주요 시장에서 예상치를 상회하면서 투자 심리가 개선되었다. 또한, 애플이 추진 중인 자체 AI 모델 '애플 인텔리전스'의 서비스 범위",
-    "url": "internal://stock_news_2026-09-03",
-    "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "종목동향",
-    "region": "global",
-    "country": "미국",
-    "country_flag": "🇺🇸",
-    "score": 1,
-    "created_at": "2026-09-04 06:27",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/stock_news_2026_09_03.jpg",
-    "view_count": 1,
-    "first_published_at": "2026-09-04T06:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 06:27",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
     "id": 128730,
     "title_en": "한국, 전국·맑은 가운데 31도 안팎 늦더위…제주 강풍",
     "title_ko": "한국, 전국·맑은 가운데 31도 안팎 늦더위…제주 강풍",
@@ -7236,6 +7237,40 @@
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20260904.jpg",
     "view_count": 0,
+    "first_published_at": "2026-09-04T06:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-04 06:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 128729,
+    "title_en": "Apple Shares Rise 1.00% Amid Improving Technical Indicators",
+    "title_ko": "[종목 동향] 애플 주가 1.00% 상승…기술적 지표 개선세",
+    "summary_ko": "◆ 주가 동향\n나스닥에서 애플 주가는 3일(현지시간) 전일 대비 1.00% 상승한 328.21달러에 장을 마감했다. 최근 시장에서는 애플 주가가 지난 20년 동안 나타나지 않았던 이례적인 기술적 패턴을 보이고 있다는 분석이 제기되었다. 월가 애널리스트들은 애플의 주간 이동평균선이 장기 추세선을 상향 돌파하며 강력한 모멘텀을 형성하고 있다는 점에 주목했다. 특히 아이폰 18 시리즈의 초기 판매 데이터가 주요 시장에서 예상치를 상회하면서 투자 심리가 개선되었다. 또한, 애플이 추진 중인 자체 AI 모델 '애플 인텔리전스'의 서비스 범위",
+    "url": "internal://stock_news_2026-09-03",
+    "source": "NewsFinal",
+    "category": "금융",
+    "subcategory": "종목동향",
+    "region": "global",
+    "country": "미국",
+    "country_flag": "🇺🇸",
+    "score": 1,
+    "created_at": "2026-09-04 06:27",
+    "countries": [
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/stock_news_2026_09_03.jpg",
+    "view_count": 1,
     "first_published_at": "2026-09-04T06:27:00",
     "update_log": [
       {
@@ -9732,6 +9767,40 @@
     "continuation_of_id": null
   },
   {
+    "id": 124811,
+    "title_en": "카타르 웹 서밋, 4회 행사 앞두고 70개 이상 글로벌 파트너사 확보",
+    "title_ko": "카타르 웹 서밋, 4회 행사 앞두고 70개 이상 글로벌 파트너사 확보",
+    "summary_ko": "카타르에서 개최되는 웹 서밋 카타르(Web Summit Qatar) 제4회 행사를 앞두고 70개 이상의 글로벌 파트너사가 참가 계약을 체결했다고 주최 측이 2일(현지시간) 밝혔다. 이번 행사는 중동 및 북아프리카 지역에서 가장 빠르게 성장하는 기술 행사로 자리잡고 있다.\n\n영구 웹 서밋 조직위원회는 정부커뮤니케이션국(GCO) 국장이자 위원회 위원장인 셰이크 자심 빈 만수르 빈 자보르 알 타니(Sheikh Jassim bin Mansour bin Jabor al-Thani)의 주재로 도하에서 정례 회의를 열고 2027년 행사의 준비 ",
+    "url": "internal://solo_20260903_3c4d4bca",
+    "source": "NewsFinal",
+    "category": "IT·과학",
+    "subcategory": "solo_20260903_3c4d4bca",
+    "region": "middle_east",
+    "country": "카타르",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-03 05:26",
+    "countries": [
+      "카타르"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_aya_atassi_web_summit_speaker.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-03T05:26:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-03 05:26",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
     "id": 124810,
     "title_en": "카타르 총리, 레바논·튀르키예·이집트와 연쇄 통화…해상 항행 자유 및 지역 정세 안정 논의",
     "title_ko": "카타르 총리, 레바논·튀르키예·이집트와 연쇄 통화…해상 항행 자유 및 지역 정세 안정 논의",
@@ -10297,22 +10366,21 @@
     "continuation_of_id": null
   },
   {
-    "id": 123781,
-    "title_en": "미 국방부 피트 헤그세스 장관 캐나다 생도 프로그램 조롱 논란 속 육군 장관 사임",
-    "title_ko": "미 국방부 피트 헤그세스 장관 캐나다 생도 프로그램 조롱 논란 속 육군 장관 사임",
-    "summary_ko": "댄 드리스콜(Dan Driscoll) 육군 장관이 피트 헤그세스(Pete Hegseth) 국방부 장관과의 충돌로 사임한 이후 미국 국방부 내부의 혼란이 심화되었다. 파이낸셜 타임스(Financial Times)의 보도에 따르면 이번 사임은 국방부 최고위층 간의 마찰을 드러냈다.\n\n피트 헤그세스 장관은 1일(현지시간) 소셜미디어를 통해 캐나다의 청소년 생도 프로그램을 겨냥한 게시물을 올려 논란을 빚었다. CBC 등 외신 보도에 따르면 이 게시물은 캐나다 생도 프로그램을 경시하고 여성 청소년 생도 강사를 조롱하는 내용을 담았다. \n\n캐",
-    "url": "internal://realtrend_Pentagon_Leadership_Resignation_(Driscoll_&_Hegseth)_2026090222",
+    "id": 123783,
+    "title_en": "장동혁 의원, 미래에셋 로비 의혹 제기하며 사의 표명... 정치권 파장 확대",
+    "title_ko": "장동혁 의원, 미래에셋 로비 의혹 제기하며 사의 표명... 정치권 파장 확대",
+    "summary_ko": "장동혁 의원은 2일(현지시간) 김용범 청와대 정책실장이 미래에셋의 로비를 받아 단일종목 레버리지 상장지수펀드(ETF) 도입을 추진했다는 의혹을 공개적으로 제기했다. 장동혁 의원은 이와 같은 의혹 제기와 함께 사의를 표명했다. 야당은 이번 사태를 'ETF 게이트'로 규정하고 철저한 진상 규명을 위한 특검 도입을 촉구하고 나섰다.\n\n김용범 정책실장은 개각 발표 다음 날인 1일(현지시간) 전격적으로 사의를 표명했다. 이 대통령은 사의 표명 하루 만에 김용범 실장의 사표를 수리했다. 이번 사퇴는 부동산 정책 책임론과 맞물려 경제 사령탑 라",
+    "url": "internal://realtrend_김용범_미래에셋_로비_및_단일종목_레버리지_ETF_의혹_2026090222",
     "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "realtrend_Pentagon_Leadership_",
+    "category": "경제",
+    "subcategory": "realtrend_김용범_미래에셋_로비_및_단일종목_레",
     "region": "africa",
-    "country": "미국",
+    "country": "한국",
     "country_flag": "",
     "score": 2,
     "created_at": "2026-09-02 22:46",
     "countries": [
-      "미국",
-      "캐나다"
+      "한국"
     ],
     "is_published": true,
     "image_url": null,
@@ -10332,21 +10400,22 @@
     "continuation_of_id": null
   },
   {
-    "id": 123783,
-    "title_en": "장동혁 의원, 미래에셋 로비 의혹 제기하며 사의 표명... 정치권 파장 확대",
-    "title_ko": "장동혁 의원, 미래에셋 로비 의혹 제기하며 사의 표명... 정치권 파장 확대",
-    "summary_ko": "장동혁 의원은 2일(현지시간) 김용범 청와대 정책실장이 미래에셋의 로비를 받아 단일종목 레버리지 상장지수펀드(ETF) 도입을 추진했다는 의혹을 공개적으로 제기했다. 장동혁 의원은 이와 같은 의혹 제기와 함께 사의를 표명했다. 야당은 이번 사태를 'ETF 게이트'로 규정하고 철저한 진상 규명을 위한 특검 도입을 촉구하고 나섰다.\n\n김용범 정책실장은 개각 발표 다음 날인 1일(현지시간) 전격적으로 사의를 표명했다. 이 대통령은 사의 표명 하루 만에 김용범 실장의 사표를 수리했다. 이번 사퇴는 부동산 정책 책임론과 맞물려 경제 사령탑 라",
-    "url": "internal://realtrend_김용범_미래에셋_로비_및_단일종목_레버리지_ETF_의혹_2026090222",
+    "id": 123781,
+    "title_en": "미 국방부 피트 헤그세스 장관 캐나다 생도 프로그램 조롱 논란 속 육군 장관 사임",
+    "title_ko": "미 국방부 피트 헤그세스 장관 캐나다 생도 프로그램 조롱 논란 속 육군 장관 사임",
+    "summary_ko": "댄 드리스콜(Dan Driscoll) 육군 장관이 피트 헤그세스(Pete Hegseth) 국방부 장관과의 충돌로 사임한 이후 미국 국방부 내부의 혼란이 심화되었다. 파이낸셜 타임스(Financial Times)의 보도에 따르면 이번 사임은 국방부 최고위층 간의 마찰을 드러냈다.\n\n피트 헤그세스 장관은 1일(현지시간) 소셜미디어를 통해 캐나다의 청소년 생도 프로그램을 겨냥한 게시물을 올려 논란을 빚었다. CBC 등 외신 보도에 따르면 이 게시물은 캐나다 생도 프로그램을 경시하고 여성 청소년 생도 강사를 조롱하는 내용을 담았다. \n\n캐",
+    "url": "internal://realtrend_Pentagon_Leadership_Resignation_(Driscoll_&_Hegseth)_2026090222",
     "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "realtrend_김용범_미래에셋_로비_및_단일종목_레",
+    "category": "정치·외교",
+    "subcategory": "realtrend_Pentagon_Leadership_",
     "region": "africa",
-    "country": "한국",
+    "country": "미국",
     "country_flag": "",
     "score": 2,
     "created_at": "2026-09-02 22:46",
     "countries": [
-      "한국"
+      "미국",
+      "캐나다"
     ],
     "is_published": true,
     "image_url": null,
@@ -11043,24 +11112,22 @@
     "continuation_of_id": null
   },
   {
-    "id": 121864,
-    "title_en": "독일, 라이프치히 하이브리드 공격 배후로 러시아 지목… 모스크바는 보복 경고",
-    "title_ko": "독일, 라이프치히 하이브리드 공격 배후로 러시아 지목… 모스크바는 보복 경고",
-    "summary_ko": "독일은 러시아가 라이프치히 공항에서 하이브리드 공격을 가했다고 1일(현지시간) 비난했다. 유럽 각국은 베를린 정부를 지지하고 나섰으며 모스크바는 이에 대해 보복을 약속했다.\n\n블라디미르 푸틴 러시아 대통령은 독일이 라이프치히 공항에서 폭발물을 탑재한 드론 사건에 대해 러시아에 책임을 묻기 위해 증거를 심었다고 주장했다.",
-    "url": "internal://realtrend_US_Army_Leadership_Crisis_(Hegseth_&_Driscoll)_2026090210",
+    "id": 121865,
+    "title_en": "메트로 퍼시픽 워터, 필리핀 및 베트남 인프라 개선에 230억 페소 투자",
+    "title_ko": "메트로 퍼시픽 워터, 필리핀 및 베트남 인프라 개선에 230억 페소 투자",
+    "summary_ko": "팡길리난이 주도하는 메트로 퍼시픽 인베스트먼츠 코프의 계열사인 메트로 퍼시픽 워터는 1일(현지시간) 필리핀과 베트남의 물 서비스 포트폴리오를 개선하기 위해 향후 5년 동안 230억 페소를 투자할 계획이라고 밝혔다.\n\n이번 자금은 양국 지역의 물 서비스 품질을 높이고 관련 인프라를 전반적으로 업그레이드하는 데 집중적으로 투입된다.",
+    "url": "internal://realtrend_필리핀_탈락(Tarlac)_교량_붕괴_2026090210",
     "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "realtrend_US_Army_Leadership_C",
-    "region": "africa",
-    "country": "독일",
+    "category": "사회",
+    "subcategory": "realtrend_필리핀_탈락(Tarlac)_교량_붕괴",
+    "region": "southeast_asia",
+    "country": "필리핀",
     "country_flag": "",
     "score": 2,
     "created_at": "2026-09-02 10:15",
     "countries": [
-      "독일",
-      "러시아",
-      "프랑스",
-      "영국"
+      "필리핀",
+      "베트남"
     ],
     "is_published": true,
     "image_url": null,
@@ -11080,22 +11147,24 @@
     "continuation_of_id": null
   },
   {
-    "id": 121865,
-    "title_en": "메트로 퍼시픽 워터, 필리핀 및 베트남 인프라 개선에 230억 페소 투자",
-    "title_ko": "메트로 퍼시픽 워터, 필리핀 및 베트남 인프라 개선에 230억 페소 투자",
-    "summary_ko": "팡길리난이 주도하는 메트로 퍼시픽 인베스트먼츠 코프의 계열사인 메트로 퍼시픽 워터는 1일(현지시간) 필리핀과 베트남의 물 서비스 포트폴리오를 개선하기 위해 향후 5년 동안 230억 페소를 투자할 계획이라고 밝혔다.\n\n이번 자금은 양국 지역의 물 서비스 품질을 높이고 관련 인프라를 전반적으로 업그레이드하는 데 집중적으로 투입된다.",
-    "url": "internal://realtrend_필리핀_탈락(Tarlac)_교량_붕괴_2026090210",
+    "id": 121864,
+    "title_en": "독일, 라이프치히 하이브리드 공격 배후로 러시아 지목… 모스크바는 보복 경고",
+    "title_ko": "독일, 라이프치히 하이브리드 공격 배후로 러시아 지목… 모스크바는 보복 경고",
+    "summary_ko": "독일은 러시아가 라이프치히 공항에서 하이브리드 공격을 가했다고 1일(현지시간) 비난했다. 유럽 각국은 베를린 정부를 지지하고 나섰으며 모스크바는 이에 대해 보복을 약속했다.\n\n블라디미르 푸틴 러시아 대통령은 독일이 라이프치히 공항에서 폭발물을 탑재한 드론 사건에 대해 러시아에 책임을 묻기 위해 증거를 심었다고 주장했다.",
+    "url": "internal://realtrend_US_Army_Leadership_Crisis_(Hegseth_&_Driscoll)_2026090210",
     "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "realtrend_필리핀_탈락(Tarlac)_교량_붕괴",
-    "region": "southeast_asia",
-    "country": "필리핀",
+    "category": "정치·외교",
+    "subcategory": "realtrend_US_Army_Leadership_C",
+    "region": "africa",
+    "country": "독일",
     "country_flag": "",
     "score": 2,
     "created_at": "2026-09-02 10:15",
     "countries": [
-      "필리핀",
-      "베트남"
+      "독일",
+      "러시아",
+      "프랑스",
+      "영국"
     ],
     "is_published": true,
     "image_url": null,
@@ -14435,38 +14504,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 115107,
-    "title_en": "지루함이 부르는 턱의 움직임…인간이 심심할 때 껌을 씹는 이유",
-    "title_ko": "지루함이 부르는 턱의 움직임…인간이 심심할 때 껌을 씹는 이유",
-    "summary_ko": "심리학 연구에 따르면 많은 사람들이 껌을 씹는 행동은 영양 섭취나 공복감 때문이 아니라 지루함과 정신적 피로에 대한 신경 M 응답으로 나타난다. 연구원들은 이 반복적인 움직임이 각성 수준을 높이고 감정을 조절하며 단조로운 기간 동안 적절한 감각 자극으로 뇌를 바쁘게 만드는 데 기여한다고 강조한다.\n\n이 행동을 실천하는 개인의 동기는 다양하다. 일부 사람들은 향을 즐기는 반면 다른 사람들은 이를 무의식적인 대처나 진정 메커니즘으로 채택한다. 연구에 따르면 뇌는 5가지 주요 심리학적 이론과 이유를 바탕으로 지루함이 스며들 때 자동으로 ",
-    "url": "internal://solo_20260831_d5098f8e",
-    "source": "NewsFinal",
-    "category": "글로벌",
-    "subcategory": "solo_20260831_d5098f8e",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-08-31 11:58",
-    "countries": [],
-    "is_published": true,
-    "image_url": "",
-    "view_count": 0,
-    "first_published_at": "2026-08-31T11:58:00",
-    "update_log": [
-      {
-        "timestamp": "2026-08-31 11:58",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
     "id": 115109,
     "title_en": "과테말라 국립 마르임바 페스티벌 개최…전통 잇는 음악가 80여 명 한자리에",
     "title_ko": "과테말라 국립 마르임바 페스티벌 개최…전통 잇는 음악가 80여 명 한자리에",
@@ -14501,27 +14538,27 @@
     "continuation_of_id": null
   },
   {
-    "id": 115106,
-    "title_en": "국제 금 가격, 주초 매도 압력에 4,400달러 선으로 하락",
-    "title_ko": "국제 금 가격, 주초 매도 압력에 4,400달러 선으로 하락",
-    "summary_ko": "국제 금 가격이 한 주를 시작하는 초기 거래에서 뚜렷한 매도 압력을 받았다. 금 시세는 온스당 4,696달러 선에서 약 4,455달러 선까지 하락하며 단기적인 가격 모멘텀의 변화를 보였고, 이러한 하락세의 성격과 지속성에 대한 시장의 관심이 집중되고 있다.\n\n기술적 분석 관점에서 금은 4,564달러 선에 있던 지지선을 이탈했다. 이에 따라 하락세가 가속화되면서 4,489달러에서 4,463달러 사이의 구간에 도달했으며, 현재 이 가격대는 향후 추세를 가를 결정적인 시험대로 작용하고 있다. 이 구간을 방어해내면 상승 모멘텀을 되찾을 가",
-    "url": "internal://solo_20260831_3458b5ea",
+    "id": 115107,
+    "title_en": "지루함이 부르는 턱의 움직임…인간이 심심할 때 껌을 씹는 이유",
+    "title_ko": "지루함이 부르는 턱의 움직임…인간이 심심할 때 껌을 씹는 이유",
+    "summary_ko": "심리학 연구에 따르면 많은 사람들이 껌을 씹는 행동은 영양 섭취나 공복감 때문이 아니라 지루함과 정신적 피로에 대한 신경 M 응답으로 나타난다. 연구원들은 이 반복적인 움직임이 각성 수준을 높이고 감정을 조절하며 단조로운 기간 동안 적절한 감각 자극으로 뇌를 바쁘게 만드는 데 기여한다고 강조한다.\n\n이 행동을 실천하는 개인의 동기는 다양하다. 일부 사람들은 향을 즐기는 반면 다른 사람들은 이를 무의식적인 대처나 진정 메커니즘으로 채택한다. 연구에 따르면 뇌는 5가지 주요 심리학적 이론과 이유를 바탕으로 지루함이 스며들 때 자동으로 ",
+    "url": "internal://solo_20260831_d5098f8e",
     "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "solo_20260831_3458b5ea",
+    "category": "글로벌",
+    "subcategory": "solo_20260831_d5098f8e",
     "region": "global",
     "country": "",
     "country_flag": "",
     "score": 1,
-    "created_at": "2026-08-31 11:57",
+    "created_at": "2026-08-31 11:58",
     "countries": [],
     "is_published": true,
     "image_url": "",
-    "view_count": 1,
-    "first_published_at": "2026-08-31T11:57:00",
+    "view_count": 0,
+    "first_published_at": "2026-08-31T11:58:00",
     "update_log": [
       {
-        "timestamp": "2026-08-31 11:57",
+        "timestamp": "2026-08-31 11:58",
         "note": "최초 게시"
       }
     ],
@@ -14553,6 +14590,38 @@
     "is_published": true,
     "image_url": "",
     "view_count": 0,
+    "first_published_at": "2026-08-31T11:57:00",
+    "update_log": [
+      {
+        "timestamp": "2026-08-31 11:57",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 115106,
+    "title_en": "국제 금 가격, 주초 매도 압력에 4,400달러 선으로 하락",
+    "title_ko": "국제 금 가격, 주초 매도 압력에 4,400달러 선으로 하락",
+    "summary_ko": "국제 금 가격이 한 주를 시작하는 초기 거래에서 뚜렷한 매도 압력을 받았다. 금 시세는 온스당 4,696달러 선에서 약 4,455달러 선까지 하락하며 단기적인 가격 모멘텀의 변화를 보였고, 이러한 하락세의 성격과 지속성에 대한 시장의 관심이 집중되고 있다.\n\n기술적 분석 관점에서 금은 4,564달러 선에 있던 지지선을 이탈했다. 이에 따라 하락세가 가속화되면서 4,489달러에서 4,463달러 사이의 구간에 도달했으며, 현재 이 가격대는 향후 추세를 가를 결정적인 시험대로 작용하고 있다. 이 구간을 방어해내면 상승 모멘텀을 되찾을 가",
+    "url": "internal://solo_20260831_3458b5ea",
+    "source": "NewsFinal",
+    "category": "금융",
+    "subcategory": "solo_20260831_3458b5ea",
+    "region": "global",
+    "country": "",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-08-31 11:57",
+    "countries": [],
+    "is_published": true,
+    "image_url": "",
+    "view_count": 1,
     "first_published_at": "2026-08-31T11:57:00",
     "update_log": [
       {
