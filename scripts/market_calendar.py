@@ -198,6 +198,101 @@ FR_HOLIDAYS_BY_YEAR = {
 }
 
 
+# ── 요하네스버그·인도네시아·말레이시아 증권거래소 휴장일 ───────────
+# 사용자 요청(2026-09-08): "아프리카, 동남아쪽은 어떻게 소스를 못구하나?"
+# — exchange_calendars 라이브러리(XJSE/XIDX/XKLS)로 조회. 각 거래소
+# 공식 사이트는 Cloudflare 봇 차단(JSE)이나 접근 제한(Bursa Malaysia)에
+# 막혀 직접 확인은 못 했다 — 대신 날짜를 남아공/인도네시아의 잘 알려진
+# 고정 공휴일 목록과 요일 계산으로 교차검증했다(전부 일치 확인).
+# ⚠️ 말레이시아는 다종교 국가라 이슬람력·힌두력 기반 이동휴일이 많아
+# 라이브러리가 날짜는 정확히 계산해도(실제 거래 스케줄 기반) 절반 가까이
+# 구체적 명칭을 못 붙였다 — 확신 없는 명칭을 지어내지 않고 "이동휴일
+# (공휴일)"로 표기한다. 매년 초 가능하면 각 거래소 공식 캘린더로
+# 명칭을 보강할 것.
+ZA_HOLIDAYS_BY_YEAR = {
+    2026: [
+        (date(2026, 1, 1), "신정"),
+        (date(2026, 4, 3), "성금요일(Good Friday)"),
+        (date(2026, 4, 6), "패밀리 데이(Family Day)"),
+        (date(2026, 4, 27), "자유의 날(Freedom Day)"),
+        (date(2026, 5, 1), "노동절(Workers' Day)"),
+        (date(2026, 6, 16), "청년의 날(Youth Day)"),
+        (date(2026, 8, 10), "여성의 날 대체휴일(National Women's Day observed)"),
+        (date(2026, 9, 24), "문화유산의 날(Heritage Day)"),
+        (date(2026, 12, 16), "화해의 날(Day of Reconciliation)"),
+        (date(2026, 12, 25), "크리스마스"),
+    ],
+    2027: [
+        (date(2027, 1, 1), "신정"),
+        (date(2027, 3, 22), "인권의 날(Human Rights Day)"),
+        (date(2027, 3, 26), "성금요일(Good Friday)"),
+        (date(2027, 3, 29), "패밀리 데이(Family Day)"),
+        (date(2027, 4, 27), "자유의 날(Freedom Day)"),
+        (date(2027, 6, 16), "청년의 날(Youth Day)"),
+        (date(2027, 8, 9), "여성의 날(National Women's Day)"),
+        (date(2027, 9, 24), "문화유산의 날(Heritage Day)"),
+        (date(2027, 12, 16), "화해의 날(Day of Reconciliation)"),
+        (date(2027, 12, 27), "굿윌 데이 대체휴일(Day of Goodwill observed)"),
+    ],
+}
+
+ID_HOLIDAYS_BY_YEAR = {
+    2026: [
+        (date(2026, 1, 1), "신정"),
+        (date(2026, 2, 17), "음력설(Imlek/Chinese New Year)"),
+        (date(2026, 4, 3), "성금요일(Good Friday)"),
+        (date(2026, 5, 1), "노동절(Labor Day)"),
+        (date(2026, 5, 14), "예수승천일(Ascension Day)"),
+        (date(2026, 6, 1), "판차실라의 날(Pancasila Day)"),
+        (date(2026, 8, 17), "독립기념일(Independence Day)"),
+        (date(2026, 12, 25), "크리스마스"),
+        (date(2026, 12, 31), "연말 휴장일"),
+    ],
+    2027: [
+        (date(2027, 1, 1), "신정"),
+        (date(2027, 3, 26), "성금요일(Good Friday)"),
+        (date(2027, 5, 6), "예수승천일(Ascension Day)"),
+        (date(2027, 6, 1), "판차실라의 날(Pancasila Day)"),
+        (date(2027, 8, 17), "독립기념일(Independence Day)"),
+        (date(2027, 12, 31), "연말 휴장일"),
+    ],
+}
+
+MY_HOLIDAYS_BY_YEAR = {
+    2026: [
+        (date(2026, 1, 1), "신정"),
+        (date(2026, 2, 2), "연방 직할구의 날(Federal Territory Day)"),
+        (date(2026, 2, 17), "이동휴일(공휴일, 음력설 추정)"),
+        (date(2026, 2, 18), "이동휴일(공휴일, 음력설 추정)"),
+        (date(2026, 3, 23), "이동휴일(공휴일)"),
+        (date(2026, 5, 1), "노동절(Labour Day)"),
+        (date(2026, 5, 27), "이동휴일(공휴일)"),
+        (date(2026, 6, 1), "이동휴일(공휴일)"),
+        (date(2026, 6, 17), "이동휴일(공휴일)"),
+        (date(2026, 8, 25), "이동휴일(공휴일)"),
+        (date(2026, 8, 31), "독립기념일(National Day)"),
+        (date(2026, 9, 16), "말레이시아의 날(Malaysia Day)"),
+        (date(2026, 11, 9), "이동휴일(공휴일)"),
+        (date(2026, 12, 25), "크리스마스"),
+    ],
+    2027: [
+        (date(2027, 1, 1), "신정"),
+        (date(2027, 1, 22), "이동휴일(공휴일)"),
+        (date(2027, 2, 1), "연방 직할구의 날(Federal Territory Day)"),
+        (date(2027, 2, 8), "이동휴일(공휴일, 음력설 추정)"),
+        (date(2027, 2, 24), "이동휴일(공휴일)"),
+        (date(2027, 3, 9), "이동휴일(공휴일)"),
+        (date(2027, 3, 10), "이동휴일(공휴일)"),
+        (date(2027, 5, 17), "이동휴일(공휴일)"),
+        (date(2027, 5, 20), "이동휴일(공휴일)"),
+        (date(2027, 6, 7), "이동휴일(공휴일)"),
+        (date(2027, 8, 31), "독립기념일(National Day)"),
+        (date(2027, 9, 16), "말레이시아의 날(Malaysia Day)"),
+        (date(2027, 10, 28), "이동휴일(공휴일)"),
+    ],
+}
+
+
 def _make_holiday_helpers(holidays_by_year: dict):
     def holiday_name_fn(d: date) -> str | None:
         year_holidays = holidays_by_year.get(d.year)
@@ -226,3 +321,6 @@ uk_holiday_name, is_uk_market_closed, uk_previous_trading_date = _make_holiday_h
 de_holiday_name, is_de_market_closed, de_previous_trading_date = _make_holiday_helpers(DE_HOLIDAYS_BY_YEAR)
 fr_holiday_name, is_fr_market_closed, fr_previous_trading_date = _make_holiday_helpers(FR_HOLIDAYS_BY_YEAR)
 jp_holiday_name, is_jp_market_closed, jp_previous_trading_date = _make_holiday_helpers(JP_HOLIDAYS_BY_YEAR)
+za_holiday_name, is_za_market_closed, za_previous_trading_date = _make_holiday_helpers(ZA_HOLIDAYS_BY_YEAR)
+id_holiday_name, is_id_market_closed, id_previous_trading_date = _make_holiday_helpers(ID_HOLIDAYS_BY_YEAR)
+my_holiday_name, is_my_market_closed, my_previous_trading_date = _make_holiday_helpers(MY_HOLIDAYS_BY_YEAR)

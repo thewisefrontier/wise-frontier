@@ -1,0 +1,71 @@
+name: NewsFinal - Frontier Market Holiday Notice
+
+# 남아공(JSE)·인도네시아(IDX)·말레이시아(Bursa Malaysia) 증시 휴장일
+# 안내 기사. us/jp/eu_market_holiday.yml과 동일한 패턴(사용자 요청
+# 2026-09-08: "아프리카, 동남아쪽은 어떻게 소스를 못구하나?" → 진행)
+# — 결정론적 템플릿이라 GEMINI_API_KEY 불필요.
+#
+# ⚠️ 휴장일 캘린더(market_calendar.py)는 각 거래소 공식 사이트가
+# Cloudflare 봇 차단(JSE) 등으로 막혀 exchange_calendars 오픈소스
+# 라이브러리 + 날짜 교차검증으로 확보했다 — 말레이시아는 이슬람력 등
+# 이동휴일이 많아 절반 가까이 구체적 명칭 없이 "이동휴일(공휴일)"로만
+# 표기된다(날짜 자체는 정확). 매년 초 가능하면 각 거래소 공식 캘린더로
+# 재확인할 것.
+#
+# 한국시간 오전 중(각 시장 개장 전후) 1회면 충분 — already_published()가
+# 같은 날짜 중복 발행을 막는다.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: newsfinal-frontier-market-holiday
+  cancel-in-progress: false
+
+jobs:
+  frontier_market_holiday:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v5
+
+      - name: Python 설정
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: 패키지 설치
+        run: pip install -r requirements.txt
+
+      - name: 남아공·인도네시아·말레이시아 증시 휴장 안내 기사 생성
+        run: python scripts/frontier_market_holiday_writer.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
+          UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
+
+      - name: 웹사이트 데이터 내보내기
+        run: python scripts/export_articles.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+
+      - name: 변경사항 커밋 및 푸시
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add -A
+          git diff --staged --quiet || git commit -m "Update frontier market holiday articles"
+          for i in 1 2 3 4 5; do
+            git pull origin main -X ours --no-rebase
+            git push && break
+            echo "push failed (attempt $i) - another workflow pushed first, retrying"
+            sleep $((RANDOM % 8 + 3))
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
