@@ -476,12 +476,15 @@ def _fuzzy_keyword_overlap(kws_a: set, kws_b: set) -> int:
 try:
     from dedup_guard import (
         article_tags as _article_tags,
+        normalize_tags as _normalize_tags,
         same_event_llm as _dg_same_event_llm,
         find_by_tags as _dg_find_by_tags,
     )
 except Exception:
     def _article_tags(a: dict) -> set:
         return set()
+    def _normalize_tags(tags, limit: int = 15) -> list:
+        return sorted(tags or ())[:limit]
     def _dg_same_event_llm(title_a, body_a, title_b, body_b, gemini_fallback=None) -> bool:
         return False
     def _dg_find_by_tags(title, body, tags, hours=72, limit=200, order="desc", gemini_fallback=None):
@@ -3062,7 +3065,7 @@ def run():
                     image_url     = image_url,
                     image_credit  = image_credit,
                     is_travel     = gen_travel,
-                    source_data   = {"tags": sorted(cluster_tags)} if cluster_tags else None,
+                    source_data   = {"tags": _normalize_tags(cluster_tags)} if cluster_tags else None,
                     continuation_of_id = continuing["id"] if (continuing and published) else None,
                 )
                 if article_id > 0:
@@ -3341,7 +3344,7 @@ def run():
                 image_url=image_url,
                 image_credit=image_credit,
                 is_travel=gen_travel,
-                source_data={"tags": sorted(solo_tags)} if solo_tags else None,
+                source_data={"tags": _normalize_tags(solo_tags)} if solo_tags else None,
             )
             if article_id > 0:
                 status = "✅ 단독 저장" if published else "📋 단독 미발행"

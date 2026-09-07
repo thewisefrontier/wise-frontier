@@ -884,6 +884,7 @@ try:
     from dedup_guard import (
         article_tags as _article_tags,
         tag_word_set as _tag_word_set,
+        normalize_tags as _normalize_tags,
         same_event_llm as _dg_same_event_llm,
         find_by_tags as _dg_find_by_tags,
         find_by_llm_scan as _dg_find_by_llm_scan,
@@ -893,6 +894,8 @@ except Exception:
         return set()
     def _tag_word_set(tags: set) -> set:
         return set()
+    def _normalize_tags(tags, limit: int = 15) -> list:
+        return sorted(tags or ())[:limit]
     def _dg_same_event_llm(title_a, body_a, title_b, body_b, gemini_fallback=None) -> bool:
         return False
     def _dg_find_by_tags(title, body, tags, hours=72, limit=200, order="desc", gemini_fallback=None):
@@ -2064,7 +2067,7 @@ JSON 배열로만 응답하세요 (마크다운 없이):
             "countries": ([art_country] + [c for c in (art_countries or []) if c and c != art_country]) if art_country else (art_countries or []),
             "image_url": image_url,
             "image_credit": image_credit,
-            "source_data": {"tags": sorted(related_tags)} if related_tags else None,
+            "source_data": {"tags": _normalize_tags(related_tags)} if related_tags else None,
             "score": 2,
             "created_at": now_str,
             "first_published_at": now_str,
