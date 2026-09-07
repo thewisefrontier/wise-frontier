@@ -40,6 +40,14 @@ except Exception:
     def detect_script_leak(title, body):
         return []
 
+# 저장 시점 raw JSON 본문 차단(2026-09-08, 사용자 지적 — "공용모듈이 필요한
+# 시스템이 더 있는지 점검해줘" 감사로 이 파일에 빠져있던 걸 발견).
+try:
+    from json_body_guard import unwrap_json_body
+except Exception:
+    def unwrap_json_body(text, _depth=0):
+        return None
+
 # articles 테이블 삽입 공용 로직(2026-09-02, article_store.py로 공용화).
 try:
     from article_store import insert_final_article
@@ -400,9 +408,20 @@ def parse_article_output(text: str) -> tuple[str, str]:
     return title, body
 
 
-def has_column_style(text: str) -> bool:
-    patterns = ["주목됩니다", "기대됩니다", "보여줍니다", "시사합니다", "중요합니다"]
-    return any(p in text for p in patterns)
+# 2026-09-08 수정("공용모듈이 필요한 시스템이 더 있는지 점검해줘"): 이 파일은
+# style_guard.py 공용화(2026-09-02) 이전, 그 이전 버전보다도 더 축약된 5개
+# 리터럴 패턴만 쓰고 있었다(style_guard.py는 27개+ 정규식 패턴, 합쇼체 감지·
+# 자동변환까지 있음). 공용 모듈 import로 교체.
+try:
+    from style_guard import has_column_style, has_polite_ending, to_plain_style
+except Exception:
+    def has_column_style(text: str) -> bool:
+        patterns = ["주목됩니다", "기대됩니다", "보여줍니다", "시사합니다", "중요합니다"]
+        return any(p in text for p in patterns)
+    def has_polite_ending(text: str) -> bool:
+        return False
+    def to_plain_style(text: str) -> str:
+        return text
 
 
 # ── 대표 이미지 ──────────────────────────────────────────────
@@ -430,6 +449,14 @@ def insert_article(title_ko: str, summary_ko: str, prices: dict, image_url: str 
     if detect_script_leak(title_ko, summary_ko):
         print(f"  ⚠️ [문자 혼입 감지] 저장 차단: {title_ko[:60]}")
         return -1
+    _unwrapped = unwrap_json_body(summary_ko)
+    if _unwrapped is not None:
+        if _unwrapped:
+            print("  🔧 [raw JSON 본문] 내부 body 추출 → 복구")
+            summary_ko = _unwrapped
+        else:
+            print(f"  ⛔ [raw JSON 본문] 저장 차단: {title_ko[:60]}")
+            return -1
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
     price_date = prices["date"].isoformat()
     internal_url = f"internal://opinet_price_{price_date}"
@@ -522,6 +549,12 @@ def main():
             max_tokens=2500,
         ) or article_text
         time.sleep(5)
+
+    if has_polite_ending(article_text):
+        converted = to_plain_style(article_text)
+        if converted != article_text:
+            print("  🔧 합쇼체(-습니다) 감지 → 자동 변환 적용")
+            article_text = converted
 
     art_title, art_body = parse_article_output(article_text)
     art_title = enforce_title_prefix(art_title)
