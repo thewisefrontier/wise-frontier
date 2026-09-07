@@ -1,5 +1,46 @@
 [
   {
+    "id": 141380,
+    "title_en": "중남미, 31도 폭염 속 뇌우·소나기 소식",
+    "title_ko": "중남미, 31도 폭염 속 뇌우·소나기 소식",
+    "summary_ko": "7일(현지시간) 중남미 주요국 수도의 기온은 최저 6°C에서 최고 31°C의 넓은 기온 범위를 기록한 가운데, 지역별로 극심한 기온 차와 함께 비 소식이 이어지고 있다. 가장 더운 곳은 최고기온 31°C, 최저기온 25°C를 기록한 쿠바 아바나이며, 가장 선선한 곳은 최고기온 11°C, 최저기온 6°C에 그친 아르헨티나 부에노스아이레스로 두 지역 간 최고기온 격차가 20°C에 달한다. 특히 쿠바 아바나는 멕시코 칸쿤과 함께 최고기온이 31°C를 기록하며 무더운 날씨를 보였다.\n\n브라질, 멕시코, 콜롬비아, 쿠바 등에서는 비 소식이 ",
+    "url": "internal://weather_group_중남미_today20260907",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_중남미_today20260907",
+    "region": "latin_america",
+    "country": "중남미",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-07 17:14",
+    "countries": [
+      "브라질",
+      "멕시코",
+      "아르헨티나",
+      "칠레",
+      "콜롬비아",
+      "페루",
+      "쿠바",
+      "도미니카공화국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_brazil_20260907.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-07T17:14:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-07 17:14",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 140501,
     "title_en": "아프리카, 카이로 38도 폭염 속 곳곳 뇌우·소나기",
     "title_ko": "아프리카, 카이로 38도 폭염 속 곳곳 뇌우·소나기",
@@ -589,40 +630,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 140159,
-    "title_en": "Qatar’s Ministry of Municipality Adds 38 E-Services for Veterinary, Agriculture Sectors to Oun App",
-    "title_ko": "카타르 자치부, 오운 앱에 수의·농업 등 전자 서비스 38개 추가",
-    "summary_ko": "카타르 자치부가 스마트폰 애플리케이션 오운(Oun)을 통해 38개의 새로운 전자 서비스를 대거 도입하며 디지털 서비스 확장에 나섰다고 7일(현지시간) 밝혔다. 이번 조치는 관련 민원 처리 과정을 간소화하고 절차를 가속화하기 위한 차원에서 단행됐다.\n\n이번 서비스 확대에 따라 거주자와 기업들은 정부 청사를 직접 방문하지 않고도 수의, 농업, 무역 관련 절차를 온라인으로 완전히 마칠 수 있게 됐다. 자치부가 공식 엑스(X) 계정을 통해 공유한 이번 발표는 지속적인 디지털 전환 추진의 일환이다. 자치부는 이러한 디지털화 노력을 인정받아 ",
-    "url": "internal://solo_20260907_2f707897",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "solo_20260907_2f707897",
-    "region": "middle_east",
-    "country": "카타르",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-07 09:01",
-    "countries": [
-      "카타르"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_doha_west_bay_skyline.jpg",
-    "view_count": 2,
-    "first_published_at": "2026-09-07T09:01:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-07 09:01",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "사진: Thameur Belghith (CC BY-SA 4.0, Wikimedia Commons)",
-    "continuation_of_id": null
-  },
-  {
     "id": 140160,
     "title_en": "Celine Dion Overcomes Illness to Kick Off 26-Show Paris Concert Residency on Sept. 12",
     "title_ko": "셀린 디옹, 투병 딛고 9월 12일 파리서 26회 콘서트 개막",
@@ -655,6 +662,40 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: RepliCarter (CC BY-SA 3.0, Wikimedia Commons)",
+    "continuation_of_id": null
+  },
+  {
+    "id": 140159,
+    "title_en": "Qatar’s Ministry of Municipality Adds 38 E-Services for Veterinary, Agriculture Sectors to Oun App",
+    "title_ko": "카타르 자치부, 오운 앱에 수의·농업 등 전자 서비스 38개 추가",
+    "summary_ko": "카타르 자치부가 스마트폰 애플리케이션 오운(Oun)을 통해 38개의 새로운 전자 서비스를 대거 도입하며 디지털 서비스 확장에 나섰다고 7일(현지시간) 밝혔다. 이번 조치는 관련 민원 처리 과정을 간소화하고 절차를 가속화하기 위한 차원에서 단행됐다.\n\n이번 서비스 확대에 따라 거주자와 기업들은 정부 청사를 직접 방문하지 않고도 수의, 농업, 무역 관련 절차를 온라인으로 완전히 마칠 수 있게 됐다. 자치부가 공식 엑스(X) 계정을 통해 공유한 이번 발표는 지속적인 디지털 전환 추진의 일환이다. 자치부는 이러한 디지털화 노력을 인정받아 ",
+    "url": "internal://solo_20260907_2f707897",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "solo_20260907_2f707897",
+    "region": "middle_east",
+    "country": "카타르",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-07 09:01",
+    "countries": [
+      "카타르"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_doha_west_bay_skyline.jpg",
+    "view_count": 2,
+    "first_published_at": "2026-09-07T09:01:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-07 09:01",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "사진: Thameur Belghith (CC BY-SA 4.0, Wikimedia Commons)",
     "continuation_of_id": null
   },
   {
@@ -854,38 +895,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 139854,
-    "title_en": "Solana Rises 2.37% as Network Activity Recovers",
-    "title_ko": "[가상자산 동향] 솔라나 2.37% 상승…네트워크 활성도 회복 영향",
-    "summary_ko": "◆ 가격 동향\n\n7일 06:25(한국시간) 야후 파이낸스에 따르면 솔라나 가격은 전일 대비 2.37% 상승한 106.22달러를 기록했다. 최근 솔라나 생태계 내 탈중앙화 거래소의 거래량이 증가하고 스테이블코인 결제 솔루션이 확장되면서 네트워크 활성도가 개선된 점이 매수세를 견인했다. 특히 주요 기관 투자자들이 솔라나 기반의 온체인 데이터 분석 툴을 도입하며 생태계 신뢰도가 높아진 상황이 가격 방어에 기여했다. 거시경제 측면에서는 미국 연방준비제도의 금리 정책 방향성에 대한 시장의 불확실성이 지속되고 있으나, 솔라나는 상대적으로 견고",
-    "url": "internal://crypto_news_2026-09-07",
-    "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "가상자산동향_crypto",
-    "region": "global",
-    "country": "글로벌",
-    "country_flag": "🌐",
-    "score": 1,
-    "created_at": "2026-09-07 06:26",
-    "countries": [],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_09_07.jpg",
-    "view_count": 1,
-    "first_published_at": "2026-09-07T06:26:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-07 06:26",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
     "id": 139472,
     "title_en": "At Least 25 Dead in Cabo Verde School Bus Crash; National Mourning Declared",
     "title_ko": "카보베르데 포고섬 스쿨버스 추락 사고로 최소 25명 사망 및 국가 애도 선포",
@@ -945,6 +954,38 @@
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_china_20260907.jpg",
     "view_count": 0,
+    "first_published_at": "2026-09-07T06:26:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-07 06:26",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 139854,
+    "title_en": "Solana Rises 2.37% as Network Activity Recovers",
+    "title_ko": "[가상자산 동향] 솔라나 2.37% 상승…네트워크 활성도 회복 영향",
+    "summary_ko": "◆ 가격 동향\n\n7일 06:25(한국시간) 야후 파이낸스에 따르면 솔라나 가격은 전일 대비 2.37% 상승한 106.22달러를 기록했다. 최근 솔라나 생태계 내 탈중앙화 거래소의 거래량이 증가하고 스테이블코인 결제 솔루션이 확장되면서 네트워크 활성도가 개선된 점이 매수세를 견인했다. 특히 주요 기관 투자자들이 솔라나 기반의 온체인 데이터 분석 툴을 도입하며 생태계 신뢰도가 높아진 상황이 가격 방어에 기여했다. 거시경제 측면에서는 미국 연방준비제도의 금리 정책 방향성에 대한 시장의 불확실성이 지속되고 있으나, 솔라나는 상대적으로 견고",
+    "url": "internal://crypto_news_2026-09-07",
+    "source": "NewsFinal",
+    "category": "금융",
+    "subcategory": "가상자산동향_crypto",
+    "region": "global",
+    "country": "글로벌",
+    "country_flag": "🌐",
+    "score": 1,
+    "created_at": "2026-09-07 06:26",
+    "countries": [],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_09_07.jpg",
+    "view_count": 1,
     "first_published_at": "2026-09-07T06:26:00",
     "update_log": [
       {
@@ -1754,47 +1795,6 @@
     "update_log": [
       {
         "timestamp": "2026-09-06 18:12",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 137678,
-    "title_en": "중남미, 30도 웃도는 열기와 서늘함 속 곳곳 빗줄기",
-    "title_ko": "중남미, 30도 웃도는 열기와 서늘함 속 곳곳 빗줄기",
-    "summary_ko": "6일(현지시간) 중남미 지역은 최저기온 5°C에서 최고기온 32°C의 기온 분포를 나타내는 가운데 대다수 국가에서 비가 내린다. 브라질, 멕시코, 아르헨티나, 칠레, 콜롬비아, 쿠바, 도미니카공화국 등 광범위한 지역에 걸쳐 강수 현상이 나타난다. 전반적으로 카리브해 연안을 중심으로는 30°C를 웃도는 무더위가 이어지는 반면, 남부 및 산악 권역에서는 최저기온이 한 자릿수까지 떨어지는 등 지역별 기온 편차가 크게 벌어진다.\n\n카리브해와 열대 권역에 속한 국가들은 높은 기온과 함께 비가 이어진다. 쿠바는 최저기온 24°C, 최고기온 3",
-    "url": "internal://weather_group_중남미_weekly20260906",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_중남미_weekly20260906",
-    "region": "latin_america",
-    "country": "중남미",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-06 17:13",
-    "countries": [
-      "브라질",
-      "멕시코",
-      "아르헨티나",
-      "칠레",
-      "콜롬비아",
-      "페루",
-      "쿠바",
-      "도미니카공화국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_brazil_20260906.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-06T17:13:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-06 17:13",
         "note": "최초 게시"
       }
     ],
