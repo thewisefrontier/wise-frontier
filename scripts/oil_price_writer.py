@@ -438,85 +438,19 @@ def call_gemini(prompt: str, max_tokens: int = 1500, start_tier: int = 2) -> str
                                 temperature=0.15, timeout=(10, 60))
 
 
-def wikipedia_confirms(name: str, threshold: int = 70) -> bool:
-    """이름과 충분히 비슷한 위키 문서 제목이 하나라도 있으면 True (결정론적 조회)."""
-    name = (name or "").strip()
-    if not name:
+# 원문에 없는 고유명사·수식어 날조 검사 공용화(2026-09-08, 사용자 지적 —
+# "공용모듈이 필요한 시스템이 더 있는지 점검해봐"). fabrication_guard.py로 이식.
+try:
+    from fabrication_guard import wikipedia_confirms, verify_no_fabricated_names as _fg_verify_no_fabricated_names
+except Exception:
+    def wikipedia_confirms(name: str, threshold: int = 70) -> bool:
         return False
-    titles = []
-    for lang in ("ko", "en"):
-        try:
-            res = requests.get(
-                f"https://{lang}.wikipedia.org/w/api.php",
-                params={"action": "opensearch", "search": name, "limit": 3, "namespace": 0, "format": "json"},
-                headers={"User-Agent": "NewsFinal-EntityCheck/1.0 (+https://newsfinal.co.kr)"},
-                timeout=10,
-            )
-            if res.status_code == 200:
-                data = res.json()
-                if len(data) >= 2 and isinstance(data[1], list):
-                    titles.extend(data[1])
-        except Exception:
-            continue
-    return any(fuzz.token_sort_ratio(name, t) >= threshold for t in titles)
-
-
-def extract_candidate_names(body: str) -> list:
-    """판단이 아니라 단순 추출 — LLM 위험도가 낮은 작업이라 위키 조회 대상을 뽑는 데만 쓴다."""
-    if not body:
-        return []
-    prompt = f"""아래 기사 본문에서 실제 존재 여부를 확인해볼 만한 구체적 고유명사를 추출하세요.
-영화·도서·게임 등 작품명, 특정 인물 실명, 특정 기관·단체·기업명만 대상으로 합니다.
-국가명·일반 지명(도시·나라)이나 흔한 일반명사·직함은 제외하세요.
-쉼표로 구분해 나열만 하세요(설명 금지). 대상이 없으면 "없음"이라고만 답하세요.
-
-본문:
-{body[:2000]}
-
-답변:"""
-    result = call_gemini(prompt, max_tokens=150, start_tier=3)
-    if not result:
-        return []
-    result = result.strip()
-    if not result or ("없음" in result and len(result) <= 12):
-        return []
-    return [n.strip() for n in result.split(",") if n.strip() and len(n.strip()) >= 2][:15]
+    def _fg_verify_no_fabricated_names(source_prompt, body, call_gemini_fn):
+        return ""
 
 
 def verify_no_fabricated_names(source_prompt: str, body: str) -> str:
-    """생성된 본문에 원문 자료에 없는 고유명사(작품명·인명·지명·기관명)가 새로 등장했는지 확인.
-    두 신호를 같이 쓴다: ① 원본 자료 대조(Gemini 판단) ② 위키피디아 독립 조회(단순 추출 +
-    결정론적 HTTP 조회 — Gemini가 오판해도 이 신호는 별개로 남는다). gemini_writer.py의
-    동명 함수와 동일 로직(실사고 2026-08-16, id=79327)."""
-    if not body:
-        return ""
-    check_prompt = f"""아래는 기사 작성에 쓰인 원본 자료와, 그걸 바탕으로 생성된 한국어 기사 본문입니다.
-기사 본문에 나오는 고유명사(영화·도서·게임 등 작품명, 인명, 지명, 기관명)가 원본 자료에
-실제로 근거하는지 확인하세요. 정상적인 한글 음차나 공식 번역명은 문제가 아닙니다 —
-원본 자료에 등장하는 대상을 다른 이름으로 완전히 잘못 지어낸 경우만 찾으세요.
-그런 이름이 있으면 "지어낸이름 → 원본표기" 형식으로 쉼표 구분해 나열하세요.
-없으면 "없음"이라고만 답하세요.
-
-[원본 자료]
-{source_prompt[:3000]}
-
-[생성된 기사 본문]
-{body[:2000]}
-
-답변:"""
-    result = call_gemini(check_prompt, max_tokens=150, start_tier=3)
-    suspect = ""
-    if result:
-        result = result.strip()
-        if result and not ("없음" in result and len(result) <= 12):
-            suspect = result
-
-    unconfirmed = [n for n in extract_candidate_names(body) if not wikipedia_confirms(n)]
-    if unconfirmed:
-        note = "[위키 미확인] " + ", ".join(unconfirmed)
-        suspect = (suspect + "\n" + note) if suspect else note
-
-    return suspect
+    return _fg_verify_no_fabricated_names(source_prompt, body, call_gemini)
 
 
 # ── 기사 프롬프트 ────────────────────────────────────────────

@@ -405,26 +405,16 @@ def fetch_all_data() -> dict:
 
 
 # ── 위키피디아 고유명사 검증 (다른 writer 스크립트와 동일 로직) ──────
-def wikipedia_confirms(name: str, threshold: int = 70) -> bool:
-    name = (name or "").strip()
-    if not name:
+# wikipedia_confirms()는 다른 6개 writer와 완전히 동일한 순수 HTTP 조회라
+# fabrication_guard.py 공용화 대상(2026-09-08). extract_candidate_names/
+# verify_no_fabricated_names는 이 스크립트만 검색 그라운딩(use_search=True)을
+# 쓰는 특성상 검증 기준 자체가 다르게 설계돼 있어(시세 수치만 검증, 검색으로
+# 찾은 기관·인물명은 정상 허용) 공용화하지 않고 그대로 둔다.
+try:
+    from fabrication_guard import wikipedia_confirms
+except Exception:
+    def wikipedia_confirms(name: str, threshold: int = 70) -> bool:
         return False
-    titles = []
-    for lang in ("ko", "en"):
-        try:
-            res = requests.get(
-                f"https://{lang}.wikipedia.org/w/api.php",
-                params={"action": "opensearch", "search": name, "limit": 3, "namespace": 0, "format": "json"},
-                headers={"User-Agent": "NewsFinal-EntityCheck/1.0 (+https://newsfinal.co.kr)"},
-                timeout=10,
-            )
-            if res.status_code == 200:
-                data = res.json()
-                if len(data) >= 2 and isinstance(data[1], list):
-                    titles.extend(data[1])
-        except Exception:
-            continue
-    return any(fuzz.token_sort_ratio(name, t) >= threshold for t in titles)
 
 
 def extract_candidate_names(body: str) -> list:
