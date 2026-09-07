@@ -44,6 +44,16 @@ except Exception:
             return data[0].get("id", -1) if data else -1
         return -1
 
+# 주요국 중앙은행 정책금리 공식 데이터 조회(2026-09-08, 사용자 신고로
+# Gemini 검색 기반 actual_value 채우기가 실측상 거의 항상 실패하는 것을
+# 발견해 도입 — central_bank_rates.py 참고). import 실패해도 죽지 않도록
+# 항상 None(지원 안 됨 → 기존 Gemini 경로로 폴백)으로 처리한다.
+try:
+    from central_bank_rates import fetch_official_rate
+except Exception:
+    def fetch_official_rate(country: str):
+        return None
+
 # ── 설정 ────────────────────────────────────────────────────
 GEMINI_MODELS = [
     "gemini-3.8-flash",
@@ -484,52 +494,71 @@ def main():
             print(f"    → 이미 기사 존재, 스킵")
             continue
 
-        # ── Step 1: Gemini 검색 1차
-        prompt = build_search_prompt(event)
-        print(f"    → Gemini 1차 검색...")
-        resp1 = call_gemini(prompt, max_tokens=100, use_search=True)
-        time.sleep(5)
+        # ── Step 0: 공식 데이터 소스 우선 조회(2026-09-08, 사용자 신고 —
+        # "해외 금리 관련 기사도 거의 나오질 않고 있는데" 원인 진단: 아래
+        # Gemini 검색 2회 일치 검증이 실측상 거의 항상 실패하고 있었다
+        # (DB 확인 — 최근 발표된 모든 국가 금리 이벤트가 actual_value=null).
+        # central_bank_rates.py로 미국(FRED)·유로존(FRED)·영국(BOE) 공식
+        # 데이터를 직접 조회해, 성공하면 Gemini 검색 전체를 건너뛴다.
+        # 지원 안 되는 국가(일본 포함)는 official_rate가 None이라 그대로
+        # 아래 기존 경로로 폴백한다.
+        actual_str = None
+        official = fetch_official_rate(country)
+        if official:
+            off_rate, off_date = official
+            if off_date.isoformat() >= edate:
+                actual_str = f"{off_rate:.2f}%"
+                print(f"    ✓ 공식 소스 조회 성공: {actual_str} (기준일 {off_date})")
+            else:
+                print(f"    → 공식 소스 데이터가 아직 발표 시점({edate}) 이전({off_date}) → Gemini 검색으로 폴백")
 
-        if not resp1:
-            print(f"    → 1차 응답 없음, 스킵")
-            continue
-        print(f"    → 1차 응답: {resp1[:80]}")
+        if actual_str is None:
+            # ── Step 1: Gemini 검색 1차
+            prompt = build_search_prompt(event)
+            print(f"    → Gemini 1차 검색...")
+            resp1 = call_gemini(prompt, max_tokens=100, use_search=True)
+            time.sleep(5)
 
-        if "미발표" in resp1:
-            print(f"    → 아직 미발표, 스킵")
-            continue
+            if not resp1:
+                print(f"    → 1차 응답 없음, 스킵")
+                continue
+            print(f"    → 1차 응답: {resp1[:80]}")
 
-        rate1 = parse_rate(resp1)
-        if rate1 is None:
-            print(f"    → 1차 숫자 파싱 실패 ({resp1[:60]}), 스킵")
-            continue
+            if "미발표" in resp1:
+                print(f"    → 아직 미발표, 스킵")
+                continue
 
-        # ── Step 2: Gemini 검색 2차 (독립 검증)
-        print(f"    → Gemini 2차 검색...")
-        resp2 = call_gemini(prompt, max_tokens=100, use_search=True)
-        time.sleep(5)
+            rate1 = parse_rate(resp1)
+            if rate1 is None:
+                print(f"    → 1차 숫자 파싱 실패 ({resp1[:60]}), 스킵")
+                continue
 
-        if not resp2:
-            print(f"    → 2차 응답 없음, 스킵")
-            continue
-        print(f"    → 2차 응답: {resp2[:80]}")
+            # ── Step 2: Gemini 검색 2차 (독립 검증)
+            print(f"    → Gemini 2차 검색...")
+            resp2 = call_gemini(prompt, max_tokens=100, use_search=True)
+            time.sleep(5)
 
-        if "미발표" in resp2:
-            print(f"    → 2차 미발표 응답, 스킵")
-            continue
+            if not resp2:
+                print(f"    → 2차 응답 없음, 스킵")
+                continue
+            print(f"    → 2차 응답: {resp2[:80]}")
 
-        rate2 = parse_rate(resp2)
-        if rate2 is None:
-            print(f"    → 2차 숫자 파싱 실패 ({resp2[:60]}), 스킵")
-            continue
+            if "미발표" in resp2:
+                print(f"    → 2차 미발표 응답, 스킵")
+                continue
 
-        # ── Step 3: 검증
-        if not rates_match(rate1, rate2):
-            print(f"    → 불일치: {rate1}% vs {rate2}% → 스킵 (다음 사이클 재시도)")
-            continue
+            rate2 = parse_rate(resp2)
+            if rate2 is None:
+                print(f"    → 2차 숫자 파싱 실패 ({resp2[:60]}), 스킵")
+                continue
 
-        actual_str = f"{rate1:.2f}%"
-        print(f"    ✓ 검증 완료: {actual_str}")
+            # ── Step 3: 검증
+            if not rates_match(rate1, rate2):
+                print(f"    → 불일치: {rate1}% vs {rate2}% → 스킵 (다음 사이클 재시도)")
+                continue
+
+            actual_str = f"{rate1:.2f}%"
+            print(f"    ✓ 검증 완료: {actual_str}")
 
         # ── Step 4: econ_events 업데이트
         if not update_event_actual(eid, actual_str):
