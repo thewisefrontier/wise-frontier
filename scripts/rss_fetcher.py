@@ -14,6 +14,12 @@ from dotenv import load_dotenv
 from rapidfuzz import fuzz
 from db import init_db, is_url_exists, insert_article, mark_sent_telegram, now_kst
 
+try:
+    from dedup_guard import normalize_tags
+except Exception:
+    def normalize_tags(tags, limit: int = 15) -> list:
+        return list(dict.fromkeys(t.strip().lower() for t in (tags or ()) if t and t.strip()))[:limit]
+
 # UTF-8 출력 설정 (Windows 인코딩 오류 방지)
 sys.stdout.reconfigure(encoding='utf-8')
 
@@ -1186,7 +1192,7 @@ for data in results:
     # 다르게 뽑히거나 아예 안 뽑히는 문제(리퀴드 네트워크 해킹 트렌드 기사 중복,
     # 국가 없는 글로벌 이슈)를 언어 중립적인 원문 태그로 보완한다.
     raw_tags = [t.get("term", "").strip() for t in (latest.get("tags") or []) if t.get("term")]
-    raw_tags = list(dict.fromkeys(raw_tags))[:10]  # 중복 제거 + 과다 태그 방지
+    raw_tags = normalize_tags(raw_tags, limit=10)  # 정리(정규화+포함관계 제거)+정렬(dedup_guard.py)
     tag_source_data = {"tags": raw_tags} if raw_tags else None
 
     # 텔레그램 발송 (소프트 노이즈는 스킵)

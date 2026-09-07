@@ -84,6 +84,31 @@ def article_tags(a: dict) -> set:
     return {t.strip().lower() for t in raw if t and t.strip().lower() not in GENERIC_TAGS}
 
 
+def normalize_tags(tags, limit: int = 15) -> list:
+    """여러 소스 기사의 태그를 합칠 때 쓰는 정리·정렬 함수.
+
+    2026-09-08 사용자 지적("태그를 정리/정렬해주는 모듈도 있어야겠다"):
+    RSS 수집 단계(rss_fetcher.py)는 원문 1건당 태그를 10개로 이미 제한하지만,
+    트렌드/클러스터 기사는 최대 8건의 소스 기사 태그를 하나로 합치므로 상한
+    없이 20~30개까지 불어날 수 있었다. 여기서 세 가지를 한 번에 처리한다:
+    1. 소문자 정규화 + 범용 버킷(GENERIC_TAGS) 제외 — article_tags()와 동일 기준.
+    2. 포함관계 정리 — "liquid"와 "liquid network"가 같이 있으면 짧은 쪽은
+       긴 쪽에 이미 포함된 정보라 중복이므로 제거한다(tag_word_set() 매칭
+       결과에는 영향 없음 — 어차피 단어 단위로 겹쳐서 판정하므로).
+    3. 알파벳순 정렬 + 개수 상한 — 저장값을 결정적(deterministic)으로 만들고
+       무한정 불어나는 것을 막는다.
+    """
+    cleaned = {t.strip().lower() for t in (tags or ()) if t and t.strip()}
+    cleaned = {t for t in cleaned if t not in GENERIC_TAGS}
+
+    kept: list = []
+    for t in sorted(cleaned, key=len, reverse=True):
+        if any(t != k and t in k for k in kept):
+            continue
+        kept.append(t)
+    return sorted(kept)[:limit]
+
+
 def tag_word_set(tags: set) -> set:
     """태그 집합을 단어 단위 토큰 집합으로 변환(소스마다 "Liquid Network"/
     "Liquid"처럼 조금씩 다르게 태깅해도 겹치는 단어가 있으면 같은 대상으로 본다).
