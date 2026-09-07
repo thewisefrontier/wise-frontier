@@ -54,7 +54,8 @@ def is_url_exists(url: str) -> bool:
 def insert_article(
     title_en, title_ko, summary_en, summary_ko,
     url, source, category, subcategory, region, country, country_flag, score,
-    full_text="", countries=None, is_published=False, source_published_at=None
+    full_text="", countries=None, is_published=False, source_published_at=None,
+    source_data=None,
 ) -> int:
     payload = {
         "title_en": title_en or "",
@@ -79,6 +80,10 @@ def insert_article(
     # 원문(RSS) 발행일 — 값이 있을 때만 실어 기존 동작에 영향 없게 한다
     if source_published_at:
         payload["source_published_at"] = source_published_at
+    # RSS 원문 태그(<category> 등) — 트렌드 중복판정에서 country 대신/보조로
+    # 쓸 수 있게 원문 그대로 보존한다(2026-09-08, gemini_summarizer.py 참고).
+    if source_data:
+        payload["source_data"] = source_data
     headers = {**_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
     res = requests.post(_url(), headers=headers, json=payload, timeout=15)
     if res.status_code in (200, 201):

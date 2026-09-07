@@ -468,30 +468,47 @@ def _fuzzy_keyword_overlap(kws_a: set, kws_b: set) -> int:
     return count
 
 
+# 일반기사(이 파일)/트렌드기사(gemini_summarizer.py)가 각자 따로 갖고
+# 있던 "동일사건 판정"·"태그 기반 후보 검색" 로직을 dedup_guard.py로
+# 공용화(2026-09-08, 사용자 지적: "일반기사/트렌드기사 각각의 중복 검사
+# 툴이 있을텐데, 그걸 합쳐서 공용 모듈로 만들면 안되나?"). import 실패해도
+# 죽지 않도록 최소 폴백을 둔다.
+try:
+    from dedup_guard import (
+        article_tags as _article_tags,
+        same_event_llm as _dg_same_event_llm,
+        find_by_tags as _dg_find_by_tags,
+    )
+except Exception:
+    def _article_tags(a: dict) -> set:
+        return set()
+    def _dg_same_event_llm(title_a, body_a, title_b, body_b, gemini_fallback=None) -> bool:
+        return False
+    def _dg_find_by_tags(title, body, tags, hours=72, limit=200, order="desc", gemini_fallback=None):
+        return None
+
+
 def _same_headline_event_llm(title_a: str, body_a: str, title_b: str, body_b: str) -> bool:
     """토큰/키워드 기반 지표가 근소하게 갈릴 때만 쓰는 최종 판정 — 두 기사가
-    같은 사건을 다루는지 LLM에게 직접 묻는다(gemini_summarizer.py의
-    _same_event_llm과 같은 철학, gemini_writer.py 쪽엔 이 안전망이 없어서
-    2026-09-06 카르그 유조선 중복(id=135075/137073)을 놓쳤다 — 두 제목이
-    표현·구조가 달라 rapidfuzz 유사도가 낮게 나왔지만 실제로는 같은 사건)."""
-    prompt = f"""아래 두 뉴스 기사가 완전히 같은 사건(같은 시점의 같은 구체적
-사건)을 다루고 있습니까? 같은 큰 이슈의 다른 시점/다른 세부사건이면
-"다름"입니다.
-
-[기사 A 제목] {title_a}
-[기사 A 본문 앞부분] {(body_a or '')[:300]}
-
-[기사 B 제목] {title_b}
-[기사 B 본문 앞부분] {(body_b or '')[:300]}
-
-"같음" 또는 "다름"으로만 답하세요."""
-    result = call_gemini(prompt, max_tokens=10, start_tier=3)
-    return bool(result) and result.strip().startswith("같음")
+    같은 사건을 다루는지 LLM에게 직접 묻는다. dedup_guard.same_event_llm()
+    (Nvidia 우선 + 이 스크립트의 call_gemini 폴백)로 위임 — gemini_summarizer.py
+    의 _same_event_llm과 같은 함수를 공유한다(2026-09-06 카르그 유조선
+    중복(id=135075/137073) 때 이 안전망이 없어서 놓쳤던 사고 대응으로 처음
+    도입됐던 것을 이번에 공용화)."""
+    return _dg_same_event_llm(title_a, body_a, title_b, body_b, gemini_fallback=call_gemini)
 
 
-def find_similar_article(title: str, own_articles: list, threshold: int = 70, body: str | None = None):
+def find_similar_article(title: str, own_articles: list, threshold: int = 70,
+                          body: str | None = None, tags: set | None = None):
     """
-    중복 기사 탐색 — 3단계:
+    중복 기사 탐색:
+    0차: 원문(RSS) 태그 공유 + LLM 확인 — country/제목 표기가 갈려도 언어
+         중립적으로 잡는다(dedup_guard.py 공용화, 2026-09-08. gemini_summarizer.py
+         의 find_similar_trend()에 있던 신호를 이쪽에도 연결 — "일반기사/
+         트렌드기사 각각의 중복 검사 툴이 있을텐데, 그걸 합쳐서 공용 모듈로
+         만들면 안되나?" 사용자 지적. 이 조회는 subcategory/파이프라인 구분
+         없이 발행된 기사 전체를 보므로, 트렌드 트래커가 먼저 쓴 사건을 이
+         일반 클러스터링 경로가 또 쓰는 것도 잡을 수 있다).
     1차: DB RPC(find_duplicate_title) — pg_trgm 유사도 기반
     2차: 숫자 제거 후 같은 국가·날짜 기사와 키워드 재비교
          (사망자 수 등 수치가 바뀐 후속 보도 감지용)
@@ -500,6 +517,12 @@ def find_similar_article(title: str, own_articles: list, threshold: int = 70, bo
     """
     if not title:
         return None, 0
+
+    # ── 0차: 태그 공유 ──
+    if tags and body:
+        match = _dg_find_by_tags(title, body, tags, hours=72, order="desc", gemini_fallback=call_gemini)
+        if match:
+            return {"id": match["id"], "title_ko": match.get("title_ko", ""), "score": 0.9}, 90
 
     # ── 1차: RPC ──
     try:
@@ -656,7 +679,7 @@ def find_continuing_story(title: str, body_excerpt: str, country: str, hours: in
     return None
 
 
-def save_article(title_ko, summary_ko, cluster_key, category, region, country="", article_count=0, published=True, countries=None, image_url="", image_credit="", is_travel=False, summary_3lines="", investment_idea="", unpub_reason="", continuation_of_id=None):
+def save_article(title_ko, summary_ko, cluster_key, category, region, country="", article_count=0, published=True, countries=None, image_url="", image_credit="", is_travel=False, summary_3lines="", investment_idea="", unpub_reason="", continuation_of_id=None, source_data=None):
     # 문자셋 혼입 감지(아랍/히브리/키릴/태국/데바나가리/벵골/타밀/한자) — 저장 차단
     _leak = detect_script_leak(title_ko, summary_ko)
     if _leak:
@@ -705,6 +728,10 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
         "is_travel": bool(is_travel),
         "summary_3lines": summary_3lines,
         "investment_idea": investment_idea,
+        # 소스 원문 RSS 태그 취합 — dedup_guard.py 공용화(2026-09-08)로 이
+        # 일반 클러스터링 경로도 트렌드 트래커와 같은 언어중립 태그 매칭을
+        # 쓸 수 있게, 다음 재작성이 찾아볼 수 있도록 자기 자신에도 저장해둔다.
+        **({"source_data": source_data} if source_data else {}),
         **({"continuation_of_id": continuation_of_id} if continuation_of_id else {}),
     }
     return insert_final_article(payload)
@@ -2986,7 +3013,11 @@ def run():
                 else:
                     final_subcategory = cluster_key
 
-                similar, sim_score = find_similar_article(full_title, today_own_articles, body=gen_body)
+                cluster_tags: set = set()
+                for _ca in cluster:
+                    cluster_tags |= _article_tags(_ca)
+
+                similar, sim_score = find_similar_article(full_title, today_own_articles, body=gen_body, tags=cluster_tags)
                 if similar:
                     print(f"  ⚠️ 유사 기사 재발견 (유사도 {sim_score}%) → 미발행으로 저장: {similar.get('title_ko','')[:40]}")
                     published = False
@@ -3031,6 +3062,7 @@ def run():
                     image_url     = image_url,
                     image_credit  = image_credit,
                     is_travel     = gen_travel,
+                    source_data   = {"tags": sorted(cluster_tags)} if cluster_tags else None,
                     continuation_of_id = continuing["id"] if (continuing and published) else None,
                 )
                 if article_id > 0:
@@ -3262,7 +3294,8 @@ def run():
                 time.sleep(CALL_INTERVAL)
                 continue
 
-            similar, sim_score = find_similar_article(full_title, today_own_articles, body=gen_body)
+            solo_tags = _article_tags(a)
+            similar, sim_score = find_similar_article(full_title, today_own_articles, body=gen_body, tags=solo_tags)
             if similar:
                 print(f"  ⚠️ 유사 기사 재발견 (유사도 {sim_score}%) → 미발행으로 저장")
                 published = False
@@ -3308,6 +3341,7 @@ def run():
                 image_url=image_url,
                 image_credit=image_credit,
                 is_travel=gen_travel,
+                source_data={"tags": sorted(solo_tags)} if solo_tags else None,
             )
             if article_id > 0:
                 status = "✅ 단독 저장" if published else "📋 단독 미발행"

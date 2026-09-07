@@ -414,6 +414,114 @@ def call_gemini(prompt: str, retry: int = 2, max_tokens: int = 500, start_tier: 
     return _gemini_client.call(prompt, max_tokens=max_tokens, start_tier=start_tier,
                                 temperature=0.4, timeout=(10, 30))
 
+
+try:
+    from nvidia_client import call_nvidia
+except Exception:
+    def call_nvidia(prompt: str, max_tokens: int = 400, temperature: float = 0.2):
+        return None
+
+
+def fetch_background_context(query: str) -> str:
+    """트렌드 기사 소재의 배경 지식을 보강 — NVIDIA 먼저 시도, 안 되면
+    검색 그라운딩(Gemini use_search)으로 폴백.
+
+    실사고 사례(2026-09-08, id=143389 시에라리온 코로마 전 대통령 기사):
+    소스 기사가 "귀국했다"는 사실만 담고 있어 정작 "이 사람이 누구고 왜
+    반역죄로 기소됐는지" 배경이 통째로 빠진 채 발행됐다("코로마가 어떤
+    사람인지, 왜 반역죄로 기소됐는지" — 사용자 지적). 재난성 이슈(예: 화산
+    분화)도 마찬가지로 경제적 피해·증시·환율 등 파급 영향을 찾아봐야 하는데
+    소스 기사 자체엔 없는 경우가 많다.
+
+    2026-09-08 사용자 질문("엔비디아 가지고 검색은 못하나?"): NVIDIA(nemotron)는
+    이 프로젝트에서 순수 텍스트 completion으로만 호출돼 실시간 검색 기능이
+    없다 — 학습 시점에 멈춘 지식만 답할 수 있다. 하지만 "코로마가 누구인지"
+    같은 배경 질문은 대부분 오래전에 공개된 정적 지식이라 검색 없이도
+    커버되고, "이번 화산 분화로 증시가 어떻게 됐나" 같은 실시간 수치만
+    검색이 꼭 필요하다. 그래서 NVIDIA에게 먼저 "확신 없는 최신 정보는 답하지
+    말라"고 명시해 묻고, 모른다고 답하거나 실패할 때만 Gemini 검색 그라운딩
+    으로 넘어간다 — 검색 그라운딩 쿼터가 매우 작아서(gemini_client.py 주석
+    참고, 2026-08-22 실사고) 대부분의 배경 질문을 NVIDIA(사실상 무제한)로
+    처리하면 이 쿼터를 거의 안 쓰게 된다.
+
+    두 경로 다 실패해도 빈 문자열을 반환해 호출부가 배경 문단 없이 기존
+    방식대로 진행하게 한다(이 기능 실패가 기사 생성 자체를 막으면 안 됨).
+
+    ⚠️ 2026-09-08 사용자 지시("다만 확실하게 환각을 거를 수 있도록 프롬프트를
+    추가해둘 것"): 생성 모델 자신에게 "모르면 모름이라 답하라"고 시키는 것만
+    으로는 과신(overconfidence)에 의한 환각을 다 못 거른다 — 모델은 틀린
+    내용도 확신 있게 말할 수 있다. 그래서 결과를 그대로 안 믿고, 이 프로젝트의
+    기존 원칙(같은 모델이 생성·검증을 다 하면 맹점이 반복된다 — verify_entities.py,
+    _same_event_llm과 동일한 철학)대로 계열이 다른 모델에게 한 번 더 "위험한
+    구체적 주장만 걸러내라"고 시키는 별도 검증 패스를 추가했다.
+    """
+    base_prompt = (
+        "다음 소재에 대한 배경 정보를 기사에 참고할 객관적 사실만 5문장 이내로 "
+        "정리하세요. 인물이면 직함·이력·이전 행적(왜 화제가 됐는지)을, 사건·재난이면 "
+        "원인·경위와 경제적 파급 영향(증시·환율·산업 피해 등)을 우선하세요.\n\n"
+        f"소재: {query}"
+    )
+
+    # 1차: NVIDIA — 검색 없이 학습 지식만으로 답함. 최신 수치·현재진행형
+    # 사건처럼 확신할 수 없는 내용은 스스로 거르고 "모름"으로 답하게 한다.
+    nvidia_prompt = (
+        base_prompt + "\n\n주의: 당신은 실시간 인터넷 조회 없이 학습된 지식만으로 "
+        "답합니다. 인물의 이력·직함처럼 시간이 지나도 안 바뀌는 사실만 확신 있게 "
+        "쓰세요. 주가·환율·사망자 수·현재 상황처럼 계속 바뀌거나 최근에 일어났을 "
+        "수 있는 내용은 확신이 없으면 절대 추측하지 말고, 그런 내용밖에 없거나 "
+        "확인되지 않은 추측은 쓰지 말고 '모름'이라고만 답하세요."
+    )
+    try:
+        nv_result = call_nvidia(nvidia_prompt, max_tokens=400, temperature=0.2)
+        if nv_result and "모름" not in nv_result and "배경 정보 없음" not in nv_result:
+            checked = _verify_no_hallucination(nv_result, call_fn=call_gemini)
+            if checked:
+                return checked
+    except Exception:
+        pass
+
+    # 2차: Gemini 검색 그라운딩 — NVIDIA가 모른다고 답했거나 실패했을 때만.
+    search_prompt = (
+        base_prompt + "\n\n확인되지 않은 추측은 쓰지 말고, 근거를 찾지 못하면 "
+        "'배경 정보 없음'이라고만 답하세요."
+    )
+    try:
+        result = _gemini_client.call(search_prompt, max_tokens=400, start_tier=0,
+                                      temperature=0.3, timeout=(10, 20),
+                                      use_search=True, max_stages=1)
+        if result and "배경 정보 없음" not in result:
+            checked = _verify_no_hallucination(
+                result, call_fn=lambda p, max_tokens=400: call_nvidia(p, max_tokens=max_tokens, temperature=0.1)
+            )
+            if checked:
+                return checked
+    except Exception:
+        pass
+    return ""
+
+
+def _verify_no_hallucination(text: str, call_fn) -> str:
+    """생성된 배경 자료에서 확인 안 된 구체적 주장(숫자·통계·날짜·최근 상황)을
+    한 번 더 걸러낸다. call_fn은 검증에 쓸 LLM 호출 함수(생성에 쓴 모델과는
+    다른 계열이어야 맹점이 안 겹친다) — (prompt, max_tokens) 시그니처."""
+    check_prompt = (
+        "다음은 기사에 참고할 배경자료 후보입니다. 이 중 구체적인 숫자·통계·"
+        "날짜나, 현재 진행 중이거나 최근에 바뀌었을 수 있어 사실 확인이 안 되면 "
+        "위험한 문장이 있으면 그 문장만 전부 제거하세요. 인물의 이력·직함·"
+        "역사적 배경처럼 시간이 지나도 안 바뀌는 안전한 사실은 그대로 남기세요. "
+        "위험한 문장이 하나도 없으면 원문 그대로 반환하고, 안전한 내용이 전혀 "
+        "남지 않으면 정확히 '없음'이라고만 답하세요. 다른 설명 없이 결과만 "
+        "출력하세요.\n\n"
+        f"{text}"
+    )
+    try:
+        checked = call_fn(check_prompt, max_tokens=400)
+    except Exception:
+        return ""
+    if not checked or "없음" in checked.strip()[:10]:
+        return ""
+    return checked.strip()
+
 # 문체 검증/변환(논평·칼럼체 감지, 합쇼체 감지·해라체 변환)은 style_guard.py로
 # 공용화(2026-09-02, gemini_writer.py와 완전히 동일한 코드가 각각 복붙돼
 # 있었음). import 실패해도 죽지 않도록 최소 폴백을 둔다.
@@ -767,6 +875,32 @@ def _title_keywords(t: str) -> set:
     return {w for w in toks if len(w) >= 2 and w not in FREQ_STOPWORDS}
 
 
+# 일반기사(gemini_writer.py)와 트렌드기사(gemini_summarizer.py)가 각자
+# 따로 갖고 있던 "동일사건 판정" 로직을 dedup_guard.py로 공용화(2026-09-08,
+# 사용자 지적: "일반기사/트렌드기사 각각의 중복 검사 툴이 있을텐데, 그걸
+# 합쳐서 공용 모듈로 만들면 안되나?"). import 실패해도 죽지 않도록 최소
+# 폴백(태그 매칭 없이 기존 country 기반 경로만 동작)을 둔다.
+try:
+    from dedup_guard import (
+        article_tags as _article_tags,
+        tag_word_set as _tag_word_set,
+        same_event_llm as _dg_same_event_llm,
+        find_by_tags as _dg_find_by_tags,
+        find_by_llm_scan as _dg_find_by_llm_scan,
+    )
+except Exception:
+    def _article_tags(a: dict) -> set:
+        return set()
+    def _tag_word_set(tags: set) -> set:
+        return set()
+    def _dg_same_event_llm(title_a, body_a, title_b, body_b, gemini_fallback=None) -> bool:
+        return False
+    def _dg_find_by_tags(title, body, tags, hours=72, limit=200, order="desc", gemini_fallback=None):
+        return None
+    def _dg_find_by_llm_scan(title, body, hours=8, limit=20, exclude_country=None, gemini_fallback=None):
+        return None
+
+
 def _hours_since(created_at: str) -> float:
     """created_at(16자 KST 텍스트 'YYYY-MM-DD HH:MM') 기준 경과 시간(시간).
     파싱 실패 시 무한대를 반환해 시간창 조건을 통과하지 못하게 한다."""
@@ -790,12 +924,26 @@ def _lead_metrics(a: str, b: str, n: int = 300):
 
 def find_similar_trend(title: str, country: str | None = None,
                        days: int = 14, sim_threshold: int = 60,
-                       body: str | None = None) -> dict | None:
+                       body: str | None = None, tags: set | None = None) -> dict | None:
     """
     최근 N일 내 트렌드 기사 중 동일 사건의 '루트(최초 발행=최소 id)' 반환. 없으면 None.
     매칭: country 지정 시 country 일치 필수 + 제목 token_sort_ratio>=sim_threshold + 공유 키워드>=1.
           country=None이면 제목 유사도만으로 느슨히 탐색(사전 스킵 판단용).
     id 오름차순 조회 → 첫 매칭이 곧 루트.
+
+    ⚠️ 2026-09-08 사용자 지적("이게 지금 계속 문제가 생기는게 기사 분류를
+    '국가'로 하니까 그런거잖아"): country를 하드 필터로 쓰는 구조 자체가
+    반복 사고(니제르/우크라이나, 이란/미국 유조선, 리퀴드 네트워크)의 공통
+    원인이었다. country는 파이프라인마다 다르게 뽑히거나(주체국 판단 차이)
+    아예 안 뽑힐 수 있는(글로벌 이슈) 불안정한 축이기 때문이다. 이를 보완하려고
+    RSS 원문 태그(source_data.tags — country와 달리 원문 언어 그대로 보존되고
+    파이프라인 판단이 안 섞여 안정적)를 언어 중립적 매칭 축으로 새로 추가한다
+    ("트렌드 기사 묶이는 거 보면 #bitcoin #liquid #network 이런 식으로 태그를
+    줘서 묶고 있는데... 태그를 좀 더 다양하게 써먹던가" — 사용자 제안).
+    country/제목 유사도 판단보다 먼저, 그리고 country 일치 여부와 무관하게
+    본문까지 있는 실제 병합 판단에서 태그 공유 여부를 확인한다 — 공유 태그가
+    있으면 LLM에게 최종 확인만 받고, 태그가 없으면(비-크립토 소스 등) 아래
+    기존 경로로 폴백한다.
 
     ⚠️ 2026-09-03 실사고(id=118418 vs 123782, 투팍 살해범 유죄평결 중복):
     이전엔 subcategory가 trend_/realtrend_/extrend_인 기사만 검색해서,
@@ -815,7 +963,27 @@ def find_similar_trend(title: str, country: str | None = None,
     (의도적 느슨 탐색)과 country=""(추출 실패)를 구분해, 후자는 아예 매칭
     시도를 하지 않는다.
     """
+    if tags and body:
+        match = _dg_find_by_tags(title, body, tags, hours=days * 24, order="asc", gemini_fallback=call_gemini)
+        if match:
+            return match
+
     if country == "":
+        # 국가 추출 실패 시 1~3차(느슨한 제목/키워드 기반) 경로는 전부
+        # 건너뛴다 — 실사고(니제르 쿠데타 vs 우크라이나 전쟁 오병합) 재발 방지.
+        # 다만 완전히 손 놓으면 국가가 특정되지 않는 글로벌 이슈(암호화폐 해킹
+        # 등)는 재작성될 때마다 중복 발행된다(2026-09-08 실사고: 리퀴드 네트워크
+        # 해킹이 subcategory=realtrend_리퀴드_네트워크... 와
+        # subcategory=realtrend_Blockstream_Liquid_N...로 각각 다른 언어
+        # 표기라 서로 못 알아보고 트렌드 기사 2건이 따로 발행됨). body가 있는
+        # 실제 병합 판단(제목+본문까지 완성된 2차 호출)에서는 5차 경로와 동일하게
+        # 최근 8시간 내 발행 기사만 좁게 재조회해 LLM에게 "같은 사건인지"만
+        # 물어 확인한다 — 느슨한 제목유사도가 아니라 본문까지 읽는 LLM 판정이라
+        # country 매칭 없이도 오탐 위험이 낮다.
+        if body:
+            match = _dg_find_by_llm_scan(title, body, hours=8, limit=20, gemini_fallback=call_gemini)
+            if match:
+                return match
         return None
     from rapidfuzz import fuzz
     since = (now_kst() - timedelta(days=days)).strftime("%Y-%m-%d %H:%M")
@@ -895,70 +1063,21 @@ def find_similar_trend(title: str, country: str | None = None,
         # 오탐 위험을 낮춘다(중복은 거의 항상 몇 시간 내 재탕이라 8시간이면
         # 충분히 좁음).
         if country and body:
-            since_narrow = (now_kst() - timedelta(hours=8)).strftime("%Y-%m-%d %H:%M")
-            narrow_res = requests.get(
-                _sb_url(), headers=_sb_headers(),
-                params={
-                    "select": "id,title_ko,summary_ko,country,created_at",
-                    "source": "eq.NewsFinal", "is_published": "eq.true",
-                    "created_at": f"gte.{since_narrow}",
-                    "order": "id.desc", "limit": "20",
-                },
-                timeout=10,
-            )
-            if narrow_res.status_code in (200, 206):
-                for a in narrow_res.json():
-                    if (a.get("country") or "") == country:
-                        continue  # 같은 국가면 이미 위에서 검사됨
-                    existing_title = a.get("title_ko") or ""
-                    existing_body = a.get("summary_ko") or ""
-                    if not existing_title or not existing_body:
-                        continue
-                    if _same_event_llm(title, body, existing_title, existing_body):
-                        print(f"    → 유사 트렌드 루트 발견[LLM 판정, 국가불일치] (id={a['id']}): {existing_title[:40]}")
-                        return a
+            match = _dg_find_by_llm_scan(title, body, hours=8, limit=20,
+                                          exclude_country=country, gemini_fallback=call_gemini)
+            if match:
+                return match
     except Exception as e:
         print(f"    → 유사도 체크 실패: {e}")
     return None
 
 
-# 다른 모델 계열(Nemotron)로 판단 — 같은 모델(Gemini)이 트렌드 기사도 쓰고
-# 중복 판정도 하면 그 모델의 맹점이 양쪽에 반복된다는 문제의식(verify_entities.py
-# 의 엔비디아 교차검증과 같은 이유). 2026-09-03: 크레딧 한도가 아니라 RPM만
-# 제약이라는 게 확인돼(memory: newsfinal_nvidia_cross_verification 정정)
-# Gemini 대신 이쪽으로 옮김 — 호출 빈도도 낮아(최근 같은 국가 후보 최대 3건)
-# RPM 부담이 거의 없다.
-try:
-    from nvidia_client import call_nvidia
-except Exception:
-    def call_nvidia(prompt: str, max_tokens: int = 400, temperature: float = 0.2):
-        return None
-
-
+# 동일사건 LLM 최종 판정은 dedup_guard.same_event_llm()으로 공용화됐다
+# (Nvidia 우선 + 이 스크립트의 call_gemini 폴백, gemini_writer.py의
+# _same_headline_event_llm과도 같은 함수를 공유). 위 4차 경로가 여전히
+# 이 이름(_same_event_llm)으로 호출하므로 얇은 래퍼만 남긴다.
 def _same_event_llm(new_title: str, new_body: str, existing_title: str, existing_body: str) -> bool:
-    """토큰 유사도 지표가 전부 실패했을 때만 쓰는 최후 판정 — 두 기사가
-    같은 실제 사건을 다루는지 묻는다(위 find_similar_trend 4차 경로 참조)."""
-    prompt = f"""아래 두 기사가 같은 실제 사건(같은 날짜·같은 구체적 사건)을
-다루고 있습니까? 단순히 같은 나라·같은 종류의 사건(예: 둘 다 "쿠데타
-시도"이지만 서로 다른 날짜의 별개 사건)이면 "다름"입니다. 정확히 "같음"
-또는 "다름" 한 단어만 답하세요.
-
-[기사 A] {existing_title}
-{existing_body[:600]}
-
-[기사 B] {new_title}
-{new_body[:600]}
-
-답변:"""
-    try:
-        result = call_nvidia(prompt, max_tokens=10)
-        if not result:
-            # 엔비디아 키 미설정 등으로 실패하면 Gemini로 폴백 — 판정 자체가
-            # 안 되는 것보다는 낫다(중복 탐지 4차 경로는 원래도 최후 수단).
-            result = call_gemini(prompt, max_tokens=10, start_tier=3)
-    except Exception:
-        return False
-    return bool(result) and "같음" in result.strip()
+    return _dg_same_event_llm(new_title, new_body, existing_title, existing_body, gemini_fallback=call_gemini)
 
 
 def _summarize_delta(root_summary: str, new_title: str, new_body: str) -> str:
@@ -1454,7 +1573,7 @@ def fetch_recent_titles(days: int) -> list:
                 _sb_url(),
                 headers={**_sb_headers(), "Range": f"{offset}-{offset+499}"},
                 params={
-                    "select": "id,title_en,title_ko,summary_en,summary_ko,country,category,region,created_at,source",
+                    "select": "id,title_en,title_ko,summary_en,summary_ko,country,category,region,created_at,source,source_data",
                     "source": "neq.NewsFinal",
                     "created_at": f"gte.{since}",
                     "order": "created_at.desc",
@@ -1725,6 +1844,25 @@ JSON 배열로만 응답하세요 (마크다운 없이):
         # 기사 생성 프롬프트
         # 보도일·원문을 여기서 한 번 보강해 프롬프트와 date_guard가 함께 쓰게 한다
         related = _merge_source_details(related)
+
+        # 원문 태그 취합(2026-09-08) — country와 달리 언어 중립적이라 재작성마다
+        # 표기가 달라지는 문제 없이 동일사건 판정에 쓸 수 있다. 이 트렌드 기사
+        # 자체의 source_data에도 저장해 다음 재작성 때 서로를 찾을 수 있게 한다.
+        related_tags: set = set()
+        for a in related:
+            related_tags |= _article_tags(a)
+
+        # 배경 리서치 보강(2026-09-08, id=143389 시에라리온 코로마 전 대통령
+        # 기사 — "코로마가 어떤 사람인지, 왜 반역죄로 기소됐는지" 사용자 지적):
+        # 소스 기사 자체엔 없는 배경(인물 이력, 재난의 경제적 파급 등)을 검색
+        # 그라운딩으로 한 번 더 찾아본다. 실패해도 빈 문자열이라 기존 방식대로
+        # 진행된다(전체 흐름을 막지 않음).
+        background = fetch_background_context(f"{issue_ko} ({topic})")
+        background_block = (
+            f"\n[배경 참고자료 — 검색 기반, 아래 관련 기사에 없는 사실관계 보완용]\n{background}\n"
+            if background else ""
+        )
+
         article_list = ""
         for i, a in enumerate(related, 1):
             t = a.get("title_ko") or a.get("title_en") or ""
@@ -1761,9 +1899,10 @@ JSON 배열로만 응답하세요 (마크다운 없이):
 
 [관련 기사]
 {article_list}
-
+{background_block}
 이 기사들을 종합해 완성도 높은 한국어 기사를 작성하세요.
 - 반드시 하나의 토픽만 다루세요.
+- [배경 참고자료]가 있다면 인물의 이력·직함, 사건의 경위·파급 영향처럼 위 관련 기사에 없는 사실관계를 보완하는 데 쓰세요. 다만 이 자료도 검색 결과이므로 관련 기사와 모순되면 관련 기사를 우선하고, 확신이 낮은 내용은 쓰지 마세요.
 - 여러 국가·기관에서 같은 사안이 동시에 벌어지고 있다면, 첫 문단은 그 사실을 압축해 요약하는 리드로 시작하세요(예: "나이지리아와 남수단 등 아프리카 여러 국가에서 콜레라 확산이 이어지며 방역 당국이 대응에 나섰다"). 이 리드는 반드시 구체적 사실(무엇이 몇 개국·몇 곳에서 벌어지고 있는지)을 담아야 하며, 화자 없는 추상적 개관 문장이어서는 안 됩니다. 리드 다음 문단부터 국가·기관별 구체적 내용을 전개하세요. 나라가 하나뿐이면 이 리드는 필요 없습니다.
 - 본문은 부가가치 문단을 포함해 3개 문단 이상으로 충분히 작성하세요. 일반적인 스트레이트 기사의 표준 분량은 200자 원고지 10매, 즉 대략 2,000자 이상입니다(2026-08-26 사용자 지적: "죄다 단신급의 기사" → "적어도 기사 하나마다 분량이 2천자 정도는 됐으면", "더 길어도 상관 없다") — 700자는 최소 하한선이지 목표치가 아니니 그 근처에서 서둘러 마무리하지 마세요. 2,000자는 상한이 아니라 하한이라 소스에 사실관계가 더 있으면 넘어가도 됩니다. 배경·경과·전망(또는 파급 효과)을 각각 다루어 분량을 채우세요. 관련 기사에 나온 내용이 부족하면 배경 설명이나 맥락으로 보완하되, 소스에 없는 내용을 지어내 채우지는 마세요 — 소스가 짧은 단신이면 억지로 채우지 말고 가능한 만큼만 쓰세요. ⚠️ 분량 확보보다 환각 방지가 항상 우선입니다("핵심은 환각 현상이 일어나지 않도록 하는거야", "너무 길게 만들다가 헛소리가 나가면 안돼") — 분량과 정확성이 충돌하면 무조건 정확성을 택해 짧게 쓰세요.
 - 문단을 나눌 때는 반드시 빈 줄(줄바꿈 2번)로 구분하세요. 한 문단에 모든 문장을 붙여 쓰지 마세요.
@@ -1869,7 +2008,7 @@ JSON 배열로만 응답하세요 (마크다운 없이):
                 continue
 
         # 생성된 실제 제목+국가로 동일 사건 루트 재확인 (우선)
-        similar = find_similar_trend(title, country=art_country, days=14, body=body)
+        similar = find_similar_trend(title, country=art_country, days=14, body=body, tags=related_tags)
 
         # 단일 토픽 검수 — 무관한 사건이 묶였으면 병합·발행 모두 차단
         _mt_bad = not verify_single_topic(title, body)
@@ -1925,6 +2064,7 @@ JSON 배열로만 응답하세요 (마크다운 없이):
             "countries": ([art_country] + [c for c in (art_countries or []) if c and c != art_country]) if art_country else (art_countries or []),
             "image_url": image_url,
             "image_credit": image_credit,
+            "source_data": {"tags": sorted(related_tags)} if related_tags else None,
             "score": 2,
             "created_at": now_str,
             "first_published_at": now_str,

@@ -1175,6 +1175,20 @@ for data in results:
         lang_tag = lang_labels.get(src_lang, "[원문: " + src_lang + "]")
         full_text = lang_tag + "\n" + full_text
 
+    # RSS 원문 태그(<category> 등, feedparser entry.tags) — 실측(2026-09-08):
+    # Cointelegraph/CryptoPotato/NewsBTC/Decrypt 전부 태그를 갖고 있고, 일부는
+    # "Latest News"/"AA News" 같은 범용 버킷이지만 "Robinhood Chain"/"bitwise"처럼
+    # 구체적인 개체명도 섞여 있다. 여기선 정제 없이 원문 그대로 보존만 하고,
+    # 노이즈 필터링·매칭 판단은 소비 쪽(gemini_summarizer.py find_similar_trend)
+    # 책임으로 둔다 — 사용자 제안("트렌드 기사 묶이는 거 보면 #bitcoin #liquid
+    # #network 이런 식으로 태그를 줘서 묶고 있는데, 태그를 좀 더 다양하게
+    # 써먹던가... 내부적으로 분류하는데 써먹던가") 반영: country가 파이프라인마다
+    # 다르게 뽑히거나 아예 안 뽑히는 문제(리퀴드 네트워크 해킹 트렌드 기사 중복,
+    # 국가 없는 글로벌 이슈)를 언어 중립적인 원문 태그로 보완한다.
+    raw_tags = [t.get("term", "").strip() for t in (latest.get("tags") or []) if t.get("term")]
+    raw_tags = list(dict.fromkeys(raw_tags))[:10]  # 중복 제거 + 과다 태그 방지
+    tag_source_data = {"tags": raw_tags} if raw_tags else None
+
     # 텔레그램 발송 (소프트 노이즈는 스킵)
     if soft_noise:
         article_id = insert_article(
@@ -1187,6 +1201,7 @@ for data in results:
             countries=country_names,
             is_published=False,
             source_published_at=src_published,
+            source_data=tag_source_data,
         )
         print(f"[SOFT] [{category}] [{country_name}] {title_ko[:50]}")
         continue
@@ -1208,6 +1223,7 @@ for data in results:
             countries=country_names,
             is_published=False,
             source_published_at=src_published,
+            source_data=tag_source_data,
         )
         if article_id > 0:
             mark_sent_telegram(article_id)
