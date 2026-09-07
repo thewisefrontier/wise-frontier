@@ -227,6 +227,29 @@ OFFICIAL_SOURCE_NAMES = {
 def _has_official_source(cluster) -> bool:
     return any((a.get("source") or "") in OFFICIAL_SOURCE_NAMES for a in cluster)
 
+
+# 2026-09-07 도입(사용자 지적: "미술쪽 기사는 좀 올라왔나?" → 소스는 추가했는데
+# 발행 0건). 물량이 훨씬 적은(하루 1~2건) 문화·예술/IT·과학 소스는 (1) 최근
+# 300건 창에 애초에 안 들어오고(get_today_articles), (2) 들어와도 물량 많은
+# 일반 뉴스에 밀려 클러스터/단독기사 슬롯을 못 받는다(run()) — 두 지점 모두
+# 이 목록을 참조해야 해서 모듈 레벨에 둔다. IT·과학도 문화·예술과 같은 원인
+# (전용 스크립트 없이 이 클러스터/단독 경로에만 의존, 2주간 전환율 ~5%)으로
+# 같이 추가했다.
+QUOTA_SOURCE_GROUPS = {
+    "문화·예술": ({
+        "Variety", "IndieWire", "Pitchfork", "Playbill", "ArchDaily", "Dezeen", "designboom",
+        "My Modern Met", "Artlyst", "Creative Boom", "Booooooom", "Art in America", "Juxtapoz",
+        "BBC Culture", "Guardian Culture", "LitHub", "Paris Review",
+    }, 2),
+    "IT·과학": ({
+        "TechCrunch AI", "VentureBeat AI", "The Verge AI", "Ars Technica AI", "Wired AI",
+        "OpenAI Blog", "Google DeepMind Blog", "Hugging Face Blog", "AI News", "MIT News AI",
+        "구글뉴스 주제-AI", "MIT Technology Review", "ScienceDaily", "Phys.org", "Nature News",
+        "Science AAAS", "Live Science", "Smithsonian Science", "Quanta Magazine",
+    }, 2),
+}
+QUOTA_SOURCE_NAMES = set().union(*(names for names, _ in QUOTA_SOURCE_GROUPS.values()))
+
 STOPWORDS = {
     "the","a","an","in","on","at","to","of","for","and","or","is","are",
     "was","were","has","have","been","will","with","by","from","this","that",
@@ -265,6 +288,18 @@ def get_today_articles(limit=300):
             break
         offset += batch
 
+    # ⚠️ 아래 보강 조회(파킹된 토픽·문화예술/IT과학 쿼터 소스)를 여기서 먼저
+    # 자르지 않으면, 매 실행 상위 300건이 score.desc(전부 0으로 동률)+
+    # created_at.desc 정렬 특성상 가장 최근 유입량이 많은 일반 뉴스로만
+    # 채워지고(실측: 최근 6시간 내 원자재만 2,000건↑ — limit=300은 사실상
+    # "최근 1시간 미만"만 본다는 뜻) 아래서 append하는 보강분이 최종
+    # [:limit] 절단에서 통째로 잘려나간다(2026-09-07 발견 — 문화·예술 쿼터를
+    # 아무리 solo_candidates 단계에서 확보해도, all_articles 자체에 애초에
+    # 안 들어와 있으면 의미가 없었음). 메인 결과만 먼저 자르고, 보강분은
+    # 이후 그대로 유지한다.
+    articles = articles[:limit]
+    existing_ids = {a["id"] for a in articles}
+
     # 파킹된 토픽 기사도 클러스터링 소스로 포함
     try:
         parked_res = requests.get(
@@ -281,12 +316,39 @@ def get_today_articles(limit=300):
         )
         if parked_res.status_code in (200, 206):
             parked = parked_res.json()
-            existing_ids = {a["id"] for a in articles}
-            articles.extend(a for a in parked if a["id"] not in existing_ids)
+            new_parked = [a for a in parked if a["id"] not in existing_ids]
+            articles.extend(new_parked)
+            existing_ids.update(a["id"] for a in new_parked)
     except Exception:
         pass
 
-    return articles[:limit]
+    # 문화·예술/IT·과학 등 쿼터 대상 소스는 물량이 훨씬 적어(하루 1~2건 수준)
+    # 위 최근순 300건 창에 아예 안 들어오는 경우가 흔하다 — 별도로 소량만
+    # 더 가져와 반드시 클러스터링·단독기사화 후보 풀에는 들어오게 한다.
+    # 실제 선정(쿼터 배정)은 run()의 QUOTA_SOURCE_GROUPS가 담당하고, 여기서는
+    # "후보 풀 진입 자체를 보장"하는 역할만 한다.
+    if QUOTA_SOURCE_NAMES:
+        try:
+            source_filter = ",".join(f'"{s}"' for s in QUOTA_SOURCE_NAMES)
+            quota_res = requests.get(
+                _sb_url(),
+                headers=_sb_headers(),
+                params={
+                    "select": "id,title_ko,title_en,summary_ko,summary_en,source,category,subcategory,country,region,url,created_at,score,full_text,source_published_at",
+                    "source": f"in.({source_filter})",
+                    "created_at": f"gte.{since}",
+                    "order": "created_at.desc",
+                    "limit": "40",
+                },
+                timeout=15
+            )
+            if quota_res.status_code in (200, 206):
+                new_quota = [a for a in quota_res.json() if a["id"] not in existing_ids]
+                articles.extend(new_quota)
+        except Exception:
+            pass
+
+    return articles
 
 
 def get_existing_cluster(cluster_key):
@@ -3041,24 +3103,24 @@ def run():
     #
     # 2026-09-07 도입(사용자 지적: "미술쪽 기사는 좀 올라왔나?" → 소스는
     # 추가했는데 발행 0건). 원인 두 가지를 같이 고친다:
-    # (b) Dezeen·designboom은 크롤러가 본문(full_text)을 아예 못 가져온다
-    #     (사이트 구조상 RSS 요약이 사실상 유일한 재료) — 이런 소스는 RSS
-    #     요약(summary_en)만으로도 단독기사화를 허용한다.
+    # (b) Dezeen·designboom·일부 IT·과학 소스는 크롤러가 본문(full_text)을
+    #     아예 못 가져온다(사이트 구조상 RSS 요약이 사실상 유일한 재료) —
+    #     이런 소스는 RSS 요약(summary_en)만으로도 단독기사화를 허용한다.
     # (a) 그렇게 자격을 얻어도 매 실행 상위 5건에 물량이 훨씬 많은 프론티어
-    #     마켓 뉴스가 항상 먼저 채워 순번이 영영 안 온다 — 문화·예술 소스에
-    #     최소 쿼터를 별도로 확보한다.
-    CULTURE_SOURCE_NAMES = {
-        "Variety", "IndieWire", "Pitchfork", "Playbill", "ArchDaily", "Dezeen", "designboom",
-        "My Modern Met", "Artlyst", "Creative Boom", "Booooooom", "Art in America", "Juxtapoz",
-        "BBC Culture", "Guardian Culture", "LitHub", "Paris Review",
-    }
-    CULTURE_QUOTA = 2  # 단독기사 슬롯(5개) 중 문화·예술 소스에 배정하는 최소 개수
-
+    #     마켓 뉴스(세계>지역별 통신 — 2주간 17,500여 건)가 항상 먼저
+    #     채워 순번이 영영 안 온다. 문화·예술 확인 후 같은 원인으로
+    #     IT·과학도 점검(2주간 원자재 233건 중 발행 12건, ~5% 전환율 —
+    #     경제·금융처럼 별도 전용 스크립트(crypto_news_writer 등)가 없어
+    #     전적으로 이 클러스터/단독 경로에만 의존하는 카테고리라 문화·예술과
+    #     동일하게 쿼터가 필요하다고 판단) — 두 카테고리 모두 최소 쿼터를
+    #     확보한다. 사용자 지시: "소스가 너무 부족하면 억지로 기사를 내지는
+    #     않도록" — 쿼터는 상한일 뿐 강제 채움이 아니다(그날 후보가 쿼터보다
+    #     적으면 있는 만큼만 쓰고 나머지 슬롯은 일반 후보로 채운다).
     def _has_enough_material(a):
         ft = a.get("full_text") or ""
         if len(ft) >= 1000:
             return True
-        if not ft and (a.get("source") or "") in CULTURE_SOURCE_NAMES:
+        if not ft and (a.get("source") or "") in QUOTA_SOURCE_NAMES:
             return len((a.get("summary_en") or "")) >= 200
         return False
 
@@ -3069,7 +3131,7 @@ def run():
         and not is_multi_topic_body(a.get("full_text","") or a.get("summary_en",""))
         and ((a.get("country") or "") not in ADVANCED_ECONOMIES
              or (a.get("source") or "") in OFFICIAL_SOURCE_NAMES
-             or (a.get("source") or "") in CULTURE_SOURCE_NAMES)
+             or (a.get("source") or "") in QUOTA_SOURCE_NAMES)
     ]
 
     multi_topic_skipped = [
@@ -3084,12 +3146,18 @@ def run():
 
     print(f"\n[단독 기사] 원문 충분한 기사 {len(solo_candidates)}건")
 
-    _culture_pool = [a for a in solo_candidates if (a.get("source") or "") in CULTURE_SOURCE_NAMES]
-    _other_pool = [a for a in solo_candidates if (a.get("source") or "") not in CULTURE_SOURCE_NAMES]
-    _picked_culture = _culture_pool[:CULTURE_QUOTA]
-    solo_selected = _picked_culture + _other_pool[:5 - len(_picked_culture)]
-    if _picked_culture:
-        print(f"  [쿼터] 문화·예술 소스 {len(_picked_culture)}건 확보")
+    _already_picked_ids = set()
+    solo_selected = []
+    for _label, (_names, _quota) in QUOTA_SOURCE_GROUPS.items():
+        _pool = [a for a in solo_candidates
+                 if (a.get("source") or "") in _names and a.get("id") not in _already_picked_ids]
+        _picked = _pool[:_quota]
+        solo_selected.extend(_picked)
+        _already_picked_ids.update(a.get("id") for a in _picked)
+        if _picked:
+            print(f"  [쿼터] {_label} 소스 {len(_picked)}건 확보")
+    _other_pool = [a for a in solo_candidates if a.get("id") not in _already_picked_ids]
+    solo_selected += _other_pool[:5 - len(solo_selected)]
 
     solo_generated = 0
     for a in solo_selected:
