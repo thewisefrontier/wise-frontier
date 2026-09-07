@@ -2444,6 +2444,15 @@ def get_stale_live_articles() -> list:
     return []
 
 
+# search_followup() 폴백 키워드 추출에서 건너뛸 국가·대륙·지역명(2026-09-07,
+# id=137672/138097 실사고). COUNTRY_TO_REGION의 국가명 전부 + 대륙/지역 표현.
+_FOLLOWUP_KW_BLOCKLIST = set(COUNTRY_TO_REGION.keys()) | {
+    "아프리카", "아시아", "유럽", "중동", "중남미", "북미", "동아시아", "오세아니아",
+    "동남아시아", "중앙아시아", "남아시아", "카리브해", "라틴아메리카", "글로벌",
+    "한국", "중국", "일본", "미국", "러시아", "인도", "영국", "프랑스", "독일",
+}
+
+
 def search_followup(title: str, country: str, keyword_ko: str = "", keyword_en: str = "") -> list:
     """keyword_ko/keyword_en(article_keywords 테이블, 2026-08-09 도입)이 있으면 그것만
     쓴다 - Gemini가 생성 시점에 핵심 주제를 직접 답한 구조화 데이터라, 제목 문자열을
@@ -2461,9 +2470,18 @@ def search_followup(title: str, country: str, keyword_ko: str = "", keyword_en: 
         # 폴백: 구조화 키워드가 없는 기사용 title 파싱 휴리스틱.
         # 제목은 "국가명, 본문" 형식이라 첫 단어가 거의 항상 국가명이다. 국가명만으로
         # 검색하면 무관한 기사가 붙는다(id=63237). 국가명 다음 실제 핵심어를 쓴다.
+        #
+        # ⚠️ 2026-09-07 실사고(id=137672, 138097): 트렌드 트래커(gemini_summarizer.py)가
+        # 만든 제목은 쉼표가 아예 없는 일반 문장형("이란 서부 도로에서 연료 탱크로리
+        # 폭발해...", "아프리카 각국서 엠폭스 확산...")이라 위 쉼표 분리가 무력화되고,
+        # kw_list[0]이 그대로 "이란"/"아프리카" 같은 국가·대륙명이 되어버렸다. "이란"으로
+        # 검색해 완전 무관한 "이란 연료가격 인상" 기사가, "아프리카"로 검색해 케냐
+        # 소상공인 금지 등 무관한 기사가 그대로 "후속 정보"로 붙었다. 쉼표 유무와
+        # 무관하게 국가명·대륙명 자체는 항상 건너뛰고 그다음 실제 단어를 쓴다.
         body_part = title.split(",", 1)[1] if "," in title else title
         kw_list = [w for w in body_part.replace(",", "").replace("\xb7", " ").split() if len(w) >= 2]
-        kw = kw_list[0] if kw_list else country
+        kw_list = [w for w in kw_list if w not in _FOLLOWUP_KW_BLOCKLIST]
+        kw = kw_list[0] if kw_list else ""
         # 한글 전용 제목은 영문 단어가 없다. country 폴백은 무관한 GDELT 결과를
         # 불러온다(id=61698). 영문 키워드가 없으면 GDELT 검색을 건너뛴다.
         eng_words = [w for w in title.split() if not any("가" <= c <= "힣" for c in w)]
