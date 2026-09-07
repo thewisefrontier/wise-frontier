@@ -124,14 +124,22 @@ JP_HOLIDAYS_BY_YEAR = {
 
 
 # ── 런던·프랑크푸르트·파리 증권거래소 휴장일 ─────────────────────
-# 출처: exchange_calendars 라이브러리(2026-09-08, pip install exchange_calendars
-# 로 XLON/XFRA/XPAR 직접 조회 — quantopian/trading_calendars를 이어받은
-# 커뮤니티 유지보수 오픈소스). 사용자 제안("github나 [캘린더 받아올 수
-# 있는 사이트] 없어?")으로 각 거래소 공식 사이트 스크래핑 대신 이 방식
-# 채택 — 블로그 집계보다 신뢰도가 높다.
-# ⚠️ 그래도 이 라이브러리도 NYSE 7/3(2026, 조기폐장일인데 라이브러리는
-# 휴장으로 표시)처럼 실제 거래소 공지와 다를 수 있음을 미국 캘린더
-# 대조로 확인했다 — 매년 초 가능하면 각 거래소 공식 캘린더로 재확인할 것.
+# 최초 출처: exchange_calendars 라이브러리(2026-09-08, pip install
+# exchange_calendars로 XLON/XFRA/XPAR 직접 조회 — quantopian/
+# trading_calendars를 이어받은 커뮤니티 유지보수 오픈소스). 사용자
+# 제안("github나 [캘린더 받아올 수 있는 사이트] 없어?")으로 각 거래소
+# 공식 사이트 스크래핑(자동조회 도구는 403으로 막힘) 대신 채택.
+#
+# 이후 브라우저 도구로 각 거래소 공식 사이트를 직접 열어 대조 완료
+# (2026-09-08, 전부 라이브러리 데이터와 일치해 그대로 확정):
+# - 영국: londonstockexchange.com/equities-trading/business-days
+#   (12/24·12/31은 "half day"일 뿐 완전 휴장이 아님을 확인 — 이미
+#   반영돼 있었음)
+# - 독일: cashmarket.deutsche-boerse.com "Trading Calendar and
+#   Trading Hours" — 2026·2027 전부 공식 확인
+# - 프랑스: live.euronext.com "2026 Holiday Calendar" — 2026만 공식
+#   발표됨(2027은 아직 미발표라 라이브러리 값 유지, 연말경 재확인 필요)
+# ⚠️ 그래도 매년 다음 연도분 공개 후 재확인할 것 — 특히 프랑스 2027.
 UK_HOLIDAYS_BY_YEAR = {
     2026: [
         (date(2026, 1, 1), "신정"),
