@@ -1,5 +1,81 @@
 [
   {
+    "id": 140164,
+    "title_en": "중앙아시아, 완연한 맑음 속 타슈켄트 35도 찜통",
+    "title_ko": "중앙아시아, 완연한 맑음 속 타슈켄트 35도 찜통",
+    "summary_ko": "7일(현지시간) 중앙아시아 주요국 수도는 최저기온 12도에서 최고기온 35도 사이의 기온 분포를 보이며 대체로 안정된 기상 상태를 나타내고 있다. 역내 국가별 수도 기온을 보면 카자흐스탄 아스타나는 최저기온 12도, 최고기온 28도로 가장 선선한 날씨를 보인 반면, 우즈베키스탄 타슈켄트는 최저기온 20도, 최고기온 35도를 기록하며 가장 더운 곳으로 집계됐다. 타슈켄트의 최고기온은 아스타나보다 7도 높게 형성되었다.\n\n카자흐스탄 아스타나는 강수확률 0%에 강수량 0.0mm를 기록하며 맑은 날씨와 함께 자외선지수 5.3을 나타냈고, ",
+    "url": "internal://weather_group_중앙아시아_today20260907",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_중앙아시아_today20260907",
+    "region": "central_asia",
+    "country": "중앙아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-07 09:20",
+    "countries": [
+      "카자흐스탄",
+      "우즈베키스탄",
+      "키르기스스탄"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_kazakhstan_20260907.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-07T09:20:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-07 09:20",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 138097,
+    "title_en": "Mpox Spreads Across African Nations While Others Declare End to Outbreaks, Strain Public Health Systems",
+    "title_ko": "아프리카 각국서 엠폭스 확산 및 종식 교차... 방역 체계 혼선 지속",
+    "summary_ko": "[업데이트]\n■ 9월 7일 09:05 — 한편 7일(현지시간) 케냐에서는 윌리엄 루토 대통령이 외국인의 소규모 상업 활동과 행상을 금지하고 정부에 대책 마련을 지시하면서 외국인 배척 우려가 고조되고 있다. 이번 조치는 청년 실업 문제 해결과 빈곤층 지지 세력 결집을 위한 정치적 전략의 일환이지만, 외국인들이 사회적 불만의 희생양이 되거나 남아프리카공화국에서 발생했던 제노포비아 폭력 사태와 유사한 '남아프리카 증후군'이 재현될 수 있다는 우려가 제기된다. 아프리카연합(UA)은 대륙 통합과 인적 이동 촉진이라는 2063년 비전에 역행하",
+    "url": "internal://trend_mpox_2026090618",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "trend_mpox",
+    "region": "africa",
+    "country": "콩고민주공화국",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-07 09:05",
+    "countries": [
+      "콩고민주공화국",
+      "말라위",
+      "중앙아프리카공화국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_mpox_daily_confirmed_cases.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-06T18:21:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-06 18:21",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-09-07 09:05",
+        "note": "케냐 대통령, 외국인 소상공인 활동 금지 지시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "사진: OWID (CC BY 4.0, Wikimedia Commons)",
+    "continuation_of_id": null
+  },
+  {
     "id": 137672,
     "title_en": "Fuel Tanker Explosion on Western Iran Road Leaves 11 Dead",
     "title_ko": "이란 서부 도로에서 연료 탱크로리 폭발해 11명 사망",
@@ -37,46 +113,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 138097,
-    "title_en": "Mpox Spreads Across African Nations While Others Declare End to Outbreaks, Strain Public Health Systems",
-    "title_ko": "아프리카 각국서 엠폭스 확산 및 종식 교차... 방역 체계 혼선 지속",
-    "summary_ko": "[업데이트]\n■ 9월 7일 09:05 — 한편 7일(현지시간) 케냐에서는 윌리엄 루토 대통령이 외국인의 소규모 상업 활동과 행상을 금지하고 정부에 대책 마련을 지시하면서 외국인 배척 우려가 고조되고 있다. 이번 조치는 청년 실업 문제 해결과 빈곤층 지지 세력 결집을 위한 정치적 전략의 일환이지만, 외국인들이 사회적 불만의 희생양이 되거나 남아프리카공화국에서 발생했던 제노포비아 폭력 사태와 유사한 '남아프리카 증후군'이 재현될 수 있다는 우려가 제기된다. 아프리카연합(UA)은 대륙 통합과 인적 이동 촉진이라는 2063년 비전에 역행하",
-    "url": "internal://trend_mpox_2026090618",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "trend_mpox",
-    "region": "africa",
-    "country": "콩고민주공화국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-07 09:05",
-    "countries": [
-      "콩고민주공화국",
-      "말라위",
-      "중앙아프리카공화국"
-    ],
-    "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/48/Mpox-daily-confirmed-cases.png/960px-Mpox-daily-confirmed-cases.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-    "view_count": 0,
-    "first_published_at": "2026-09-06T18:21:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-06 18:21",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-09-07 09:05",
-        "note": "케냐 대통령, 외국인 소상공인 활동 금지 지시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "사진: OWID (CC BY 4.0, Wikimedia Commons)",
     "continuation_of_id": null
   },
   {
@@ -200,8 +236,8 @@
       "카타르"
     ],
     "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_agricultural_service_government_office_smartphone_ap.jpg",
-    "view_count": 0,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_doha_west_bay_skyline.jpg",
+    "view_count": 1,
     "first_published_at": "2026-09-07T09:01:00",
     "update_log": [
       {
@@ -213,7 +249,7 @@
     "is_travel": false,
     "source_published_at": null,
     "source_data": null,
-    "image_credit": "",
+    "image_credit": "사진: Thameur Belghith (CC BY-SA 4.0, Wikimedia Commons)",
     "continuation_of_id": null
   },
   {
@@ -235,8 +271,8 @@
       "캐나다"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/d/d7/Celine_Dion_%28BBW%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
-    "view_count": 1,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_celine_dion_bercy.jpg",
+    "view_count": 3,
     "first_published_at": "2026-09-07T09:01:00",
     "update_log": [
       {
@@ -248,7 +284,7 @@
     "is_travel": false,
     "source_published_at": null,
     "source_data": null,
-    "image_credit": "사진: John Mathew Smith & www.celebrity-photos.com (CC BY-SA 4.0, Wikimedia Commons)",
+    "image_credit": "사진: RepliCarter (CC BY-SA 3.0, Wikimedia Commons)",
     "continuation_of_id": null
   },
   {
@@ -431,7 +467,7 @@
       "차드"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/d/da/1853_Copenhagen_cholera_outbreak_-_tent_camp.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_1853_copenhagen_cholera_outbreak_tent.jpg",
     "view_count": 4,
     "first_published_at": "2026-09-07T00:38:00",
     "update_log": [
@@ -473,7 +509,7 @@
       "차드"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a9/20250130_Sudan_Conflict_and_pop_displ.png/960px-20250130_Sudan_Conflict_and_pop_displ.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_20250130_sudan_conflict_and_pop_di.jpg",
     "view_count": 1,
     "first_published_at": "2026-09-07T03:17:00",
     "update_log": [
@@ -484,6 +520,44 @@
       {
         "timestamp": "2026-09-07 06:27",
         "note": "남수단·우간다 가축 약탈 사건 공동 대응"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
+    "id": 139472,
+    "title_en": "At Least 25 Dead in Cabo Verde School Bus Crash; National Mourning Declared",
+    "title_ko": "카보베르데 포고섬 스쿨버스 추락 사고로 최소 25명 사망 및 국가 애도 선포",
+    "summary_ko": "[업데이트]\n■ 9월 7일 06:26 — 사고 버스에 탑승했던 승객들은 쿠랄 그란드(Curral Grande)와 폰타 베르드(Ponta Verde) 지역 3·4군 소속 중등학생들로, 샤 다스 칼데이라스(Chã das Caldeiras)로 견학을 다녀오던 길이었던 것으로 확인됐다. 차량은 샤 다스 칼데이라스에서 캄파나스로 향하던 도로에서 이탈해 약 30미터 높이의 협곡 아래로 굴러떨어졌다. 추락 당시 최소 10명의 승객이 차 밖으로 튕겨져 나갔으며, 일부 승객은 찌그러진 차체 잔해 속에 갇혔다. 전체 사망자 25명 가운데 20명은 사",
+    "url": "internal://realtrend_Cabo_Verde_Bus_Crash_2026090703",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "realtrend_Cabo_Verde_Bus_Crash",
+    "region": "africa",
+    "country": "카보베르데",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-07 06:26",
+    "countries": [
+      "카보베르데"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_school_bus_accident_canyon_road_emergency_rescue.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-07T03:22:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-07 03:22",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-09-07 06:26",
+        "note": "사고 버스 승객은 견학 다녀오던 중학생들"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -562,44 +636,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 139472,
-    "title_en": "At Least 25 Dead in Cabo Verde School Bus Crash; National Mourning Declared",
-    "title_ko": "카보베르데 포고섬 스쿨버스 추락 사고로 최소 25명 사망 및 국가 애도 선포",
-    "summary_ko": "[업데이트]\n■ 9월 7일 06:26 — 사고 버스에 탑승했던 승객들은 쿠랄 그란드(Curral Grande)와 폰타 베르드(Ponta Verde) 지역 3·4군 소속 중등학생들로, 샤 다스 칼데이라스(Chã das Caldeiras)로 견학을 다녀오던 길이었던 것으로 확인됐다. 차량은 샤 다스 칼데이라스에서 캄파나스로 향하던 도로에서 이탈해 약 30미터 높이의 협곡 아래로 굴러떨어졌다. 추락 당시 최소 10명의 승객이 차 밖으로 튕겨져 나갔으며, 일부 승객은 찌그러진 차체 잔해 속에 갇혔다. 전체 사망자 25명 가운데 20명은 사",
-    "url": "internal://realtrend_Cabo_Verde_Bus_Crash_2026090703",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "realtrend_Cabo_Verde_Bus_Crash",
-    "region": "africa",
-    "country": "카보베르데",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-07 06:26",
-    "countries": [
-      "카보베르데"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_school_bus_accident_canyon_road_emergency_rescue.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-07T03:22:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-07 03:22",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-09-07 06:26",
-        "note": "사고 버스 승객은 견학 다녀오던 중학생들"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
     "id": 139852,
     "title_en": "Niger Restores Order After Defeating Internal Military Mutiny and Coup Attempt",
     "title_ko": "니제르, 내부 군사 반란과 쿠데타 시도 격퇴 이후 정국 수습 나서",
@@ -620,7 +656,7 @@
       "적도기니"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/28/Alliance_of_Sahel_States.svg/960px-Alliance_of_Sahel_States.svg.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_alliance_of_sahel_states_svg.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-07T06:18:00",
     "update_log": [
@@ -788,7 +824,7 @@
       "이집트"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2d/Air_Algerie._Compagnie_g%C3%A9n%C3%A9rale_de_transports_a%C3%A9riens%2C_%22_Le_pont_a%C3%A9rien_de_la_M%C3%A9dit%C3%A9rann%C3%A9e%22_-_affiche_-_btv1b10104922f.jpg/960px-Air_Algerie._Compagnie_g%C3%A9n%C3%A9rale_de_transports_a%C3%A9riens%2C_%22_Le_pont_a%C3%A9rien_de_la_M%C3%A9dit%C3%A9rann%C3%A9e%22_-_affiche_-_btv1b10104922f.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_air_algerie_compagnie_g_c3_a9n_c3.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-07T03:42:00",
     "update_log": [
@@ -857,7 +893,7 @@
       "사우디아라비아"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/1/12/Cristiano_Ronaldo%2C_Al-Nassr_19_Sep_2023_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_cristiano_ronaldo_2c_al_nassr_19_sep_202.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-07T03:38:00",
     "update_log": [
@@ -891,7 +927,7 @@
       "독일"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/df/AfD-Wagen_M%C3%B6dlareuth_20201003_DSC4598.jpg/960px-AfD-Wagen_M%C3%B6dlareuth_20201003_DSC4598.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_afd_wagen_m_c3_b6dlareuth_20201003.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-07T03:28:00",
     "update_log": [
@@ -927,7 +963,7 @@
       "체코"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/da/Aerial_view_of_Leipzig-Mockau_airport%2C_Germany%2C_11_April_1945_%28342-FH-3A20633-57741AC%29.jpg/960px-Aerial_view_of_Leipzig-Mockau_airport%2C_Germany%2C_11_April_1945_%28342-FH-3A20633-57741AC%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_aerial_view_of_leipzig_mockau_airp.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-07T00:55:00",
     "update_log": [
@@ -963,7 +999,7 @@
       "미국"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e0/G20_meeting_on_Ukraine_000186341.jpg/960px-G20_meeting_on_Ukraine_000186341.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_g20_meeting_on_ukraine_000186341.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-07T00:50:00",
     "update_log": [
@@ -1036,7 +1072,7 @@
       "싱가포르"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/Anak_Krakatau%2C_Indonesia_2.jpg/960px-Anak_Krakatau%2C_Indonesia_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_anak_krakatau_2c_indonesia_2.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-06T21:43:00",
     "update_log": [
@@ -1100,7 +1136,7 @@
       "네팔"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2b/Qatar_Base_Fundraiser_Proceeds%2C_Participation_Doubles_DVIDS194603.jpg/960px-Qatar_Base_Fundraiser_Proceeds%2C_Participation_Doubles_DVIDS194603.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_qatar_base_fundraiser_proceeds_2c.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-06T18:46:00",
     "update_log": [
@@ -1135,7 +1171,7 @@
       "르완다"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/e/eb/Iranian_Denounces_FATF_-_Khorramabad_-_2018.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_iranian_denounces_fatf_khorramabad_2.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-06T18:45:00",
     "update_log": [
@@ -1341,7 +1377,7 @@
       "아프리카"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e4/2014_ebola_virus_epidemic_in_West_Africa_CS.svg/960px-2014_ebola_virus_epidemic_in_West_Africa_CS.svg.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_2014_ebola_virus_epidemic_in_west.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-06T18:20:00",
     "update_log": [
@@ -1525,6 +1561,40 @@
     "continuation_of_id": null
   },
   {
+    "id": 137377,
+    "title_en": "Weekend Traffic Accidents Across Guatemala Leave Two Dead, Cause Major Congestion",
+    "title_ko": "과테말라 전국서 주말 교통사고 잇따라…2명 사망·부상 및 정체 극심",
+    "summary_ko": "5일(현지시간) 과테말라 전국 각지의 도로와 도심에서 교통사고가 잇따라 발생해 최소 2명이 숨지고 여러 명이 다치는 등 차량 통행에 큰 차질이 빚어졌다. 이번 사고들은 국도와 수도권 도로를 가리지 않고 발생했으며 오토바이와 승용차, 대형 화물차 간의 충돌뿐만 아니라 차량 전복과 이탈 사고 등이 복합적으로 보고됐다.\n\n이날 오전 이사발주 모랄레스 지역의 아틀란틱 루트 CA-9 노스 260킬로미터 지점에서는 트레일러와 오토바이가 충돌하는 사고가 발생했다. 도로보호단위(Provial)에 따르면 이 사고로 현장에서 1명이 사망했으며 남행 ",
+    "url": "internal://solo_20260906_c64ae53d",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "solo_20260906_c64ae53d",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-06 13:04",
+    "countries": [
+      "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_image_shows_how_accident_bus_was_going_a.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-06T13:04:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-06 13:04",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": true,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
     "id": 137376,
     "title_en": "71-Year-Old Woman Shot and Killed After Opening Fire at Florida Police Station",
     "title_ko": "미 플로리다 경찰서서 71세 여성 총격 후 사살",
@@ -1553,40 +1623,6 @@
     ],
     "byline": "뉴스파이널 편집국",
     "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
-    "id": 137377,
-    "title_en": "Weekend Traffic Accidents Across Guatemala Leave Two Dead, Cause Major Congestion",
-    "title_ko": "과테말라 전국서 주말 교통사고 잇따라…2명 사망·부상 및 정체 극심",
-    "summary_ko": "5일(현지시간) 과테말라 전국 각지의 도로와 도심에서 교통사고가 잇따라 발생해 최소 2명이 숨지고 여러 명이 다치는 등 차량 통행에 큰 차질이 빚어졌다. 이번 사고들은 국도와 수도권 도로를 가리지 않고 발생했으며 오토바이와 승용차, 대형 화물차 간의 충돌뿐만 아니라 차량 전복과 이탈 사고 등이 복합적으로 보고됐다.\n\n이날 오전 이사발주 모랄레스 지역의 아틀란틱 루트 CA-9 노스 260킬로미터 지점에서는 트레일러와 오토바이가 충돌하는 사고가 발생했다. 도로보호단위(Provial)에 따르면 이 사고로 현장에서 1명이 사망했으며 남행 ",
-    "url": "internal://solo_20260906_c64ae53d",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "solo_20260906_c64ae53d",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-06 13:04",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/c/c5/Image-shows-how-accident-bus-was-going-at-excessive-speed-Guatemala-City.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
-    "view_count": 0,
-    "first_published_at": "2026-09-06T13:04:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-06 13:04",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": true,
     "source_published_at": null,
     "source_data": null,
     "image_credit": "",
@@ -1678,7 +1714,7 @@
       "인도네시아"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/Anak_Krakatau%2C_Indonesia_2.jpg/960px-Anak_Krakatau%2C_Indonesia_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_anak_krakatau_2c_indonesia_2.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-06T12:55:00",
     "update_log": [
@@ -1945,7 +1981,7 @@
       "모잠비크"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/64/Eswatini_rail_network_map.svg/960px-Eswatini_rail_network_map.svg.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_eswatini_rail_network_map_svg.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-06T10:27:00",
     "update_log": [
@@ -1979,7 +2015,7 @@
       "과테말라"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/17/0578_kevin_borlee_reeksen_400m_%2828541002155%29.jpg/960px-0578_kevin_borlee_reeksen_400m_%2828541002155%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_0578_kevin_borlee_reeksen_400m_28.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-06T10:27:00",
     "update_log": [
@@ -2088,7 +2124,7 @@
       "미국"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f2/Gwylnos_-_vigil_-_stop_the_war_in_Ukraine_-_Rhuthun_Ruthin_Wales_5th_March_2022_02.jpg/960px-Gwylnos_-_vigil_-_stop_the_war_in_Ukraine_-_Rhuthun_Ruthin_Wales_5th_March_2022_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_gwylnos_vigil_stop_the_war_in.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-06T10:22:00",
     "update_log": [
@@ -2162,7 +2198,7 @@
       "인도"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b5/Armed_conflict_zones_in_Myanmar.png/960px-Armed_conflict_zones_in_Myanmar.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_armed_conflict_zones_in_myanmar.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-06T10:12:00",
     "update_log": [
@@ -2450,7 +2486,7 @@
       "러시아"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/28/Alliance_of_Sahel_States.svg/960px-Alliance_of_Sahel_States.svg.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_alliance_of_sahel_states_svg.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T22:34:00",
     "update_log": [
@@ -2468,48 +2504,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: Lukt64 (CC BY-SA 4.0, Wikimedia Commons)",
-    "continuation_of_id": null
-  },
-  {
-    "id": 135993,
-    "title_en": "Intense Fighting Between Sudan's Military and Paramilitary Forces and Spread of Cholera",
-    "title_ko": "수단 군부와 준군사조직 교전 격화 및 콜레라 확산",
-    "summary_ko": "[업데이트]\n■ 9월 6일 04:37 — 유엔 전문가들은 인권이사회에 제출한 보고서를 통해 수단 전역으로 무기 금수 조치를 확대하고 이를 엄격히 집행해야 한다고 촉구했다. 이 보고서는 3년 넘게 이어지고 있는 수단 내전에 외국 세력들이 책임을 지고 있다고 지적하며 외부 개입의 심각성을 강조했다. 이와 관련해 UN 독립 국제 진상조사단은 에티오피아 정부가 수단 내전과 연관되어 자국 영토에서 이루어진 불법 군사 및 병참 지원 의혹에 관한 공식적인 요청에 아직 응답하지 않고 있으며 침묵으로 일관하고 있다고 밝혔다.\n\n수단군 사령관이자 주",
-    "url": "internal://trend_수단 분쟁_2026090601",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "trend_수단 분쟁",
-    "region": "africa",
-    "country": "수단",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-06 04:37",
-    "countries": [
-      "수단",
-      "에티오피아",
-      "아랍에미리트",
-      "차드",
-      "콜롬비아"
-    ],
-    "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a9/20250130_Sudan_Conflict_and_pop_displ.png/960px-20250130_Sudan_Conflict_and_pop_displ.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-    "view_count": 0,
-    "first_published_at": "2026-09-06T01:18:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-06 01:18",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-09-06 04:37",
-        "note": "남수단, 심각한 식량 불안정으로 긴급 대책 요구됨"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
     "continuation_of_id": null
   },
   {
@@ -2543,6 +2537,48 @@
       {
         "timestamp": "2026-09-06 04:37",
         "note": "중국 희토류 기업, 미국행 선적 중단"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
+    "id": 135993,
+    "title_en": "Intense Fighting Between Sudan's Military and Paramilitary Forces and Spread of Cholera",
+    "title_ko": "수단 군부와 준군사조직 교전 격화 및 콜레라 확산",
+    "summary_ko": "[업데이트]\n■ 9월 6일 04:37 — 유엔 전문가들은 인권이사회에 제출한 보고서를 통해 수단 전역으로 무기 금수 조치를 확대하고 이를 엄격히 집행해야 한다고 촉구했다. 이 보고서는 3년 넘게 이어지고 있는 수단 내전에 외국 세력들이 책임을 지고 있다고 지적하며 외부 개입의 심각성을 강조했다. 이와 관련해 UN 독립 국제 진상조사단은 에티오피아 정부가 수단 내전과 연관되어 자국 영토에서 이루어진 불법 군사 및 병참 지원 의혹에 관한 공식적인 요청에 아직 응답하지 않고 있으며 침묵으로 일관하고 있다고 밝혔다.\n\n수단군 사령관이자 주",
+    "url": "internal://trend_수단 분쟁_2026090601",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "trend_수단 분쟁",
+    "region": "africa",
+    "country": "수단",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-06 04:37",
+    "countries": [
+      "수단",
+      "에티오피아",
+      "아랍에미리트",
+      "차드",
+      "콜롬비아"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_20250130_sudan_conflict_and_pop_di.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-06T01:18:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-06 01:18",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-09-06 04:37",
+        "note": "남수단, 심각한 식량 불안정으로 긴급 대책 요구됨"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -2639,7 +2675,7 @@
       "요르단"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/Jordan_single_age_population_pyramid_2020.png/960px-Jordan_single_age_population_pyramid_2020.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_jordan_single_age_population_pyram.png",
     "view_count": 0,
     "first_published_at": "2026-09-06T04:33:00",
     "update_log": [
@@ -2710,7 +2746,7 @@
       "이란"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/aa/STS004-37-716_-_Strait_of_Hormuz.jpg/960px-STS004-37-716_-_Strait_of_Hormuz.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_sts004_37_716_strait_of_hormuz.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-06T04:31:00",
     "update_log": [
@@ -2783,7 +2819,7 @@
       "차드"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/d/da/1853_Copenhagen_cholera_outbreak_-_tent_camp.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_1853_copenhagen_cholera_outbreak_tent.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-06T04:15:00",
     "update_log": [
@@ -2865,7 +2901,7 @@
       "포르투갈"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e5/Gianni_Infantino_%282020%29.jpg/960px-Gianni_Infantino_%282020%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_gianni_infantino_282020_29.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-06T01:40:00",
     "update_log": [
@@ -2901,7 +2937,7 @@
       "폴란드"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/82/Blue_Button_Announcement%2C_HIMSS18%2C_Las_Vegas%2C_March_2018_Jared_Kushner_%2840126774744%29.jpg/960px-Blue_Button_Announcement%2C_HIMSS18%2C_Las_Vegas%2C_March_2018_Jared_Kushner_%2840126774744%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_blue_button_announcement_2c_himss1.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-06T01:29:00",
     "update_log": [
@@ -2941,7 +2977,7 @@
       "중국"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/50/2026_Nepal_floods_map.svg/960px-2026_Nepal_floods_map.svg.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_2026_nepal_floods_map_svg.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-06T01:28:00",
     "update_log": [
@@ -2980,7 +3016,7 @@
       "중국"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/50/2026_Nepal_floods_map.svg/960px-2026_Nepal_floods_map.svg.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_2026_nepal_floods_map_svg.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T19:47:00",
     "update_log": [
@@ -3020,7 +3056,7 @@
       "미국"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/3/38/Steve_Witkoff.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_steve_witkoff.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T22:43:00",
     "update_log": [
@@ -3117,7 +3153,7 @@
       "튀르키예"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9e/GSSP_Golden_Spike.svg/960px-GSSP_Golden_Spike.svg.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_gssp_golden_spike_svg.png",
     "view_count": 1,
     "first_published_at": "2026-09-05T19:51:00",
     "update_log": [
@@ -3384,7 +3420,7 @@
       "인도"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Typhoon_Saudel_%28MODIS_2020-10-23%29.jpg/960px-Typhoon_Saudel_%28MODIS_2020-10-23%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_typhoon_saudel_28modis_2020_10_23.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T16:44:00",
     "update_log": [
@@ -3421,7 +3457,7 @@
       "말라위"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/d/da/1853_Copenhagen_cholera_outbreak_-_tent_camp.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_1853_copenhagen_cholera_outbreak_tent.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T02:01:00",
     "update_log": [
@@ -3459,7 +3495,7 @@
       "과테말라"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/69/WikiConf26_Argentina_-_Panel_de_apertura_%282026-04-18%29_-_02.jpg/960px-WikiConf26_Argentina_-_Panel_de_apertura_%282026-04-18%29_-_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_wikiconf26_argentina_panel_de_ap.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T13:35:00",
     "update_log": [
@@ -3529,7 +3565,7 @@
       "과테말라"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f1/Rick_Harrison_%2825673803347%29.jpg/960px-Rick_Harrison_%2825673803347%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_rick_harrison_2825673803347_29.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T13:34:00",
     "update_log": [
@@ -3543,40 +3579,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: Gage Skidmore from Peoria, AZ, United States of America (CC BY-SA 2.0, Wikimedia Commons)",
-    "continuation_of_id": null
-  },
-  {
-    "id": 134221,
-    "title_en": "Guatemala Labor Ministry Clarifies Pro-Rata Severance, Benefits Required Even During Probation",
-    "title_ko": "과테말라 노동부, 수습 기간 퇴직 시에도 비례 퇴직금 지급 의무 명시",
-    "summary_ko": "과테말라 노동사회보장부(Mintrab) 근로감독관들은 고용 관계가 종료될 때 근로 기간이 단 몇 주에 불과하거나 수습 기간 중이더라도 고용주는 이에 상응하는 비례적 수당을 정산금에 포함해야 한다고 5일(현지시간) 밝혔다. 이는 휴가, 연말 보너스인 아기날도, 그리고 보너스 14를 포함하는 조치다.\n\n최근 한 달에서 한 달 반 동안 근무하거나 두 달의 수습 기간을 마친 직후 해고된 과테말라 근로자들이 본지에 제보한 바에 따르면, 이들 기업은 계약 종료를 통보하면서 30일 후에 정산 수표를 받게 될 것이라고 안내했다. 그러나 일부 근로",
-    "url": "internal://solo_20260905_358e5d17",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "solo_20260905_358e5d17",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-05 13:33",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_employment_contract_workplace_office_worker.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T13:33:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 13:33",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
     "continuation_of_id": null
   },
   {
@@ -3615,6 +3617,40 @@
     "continuation_of_id": null
   },
   {
+    "id": 134221,
+    "title_en": "Guatemala Labor Ministry Clarifies Pro-Rata Severance, Benefits Required Even During Probation",
+    "title_ko": "과테말라 노동부, 수습 기간 퇴직 시에도 비례 퇴직금 지급 의무 명시",
+    "summary_ko": "과테말라 노동사회보장부(Mintrab) 근로감독관들은 고용 관계가 종료될 때 근로 기간이 단 몇 주에 불과하거나 수습 기간 중이더라도 고용주는 이에 상응하는 비례적 수당을 정산금에 포함해야 한다고 5일(현지시간) 밝혔다. 이는 휴가, 연말 보너스인 아기날도, 그리고 보너스 14를 포함하는 조치다.\n\n최근 한 달에서 한 달 반 동안 근무하거나 두 달의 수습 기간을 마친 직후 해고된 과테말라 근로자들이 본지에 제보한 바에 따르면, 이들 기업은 계약 종료를 통보하면서 30일 후에 정산 수표를 받게 될 것이라고 안내했다. 그러나 일부 근로",
+    "url": "internal://solo_20260905_358e5d17",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "solo_20260905_358e5d17",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-05 13:33",
+    "countries": [
+      "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_employment_contract_workplace_office_worker.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T13:33:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 13:33",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
     "id": 134206,
     "title_en": "PM Le Minh Hung Attends 2026-2027 School Year Opening and Border Boarding School Completion Ceremony",
     "title_ko": "레 민 헝 총리, 2026-2027 새 학년도 개학식 및 국경 지역 기숙학교 준공식 참석",
@@ -3632,7 +3668,7 @@
       "베트남"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/b/b6/Le_Minh_Hung_20260502.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_le_minh_hung_20260502.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T13:31:00",
     "update_log": [
@@ -3746,7 +3782,7 @@
       "인도"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b5/Armed_conflict_zones_in_Myanmar.png/960px-Armed_conflict_zones_in_Myanmar.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_armed_conflict_zones_in_myanmar.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T13:16:00",
     "update_log": [
@@ -3906,7 +3942,7 @@
       "앙골라"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/3/3b/Dendroaspis_angusticeps--_the_Green_Mamba_%2821812342209%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_dendroaspis_angusticeps_the_green_mamb.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T10:36:00",
     "update_log": [
@@ -3978,7 +4014,7 @@
       "영국"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/aa/STS004-37-716_-_Strait_of_Hormuz.jpg/960px-STS004-37-716_-_Strait_of_Hormuz.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_sts004_37_716_strait_of_hormuz.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T10:35:00",
     "update_log": [
@@ -4193,7 +4229,7 @@
       "과테말라"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c2/Bagong_Barrio_Pandi_Bridges_18.jpg/960px-Bagong_Barrio_Pandi_Bridges_18.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_bagong_barrio_pandi_bridges_18.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T07:43:00",
     "update_log": [
@@ -4227,7 +4263,7 @@
       "미국"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b5/Dolly_Parton_-_RCA_Press_Photo_%281970%29.jpg/960px-Dolly_Parton_-_RCA_Press_Photo_%281970%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_dolly_parton_rca_press_photo_28.jpg",
     "view_count": 1,
     "first_published_at": "2026-09-05T07:42:00",
     "update_log": [
@@ -4297,7 +4333,7 @@
       "프랑스"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ec/Blank_world_map_Equal_Earth_projection.svg/960px-Blank_world_map_Equal_Earth_projection.svg.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_blank_world_map_equal_earth_projec.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T07:39:00",
     "update_log": [
@@ -4460,38 +4496,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 133064,
-    "title_en": "Bitcoin falls 2.23% as U.S. labor market uncertainty weighs on sentiment",
-    "title_ko": "[가상자산 동향] 비트코인 2.23% 하락…미 고용지표 경계감 확산",
-    "summary_ko": "◆ 가격 동향\n\n5일 06:27(한국시간) 야후 파이낸스에 따르면 비트코인 가격은 79783.08달러로 전일 대비 2.23% 하락했다. 이번 하락세는 미국 노동시장의 불확실성이 커지면서 위험 자산에 대한 투자 심리가 위축된 결과다. 최근 발표된 미국 고용 지표가 시장의 예상치를 하회하거나 상회하는 등 혼조세를 보이면서 연방준비제도의 금리 인하 경로에 대한 의구심이 시장에 반영됐다. 거시경제적 불확실성이 가중되자 기관 투자자들은 차익 실현 매물을 출회하며 포트폴리오를 조정했다. 또한 미국 증권거래위원회의 가상자산 관련 규제 강화 움직",
-    "url": "internal://crypto_news_2026-09-05",
-    "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "가상자산동향_crypto",
-    "region": "global",
-    "country": "글로벌",
-    "country_flag": "🌐",
-    "score": 1,
-    "created_at": "2026-09-05 06:27",
-    "countries": [],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_09_05.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T06:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 06:27",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
     "id": 133063,
     "title_en": "Nvidia Shares Rise 0.84% Amid Anticipation for Broadcom Earnings",
     "title_ko": "[종목 동향] 엔비디아 주가 0.84% 상승…브로드컴 실적 발표 앞둔 기대감",
@@ -4510,6 +4514,38 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/stock_news_2026_09_04.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T06:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 06:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 133064,
+    "title_en": "Bitcoin falls 2.23% as U.S. labor market uncertainty weighs on sentiment",
+    "title_ko": "[가상자산 동향] 비트코인 2.23% 하락…미 고용지표 경계감 확산",
+    "summary_ko": "◆ 가격 동향\n\n5일 06:27(한국시간) 야후 파이낸스에 따르면 비트코인 가격은 79783.08달러로 전일 대비 2.23% 하락했다. 이번 하락세는 미국 노동시장의 불확실성이 커지면서 위험 자산에 대한 투자 심리가 위축된 결과다. 최근 발표된 미국 고용 지표가 시장의 예상치를 하회하거나 상회하는 등 혼조세를 보이면서 연방준비제도의 금리 인하 경로에 대한 의구심이 시장에 반영됐다. 거시경제적 불확실성이 가중되자 기관 투자자들은 차익 실현 매물을 출회하며 포트폴리오를 조정했다. 또한 미국 증권거래위원회의 가상자산 관련 규제 강화 움직",
+    "url": "internal://crypto_news_2026-09-05",
+    "source": "NewsFinal",
+    "category": "금융",
+    "subcategory": "가상자산동향_crypto",
+    "region": "global",
+    "country": "글로벌",
+    "country_flag": "🌐",
+    "score": 1,
+    "created_at": "2026-09-05 06:27",
+    "countries": [],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_09_05.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T06:27:00",
     "update_log": [
@@ -5028,41 +5064,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 133055,
-    "title_en": "Russian Forces Strike SBU Headquarters in Central Kyiv as US-Ukraine Tensions Rise",
-    "title_ko": "러시아군, 키예프 중심부 SBU 본부 타격…미·우크라 긴장 고조",
-    "summary_ko": "러시아군이 4일(현지시간) 우크라이나의 수도 키예프 중심부에 위치한 우크라이나 보안국(SBU) 본부를 목표로 드론 공격을 감행했다. 이번 공습으로 보안 서비스 국장 사무실 등이 직접적인 타격을 입었으며, 중심부 피격으로 인해 최소 5명이 부상을 입었다.\n\n이번 공격은 미국 측 특사의 키예프 방문을 앞두고 이루어져 외교적 거부 의도를 담은 것이라는 분석이 제기된다. 특히 대낮에 우크라이나 정보국과 볼로디미르 젤렌스키 대통령의 지휘부 핵심 시설이 직접 공격을 받으면서 안보 태세를 둘러싼 당혹감이 확산하고 있다.\n\n볼로디미르 젤렌스키 우",
-    "url": "internal://cluster_20260905_afc32896",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "cluster_20260905_afc32896",
-    "region": "global",
-    "country": "우크라이나",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-05 04:49",
-    "countries": [
-      "우크라이나",
-      "러시아"
-    ],
-    "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/75/SBU_Headquarters.jpg/960px-SBU_Headquarters.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T04:49:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 04:49",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null
-  },
-  {
     "id": 133056,
     "title_en": "Lululemon Shares Plunge 20% After Cutting Annual Outlook Again",
     "title_ko": "룰루레몬, 연간 전망치 추가 하향 속 주가 20% 급락",
@@ -5081,6 +5082,41 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_stock_market_retail_store_yoga_pants.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T04:49:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 04:49",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
+    "id": 133055,
+    "title_en": "Russian Forces Strike SBU Headquarters in Central Kyiv as US-Ukraine Tensions Rise",
+    "title_ko": "러시아군, 키예프 중심부 SBU 본부 타격…미·우크라 긴장 고조",
+    "summary_ko": "러시아군이 4일(현지시간) 우크라이나의 수도 키예프 중심부에 위치한 우크라이나 보안국(SBU) 본부를 목표로 드론 공격을 감행했다. 이번 공습으로 보안 서비스 국장 사무실 등이 직접적인 타격을 입었으며, 중심부 피격으로 인해 최소 5명이 부상을 입었다.\n\n이번 공격은 미국 측 특사의 키예프 방문을 앞두고 이루어져 외교적 거부 의도를 담은 것이라는 분석이 제기된다. 특히 대낮에 우크라이나 정보국과 볼로디미르 젤렌스키 대통령의 지휘부 핵심 시설이 직접 공격을 받으면서 안보 태세를 둘러싼 당혹감이 확산하고 있다.\n\n볼로디미르 젤렌스키 우",
+    "url": "internal://cluster_20260905_afc32896",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "cluster_20260905_afc32896",
+    "region": "global",
+    "country": "우크라이나",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-05 04:49",
+    "countries": [
+      "우크라이나",
+      "러시아"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_sbu_headquarters.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T04:49:00",
     "update_log": [
@@ -5249,7 +5285,7 @@
       "베네수엘라"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/9/9b/Delcy_Rodriguez_June_2016_%2827571633682%29_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_delcy_rodriguez_june_2016_2827571633682.jpg",
     "view_count": 1,
     "first_published_at": "2026-09-04T17:42:00",
     "update_log": [
@@ -5402,7 +5438,7 @@
       "이스라엘"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/62/Two_israeli_settlements_on_the_hills_of_the_west_bank_%282826805820%29.jpg/960px-Two_israeli_settlements_on_the_hills_of_the_west_bank_%282826805820%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_two_israeli_settlements_on_the_hil.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-04T14:21:00",
     "update_log": [
@@ -5436,7 +5472,7 @@
       "스페인"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/0/03/Anah%C3%AD_at_Premios_Juventud_2009.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_anah_c3_ad_at_premios_juventud_2009.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-04T14:20:00",
     "update_log": [
@@ -5571,7 +5607,7 @@
       "파푸아뉴기니"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/8/84/Beta-CuGaO2.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_beta_cugao2.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-04T14:14:00",
     "update_log": [
@@ -5643,7 +5679,7 @@
       "한국"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/1896_Strait_of_Hormuz_map_%28cropped%29.jpg/960px-1896_Strait_of_Hormuz_map_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_1896_strait_of_hormuz_map_28cropp.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-04T14:11:00",
     "update_log": [
@@ -5922,7 +5958,7 @@
       "이스라엘"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/73/Fires_in_Israel_and_the_Gaza_strip_-_7_October_2023_%2853245908850%29.jpg/960px-Fires_in_Israel_and_the_Gaza_strip_-_7_October_2023_%2853245908850%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_fires_in_israel_and_the_gaza_strip.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-04T11:08:00",
     "update_log": [
@@ -5936,41 +5972,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: Pierre Markuse (CC BY 2.0, Wikimedia Commons)",
-    "continuation_of_id": null
-  },
-  {
-    "id": 129718,
-    "title_en": "US Warns Threats to Democracy as Security Ties With Guatemala Deepen",
-    "title_ko": "미국, 과테말라와 안보 협력 강화 속 민주주의 위협 세력에 무관용 경고",
-    "summary_ko": "미국은 민주주의 제도와 안보를 위협하는 세력에 대해 비자 추가 취소 등 지속적인 조치를 취할 것이라고 3일(현지시간) 밝혔다. 주과테말라 미국 대사관은 아나 퀸타나 로베트 미국 국무부 중미 담당 부차관의 과테말라 방문을 계기로 이 같은 입장을 공개했다.\n\n방문 기간 아나 퀸타나 로베트 부차관은 베르나르도 아레발로 과테말라 대통령, 헨리 사엔스 라모스 국방장관, 가브리엘 에스투아도 가르시아 루나 검찰총장 겸 법무부 장관 등 고위 관료들과 연이어 회담을 가졌으며 양국 간 안보 및 협력 방안을 논의했다. 미국 대사관 측은 양국이 마약 밀",
-    "url": "internal://solo_20260904_624e0630",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "solo_20260904_624e0630",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-04 11:07",
-    "countries": [
-      "과테말라",
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_diplomatic_meeting_government_building_security_coop.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T11:07:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 11:07",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
     "continuation_of_id": null
   },
   {
@@ -5995,6 +5996,41 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_courthouse_law_court_judge_gavel.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-04T11:07:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-04 11:07",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null
+  },
+  {
+    "id": 129718,
+    "title_en": "US Warns Threats to Democracy as Security Ties With Guatemala Deepen",
+    "title_ko": "미국, 과테말라와 안보 협력 강화 속 민주주의 위협 세력에 무관용 경고",
+    "summary_ko": "미국은 민주주의 제도와 안보를 위협하는 세력에 대해 비자 추가 취소 등 지속적인 조치를 취할 것이라고 3일(현지시간) 밝혔다. 주과테말라 미국 대사관은 아나 퀸타나 로베트 미국 국무부 중미 담당 부차관의 과테말라 방문을 계기로 이 같은 입장을 공개했다.\n\n방문 기간 아나 퀸타나 로베트 부차관은 베르나르도 아레발로 과테말라 대통령, 헨리 사엔스 라모스 국방장관, 가브리엘 에스투아도 가르시아 루나 검찰총장 겸 법무부 장관 등 고위 관료들과 연이어 회담을 가졌으며 양국 간 안보 및 협력 방안을 논의했다. 미국 대사관 측은 양국이 마약 밀",
+    "url": "internal://solo_20260904_624e0630",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "solo_20260904_624e0630",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-04 11:07",
+    "countries": [
+      "과테말라",
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_diplomatic_meeting_government_building_security_coop.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-04T11:07:00",
     "update_log": [
@@ -6140,7 +6176,7 @@
       "니제르"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/19/Central_African_Republic_2012_Battles-en.svg/960px-Central_African_Republic_2012_Battles-en.svg.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_central_african_republic_2012_batt.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-04T10:50:00",
     "update_log": [
@@ -6180,7 +6216,7 @@
       "미국"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a9/20250130_Sudan_Conflict_and_pop_displ.png/960px-20250130_Sudan_Conflict_and_pop_displ.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_20250130_sudan_conflict_and_pop_di.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-04T10:47:00",
     "update_log": [
@@ -6310,7 +6346,7 @@
       "벨기에"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Democratic_Republic_of_the_Congo_%28DRC%29_visit_by_Jenny_Chapman%2C_Minister_for_Africa_and_International_Development_in_March_2026_-_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_extra_3.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-04T04:58:00",
     "update_log": [
@@ -6418,41 +6454,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 129278,
-    "title_en": "Qatar Museums Launches Special Exhibitions on Uzbek Heritage at Museum of Islamic Art",
-    "title_ko": "카타르 국립박물관, 이슬람 예술 박물관서 우즈베키스탄 문화유산 특별전 개막",
-    "summary_ko": "카타르 박물관청(QM)의 셰이카 알 마야사 빈트 하마드 알 타니 이사장의 주도로 우즈베키스탄의 문화와 유산을 조명하는 두 건의 특별전이 전날 저녁 이슬람 예술 박물관(MIA)에서 개막했다. 이번 전시는 양국 간의 문화 교류 노력의 일환으로 관람객들에게 우즈베키스탄의 문화적 유산을 소개하기 위해 마련됐다.\n\n우즈베키스탄: 움직이는 유산 전시는 11월 28일까지 이어지며, 엑타시프: 우즈베키스탄 전시는 11월 24일까지 진행된다. 두 전시를 통해 관람객들은 우즈베키스탄의 문화와 다양한 예술, 관습, 전통의 핵심 요소를 탐구할 수 있는 ",
-    "url": "internal://solo_20260904_6a9a579d",
-    "source": "NewsFinal",
-    "category": "문화·예술",
-    "subcategory": "solo_20260904_6a9a579d",
-    "region": "middle_east",
-    "country": "카타르",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-04 08:15",
-    "countries": [
-      "카타르",
-      "우즈베키스탄"
-    ],
-    "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2a/Exhibition_Hall_of_the_Academy_of_Arts_of_Uzbekistan.jpg/960px-Exhibition_Hall_of_the_Academy_of_Arts_of_Uzbekistan.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T08:15:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 08:15",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "사진: 26D (CC BY-SA 4.0, Wikimedia Commons)",
-    "continuation_of_id": null
-  },
-  {
     "id": 129277,
     "title_en": "Customized 'Airplane Car' Turns Heads on Guatemalan Roads, Goes Viral on Social Media",
     "title_ko": "과테말라 산마르코스 달리는 ‘자동차 비행기’…SNS서 화제",
@@ -6487,6 +6488,41 @@
     "continuation_of_id": null
   },
   {
+    "id": 129278,
+    "title_en": "Qatar Museums Launches Special Exhibitions on Uzbek Heritage at Museum of Islamic Art",
+    "title_ko": "카타르 국립박물관, 이슬람 예술 박물관서 우즈베키스탄 문화유산 특별전 개막",
+    "summary_ko": "카타르 박물관청(QM)의 셰이카 알 마야사 빈트 하마드 알 타니 이사장의 주도로 우즈베키스탄의 문화와 유산을 조명하는 두 건의 특별전이 전날 저녁 이슬람 예술 박물관(MIA)에서 개막했다. 이번 전시는 양국 간의 문화 교류 노력의 일환으로 관람객들에게 우즈베키스탄의 문화적 유산을 소개하기 위해 마련됐다.\n\n우즈베키스탄: 움직이는 유산 전시는 11월 28일까지 이어지며, 엑타시프: 우즈베키스탄 전시는 11월 24일까지 진행된다. 두 전시를 통해 관람객들은 우즈베키스탄의 문화와 다양한 예술, 관습, 전통의 핵심 요소를 탐구할 수 있는 ",
+    "url": "internal://solo_20260904_6a9a579d",
+    "source": "NewsFinal",
+    "category": "문화·예술",
+    "subcategory": "solo_20260904_6a9a579d",
+    "region": "middle_east",
+    "country": "카타르",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-04 08:15",
+    "countries": [
+      "카타르",
+      "우즈베키스탄"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_exhibition_hall_of_the_academy_of.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-04T08:15:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-04 08:15",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "사진: 26D (CC BY-SA 4.0, Wikimedia Commons)",
+    "continuation_of_id": null
+  },
+  {
     "id": 129276,
     "title_en": "Oman Rejects Iran's Proposal to Impose Joint Service Fees in Strait of Hormuz",
     "title_ko": "오만, 이란의 호르무즈 해협 공동 서비스 수수료 부과 제안 거부",
@@ -6505,7 +6541,7 @@
       "이란"
     ],
     "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/aa/STS004-37-716_-_Strait_of_Hormuz.jpg/960px-STS004-37-716_-_Strait_of_Hormuz.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_sts004_37_716_strait_of_hormuz.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-04T08:14:00",
     "update_log": [
@@ -6788,6 +6824,42 @@
     "update_log": [
       {
         "timestamp": "2026-09-04 06:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
+    "id": 128727,
+    "title_en": "동아시아, 베이징 34도 찜통더위 속 울란바토르 쌀쌀",
+    "title_ko": "동아시아, 베이징 34도 찜통더위 속 울란바토르 쌀쌀",
+    "summary_ko": "4일(현지시간) 동아시아 주요국 수도는 최저기온 9°C에서 최고기온 34°C 사이의 폭넓은 기온 분포를 보였다. 중국 베이징은 최고기온 34°C, 최저기온 22°C를 기록하며 동아시아 주요국 수도 중 가장 더운 곳으로 집계됐다. 반면 몽골 울란바토르는 최고기온 17°C, 최저기온 9°C에 머물러 가장 선선한 곳으로 나타났다. 베이징의 최고기온은 울란바토르보다 17°C나 높아 지역별 기온 격차가 뚜렷했다.\n\n중국 베이징은 흐린 날씨를 보인 가운데 강수확률 0%, 강수량 0.0mm를 기록했으며 자외선지수는 5.1로 측정됐다. 내일 베이",
+    "url": "internal://weather_group_동아시아_today20260904",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_동아시아_today20260904",
+    "region": "east_asia",
+    "country": "동아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-04 06:26",
+    "countries": [
+      "일본",
+      "중국",
+      "몽골"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_china_20260904.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-04T06:26:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-04 06:26",
         "note": "최초 게시"
       }
     ],
@@ -7163,42 +7235,6 @@
     "continuation_of_id": null
   },
   {
-    "id": 128727,
-    "title_en": "동아시아, 베이징 34도 찜통더위 속 울란바토르 쌀쌀",
-    "title_ko": "동아시아, 베이징 34도 찜통더위 속 울란바토르 쌀쌀",
-    "summary_ko": "4일(현지시간) 동아시아 주요국 수도는 최저기온 9°C에서 최고기온 34°C 사이의 폭넓은 기온 분포를 보였다. 중국 베이징은 최고기온 34°C, 최저기온 22°C를 기록하며 동아시아 주요국 수도 중 가장 더운 곳으로 집계됐다. 반면 몽골 울란바토르는 최고기온 17°C, 최저기온 9°C에 머물러 가장 선선한 곳으로 나타났다. 베이징의 최고기온은 울란바토르보다 17°C나 높아 지역별 기온 격차가 뚜렷했다.\n\n중국 베이징은 흐린 날씨를 보인 가운데 강수확률 0%, 강수량 0.0mm를 기록했으며 자외선지수는 5.1로 측정됐다. 내일 베이",
-    "url": "internal://weather_group_동아시아_today20260904",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_동아시아_today20260904",
-    "region": "east_asia",
-    "country": "동아시아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-04 06:26",
-    "countries": [
-      "일본",
-      "중국",
-      "몽골"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_china_20260904.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T06:26:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 06:26",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
     "id": 128726,
     "title_en": "[국제유가] WTI 배럴당 92달러…호르무즈 해협 봉쇄 우려",
     "title_ko": "[국제유가] WTI 배럴당 92달러…호르무즈 해협 봉쇄 우려",
@@ -7381,7 +7417,7 @@
       "카타르"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/e/e6/2016-03-03_Qatar_Interior_Ministry_delegation_meets_Bangladesh_Expatriates_Welfare_Minister_Nurul_Islam_in_Dhaka_%28PID-0055575%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_2016_03_03_qatar_interior_ministry_deleg.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-04T05:20:00",
     "update_log": [
@@ -7415,7 +7451,7 @@
       "알제리"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Banque_Nationale_d%27Alg%C3%A9rie_2026.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_banque_nationale_d_27alg_c3_a9rie_2026.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-04T05:19:00",
     "update_log": [
@@ -7449,7 +7485,7 @@
       "알제리"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/b/b8/2025-07-23_Blue_Lake_%28Lac_Bleu%29%2C_Plan_de_l%E2%80%99Aiguille.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_2025_07_23_blue_lake_28lac_bleu_29_2c_p.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-04T05:18:00",
     "update_log": [
@@ -7650,7 +7686,7 @@
       "미국"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/a/a6/Gloria_Steinem_%2829126367513%29_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_gloria_steinem_2829126367513_29_28crop.jpg",
     "view_count": 4,
     "first_published_at": "2026-09-04T01:58:00",
     "update_log": [
@@ -7771,7 +7807,7 @@
       "프랑스"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/2/28/Alliance_of_Sahel_States.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_alliance_of_sahel_states.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-04T01:44:00",
     "update_log": [
@@ -8087,7 +8123,7 @@
       "이란"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/1/19/January_2025_Official_Presidential_Portrait_of_Donald_J._Trump.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_january_2025_official_presidential_portr.jpg",
     "view_count": 2,
     "first_published_at": "2026-09-03T05:05:00",
     "update_log": [
@@ -8433,6 +8469,40 @@
     "continuation_of_id": null
   },
   {
+    "id": 125544,
+    "title_en": "김성수 대법관 후보자, 처남 명의 강남 아파트 저가 전세 거주 논란 확산",
+    "title_ko": "김성수 대법관 후보자, 처남 명의 강남 아파트 저가 전세 거주 논란 확산",
+    "summary_ko": "동아일보, KBS 뉴스, 한겨레 등 주요 언론 보도에 따르면 2일(현지시간) 김성수 대법관 후보자가 처남이 임차한 서울 강남 아파트에 시세보다 저렴한 전세로 장기간 거주해 온 사실이 드러났다.\n\n논란이 된 아파트는 서울 강남구 도곡동에 위치한 도곡렉슬 43평 규모로, 해당 주택의 전세 시세는 15억 원에 달한다. 그러나 김 후보자는 처남이 임차한 이 아파트에 보증금 3억 5천만 원과 월세 80만 원 조건으로 거주한 것으로 확인됐다.\n\n야당은 이를 명백한 '처남 찬스'를 이용한 편법 전전대 거래로 규정했다. 국회 법제사법위원회 소속 ",
+    "url": "internal://realtrend_김성수_대법관_후보_2026090310",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "realtrend_김성수_대법관_후보",
+    "region": "africa",
+    "country": "한국",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-03 10:49",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": null,
+    "view_count": 0,
+    "first_published_at": "2026-09-03T10:49:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-03 10:49",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 125543,
     "title_en": "가나 뉴 위네바 지역 토지 소송 관련 폭력 사태로 3명 사망·17명 부상",
     "title_ko": "가나 뉴 위네바 지역 토지 소송 관련 폭력 사태로 3명 사망·17명 부상",
@@ -8461,40 +8531,6 @@
       {
         "timestamp": "2026-09-03 19:10",
         "note": "토지 분쟁 폭력 사태 관련 용의자 6명 체포 구금"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 125544,
-    "title_en": "김성수 대법관 후보자, 처남 명의 강남 아파트 저가 전세 거주 논란 확산",
-    "title_ko": "김성수 대법관 후보자, 처남 명의 강남 아파트 저가 전세 거주 논란 확산",
-    "summary_ko": "동아일보, KBS 뉴스, 한겨레 등 주요 언론 보도에 따르면 2일(현지시간) 김성수 대법관 후보자가 처남이 임차한 서울 강남 아파트에 시세보다 저렴한 전세로 장기간 거주해 온 사실이 드러났다.\n\n논란이 된 아파트는 서울 강남구 도곡동에 위치한 도곡렉슬 43평 규모로, 해당 주택의 전세 시세는 15억 원에 달한다. 그러나 김 후보자는 처남이 임차한 이 아파트에 보증금 3억 5천만 원과 월세 80만 원 조건으로 거주한 것으로 확인됐다.\n\n야당은 이를 명백한 '처남 찬스'를 이용한 편법 전전대 거래로 규정했다. 국회 법제사법위원회 소속 ",
-    "url": "internal://realtrend_김성수_대법관_후보_2026090310",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "realtrend_김성수_대법관_후보",
-    "region": "africa",
-    "country": "한국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-03 10:49",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": null,
-    "view_count": 0,
-    "first_published_at": "2026-09-03T10:49:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-03 10:49",
-        "note": "최초 게시"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -8600,7 +8636,7 @@
       "중국"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/a/a9/20250130_Sudan_Conflict_and_pop_displ.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_20250130_sudan_conflict_and_pop_displ.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-03T02:00:00",
     "update_log": [
@@ -8639,7 +8675,7 @@
       "탄자니아"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Democratic_Republic_of_the_Congo_%28DRC%29_visit_by_Jenny_Chapman%2C_Minister_for_Africa_and_International_Development_in_March_2026_-_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_extra_3.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-03T05:02:00",
     "update_log": [
@@ -9263,7 +9299,7 @@
       "카타르"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/c/c4/Aya_Atassi_Web_Summit_Speaker.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_aya_atassi_web_summit_speaker.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-03T05:26:00",
     "update_log": [
@@ -9314,6 +9350,43 @@
     "continuation_of_id": null
   },
   {
+    "id": 124810,
+    "title_en": "카타르 총리, 레바논·튀르키예·이집트와 연쇄 통화…해상 항행 자유 및 지역 정세 안정 논의",
+    "title_ko": "카타르 총리, 레바논·튀르키예·이집트와 연쇄 통화…해상 항행 자유 및 지역 정세 안정 논의",
+    "summary_ko": "모하메드 빈 압둘라흐만 빈 자심 알 타니(Mohammed bin Abdulrahman bin Jassim al-Thani) 카타르 총리 겸 외교부 장관이 3일(현지시간) 레바논 총리를 비롯해 튀르키예, 이집트 외교부 장관과 잇따라 전화 통화를 갖고 양국 관계와 지역 긴장 완화를 위한 외교적 공조 방안을 논의했다.\n\n모하메드 총리는 나와프 살람(Nawaf Salam) 레바논 총리와의 통화에서 양국 간 협력을 강화하고 지역 긴장 완화와 안보·안정을 위한 공동 조율 방안을 협의했다. 이 자리에서 그는 해상 항행의 자유를 확보하고 지역 내",
+    "url": "internal://solo_20260903_5354b15e",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "solo_20260903_5354b15e",
+    "region": "middle_east",
+    "country": "카타르",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-03 05:25",
+    "countries": [
+      "카타르",
+      "레바논",
+      "튀르키예",
+      "이집트"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_h_e_sheikh_mohammed_bin_abdulrahman_bin.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-03T05:25:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-03 05:25",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "사진: Chatham House (CC BY 2.0, Wikimedia Commons)",
+    "continuation_of_id": null
+  },
+  {
     "id": 124809,
     "title_en": "서울, 맑은 속 늦더위…부산·광주 비",
     "title_ko": "서울, 맑은 가운데 늦더위…부산·광주 비",
@@ -9345,43 +9418,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 124810,
-    "title_en": "카타르 총리, 레바논·튀르키예·이집트와 연쇄 통화…해상 항행 자유 및 지역 정세 안정 논의",
-    "title_ko": "카타르 총리, 레바논·튀르키예·이집트와 연쇄 통화…해상 항행 자유 및 지역 정세 안정 논의",
-    "summary_ko": "모하메드 빈 압둘라흐만 빈 자심 알 타니(Mohammed bin Abdulrahman bin Jassim al-Thani) 카타르 총리 겸 외교부 장관이 3일(현지시간) 레바논 총리를 비롯해 튀르키예, 이집트 외교부 장관과 잇따라 전화 통화를 갖고 양국 관계와 지역 긴장 완화를 위한 외교적 공조 방안을 논의했다.\n\n모하메드 총리는 나와프 살람(Nawaf Salam) 레바논 총리와의 통화에서 양국 간 협력을 강화하고 지역 긴장 완화와 안보·안정을 위한 공동 조율 방안을 협의했다. 이 자리에서 그는 해상 항행의 자유를 확보하고 지역 내",
-    "url": "internal://solo_20260903_5354b15e",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "solo_20260903_5354b15e",
-    "region": "middle_east",
-    "country": "카타르",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-03 05:25",
-    "countries": [
-      "카타르",
-      "레바논",
-      "튀르키예",
-      "이집트"
-    ],
-    "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/6/6a/H.E._Sheikh_Mohammed_bin_Abdulrahman_bin_Jassim_Al-Thani%2C_Minister_of_Foreign_Affairs%2C_State_of_Qatar_%2835035675644%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-    "view_count": 0,
-    "first_published_at": "2026-09-03T05:25:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-03 05:25",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "사진: Chatham House (CC BY 2.0, Wikimedia Commons)",
     "continuation_of_id": null
   },
   {
@@ -9477,7 +9513,7 @@
       "미국"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/5/50/2026_Nepal_floods_map.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_2026_nepal_floods_map.jpg",
     "view_count": 1,
     "first_published_at": "2026-09-03T05:15:00",
     "update_log": [
@@ -9614,7 +9650,7 @@
       "우크라이나"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/0/03/Guinea%E2%80%99s_frontline_healthcare_workers.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_guinea_e2_80_99s_frontline_healthcare_wo.jpg",
     "view_count": 5,
     "first_published_at": "2026-09-03T05:01:00",
     "update_log": [
@@ -9724,7 +9760,7 @@
       "콩고민주공화국"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/e/e4/2014_ebola_virus_epidemic_in_West_Africa_CS.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_2014_ebola_virus_epidemic_in_west_africa.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-03T01:59:00",
     "update_log": [
@@ -9778,7 +9814,7 @@
       "콜롬비아"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/a/a5/Department_Of_Defense_to_Deliver_Additional_MRAPS%2C_Turrets_for_The_MSS_Mission_In_Haiti_%288607904%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_extra_2.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-02T19:18:00",
     "update_log": [
@@ -9964,7 +10000,7 @@
       "태국"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Armed_conflict_zones_in_Myanmar.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_armed_conflict_zones_in_myanmar.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-02T22:42:00",
     "update_log": [
@@ -10157,7 +10193,7 @@
       "예멘"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/7/78/Al-Shabaab_VBIED_attack_on_base_in_Ethiopia_during_2022_incursion.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_al_shabaab_vbied_attack_on_base_in_ethio.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-02T15:59:00",
     "update_log": [
@@ -10506,7 +10542,7 @@
       "중국"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/a/a9/20250130_Sudan_Conflict_and_pop_displ.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_20250130_sudan_conflict_and_pop_displ.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-02T12:48:00",
     "update_log": [
@@ -10713,7 +10749,7 @@
       "태국"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Armed_conflict_zones_in_Myanmar.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_armed_conflict_zones_in_myanmar.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-02T10:13:00",
     "update_log": [
@@ -10926,7 +10962,7 @@
       "수리남"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/5/58/Escudo_Seleccion_Guatemala.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_escudo_seleccion_guatemala.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-02T07:10:00",
     "update_log": [
@@ -11622,7 +11658,7 @@
       "벨기에"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Democratic_Republic_of_the_Congo_%28DRC%29_visit_by_Jenny_Chapman%2C_Minister_for_Africa_and_International_Development_in_March_2026_-_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_extra_3.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-02T04:01:00",
     "update_log": [
@@ -11660,7 +11696,7 @@
       "콩고민주공화국"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/e/e4/2014_ebola_virus_epidemic_in_West_Africa_CS.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_2014_ebola_virus_epidemic_in_west_africa.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-02T03:58:00",
     "update_log": [
@@ -11702,7 +11738,7 @@
       "대한민국"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/a/aa/STS004-37-716_-_Strait_of_Hormuz.jpg",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_sts004_37_716_strait_of_hormuz_jpg.jpg",
     "view_count": 8,
     "first_published_at": "2026-09-02T03:30:00",
     "update_log": [
@@ -11823,7 +11859,7 @@
       "니제르"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/1/19/Central_African_Republic_2012_Battles-en.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_central_african_republic_2012_battles_en.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-01T22:16:00",
     "update_log": [
@@ -11864,7 +11900,7 @@
       "태국"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Armed_conflict_zones_in_Myanmar.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_armed_conflict_zones_in_myanmar.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-01T22:11:00",
     "update_log": [
@@ -11925,7 +11961,7 @@
       "르완다"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/a/a9/20250130_Sudan_Conflict_and_pop_displ.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_20250130_sudan_conflict_and_pop_displ.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-01T22:10:00",
     "update_log": [
@@ -12071,7 +12107,7 @@
       "르완다"
     ],
     "is_published": true,
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/8/83/Democratic_Republic_of_the_Congo_%28DRC%29_visit_by_Jenny_Chapman%2C_Minister_for_Africa_and_International_Development_in_March_2026_-_11.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_extra_1.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-01T15:54:00",
     "update_log": [
@@ -13894,6 +13930,46 @@
     "continuation_of_id": null
   },
   {
+    "id": 114537,
+    "title_en": "미국, 베네수엘라 석유 협정 체결…전략적 비축유 보충 추진",
+    "title_ko": "미국, 베네수엘라 석유 협정 체결…전략적 비축유 보충 추진",
+    "summary_ko": "[업데이트]\n■ 8월 31일 11:59 — 이번 합의를 둘러싸고 미국과 베네수엘라 양국이 내놓은 조건과 전망에는 시각차가 뚜렷하게 나타났다. 도널드 트럼프 대통령은 이번 협정으로 확보한 석유 공급을 미국 국민을 위한 선물로 규정하고, 미국이 베네수엘라의 650억 배럴에 달하는 막대한 매장량을 통제할 수 있게 되었다고 강조했다. 백악관 고위 관료들에 따르면 워싱턴은 신규 합작 법인 생산량의 55퍼센트에 대한 통제권을 쥐게 되며, 유전 개발을 위한 양허 기간 역시 25년이 아니라 100년에 이른다는 관측도 제기되었다. 트럼프 대통령은 ",
+    "url": "internal://realtrend_Venezuela_Oil_Deal_&_Maduro_Imprisonment_2026083106",
+    "source": "NewsFinal",
+    "category": "자원·에너지",
+    "subcategory": "realtrend_Venezuela_Oil_Deal_&",
+    "region": "africa",
+    "country": "미국",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-08-31 11:59",
+    "countries": [
+      "미국",
+      "베네수엘라",
+      "캐나다"
+    ],
+    "is_published": true,
+    "image_url": null,
+    "view_count": 1,
+    "first_published_at": "2026-08-31T06:19:00",
+    "update_log": [
+      {
+        "timestamp": "2026-08-31 06:19",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-08-31 11:59",
+        "note": "내용 업데이트"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null
+  },
+  {
     "id": 114536,
     "title_en": "아이티 켄스코프 갱단 습격 인질 일부 석방 속 유엔의 민간인 보호 촉구",
     "title_ko": "아이티 켄스코프 갱단 습격 인질 일부 석방 속 유엔의 민간인 보호 촉구",
@@ -13929,46 +14005,6 @@
       {
         "timestamp": "2026-09-05 13:17",
         "note": "갱단 습격 희생자들의 공동 장례식 거행"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null
-  },
-  {
-    "id": 114537,
-    "title_en": "미국, 베네수엘라 석유 협정 체결…전략적 비축유 보충 추진",
-    "title_ko": "미국, 베네수엘라 석유 협정 체결…전략적 비축유 보충 추진",
-    "summary_ko": "[업데이트]\n■ 8월 31일 11:59 — 이번 합의를 둘러싸고 미국과 베네수엘라 양국이 내놓은 조건과 전망에는 시각차가 뚜렷하게 나타났다. 도널드 트럼프 대통령은 이번 협정으로 확보한 석유 공급을 미국 국민을 위한 선물로 규정하고, 미국이 베네수엘라의 650억 배럴에 달하는 막대한 매장량을 통제할 수 있게 되었다고 강조했다. 백악관 고위 관료들에 따르면 워싱턴은 신규 합작 법인 생산량의 55퍼센트에 대한 통제권을 쥐게 되며, 유전 개발을 위한 양허 기간 역시 25년이 아니라 100년에 이른다는 관측도 제기되었다. 트럼프 대통령은 ",
-    "url": "internal://realtrend_Venezuela_Oil_Deal_&_Maduro_Imprisonment_2026083106",
-    "source": "NewsFinal",
-    "category": "자원·에너지",
-    "subcategory": "realtrend_Venezuela_Oil_Deal_&",
-    "region": "africa",
-    "country": "미국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-08-31 11:59",
-    "countries": [
-      "미국",
-      "베네수엘라",
-      "캐나다"
-    ],
-    "is_published": true,
-    "image_url": null,
-    "view_count": 1,
-    "first_published_at": "2026-08-31T06:19:00",
-    "update_log": [
-      {
-        "timestamp": "2026-08-31 06:19",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-08-31 11:59",
-        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
