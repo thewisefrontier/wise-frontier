@@ -91,6 +91,7 @@ load_dotenv()
 
 # RPD 낮은 고품질 모델부터 순서대로 소진시키고, RPD 500인 lite 모델을 마지막 안전망으로 둔다
 GEMINI_MODELS = [
+    "gemini-3.8-flash",
     "gemini-3.7-flash",
     "gemini-3.6-flash",
     "gemini-3.5-flash",
