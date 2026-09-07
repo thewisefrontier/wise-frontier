@@ -513,6 +513,15 @@ except Exception:
     def is_placeholder_response(title, body):
         return False
 
+# 날짜 환각 판정(2026-09-08, 사용자 지시 — "date_guard도 마저 붙여줘").
+# 검색 그라운딩으로 실제 뉴스를 반영하는 구조라 gemini_writer.py와 동일한
+# "원문에 없는 날짜를 지어냄" 위험이 있다.
+try:
+    from date_guard import check_date_hallucination
+except Exception:
+    def check_date_hallucination(body, sources, base_date=None):
+        return False, ""
+
 
 # ── 기사 프롬프트 ────────────────────────────────────────────
 def build_article_prompt(data: dict) -> str:
@@ -825,6 +834,13 @@ def main():
 
     if not title or not body:
         print("  [ERROR] 응답 파싱 실패")
+        return
+
+    _dg_bad, _dg_reason = check_date_hallucination(
+        body, [{"source_published_at": article_date.isoformat()}], base_date=article_date
+    )
+    if _dg_bad:
+        print(f"  ⚠️ [{_dg_reason}] → 스킵")
         return
 
     image_url = fetch_market_image(article_date)

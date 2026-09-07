@@ -42,6 +42,16 @@ except Exception:
     def is_placeholder_response(title, body):
         return False
 
+# 날짜 환각 판정(2026-09-08, 사용자 지시 — "date_guard도 마저 붙여줘").
+# event_date가 이미 정확히 알려진 값이라 sources를 굳이 크롤링할 필요 없이
+# source_published_at 하나만 채운 합성 소스로 대조한다(gemini_writer.py의
+# 실제 원문 리스트 대신 — 여기선 이벤트 발표일 자체가 유일하고 확실한 근거).
+try:
+    from date_guard import check_date_hallucination
+except Exception:
+    def check_date_hallucination(body, sources, base_date=None):
+        return False, ""
+
 # articles 테이블 삽입 공용 로직(2026-09-02, article_store.py로 공용화).
 try:
     from article_store import insert_final_article
@@ -635,6 +645,13 @@ def main():
 
         if len(art_body) < 300:
             print(f"    ⚠️ 본문 너무 짧음 ({len(art_body)}자), 스킵")
+            continue
+
+        _dg_bad, _dg_reason = check_date_hallucination(
+            art_body, [{"source_published_at": edate}], base_date=now_kst().date()
+        )
+        if _dg_bad:
+            print(f"    ⚠️ [{_dg_reason}] → 스킵")
             continue
 
         # ── Step 6: 기사 삽입
