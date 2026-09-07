@@ -477,6 +477,52 @@ def extract_summary(entry):
     return clean_text(summary)
 
 
+# ── RSS 자체 제공 이미지 추출 ─────────────────────────────────────────
+# 2026-09-07 도입(사용자 지적: "미술쪽 글은 이미지가 중요... 특정 그림을
+# 다루는 글은 그 그림의 사진을 넣어야 한다는 거야. 반드시"). ArchDaily·
+# Dezeen·designboom·My Modern Met 등 사진 중심 매체는 그 기사가 다루는
+# 실제 대상(건물·작품) 사진을 RSS 자체에 싣고 있는데, 지금까지 이걸 전혀
+# 수집하지 않고 나중에 Wikimedia·Pixabay 일반 검색으로 대체해왔다 —
+# 신축 건물이나 신작처럼 애초에 Commons/Pixabay에 있을 수 없는 대상이라
+# 검색은 구조적으로 무관한 사진만 돌려준다. 소스가 이미 준 실제 사진을
+# 최우선으로 쓴다. 매체마다 이미지가 담기는 위치가 달라 3단계로 확인:
+# 1) <enclosure> 링크(ArchDaily·designboom), 2) content:encoded 안의 첫
+# <img>(Dezeen·My Modern Met·Creative Boom), 3) media:thumbnail(RSS 미디어 확장).
+_IMG_TAG_RE = re.compile(r'<img[^>]+src=["\']([^"\']+)["\']', re.IGNORECASE)
+
+
+def extract_rss_image(entry) -> str:
+    try:
+        for link in (entry.get("links") or []):
+            if link.get("rel") != "enclosure":
+                continue
+            href = link.get("href", "")
+            ltype = str(link.get("type", ""))
+            # ArchDaily 등 일부 소스는 enclosure에 type을 아예 안 붙인다 —
+            # type이 없으면 확장자로 이미지 여부를 판단(실측: ArchDaily는
+            # type 필드 자체가 없음).
+            if href and (ltype.startswith("image") or
+                         (not ltype and re.search(r"\.(jpe?g|png|webp|gif)(\?|$)", href, re.I))):
+                return href
+        content = entry.get("content")
+        if content:
+            m = _IMG_TAG_RE.search(content[0].get("value", "") or "")
+            if m:
+                return m.group(1)
+        m = _IMG_TAG_RE.search(entry.get("summary", "") or "")
+        if m:
+            return m.group(1)
+        thumb = entry.get("media_thumbnail")
+        if thumb and isinstance(thumb, list) and thumb[0].get("url"):
+            return thumb[0]["url"]
+        media = entry.get("media_content")
+        if media and isinstance(media, list) and media[0].get("url"):
+            return media[0]["url"]
+    except Exception:
+        pass
+    return ""
+
+
 # ── 사진 캡션·크레딧 제거 ─────────────────────────────────────────────
 # 원문 <p>에 섞여 들어오는 사진 캡션은 "설명문 + 날짜 + © + 크레딧" 구조가 흔하다.
 # 자료사진이면 캡션 날짜가 사건 날짜와 수개월씩 벌어진다.
@@ -1080,6 +1126,8 @@ for data in results:
     if is_url_exists(link):
         continue
 
+    rss_image_url = extract_rss_image(latest)
+
     if is_duplicate(title, seen_titles):
         print(f"[SKIP] 유사 기사 중복 — {title[:50]}")
         continue
@@ -1187,6 +1235,7 @@ for data in results:
             countries=country_names,
             is_published=False,
             source_published_at=src_published,
+            image_url=rss_image_url,
         )
         print(f"[SOFT] [{category}] [{country_name}] {title_ko[:50]}")
         continue
@@ -1208,6 +1257,7 @@ for data in results:
             countries=country_names,
             is_published=False,
             source_published_at=src_published,
+            image_url=rss_image_url,
         )
         if article_id > 0:
             mark_sent_telegram(article_id)
