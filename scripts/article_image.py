@@ -200,8 +200,18 @@ def fetch_article_image(title: str, body: str, entity: str, call_gemini_fn) -> t
     if entity:
         wiki_url, wiki_credit = fetch_wikimedia_image(entity)
         if wiki_url:
+            # 2026-09-07 실사고(id=140160): 위키미디어 경로만 store_image()를
+            # 거치지 않고 upload.wikimedia.org 원본 URL을 그대로 반환하고
+            # 있었다 — Pixabay 경로(아래)는 이미 R2 저장+재압축을 거치는데
+            # 위키미디어만 이 구조적 최적화에서 빠져 있었다.
+            try:
+                from image_store import store_image
+                stored_url = store_image(wiki_url, key_hint=f"wiki_{entity}")
+            except Exception as e:
+                print(f"  ⚠️ 위키미디어 이미지 R2 저장 실패, 원본 URL 사용: {e}")
+                stored_url = wiki_url
             print(f"  🖼️ 위키미디어 커먼즈 이미지 사용: {entity}")
-            return wiki_url, (wiki_credit or "")
+            return (stored_url or wiki_url), (wiki_credit or "")
 
     if not PIXABAY_API_KEY:
         return "", ""

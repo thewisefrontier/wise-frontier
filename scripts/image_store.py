@@ -207,7 +207,13 @@ def store_image(src_url: str, key_hint: str = "", timeout: int = 30) -> str:
         return src_url
 
     try:
-        res = requests.get(src_url, timeout=timeout, stream=True)
+        # 2026-09-07 실사고: 위키미디어는 User-Agent 없는 요청을 403으로
+        # 차단한다(User-Agent 정책). Pixabay 등 다른 소스는 문제없었지만
+        # 위키미디어 원본을 처음 이 함수에 태우면서 드러났다.
+        res = requests.get(
+            src_url, timeout=timeout, stream=True,
+            headers={"User-Agent": "NewsFinalBot/1.0 (+https://newsfinal.co.kr)"},
+        )
         if res.status_code != 200:
             print(f"  ⚠️ 이미지 다운로드 실패 {res.status_code} — 원본 URL 유지")
             return src_url
