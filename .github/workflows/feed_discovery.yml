@@ -1,0 +1,41 @@
+name: NewsFinal - RSS Feed Discovery
+
+# 후보 매체 홈페이지에서 RSS/Atom 피드를 자동 탐색해 rss_sources 테이블에
+# 검수 대기(is_active=false) 상태로 등록한다(2026-09-08 신설, 사용자 지시 —
+# "RSS 피드 자동 탐색 도구도 진행해"). 상시 자동화가 아니라 새 매체를
+# 추가하고 싶을 때 수동으로 실행하는 도구 — homepages 입력에 후보
+# 홈페이지 URL을 공백으로 구분해 전달한다.
+on:
+  workflow_dispatch:
+    inputs:
+      homepages:
+        description: '후보 홈페이지 URL(공백으로 구분, 예: https://a.com https://b.com)'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  feed_discovery:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v5
+
+      - name: Python 설정
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: 패키지 설치
+        run: pip install -r requirements.txt
+
+      - name: RSS 피드 탐색 및 검수 대기 등록
+        # ⚠️ 워크플로우 입력을 run: 셸에 직접 보간하면 스크립트 인젝션 위험이
+        # 있다(GitHub Actions 알려진 안티패턴) — env로 전달해 셸 확장을 피한다.
+        run: python scripts/feed_discovery.py $HOMEPAGES
+        env:
+          HOMEPAGES: ${{ github.event.inputs.homepages }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}

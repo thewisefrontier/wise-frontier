@@ -1,0 +1,53 @@
+name: NewsFinal - Site-wide Article Discovery
+
+# newspaper4k의 사이트 전체 기사 발견 기능으로, 이미 신뢰하는 매체
+# 홈페이지를 훑어 RSS 피드에 안 걸린 기사를 찾는다(2026-09-08 신설,
+# 사용자 지시 — "newspaper4k의 사이트 전체 기사 발견 기능... 진행해").
+# 사이트 하나당 크롤이 무겁고 매 실행마다 순번(cursor)만큼만 훑으므로
+# 30분 주기 메인 파이프라인(run.yml)과 분리해 낮은 빈도로 돌린다.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: newsfinal-site-discovery
+  cancel-in-progress: false
+
+jobs:
+  site_discovery:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v5
+
+      - name: Python 설정
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: 패키지 설치
+        run: pip install -r requirements.txt
+
+      - name: 사이트 전체 기사 발견
+        run: python scripts/site_discovery.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+
+      - name: 순번(cursor) 상태 커밋
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add data/site_discovery_state.json
+          git diff --staged --quiet || git commit -m "Update site_discovery cursor"
+          for i in 1 2 3 4 5; do
+            git pull origin main -X ours --no-rebase
+            git push && break
+            echo "push failed (attempt $i) - retrying"
+            sleep $((RANDOM % 8 + 3))
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
