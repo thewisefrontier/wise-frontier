@@ -18,11 +18,14 @@ export const UTILITY_LINKS = [
   { href: '/country.html', label: '국가별' },
   { href: '/weather.html', label: '날씨' },
   // 다국어(글로벌) 채널 진입점(2026-09-08 신설) — 사용자 지적: "사이트에
-  // 들어갈 수 있는 공간 같은게 보이질 않는데... 국기를 붙여 놓는다거나
-  // 하는 방식이면 좋을 것 같은데". 서브도메인(global.newsfinal.co.kr) DNS
-  // 연결 전이라도 /global/은 같은 docs/ 배포 안에 있어 상대경로로 지금 바로
-  // 접근 가능 — 그래서 절대 URL이 아니라 상대경로를 쓴다.
-  { href: '/global/', label: '🇺🇸🇮🇳🇫🇷🇪🇸' },
+  // 들어갈 수 있는 공간 같은게 보이질 않는데". 국기 이모지 클러스터
+  // (🇺🇸🇮🇳🇫🇷🇪🇸)를 처음 시도했다가 "사이트가 쓸데없이 복잡해. 직관적이지
+  // 않아" 지적으로 단순 텍스트로 교체 — 언어별 선택(EN/HI/FR/ES 버튼)은
+  // /global/index.html 안의 langSwitch가 이미 담당하므로, 메인 사이트
+  // nav는 진입점 하나만 명확하면 된다. 서브도메인(global.newsfinal.co.kr)
+  // DNS 연결 전이라도 /global/은 같은 docs/ 배포 안에 있어 상대경로로
+  // 지금 바로 접근 가능 — 그래서 절대 URL이 아니라 상대경로를 쓴다.
+  { href: '/global/', label: 'GLOBAL' },
 ];
 
 /**
