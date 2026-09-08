@@ -36,6 +36,24 @@ except Exception:
 
 KST = timezone(timedelta(hours=9))
 
+# 9개 build_*_report*() 함수(한국 오늘/주말/주간, 글로벌 오늘/주말/주간,
+# 그룹 오늘/주말/주간)가 이 "제목 작성 규칙" 블록을 각자 복붙해 갖고
+# 있었다. 2026-09-03 사용자 지적("서울 맑은 속 늦더위라니")으로 "속"
+# 어색한 표현 금지 규칙이 추가됐는데, build_korea_today_report_kma()
+# 한 곳에만 반영되고 나머지 8곳엔 전파가 안 됐다(2026-09-09 사용자
+# 지시: "다른 트렌드/요약 함수에도 같은 중복 있는지 더 찾아줘" —
+# 감사로 발견). 상수로 통일해 9곳 모두 같은 규칙을 쓰게 한다.
+WEATHER_TITLE_RULES = """제목 작성 규칙:
+- 지역명을 맨 앞에 붙이고 쉼표로 구분할 것 (예: "유럽, 최고 37도 폭염 속 곳곳 장맛비")
+- 지역명을 제외한 나머지는 20자 내외
+- 쉼표(,)는 지역명 뒤 1개만. 그 외 나열은 가운뎃점(·)이나 말줄임표(…)를 쓸 것
+- 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
+- "최고 N°C…비 소식" 같은 기계적 패턴 금지
+- ⚠️ "맑은 속", "흐린 속"처럼 형용사(맑은/흐린/추운 등)에 "속"을 바로 붙이는
+  어색한 표현 금지(2026-09-03 사용자 지적: "서울 맑은 속 늦더위라니"). "속"은
+  명사 뒤에만 쓸 것(예: "맑은 날씨 속", "폭염 속") — 형용사 바로 뒤라면
+  "~가운데"를 쓸 것(예: "맑은 가운데 늦더위")"""
+
 def now_kst() -> datetime:
     return datetime.now(timezone.utc).astimezone(KST)
 
@@ -1466,16 +1484,7 @@ def build_korea_today_report_kma(cities: list, local_now: datetime):
 응답은 반드시 아래 JSON 형식으로만 출력하라 (마크다운 코드블록 없이):
 {{"title": "제목", "body": "본문..."}}
 
-제목 작성 규칙:
-- 지역명을 맨 앞에 붙이고 쉼표로 구분할 것 (예: "유럽, 최고 37도 폭염 속 곳곳 장맛비")
-- 지역명을 제외한 나머지는 20자 내외
-- 쉼표(,)는 지역명 뒤 1개만. 그 외 나열은 가운뎃점(·)이나 말줄임표(…)를 쓸 것
-- 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
-- "최고 N°C…비 소식" 같은 기계적 패턴 금지
-- ⚠️ "맑은 속", "흐린 속"처럼 형용사(맑은/흐린/추운 등)에 "속"을 바로 붙이는
-  어색한 표현 금지(2026-09-03 사용자 지적: "서울 맑은 속 늦더위라니"). "속"은
-  명사 뒤에만 쓸 것(예: "맑은 날씨 속", "폭염 속") — 형용사 바로 뒤라면
-  "~가운데"를 쓸 것(예: "맑은 가운데 늦더위")"""
+{WEATHER_TITLE_RULES}"""
 
     _raw_kma_today = call_gemini_weather(gemini_prompt)
     _title_kma_today, lede = _parse_gemini_weather_response(_raw_kma_today)
@@ -1585,12 +1594,7 @@ def build_korea_weekend_report_kma(cities: list, local_now: datetime):
 응답은 반드시 아래 JSON 형식으로만 출력하라 (마크다운 코드블록 없이):
 {{"title": "제목", "body": "본문..."}}
 
-제목 작성 규칙:
-- 지역명을 맨 앞에 붙이고 쉼표로 구분할 것 (예: "유럽, 최고 37도 폭염 속 곳곳 장맛비")
-- 지역명을 제외한 나머지는 20자 내외
-- 쉼표(,)는 지역명 뒤 1개만. 그 외 나열은 가운뎃점(·)이나 말줄임표(…)를 쓸 것
-- 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
-- "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
+{WEATHER_TITLE_RULES}"""
 
     _raw_kma_wknd = call_gemini_weather(gemini_prompt)
     _title_kma_wknd, lede = _parse_gemini_weather_response(_raw_kma_wknd)
@@ -1808,12 +1812,7 @@ def build_korea_weekly_report_kma(cities: list, local_now: datetime):
 응답은 반드시 아래 JSON 형식으로만 출력하라 (마크다운 코드블록 없이):
 {{"title": "제목", "body": "본문..."}}
 
-제목 작성 규칙:
-- 지역명을 맨 앞에 붙이고 쉼표로 구분할 것 (예: "유럽, 최고 37도 폭염 속 곳곳 장맛비")
-- 지역명을 제외한 나머지는 20자 내외
-- 쉼표(,)는 지역명 뒤 1개만. 그 외 나열은 가운뎃점(·)이나 말줄임표(…)를 쓸 것
-- 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
-- "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
+{WEATHER_TITLE_RULES}"""
 
     _raw_kma_wkly = call_gemini_weather(gemini_prompt)
     _title_kma_wkly, summary = _parse_gemini_weather_response(_raw_kma_wkly)
@@ -2025,12 +2024,7 @@ def build_today_report(country_name, weather_list, local_now: datetime):
 응답은 반드시 아래 JSON 형식으로만 출력하라 (마크다운 코드블록 없이):
 {{"title": "제목", "body": "본문..."}}
 
-제목 작성 규칙:
-- 지역명을 맨 앞에 붙이고 쉼표로 구분할 것 (예: "유럽, 최고 37도 폭염 속 곳곳 장맛비")
-- 지역명을 제외한 나머지는 20자 내외
-- 쉼표(,)는 지역명 뒤 1개만. 그 외 나열은 가운뎃점(·)이나 말줄임표(…)를 쓸 것
-- 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
-- "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
+{WEATHER_TITLE_RULES}"""
 
     _raw_today = call_gemini_weather(gemini_prompt)
     _title_today, summary = _parse_gemini_weather_response(_raw_today)
@@ -2113,12 +2107,7 @@ def build_weekend_report(country_name, weather_list, local_now: datetime):
 응답은 반드시 아래 JSON 형식으로만 출력하라 (마크다운 코드블록 없이):
 {{"title": "제목", "body": "본문..."}}
 
-제목 작성 규칙:
-- 지역명을 맨 앞에 붙이고 쉼표로 구분할 것 (예: "유럽, 최고 37도 폭염 속 곳곳 장맛비")
-- 지역명을 제외한 나머지는 20자 내외
-- 쉼표(,)는 지역명 뒤 1개만. 그 외 나열은 가운뎃점(·)이나 말줄임표(…)를 쓸 것
-- 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
-- "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
+{WEATHER_TITLE_RULES}"""
 
     _raw_wknd = call_gemini_weather(gemini_prompt)
     _title_wknd, summary = _parse_gemini_weather_response(_raw_wknd)
@@ -2197,12 +2186,7 @@ def build_weekly_report(country_name, weather_list, local_now: datetime):
 응답은 반드시 아래 JSON 형식으로만 출력하라 (마크다운 코드블록 없이):
 {{"title": "제목", "body": "본문..."}}
 
-제목 작성 규칙:
-- 지역명을 맨 앞에 붙이고 쉼표로 구분할 것 (예: "유럽, 최고 37도 폭염 속 곳곳 장맛비")
-- 지역명을 제외한 나머지는 20자 내외
-- 쉼표(,)는 지역명 뒤 1개만. 그 외 나열은 가운뎃점(·)이나 말줄임표(…)를 쓸 것
-- 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
-- "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
+{WEATHER_TITLE_RULES}"""
 
     _raw_wkly = call_gemini_weather(gemini_prompt)
     _title_wkly, summary = _parse_gemini_weather_response(_raw_wkly)
@@ -2348,12 +2332,7 @@ def build_group_today_report(group_name, countries_data, local_now: datetime):
 응답은 반드시 아래 JSON 형식으로만 출력하라 (마크다운 코드블록 없이):
 {{"title": "제목", "body": "본문..."}}
 
-제목 작성 규칙:
-- 지역명을 맨 앞에 붙이고 쉼표로 구분할 것 (예: "유럽, 최고 37도 폭염 속 곳곳 장맛비")
-- 지역명을 제외한 나머지는 20자 내외
-- 쉼표(,)는 지역명 뒤 1개만. 그 외 나열은 가운뎃점(·)이나 말줄임표(…)를 쓸 것
-- 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
-- "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
+{WEATHER_TITLE_RULES}"""
 
     _raw_grp_today = call_gemini_weather(gemini_prompt)
     _title_grp_today, summary = _parse_gemini_weather_response(_raw_grp_today)
@@ -2451,12 +2430,7 @@ def build_group_weekend_report(group_name, countries_data, local_now: datetime):
 응답은 반드시 아래 JSON 형식으로만 출력하라 (마크다운 코드블록 없이):
 {{"title": "제목", "body": "본문..."}}
 
-제목 작성 규칙:
-- 지역명을 맨 앞에 붙이고 쉼표로 구분할 것 (예: "유럽, 최고 37도 폭염 속 곳곳 장맛비")
-- 지역명을 제외한 나머지는 20자 내외
-- 쉼표(,)는 지역명 뒤 1개만. 그 외 나열은 가운뎃점(·)이나 말줄임표(…)를 쓸 것
-- 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
-- "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
+{WEATHER_TITLE_RULES}"""
 
     _raw_grp_wknd = call_gemini_weather(gemini_prompt)
     _title_grp_wknd, summary = _parse_gemini_weather_response(_raw_grp_wknd)
@@ -2545,12 +2519,7 @@ def build_group_weekly_report(group_name, countries_data, local_now: datetime):
 응답은 반드시 아래 JSON 형식으로만 출력하라 (마크다운 코드블록 없이):
 {{"title": "제목", "body": "본문..."}}
 
-제목 작성 규칙:
-- 지역명을 맨 앞에 붙이고 쉼표로 구분할 것 (예: "유럽, 최고 37도 폭염 속 곳곳 장맛비")
-- 지역명을 제외한 나머지는 20자 내외
-- 쉼표(,)는 지역명 뒤 1개만. 그 외 나열은 가운뎃점(·)이나 말줄임표(…)를 쓸 것
-- 핵심 기상 현상 + 체감 표현 중심 (예: "수도권 물폭탄…남부는 찜통더위")
-- "최고 N°C…비 소식" 같은 기계적 패턴 금지"""
+{WEATHER_TITLE_RULES}"""
 
     _raw_grp_wkly = call_gemini_weather(gemini_prompt)
     _title_grp_wkly, summary = _parse_gemini_weather_response(_raw_grp_wkly)
