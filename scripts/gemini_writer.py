@@ -2965,6 +2965,24 @@ def run():
                         published = False
                         _dg_reason = f"번역 누락 — 외국어 잔존: {_fl}"
 
+                # 2026-09-08 실사고(id=145091) 대응 — solo 경로와 동일하게
+                # 고유명사 날조 감지 시 실제로 미발행 처리(detect_foreign_leftover
+                # 패턴과 동일).
+                if published:
+                    _fab = verify_no_fabricated_names(prompt, gen_body or _strip_leaked_labels(content))
+                    if _fab:
+                        print(f"  ⚠️ [원문에 없는 고유명사/수식어 잔존: {_fab}] → 미발행으로 저장")
+                        published = False
+                        _dg_reason = f"고유명사 날조 의심 — {_fab}"
+
+                # 2026-09-08 실사고(id=145092) 대응 — solo 경로와 동일하게
+                # 분량 미달은 실제로 미발행 처리한다(소스 빈약 → 의미 없는
+                # 반복 서술로 채우는 사고 방지).
+                if published and len(gen_body or "") < MIN_BODY_LEN_HARD_FLOOR:
+                    print(f"  ⚠️ [분량 부족 {len(gen_body or '')}자] → 미발행으로 저장")
+                    published = False
+                    _dg_reason = f"분량 부족 — 소스 부족으로 실질적 내용 없이 반복 서술({len(gen_body or '')}자)"
+
                 image_url, image_credit = fetch_article_image(
                     full_title, gen_body or _strip_leaked_labels(content), gen_keyword_en
                 ) if published else ("", "")
@@ -3255,6 +3273,33 @@ def run():
                     print(f"  ⚠️ [번역 안 된 외국어 잔존: {_fl}] → 미발행으로 저장")
                     published = False
                     _dg_reason = f"번역 누락 — 외국어 잔존: {_fl}"
+
+            # 2026-09-08 실사고(id=145091): 원문(이안 플레밍 다큐멘터리 기사)과
+            # 완전히 무관한 알렉산더 플레밍/페니실린 내용이 통째로 지어져
+            # 발행됐다 — id=142060과 같은 근본 원인(소스 자료 빈약 → Gemini가
+            # 자기 사전지식으로 그럴듯한 다른 내용을 지어냄)의 재발. 원인 확인
+            # 결과, call_gemini_article() 내부에서 verify_no_fabricated_names가
+            # 감지는 했어도(1회 재생성 시도 후에도 안 고쳐지면) "그대로 발행 —
+            # 수동 확인 필요"라고 로그만 찍고 실제로 막지는 않는 설계였다.
+            # detect_foreign_leftover처럼 호출부에서 한 번 더 확인해 실제로
+            # 미발행 처리한다.
+            if published:
+                _fab = verify_no_fabricated_names(prompt, gen_body or _strip_leaked_labels(content))
+                if _fab:
+                    print(f"  ⚠️ [원문에 없는 고유명사/수식어 잔존: {_fab}] → 미발행으로 저장")
+                    published = False
+                    _dg_reason = f"고유명사 날조 의심 — {_fab}"
+
+            # 2026-09-08 실사고(id=145092) — 소스가 빈약한데도(full_text 없음)
+            # 700자 하한을 채우려다 실제 정보 없이 같은 말을 문단만 바꿔
+            # 반복하는 "의미 없는 말로 채워진" 기사가 나왔다(사용자 지적).
+            # MIN_BODY_LEN_HARD_FLOOR 미달은 call_gemini_article() 내부에서
+            # 로그만 찍고 넘어가므로, 여기서 다시 확인해 실제로 미발행 처리한다
+            # — 소스가 정말 짧으면 억지로 채우게 두지 않고 아예 스킵.
+            if published and len(gen_body or "") < MIN_BODY_LEN_HARD_FLOOR:
+                print(f"  ⚠️ [분량 부족 {len(gen_body or '')}자] → 미발행으로 저장")
+                published = False
+                _dg_reason = f"분량 부족 — 소스 부족으로 실질적 내용 없이 반복 서술({len(gen_body or '')}자)"
 
             # 2026-09-07: RSS 원본 이미지(ArchDaily/Dezeen 등)를 재호스팅하는
             # 방안을 검토했으나 저작권 문제로 보류(사용자 판단) — 현대미술·
