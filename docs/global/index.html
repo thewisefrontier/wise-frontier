@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="NewsFinal Global — Korean news, translated." />
+  <link rel="canonical" href="https://global.newsfinal.co.kr/" />
+  <link rel="alternate" hreflang="en" href="https://global.newsfinal.co.kr/?lang=en" />
+  <link rel="alternate" hreflang="hi" href="https://global.newsfinal.co.kr/?lang=hi" />
+  <link rel="alternate" hreflang="fr" href="https://global.newsfinal.co.kr/?lang=fr" />
+  <link rel="alternate" hreflang="es" href="https://global.newsfinal.co.kr/?lang=es" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <title>NewsFinal Global</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans:wght@400;500;700&family=Noto+Sans+Devanagari:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f8f6f1; --bg2: #ffffff; --bg3: #f0ede6;
+      --border: #ddd9d0; --text: #1a1a1a; --muted: #888; --accent: #8b5e2a; --accent2: #1a5fa8;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--bg); color: var(--text); font-family: 'Noto Sans', sans-serif; font-size: 15px; line-height: 1.6; }
+    header { background: var(--bg2); border-bottom: 3px solid var(--text); padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .logo { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; color: var(--text); text-decoration: none; }
+    .logo span { color: var(--accent); }
+    .lang-switch { display: flex; gap: 6px; }
+    .lang-switch a, .lang-switch span {
+      font-family: 'IBM Plex Mono', monospace; font-size: 12px; padding: 6px 12px;
+      border: 1px solid var(--border); text-decoration: none; color: var(--muted); background: var(--bg2);
+    }
+    .lang-switch a:hover { border-color: var(--accent); color: var(--accent); }
+    .lang-switch .active { background: var(--text); color: #fff; border-color: var(--text); }
+    main { max-width: 860px; margin: 0 auto; padding: 32px 24px 60px; }
+    .subhead { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--muted); margin-bottom: 24px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .card { display: block; background: var(--bg2); border: 1px solid var(--border); padding: 20px; margin-bottom: 14px; text-decoration: none; color: var(--text); }
+    .card:hover { border-color: var(--accent); }
+    .card h2 { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 700; margin-bottom: 8px; }
+    .card p { color: var(--muted); font-size: 14px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    .card .meta { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--accent2); margin-top: 10px; }
+    .empty { color: var(--muted); text-align: center; padding: 60px 0; }
+    [lang="hi"] body, body.lang-hi { font-family: 'Noto Sans Devanagari', 'Noto Sans', sans-serif; }
+    footer { text-align: center; padding: 24px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="/">News<span>Final</span> Global</a>
+    <nav class="lang-switch" id="langSwitch"></nav>
+  </header>
+  <main>
+    <div class="subhead" id="subhead">Korean news, translated</div>
+    <div id="list"></div>
+  </main>
+  <footer>NewsFinal Global — <span id="footerNote"></span></footer>
+
+  <script>
+    const LANGS = {
+      en: { name: "English", subhead: "Korean news, translated", empty: "No articles yet." },
+      hi: { name: "हिन्दी", subhead: "कोरियाई समाचार, अनुवादित", empty: "अभी तक कोई लेख नहीं।" },
+      fr: { name: "Français", subhead: "Actualités coréennes, traduites", empty: "Aucun article pour l'instant." },
+      es: { name: "Español", subhead: "Noticias de Corea, traducidas", empty: "Aún no hay artículos." },
+    };
+    const params = new URLSearchParams(location.search);
+    const lang = LANGS[params.get('lang')] ? params.get('lang') : 'en';
+
+    document.documentElement.lang = lang;
+    document.title = "NewsFinal Global — " + LANGS[lang].name;
+    document.getElementById('subhead').textContent = LANGS[lang].subhead;
+    document.getElementById('footerNote').textContent = LANGS[lang].name;
+
+    const switchEl = document.getElementById('langSwitch');
+    Object.keys(LANGS).forEach(code => {
+      const el = document.createElement(code === lang ? 'span' : 'a');
+      if (code !== lang) el.href = '?lang=' + code;
+      el.className = code === lang ? 'active' : '';
+      el.textContent = code.toUpperCase();
+      switchEl.appendChild(el);
+    });
+
+    fetch('/data/global/' + lang + '.json')
+      .then(r => r.json())
+      .then(data => {
+        const list = document.getElementById('list');
+        const items = data.articles || [];
+        if (!items.length) {
+          list.innerHTML = '<div class="empty">' + LANGS[lang].empty + '</div>';
+          return;
+        }
+        list.innerHTML = items.map(a => `
+          <a class="card" href="article.html?lang=${lang}&id=${a.id}">
+            <h2>${escapeHtml(a.title)}</h2>
+            <p>${escapeHtml(a.summary)}</p>
+            <div class="meta">${escapeHtml(a.created_at || '')}</div>
+          </a>
+        `).join('');
+      })
+      .catch(() => {
+        document.getElementById('list').innerHTML = '<div class="empty">' + LANGS[lang].empty + '</div>';
+      });
+
+    function escapeHtml(s) {
+      return (s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+  </script>
+</body>
+</html>

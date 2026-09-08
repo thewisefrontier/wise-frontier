@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="NewsFinal Global">
+  <link rel="canonical" href="https://global.newsfinal.co.kr/article.html" id="canonicalLink" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <title>NewsFinal Global</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans:wght@400;500;700&family=Noto+Sans+Devanagari:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f8f6f1; --bg2: #ffffff; --bg3: #f0ede6;
+      --border: #ddd9d0; --text: #1a1a1a; --muted: #888; --accent: #8b5e2a; --accent2: #1a5fa8;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--bg); color: var(--text); font-family: 'Noto Sans', sans-serif; font-size: 16px; line-height: 1.7; }
+    header { background: var(--bg2); border-bottom: 3px solid var(--text); padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 900; color: var(--text); text-decoration: none; }
+    .logo span { color: var(--accent); }
+    main { max-width: 720px; margin: 0 auto; padding: 32px 24px 60px; }
+    .back { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--muted); text-decoration: none; margin-bottom: 20px; }
+    .back:hover { color: var(--accent); }
+    h1 { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 900; margin-bottom: 14px; }
+    .meta { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--muted); margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+    .body { white-space: pre-wrap; font-size: 16px; }
+    .source-note { margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 13px; color: var(--muted); }
+    .source-note a { color: var(--accent2); }
+    .empty { color: var(--muted); text-align: center; padding: 60px 0; }
+    [lang="hi"] body, body.lang-hi { font-family: 'Noto Sans Devanagari', 'Noto Sans', sans-serif; }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="index.html" id="homeLink">News<span>Final</span> Global</a>
+  </header>
+  <main>
+    <a class="back" id="backLink" href="index.html">&larr; Back</a>
+    <div id="content"><div class="empty">Loading…</div></div>
+  </main>
+
+  <script>
+    const LANGS = {
+      en: { name: "English", back: "← Back", source: "Source", notFound: "Article not found." },
+      hi: { name: "हिन्दी", back: "← वापस", source: "स्रोत", notFound: "लेख नहीं मिला।" },
+      fr: { name: "Français", back: "← Retour", source: "Source", notFound: "Article introuvable." },
+      es: { name: "Español", back: "← Volver", source: "Fuente", notFound: "Artículo no encontrado." },
+    };
+    const params = new URLSearchParams(location.search);
+    const lang = LANGS[params.get('lang')] ? params.get('lang') : 'en';
+    const id = params.get('id');
+
+    document.documentElement.lang = lang;
+    document.getElementById('homeLink').href = 'index.html?lang=' + lang;
+    document.getElementById('backLink').href = 'index.html?lang=' + lang;
+    document.getElementById('backLink').textContent = LANGS[lang].back;
+
+    fetch('/data/global/' + lang + '.json')
+      .then(r => r.json())
+      .then(data => {
+        const article = (data.articles || []).find(a => String(a.id) === String(id));
+        const content = document.getElementById('content');
+        if (!article) {
+          content.innerHTML = '<div class="empty">' + LANGS[lang].notFound + '</div>';
+          return;
+        }
+        document.title = article.title + ' — NewsFinal Global';
+        const canonical = document.getElementById('canonicalLink');
+        canonical.href = 'https://global.newsfinal.co.kr/article.html?lang=' + lang + '&id=' + id;
+        document.querySelector('meta[property="og:title"]').setAttribute('content', article.title);
+
+        let sourceHtml = '';
+        if (article.source_url) {
+          sourceHtml = `<div class="source-note">${LANGS[lang].source}: <a href="${escapeHtml(article.source_url)}" target="_blank" rel="noopener">${escapeHtml(article.source_domain || article.source_url)}</a></div>`;
+        }
+
+        content.innerHTML = `
+          <h1>${escapeHtml(article.title)}</h1>
+          <div class="meta">${escapeHtml(article.created_at || '')}</div>
+          <div class="body">${escapeHtml(article.summary)}</div>
+          ${sourceHtml}
+        `;
+      })
+      .catch(() => {
+        document.getElementById('content').innerHTML = '<div class="empty">' + LANGS[lang].notFound + '</div>';
+      });
+
+    function escapeHtml(s) {
+      return (s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+  </script>
+</body>
+</html>

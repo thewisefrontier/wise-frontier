@@ -63,6 +63,14 @@ GDELT_QUERIES = [
     "Ivory Coast OR Senegal OR Cote d'Ivoire (economy OR business)",
     "frontier markets investment",
     "emerging markets Africa business",
+    # 해외 시각에서 본 한국 — 2026-09-08 사용자 지시: "국내 소스에서는
+    # 다뤄지지 않았는데, 해외에서 국내 이야기를 다룬 게 있다면 그거는
+    # 우리쪽에서 보도할만한 가치가 있을 것 같아". 아래 결과는 이 파일의
+    # 기존 국내(한국) 소스 제외 필터(sourcecountry=="South Korea")를
+    # 그대로 통과하므로 자동으로 "외신이 본 한국"만 남는다 — 한국어
+    # 메인 파이프라인(gemini_writer.py 등)의 일반 원재료로 흘러간다.
+    "South Korea (business OR economy OR industry OR technology)",
+    "Samsung OR Hyundai OR LG OR SK Group",
 ]
 
 MAX_RECORDS_PER_QUERY = 10

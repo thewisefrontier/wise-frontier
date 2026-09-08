@@ -1,11 +1,11 @@
 """
 scripts/translate_guard.py
 -----------------------------
-검증된 한국어 기사 본문을 영어로 번역/현지화한다(2026-09-03 신설 —
+검증된 한국어 기사 본문을 외국어로 번역/현지화한다(2026-09-03 신설 —
 "국제성 있는 카테고리 기사는 만들 때 처음부터 한글 콘텐츠랑 외국어로
-같이 만들면 어떨까" 요청).
+같이 만들면 어떨까" 요청. 2026-09-08 다국어 채널 신설로 언어 파라미터화).
 
-⚠️ 설계: 한국어·영어를 한 번의 Gemini 호출로 동시에 생성하지 않는다.
+⚠️ 설계: 한국어·번역을 한 번의 Gemini 호출로 동시에 생성하지 않는다.
 한국어를 먼저 생성하고 각 writer의 기존 팩트체크(verify_no_fabricated_names
 등)를 통과한 뒤, 그 "검증된" 한국어를 소스로 번역만 한다 — 동시 생성은
 언어별로 숫자·사실이 미묘하게 갈릴 위험(예: 환율 수치가 한/영 버전에서
@@ -17,13 +17,34 @@ scripts/translate_guard.py
 함수를 주입받는다 — 이 모듈이 직접 Gemini 클라이언트를 만들지 않는다.
 
 사용:
-    from translate_guard import translate_article
+    from translate_guard import translate_article, verify_translation
     title_en, body_en = translate_article(title_ko, body_ko, call_gemini)
+    title_hi, body_hi = translate_article(title_ko, body_ko, call_gemini, lang="hi")
     # 번역 실패 시 ("", "") 반환. 번역은 부가 기능이지 필수 경로가
     # 아니므로, 호출부는 실패해도 한국어 기사 저장 자체를 막으면 안 된다.
+
+    reason = verify_translation(title_ko, body_ko, title_hi, body_hi, lang="hi")
+    # 문제 없으면 "" 반환, 문제 있으면 사유 문자열(한국어) 반환.
+    # 2026-09-08 사용자 지시("최소한 두세번 검증은 필요할테니까",
+    # "거의 놀고 있는 엔비디아를 이용해도") — Gemini가 쓰고 Gemini가
+    # 스스로 검증하면 같은 맹점이 반복되므로, 계열이 다른 모델(NVIDIA
+    # nemotron, nvidia_client.py — 이미 dedup_guard.py 등에서 같은
+    # 이유로 교차검증용으로 씀)로 원문·번역문을 대조한다. 팀이 힌디어/
+    # 프랑스어/스페인어를 직접 못 읽어 오역을 못 잡는 리스크의 안전장치.
 """
 
 import re
+
+LANG_NAMES = {
+    "en": "English",
+    "hi": "Hindi",
+    "fr": "French",
+    "es": "Spanish",
+    # Phase 2 후보 — 리스트에 추가만 하면 translate_article()이 바로 지원:
+    "ar": "Arabic",
+    "ru": "Russian",
+    "pt": "Portuguese",
+}
 
 
 def _parse_translation(text: str) -> tuple[str, str]:
@@ -37,25 +58,29 @@ def _parse_translation(text: str) -> tuple[str, str]:
     return title, body
 
 
-def translate_article(title_ko: str, body_ko: str, call_gemini_fn, max_tokens: int = 3500) -> tuple[str, str]:
-    """검증된 한국어 제목·본문을 자연스러운 영어 뉴스 문체로 번역한다.
+def translate_article(title_ko: str, body_ko: str, call_gemini_fn, lang: str = "en",
+                       max_tokens: int = 3500) -> tuple[str, str]:
+    """검증된 한국어 제목·본문을 자연스러운 <lang> 뉴스 문체로 번역한다.
 
-    직역이 아니라 영어권 독자에게 자연스러운 뉴스 문장으로 재구성하되,
+    직역이 아니라 그 언어권 독자에게 자연스러운 뉴스 문장으로 재구성하되,
     숫자·날짜·고유명사·사실관계는 원문 그대로 유지하도록 지시한다.
     """
     if not title_ko or not body_ko:
         return "", ""
 
+    lang_name = LANG_NAMES.get(lang, LANG_NAMES["en"])
+
     prompt = f"""Translate the following Korean news article into natural, professional
-English news writing (AP style). Do not translate word-for-word — restructure
-sentences the way a native English news writer would, but keep every number,
-date, percentage, name, and fact EXACTLY as in the original. Do not add
-commentary, opinion, or any fact not present in the Korean original. Do not
-invent anything.
+{lang_name} news writing (AP style equivalent for that language). Do not translate
+word-for-word — restructure sentences the way a native {lang_name} news writer
+would, but keep every number, date, percentage, name, and fact EXACTLY as in
+the original. Do not add commentary, opinion, or any fact not present in the
+Korean original. Do not invent anything. Write the TITLE and BODY entirely in
+{lang_name} (do not leave any Korean text).
 
 Output format (follow exactly, no extra text before or after):
-TITLE: <English title>
-BODY: <English body>
+TITLE: <{lang_name} title>
+BODY: <{lang_name} body>
 
 [Korean title]
 {title_ko}
@@ -69,7 +94,56 @@ Output:"""
     if not text:
         return "", ""
 
-    title_en, body_en = _parse_translation(text)
-    if not title_en or not body_en:
+    title_out, body_out = _parse_translation(text)
+    if not title_out or not body_out:
         return "", ""
-    return title_en, body_en
+    return title_out, body_out
+
+
+def verify_translation(title_ko: str, body_ko: str, title_out: str, body_out: str,
+                        lang: str, call_nvidia_fn=None) -> str:
+    """원문 한국어와 번역 결과를 계열이 다른 모델(NVIDIA)로 대조해 숫자·
+    날짜·고유명사·핵심 사실이 보존됐는지 확인한다.
+
+    문제 없으면 "" 반환, 문제 있으면 짧은 한국어 사유 반환. NVIDIA 키가
+    없거나 호출 실패하면(부가 안전장치이지 필수 경로가 아니므로) 통과로
+    간주하고 "" 반환 — 검증 불가가 발행 자체를 막으면 안 된다.
+    """
+    if not title_out or not body_out:
+        return "번역 결과 없음"
+
+    if call_nvidia_fn is None:
+        try:
+            from nvidia_client import call_nvidia as call_nvidia_fn
+        except Exception:
+            return ""
+
+    lang_name = LANG_NAMES.get(lang, lang)
+    prompt = f"""Compare this Korean news article with its {lang_name} translation.
+Check ONLY for: numbers/statistics changed, dates changed, names/places changed
+or mistranslated, facts added that aren't in the Korean original, facts dropped
+that change the meaning. Ignore stylistic differences — translation doesn't
+need to be word-for-word.
+
+[Korean original]
+{title_ko}
+{body_ko[:2000]}
+
+[{lang_name} translation]
+{title_out}
+{body_out[:2000]}
+
+If the translation accurately preserves all facts, respond with exactly: OK
+If there is a problem, respond with a brief description in Korean (one sentence,
+what specifically is wrong). No other text."""
+
+    try:
+        resp = call_nvidia_fn(prompt, max_tokens=200)
+    except Exception:
+        return ""
+    if not resp:
+        return ""
+    resp = resp.strip()
+    if resp.upper().startswith("OK"):
+        return ""
+    return resp[:300]

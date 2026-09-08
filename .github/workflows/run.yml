@@ -106,6 +106,15 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
 
+      - name: 국내(한국) 뉴스 수집 — 다국어 채널 전용 (2026-09-08 신설)
+        if: steps.guard.outputs.skip != 'true'
+        continue-on-error: true
+        timeout-minutes: 10
+        run: python scripts/domestic_kr_fetcher.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+
       - name: 머니파이널 미국 시장뉴스 수집 (2026-09-03 신설)
         if: steps.guard.outputs.skip != 'true'
         continue-on-error: true
@@ -174,6 +183,22 @@ jobs:
           IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
           UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
 
+      - name: 다국어 채널 번역 배치 (2026-09-08 신설)
+        if: steps.guard.outputs.skip != 'true'
+        timeout-minutes: 10
+        continue-on-error: true
+        run: python scripts/multilang_translate.py
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
+          GEMINI_API_KEY_4: ${{ secrets.GEMINI_API_KEY_4 }}
+          GEMINI_API_KEY_5: ${{ secrets.GEMINI_API_KEY_5 }}
+          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+          NVIDIA_API_KEY_L: ${{ secrets.NVIDIA_API_KEY_L }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+
       - name: 웹사이트 데이터 내보내기
         if: steps.guard.outputs.skip != 'true'
         run: python scripts/export_articles.py
@@ -181,6 +206,14 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+
+      - name: 다국어 채널 데이터 내보내기 (2026-09-08 신설)
+        if: steps.guard.outputs.skip != 'true'
+        continue-on-error: true
+        run: python scripts/export_global.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
 
       - name: 변경사항 커밋 및 푸시 (docs/ + state)
         if: steps.guard.outputs.skip != 'true'
