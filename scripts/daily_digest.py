@@ -189,8 +189,20 @@ def call_gemini(prompt, max_tokens=3000, start_tier=0):
 # 사본이라 그 뒤 추가된 패턴(화자 없는 전망/분석형 마무리 문장 7종,
 # 2026-07-28)과 합쇼체(-습니다) 감지·자동변환을 못 받고 있었다.
 try:
-    from style_guard import has_column_style, has_polite_ending, to_plain_style
+    from style_guard import has_column_style, has_polite_ending, to_plain_style, _pub_day_label
 except Exception:
+    def _pub_day_label(raw) -> str:
+        s = str(raw or "")[:10]
+        m = re.match(r"^(\d{4})-(\d{2})-(\d{2})$", s)
+        if not m:
+            return ""
+        try:
+            mm, dd = int(m.group(2)), int(m.group(3))
+        except ValueError:
+            return ""
+        if not (1 <= mm <= 12 and 1 <= dd <= 31):
+            return ""
+        return f"{mm}월 {dd}일"
     BANNED_STYLE_PATTERNS = [
         r"보여줍니다", r"보여주고 있습니다", r"보여준다",
         r"도모하고 있습니다", r"도모한다",
@@ -288,7 +300,17 @@ def build_digest_prompt(articles):
             related = a.get("countries") or []
             related = [c for c in related if c and c != country]
             related_str = f" (관련: {', '.join(related[:3])})" if related else ""
-            article_list += f"- {title}{related_str}\n  {summary}\n"
+            # 2026-09-08 실사고(id=142008, 9/7 다이제스트 날짜환각으로 미발행 —
+            # "데일리 다이제스트가 6일자 이후 업데이트가 안되네" 사용자 지적):
+            # get_yesterday_own_articles()가 created_at을 조회는 하면서도 정작
+            # 이 프롬프트에는 한 번도 넘긴 적이 없었다. date_guard(_digest_sources
+            # 참고)는 created_at을 근거 날짜로 쓰는데, 정작 본문을 쓰는 이 프롬프트는
+            # 날짜 정보를 전혀 못 받으니 "N일(현지시간)" 표기 형식만 지시받고 실제
+            # 근거 없이 날짜를 지어낼 수밖에 없었다(니제르 쿠데타 "29일" 등 실사고).
+            # 각 기사 자체 발행일을 명시해 검증 로직과 같은 근거로 맞춘다.
+            pub = _pub_day_label(a.get("created_at"))
+            pub_tag = f" [{pub} 발행]" if pub else ""
+            article_list += f"- {title}{related_str}{pub_tag}\n  {summary}\n"
 
     rules = load_prompt("digest_rules", fallback="""[작성 규칙]
 - 지난 하루 동안 NewsFinal이 다룬 프론티어 마켓 기사들을 종합해 오늘의 핵심 테마를 정리하는 일일 다이제스트를 작성하세요.
@@ -301,6 +323,7 @@ def build_digest_prompt(articles):
 - 다룬 기사가 적으면 무리하게 늘리지 말고 섹션 수를 줄여서 간결하게 작성하세요.
 - 기사 문체로 작성하세요. "~를 보여줍니다", "~을 도모하고 있습니다", "~라는 평가다" 같은 논평/칼럼 문체는 금지입니다. 패턴이나 트렌드를 설명할 때도 사실 서술형("~로 나타났다", "~가 확인됐다", "~로 집계됐다")으로 쓰세요.
 - 날짜 표기는 반드시 사건 발생지의 현지시간 기준으로 "N일(현지시간)" 형식으로 쓰세요. "오늘", "어제", "2026년 7월 17일" 같은 절대날짜나 KST 기준 표기는 금지입니다.
+- 각 기사 항목 끝에 "[M월 D일 발행]" 표시가 있습니다. 그 기사 내용을 언급할 때는 반드시 그 표시된 날짜를 "D일(현지시간)"로 사용하세요. 표시된 날짜와 다른 날짜를 지어내지 마세요 — 기사 원문에 더 이른 날짜가 언급된 게 확실하지 않다면 발행일 표시를 그대로 따르세요. 여러 기사를 묶어 설명할 때 날짜가 서로 다르면 각각 맞는 날짜를 쓰거나, 특정하기 어려우면 그 문장에서는 날짜 표기 자체를 생략하세요.
 - 한국어로만 작성하세요.""")
 
     return f"""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다.
