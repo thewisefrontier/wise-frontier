@@ -182,7 +182,10 @@
     </div>
   </div>
   <div class="header-main">
-    <a href="/" class="logo">News<span>Final</span></a>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <a href="/" class="logo">News<span>Final</span></a>
+      <span id="global-link"></span>
+    </div>
     <div class="header-meta">프론티어 미디어</div>
   </div>
   <div class="nav-wrap" id="nav-tabs">
@@ -211,8 +214,9 @@
       </button>
       <nav class="nav-sector" id="nav-sector"></nav>
       <script type="module">
-        import { renderSectorNav } from '/js/site-nav.js';
+        import { renderSectorNav, renderLogoGlobalLink } from '/js/site-nav.js';
         renderSectorNav(document.getElementById('nav-sector'), { includeAll: false, activeHref: '/archive.html' });
+        renderLogoGlobalLink(document.getElementById('global-link'));
       </script>
     </div>
   </div>

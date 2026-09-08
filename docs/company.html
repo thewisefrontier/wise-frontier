@@ -167,7 +167,10 @@
     <div class="header-right"><div id="datetime"></div></div>
   </div>
   <div class="header-main">
-    <a href="/" class="logo">News<span>Final</span></a>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <a href="/" class="logo">News<span>Final</span></a>
+      <span id="global-link"></span>
+    </div>
     <div class="header-meta">프론티어 미디어</div>
   </div>
   <div class="nav-wrap">
@@ -176,8 +179,9 @@
   </div>
 </header>
 <script type="module">
-  import { renderPageNav } from '/js/site-nav.js';
+  import { renderPageNav, renderLogoGlobalLink } from '/js/site-nav.js';
   renderPageNav(document.getElementById('page-nav'));
+  renderLogoGlobalLink(document.getElementById('global-link'));
 </script>
 
 <div id="hero">
