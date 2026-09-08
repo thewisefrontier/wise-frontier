@@ -56,13 +56,15 @@ except Exception:
         return None
 
 try:
-    from style_guard import has_column_style, has_polite_ending, to_plain_style, parse_article_output
+    from style_guard import has_column_style, has_polite_ending, to_plain_style, parse_article_output, ensure_paragraphs
 except Exception:
     def has_column_style(text: str) -> bool:
         return False
     def has_polite_ending(text: str) -> bool:
         return False
     def to_plain_style(text: str) -> str:
+        return text
+    def ensure_paragraphs(text: str, target: int = 3, max_sentences_per_para: int = 4) -> str:
         return text
     def parse_article_output(text: str) -> tuple[str, str]:
         title, body = "", ""
@@ -341,6 +343,7 @@ def main():
     if not title or not body:
         print(f"  [ERROR] TITLE/BODY 파싱 실패\n{content[:300]}")
         return
+    body = ensure_paragraphs(body)
     if len(body) < 400:
         print(f"  ⚠️ 본문이 너무 짧음({len(body)}자) — 스킵")
         return

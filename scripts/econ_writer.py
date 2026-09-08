@@ -433,8 +433,10 @@ except Exception:
 # 2026-09-08 공용화("공용모듈이 필요한 시스템이 더 있는지 점검해줘") —
 # style_guard.parse_article_output()로 이식(8개 파일에 동일 코드 복붙).
 try:
-    from style_guard import parse_article_output
+    from style_guard import parse_article_output, ensure_paragraphs
 except Exception:
+    def ensure_paragraphs(text: str, target: int = 3, max_sentences_per_para: int = 4) -> str:
+        return text
     def parse_article_output(text: str) -> tuple[str, str]:
         m_title = re.search(r"TITLE:\s*(.+)", text)
         m_body  = re.search(r"BODY:\s*([\s\S]+)", text)
@@ -583,6 +585,8 @@ def main():
         if not art_title or not art_body:
             print(f"    [ERROR] TITLE/BODY 파싱 실패\n{article_text[:200]}")
             continue
+
+        art_body = ensure_paragraphs(art_body)
 
         if len(art_body) < 300:
             print(f"    ⚠️ 본문 너무 짧음 ({len(art_body)}자), 스킵")
