@@ -22,7 +22,8 @@ script_leak.py·json_body_guard.py와 같은 이유로 공용화한다.
 
 import os
 import time
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 
 import requests
 
@@ -34,7 +35,13 @@ import requests
 # 실패해도 실제 Gemini 호출 자체는 절대 막지 않는다(집계는 부가 기능).
 _USAGE_SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 _USAGE_SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
-_KST = timezone(timedelta(hours=9))
+# 2026-09-08 수정: RPD(하루 요청 한도)는 KST가 아니라 태평양시간(America/
+# Los_Angeles) 자정 기준으로 리셋된다(공식 확인: ai.google.dev/gemini-api/docs/
+# rate-limits + Google 커뮤니티 스레드 — "AI Studio not resetting... even after
+# midnight Pacific Time"). KST 자정으로 집계하면 구글의 실제 리셋 시점과
+# 최대 17시간(PST 기준)까지 어긋나 "오늘 잔여 한도" 계산이 실제보다 부풀거나
+# 줄어들게 잘못 나온다 — 사용자가 카운터 값과 RPD 한도를 대조하다 발견.
+_PACIFIC = ZoneInfo("America/Los_Angeles")
 
 
 def _log_usage(model: str, key_index: int, outcome: str,
@@ -50,7 +57,7 @@ def _log_usage(model: str, key_index: int, outcome: str,
                 "Content-Type": "application/json",
             },
             json={
-                "p_date": datetime.now(_KST).date().isoformat(),
+                "p_date": datetime.now(timezone.utc).astimezone(_PACIFIC).date().isoformat(),
                 "p_model": model,
                 "p_key_index": key_index,
                 "p_outcome": outcome,
