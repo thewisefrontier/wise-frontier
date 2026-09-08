@@ -17,16 +17,27 @@ export const UTILITY_LINKS = [
   { href: '/markets.html', label: '마켓' },
   { href: '/country.html', label: '국가별' },
   { href: '/weather.html', label: '날씨' },
-  // 다국어(글로벌) 채널 진입점(2026-09-08 신설) — 사용자 지적: "사이트에
-  // 들어갈 수 있는 공간 같은게 보이질 않는데". 국기 이모지 클러스터
-  // (🇺🇸🇮🇳🇫🇷🇪🇸)를 처음 시도했다가 "사이트가 쓸데없이 복잡해. 직관적이지
-  // 않아" 지적으로 단순 텍스트로 교체 — 언어별 선택(EN/HI/FR/ES 버튼)은
-  // /global/index.html 안의 langSwitch가 이미 담당하므로, 메인 사이트
-  // nav는 진입점 하나만 명확하면 된다. 서브도메인(global.newsfinal.co.kr)
-  // DNS 연결 전이라도 /global/은 같은 docs/ 배포 안에 있어 상대경로로
-  // 지금 바로 접근 가능 — 그래서 절대 URL이 아니라 상대경로를 쓴다.
-  { href: '/global/', label: 'GLOBAL' },
 ];
+
+// 다국어(글로벌) 채널 진입점(2026-09-08 신설) — 사용자 지적: "사이트에 들어갈
+// 수 있는 공간 같은게 보이질 않는데". 카테고리 nav(UTILITY_LINKS)에 넣었다가
+// "아니 카테고리에 넣지 말고 메인 로고 옆에 두자니까?" 지적으로 로고 옆
+// 전용 위치로 이동 — renderLogoGlobalLink()가 로고 바로 옆에 별도로 그린다.
+// 국기 이모지(🇺🇸🇮🇳🇫🇷🇪🇸)는 "사이트가 쓸데없이 복잡해" 지적으로 단순 텍스트로
+// 교체함. 언어별 선택(EN/HI/FR/ES 버튼)은 /global/index.html 안의 langSwitch가
+// 담당하므로 여긴 진입점 하나만 있으면 된다. 서브도메인(global.newsfinal.co.kr)
+// DNS 연결 전이라도 /global/은 같은 docs/ 배포 안에 있어 상대경로로 지금 바로
+// 접근 가능 — 그래서 절대 URL이 아니라 상대경로를 쓴다.
+export const GLOBAL_LINK = { href: '/global/', label: 'GLOBAL' };
+
+/**
+ * 로고 바로 옆에 다국어 채널 진입 링크를 작게 그린다. 페이지의 .logo
+ * 옆에 mountEl(예: 빈 <span>)을 두고 호출하면 된다.
+ */
+export function renderLogoGlobalLink(mountEl) {
+  if (!mountEl) return;
+  mountEl.innerHTML = `<a href="${GLOBAL_LINK.href}" style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:3px 7px;letter-spacing:0.03em;">${GLOBAL_LINK.label}</a>`;
+}
 
 /**
  * 상단 page-nav(플랫 바 형태) 링크 목록을 렌더링해 mountEl에 채운다.
