@@ -249,7 +249,7 @@ def fetch_open_data() -> dict:
 TITLE_PREFIX = "[뉴욕증시 개장]"
 
 
-def build_article_prompt(data: dict, today: date) -> str:
+def build_article_prompt(data: dict, today: date, fetch_time_str: str) -> str:
     today_str = today.strftime("%Y년 %m월 %d일")
 
     open_lines = "\n".join(
@@ -268,7 +268,7 @@ def build_article_prompt(data: dict, today: date) -> str:
 지정학 이슈 등)를 찾아서, 아래 실제 개장가·해외 증시 데이터와 결합해
 "개장 기사"를 작성하세요. 검색 없이 수치만 나열하지 마세요.
 
-오늘({today_str}) 뉴욕증시 개장(09:30 현지시간) 직후 실제 지수 데이터:
+오늘({today_str}) 뉴욕증시 개장(09:30 현지시간) 이후, {fetch_time_str}(현지시간) 기준 실제 지수 데이터:
 
 [미국 3대 지수 — 개장 직후 실제가]
 {open_lines}
@@ -304,6 +304,9 @@ BODY: <본문>
    이미 개장한 시점임을 분명히 하고(선물·"개장을 앞두고" 같은 개장 전
    표현은 쓰지 마세요), 검색으로 찾은 실제 뉴스 기반으로 왜 그런 방향인지
    반영하세요. 지수가 엇갈리면(혼조) 그 사실 자체를 리드로 쓰세요.
+   ⚠️ 장중 시황이라 시각이 지나면 수치가 달라진다 — 날짜만으론 부족하다.
+   지수 수치를 언급하는 문장에 반드시 "{fetch_time_str}(현지시간) 기준"을
+   함께 명시하세요(예: "{today.day}일(현지시간) {fetch_time_str} 기준 다우존스는...").
 
    ◆ 간밤 해외증시
    아시아·유럽 주요 증시의 마감 상황을 변동폭 상위 2~3개 중심으로, 실제
@@ -593,6 +596,7 @@ def main():
         return
 
     print("  → 야후 파이낸스에서 개장가·해외증시 데이터 수집 중...")
+    fetch_time_str = now_edt().strftime("%H시 %M분")
     data = fetch_open_data()
     if len(data["us_open"]) < 2 or len(data["overnight"]) < 2:
         print(f"  [ERROR] 데이터 수집 부족(미국 지수 {len(data['us_open'])}건, "
@@ -601,7 +605,7 @@ def main():
     print(f"  → 미국 지수 {len(data['us_open'])}건, 해외증시 {len(data['overnight'])}건 수집 완료")
 
     print("  → Gemini로 기사 생성 중...")
-    prompt = build_article_prompt(data, article_date)
+    prompt = build_article_prompt(data, article_date, fetch_time_str)
     article_text = call_gemini_article(prompt)
 
     if not article_text:
