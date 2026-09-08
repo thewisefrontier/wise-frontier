@@ -92,6 +92,14 @@ KR_RSS_FEEDS = [
     ("텐아시아-드라마", "https://www.tenasia.co.kr/rss/tv-drama/"),
     ("텐아시아-음악", "https://www.tenasia.co.kr/rss/music/"),
     ("텐아시아-영화", "https://www.tenasia.co.kr/rss/movie/"),
+    # 구글뉴스 한국판(2026-09-08 사용자 지시: "구글 뉴스도") — 여러 국내
+    # 매체를 한 번에 아우르는 애그리게이터라 KR_RSS_FEEDS(개별 매체)·
+    # KR_QUERIES(GDELT 검색)의 빈 틈을 넓게 메운다. 실측 확인(경향신문·
+    # 한겨레 등 상위 매체 실기사 정상 수신). 링크는 news.google.com 리다이렉트
+    # 형태라 text_crawl.py의 _resolve_google_news_url()이 크롤링 시 자동 해독.
+    ("구글뉴스 한국", "https://news.google.com/rss?hl=ko&gl=KR&ceid=KR:ko"),
+    ("구글뉴스 한국-케이팝", "https://news.google.com/rss/search?q=%EC%BC%80%EC%9D%B4%ED%8C%9D&hl=ko&gl=KR&ceid=KR:ko"),
+    ("구글뉴스 한국-기업", "https://news.google.com/rss/search?q=%ED%95%9C%EA%B5%AD+%EA%B8%B0%EC%97%85&hl=ko&gl=KR&ceid=KR:ko"),
 ]
 
 MAX_RECORDS_PER_QUERY = 10
