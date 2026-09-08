@@ -1,0 +1,65 @@
+name: NewsFinal - Weekly Classic Art Feature
+
+# 매주 고전 명화 한 점을 소개하는 "주말 읽을거리" 기사(2026-09-08 신설,
+# 사용자 요청 — "매주 고전 미술 작품 하나를 소개하는 기사가 있으면 좋을 것
+# 같은데" → "주말에 읽을거리로"). 다른 writer들과 동일하게 GitHub 자체
+# schedule: 대신 cron-job.org의 workflow_dispatch로 실행한다.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: newsfinal-art-weekly
+  cancel-in-progress: false
+
+jobs:
+  art_weekly:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v5
+
+      - name: Python 설정
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: 패키지 설치
+        run: pip install -r requirements.txt
+
+      - name: 이번 주 고전 명화 기사 생성
+        run: python scripts/art_weekly_writer.py
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
+          GEMINI_API_KEY_4: ${{ secrets.GEMINI_API_KEY_4 }}
+          GEMINI_API_KEY_5: ${{ secrets.GEMINI_API_KEY_5 }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
+          UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
+
+      - name: 웹사이트 데이터 내보내기
+        run: python scripts/export_articles.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+
+      - name: 변경사항 커밋 및 푸시
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add -A
+          git diff --staged --quiet || git commit -m "Update weekly art feature"
+          for i in 1 2 3 4 5; do
+            git pull origin main -X ours --no-rebase
+            git push && break
+            echo "push failed (attempt $i) - another workflow pushed first, retrying"
+            sleep $((RANDOM % 8 + 3))
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
