@@ -31,6 +31,7 @@ API가 반환한 숫자를 Python 문자열 포맷으로 그대로 꽂아 넣는
 """
 
 import os
+import re
 import time
 import requests
 from datetime import date, datetime, timedelta, timezone
@@ -723,21 +724,165 @@ def build_pension720_article(latest: dict, prizes: list) -> tuple[str, str, str]
 
 
 # ── 미국 파워볼 ──────────────────────────────────────────────
-def fetch_powerball_latest() -> dict | None:
+def _fetch_powerball_from_site() -> tuple | None:
+    """powerball.com 홈페이지에서 가장 최근 추첨의 날짜·번호·Power Play를 가져온다.
+    반환: (draw_date_str "YYYY-MM-DD", white_balls[5], powerball, multiplier_str) 또는 None.
+    2026-09-08 확인: 9/7(월) 추첨 결과가 홈페이지엔 바로 다음날 올라와 있는데
+    data.ny.gov 공식 오픈데이터는 그 시점까지도 9/5 추첨까지만 게시돼 있었다."""
+    try:
+        from playwright.sync_api import sync_playwright
+    except Exception as e:
+        print(f"  [WARN] playwright 미설치: {e}")
+        return None
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            try:
+                page = browser.new_page(
+                    user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                               "(KHTML, like Gecko) Chrome/120.0 Safari/537.36",
+                )
+                page.goto("https://www.powerball.com/", timeout=45000, wait_until="domcontentloaded")
+                page.wait_for_selector(".number-card .white-balls", timeout=15000)
+                data = page.evaluate("""() => {
+                    const card = document.querySelector('.number-card');
+                    if (!card) return null;
+                    const dateEl = card.querySelector('h5.title-date, .title-date');
+                    const whites = [...card.querySelectorAll('.white-balls')].map(b => b.textContent.trim());
+                    const pbEl = card.querySelector('.powerball:not(.white-balls)');
+                    const multEl = card.querySelector('.multiplier');
+                    return {
+                        date_text: dateEl ? dateEl.textContent.trim() : null,
+                        whites: whites,
+                        powerball: pbEl ? pbEl.textContent.trim() : null,
+                        multiplier: multEl ? multEl.textContent.trim() : null,
+                    };
+                }""")
+                if not data or not data.get("date_text") or len(data.get("whites") or []) != 5 or not data.get("powerball"):
+                    print(f"  [WARN] 파워볼 홈페이지 파싱 실패(구조 변경 의심): {data}")
+                    return None
+                draw_date = datetime.strptime(data["date_text"], "%a, %b %d, %Y").date()
+                white = [int(n) for n in data["whites"]]
+                pb = int(data["powerball"])
+                multiplier = (data.get("multiplier") or "").replace("x", "").replace("X", "").strip()
+                return draw_date.isoformat(), white, pb, multiplier
+            finally:
+                browser.close()
+    except Exception as e:
+        print(f"  [WARN] 파워볼 홈페이지 조회 실패: {e}")
+        return None
+
+
+def _fetch_powerball_official_check(draw_date_str: str) -> tuple | None:
+    """data.ny.gov 공식 오픈데이터에서 해당 추첨일 결과를 찾아 검증용으로 반환.
+    아직 게시 안 됐으면(공식 소스가 흔히 며칠 늦다) None — 검증 보류일 뿐
+    발행을 막지 않는다. 반환: (white_balls[5], powerball) 또는 None."""
     try:
         res = requests.get(
             "https://data.ny.gov/resource/d6yy-54nr.json",
-            params={"$limit": 1, "$order": "draw_date DESC"},
+            params={"$where": f"draw_date='{draw_date_str}T00:00:00.000'", "$limit": 1},
             timeout=15,
         )
         if res.status_code != 200:
-            print(f"  [WARN] 파워볼 조회 실패: HTTP {res.status_code}")
             return None
         items = res.json()
-        return items[0] if items else None
+        if not items:
+            return None
+        nums = [int(n) for n in items[0]["winning_numbers"].split()]
+        return nums[:5], nums[5]
     except Exception as e:
-        print(f"  [WARN] 파워볼 조회 실패: {e}")
+        print(f"  [WARN] 파워볼 공식 데이터 검증 조회 실패: {e}")
         return None
+
+
+def _fetch_powerball_thirdparty_check(draw_date: date) -> tuple | None:
+    """lotteryusa.com(powerball.com과 무관한 제3자 운영 사이트)에서 같은
+    추첨일 결과를 서버렌더 HTML에서 직접 파싱해 대조. 2026-09-08 사용자
+    지시("다른 언론 기사도 검증에 쓰면... 우리 스크래핑 코드 자체의 실수만
+    잡아주는 정도의 가치로도 충분해") — 처음엔 구글 뉴스 헤드라인에서
+    숫자를 찾으려 했는데, 실측해보니 헤드라인엔 대부분 "check your numbers"
+    류 문구만 있고 실제 6개 숫자가 안 나와 사실상 항상 실패했다(70건 검색
+    결과 전부 마찬가지). lotteryusa.com은 powerball.com과 코드베이스가
+    전혀 다른 제3자 사이트인데도 페이지 로드만으로 서버 HTML에 숫자가
+    그대로 박혀 있어(JS 렌더링 불필요, requests만으로 확인됨) 훨씬
+    안정적으로 확인 가능하다 — 우리 파싱 코드가 페이지 구조 변경 등으로
+    잘못된 숫자를 긁어온 경우를 걸러내는 용도(완전히 독립적인 "실제
+    추첨 검증"은 아님, 원 출처는 결국 같은 공식 발표)."""
+    try:
+        res = requests.get(
+            "https://www.lotteryusa.com/powerball/",
+            headers={"User-Agent": "Mozilla/5.0"},
+            timeout=15,
+        )
+        if res.status_code != 200:
+            return None
+        html = res.text
+
+        date_m = re.search(r'c-draw-card__draw-date-sub">\s*([A-Za-z]{3,9} \d{1,2}, \d{4})', html)
+        if not date_m:
+            return None
+        page_date = datetime.strptime(date_m.group(1).strip(), "%b %d, %Y").date()
+        if page_date != draw_date:
+            # 사이트가 아직 최신화 안 됐거나(우리보다 느림) 날짜 형식이 바뀜 → 검증 보류
+            return None
+
+        block_m = re.search(r'c-result--has-multiplier">(.*?)c-result__bonus', html, re.S)
+        if not block_m:
+            return None
+        whites = [int(n) for n in re.findall(r'c-ball c-ball--sm">(\d{1,2})<', block_m.group(1))]
+        bonus_m = re.search(r'c-result__bonus.*?c-ball[^>]*>(\d{1,2})<', html, re.S)
+        if len(whites) != 5 or not bonus_m:
+            return None
+        return whites, int(bonus_m.group(1))
+    except Exception as e:
+        print(f"  [WARN] 파워볼 제3소스(lotteryusa.com) 검증 조회 실패: {e}")
+        return None
+
+
+def fetch_powerball_latest() -> dict | None:
+    """파워볼 최신 추첨 결과. powerball.com을 1차 소스로 쓰고 data.ny.gov
+    공식 오픈데이터는 검증용으로만 쓴다(2026-09-08, 사용자 지시 — "파워볼쪽
+    으로 소스를 가져오고, 정부 공식 오픈데이터는 검증에 쓰도록 하자". 기존엔
+    거꾸로 data.ny.gov를 1차로 썼는데, 이 공식 데이터셋이 실제 추첨보다
+    며칠씩 늦게 갱신돼(9/8 확인 시점에 9/7 추첨분 누락) 발행이 그만큼
+    밀리는 문제가 있었음). 두 소스가 다르면(스크래핑 오류 위험) 발행을
+    보류한다 — 공식 데이터가 아직 없으면 검증을 생략하고 사이트 결과로 진행."""
+    site = _fetch_powerball_from_site()
+    if not site:
+        print("  [WARN] 파워볼 조회 실패(powerball.com)")
+        return None
+    draw_date_str, white, pb, multiplier = site
+
+    check = _fetch_powerball_official_check(draw_date_str)
+    if check is not None:
+        off_white, off_pb = check
+        if sorted(off_white) != sorted(white) or off_pb != pb:
+            print(f"  ⚠️ [파워볼 검증 실패] powerball.com({white}+{pb}) vs "
+                  f"공식데이터({off_white}+{off_pb}) 불일치 → 발행 보류")
+            return None
+        print("  ✓ 공식 데이터(data.ny.gov)와 번호 일치 확인")
+    else:
+        print("  → 공식 데이터(data.ny.gov) 아직 미게시 — 검증 생략")
+
+    # 언론 보도 교차 검증(2026-09-08, 사용자 지시) — 독립적인 검증이라기보단
+    # 우리 스크래핑 코드 자체의 실수를 잡는 용도. 헤드라인에 숫자가 안 나오는
+    # 경우가 흔해 못 찾는 게 정상이며, 그럴 땐 그냥 건너뛴다.
+    third = _fetch_powerball_thirdparty_check(datetime.strptime(draw_date_str, "%Y-%m-%d").date())
+    if third is not None:
+        third_white, third_pb = third
+        if sorted(third_white) != sorted(white) or third_pb != pb:
+            print(f"  ⚠️ [파워볼 검증 실패] powerball.com({white}+{pb}) vs "
+                  f"lotteryusa.com({third_white}+{third_pb}) 불일치 → 발행 보류")
+            return None
+        print("  ✓ 제3소스(lotteryusa.com)와도 번호 일치 확인")
+    else:
+        print("  → 제3소스(lotteryusa.com)에서 확인 안 됨 — 검증 생략")
+
+    return {
+        "draw_date": f"{draw_date_str}T00:00:00.000",
+        "winning_numbers": " ".join(f"{n:02d}" for n in white) + f" {pb:02d}",
+        "multiplier": multiplier,
+    }
 
 
 # data.ny.gov(공식 소스)는 당첨번호만 제공하고 잭팟 금액·등수별 당첨자 수는
