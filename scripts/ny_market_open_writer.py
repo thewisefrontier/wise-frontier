@@ -1,13 +1,17 @@
 """
 scripts/ny_market_open_writer.py
 -----------------------------------
-뉴욕증시 개장(현지 09:30 ET) 시점 프리뷰 기사 자동 생성.
+뉴욕증시 개장(현지 09:30 ET) 시점 기사 자동 생성.
 frontier_markets_writer.py("글로벌 마켓 동향", 마감 후 발행)의 개장판.
 
 사용자 요청(2026-09-02): "뉴욕증시 개장 기사도 나갈 수 있나?" →
 "개장 기사 프로세스도 크론잡에 붙여서 딱 정시에 돌아가게 하자".
 
-데이터: 선물지수(S&P500·나스닥·다우 선물) + 아시아·유럽 주요 증시 마감
+데이터: 미국 3대 지수(S&P500·나스닥·다우) 개장 직후 실제가 + 아시아·유럽
+주요 증시 마감(2026-09-08까지는 선물(ES=F 등)을 썼으나, "개장" 기사에
+개장 전 선물 데이터를 쓰는 게 제목·시점과 어긋난다는 사용자 지적으로
+실제 지수로 교체 — market_just_opened()가 09:30 ET 이후에만 실행을
+허용하므로 이 시점엔 이미 실제 개장가를 조회할 수 있다).
 (frontier_markets_writer.py의 fetch_yahoo_quote()/MAJOR_INDICES/
 wikipedia_confirms()/verify_no_fabricated_names() 등을 그대로 import해서
 쓴다 — 같은 야후 파이낸스 조회·검증 로직을 또 복붙하지 않는다).
@@ -206,12 +210,14 @@ def europe_focus_window() -> bool:
     return MARKET_OPEN_MINUTES <= minutes < MARKET_OPEN_MINUTES + MARKET_OPEN_WINDOW_MINUTES
 
 
-# ── 선물지수 (뉴욕 개장 전 방향성 지표) ──────────────────────────
-FUTURES = [
-    ("S&P500 선물", "ES=F"),
-    ("나스닥 선물", "NQ=F"),
-    ("다우존스 선물", "YM=F"),
-]
+# ── 미국 3대 지수 실제 개장가 ──────────────────────────────────
+# 2026-09-08 사용자 지적: "개장을 쓰라고 했더니 왜 주요 지수 선물을 쓰고
+# 있지?" — 원래 ES=F/NQ=F/YM=F(개장 전 선물) 데이터를 "개장" 기사에
+# 썼던 게 제목·시점 표현과 어긋났다. market_just_opened()가 이미 09:30
+# ET 이후에만 실행을 허용하므로, 선물 대신 실제 지수(MAJOR_INDICES의
+# 미국 항목 — frontier_markets_writer.py와 동일 야후 조회 로직 재사용)로
+# 개장 직후 실제 가격을 쓴다.
+US_INDICES = [t for t in MAJOR_INDICES if t[0] == "미국"]  # (country, name, symbol, exchange)
 
 # 개장 프리뷰에선 "밤사이(아시아·유럽) 무슨 일이 있었나"가 핵심이라 미국을 뺀
 # 해외 주요 지수만 쓴다. MAJOR_INDICES는 (country, name, symbol, exchange) 4-튜플.
@@ -219,13 +225,13 @@ _OVERNIGHT_INDICES = [t for t in MAJOR_INDICES if t[0] != "미국"]
 
 
 def fetch_open_data() -> dict:
-    futures = []
-    for name, symbol in FUTURES:
+    us_open = []
+    for _country, name, symbol, _exchange in US_INDICES:
         q = fetch_yahoo_quote(symbol)
         time.sleep(0.5)
         if not q or q.pop("_suspect", False):
             continue
-        futures.append({"name": name, "symbol": symbol, **q})
+        us_open.append({"name": name, "symbol": symbol, **q})
 
     overnight = []
     for country, name, symbol, exchange in _OVERNIGHT_INDICES:
@@ -236,7 +242,7 @@ def fetch_open_data() -> dict:
         overnight.append({"country": country, "name": name, "exchange": exchange, **q})
 
     overnight.sort(key=lambda x: abs(x["pct"]), reverse=True)
-    return {"futures": futures, "overnight": overnight}
+    return {"us_open": us_open, "overnight": overnight}
 
 
 # ── 기사 프롬프트 ────────────────────────────────────────────
@@ -246,9 +252,9 @@ TITLE_PREFIX = "[뉴욕증시 개장]"
 def build_article_prompt(data: dict, today: date) -> str:
     today_str = today.strftime("%Y년 %m월 %d일")
 
-    fut_lines = "\n".join(
+    open_lines = "\n".join(
         f"- {f['name']}({f['symbol']}): {f['price']:.2f} (전일比 {f['pct']:+.2f}%)"
-        for f in data["futures"]
+        for f in data["us_open"]
     )
     overnight_lines = "\n".join(
         f"- {i['country']} {i['name']} ({i['exchange']}): {i['price']:.2f} (전일比 {i['pct']:+.2f}%)"
@@ -258,14 +264,14 @@ def build_article_prompt(data: dict, today: date) -> str:
     top_overnight_str = ", ".join(f"{i['country']} {i['name']} {i['pct']:+.1f}%" for i in top_overnight)
 
     return f"""당신은 글로벌 마켓 전문 경제 기자입니다. 구글 검색으로 오늘 뉴욕증시
-개장을 앞두고 시장을 움직이는 실제 뉴스(연준 발언·경제지표 발표 예정·기업
-실적 예정·지정학 이슈 등)를 찾아서, 아래 선물·해외 증시 데이터와 결합해
-"개장 프리뷰" 기사를 작성하세요. 검색 없이 수치만 나열하지 마세요.
+개장 직후 시장을 움직이는 실제 뉴스(연준 발언·경제지표 발표·기업 실적·
+지정학 이슈 등)를 찾아서, 아래 실제 개장가·해외 증시 데이터와 결합해
+"개장 기사"를 작성하세요. 검색 없이 수치만 나열하지 마세요.
 
-오늘({today_str}) 뉴욕증시 개장(09:30 현지시간) 시점 데이터:
+오늘({today_str}) 뉴욕증시 개장(09:30 현지시간) 직후 실제 지수 데이터:
 
-[미국 선물지수 — 정규장 개장 전 방향성 지표]
-{fut_lines}
+[미국 3대 지수 — 개장 직후 실제가]
+{open_lines}
 
 [아시아·유럽 주요 증시 — 밤사이 마감]
 {overnight_lines}
@@ -279,8 +285,8 @@ BODY: <본문>
 
 [제목]
 - 반드시 "{TITLE_PREFIX} "로 시작. 대괄호 포함 그대로 출력.
-- 선물지수 방향(상승/하락/혼조)이 핵심 소재여야 합니다. 50자 이내로.
-- 예: "{TITLE_PREFIX} 선물 상승…아시아 증시도 동반 강세"
+- 지수 방향(상승/하락/혼조)이 핵심 소재여야 합니다. 50자 이내로.
+- 예: "{TITLE_PREFIX} 3대 지수 상승 출발…아시아 증시도 동반 강세"
 
 [본문]
 1. 뉴스 스타일. 모든 문장 "-다" 종결. 감정·논평 표현 절대 금지.
@@ -293,10 +299,11 @@ BODY: <본문>
    바로 이어서 지시를 따른 기사 내용을 쓰세요.
 
    ◆ 뉴욕증시
-   ⚠️ 반드시 미국 선물지수(S&P500·나스닥·다우 선물) 방향으로 시작하세요.
-   "{today.day}일(현지시간) 뉴욕증시 개장을 앞두고"처럼 개장 전 시점임을
-   분명히 하고, 검색으로 찾은 실제 뉴스 기반으로 왜 그런 방향인지 반영하세요.
-   선물이 엇갈리면(혼조) 그 사실 자체를 리드로 쓰세요.
+   ⚠️ 반드시 미국 3대 지수(S&P500·나스닥·다우)의 실제 개장 이후 등락
+   방향으로 시작하세요. "{today.day}일(현지시간) 뉴욕증시가 개장했다"처럼
+   이미 개장한 시점임을 분명히 하고(선물·"개장을 앞두고" 같은 개장 전
+   표현은 쓰지 마세요), 검색으로 찾은 실제 뉴스 기반으로 왜 그런 방향인지
+   반영하세요. 지수가 엇갈리면(혼조) 그 사실 자체를 리드로 쓰세요.
 
    ◆ 간밤 해외증시
    아시아·유럽 주요 증시의 마감 상황을 변동폭 상위 2~3개 중심으로, 실제
@@ -470,17 +477,25 @@ def call_gemini_article(prompt: str, max_tokens: int = 3000) -> str | None:
 
 
 # ── 이미지 ───────────────────────────────────────────────────
-_IMAGE_KEYWORDS = [
-    "stock exchange trading floor", "wall street", "opening bell",
-    "stock market screen", "financial district morning", "trading desk",
+# 2026-09-08 사용자 지적: Pixabay 키워드 검색("stock market screen" 등
+# 범용 키워드)이 뉴욕증시와 무관한 일반 스톡사진을 곧잘 골라옴 → "월가,
+# NYSE 사진 몇 개를 돌려 쓰는 방향으로 가자" 지시로 위키미디어 커먼즈에서
+# 실제 월스트리트/NYSE 랜드마크 사진만 검색하는 방식으로 교체
+# (art_weekly_writer.py가 이미 쓰는 fetch_wikimedia_image() 패턴 재사용).
+_WALLSTREET_IMAGE_QUERIES = [
+    "New York Stock Exchange building facade",
+    "Wall Street sign Manhattan",
+    "Federal Hall Wall Street",
+    "Charging Bull Wall Street",
+    "New York Stock Exchange trading floor",
 ]
 
 
-def fetch_open_image(article_date: date) -> str:
-    from article_image import fetch_seeded_pixabay_image
-    return fetch_seeded_pixabay_image(
-        _IMAGE_KEYWORDS, article_date.toordinal(), f"ny_market_open_{article_date.isoformat()}"
-    )
+def fetch_open_image(article_date: date) -> tuple[str, str]:
+    from article_image import fetch_wikimedia_image
+    query = _WALLSTREET_IMAGE_QUERIES[article_date.toordinal() % len(_WALLSTREET_IMAGE_QUERIES)]
+    url, credit = fetch_wikimedia_image(query)
+    return url or "", credit or ""
 
 
 # ── 기사 삽입 ────────────────────────────────────────────────
@@ -496,6 +511,7 @@ def already_published(article_date: date, url_key: str = "ny_market_open") -> bo
 
 
 def insert_article(title_ko: str, summary_ko: str, article_date: date, image_url: str = "",
+                    image_credit: str = "",
                     url_key: str = "ny_market_open", subcategory: str = "뉴욕증시개장",
                     country: str = "미국", country_flag: str = "🇺🇸",
                     note: str = "뉴욕증시 개장 자동 기사") -> int:
@@ -536,6 +552,7 @@ def insert_article(title_ko: str, summary_ko: str, article_date: date, image_url
         "country_flag": country_flag,
         "countries": [country] if country else [],
         "image_url": image_url,
+        "image_credit": image_credit,
         "score": 1,
         "created_at": now_str,
         "first_published_at": now_str,
@@ -575,13 +592,13 @@ def main():
         print(f"  → {article_date} 뉴욕증시 개장 기사 이미 존재 → 스킵")
         return
 
-    print("  → 야후 파이낸스에서 선물·해외증시 데이터 수집 중...")
+    print("  → 야후 파이낸스에서 개장가·해외증시 데이터 수집 중...")
     data = fetch_open_data()
-    if len(data["futures"]) < 2 or len(data["overnight"]) < 2:
-        print(f"  [ERROR] 데이터 수집 부족(선물 {len(data['futures'])}건, "
+    if len(data["us_open"]) < 2 or len(data["overnight"]) < 2:
+        print(f"  [ERROR] 데이터 수집 부족(미국 지수 {len(data['us_open'])}건, "
               f"해외증시 {len(data['overnight'])}건) → 종료")
         return
-    print(f"  → 선물 {len(data['futures'])}건, 해외증시 {len(data['overnight'])}건 수집 완료")
+    print(f"  → 미국 지수 {len(data['us_open'])}건, 해외증시 {len(data['overnight'])}건 수집 완료")
 
     print("  → Gemini로 기사 생성 중...")
     prompt = build_article_prompt(data, article_date)
@@ -605,9 +622,9 @@ def main():
         print(f"  ⚠️ [{_dg_reason}] → 스킵")
         return
 
-    image_url = fetch_open_image(article_date)
+    image_url, image_credit = fetch_open_image(article_date)
 
-    article_id = insert_article(title, body, article_date, image_url)
+    article_id = insert_article(title, body, article_date, image_url, image_credit)
     if article_id > 0:
         print(f"  ✓ 기사 삽입 완료 (articles.id={article_id})")
     else:
@@ -653,10 +670,10 @@ def _run_europe_focus():
         print(f"  ⚠️ [{_dg_reason}] → 스킵")
         return
 
-    image_url = fetch_open_image(article_date)
+    image_url, image_credit = fetch_open_image(article_date)
 
     article_id = insert_article(
-        title, body, article_date, image_url,
+        title, body, article_date, image_url, image_credit,
         url_key=url_key, subcategory="유럽증시동향", country="", country_flag="",
         note="유럽증시 동향 자동 기사(미국 증시 휴장일 대체)",
     )
