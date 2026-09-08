@@ -49,7 +49,19 @@ _HTML_TAG_RE = re.compile(r'<[^>]+>')
 _WIKI_TITLE_BLOCKLIST = {
     "file:adult cholera patient.jpg",
 }
-_WIKI_TITLE_AVOID_WORDS = ("patient", "autopsy", "cadaver", "corpse")
+_WIKI_TITLE_AVOID_WORDS = (
+    "patient", "autopsy", "cadaver", "corpse",
+    # 2026-09-09 실사고(id=145058, 148140): "콜레라" 검색이 실제 사진이
+    # 아니라 "Cholera deaths in Great Britain over the long-term, 1832 to
+    # 2016" 같은 Our World In Data 통계 차트를 반환 — 주제어(질병명·경제
+    # 지표 등)로 검색하면 위키미디어 커먼즈에 사진과 함께 차트·그래프·지도가
+    # 섞여 나오는데, 지금까지는 그걸 걸러내는 규칙이 없었다. 기사 히어로
+    # 이미지는 "사진"이어야지 통계 도표가 아니므로 파일 제목에 이런 단어가
+    # 있으면 제외한다.
+    "chart", "graph", "diagram", "infographic", "statistics", "our world in data",
+    "owid", "deaths in", "cases in", "map", "distribution of", "timeline of",
+    "trend in", "trends in", "by country", "by year", "per capita",
+)
 
 
 def fetch_wikimedia_image(query: str):
