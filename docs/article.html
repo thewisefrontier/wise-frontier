@@ -469,6 +469,12 @@ function cleanBody(text) {
     // 원문에 진짜 <script> 등이 있어도 텍스트로만 남게 한다 — 이스케이프는 <,>,&,",'만
     // 건드리므로 마크다운에 쓰는 []()*  문자는 그대로 남아 이후 변환 로직에 영향 없다.
     const body = window.esc(cleanBody(lang === 'en' ? (a.summary_en || a.summary_ko || '') : (a.summary_ko || a.summary_en || '')));
+    // 2026-09-09 사용자 지적: "영어로 보기... 3줄 요약은 번역이 안되는데",
+    // "투자 아이디어도 번역이 따로 안되네" — 이 두 필드는 title/body와 별도로
+    // summary_3lines_en/investment_idea_en 컬럼에 번역이 채워진다(translate_guard.py
+    // translate_extra_fields()). 없으면(과거 기사 등) 한국어로 폴백.
+    const summary3Text = lang === 'en' ? (a.summary_3lines_en || a.summary_3lines || '') : (a.summary_3lines || a.summary_3lines_en || '');
+    const investmentText = lang === 'en' ? (a.investment_idea_en || a.investment_idea || '') : (a.investment_idea || a.investment_idea_en || '');
 
     // 문단(빈 줄) 단위로 먼저 블록을 나눈 뒤 블록별로 처리한다.
     // ⚠️ 실사고(2026-08-17, id=80581 다이제스트): 예전엔 \n\n을 플레이스홀더로
@@ -587,11 +593,11 @@ function cleanBody(text) {
           ${nextArticle ? `<div>➡️ 후속 기사: <a href="/article?id=${nextArticle.id}" style="color:var(--accent2);">${window.esc(nextArticle.title_ko || nextArticle.title_en)}</a></div>` : ''}
         </div>` : ''}
 
-      ${a.summary_3lines ? `
+      ${summary3Text ? `
         <div style="margin:16px 0;padding:14px 16px;background:rgba(26,95,168,0.06);border-radius:8px;border-left:3px solid var(--accent2);">
-          <div style="font-weight:700;color:var(--accent2);font-size:13px;margin-bottom:8px;">📌 3줄 요약</div>
+          <div style="font-weight:700;color:var(--accent2);font-size:13px;margin-bottom:8px;">${lang === 'en' ? '📌 Summary' : '📌 3줄 요약'}</div>
           <ul style="margin:0;padding-left:18px;">
-            ${a.summary_3lines.split(/\\n|\n/).filter(l => l.trim()).map(l => `<li style="margin-bottom:4px;font-size:14px;line-height:1.6;">${window.esc(l.trim().replace(/^[*\-•]\s*/,''))}</li>`).join('')}
+            ${summary3Text.split(/\\n|\n/).filter(l => l.trim()).map(l => `<li style="margin-bottom:4px;font-size:14px;line-height:1.6;">${window.esc(l.trim().replace(/^[*\-•]\s*/,''))}</li>`).join('')}
           </ul>
         </div>` : ''}
 
@@ -611,10 +617,10 @@ function cleanBody(text) {
         ${bodyHtml}
       </div>
 
-      ${a.investment_idea ? `
+      ${investmentText ? `
         <div style="margin:24px 0;padding:16px 18px;background:rgba(200,140,20,0.07);border-radius:8px;border-left:3px solid #c88c14;">
-          <div style="font-weight:700;color:#c88c14;font-size:13px;margin-bottom:8px;">💡 투자 아이디어</div>
-          <div style="font-size:14px;line-height:1.8;color:var(--text);">${window.esc(a.investment_idea).replace(/\\n|\n/g,'<br>')}</div>
+          <div style="font-weight:700;color:#c88c14;font-size:13px;margin-bottom:8px;">${lang === 'en' ? '💡 Investment Idea' : '💡 투자 아이디어'}</div>
+          <div style="font-size:14px;line-height:1.8;color:var(--text);">${window.esc(investmentText).replace(/\\n|\n/g,'<br>')}</div>
         </div>` : ''}
 
       <div class="source-link">ⓒ NewsFinal <button onclick="shareArticle()" style="float:right;background:none;border:1px solid var(--border);border-radius:6px;padding:4px 12px;cursor:pointer;color:var(--text);font-size:12px;">🔗 공유</button></div>
