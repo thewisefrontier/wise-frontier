@@ -24,6 +24,16 @@ ensure_paragraphs()/parse_article_output()는 2026-09-08 감사("공용모듈이
 필요한 시스템이 더 있는지 점검해줘")로 추가 공용화 — 각각 4개·8개 파일에
 기능적으로 동일한 코드가 복붙돼 있었다(버그로 인한 드리프트는 아니고
 순수 중복). 둘 다 Gemini 호출이 없는 순수 텍스트 처리라 주입이 필요 없다.
+
+enforce_title_prefix()는 2026-09-09 감사("다른 모듈에 있는 안전장치 중에
+쓸만한 것들을 모두 모아서 안전장치도 공용 모듈화하자")로 추가 공용화 —
+9개 writer 파일(oil_price/opinet_price/opinet_weekly/frontier_markets/
+ny_market_open×2/crypto_news/stock_news)에 제목 앞 [태그] 강제 부착
+로직이 복붙돼 있었는데, 실제로는 두 계열로 드리프트해 있었다: oil_price/
+opinet_price/opinet_weekly/frontier_markets는 "태그가/는 ..." 식으로
+새어나온 평문 접두 표현까지 제거하는 3단계 폴백이 있었지만, crypto_news/
+stock_news/ny_market_open(본편+유럽판)은 대괄호([태그]) 형태만 인식해서
+Gemini가 평문으로 접두어를 흘리면 태그가 중복 부착되는 결함이 있었다.
 """
 
 import math
@@ -190,6 +200,43 @@ def ensure_paragraphs(text: str, target: int = 3, max_sentences_per_para: int = 
         for i in range(0, len(sentences), max_sentences_per_para):
             out_blocks.append(" ".join(sentences[i:i + max_sentences_per_para]))
     return "\n\n".join(out_blocks)
+
+
+def _has_batchim(ch: str) -> bool:
+    """음절 ch에 받침이 있는지(조사 가/는 vs 이/은 선택용)."""
+    code = ord(ch) - 0xAC00
+    if not (0 <= code < 11172):
+        return False
+    return code % 28 != 0
+
+
+def enforce_title_prefix(title: str, prefix: str, bare_name: str, particles=None) -> str:
+    """제목 앞에 [prefix] 태그를 강제 부착. 중복 부착 방지.
+
+    이미 "[bare_name]"이 붙어 있으면 정규화만 하고, "bare_name가/는 ..."처럼
+    Gemini가 평문으로 접두 표현을 흘린 경우도 감지해 제거한 뒤 재부착한다.
+    조사(가/는 vs 이/은)는 particles를 넘기지 않으면 bare_name 마지막 글자
+    받침 유무로 자동 판정한다.
+    """
+    t = (title or "").strip()
+    if not t:
+        return t
+    spaced = r"\s*".join(re.escape(ch) for ch in bare_name)
+    m = re.match(r"^\s*\[\s*" + spaced + r"\s*\]\s*(.*)$", t)
+    if m:
+        t = m.group(1).strip()
+    else:
+        if particles is None:
+            particles = ("이", "은") if _has_batchim(bare_name[-1]) else ("가", "는")
+        particle_group = "|".join(particles)
+        # bare_name도 대괄호 검사와 같은 "글자 사이 공백 허용" 패턴(spaced)을 써야
+        # "글로벌 마켓 동향"처럼 여러 단어로 된 태그명도 정확히 매칭된다.
+        m2 = re.match(r"^" + spaced + r"(?:" + particle_group + r")?\s*[,·]?\s+(.+)$", t)
+        if m2 and m2.group(1)[:1] not in ("와", "과", "및"):
+            t = m2.group(1).strip()
+        else:
+            t = re.sub(r"^" + spaced + r"\s*[,·]\s*", "", t).strip()
+    return f"{prefix} {t}" if t else prefix
 
 
 def parse_article_output(text: str) -> tuple[str, str]:

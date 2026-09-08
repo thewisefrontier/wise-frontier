@@ -414,27 +414,14 @@ BODY: <본문>
 TITLE_PREFIX = "[주간유가]"
 
 
-def enforce_title_prefix(title: str) -> str:
-    t = (title or "").strip()
-    if not t:
-        return t
-    m = re.match(r"^\s*\[\s*주간\s*유가\s*\]\s*(.*)$", t)
-    if m:
-        t = m.group(1).strip()
-    else:
-        m2 = re.match(r"^주간유가(?:는)?\s*[,·]?\s+(.+)$", t)
-        if m2 and m2.group(1)[:1] not in ("와", "과", "및"):
-            t = m2.group(1).strip()
-        else:
-            t = re.sub(r"^주간유가\s*[,·]\s*", "", t).strip()
-    return f"{TITLE_PREFIX} {t}" if t else TITLE_PREFIX
-
-
-# 2026-09-08 공용화("공용모듈이 필요한 시스템이 더 있는지 점검해줘") —
+# 2026-09-08/09 공용화("공용모듈이 필요한 시스템이 더 있는지 점검해줘") —
 # style_guard.parse_article_output()로 이식(8개 파일에 동일 코드 복붙).
+# enforce_title_prefix도 동일 감사로 style_guard 공용 버전 사용.
 try:
-    from style_guard import parse_article_output, ensure_paragraphs
+    from style_guard import parse_article_output, ensure_paragraphs, enforce_title_prefix as _sg_enforce_title_prefix
 except Exception:
+    def _sg_enforce_title_prefix(title, prefix, bare_name, particles=None):
+        return f"{prefix} {(title or '').strip()}".strip()
     def ensure_paragraphs(text: str, target: int = 3, max_sentences_per_para: int = 4) -> str:
         return text
     def parse_article_output(text: str) -> tuple[str, str]:
@@ -446,6 +433,11 @@ except Exception:
         if m_body:
             body = m_body.group(1).strip()
         return title, body
+
+
+def enforce_title_prefix(title: str) -> str:
+    """제목 앞에 [주간유가] 태그를 강제 부착. 중복 부착 방지. (style_guard 공용화, 2026-09-09)"""
+    return _sg_enforce_title_prefix(title, TITLE_PREFIX, "주간유가", particles=("는",))
 
 
 # 2026-09-08 수정("공용모듈이 필요한 시스템이 더 있는지 점검해줘"): 이 파일은

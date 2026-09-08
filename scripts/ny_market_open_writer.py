@@ -327,13 +327,8 @@ BODY: <본문>
 
 
 def enforce_title_prefix(title: str) -> str:
-    t = (title or "").strip()
-    if not t:
-        return t
-    m = re.match(r"^\s*\[\s*뉴욕증시\s*개장\s*\]\s*(.*)$", t)
-    if m:
-        t = m.group(1).strip()
-    return f"{TITLE_PREFIX} {t}" if t else TITLE_PREFIX
+    """제목 앞에 [뉴욕증시 개장] 태그를 강제 부착. 중복 부착 방지. (style_guard 공용화, 2026-09-09)"""
+    return _sg_enforce_title_prefix(title, TITLE_PREFIX, "뉴욕증시개장")
 
 
 # ── 미국 증시 휴장일 대체 콘텐츠(유럽·아시아 위주) ──────────────────
@@ -422,20 +417,20 @@ BODY: <본문>
 
 
 def enforce_europe_title_prefix(title: str) -> str:
-    t = (title or "").strip()
-    if not t:
-        return t
-    m = re.match(r"^\s*\[\s*유럽증시\s*\]\s*(.*)$", t)
-    if m:
-        t = m.group(1).strip()
-    return f"{EUROPE_TITLE_PREFIX} {t}" if t else EUROPE_TITLE_PREFIX
+    """제목 앞에 [유럽증시] 태그를 강제 부착. 중복 부착 방지. (style_guard 공용화, 2026-09-09)"""
+    return _sg_enforce_title_prefix(title, EUROPE_TITLE_PREFIX, "유럽증시")
 
 
-# 2026-09-08 공용화("공용모듈이 필요한 시스템이 더 있는지 점검해줘") —
+# 2026-09-08/09 공용화("공용모듈이 필요한 시스템이 더 있는지 점검해줘") —
 # style_guard.parse_article_output()로 이식(8개 파일에 동일 코드 복붙).
+# enforce_title_prefix도 동일 감사로 style_guard 공용 버전 사용 — 기존엔
+# 대괄호([태그]) 형태만 인식해서, Gemini가 평문으로 접두어를 흘리면 태그가
+# 중복 부착되는 결함이 있었다(본편/유럽판 둘 다 동일한 결함이었음).
 try:
-    from style_guard import parse_article_output, ensure_paragraphs
+    from style_guard import parse_article_output, ensure_paragraphs, enforce_title_prefix as _sg_enforce_title_prefix
 except Exception:
+    def _sg_enforce_title_prefix(title, prefix, bare_name, particles=None):
+        return f"{prefix} {(title or '').strip()}".strip()
     def ensure_paragraphs(text: str, target: int = 3, max_sentences_per_para: int = 4) -> str:
         return text
     def parse_article_output(text: str) -> tuple[str, str]:

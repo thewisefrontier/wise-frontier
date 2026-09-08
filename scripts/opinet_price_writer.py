@@ -372,28 +372,15 @@ BODY: <본문>
 TITLE_PREFIX = "[국내유가]"
 
 
-def enforce_title_prefix(title: str) -> str:
-    t = (title or "").strip()
-    if not t:
-        return t
-    m = re.match(r"^\s*\[\s*국내\s*유가\s*\]\s*(.*)$", t)
-    if m:
-        t = m.group(1).strip()
-    else:
-        m2 = re.match(r"^국내유가(?:가|는)?\s*[,·]?\s+(.+)$", t)
-        if m2 and m2.group(1)[:1] not in ("와", "과", "및"):
-            t = m2.group(1).strip()
-        else:
-            t = re.sub(r"^국내유가\s*[,·]\s*", "", t).strip()
-    return f"{TITLE_PREFIX} {t}" if t else TITLE_PREFIX
-
-
-# 2026-09-08 공용화("공용모듈이 필요한 시스템이 더 있는지 점검해줘") —
+# 2026-09-08/09 공용화("공용모듈이 필요한 시스템이 더 있는지 점검해줘") —
 # style_guard.ensure_paragraphs()로 이식(target=4는 이 파일 고유 기본값,
-# 2026-08-26 실사고 id=100254 대응으로 유지).
+# 2026-08-26 실사고 id=100254 대응으로 유지). enforce_title_prefix도 동일 감사로
+# style_guard 공용 버전 사용(9개 파일에 복붙돼 있던 것 중 하나).
 try:
-    from style_guard import ensure_paragraphs as _ensure_paragraphs
+    from style_guard import ensure_paragraphs as _ensure_paragraphs, enforce_title_prefix as _sg_enforce_title_prefix
 except Exception:
+    def _sg_enforce_title_prefix(title, prefix, bare_name, particles=None):
+        return f"{prefix} {(title or '').strip()}".strip()
     def _ensure_paragraphs(text: str, target: int = 4) -> str:
         if not text or "\n\n" in text:
             return text
@@ -405,6 +392,11 @@ except Exception:
         size = math.ceil(n / actual_target)
         groups = [sentences[i:i + size] for i in range(0, n, size)]
         return "\n\n".join(" ".join(g) for g in groups)
+
+
+def enforce_title_prefix(title: str) -> str:
+    """제목 앞에 [국내유가] 태그를 강제 부착. 중복 부착 방지. (style_guard 공용화, 2026-09-09)"""
+    return _sg_enforce_title_prefix(title, TITLE_PREFIX, "국내유가", particles=("가", "는"))
 
 
 def parse_article_output(text: str) -> tuple[str, str]:
