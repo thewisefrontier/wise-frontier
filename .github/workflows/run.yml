@@ -100,7 +100,7 @@ jobs:
       - name: GDELT 글로벌 뉴스 검색 수집 (2026-09-08 신설)
         if: steps.guard.outputs.skip != 'true'
         continue-on-error: true
-        timeout-minutes: 10
+        timeout-minutes: 8
         run: python scripts/gdelt_fetcher.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -109,7 +109,7 @@ jobs:
       - name: 국내(한국) 뉴스 수집 — 다국어 채널 전용 (2026-09-08 신설)
         if: steps.guard.outputs.skip != 'true'
         continue-on-error: true
-        timeout-minutes: 10
+        timeout-minutes: 8
         run: python scripts/domestic_kr_fetcher.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}

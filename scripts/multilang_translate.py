@@ -47,8 +47,12 @@ GEMINI_API_KEYS = [
 LANGUAGES = ["en", "hi", "fr", "es"]  # Phase 2 확장 시 이 리스트만 수정
 
 # 사이클당 처리 기사 수 상한(사용자 지시: "전체 기사를 다 번역할 필요는 없고") —
-# 언어 4개 기준 최대 10건 × 4 = 40콜/사이클, run.yml 30분 주기에 부담 없는 수준.
-MAX_ARTICLES_PER_CYCLE = 10
+# 2026-09-09: 10건(언어 4개=40콜)이 다른 신규 스텝들과 겹쳐 사이클 전체가
+# 2시간+로 늘어난 사고 이후 5건(=20콜)으로 낮춤 — Gemini+NVIDIA 호출이라
+# 지연 편차가 크다. 별도 커서 없이 매번 "최신순 미번역분"을 다시 조회하므로
+# (fetch_candidates() 참고) 이번에 못 채운 기사도 다음 사이클에 자연히
+# 다시 후보로 잡힌다 — 유실 없음.
+MAX_ARTICLES_PER_CYCLE = 5
 
 _gemini_client = GeminiClient(GEMINI_API_KEYS) if GEMINI_API_KEYS else None
 

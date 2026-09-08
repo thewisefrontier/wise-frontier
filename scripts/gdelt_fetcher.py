@@ -73,7 +73,7 @@ GDELT_QUERIES = [
     "Samsung OR Hyundai OR LG OR SK Group",
 ]
 
-MAX_RECORDS_PER_QUERY = 10
+MAX_RECORDS_PER_QUERY = 5  # 2026-09-09 10건→5건: crawl_full_text() 비용이 커서 10분 타임아웃 유발
 TIMESPAN = "3h"          # 30분 간격 실행이라도 놓친 구간을 흡수하도록 여유
 # GDELT 공식 제한: 5초당 1회("Please limit requests to one every 5 seconds" —
 # 2026-09-08 실측, 1.2초로 뒀다가 429 확인). 여유를 두어 6초로 설정.
@@ -81,6 +81,33 @@ REQUEST_INTERVAL = 6.0
 MAX_AGE_DAYS = 2
 
 _SIMILARITY_THRESHOLD = 75
+
+# 2026-09-09 실사고: "GDELT 글로벌 뉴스 검색 수집"이 10분 타임아웃에 걸리고,
+# 사이클 전체가 30분→2시간+로 늘어남(사용자: "마지막에 성공한게 4시 17분에
+# 돌아간거고, 2시간5분 걸렸네", 실제 타임아웃 로그 4건 확인). 원인은 매
+# 사이클마다 GDELT_QUERIES 전체(18개 × 6초 대기)를 다 돌면서 각 결과마다
+# crawl_full_text()까지 하니 누적 시간이 컸다. site_discovery.py와 동일한
+# 커서 순환 방식으로 사이클당 일부 쿼리만 처리하도록 변경.
+QUERIES_PER_CYCLE = 6
+STATE_FILE = "data/gdelt_fetcher_state.json"
+
+
+def _load_cursor(total: int) -> int:
+    if os.path.exists(STATE_FILE):
+        try:
+            with open(STATE_FILE, "r", encoding="utf-8") as f:
+                import json
+                return json.load(f).get("cursor", 0) % max(total, 1)
+        except Exception:
+            pass
+    return 0
+
+
+def _save_cursor(cursor: int, total: int):
+    import json
+    os.makedirs("data", exist_ok=True)
+    with open(STATE_FILE, "w", encoding="utf-8") as f:
+        json.dump({"cursor": cursor % max(total, 1)}, f)
 
 
 def _normalize_url(url):
@@ -160,7 +187,12 @@ def run():
     inserted = 0
     scanned = 0
 
-    for query in GDELT_QUERIES:
+    cursor = _load_cursor(len(GDELT_QUERIES))
+    batch = [GDELT_QUERIES[(cursor + i) % len(GDELT_QUERIES)] for i in range(min(QUERIES_PER_CYCLE, len(GDELT_QUERIES)))]
+    _save_cursor(cursor + QUERIES_PER_CYCLE, len(GDELT_QUERIES))
+    print(f"[gdelt_fetcher] 이번 사이클 쿼리 {len(batch)}/{len(GDELT_QUERIES)}개 (cursor={cursor})")
+
+    for query in batch:
         articles = fetch_gdelt(query)
         time.sleep(REQUEST_INTERVAL)
         if not articles:

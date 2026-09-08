@@ -29,6 +29,7 @@ gemini_writer.py/gemini_summarizer.py의 클러스터링 로직이 이 태그를
 export_articles.py도 source=eq.NewsFinal 필터라 애초에 안 잡힌다.
 """
 
+import os
 import re
 import time
 from urllib.parse import urlparse, urlunparse
@@ -102,12 +103,39 @@ KR_RSS_FEEDS = [
     ("구글뉴스 한국-기업", "https://news.google.com/rss/search?q=%ED%95%9C%EA%B5%AD+%EA%B8%B0%EC%97%85&hl=ko&gl=KR&ceid=KR:ko"),
 ]
 
-MAX_RECORDS_PER_QUERY = 10
+MAX_RECORDS_PER_QUERY = 5  # 2026-09-09 10건→5건: crawl_full_text()가 사이클당 소요시간의
+                            # 대부분을 차지해 10분 타임아웃을 반복 유발함(아래 QUERIES_PER_CYCLE 참고)
 TIMESPAN = "6h"
 REQUEST_INTERVAL = 6.0   # GDELT 제한: 5초당 1회(2026-09-08 실측, gdelt_fetcher.py와 동일)
 MAX_AGE_DAYS = 2
 
 _TARGET_COUNTRY = "South Korea"
+
+# 2026-09-09 실사고: 이 스텝이 10분 타임아웃에 반복적으로 걸려 run.yml
+# 전체 사이클이 30분→2시간+로 늘어남(실제 타임아웃 로그로 확인). KR_QUERIES
+# (GDELT, 19개 × 6초 대기 + 크롤링)를 매 사이클 전부 도는 게 원인 — RSS
+# 피드(KR_RSS_FEEDS, 빠름)는 항상 다 돌되, GDELT 쪽만 site_discovery.py와
+# 동일한 커서 순환으로 사이클당 일부만 처리한다.
+GDELT_QUERIES_PER_CYCLE = 6
+GDELT_STATE_FILE = "data/domestic_kr_gdelt_state.json"
+
+
+def _load_gdelt_cursor(total: int) -> int:
+    if os.path.exists(GDELT_STATE_FILE):
+        try:
+            import json
+            with open(GDELT_STATE_FILE, "r", encoding="utf-8") as f:
+                return json.load(f).get("cursor", 0) % max(total, 1)
+        except Exception:
+            pass
+    return 0
+
+
+def _save_gdelt_cursor(cursor: int, total: int):
+    import json
+    os.makedirs("data", exist_ok=True)
+    with open(GDELT_STATE_FILE, "w", encoding="utf-8") as f:
+        json.dump({"cursor": cursor % max(total, 1)}, f)
 
 
 def _normalize_url(url):
@@ -224,8 +252,14 @@ def run():
             if _save_candidate(title, link, urlparse(link).netloc, src_published, name, seen_titles):
                 inserted += 1
 
-    # ② GDELT 검색(RSS 없는 매체·주제까지 넓게 보완)
-    for query in KR_QUERIES:
+    # ② GDELT 검색(RSS 없는 매체·주제까지 넓게 보완) — 사이클당 일부만 순환
+    gdelt_cursor = _load_gdelt_cursor(len(KR_QUERIES))
+    gdelt_batch = [KR_QUERIES[(gdelt_cursor + i) % len(KR_QUERIES)]
+                   for i in range(min(GDELT_QUERIES_PER_CYCLE, len(KR_QUERIES)))]
+    _save_gdelt_cursor(gdelt_cursor + GDELT_QUERIES_PER_CYCLE, len(KR_QUERIES))
+    print(f"[domestic_kr_fetcher] GDELT 쿼리 {len(gdelt_batch)}/{len(KR_QUERIES)}개 (cursor={gdelt_cursor})")
+
+    for query in gdelt_batch:
         articles = fetch_gdelt(query)
         time.sleep(REQUEST_INTERVAL)
         if not articles:
