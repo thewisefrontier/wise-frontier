@@ -181,9 +181,12 @@ _gemini_client = GeminiClient(GEMINI_API_KEYS, GEMINI_MODELS)
 # 비용을 고려해(사용자 지적) 항상 lite 계열(start_tier=3)로 고정해서 부른다
 # — 플래그십 모델 쿼터를 번역이 잠식하지 않도록.
 try:
-    from translate_guard import translate_article
+    from translate_guard import translate_article, translate_extra_fields
 except Exception:
     def translate_article(title_ko: str, body_ko: str, call_gemini_fn, max_tokens: int = 3500) -> tuple[str, str]:
+        return "", ""
+    def translate_extra_fields(summary_3lines_ko: str, investment_idea_ko: str, call_gemini_fn,
+                                lang: str = "en", max_tokens: int = 1200) -> tuple[str, str]:
         return "", ""
 
 
@@ -703,8 +706,16 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
 
     title_en, summary_en = "", ""
+    summary_3lines_en, investment_idea_en = "", ""
     if published:
         title_en, summary_en = translate_article(title_ko, summary_ko, _call_gemini_for_translation)
+        # 2026-09-09 사용자 지적("영어로 보기... 3줄 요약은 번역이 안되는데",
+        # "투자 아이디어도 번역이 따로 안되네") — title/body만 번역되고 이
+        # 두 필드는 애초에 번역 대상이 아니었다. translate_guard.py에 별도
+        # 함수 추가해 여기서도 채운다.
+        summary_3lines_en, investment_idea_en = translate_extra_fields(
+            summary_3lines, investment_idea, _call_gemini_for_translation
+        )
 
     payload = {
         "title_en": title_en or title_ko,
@@ -731,6 +742,8 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
         "is_travel": bool(is_travel),
         "summary_3lines": summary_3lines,
         "investment_idea": investment_idea,
+        "summary_3lines_en": summary_3lines_en,
+        "investment_idea_en": investment_idea_en,
         # 소스 원문 RSS 태그 취합 — dedup_guard.py 공용화(2026-09-08)로 이
         # 일반 클러스터링 경로도 트렌드 트래커와 같은 언어중립 태그 매칭을
         # 쓸 수 있게, 다음 재작성이 찾아볼 수 있도록 자기 자신에도 저장해둔다.

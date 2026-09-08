@@ -147,3 +147,56 @@ what specifically is wrong). No other text."""
     if resp.upper().startswith("OK"):
         return ""
     return resp[:300]
+
+
+def translate_extra_fields(summary_3lines_ko: str, investment_idea_ko: str, call_gemini_fn,
+                            lang: str = "en", max_tokens: int = 1200) -> tuple[str, str]:
+    """3줄요약·투자아이디어를 번역한다(2026-09-09 신설 — 사용자 지적:
+    "영어로 보기... 3줄 요약은 번역이 안되는데", "투자 아이디어도 번역이
+    따로 안되네". 원인은 "분리가 안 된" 게 아니라, translate_article()이
+    title/body만 번역하도록 설계돼 있어 이 두 필드는 애초에 번역 대상에
+    포함된 적이 없었다 — summary_3lines_en/investment_idea_en 컬럼 자체가
+    없었음).
+
+    title/body와 별도 호출인 이유: 두 필드 다 없는 기사가 있고(예: 데이터
+    저널리즘 템플릿), 있어도 이미 title/body 번역이 끝난 뒤에만 필요하므로
+    항상 같이 호출할 필요가 없다.
+
+    입력 중 하나라도 없으면 그 필드는 빈 문자열로 반환(둘 다 없으면
+    ("", "") 즉시 반환, Gemini 호출 자체를 안 함).
+    """
+    if not summary_3lines_ko and not investment_idea_ko:
+        return "", ""
+
+    lang_name = LANG_NAMES.get(lang, LANG_NAMES["en"])
+    prompt = f"""Translate the following into natural, professional {lang_name} (AP style
+equivalent). Keep every number, date, percentage, and name EXACTLY as in the
+original. Do not add commentary or invent anything. Write entirely in
+{lang_name} — do not leave any Korean text.
+
+Output format (follow exactly, no extra text before or after):
+SUMMARY3: <{lang_name} 3-line summary, lines separated by \\n>
+INVESTMENT: <{lang_name} investment-idea paragraph>
+
+[Korean 3-line summary]
+{summary_3lines_ko}
+
+[Korean investment idea]
+{investment_idea_ko}
+
+Output:"""
+
+    text = call_gemini_fn(prompt, max_tokens=max_tokens)
+    if not text:
+        return "", ""
+
+    m_s3 = re.search(r"SUMMARY3:\s*(.+?)(?:\nINVESTMENT:|$)", text, re.S)
+    m_inv = re.search(r"INVESTMENT:\s*(.+)$", text, re.S)
+    summary3_out = m_s3.group(1).strip() if m_s3 else ""
+    investment_out = m_inv.group(1).strip() if m_inv else ""
+
+    if not summary_3lines_ko:
+        summary3_out = ""
+    if not investment_idea_ko:
+        investment_out = ""
+    return summary3_out, investment_out
