@@ -189,8 +189,10 @@ def call_gemini(prompt, max_tokens=3000, start_tier=0):
 # 사본이라 그 뒤 추가된 패턴(화자 없는 전망/분석형 마무리 문장 7종,
 # 2026-07-28)과 합쇼체(-습니다) 감지·자동변환을 못 받고 있었다.
 try:
-    from style_guard import has_column_style, has_polite_ending, to_plain_style, _pub_day_label
+    from style_guard import has_column_style, has_polite_ending, to_plain_style, _pub_day_label, ensure_paragraphs
 except Exception:
+    def ensure_paragraphs(text: str, target: int = 3, max_sentences_per_para: int = 4) -> str:
+        return text
     def _pub_day_label(raw) -> str:
         s = str(raw or "")[:10]
         m = re.match(r"^(\d{4})-(\d{2})-(\d{2})$", s)
@@ -478,6 +480,7 @@ def run():
     title, body = parse_title_and_body(content)
     if not title:
         title = "[데일리 다이제스트] 주요 동향"
+    body = ensure_paragraphs(body)
 
     image_url = fetch_article_image(title, body or content)
 

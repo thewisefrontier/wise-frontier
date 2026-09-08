@@ -297,6 +297,8 @@ BODY: <본문>
    섹션명 뒤에 붙은 설명은 그 섹션에 뭘 써야 하는지 알려주는 지시일 뿐이니
    지시 내용 자체를 본문에 옮겨 적지 마세요 — "◆ 섹션명" 한 줄만 그대로 쓰고
    바로 이어서 지시를 따른 기사 내용을 쓰세요.
+   ⚠️ 한 문단이 3~4줄을 넘으면 안 됩니다(2026-09-09 사용자 지적). 섹션
+   안에 문장이 여러 개면 의미 단위로 끊어 빈 줄로 문단을 나누세요.
 
    ◆ 뉴욕증시
    ⚠️ 반드시 미국 3대 지수(S&P500·나스닥·다우)의 실제 개장 이후 등락
@@ -325,13 +327,8 @@ BODY: <본문>
 
 
 def enforce_title_prefix(title: str) -> str:
-    t = (title or "").strip()
-    if not t:
-        return t
-    m = re.match(r"^\s*\[\s*뉴욕증시\s*개장\s*\]\s*(.*)$", t)
-    if m:
-        t = m.group(1).strip()
-    return f"{TITLE_PREFIX} {t}" if t else TITLE_PREFIX
+    """제목 앞에 [뉴욕증시 개장] 태그를 강제 부착. 중복 부착 방지. (style_guard 공용화, 2026-09-09)"""
+    return _sg_enforce_title_prefix(title, TITLE_PREFIX, "뉴욕증시개장")
 
 
 # ── 미국 증시 휴장일 대체 콘텐츠(유럽·아시아 위주) ──────────────────
@@ -392,6 +389,7 @@ BODY: <본문>
 2. 구조 — 아래 섹션을 이 순서대로 다루세요. 각 섹션은 "◆ 섹션명" 한 줄로
    시작하고, 그 다음 줄부터 내용을 쓰세요. 섹션 제목 줄 앞에는 빈 줄을
    하나씩 두세요. 섹션명 뒤 설명은 지시일 뿐이니 본문에 옮기지 마세요.
+   ⚠️ 한 문단이 3~4줄을 넘으면 안 됩니다. 문장이 여러 개면 빈 줄로 나누세요.
 
    ◆ 미국 증시 휴장
    "{today.day}일(현지시간) 미국 금융시장은 '{holiday_name}'을 맞아 휴장한다"는
@@ -419,20 +417,22 @@ BODY: <본문>
 
 
 def enforce_europe_title_prefix(title: str) -> str:
-    t = (title or "").strip()
-    if not t:
-        return t
-    m = re.match(r"^\s*\[\s*유럽증시\s*\]\s*(.*)$", t)
-    if m:
-        t = m.group(1).strip()
-    return f"{EUROPE_TITLE_PREFIX} {t}" if t else EUROPE_TITLE_PREFIX
+    """제목 앞에 [유럽증시] 태그를 강제 부착. 중복 부착 방지. (style_guard 공용화, 2026-09-09)"""
+    return _sg_enforce_title_prefix(title, EUROPE_TITLE_PREFIX, "유럽증시")
 
 
-# 2026-09-08 공용화("공용모듈이 필요한 시스템이 더 있는지 점검해줘") —
+# 2026-09-08/09 공용화("공용모듈이 필요한 시스템이 더 있는지 점검해줘") —
 # style_guard.parse_article_output()로 이식(8개 파일에 동일 코드 복붙).
+# enforce_title_prefix도 동일 감사로 style_guard 공용 버전 사용 — 기존엔
+# 대괄호([태그]) 형태만 인식해서, Gemini가 평문으로 접두어를 흘리면 태그가
+# 중복 부착되는 결함이 있었다(본편/유럽판 둘 다 동일한 결함이었음).
 try:
-    from style_guard import parse_article_output
+    from style_guard import parse_article_output, ensure_paragraphs, enforce_title_prefix as _sg_enforce_title_prefix
 except Exception:
+    def _sg_enforce_title_prefix(title, prefix, bare_name, particles=None):
+        return f"{prefix} {(title or '').strip()}".strip()
+    def ensure_paragraphs(text: str, target: int = 3, max_sentences_per_para: int = 4) -> str:
+        return text
     def parse_article_output(text: str) -> tuple[str, str]:
         title, body = "", ""
         m_title = re.search(r"TITLE:\s*(.+?)(?:\n|$)", text)
@@ -619,6 +619,8 @@ def main():
         print("  [ERROR] 응답 파싱 실패")
         return
 
+    body = ensure_paragraphs(body)
+
     _dg_bad, _dg_reason = check_date_hallucination(
         body, [{"source_published_at": article_date.isoformat()}], base_date=article_date
     )
@@ -666,6 +668,8 @@ def _run_europe_focus():
     if not title or not body:
         print("  [ERROR] 응답 파싱 실패")
         return
+
+    body = ensure_paragraphs(body)
 
     _dg_bad, _dg_reason = check_date_hallucination(
         body, [{"source_published_at": article_date.isoformat()}], base_date=article_date

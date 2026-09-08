@@ -293,6 +293,8 @@ BODY: <본문>
    설명은 그 섹션에 뭘 써야 하는지 알려주는 지시일 뿐이니 지시 내용 자체를
    본문에 옮겨 적지 마세요 — "◆ 섹션명" 한 줄만 그대로 쓰고 바로 이어서
    지시를 따른 기사 내용을 쓰세요.
+   ⚠️ 한 문단이 3~4줄을 넘으면 안 됩니다(2026-09-09 사용자 지적). 섹션
+   안에 문장이 여러 개면 의미 단위로 끊어 빈 줄로 문단을 나누세요.
 
    ◆ 주가 동향
    {name_ko}({ticker}) 주가가 오늘 왜 그렇게 움직였는지, 검색으로 찾은 실제
@@ -316,21 +318,18 @@ BODY: <본문>
 TITLE_PREFIX = "[종목 동향]"
 
 
-def enforce_title_prefix(title: str) -> str:
-    t = (title or "").strip()
-    if not t:
-        return t
-    m = re.match(r"^\s*\[\s*종목\s*동향\s*\]\s*(.*)$", t)
-    if m:
-        t = m.group(1).strip()
-    return f"{TITLE_PREFIX} {t}" if t else TITLE_PREFIX
-
-
-# 2026-09-08 공용화("공용모듈이 필요한 시스템이 더 있는지 점검해줘") —
+# 2026-09-08/09 공용화("공용모듈이 필요한 시스템이 더 있는지 점검해줘") —
 # style_guard.parse_article_output()로 이식(8개 파일에 동일 코드 복붙).
+# enforce_title_prefix도 동일 감사로 style_guard 공용 버전 사용 — 기존엔
+# 대괄호([태그]) 형태만 인식해서, Gemini가 "종목동향, ..."처럼 평문으로
+# 접두어를 흘리면 태그가 중복 부착되는 결함이 있었다.
 try:
-    from style_guard import parse_article_output
+    from style_guard import parse_article_output, ensure_paragraphs, enforce_title_prefix as _sg_enforce_title_prefix
 except Exception:
+    def _sg_enforce_title_prefix(title, prefix, bare_name, particles=None):
+        return f"{prefix} {(title or '').strip()}".strip()
+    def ensure_paragraphs(text: str, target: int = 3, max_sentences_per_para: int = 4) -> str:
+        return text
     def parse_article_output(text: str) -> tuple[str, str]:
         title, body = "", ""
         m_title = re.search(r"TITLE:\s*(.+?)(?:\n|$)", text)
@@ -340,6 +339,11 @@ except Exception:
         if m_body:
             body = m_body.group(1).strip()
         return title, body
+
+
+def enforce_title_prefix(title: str) -> str:
+    """제목 앞에 [종목 동향] 태그를 강제 부착. 중복 부착 방지. (style_guard 공용화, 2026-09-09)"""
+    return _sg_enforce_title_prefix(title, TITLE_PREFIX, "종목동향")
 
 
 def call_gemini_article(prompt: str, max_tokens: int = 3000) -> str | None:
@@ -497,6 +501,8 @@ def main():
     if not title or not body:
         print("  [ERROR] 응답 파싱 실패")
         return
+
+    body = ensure_paragraphs(body)
 
     _dg_bad, _dg_reason = check_date_hallucination(
         body, [{"source_published_at": article_date.isoformat()}], base_date=article_date
