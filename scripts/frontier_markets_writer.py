@@ -580,6 +580,10 @@ BODY: <본문>
    섹션명 뒤에 붙은 설명은 그 섹션에 뭘 써야 하는지 알려주는 지시일 뿐이니
    지시 내용 자체를 본문에 옮겨 적지 마세요 — "◆ 섹션명" 한 줄만 그대로 쓰고
    바로 이어서 지시를 따른 기사 내용을 쓰세요.
+   ⚠️ 한 문단이 3~4줄을 넘으면 안 됩니다(2026-09-09 사용자 지적: "기사는
+   한 문단에 3~4줄 이상이 되면 안 되. 보기에 좋지 않다"). 한 섹션 안에
+   문장이 여러 개면 의미 단위로 끊어 빈 줄로 문단을 나누세요 — 섹션 하나를
+   전부 한 문단으로 몰아 쓰지 마세요.
 
    ◆ 뉴욕증시
    ⚠️ 반드시 뉴욕증시(다우존스·나스닥·S&P500 중 그날 가장 중요한 움직임)로
@@ -634,8 +638,10 @@ def enforce_title_prefix(title: str) -> str:
 # 2026-09-08 공용화("공용모듈이 필요한 시스템이 더 있는지 점검해줘") —
 # style_guard.parse_article_output()로 이식(8개 파일에 동일 코드 복붙).
 try:
-    from style_guard import parse_article_output
+    from style_guard import parse_article_output, ensure_paragraphs
 except Exception:
+    def ensure_paragraphs(text: str, target: int = 3, max_sentences_per_para: int = 4) -> str:
+        return text
     def parse_article_output(text: str) -> tuple[str, str]:
         title, body = "", ""
         m_title = re.search(r"TITLE:\s*(.+?)(?:\n|$)", text)
@@ -830,6 +836,8 @@ def main():
     if not title or not body:
         print("  [ERROR] 응답 파싱 실패")
         return
+
+    body = ensure_paragraphs(body)
 
     _dg_bad, _dg_reason = check_date_hallucination(
         body, [{"source_published_at": article_date.isoformat()}], base_date=article_date
