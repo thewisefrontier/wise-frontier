@@ -652,7 +652,32 @@ try:
 except Exception:
     trafilatura = None
 
+try:
+    from googlenewsdecoder import gnewsdecoder
+except Exception:
+    gnewsdecoder = None
+
 import unicodedata
+
+
+def _resolve_google_news_url(url: str) -> str:
+    """news.google.com/rss/articles/... 리다이렉트 URL을 실제 게시처 URL로
+    해독. 2026-09-08 사용자 지시("뉴스 서칭... 우리쪽에 이식할 수 있는 건
+    이식하자")로 도입 — 구글뉴스는 HTTP 리다이렉트가 아니라 JS 리다이렉트를
+    쓰기 때문에 requests/trafilatura 둘 다 리다이렉트 안내 페이지 자체를
+    "본문"으로 착각해 크롤링이 애초에 불가능했다(실측: id=139993 관련 기사가
+    바로 이 URL 형태 — 디코딩하면 The Hindu 원문 URL이 나오고, 거기서
+    11500자+ 정상 추출 확인). 구글뉴스 URL이 아니거나 디코딩 실패 시 원본
+    URL을 그대로 반환(호출부가 안전하게 폴백하도록)."""
+    if gnewsdecoder is None or "news.google.com" not in url:
+        return url
+    try:
+        result = gnewsdecoder(url, interval=1)
+        if result and result.get("status") and result.get("decoded_url"):
+            return result["decoded_url"]
+    except Exception:
+        pass
+    return url
 
 
 def _is_garbled(text: str, sample: int = 2000) -> bool:
@@ -744,6 +769,11 @@ def crawl_full_text(url: str, timeout: int = 10) -> str:
     둘 다 실패하면 기존 regex 파서로 최종 폴백한다.
     """
     domain = urlparse(url).netloc.replace("www.", "")
+    if domain in SKIP_CRAWL_DOMAINS:
+        return ""
+
+    url = _resolve_google_news_url(url)
+    domain = urlparse(url).netloc.replace("www.", "")  # 디코딩 후 실제 게시처 도메인으로 갱신
     if domain in SKIP_CRAWL_DOMAINS:
         return ""
 
