@@ -339,6 +339,14 @@ def build_prompt(article: dict) -> str:
     content = full_text if full_text else summary
     has_full_text = bool(full_text)
 
+    # 2026-09-09 사용자 지시: "summarizer_rules도 writer_rules랑 완전 통합해줘".
+    # summarizer_rules(별도 DB 프롬프트)는 writer_rules와 상당 부분 중복돼
+    # 있었고, summarizer_rules에만 있던 고유 규칙(워드프레스 꼬리말 무시,
+    # 행사·상 이름 번역)은 writer_rules v41로 옮겨졌다(admin.html에서 그쪽만
+    # 고치면 되게). 이 함수는 이제 summarizer_rules를 따로 안 쓰고
+    # writer_rules를 로드해 [출력 형식] 이전(스타일 규칙만 해당, JSON 스펙은
+    # gemini_writer.py 전용이라 제외)까지만 잘라 쓴다 — writer_rules가
+    # 없으면(로드 실패) 예전 summarizer 전용 폴백으로 대체.
     FALLBACK_RULES = """원문이 길면 더 길게 써도 됩니다.
 본문 앞에 [도시명], [날짜] 같은 전문 형식 헤더를 붙이지 마세요.
 마크다운 문법(**굵게**, ##제목 등)을 사용하지 마세요.
@@ -353,7 +361,11 @@ def build_prompt(article: dict) -> str:
 ⚠️ 행사·상 이름처럼 뜻이 있는 고유명사는 음절을 억지로 음차하기보다 자연스러운 한글 명칭으로 옮기고 괄호로 원어를 병기하세요. 문자 그대로 직역해 어색하거나 원래 뜻과 다른 표현을 만들지 마세요.
 단, 영문+숫자 코드·규격·모델명, 한국 기업 그룹명 약칭(SK, LG 등), 명칭 안의 영문 약어(OpenAI → 오픈AI 등)는 음차하지 말고 그 부분만 원문 그대로 쓰세요."""
 
-    rules = load_prompt("summarizer_rules", fallback=FALLBACK_RULES)
+    _full_writer_rules = load_prompt("writer_rules", fallback="")
+    if _full_writer_rules:
+        rules = _full_writer_rules.split("[summary_3lines 작성 규칙", 1)[0].strip()
+    else:
+        rules = FALLBACK_RULES
 
     if is_official_source(source):
         template = load_prompt("summarizer_official", fallback="""당신은 프론티어 미디어 NewsFinal의 에디터입니다.
