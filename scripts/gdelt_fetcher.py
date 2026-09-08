@@ -165,6 +165,14 @@ def run():
             if not title or not link:
                 continue
 
+            # 국내(한국) 매체 기사 제외 — 이 파이프라인은 "해외 뉴스를 한국어로
+            # 번역"하는 게 편집 방향인데, GDELT는 자유텍스트 검색이라 쿼리와
+            # 느슨하게만 연관된 국내 기사도 종종 섞여 들어온다(실측 2026-09-08:
+            # "emerging markets" 계열 쿼리에 etoday.co.kr 국내 이커머스 기사가
+            # 걸림 — 한국어→한국어 번역은 무의미하고 편집 방향과도 안 맞음).
+            if art.get("sourcecountry") == "South Korea" or art.get("language") == "Korean":
+                continue
+
             src_published = _seendate_to_iso(art.get("seendate", ""))
             age = _age_days(src_published)
             if age is not None and age > MAX_AGE_DAYS:
