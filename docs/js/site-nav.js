@@ -17,6 +17,12 @@ export const UTILITY_LINKS = [
   { href: '/markets.html', label: '마켓' },
   { href: '/country.html', label: '국가별' },
   { href: '/weather.html', label: '날씨' },
+  // 다국어(글로벌) 채널 진입점(2026-09-08 신설) — 사용자 지적: "사이트에
+  // 들어갈 수 있는 공간 같은게 보이질 않는데... 국기를 붙여 놓는다거나
+  // 하는 방식이면 좋을 것 같은데". 서브도메인(global.newsfinal.co.kr) DNS
+  // 연결 전이라도 /global/은 같은 docs/ 배포 안에 있어 상대경로로 지금 바로
+  // 접근 가능 — 그래서 절대 URL이 아니라 상대경로를 쓴다.
+  { href: '/global/', label: '🇺🇸🇮🇳🇫🇷🇪🇸' },
 ];
 
 /**
