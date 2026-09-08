@@ -33,6 +33,7 @@ import re
 import time
 from urllib.parse import urlparse, urlunparse
 
+import feedparser
 import requests
 from dotenv import load_dotenv
 
@@ -49,8 +50,11 @@ except Exception:
 
 GDELT_API = "https://api.gdeltproject.org/api/v2/doc/doc"
 
-# 한국 관련 검색어 — 전체 한국 뉴스가 아니라 해외 다국어 채널에 옮길
-# 가치가 있는(경제·기업·산업 중심) 기사만 선별적으로 겨냥한다.
+# 한국 관련 검색어. 2026-09-08 사용자 지시로 경제·기업 중심에서 확대:
+# "번역 기사에는 제한을 풀어야지. 한국 관련 기사는 다 나가도 좋을 거야.
+# 특히 K-POP 같은 걸 생각하면 한국 가수, 배우, 드라마, 영화 같은 것도
+# 다뤄야 하고" — 해외 독자의 한국 관심사는 경제 뉴스보다 케이팝·드라마·
+# 영화 등 문화 콘텐츠 쪽이 훨씬 크다는 판단(PV 목적과도 직결).
 KR_QUERIES = [
     "South Korea economy",
     "Korea business investment",
@@ -59,6 +63,35 @@ KR_QUERIES = [
     "한국 경제",
     "삼성 OR 현대 OR LG OR SK",
     "한국 수출",
+    "Korean stock market OR KOSPI",
+    "한국 증시 OR 코스피",
+    # 문화·엔터테인먼트
+    "K-pop",
+    "Korean drama",
+    "Korean movie OR Korean film",
+    "한국 가수",
+    "한국 배우",
+    "한국 드라마",
+    "한류",
+    "Korean celebrity",
+    # 음식 등 라이프스타일(2026-09-08 사용자 지시: "한국 증권, 한국 음식
+    # 등 다양한 걸 다뤄야해" — 세계적 한국 기업·문화 관심 확대에 맞춰 넓힘)
+    "Korean food OR K-food",
+    "한국 음식",
+]
+
+# 검증된 한국 매체 RSS 피드 — GDELT 검색보다 훨씬 깨끗하고 누락이 적다.
+# 2026-09-08 사용자 지시: "RSS 소스에 다양한 한국 매체를 추가해도 된다는
+# 거야" — feed_discovery.py(이번 세션 신설)로 실제 검증 후 채택.
+# ⚠️ rss_sources 테이블에는 추가하지 않는다 — 그 테이블은 rss_fetcher.py가
+# 읽어 한국어 메인 사이트로 바로 흘려보내므로, 여기 넣으면 한국 뉴스가
+# 메인 사이트에 노출되는 사고가 난다(이번 다국어 채널의 핵심 전제 위반).
+# 대신 이 스크립트 전용 목록으로 따로 관리한다.
+KR_RSS_FEEDS = [
+    ("텐아시아-종합", "https://www.tenasia.co.kr/rss/topic/"),
+    ("텐아시아-드라마", "https://www.tenasia.co.kr/rss/tv-drama/"),
+    ("텐아시아-음악", "https://www.tenasia.co.kr/rss/music/"),
+    ("텐아시아-영화", "https://www.tenasia.co.kr/rss/movie/"),
 ]
 
 MAX_RECORDS_PER_QUERY = 10
@@ -122,12 +155,68 @@ def _age_days(iso_str: str):
         return None
 
 
+def _save_candidate(title: str, link: str, domain: str, src_published: str, tag: str,
+                     seen_titles: list) -> bool:
+    """제목·링크가 유효하면 크롤링 후 저장. 저장했으면 True."""
+    if not title or not link:
+        return False
+    if is_url_exists(link):
+        return False
+    if title in seen_titles:
+        return False
+    seen_titles.append(title)
+
+    full_text = crawl_full_text(link, timeout=8)
+    if not full_text or len(full_text) < 300:
+        # 원문이 이미 한국어이므로 크롤링 실패 시 제목만으론
+        # multilang_translate.py의 번역 재료가 너무 빈약함 — 스킵.
+        return False
+
+    article_id = insert_article(
+        title_en="", title_ko=title,
+        summary_en="", summary_ko=full_text[:2000],
+        url=link, source=f"DomesticKR:{domain}", category="글로벌",
+        subcategory="", region="korea",
+        country="한국", country_flag="🇰🇷",
+        score=0, full_text=full_text,
+        countries=["한국"],
+        is_published=False,
+        source_published_at=src_published or None,
+        source_data={"tags": normalize_tags([tag], limit=10)},
+    )
+    if article_id > 0:
+        print(f"[DomesticKR 저장] {title[:60]}")
+        return True
+    return False
+
+
 def run():
     init_db()
     seen_titles = []
     inserted = 0
     scanned = 0
 
+    # ① 검증된 한국 매체 RSS(깨끗하고 누락 적음 — 우선순위 상위)
+    for name, feed_url in KR_RSS_FEEDS:
+        try:
+            d = feedparser.parse(feed_url, request_headers={"User-Agent": "Mozilla/5.0"})
+        except Exception as e:
+            print(f"[RSS 실패] {name} — {e}")
+            continue
+        for entry in d.entries[:MAX_RECORDS_PER_QUERY]:
+            scanned += 1
+            title = clean_text(entry.get("title", ""))
+            link = _normalize_url(entry.get("link", ""))
+            src_published = ""
+            if entry.get("published_parsed"):
+                import calendar as _cal
+                src_published = _seendate_to_iso(
+                    time.strftime("%Y%m%dT%H%M%SZ", entry.published_parsed)
+                )
+            if _save_candidate(title, link, urlparse(link).netloc, src_published, name, seen_titles):
+                inserted += 1
+
+    # ② GDELT 검색(RSS 없는 매체·주제까지 넓게 보완)
     for query in KR_QUERIES:
         articles = fetch_gdelt(query)
         time.sleep(REQUEST_INTERVAL)
@@ -142,42 +231,15 @@ def run():
 
             title = clean_text(art.get("title", ""))
             link = _normalize_url(art.get("url", ""))
-            if not title or not link:
-                continue
 
             src_published = _seendate_to_iso(art.get("seendate", ""))
             age = _age_days(src_published)
             if age is not None and age > MAX_AGE_DAYS:
                 continue
 
-            if is_url_exists(link):
-                continue
-            if title in seen_titles:
-                continue
-            seen_titles.append(title)
-
             domain = (art.get("domain") or "unknown").strip()
-            full_text = crawl_full_text(link, timeout=8)
-            if not full_text or len(full_text) < 300:
-                # 원문이 이미 한국어이므로 크롤링 실패 시 GDELT 제목만으론
-                # multilang_translate.py의 번역 재료가 너무 빈약함 — 스킵.
-                continue
-
-            article_id = insert_article(
-                title_en="", title_ko=title,
-                summary_en="", summary_ko=full_text[:2000],
-                url=link, source=f"DomesticKR:{domain}", category="글로벌",
-                subcategory="", region="korea",
-                country="한국", country_flag="🇰🇷",
-                score=0, full_text=full_text,
-                countries=["한국"],
-                is_published=False,
-                source_published_at=src_published or None,
-                source_data={"tags": normalize_tags([query], limit=10)},
-            )
-            if article_id > 0:
+            if _save_candidate(title, link, domain, src_published, query, seen_titles):
                 inserted += 1
-                print(f"[DomesticKR 저장] {title[:60]}")
 
     print(f"\n✅ domestic_kr_fetcher 완료 — {scanned}건 조회, {inserted}건 신규 저장")
 
