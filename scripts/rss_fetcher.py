@@ -647,13 +647,30 @@ def fetch_arxiv_meta(arxiv_id, timeout=12):
         return None, None
 
 
-def crawl_full_text(url: str, timeout: int = 10) -> str:
-    """원문 URL에서 본문 텍스트 추출"""
-    try:
-        domain = urlparse(url).netloc.replace("www.", "")
-        if domain in SKIP_CRAWL_DOMAINS:
-            return ""
+try:
+    import trafilatura
+except Exception:
+    trafilatura = None
 
+import unicodedata
+
+
+def _is_garbled(text: str, sample: int = 2000) -> bool:
+    """trafilatura.fetch_url()이 일부 사이트(2026-09-08 실측: nenow.in)에서
+    압축 해제를 잘못 처리해 바이너리를 문자열로 그대로 반환하는 경우가
+    있다 — 길이만 보면 "성공"처럼 보여 걸러지지 않으므로, 제어문자·깨진
+    문자(U+FFFD) 비율로 실제 텍스트인지 확인한다."""
+    if not text:
+        return True
+    s = text[:sample]
+    bad = sum(1 for c in s if c == "�" or (unicodedata.category(c) == "Cc" and c not in "\n\r\t"))
+    return (bad / max(len(s), 1)) > 0.05
+
+
+def _crawl_full_text_regex_fallback(url: str, timeout: int) -> str:
+    """trafilatura 미설치 시(또는 trafilatura도 실패한 최후 수단)용 원래
+    구현 — BeautifulSoup 없이 <article>/<main>/<p> 태그를 regex로 추출."""
+    try:
         headers = {
             "User-Agent": "Mozilla/5.0 (compatible; NewsFinalBot/1.0)",
             "Accept": "text/html,application/xhtml+xml",
@@ -664,38 +681,99 @@ def crawl_full_text(url: str, timeout: int = 10) -> str:
             return ""
 
         html = res.text
-
-        # BeautifulSoup 없이 간단 파싱 — <article>, <main>, <p> 태그 추출
-        # 스크립트/스타일 제거
         html = re.sub(r'<script[^>]*>.*?</script>', '', html, flags=re.DOTALL|re.IGNORECASE)
         html = re.sub(r'<style[^>]*>.*?</style>', '', html, flags=re.DOTALL|re.IGNORECASE)
 
-        # article 태그 우선
         article_match = re.search(r'<article[^>]*>(.*?)</article>', html, re.DOTALL|re.IGNORECASE)
         if article_match:
             text_html = article_match.group(1)
         else:
-            # main 태그
             main_match = re.search(r'<main[^>]*>(.*?)</main>', html, re.DOTALL|re.IGNORECASE)
             text_html = main_match.group(1) if main_match else html
 
-        # p 태그 내용 추출
         paragraphs = re.findall(r'<p[^>]*>(.*?)</p>', text_html, re.DOTALL|re.IGNORECASE)
         texts = []
         for p in paragraphs:
             t = re.sub(r'<[^>]+>', '', p).strip()
             t = re.sub(r'\s+', ' ', t)
-            if len(t) <= 50:  # 너무 짧은 문장 제외
+            if len(t) <= 50:
                 continue
-            t = strip_photo_credits(t)  # 사진 캡션·크레딧 제거(캡션 날짜 오인 방지)
+            t = strip_photo_credits(t)
             if t:
                 texts.append(t)
 
         full_text = ' '.join(texts)
         return clean_text(full_text) if len(full_text) > 100 else ""
-
     except Exception:
         return ""
+
+
+def _postprocess_trafilatura_text(text: str) -> str:
+    if not text or len(text) <= 100:
+        return ""
+    paras = []
+    for p in text.split("\n"):
+        p = p.strip()
+        if len(p) <= 50:
+            continue
+        p = strip_photo_credits(p)
+        if p:
+            paras.append(p)
+    joined = " ".join(paras)
+    return clean_text(joined) if len(joined) > 100 else ""
+
+
+def crawl_full_text(url: str, timeout: int = 10) -> str:
+    """원문 URL에서 본문 텍스트 추출.
+
+    2026-09-08 사용자 지시("뉴스 서칭, 스크래퍼 등 깃허브에 많을거야")로
+    trafilatura(가장 널리 쓰이는 본문 추출 라이브러리)를 도입 — 기존
+    <article>/<main>/<p> regex 파싱은 실측(id=144276 Phys.org 기사)에서
+    본문을 통째로 못 가져와 full_text가 null이 되는 경우가 잦았고, 이게
+    "소스가 빈약해 의미 없는 반복 서술만 하는" 기사 사고(id=145092)의
+    원인 중 하나였다. 같은 URL을 trafilatura로 재시도하니 6000자+ 정상
+    추출 확인.
+
+    실측 결과(2026-09-08) 두 방식이 사이트마다 강점이 갈렸다:
+    - trafilatura 자체 fetch_url(): phys.org처럼 봇 차단이 있는 사이트를
+      우리 User-Agent보다 더 잘 통과함.
+    - 우리 기존 requests 세션 + trafilatura.extract(): nenow.in처럼
+      trafilatura 자체 fetch가 압축 인코딩을 잘못 처리해 바이너리를
+      반환하는 사이트에서 오히려 더 안정적.
+    그래서 둘 다 시도해 성공하는 쪽을 쓰고, trafilatura 자체가 없거나
+    둘 다 실패하면 기존 regex 파서로 최종 폴백한다.
+    """
+    domain = urlparse(url).netloc.replace("www.", "")
+    if domain in SKIP_CRAWL_DOMAINS:
+        return ""
+
+    if trafilatura is not None:
+        try:
+            downloaded = trafilatura.fetch_url(url)
+            if downloaded and not _is_garbled(downloaded):
+                text = trafilatura.extract(downloaded, include_comments=False, include_tables=False)
+                result = _postprocess_trafilatura_text(text or "")
+                if result and not _is_garbled(result):
+                    return result
+        except Exception:
+            pass
+
+        try:
+            headers = {
+                "User-Agent": "Mozilla/5.0 (compatible; NewsFinalBot/1.0)",
+                "Accept": "text/html,application/xhtml+xml",
+                "Accept-Language": "en-US,en;q=0.9",
+            }
+            res = requests.get(url, headers=headers, timeout=timeout)
+            if res.status_code == 200:
+                text = trafilatura.extract(res.text, include_comments=False, include_tables=False)
+                result = _postprocess_trafilatura_text(text or "")
+                if result:
+                    return result
+        except Exception:
+            pass
+
+    return _crawl_full_text_regex_fallback(url, timeout)
 
 # 소스명 → 기본 국가 매핑
 SOURCE_COUNTRY_MAP = {

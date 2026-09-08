@@ -3044,11 +3044,19 @@ def run():
     #     않도록" — 쿼터는 상한일 뿐 강제 채움이 아니다(그날 후보가 쿼터보다
     #     적으면 있는 만큼만 쓰고 나머지 슬롯은 일반 후보로 채운다).
     def _has_enough_material(a):
+        # 2026-09-08 실사고(id=145092, Phys.org 320자 요약만으로 통과 →
+        # 700자 하한 채우려다 의미 없는 반복 서술) — 사용자 지적("애당초
+        # 소스가 없으면 쓰지 마라는 차단 장치 적용이 제대로 안된거지만"):
+        # 기사 하한이 700자인데 QUOTA 소스 예외 입력 기준은 200자였다 —
+        # 애초에 부족할 수밖에 없는 구조. rss_fetcher.py의 crawl_full_text()
+        # 를 trafilatura 기반으로 교체(같은 날)해 이 예외에 의존하는 빈도
+        # 자체가 줄 것으로 기대되지만, 그래도 남는 케이스의 기준을 500자로
+        # 올려 최소한의 여지를 둔다.
         ft = a.get("full_text") or ""
         if len(ft) >= 1000:
             return True
         if not ft and (a.get("source") or "") in QUOTA_SOURCE_NAMES:
-            return len((a.get("summary_en") or "")) >= 200
+            return len((a.get("summary_en") or "")) >= 500
         return False
 
     solo_candidates = [
