@@ -130,7 +130,7 @@ def call_gemini_weather(prompt: str, max_tokens: int = 2000) -> str | None:
     누락돼 있었다). 북미 그룹 리포트가 유독 짧게(671자) 나온 실사고로
     발견 — 700자 이상을 요구하는 프롬프트인데 첫 모델에서 잘리자마자
     바로 코드 폴백(두 문장짜리 최소 요약)으로 떨어진 것."""
-    return _gemini_client.call(prompt, max_tokens=max_tokens, start_tier=0,
+    return _gemini_client.call(prompt, max_tokens=max_tokens, start_tier=4,
                                 temperature=0.4, timeout=(10, 60))
 
 

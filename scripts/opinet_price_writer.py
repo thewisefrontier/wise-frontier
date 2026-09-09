@@ -255,15 +255,19 @@ def fetch_opinet_prices() -> dict | None:
 
 
 # ── Gemini 호출 (키 로테이션) ─────────────────────────────────
-# 실사고(2026-08-18): start_tier=2(gemini-3.5-flash)에서 재시도까지 포함해
+# 실사고(2026-08-18): start_tier=2(gemini-3.6-flash)에서 재시도까지 포함해
 # 2회 연속 MAX_TOKENS로 실패했는데, 실제 필요한 본문은 646자에 불과했다
 # (max_tokens=8000으로 재현 시 정상 생성 확인). Gemini 3.x는 "thinking" 토큰이
 # maxOutputTokens 예산을 함께 소모하는 구조라, 비-lite 모델이 답변 생성 전에
 # 내부 추론으로 예산을 다 써버리면 눈에 보이는 본문 없이 잘릴 수 있다(공식
 # 문서로 정확한 thinkingConfig 필드까지는 확정 못함). 이 스크립트처럼 짧고
 # 단순한 구조화 기사엔 thinking이 불필요하므로, RPD 500으로 여유도 있는
-# lite 티어(start_tier=3)로 시작하도록 변경 — 사용자 제안.
-def call_gemini(prompt: str, max_tokens: int = 1500, start_tier: int = 3) -> str | None:
+# lite 티어로 시작하도록 start_tier=3으로 변경했었다 — 사용자 제안.
+# ⚠️ 2026-09-10 재발견: 인덱스 3은 gemini-3.5-flash(RPD 20)로, lite가 아니라
+# 여전히 같은 부류의 희소 티어였다 — 진짜 lite(gemini-3.5-flash-lite, RPD
+# 500)는 인덱스 4부터다. 프로젝트 전체 16개 스크립트가 이 한 칸 밀림을
+# 공유하고 있었음(사용자 지적으로 발견, start_tier=4로 일괄 정정).
+def call_gemini(prompt: str, max_tokens: int = 1500, start_tier: int = 4) -> str | None:
     return _gemini_client.call(prompt, max_tokens=max_tokens, start_tier=start_tier,
                                 temperature=0.4, timeout=(10, 30))
 

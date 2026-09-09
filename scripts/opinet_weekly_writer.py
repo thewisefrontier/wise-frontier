@@ -326,7 +326,7 @@ def get_recent_international_context() -> str:
 
 
 # ── Gemini 호출 (키 로테이션) ─────────────────────────────────
-def call_gemini(prompt: str, max_tokens: int = 4000, start_tier: int = 2) -> str | None:
+def call_gemini(prompt: str, max_tokens: int = 4000, start_tier: int = 4) -> str | None:
     return _gemini_client.call(prompt, max_tokens=max_tokens, start_tier=start_tier,
                                 temperature=0.4, timeout=(10, 30))
 

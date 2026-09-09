@@ -441,7 +441,7 @@ def _calc(today: float, prev: float) -> dict:
 
 
 # ── Gemini 호출 ──────────────────────────────────────────────
-def call_gemini(prompt: str, max_tokens: int = 1500, start_tier: int = 2) -> str | None:
+def call_gemini(prompt: str, max_tokens: int = 1500, start_tier: int = 4) -> str | None:
     return _gemini_client.call(prompt, max_tokens=max_tokens, start_tier=start_tier,
                                 temperature=0.15, timeout=(10, 60))
 
@@ -703,7 +703,7 @@ def main():
     # thinking 토큰이 maxOutputTokens 예산을 나눠 쓰는 문제(opinet_price_writer.py에서
     # 먼저 발견, 2026-08-18) — 이 스크립트도 8/20 실측으로 동일 증상 확인.
     # non-lite 대신 lite 티어로 바로 시작 + max_tokens 상향으로 대응.
-    article_text = call_gemini(prompt, max_tokens=2500, start_tier=3)
+    article_text = call_gemini(prompt, max_tokens=2500, start_tier=4)
     time.sleep(8)
 
     if not article_text:
@@ -714,7 +714,7 @@ def main():
         print("  ⚠️ 논평체 감지 → 재생성")
         article_text = call_gemini(
             prompt + "\n\n[재작성 지시] 논평/칼럼 문체가 섞였습니다. 사실 전달 중심으로만 다시 작성하세요.",
-            max_tokens=2500, start_tier=3,
+            max_tokens=2500, start_tier=4,
         ) or article_text
         time.sleep(5)
 
@@ -724,7 +724,7 @@ def main():
         article_text = call_gemini(
             prompt + f"\n\n[재작성 지시] 다음 이름을 원문에 없는 표현으로 잘못 지어냈습니다: {fabricated}. "
                      "고유명사는 원본 자료에 나온 표기를 그대로 옮기고, 확신할 수 없으면 지어내지 말고 원문 표기를 그대로 쓰세요.",
-            max_tokens=2500, start_tier=3,
+            max_tokens=2500, start_tier=4,
         ) or article_text
         time.sleep(5)
 

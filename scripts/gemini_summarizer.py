@@ -409,7 +409,7 @@ def build_prompt(article: dict) -> str:
                                content=content, summary=summary, rules=rules)
 
 
-def call_gemini(prompt: str, retry: int = 2, max_tokens: int = 500, start_tier: int = 2) -> str | None:
+def call_gemini(prompt: str, retry: int = 2, max_tokens: int = 500, start_tier: int = 4) -> str | None:
     return _gemini_client.call(prompt, max_tokens=max_tokens, start_tier=start_tier,
                                 temperature=0.4, timeout=(10, 30))
 
@@ -485,7 +485,7 @@ def fetch_background_context(query: str) -> str:
         "'배경 정보 없음'이라고만 답하세요."
     )
     try:
-        result = _gemini_client.call(search_prompt, max_tokens=400, start_tier=0,
+        result = _gemini_client.call(search_prompt, max_tokens=400, start_tier=4,
                                       temperature=0.3, timeout=(10, 20),
                                       use_search=True, max_stages=1)
         if result and "배경 정보 없음" not in result:
@@ -1163,7 +1163,7 @@ def _generate_update_headline(delta: str) -> str:
 
 {delta[:800]}"""
     try:
-        headline = call_gemini(prompt, max_tokens=40, start_tier=3)
+        headline = call_gemini(prompt, max_tokens=40, start_tier=4)
     except Exception:
         headline = None
     if not headline:
@@ -1294,7 +1294,7 @@ def verify_single_topic(title: str, body: str) -> bool:
 {body[:2500]}
 
 답변 (YES 또는 NO만):"""
-    result = call_gemini(prompt, max_tokens=5, start_tier=3)
+    result = call_gemini(prompt, max_tokens=5, start_tier=4)
     if not result:
         return True
     return "YES" in result.upper()
@@ -2497,7 +2497,7 @@ def run():
 
     # API 연결 테스트
     print(f"[체크] Gemini API 연결 테스트... (키 {len(GEMINI_API_KEYS)}개)")
-    test = call_gemini("ping", retry=1, start_tier=3)
+    test = call_gemini("ping", retry=1, start_tier=4)
     if test is None:
         print("[SKIP] Gemini API 응답 없음 — 건너뜀")
         return

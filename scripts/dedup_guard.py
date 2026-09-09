@@ -174,7 +174,7 @@ def same_event_llm(title_a: str, body_a: str, title_b: str, body_b: str,
     try:
         result = call_nvidia(prompt, max_tokens=10)
         if not result and gemini_fallback:
-            result = gemini_fallback(prompt, max_tokens=10, start_tier=3)
+            result = gemini_fallback(prompt, max_tokens=10, start_tier=4)
     except Exception:
         return False
     return bool(result) and "같음" in result.strip()

@@ -11,7 +11,7 @@ gemini_client.py와 같은 이유 — "다른 기사들에도 사진 자동 삽�
 
 call_gemini_fn 인자로 각 스크립트 자신의 call_gemini() 래퍼를 주입받는다 —
 스크립트마다 GeminiClient 인스턴스·API 키 세트가 다르기 때문(gemini_client.py
-참조). 시그니처는 call_gemini_fn(prompt, max_tokens=30, start_tier=3) 형태를
+참조). 시그니처는 call_gemini_fn(prompt, max_tokens=30, start_tier=4) 형태를
 기대한다(모든 writer 스크립트의 call_gemini 래퍼가 이미 이 시그니처).
 
 사용:
@@ -238,7 +238,7 @@ def fetch_article_image(title: str, body: str, entity: str, call_gemini_fn) -> t
 
 제목: {title}
 본문 앞부분: {(body or "")[:300]}"""
-    kw = call_gemini_fn(prompt, max_tokens=30, start_tier=3)
+    kw = call_gemini_fn(prompt, max_tokens=30, start_tier=4)
     if not kw:
         return "", ""
     query = kw.strip().replace(",", " ").split("\n")[0][:100]

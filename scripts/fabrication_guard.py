@@ -68,7 +68,7 @@ def extract_candidate_names(body: str, call_gemini_fn) -> list:
 {body[:2000]}
 
 답변:"""
-    result = call_gemini_fn(prompt, max_tokens=150, start_tier=3)
+    result = call_gemini_fn(prompt, max_tokens=150, start_tier=4)
     if not result:
         return []
     result = result.strip()
@@ -112,7 +112,7 @@ def verify_no_fabricated_names(source_prompt: str, body: str, call_gemini_fn) ->
 {body[:2000]}
 
 답변:"""
-    result = call_gemini_fn(check_prompt, max_tokens=150, start_tier=3)
+    result = call_gemini_fn(check_prompt, max_tokens=150, start_tier=4)
     suspect = ""
     if result:
         result = result.strip()

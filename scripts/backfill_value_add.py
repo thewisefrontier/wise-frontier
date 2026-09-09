@@ -100,7 +100,7 @@ except Exception:
         return f"{SUPABASE_URL}/rest/v1/articles"
 
 
-def call_gemini(prompt: str, max_tokens: int = 500, start_tier: int = 3):
+def call_gemini(prompt: str, max_tokens: int = 500, start_tier: int = 4):
     return _gemini_client.call(prompt, max_tokens=max_tokens, start_tier=start_tier,
                                 temperature=0.4, timeout=(10, 30))
 

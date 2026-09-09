@@ -177,7 +177,7 @@ except Exception:
         return f"{SUPABASE_URL}/rest/v1/articles"
 
 
-def call_gemini(prompt: str, max_tokens: int = 2500, start_tier: int = 0, use_search: bool = False,
+def call_gemini(prompt: str, max_tokens: int = 2500, start_tier: int = 4, use_search: bool = False,
                  max_stages: int | None = None) -> str | None:
     return _gemini_client.call(prompt, max_tokens=max_tokens, start_tier=start_tier,
                                 temperature=0.3, timeout=(10, 45), use_search=use_search,
@@ -422,7 +422,7 @@ def extract_candidate_names(body: str) -> list:
 {body[:2000]}
 
 답변:"""
-    result = call_gemini(prompt, max_tokens=150, start_tier=3)
+    result = call_gemini(prompt, max_tokens=150, start_tier=4)
     if not result:
         return []
     result = result.strip()
@@ -453,7 +453,7 @@ def verify_no_fabricated_names(source_prompt: str, body: str) -> str:
 {body[:2000]}
 
 답변:"""
-    result = call_gemini(check_prompt, max_tokens=150, start_tier=3)
+    result = call_gemini(check_prompt, max_tokens=150, start_tier=4)
     suspect = ""
     if result:
         result = result.strip()
@@ -654,14 +654,21 @@ def call_gemini_article(prompt: str, max_tokens: int = 3500) -> str | None:
     # max_stages=1로 헛된 재시도를 줄이고, 그래도 막히면 검색 없이(전체
     # 캐스케이드) 폴백해 최소한 기사는 나가게 한다 — 실시간 뉴스 맥락은
     # 빠지지만 시세 수치만으로도 기사 자체는 유효하다.
-    # 2026-08-29 사용자 지적: 플래그십(3.7-flash, start_tier=0)이 무료
+    # 2026-08-29 사용자 지적: 플래그십(3.7-flash, 당시 start_tier=0)이 무료
     # RPD가 작아 5키가 한꺼번에 소진되는 일이 잦았다(cron-job.org로 호출
     # 빈도가 늘면서 더 심해짐) — oil_price_writer.py/opinet_price_writer.py와
-    # 같이 RPD 여유가 큰 lite 티어(start_tier=3)부터 시작하도록 변경.
-    text = call_gemini(prompt, max_tokens=max_tokens, use_search=True, max_stages=1, start_tier=3)
+    # 같이 RPD 여유가 큰 lite 티어부터 시작하도록 start_tier=3으로 변경했었다.
+    # ⚠️ 2026-09-10 재발견: GEMINI_MODELS 배열상 인덱스 3은 gemini-3.5-flash
+    # (RPD 20)이지 lite가 아니다 — lite는 인덱스 4(gemini-3.5-flash-lite,
+    # RPD 500)부터다. "lite로 바꿨다"던 이 수정 자체가 한 칸 밀린 채였다
+    # (사용자 지적: "그게 5개인데 모자라? 설계상의 결함 아닌가?" — 실측:
+    # gemini-3.5-flash가 키당 success 24~31건에 429가 30~34건으로 절반 이상
+    # 실패, 반면 실제 lite 티어는 키당 250건대 성공에 429가 2건뿐이었다).
+    # start_tier=4로 정정.
+    text = call_gemini(prompt, max_tokens=max_tokens, use_search=True, max_stages=1, start_tier=4)
     if not text:
         print("  ⚠️ 검색 그라운딩 실패 → 검색 없이 재시도")
-        text = call_gemini(prompt, max_tokens=max_tokens, use_search=False, start_tier=3)
+        text = call_gemini(prompt, max_tokens=max_tokens, use_search=False, start_tier=4)
     time.sleep(5)
     if not text:
         return None

@@ -200,7 +200,7 @@ def get_pending_events() -> list:
 
 # ── Gemini 호출 (키 로테이션) ────────────────────────────────
 def call_gemini(prompt: str, max_tokens: int = 800,
-                use_search: bool = False, start_tier: int = 2) -> str | None:
+                use_search: bool = False, start_tier: int = 4) -> str | None:
     return _gemini_client.call(prompt, max_tokens=max_tokens, start_tier=start_tier,
                                 temperature=0.1, timeout=(10, 45), use_search=use_search)
 

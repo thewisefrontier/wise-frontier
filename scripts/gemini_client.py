@@ -93,7 +93,7 @@ class GeminiClient:
         self._current_key_idx = 0
         self._exhausted_keys = {m: set() for m in self.models}
 
-    def call(self, prompt, max_tokens=1500, start_tier=0, temperature=0.5,
+    def call(self, prompt, max_tokens=1500, start_tier=4, temperature=0.5,
              timeout=(10, 45), use_search=False, max_stages=None):
         if not self.api_keys:
             print("[ERROR] GEMINI_API_KEY 없음")

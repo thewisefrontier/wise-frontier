@@ -652,7 +652,7 @@ def find_continuing_story(title: str, body_excerpt: str, country: str, hours: in
 같은 사안이면 해당 번호만 숫자로 답하세요. 아니면 "없음"이라고만 답하세요. 다른 말은 하지 마세요."""
 
     try:
-        resp = call_gemini(prompt, max_tokens=10, start_tier=3)
+        resp = call_gemini(prompt, max_tokens=10, start_tier=4)
         if not resp:
             return None
         m = re.match(r"^\s*(\d+)", resp.strip())
@@ -742,7 +742,7 @@ def _generate_update_headline(delta: str) -> str:
 
 {delta[:800]}"""
     try:
-        headline = call_gemini(prompt, max_tokens=40, start_tier=3)
+        headline = call_gemini(prompt, max_tokens=40, start_tier=4)
     except Exception:
         headline = None
     if not headline:
@@ -1586,7 +1586,7 @@ def build_issue_prompt(cluster, existing_summary=None, continuation_title=None, 
                                count=len(main_articles))
 
 
-def call_gemini(prompt, max_tokens=1000, retry=2, start_tier=0):
+def call_gemini(prompt, max_tokens=1000, retry=2, start_tier=4):
     return _gemini_client.call(prompt, max_tokens=max_tokens, start_tier=start_tier,
                                 temperature=0.6, timeout=(10, 30))
 
@@ -2127,7 +2127,7 @@ def generate_update_note(existing_summary: str, new_summary: str) -> str:
 
 기존 내용: {(existing_summary or '')[:300]}
 새 내용: {(new_summary or '')[:300]}"""
-    result = call_gemini(prompt, max_tokens=50, start_tier=3)
+    result = call_gemini(prompt, max_tokens=50, start_tier=4)
     return (result or "업데이트").strip().replace('\n', ' ')[:30]
 
 
@@ -2169,7 +2169,7 @@ def detect_and_register_companies(title: str, body: str, country: str):
 ]
 추출할 기업이 없으면 빈 배열 []을 반환하세요."""
 
-    raw = call_gemini(prompt, max_tokens=800, start_tier=2)
+    raw = call_gemini(prompt, max_tokens=800, start_tier=4)
     if not raw:
         return
 
@@ -2239,7 +2239,7 @@ def verify_single_topic(title: str, body: str) -> bool:
 {body[:2500]}
 
 답변 (YES 또는 NO만):"""
-    result = call_gemini(prompt, max_tokens=5, start_tier=3)
+    result = call_gemini(prompt, max_tokens=5, start_tier=4)
     if not result:
         return True
     return "YES" in result.upper()
@@ -2266,7 +2266,7 @@ def detect_foreign_leftover(body: str) -> str:
 {body[:2500]}
 
 번역 안 된 외국어 단어가 있으면 그 단어들만 쉼표로 나열하세요. 없으면 "없음"이라고만 답하세요."""
-    result = call_gemini(prompt, max_tokens=60, start_tier=3)
+    result = call_gemini(prompt, max_tokens=60, start_tier=4)
     if not result:
         return ""
     result = result.strip()

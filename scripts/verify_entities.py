@@ -96,7 +96,7 @@ except Exception:
         }
 
 
-def call_gemini(prompt: str, max_tokens: int = 300, use_search: bool = True, start_tier: int = 3) -> str | None:
+def call_gemini(prompt: str, max_tokens: int = 300, use_search: bool = True, start_tier: int = 4) -> str | None:
     return _gemini_client.call(prompt, max_tokens=max_tokens, start_tier=start_tier,
                                 temperature=0.1, timeout=(10, 45), use_search=use_search)
 
@@ -170,7 +170,7 @@ def build_extract_prompt(title: str, body: str) -> str:
 
 
 def extract_candidate_names(title: str, body: str) -> list:
-    result = call_gemini(build_extract_prompt(title, body), max_tokens=150, use_search=False, start_tier=3)
+    result = call_gemini(build_extract_prompt(title, body), max_tokens=150, use_search=False, start_tier=4)
     if not result:
         return []
     result = result.strip()

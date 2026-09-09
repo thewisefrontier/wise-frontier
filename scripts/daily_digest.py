@@ -177,7 +177,7 @@ def digest_exists_for_today() -> bool:
     return res.status_code in (200, 206) and len(res.json()) > 0
 
 
-def call_gemini(prompt, max_tokens=3000, start_tier=0):
+def call_gemini(prompt, max_tokens=3000, start_tier=4):
     return _gemini_client.call(prompt, max_tokens=max_tokens, start_tier=start_tier,
                                 temperature=0.5, timeout=(10, 45))
 
@@ -363,7 +363,7 @@ def fetch_article_image(title: str, body: str) -> str:
 
 제목: {title}
 본문 앞부분: {body[:300]}"""
-    kw = call_gemini(prompt, max_tokens=30, start_tier=3)
+    kw = call_gemini(prompt, max_tokens=30, start_tier=4)
     if not kw:
         return ""
     query = kw.strip().replace(",", " ").split("\n")[0][:100]

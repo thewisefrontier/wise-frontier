@@ -129,7 +129,7 @@ except Exception:
 _gemini_client = GeminiClient(GEMINI_API_KEYS, GEMINI_MODELS)
 
 
-def call_gemini(prompt: str, max_tokens: int = 2500, start_tier: int = 3, use_search: bool = False,
+def call_gemini(prompt: str, max_tokens: int = 2500, start_tier: int = 4, use_search: bool = False,
                  max_stages: int | None = None) -> str | None:
     return _gemini_client.call(prompt, max_tokens=max_tokens, start_tier=start_tier,
                                 temperature=0.3, timeout=(10, 45), use_search=use_search,
@@ -342,10 +342,10 @@ def enforce_title_prefix(title: str) -> str:
 
 
 def call_gemini_article(prompt: str, max_tokens: int = 3000) -> str | None:
-    text = call_gemini(prompt, max_tokens=max_tokens, use_search=True, max_stages=1, start_tier=3)
+    text = call_gemini(prompt, max_tokens=max_tokens, use_search=True, max_stages=1, start_tier=4)
     if not text:
         print("  ⚠️ 검색 그라운딩 실패 → 검색 없이 재시도")
-        text = call_gemini(prompt, max_tokens=max_tokens, use_search=False, start_tier=3)
+        text = call_gemini(prompt, max_tokens=max_tokens, use_search=False, start_tier=4)
     time.sleep(5)
     if not text:
         return None

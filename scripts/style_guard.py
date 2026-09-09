@@ -171,7 +171,7 @@ def verify_single_topic(title: str, body: str, call_gemini_fn) -> bool:
 
 답변 (YES 또는 NO만):"""
 
-    result = call_gemini_fn(prompt, max_tokens=5, start_tier=3)
+    result = call_gemini_fn(prompt, max_tokens=5, start_tier=4)
     if not result:
         return True
     return "YES" in result.upper()

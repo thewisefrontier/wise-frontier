@@ -134,7 +134,7 @@ except Exception:
 _gemini_client = GeminiClient(GEMINI_API_KEYS, GEMINI_MODELS)
 
 
-def call_gemini(prompt: str, max_tokens: int = 2500, start_tier: int = 0) -> str | None:
+def call_gemini(prompt: str, max_tokens: int = 2500, start_tier: int = 4) -> str | None:
     return _gemini_client.call(prompt, max_tokens=max_tokens, start_tier=start_tier,
                                 temperature=0.4, timeout=(10, 45))
 

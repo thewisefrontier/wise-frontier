@@ -92,7 +92,7 @@ _gemini_client = GeminiClient(GEMINI_API_KEYS) if GEMINI_API_KEYS else None
 def _call_gemini(prompt: str, max_tokens: int = 3500):
     if not _gemini_client:
         return None
-    return _gemini_client.call(prompt, max_tokens=max_tokens, start_tier=3, temperature=0.3, timeout=(10, 45))
+    return _gemini_client.call(prompt, max_tokens=max_tokens, start_tier=4, temperature=0.3, timeout=(10, 45))
 
 
 def _sb_headers():
