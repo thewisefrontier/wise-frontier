@@ -1,5 +1,48 @@
 [
   {
+    "id": 148819,
+    "title_en": "유럽, 32도 불볕더위 속 로마·바르셀로나 뇌우",
+    "title_ko": "유럽, 32도 불볕더위 속 로마·바르셀로나 뇌우",
+    "summary_ko": "9일(현지시간) 유럽 주요국 수도의 기온이 최저 5°C에서 최고 32°C 사이의 분포를 보이는 가운데, 지역별로 큰 기온 차와 함께 일부 지역에서는 대기 불안정에 따른 기상 현상이 나타났다. 이번 기상 상황에서는 최저기온 5°C를 기록한 러시아(모스크바)가 가장 선선한 날씨를 보였으며, 최고기온 32°C를 기록한 이탈리아(로마)가 유럽 수도 중 가장 더운 곳으로 집계됐다. 모스크바의 최고기온은 20°C로 로마와는 12°C의 큰 격차를 나타냈다. 또한 이탈리아(밀라노)와 스페인(바르셀로나) 등 일부 지역에서는 대류성 폭풍과 연계된 뇌",
+    "url": "internal://weather_group_유럽_today20260909",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_유럽_today20260909",
+    "region": "europe",
+    "country": "유럽",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-09 12:20",
+    "countries": [
+      "영국",
+      "독일",
+      "프랑스",
+      "이탈리아",
+      "스페인",
+      "러시아",
+      "폴란드",
+      "우크라이나"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_germany_20260909.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-09T12:20:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-09 12:20",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
     "id": 148815,
     "title_en": "중동, 46도 덮친 사막 열파…걸프만 중심 극심한 폭염",
     "title_ko": "중동, 46도 덮친 사막 열파…걸프만 중심 극심한 폭염",
@@ -86,50 +129,6 @@
     "investment_idea_en": null
   },
   {
-    "id": 147308,
-    "title_en": "Myanmar Junta Drone Attack Kills Four; Vietnam and Myanmar Hold High-Level Talks",
-    "title_ko": "미얀마 군정 드론 공격으로 사상자 발생 및 베트남과의 고위급 회담 개최",
-    "summary_ko": "[업데이트]\n■ 9월 9일 09:17 — 라훌 티야기 특별 공판검사는 법정에서 이번 공소장에 UAPA 조항을 적용하지 않았으나 테러 공모 및 테러 캠프 조직 등의 혐의에 대한 조사는 유보 상태로 남겨두었으며, 혐의가 입증될 경우 추가 공소장을 제출할 수 있다고 밝혔다. 이들은 인도 국경을 불법으로 넘어 미얀마로 이동해 인도의 테러 조직을 지원하는 민족무장단체(EAG) 대원들을 상대로 드론 작전, 조립, 재밍 기술 등에 대한 사전 계획된 훈련을 제공한 혐의를 받아왔으며, 수사 과정에서 미얀마의 여객기를 목표물로 삼으려 장비를 조립하고",
-    "url": "internal://trend_미얀마_2026090901",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "trend_미얀마",
-    "region": "southeast_asia",
-    "country": "미얀마",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-09 09:17",
-    "countries": [
-      "미얀마",
-      "베트남",
-      "인도",
-      "미국",
-      "우크라이나"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_myanmar_civil_war.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-09T01:52:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-09 01:52",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-09-09 09:17",
-        "note": "파타야 숙소 화장실서 흉기 찔린 남성 사망"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "사진: Yuet Man Lee (CC BY-SA 4.0, Wikimedia Commons)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
     "id": 148140,
     "title_en": "Cholera Spreads Across Africa and Sudan as Authorities Intensify Containment Efforts",
     "title_ko": "아프리카 및 수단 등지에서 콜레라 확산과 방역 총력",
@@ -169,6 +168,50 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "이미지 출처: Wikimedia Commons",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
+    "id": 147308,
+    "title_en": "Myanmar Junta Drone Attack Kills Four; Vietnam and Myanmar Hold High-Level Talks",
+    "title_ko": "미얀마 군정 드론 공격으로 사상자 발생 및 베트남과의 고위급 회담 개최",
+    "summary_ko": "[업데이트]\n■ 9월 9일 09:17 — 라훌 티야기 특별 공판검사는 법정에서 이번 공소장에 UAPA 조항을 적용하지 않았으나 테러 공모 및 테러 캠프 조직 등의 혐의에 대한 조사는 유보 상태로 남겨두었으며, 혐의가 입증될 경우 추가 공소장을 제출할 수 있다고 밝혔다. 이들은 인도 국경을 불법으로 넘어 미얀마로 이동해 인도의 테러 조직을 지원하는 민족무장단체(EAG) 대원들을 상대로 드론 작전, 조립, 재밍 기술 등에 대한 사전 계획된 훈련을 제공한 혐의를 받아왔으며, 수사 과정에서 미얀마의 여객기를 목표물로 삼으려 장비를 조립하고",
+    "url": "internal://trend_미얀마_2026090901",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "trend_미얀마",
+    "region": "southeast_asia",
+    "country": "미얀마",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-09 09:17",
+    "countries": [
+      "미얀마",
+      "베트남",
+      "인도",
+      "미국",
+      "우크라이나"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_myanmar_civil_war.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-09T01:52:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-09 01:52",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-09-09 09:17",
+        "note": "파타야 숙소 화장실서 흉기 찔린 남성 사망"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "사진: Yuet Man Lee (CC BY-SA 4.0, Wikimedia Commons)",
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null
@@ -1801,123 +1844,6 @@
     "source_data": null,
     "image_credit": null,
     "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 144632,
-    "title_en": "유럽, 마드리드 35도 불볕더위…런던 비 소식",
-    "title_ko": "유럽, 마드리드 35도 불볕더위…런던 비 소식",
-    "summary_ko": "8일(현지시간) 유럽 주요국 수도는 최저기온 8°C에서 최고기온 35°C의 넓은 기온 범위를 보이며 지역별로 큰 편차를 나타냈다. 스페인 마드리드가 최고기온 35°C, 최저기온 23°C로 유럽 주요국 수도 중 가장 더운 곳을 기록한 반면, 러시아 모스크바는 최고기온 13°C, 최저기온 8°C에 그치며 가장 선선한 날씨를 보였다. 모스크바의 최고기온은 마드리드보다 22°C나 낮아 대륙 전반에 걸쳐 극명한 기온 차이가 확인됐다. 이탈리아 로마는 최고기온 34°C, 최저기온 23°C로 마드리드에 이어 높은 기온을 기록했으며, 독일 베를린",
-    "url": "internal://weather_group_유럽_today20260908",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_유럽_today20260908",
-    "region": "europe",
-    "country": "유럽",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-08 12:18",
-    "countries": [
-      "영국",
-      "독일",
-      "프랑스",
-      "이탈리아",
-      "스페인",
-      "러시아",
-      "폴란드",
-      "우크라이나"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_germany_20260908.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-08T12:18:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-08 12:18",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 144631,
-    "title_en": "[복권] 美 파워볼 9월 5일 당첨번호 15, 40, 47, 53, 59+파워볼 9",
-    "title_ko": "[복권] 美 파워볼 9월 5일 당첨번호 15, 40, 47, 53, 59+파워볼 9",
-    "summary_ko": "미국 파워볼이 9월 5일(현지시간) 추첨한 당첨번호를 발표했다. 당첨번호는 15, 40, 47, 53, 59이며 파워볼 번호는 9이다. 이날 파워플레이 배수는 2배였다.\n\n이번 추첨의 추정 잭팟은 1억 7500만 달러(현금가치 7540만 달러)였다. 잭팟 금액은 29년에 걸쳐 나눠 받는 연금 지급 기준 총액이고, 현금가치는 당첨자가 한 번에 일시불로 받을 경우 받는 금액이라 잭팟보다 작다. 이번 추첨에서 1등(잭팟) 당첨자는 나오지 않았다. 2등(5개 번호 일치)은 1명으로 각자 100만 달러를 받는다. 2등 당첨 지역은 TX다. ",
-    "url": "internal://powerball_2026-09-05",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "복권당첨정보",
-    "region": "global",
-    "country": "미국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-08 12:01",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/powerball_2026_09_05.png",
-    "view_count": 0,
-    "first_published_at": "2026-09-08T12:01:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-08 12:01",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "뉴스파이널",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 144627,
-    "title_en": "Oil Prices Hit 6-Week High Amid Middle East Tensions as UAE Vows Stable Energy Exports",
-    "title_ko": "중동 전운 속 유가 6주래 최고치…UAE \"에너지 수출 인질 안 돼\"",
-    "summary_ko": "미국과 이란 간의 군사적 충돌이 격화되는 가운데 중동 지역의 지정학적 리스크가 고조되면서 국제 유가가 6주 만에 최고치로 치솟았다고 로이터통신이 7일 보도했다. 앞서 브렌트유 선물이 배럴당 92.68달러를 기록한 데 이어, 중동 분쟁 악화의 여파로 원유 시장의 가격 상승세가 이어지고 있다. 실시간 국제유가 지표에 따르면 서부텍사스산원유(WTI) 현재가는 배럴당 92.43달러로 전일 대비 1.04% 상승한 상태를 나타내고 있다.\n\n이러한 정세 불안 속에서 아랍에미리트(UAE) 당국은 자국의 에너지 수출이 이란과의 전쟁으로 인해 인질로",
-    "url": "internal://cluster_20260908_4faee27a",
-    "source": "NewsFinal",
-    "category": "자원·에너지",
-    "subcategory": "cluster_20260908_4faee27a",
-    "region": "global",
-    "country": "미국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-08 11:42",
-    "countries": [
-      "미국",
-      "이란",
-      "아랍에미리트"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_oil_refinery_crude_oil_tanker_oil_pipeline.jpg",
-    "view_count": 1,
-    "first_published_at": "2026-09-08T11:42:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-08 11:42",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": 135075,
     "summary_3lines_en": null,
     "investment_idea_en": null
   }
