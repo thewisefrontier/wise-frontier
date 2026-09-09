@@ -56,34 +56,20 @@ CATEGORY_EMOJI = {
     "생활/문화": "🎭"
 }
 
-REGION_KEYWORDS = {
-    "africa": ["africa", "nigeria", "kenya", "ghana", "ethiopia", "egypt", "south africa", "allafrica", "maverick", "naira", "punch", "businessday", "businesstech", "guardian nigeria", "vanguard", "ghanaweb", "mining weekly", "engineering news"],
-    "southeast_asia": ["asia", "krasia", "dealstreet", "techinasia", "vietnam", "indonesia", "thailand", "myanmar", "khmer", "malaysia", "philippine", "bangkok", "jakarta", "loop png", "pacific", "fiji", "solomon", "png"],
-    "eastern_europe": ["emerging europe", "intellinews", "poland", "ukraine", "romania", "czechia", "kyiv", "warsaw", "caucasus", "azerbaijan"],
-    "central_asia": ["kazakhstan", "uzbekistan", "kyrgyz", "tajik", "turkmen", "mongolia", "eurasianet", "caravanserai", "astana", "kun.uz", "kabar", "akipress"],
-    "middle_east": ["iraq", "iran", "yemen", "syria", "jordan", "lebanon", "saudi", "qatar", "kuwait", "oman", "bahrain", "uae", "emirates", "al monitor", "middle east eye", "israel", "palestine", "ynet", "wafa", "globes", "israel21c", "haaretz", "jpost"],
-    "south_asia": ["pakistan", "bangladesh", "nepal", "sri lanka", "dawn", "himalayan", "daily star", "india", "hindu", "business today", "economic times", "deccan chronicle"],
-    "caribbean": ["haiti", "jamaica", "trinidad", "dominican", "caribbean", "haitian times", "loop caribbean", "jamaica gleaner", "caribbean news", "jamaica observer"],
-    "latin_america": ["venezuela", "bolivia", "ecuador", "paraguay", "nicaragua", "salvador", "guatemala", "honduras", "news americas", "alo clandestino", "bolivia express", "telesur", "costa rica", "diario"],
-    "oceania": ["australia", "new zealand", "abc news", "rnz", "stuff", "sydney", "auckland", "melbourne"]
-}
-
-def detect_region(source_name: str) -> str:
-    name_lower = source_name.lower()
-    for region, keywords in REGION_KEYWORDS.items():
-        for kw in keywords:
-            if kw in name_lower:
-                return region
-    return "global"
-
-# 국가 감지 — geo_detect.py가 단일 소스(2026-09-10 이전엔 이 파일에
-# COUNTRY_INFO/GLOBAL_COUNTRIES/detect_country()/detect_countries()를
-# 통째로 복제해 갖고 있었다 — gdelt_fetcher.py 등 다른 수집기가 쓰는
-# geo_detect.py와 별개로 관리되면서 드리프트 위험이 있었고, 실제로
-# 국가 인식 커버리지 개선(주요국 수도·기관명 추가)이 여기 반영 안 될
-# 뻔했다(call_gemini 패턴 드리프트와 같은 유형). geo_detect.py에서
-# import해 단일 진실 원천으로 통합한다.
-from geo_detect import COUNTRY_INFO, GLOBAL_COUNTRIES, detect_countries, detect_country
+# 지역/국가 감지 — geo_detect.py가 단일 소스(2026-09-10 이전엔 이 파일에
+# REGION_KEYWORDS/detect_region()/COUNTRY_INFO/GLOBAL_COUNTRIES/
+# detect_country()/detect_countries()를 통째로 복제해 갖고 있었다 —
+# gdelt_fetcher.py 등 다른 수집기가 쓰는 geo_detect.py와 별개로 관리되면서
+# 드리프트 위험이 있었고, 실제로 국가 인식 커버리지 개선(주요국 수도·
+# 기관명 추가)이 여기 반영 안 될 뻔했다(call_gemini 패턴 드리프트와 같은
+# 유형). geo_detect.py 자체 docstring도 원래 "rss_fetcher.py 원본을 고치면
+# 이 파일도 맞춰 갱신할 것"이라고 반대 방향 경고를 갖고 있었음 — 두 사본이
+# 지금은 완전히 동일함을 확인(diff 없음)하고서 import로 통합, 이제부턴
+# geo_detect.py 하나만 고치면 된다.
+from geo_detect import (
+    REGION_KEYWORDS, detect_region,
+    COUNTRY_INFO, GLOBAL_COUNTRIES, detect_countries, detect_country,
+)
 
 # =========================
 # STATE

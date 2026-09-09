@@ -1,16 +1,18 @@
 """
 scripts/geo_detect.py
 -------------------------
-rss_fetcher.py의 지역/국가 감지 로직을 그대로 복사해 독립 모듈로 뗀 것.
+지역/국가 감지 로직의 단일 소스. gdelt_fetcher.py, site_discovery.py,
+rss_fetcher.py가 전부 여기서 REGION_KEYWORDS/detect_region()/
+COUNTRY_INFO/GLOBAL_COUNTRIES/detect_country()/detect_countries()를
+import해 쓴다.
 
-⚠️ rss_fetcher.py는 최상위 코드가 import 시점에 곧바로 실행되는 구조라
-(RSS 수집 루프 + DB 쓰기 + save_state()) 다른 스크립트가 그걸 직접
-import할 수 없다. 이 모듈은 그 파일을 건드리지 않고(운영 중인 파이프라인
-리스크 회피) 같은 로직을 gdelt_fetcher.py 등 새 수집기에서도 쓸 수
-있게 복제했다. rss_fetcher.py 쪽 원본을 고치면 이 파일도 맞춰 갱신할 것.
-
-2026-09-08 도입 — 사용자 지시("GDELT 전역 뉴스 검색 API... 진행해")로
-신설한 gdelt_fetcher.py의 국가 감지에 사용.
+2026-09-08 도입 당시엔 rss_fetcher.py 걸 그대로 복사해 뗀 독립 모듈이었다
+(rss_fetcher.py는 최상위 코드가 import 시점에 곧바로 실행되는 구조라
+다른 스크립트가 직접 import할 수 없어서 — RSS 수집 루프 + DB 쓰기 +
+save_state()). 그 뒤 두 사본이 따로 관리되며 드리프트 위험이 있었고
+(call_gemini 패턴 드리프트와 같은 유형), 2026-09-10 rss_fetcher.py 쪽을
+여기서 import하도록 통합해 이 파일이 유일한 원본이 됐다 — 여기만 고치면
+모든 수집기에 반영된다.
 """
 
 import re
