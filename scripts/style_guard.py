@@ -90,6 +90,23 @@ _POLITE_CONV_RULES = [
     (re.compile(r'습니다' + _SENT_END_LA), '다'),
 ]
 _BNIDA_RE = re.compile(r'([가-힣])니다' + _SENT_END_LA)
+_HANGUL_ANY_RE = re.compile(r'[가-힣]')
+_LATIN_SENT_SPLIT_RE = re.compile(r'(?<=[.!?।])\s+')
+
+
+def _split_sentences(text: str) -> list:
+    """문장 단위 분할. 한글 본문은 기존처럼 '-다.' 어미 뒤에서만 끊어
+    약어·소수점 오분할을 피하고, 그 외(번역된 en/fr/es/hi 등 라틴·데바나가리
+    문자 본문)는 문장부호(.!?, 힌디 danda '।') 뒤 공백에서 끊는다.
+
+    2026-09-10 실사고: translate_guard.py가 번역문에도 ensure_paragraphs()를
+    쓰는데, 이 함수가 '-다.' 패턴만 봐서 한글이 아닌 번역 본문은 문장이 한
+    개로만 잡혀(len(sentences)<2) 문단 분할이 통째로 무력화됐었다(영/불/서
+    번역 기사가 전부 한 덩어리로 발행됨, 사용자 지적: "영문, 프랑스,
+    스페인어 기사도 전혀 문단 정리가 안되고 있어")."""
+    if _HANGUL_ANY_RE.search(text):
+        return [s.strip() for s in re.split(r"(?<=다\.)\s+", text) if s.strip()]
+    return [s.strip() for s in _LATIN_SENT_SPLIT_RE.split(text) if s.strip()]
 
 
 def _bnida_to_nda(m) -> str:
@@ -196,17 +213,14 @@ def ensure_paragraphs(text: str, target: int = 3, max_sentences_per_para: int = 
         return text
 
     if "\n\n" not in text:
-        sentences = [s.strip() for s in re.split(r"(?<=다\.)\s+", text.strip()) if s.strip()]
+        sentences = _split_sentences(text.strip())
         if len(sentences) < 2:
             return text  # 문장이 1개뿐이면 분할 불가
         return _regroup_sentences(sentences, target)
 
     # 이미 문단(블록)이 나뉜 텍스트
     blocks = [b.strip() for b in text.split("\n\n") if b.strip()]
-    block_sentences = [
-        [s.strip() for s in re.split(r"(?<=다\.)\s+", b) if s.strip()]
-        for b in blocks
-    ]
+    block_sentences = [_split_sentences(b) for b in blocks]
     total_sentences = sum(len(s) for s in block_sentences)
 
     # 과다 분절 판단: 블록이 3개 이상인데 블록당 평균 문장 수가 1.5개 이하면

@@ -22,11 +22,14 @@ verify_translation()(NVIDIA, 계열이 다른 모델)로 숫자·사실 보존 �
 
 import os
 import time
+from datetime import datetime, timedelta, timezone
 
 import requests
 from dotenv import load_dotenv
 
 load_dotenv()
+
+KST = timezone(timedelta(hours=9))
 
 from translate_guard import translate_article, verify_translation, LANG_NAMES
 from gemini_client import GeminiClient
@@ -55,6 +58,33 @@ LANGUAGES = ["en", "hi", "fr", "es"]  # Phase 2 확장 시 이 리스트만 수�
 # 가볍다(40콜 ≈ 3~5분, 8분 하한선 안에 여유). 별도 커서 없이 매번
 # "최신순 미번역분"을 다시 조회하므로 유실 없이 계속 이어진다.
 MAX_ARTICLES_PER_CYCLE = 10
+
+# 2026-09-10: 품질 문제 반복(힌디어 한글 유출 재발, 영/불/서 문단 미정리)으로
+# 다국어 채널 공개를 내리고 내부 검증 단계로 전환(사용자 지시: "내부
+# 어드민에서 해외 기사를 하루에 두세건씩만 올리도록 해서 테스트하자").
+# 사이클당 상한(MAX_ARTICLES_PER_CYCLE)과 별개로 "하루(KST)에 신규로 착수하는
+# 기사 수" 자체를 낮게 캡핑한다 — 이미 오늘 일부 언어가 저장된 기사는 상한과
+# 무관하게 남은 언어를 마저 채운다(신규 착수만 카운트).
+DAILY_NEW_ARTICLE_CAP = 3
+
+
+def _kst_today_start_utc_iso() -> str:
+    start_kst = datetime.now(timezone.utc).astimezone(KST).replace(
+        hour=0, minute=0, second=0, microsecond=0)
+    return start_kst.astimezone(timezone.utc).isoformat()
+
+
+def _articles_touched_today() -> set:
+    """오늘(KST) 이미 하나 이상의 언어가 저장된 article_id 집합."""
+    res = requests.get(
+        _sb_url("article_translations"),
+        headers=_sb_headers(),
+        params={"select": "article_id", "created_at": f"gte.{_kst_today_start_utc_iso()}"},
+        timeout=15,
+    )
+    if res.status_code not in (200, 206):
+        return set()
+    return {row["article_id"] for row in (res.json() or [])}
 
 _gemini_client = GeminiClient(GEMINI_API_KEYS) if GEMINI_API_KEYS else None
 
@@ -142,7 +172,18 @@ def run():
         return
 
     candidates = fetch_candidates()
-    print(f"[multilang_translate] 후보 {len(candidates)}건")
+    touched_today = _articles_touched_today()
+    new_budget = max(DAILY_NEW_ARTICLE_CAP - len(touched_today), 0)
+    allowed = []
+    for c in candidates:
+        if c["id"] in touched_today:
+            allowed.append(c)  # 오늘 이미 착수한 기사 — 상한과 무관하게 남은 언어 마저 진행
+        elif new_budget > 0:
+            allowed.append(c)
+            new_budget -= 1
+    candidates = allowed
+    print(f"[multilang_translate] 후보 {len(candidates)}건 "
+          f"(오늘 착수 {len(touched_today)}/{DAILY_NEW_ARTICLE_CAP}건)")
 
     saved = 0
     for art in candidates:
