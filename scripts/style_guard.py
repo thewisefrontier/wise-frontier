@@ -189,7 +189,7 @@ def _regroup_sentences(sentences: list, target: int) -> str:
     return "\n\n".join(" ".join(g) for g in groups)
 
 
-def ensure_paragraphs(text: str, target: int = 3, max_sentences_per_para: int = 4) -> str:
+def ensure_paragraphs(text: str, target: int = 3, max_sentences_per_para: int = 3) -> str:
     """Gemini가 프롬프트의 '문단으로 나누어 작성' 지시를 어기고
     \\n\\n 없이 한 덩어리로 응답하는 경우가 있어(강제성 없는 지시라 준수율이
     들쭉날쭉함), 코드 단에서 문장(-다.) 단위로 강제 분할하는 안전장치.
@@ -208,7 +208,16 @@ def ensure_paragraphs(text: str, target: int = 3, max_sentences_per_para: int = 
     내용도 부실한데"): 이 함수는 그동안 "너무 긴 문단을 쪼개는" 방향만
     다뤘지 "너무 잘게 쪼개진 문단을 다시 묶는" 반대 방향은 없었다. 블록당
     평균 문장 수가 지나치게 낮으면(과다 분절로 판단) 전체 문장을 한 번에
-    모아 target 기준으로 재배분한다."""
+    모아 target 기준으로 재배분한다.
+
+    2026-09-10 재조정(사용자 지적, id=152113 수동 작성 기사 — "한 문단은
+    2~3개 문장을 써서 4줄을 넘어가지 않도록 해. 약간 삐져나와서 5줄이 되는
+    것까지는 괜찮지만 문장 여러개를 묶어서 뭉치로 문단을 만들면 읽기가
+    어려워"): 기존 4는 "3~4줄"이라는 예전 기준을 문장 수로 대충 매핑한
+    값이었는데, 실제로는 2~3문장이 적정선이고 4문장부터는 뭉쳐 보인다는
+    게 이번에 명확해졌다. 3으로 낮춤 — 4문장짜리 블록이 들어오면 3+1로
+    쪼개져 마지막 문단이 문장 1개로 짧게 남는 것도 "약간 삐져나오는 것"
+    허용 범위와 부합한다."""
     if not text:
         return text
 
