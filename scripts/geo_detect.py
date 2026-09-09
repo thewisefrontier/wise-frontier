@@ -173,6 +173,32 @@ COUNTRY_INFO = {
     "netherlands": ("🇳🇱", "네덜란드"), "dutch": ("🇳🇱", "네덜란드"),
     "canada": ("🇨🇦", "캐나다"), "canadian": ("🇨🇦", "캐나다"),
     "portugal": ("🇵🇹", "포르투갈"), "portuguese": ("🇵🇹", "포르투갈"),
+    # ── 주요국 수도·핵심 기관명 (2026-09-10 신설) ──
+    # 실사고: articles_are_related()의 country_uncertain 판정(8/10 안전장치)이
+    # 국가명이 본문에 안 나오면 대부분 발동하는데, 정작 "미국"/"영국" 같은
+    # 국가명 대신 "Washington"/"White House" 등 지명·기관명으로만 언급되는
+    # 주요국 기사가 매우 흔했다(사용자 지적: "기사 생성 건수가 하루에 100개는
+    # 돼야 하는데 영 늘어나질 않네" — 최근 24h 원본의 60.3%가 country 없음).
+    # COUNTRY_INFO는 그동안 프론티어/신흥국 지명은 상세히 채워져 있었는데
+    # (아래 "프랑스어/현지 지명" 등) 주요국(미/영/일/중/러) 수도는 하나도
+    # 없었다 — 안전장치를 느슨하게 바꾸는 대신 이 데이터 공백부터 메운다.
+    "washington": ("🇺🇸", "미국"), "white house": ("🇺🇸", "미국"),
+    "pentagon": ("🇺🇸", "미국"), "wall street": ("🇺🇸", "미국"),
+    "capitol hill": ("🇺🇸", "미국"), "federal reserve": ("🇺🇸", "미국"),
+    "london": ("🇬🇧", "영국"), "downing street": ("🇬🇧", "영국"),
+    "westminster": ("🇬🇧", "영국"), "bank of england": ("🇬🇧", "영국"),
+    "tokyo": ("🇯🇵", "일본"), "bank of japan": ("🇯🇵", "일본"),
+    "beijing": ("🇨🇳", "중국"), "people's bank of china": ("🇨🇳", "중국"),
+    "moscow": ("🇷🇺", "러시아"), "kremlin": ("🇷🇺", "러시아"),
+    "paris": ("🇫🇷", "프랑스"), "berlin": ("🇩🇪", "독일"),
+    "seoul": ("🇰🇷", "한국"),
+    "madrid": ("🇪🇸", "스페인"), "rome": ("🇮🇹", "이탈리아"),
+    "amsterdam": ("🇳🇱", "네덜란드"), "lisbon": ("🇵🇹", "포르투갈"),
+    "ankara": ("🇹🇷", "튀르키예"), "istanbul": ("🇹🇷", "튀르키예"),
+    "ottawa": ("🇨🇦", "캐나다"), "canberra": ("🇦🇺", "호주"),
+    "brasilia": ("🇧🇷", "브라질"), "buenos aires": ("🇦🇷", "아르헨티나"),
+    "santiago": ("🇨🇱", "칠레"), "bogota": ("🇨🇴", "콜롬비아"),
+    "mexico city": ("🇲🇽", "멕시코"),
     # ── 프랑스어/현지 지명 ──
     "cote divoire": ("🇨🇮", "코트디부아르"), "ivory coast": ("🇨🇮", "코트디부아르"), "abidjan": ("🇨🇮", "코트디부아르"),
     "abidjan": ("🇨🇮", "코트디부아르"), "ivoirien": ("🇨🇮", "코트디부아르"),
