@@ -160,6 +160,18 @@ def verify_single_topic(title: str, body: str, call_gemini_fn) -> bool:
     return "YES" in result.upper()
 
 
+def _regroup_sentences(sentences: list, target: int) -> str:
+    """문장 목록을 target개 안팎의 문단으로 균등 재배분."""
+    if len(sentences) < 2:
+        return " ".join(sentences)
+    actual_target = min(target, len(sentences) - 1)
+    actual_target = max(actual_target, 2)
+    n = len(sentences)
+    size = math.ceil(n / actual_target)
+    groups = [sentences[i:i + size] for i in range(0, n, size)]
+    return "\n\n".join(" ".join(g) for g in groups)
+
+
 def ensure_paragraphs(text: str, target: int = 3, max_sentences_per_para: int = 4) -> str:
     """Gemini가 프롬프트의 '문단으로 나누어 작성' 지시를 어기고
     \\n\\n 없이 한 덩어리로 응답하는 경우가 있어(강제성 없는 지시라 준수율이
@@ -172,7 +184,14 @@ def ensure_paragraphs(text: str, target: int = 3, max_sentences_per_para: int = 
     문단이었음): 예전엔 \\n\\n이 하나라도 있으면 통째로 손을 안 댔는데,
     그러면 "섹션은 나뉘어 있지만 섹션 안쪽은 여전히 한 문단"인 경우를 못
     잡았다. 이제 \\n\\n으로 나뉜 블록 각각을 검사해서, max_sentences_per_para를
-    넘는 블록만 추가로 쪼갠다 — 이미 적당한 블록은 그대로 둔다."""
+    넘는 블록만 추가로 쪼갠다 — 이미 적당한 블록은 그대로 둔다.
+
+    2026-09-09 추가 확장(실사고 id=150686 — 실시간 트렌드 기사가 문장마다
+    \\n\\n을 넣어 한 문장짜리 문단 8개로 쪼개짐, 사용자 지적: "제목도 그렇고
+    내용도 부실한데"): 이 함수는 그동안 "너무 긴 문단을 쪼개는" 방향만
+    다뤘지 "너무 잘게 쪼개진 문단을 다시 묶는" 반대 방향은 없었다. 블록당
+    평균 문장 수가 지나치게 낮으면(과다 분절로 판단) 전체 문장을 한 번에
+    모아 target 기준으로 재배분한다."""
     if not text:
         return text
 
@@ -180,22 +199,29 @@ def ensure_paragraphs(text: str, target: int = 3, max_sentences_per_para: int = 
         sentences = [s.strip() for s in re.split(r"(?<=다\.)\s+", text.strip()) if s.strip()]
         if len(sentences) < 2:
             return text  # 문장이 1개뿐이면 분할 불가
-        actual_target = min(target, len(sentences) - 1)
-        actual_target = max(actual_target, 2)
-        n = len(sentences)
-        size = math.ceil(n / actual_target)
-        groups = [sentences[i:i + size] for i in range(0, n, size)]
-        return "\n\n".join(" ".join(g) for g in groups)
+        return _regroup_sentences(sentences, target)
 
-    # 이미 문단(블록)이 나뉜 텍스트 — 블록별로 길이만 확인해 너무 긴 블록만 추가 분할
+    # 이미 문단(블록)이 나뉜 텍스트
+    blocks = [b.strip() for b in text.split("\n\n") if b.strip()]
+    block_sentences = [
+        [s.strip() for s in re.split(r"(?<=다\.)\s+", b) if s.strip()]
+        for b in blocks
+    ]
+    total_sentences = sum(len(s) for s in block_sentences)
+
+    # 과다 분절 판단: 블록이 3개 이상인데 블록당 평균 문장 수가 1.5개 이하면
+    # (예: 8문장이 8블록으로, 한 문장씩) 문단이 아니라 문장 단위로 쪼개진 것 —
+    # 전체를 다시 모아 target 기준으로 재배분한다.
+    if len(blocks) >= 3 and total_sentences and (total_sentences / len(blocks)) <= 1.5:
+        all_sentences = [s for block in block_sentences for s in block]
+        return _regroup_sentences(all_sentences, target)
+
+    # 그 외에는 블록별로 길이만 확인해 너무 긴 블록만 추가로 쪼갠다 —
+    # 이미 적당한 블록은 그대로 둔다.
     out_blocks = []
-    for block in text.split("\n\n"):
-        block = block.strip()
-        if not block:
-            continue
-        sentences = [s.strip() for s in re.split(r"(?<=다\.)\s+", block) if s.strip()]
+    for sentences in block_sentences:
         if len(sentences) <= max_sentences_per_para:
-            out_blocks.append(block)
+            out_blocks.append(" ".join(sentences))
             continue
         for i in range(0, len(sentences), max_sentences_per_para):
             out_blocks.append(" ".join(sentences[i:i + max_sentences_per_para]))
