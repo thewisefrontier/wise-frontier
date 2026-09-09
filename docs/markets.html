@@ -227,7 +227,6 @@
   <div class="header-main">
     <div style="display:flex;align-items:center;gap:10px;">
       <a href="/" class="logo">News<span>Final</span></a>
-      <span id="global-link"></span>
     </div>
     <div class="header-meta">프론티어 미디어</div>
   </div>
@@ -257,9 +256,8 @@
       </button>
       <nav class="nav-sector" id="nav-sector"></nav>
       <script type="module">
-        import { renderSectorNav, renderLogoGlobalLink } from '/js/site-nav.js';
+        import { renderSectorNav } from '/js/site-nav.js';
         renderSectorNav(document.getElementById('nav-sector'), { includeAll: false, activeHref: '/markets.html' });
-        renderLogoGlobalLink(document.getElementById('global-link'));
       </script>
     </div>
   </div>

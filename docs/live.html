@@ -166,7 +166,6 @@
   <div class="header-main">
     <div style="display:flex;align-items:center;gap:10px;">
       <a href="/" class="logo">News<span>Final</span></a>
-      <span id="global-link"></span>
     </div>
     <div class="header-meta">프론티어 미디어</div>
   </div>
@@ -174,8 +173,7 @@
   <button class="page-nav-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">☰ 메뉴 <span class="arrow">▼</span></button>
   <nav class="page-nav" id="page-nav"></nav>
   <script type="module">
-    import { renderPageNav, renderLogoGlobalLink } from '/js/site-nav.js';
-    renderLogoGlobalLink(document.getElementById('global-link'));
+    import { renderPageNav } from '/js/site-nav.js';
     renderPageNav(document.getElementById('page-nav'), {
       activeHref: '/live.html',
       liveHtml: '<span style="color:var(--accent2);">트렌드</span>',

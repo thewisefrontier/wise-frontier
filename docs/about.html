@@ -130,7 +130,6 @@
   <div class="header-main">
     <div style="display:flex;align-items:center;gap:10px;">
       <a href="/" class="logo">News<span>Final</span></a>
-      <span id="global-link"></span>
     </div>
     <div class="header-meta">프론티어 미디어</div>
   </div>
@@ -140,8 +139,7 @@
   </div>
 </header>
 <script type="module">
-  import { renderPageNav, renderLogoGlobalLink } from '/js/site-nav.js';
-  renderLogoGlobalLink(document.getElementById('global-link'));
+  import { renderPageNav } from '/js/site-nav.js';
   renderPageNav(document.getElementById('page-nav'), {
     activeHref: '/about.html',
     extraLinks: [

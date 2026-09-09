@@ -19,31 +19,12 @@ export const UTILITY_LINKS = [
   { href: '/weather.html', label: '날씨' },
 ];
 
-// 다국어(글로벌) 채널 진입점(2026-09-08 신설) — 사용자 지적: "사이트에 들어갈
-// 수 있는 공간 같은게 보이질 않는데". 카테고리 nav(UTILITY_LINKS)에 넣었다가
-// "아니 카테고리에 넣지 말고 메인 로고 옆에 두자니까?" 지적으로 로고 옆
-// 전용 위치로 이동 — renderLogoGlobalLink()가 로고 바로 옆에 별도로 그린다.
-// 국기 이모지(🇺🇸🇮🇳🇫🇷🇪🇸)는 "사이트가 쓸데없이 복잡해" 지적으로 단순 텍스트로
-// 교체함. 언어별 선택(EN/HI/FR/ES 버튼)은 /global/index.html 안의 langSwitch가
-// 담당하므로 여긴 진입점 하나만 있으면 된다. 서브도메인(global.newsfinal.co.kr)
-// DNS 연결 전이라도 /global/은 같은 docs/ 배포 안에 있어 상대경로로 지금 바로
-// 접근 가능 — 그래서 절대 URL이 아니라 상대경로를 쓴다.
-export const GLOBAL_LINK = { href: '/global/', label: 'GLOBAL' };
-
-/**
- * 로고 바로 옆에 다국어 채널 진입 링크를 작게 그린다. 페이지의 .logo
- * 옆에 mountEl(예: 빈 <span>)을 두고 호출하면 된다.
- */
-// 2026-09-10: 힌디어 번역 한글 유출 재발 등 품질 문제가 반복돼(사용자
-// 지시: "내부적으로 테스트를 해보고 나서 오픈하는 게 낫겠다") 진입 링크를
-// 잠시 끈다. /global/ 페이지·번역 파이프라인 자체는 계속 돌며 내부 검증
-// 중 — 준비되면 아래 return을 지우기만 하면 다시 노출된다.
-export function renderLogoGlobalLink(mountEl) {
-  if (!mountEl) return;
-  return;
-  // eslint-disable-next-line no-unreachable
-  mountEl.innerHTML = `<a href="${GLOBAL_LINK.href}" style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:3px 7px;letter-spacing:0.03em;">${GLOBAL_LINK.label}</a>`;
-}
+// 다국어(글로벌) 채널 로고옆 진입 배지(renderLogoGlobalLink)는 2026-09-10
+// 제거함 — 힌디어 번역 한글 유출 재발 등 품질 문제가 반복돼 공개 페이지
+// (docs/global/*)를 통째로 내리고 내부 검증만 계속하기로 함(사용자 지시:
+// "배지를 끄라는게 아니라 제거해"). /global/ 페이지·번역 파이프라인 자체는
+// 계속 돌며 내부 검증 중 — 품질이 검증되면 이 커밋에서 지운 배지를 다시
+// 추가하면 된다(git 히스토리에 보존됨).
 
 /**
  * 상단 page-nav(플랫 바 형태) 링크 목록을 렌더링해 mountEl에 채운다.
