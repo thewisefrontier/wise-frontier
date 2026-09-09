@@ -34,8 +34,14 @@ export const GLOBAL_LINK = { href: '/global/', label: 'GLOBAL' };
  * 로고 바로 옆에 다국어 채널 진입 링크를 작게 그린다. 페이지의 .logo
  * 옆에 mountEl(예: 빈 <span>)을 두고 호출하면 된다.
  */
+// 2026-09-10: 힌디어 번역 한글 유출 재발 등 품질 문제가 반복돼(사용자
+// 지시: "내부적으로 테스트를 해보고 나서 오픈하는 게 낫겠다") 진입 링크를
+// 잠시 끈다. /global/ 페이지·번역 파이프라인 자체는 계속 돌며 내부 검증
+// 중 — 준비되면 아래 return을 지우기만 하면 다시 노출된다.
 export function renderLogoGlobalLink(mountEl) {
   if (!mountEl) return;
+  return;
+  // eslint-disable-next-line no-unreachable
   mountEl.innerHTML = `<a href="${GLOBAL_LINK.href}" style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:3px 7px;letter-spacing:0.03em;">${GLOBAL_LINK.label}</a>`;
 }
 
