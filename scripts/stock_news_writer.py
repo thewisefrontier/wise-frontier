@@ -5,11 +5,12 @@ scripts/stock_news_writer.py
 지금 주식 관련 기사가 그다지 없다" 사용자 지적).
 
 frontier_markets_writer.py(지수·통화 전체를 다루는 "글로벌 마켓 동향")와
-달리, 하루 한 종목을 골라 그 종목 하나에 집중한 기사를 쓴다. 데이터·검증·
-번역 로직은 frontier_markets_writer.py를 그대로 재사용한다(fetch_yahoo_quote,
+달리, 하루 한 종목을 골라 그 종목 하나에 집중한 기사를 쓴다. 데이터·검증
+로직은 frontier_markets_writer.py를 그대로 재사용한다(fetch_yahoo_quote,
 wikipedia_confirms, extract_candidate_names, verify_no_fabricated_names,
-has_column_style, translate_article — 같은 야후 조회·팩트체크·번역 로직을
-또 복붙하지 않는다).
+has_column_style — 같은 야후 조회·팩트체크 로직을 또 복붙하지 않는다).
+영어 번역(translate_article) 호출은 2026-09-09 제거됨 — 다국어 채널이
+재사용하지 않는 낭비 호출이었음(사용자 지시).
 
 종목 선택: API 키 없이 시작하기 위해 고정 워치리스트를 날짜 기반으로
 순환 선택한다(article_image.py의 date-seeded 패턴과 동일한 방식). Finnhub/
@@ -87,12 +88,6 @@ except Exception:
             data = res.json()
             return data[0].get("id", -1) if data else -1
         return -1
-
-try:
-    from translate_guard import translate_article
-except Exception:
-    def translate_article(title_ko: str, body_ko: str, call_gemini_fn, max_tokens: int = 3500) -> tuple[str, str]:
-        return "", ""
 
 # 야후 조회·팩트체크 로직은 frontier_markets_writer.py 재사용(2026-09-03).
 from frontier_markets_writer import (
@@ -426,10 +421,8 @@ def insert_article(ticker: str, name_ko: str, title_ko: str, summary_ko: str,
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
     internal_url = f"internal://stock_news_{article_date.isoformat()}"
 
-    print("  → 영어 번역 생성 중...")
-    title_en, summary_en = translate_article(title_ko, summary_ko, call_gemini)
-    if not summary_en:
-        print("  ⚠️ 영어 번역 실패 → 한국어만 저장")
+    # 2026-09-09 제거(사용자 지시 — 다국어 채널이 이 번역을 재사용하지 않음).
+    title_en, summary_en = "", ""
 
     payload = {
         "title_en": title_en or title_ko,

@@ -174,25 +174,6 @@ except Exception:
 
 _gemini_client = GeminiClient(GEMINI_API_KEYS, GEMINI_MODELS)
 
-# 영어 번역(2026-09-03) — "다른 기사도 [번역]해야지" 요청. frontier_markets_
-# writer.py 등 3개 국제성 전용 스크립트에서 시작해, 사용자 확인 후 이 파일의
-# 메인 클러스터링 파이프라인까지 확대(국내 전용 콘텐츠는 제외 — 이 파일은
-# RSS로 수집된 해외 뉴스를 합성하는 경로라 전량 해당 없음). Gemini 호출
-# 비용을 고려해(사용자 지적) 항상 lite 계열(start_tier=3)로 고정해서 부른다
-# — 플래그십 모델 쿼터를 번역이 잠식하지 않도록.
-try:
-    from translate_guard import translate_article, translate_extra_fields
-except Exception:
-    def translate_article(title_ko: str, body_ko: str, call_gemini_fn, max_tokens: int = 3500) -> tuple[str, str]:
-        return "", ""
-    def translate_extra_fields(summary_3lines_ko: str, investment_idea_ko: str, call_gemini_fn,
-                                lang: str = "en", max_tokens: int = 1200) -> tuple[str, str]:
-        return "", ""
-
-
-def _call_gemini_for_translation(prompt: str, max_tokens: int = 3500):
-    return _gemini_client.call(prompt, max_tokens=max_tokens, start_tier=3, temperature=0.3, timeout=(10, 45))
-
 # 프롬프트 캐시
 _prompt_cache = {}
 
@@ -705,17 +686,13 @@ def save_article(title_ko, summary_ko, cluster_key, category, region, country=""
     url = f"internal://{cluster_key}"
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
 
+    # 2026-09-09 제거(사용자 지시: "본진의 영문기사 번역은 일종의 테스트베드였는데,
+    # 이거 가져다 쓸 것도 아니면 의미가 없네" — 다국어(글로벌) 채널이 이 번역을
+    # 재사용하지 않고 국내기사 전용 별도 파이프라인(multilang_translate.py)을
+    # 쓰기로 확정되면서, 여기서 매 발행마다 돌던 영문 번역 Gemini 호출이
+    # 아무도 안 쓰는 데이터를 만들 뿐인 낭비가 됨 — translate_article() 호출 제거.
     title_en, summary_en = "", ""
     summary_3lines_en, investment_idea_en = "", ""
-    if published:
-        title_en, summary_en = translate_article(title_ko, summary_ko, _call_gemini_for_translation)
-        # 2026-09-09 사용자 지적("영어로 보기... 3줄 요약은 번역이 안되는데",
-        # "투자 아이디어도 번역이 따로 안되네") — title/body만 번역되고 이
-        # 두 필드는 애초에 번역 대상이 아니었다. translate_guard.py에 별도
-        # 함수 추가해 여기서도 채운다.
-        summary_3lines_en, investment_idea_en = translate_extra_fields(
-            summary_3lines, investment_idea, _call_gemini_for_translation
-        )
 
     payload = {
         "title_en": title_en or title_ko,

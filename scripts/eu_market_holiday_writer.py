@@ -58,12 +58,6 @@ except Exception:
 
 from frontier_markets_writer import fetch_yahoo_quote
 
-try:
-    from translate_guard import translate_article
-except Exception:
-    def translate_article(title_ko: str, body_ko: str, call_gemini_fn=None, max_tokens: int = 3500):
-        return "", ""
-
 from market_calendar import (
     uk_holiday_name, uk_previous_trading_date,
     de_holiday_name, de_previous_trading_date,
@@ -173,7 +167,8 @@ def insert_article(market: dict, title_ko: str, summary_ko: str, article_date: d
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
     internal_url = f"internal://{market['key']}_{article_date.isoformat()}"
 
-    title_en, summary_en = translate_article(title_ko, summary_ko, None)
+    # 2026-09-09 제거(사용자 지시 — 다국어 채널이 이 번역을 재사용하지 않음).
+    title_en, summary_en = "", ""
 
     payload = {
         "title_en": title_en or title_ko,
