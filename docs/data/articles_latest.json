@@ -1,9 +1,62 @@
 [
   {
+    "id": 153032,
+    "title_en": "[국제유가] WTI 배럴당 97달러…이란 핵 협상과 지정학적 긴장",
+    "title_ko": "[국제유가] WTI 배럴당 97달러…이란 핵 협상과 지정학적 긴장",
+    "summary_ko": "국제유가가 9일(현지시간) 상승했다. 시장 집계에 따르면 WTI 원유 선물은 뉴욕상업거래소(NYMEX)에서 배럴당 96.67달러에 거래를 마쳤으며, 전일 종가(91.30달러) 대비 5.88%(5.37달러) 올랐다.\n\n함께 거래된 브렌트유 역시 배럴당 101.64달러로 마감해, 전일 종가(95.52달러) 대비 6.41%(6.12달러) 상승했다.\n\n이번 유가 상승은 중동 지역의 지정학적 리스크가 부각된 데 따른 것이다. 외신 보도에 따르면 미국이 이란의 핵 합의 복귀를 압박하기 위해 봉쇄 조치를 경고하는 등 중동 산유국을 둘러싼 긴장감",
+    "url": "internal://oil_price_2026-09-09",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국제유가",
+    "region": "글로벌",
+    "country": "국제",
+    "country_flag": "🛢️",
+    "score": 1,
+    "created_at": "2026-09-10 06:05",
+    "countries": [
+      "미국",
+      "사우디아라비아",
+      "러시아"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/oil_2026_09_09.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-10T06:05:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-10 06:05",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "wti": {
+        "pct": 5.881708652792995,
+        "prev": 91.3,
+        "price": 96.67,
+        "change": 5.3700000000000045
+      },
+      "date": "2026-09-09",
+      "brent": {
+        "pct": 6.407035175879402,
+        "prev": 95.52,
+        "price": 101.64,
+        "change": 6.1200000000000045
+      },
+      "source": "Yahoo Finance"
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
     "id": 152113,
     "title_en": "헌터 바이든 밈코인 '$LAPTOP', 출시 2분 만에 고점 찍고 90분 만에 98% 폭락",
     "title_ko": "헌터 바이든 밈코인 '$LAPTOP', 출시 2분 만에 고점 찍고 90분 만에 98% 폭락",
-    "summary_ko": "[업데이트]\n■ 9월 10일 05:56 — 애플은 9일(현지시간) 미국 캘리포니아주 쿠퍼티노의 스티브 잡스 시어터에서 '서프라이즈 앤드 샤인' 기조연설을 열고 브랜드 최초의 폴더블 스마트폰인 아이폰 듀오와 차세대 플래그십 모델인 아이폰 18 프로 및 아이폰 18 프로 맥스를 공개했다. 전임 CEO 팀 쿡이 미소 지으며 잠시 무대에 올라 새로 최고경영자 자리에 오른 존 터너스에게 바톤을 넘겨주는 상징적인 세리머니가 진행되었으며, 이번 행사에서는 기본형 모델인 아이폰 18과 아이폰 에어 2에 대한 갱신 소식은 다뤄지지 않았다. 아이폰 ",
+    "summary_ko": "헌터 바이든 전 미국 대통령 아들이 공동 창업한 밈코인 '랩탑(LAPTOP)'이 9일(현지시간) 오전 8시 이더리움 레이어2 네트워크 베이스(Base)에서 정식 출시된 직후 급등과 급락을 동시에 겪었다. 출시 2분 만인 오전 8시 4분 190.81달러까지 치솟았던 가격은 1시간도 안 돼 3.70달러로 주저앉으며 고점 대비 약 99% 폭락했고, 이날 오후에는 1.97달러 선에서 거래됐다.\n\n가격이 정점을 찍었을 당시 완전희석가치(FDV)는 약 1440억달러까지 치솟았지만, 실제 유동성 풀은 4만8000달러에 불과해 소규모 매도 물량에",
     "url": "internal://realtrend_Hunter_Biden_Meme_Coin_crash_2026091002",
     "source": "NewsFinal",
     "category": "경제",
@@ -16,7 +69,7 @@
     "countries": null,
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_cryptocurrency_digital_currency_computer_screen.jpg",
-    "view_count": 1,
+    "view_count": 2,
     "first_published_at": null,
     "update_log": [
       {
@@ -26,6 +79,10 @@
       {
         "timestamp": "2026-09-10 05:56",
         "note": "애플 첫 폴더블 아이폰 듀오 등 공개"
+      },
+      {
+        "timestamp": "2026-09-09T21:04:20",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
