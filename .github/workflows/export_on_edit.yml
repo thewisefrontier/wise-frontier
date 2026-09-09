@@ -1,0 +1,64 @@
+name: NewsFinal - Export On Edit
+
+# 어드민(docs/admin.html)에서 기사를 저장·발행·삭제하면 export-trigger-worker.js가
+# 이 워크플로우를 workflow_dispatch로 즉시 호출한다. 목적은 단 하나 —
+# docs/data/articles.json(목록 페이지가 읽는 정적 스냅샷)이 본문 페이지
+# (article.html, Supabase 라이브 조회)보다 뒤처지는 시간을 없애는 것.
+#
+# 기존 run.yml(전체 파이프라인, ~30분)과 달리 export_articles.py 한 줄만
+# 돈다 — Supabase 조회 + JSON 저장 + git 커밋뿐이라 보통 1분 안에 끝난다.
+# 사용자 지적(2026-09-10): "본문페이지하고 미리보기 페이지를 따로 만드는
+# 거지?... 서버 자원도 적게 먹고 본문 변경시에도 빠르게 적용될 듯".
+#
+# concurrency 그룹을 run.yml과 분리한다 — 무거운 전체 파이프라인이 도는
+# 동안에도 이 가벼운 갱신은 기다리지 않고 바로 실행돼야 "빠르게 적용"의
+# 의미가 있다.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: newsfinal-export-on-edit
+  cancel-in-progress: false
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - name: Python 설정
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: 패키지 설치 (requests만 필요 — 전체 requirements.txt 안 씀)
+        run: pip install requests
+
+      - name: 웹사이트 데이터 내보내기
+        run: python scripts/export_articles.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+
+      - name: 변경사항 커밋 및 푸시
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add -A
+          git diff --staged --quiet || git commit -m "Export articles (admin edit trigger)"
+          for i in 1 2 3 4 5; do
+            git pull origin main -X ours --no-rebase
+            git push && break
+            echo "push failed (attempt $i) - another workflow pushed first, retrying"
+            sleep $((RANDOM % 8 + 3))
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

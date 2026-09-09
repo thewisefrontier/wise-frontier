@@ -361,6 +361,17 @@
       }
     } catch(e) {}
 
+    // export-trigger 비밀키 자동 로드(2026-09-10 신설) — 저장/발행/삭제
+    // 직후 목록 페이지 정적 스냅샷(articles.json)을 즉시 재생성시키는 데 씀.
+    // upload_secret처럼 매번 prompt() 띄우지 않고 gemini_key와 같은 방식으로
+    // settings 테이블에서 조용히 불러온다.
+    try {
+      const { data: exportSecretData } = await sb.from('settings').select('value').eq('key', 'export_trigger_secret').single();
+      if (exportSecretData?.value) {
+        sessionStorage.setItem('export_trigger_secret', exportSecretData.value);
+      }
+    } catch(e) {}
+
     // 관리자 전용 UI 표시
     if (currentRole === 'admin') {
       document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
@@ -615,6 +626,7 @@
       if (error) { toast(`오류: ${error.message}`, 'error'); return; }
       toast('저장됐습니다', 'success');
     }
+    triggerExport();
     closeEdit();
     loadArticles();
   }
@@ -627,6 +639,7 @@
       .eq('is_published', false);
     if (error) { toast(`오류: ${error.message}`, 'error'); return; }
     toast('전체 발행됐습니다', 'success');
+    triggerExport();
     loadArticles();
   }
 
@@ -635,6 +648,7 @@
     const { error } = await sb.from('articles').update({ is_published: true }).eq('id', id);
     if (error) { toast(`오류: ${error.message}`, 'error'); return; }
     toast('발행됐습니다', 'success');
+    triggerExport();
     loadArticles();
   }
 
@@ -644,6 +658,7 @@
     const { error } = await sb.from('articles').delete().eq('id', id);
     if (error) { toast(`삭제 실패: ${error.message}`, 'error'); return; }
     toast('삭제됐습니다', 'success');
+    triggerExport();
     loadArticles();
   }
 
@@ -654,6 +669,7 @@
     const { error } = await sb.from('articles').delete().eq('id', id);
     if (error) { toast(`삭제 실패: ${error.message}`, 'error'); return; }
     toast('삭제됐습니다', 'success');
+    triggerExport();
     closeEdit();
     loadArticles();
   }
@@ -1230,6 +1246,32 @@
     toast(`v${nextVersion}으로 저장됐습니다`, 'success');
     document.getElementById('prompt-modal')?.remove();
     showPrompts(document.getElementById('prompt-menu'));
+  }
+
+  // ── 목록 스냅샷 즉시 재생성 트리거 ─────────────────────────
+  // 2026-09-10 신설 — 사용자 지적: "본문페이지하고 미리보기 페이지를 '따로'
+  // 만드는 거지? 미리보기 페이지는 본문페이지에서 일부만 가져와서 보여주는
+  // 걸로 바꾸면 안되나?" 목록 페이지가 읽는 docs/data/articles.json은
+  // 파이프라인 사이클(~1시간)에만 갱신돼, 어드민에서 방금 고친 내용이
+  // 본문 페이지(Supabase 라이브 조회)엔 바로 반영돼도 목록엔 한동안 안
+  // 보이는 공백이 있었다. 목록 페이지 자체를 실시간 조회로 바꾸면(사용자가
+  // 처음 제안한 방식) Supabase 부하가 방문자 수에 비례해 커져(2026-09-04
+  // "모바일 로딩 느려진다" 지적으로 정적 스냅샷을 도입한 이유와 정반대
+  // 방향) — 대신 저장/발행/삭제 직후 가벼운 워크플로우(export_on_edit.yml,
+  // export_articles.py 한 줄만 돌아 ~1분 안에 끝남)를 즉시 깨우는 쪽으로
+  // 공백을 없앤다. 실패해도 조용히 무시(부가 기능 — 다음 정기 사이클에서
+  // 어차피 따라잡힘).
+  const EXPORT_TRIGGER_WORKER_URL = 'https://newsfinal-export-trigger.thewisefrontier.workers.dev';
+
+  async function triggerExport() {
+    const secret = sessionStorage.getItem('export_trigger_secret');
+    if (!secret) return;
+    try {
+      await fetch(`${EXPORT_TRIGGER_WORKER_URL}/trigger`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${secret}` },
+      });
+    } catch (e) {}
   }
 
   // ── 이미지 관리 ─────────────────────────────────────────

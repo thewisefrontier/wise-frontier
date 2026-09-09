@@ -1,0 +1,7 @@
+name = "newsfinal-export-trigger"
+main = "export-trigger-worker.js"
+compatibility_date = "2026-01-01"
+
+# EXPORT_TRIGGER_SECRET은 wrangler secret put EXPORT_TRIGGER_SECRET --config wrangler-export-trigger.toml 으로 설정
+# GITHUB_DISPATCH_TOKEN은 wrangler secret put GITHUB_DISPATCH_TOKEN --config wrangler-export-trigger.toml 으로 설정
+# (이 리포 하나에만 범위를 좁힌 fine-grained PAT — Actions: write, Contents: read/write)
