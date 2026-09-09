@@ -243,23 +243,10 @@ def _won_style_decimal(n: float) -> str:
     return f"{sign}{''.join(parts)}.{frac:02d}"
 
 
-def _won_style_amount(n: float) -> str:
-    """91,256,495,759 같은 콤마 표기 대신 "912억5649만5759" 식 억/만
-    그룹핑으로 변환(2026-09-04 사용자 지적 — 리플 기사에서 시가총액이
-    콤마 원문 그대로 나가 "가시성이 너무 떨어진다"고 지적받음). 프롬프트에
-    넣는 참고자료 자체를 이 형식으로 만들어서, Gemini가 콤마 원본을
-    그대로 베낄 여지를 원천 차단한다."""
-    n = int(round(n))
-    eok, rest = divmod(n, 100_000_000)
-    man, remainder = divmod(rest, 10_000)
-    parts = []
-    if eok:
-        parts.append(f"{eok}억")
-    if man:
-        parts.append(f"{man}만")
-    if remainder or not parts:
-        parts.append(f"{remainder}")
-    return "".join(parts)
+# _won_style_amount()는 2026-09-10 style_guard.to_won_style_amount()로
+# 공용화(stock_news_writer.py 거래량 필드에서 완전히 동일한 로직이
+# 복붙돼 있던 걸 발견 — 두 곳 다 "콤마 원문 그대로 나감" 실사고 이력 공유).
+# 하단 try/except 임포트 블록에서 to_won_style_amount로 가져온다.
 
 
 # ── 기사 프롬프트 ────────────────────────────────────────────
@@ -294,7 +281,7 @@ def build_article_prompt(symbol: str, name_ko: str, data: dict, mf_ctx: dict | N
         if mf_ctx.get("market_cap_rank"):
             parts.append(f"시가총액 순위: {mf_ctx['market_cap_rank']}위")
         if mf_ctx.get("market_cap"):
-            parts.append(f"시가총액: {_won_style_amount(float(mf_ctx['market_cap']))}달러")
+            parts.append(f"시가총액: {to_won_style_amount(float(mf_ctx['market_cap']))}달러")
         if mf_ctx.get("change_pct_7d") is not None:
             parts.append(f"7일 변동률: {float(mf_ctx['change_pct_7d']):+.2f}%")
         if parts:
@@ -378,12 +365,15 @@ TITLE_PREFIX = "[가상자산 동향]"
 # 접두어를 흘리면 태그가 중복 부착되는 결함이 있었다(oil_price_writer.py
 # 등은 이미 이 폴백이 있었음).
 try:
-    from style_guard import parse_article_output, ensure_paragraphs, enforce_title_prefix as _sg_enforce_title_prefix
+    from style_guard import parse_article_output, ensure_paragraphs, enforce_title_prefix as _sg_enforce_title_prefix, to_won_style_amount
 except Exception:
     def _sg_enforce_title_prefix(title, prefix, bare_name, particles=None):
         return f"{prefix} {(title or '').strip()}".strip()
     def ensure_paragraphs(text: str, target: int = 3, max_sentences_per_para: int = 4) -> str:
         return text
+    def to_won_style_amount(n) -> str:
+        n = int(round(n))
+        return f"{n:,}"
     def parse_article_output(text: str) -> tuple[str, str]:
         title, body = "", ""
         m_title = re.search(r"TITLE:\s*(.+?)(?:\n|$)", text)

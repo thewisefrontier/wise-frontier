@@ -288,6 +288,32 @@ def enforce_title_prefix(title: str, prefix: str, bare_name: str, particles=None
     return f"{prefix} {t}" if t else prefix
 
 
+def to_won_style_amount(n) -> str:
+    """정수를 "912억5649만5759" 식 억/만 그룹핑 문자열로 변환(단위 접미사는
+    호출부가 붙인다 — 원/달러/주 등 맥락에 따라 다르므로).
+
+    2026-09-04 crypto_news_writer.py에 처음 도입(사용자 지적 — 리플 기사
+    시가총액이 "91,256,495,759" 콤마 원문 그대로 나가 "가시성이 너무
+    떨어진다"). 2026-09-10 stock_news_writer.py에서 거래량("32,177,880주")
+    이 같은 방식으로 콤마 원문 그대로 나간 게 재발해(사용자 지적) 두 파일에
+    거의 동일한 코드가 복붙돼 있던 걸 발견 — style_guard.py로 공용화.
+    프롬프트에 넣는 참고자료 자체를 이 형식으로 만들어서, Gemini가 콤마
+    원본을 그대로 베낄 여지를 원천 차단하는 용도로 쓴다(화폐 금액뿐 아니라
+    거래량 등 큰 정수 전반에 적용 가능 — [[feedback_korean_won_man_unit_format]]
+    억/만 그룹핑 규칙 참고)."""
+    n = int(round(n))
+    eok, rest = divmod(n, 100_000_000)
+    man, remainder = divmod(rest, 10_000)
+    parts = []
+    if eok:
+        parts.append(f"{eok}억")
+    if man:
+        parts.append(f"{man}만")
+    if remainder or not parts:
+        parts.append(f"{remainder}")
+    return "".join(parts)
+
+
 def parse_article_output(text: str) -> tuple[str, str]:
     """"TITLE: ...\\nBODY: ..." 형식의 Gemini 응답을 (title, body)로 분리."""
     title, body = "", ""
