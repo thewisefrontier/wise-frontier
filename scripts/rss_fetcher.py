@@ -1094,14 +1094,19 @@ def entry_published_iso(entry):
 
 
 def fetch_source(s):
-    """단일 소스에서 최근 기사 다건 수집 (발행일 필터 적용)"""
-    import socket
+    """단일 소스에서 최근 기사 다건 수집 (발행일 필터 적용)
+
+    ⚠️ socket.setdefaulttimeout()으로 타임아웃을 걸면 프로세스 전역 상태라
+    ThreadPoolExecutor(max_workers=20)의 다른 스레드가 먼저 끝나며 그 값을
+    되돌리는 순간(원래값 None으로), 아직 통신 중인 스레드의 타임아웃이 함께
+    사라져 무한정 블록될 수 있다(2026-09-09 밤 실사고 — RSS 수집 단계가
+    1시간 25분 걸려 파이프라인 전체가 큐에 밀려 3시간+ 발행 중단됨). requests로
+    직접 받아 feedparser에 바이트를 넘기면 스레드마다 독립적인 타임아웃이 걸린다.
+    """
     name = s["name"]
     try:
-        old_timeout = socket.getdefaulttimeout()
-        socket.setdefaulttimeout(10)
-        feed = feedparser.parse(s["url"], request_headers={"User-Agent": "Mozilla/5.0"})
-        socket.setdefaulttimeout(old_timeout)
+        resp = requests.get(s["url"], headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
+        feed = feedparser.parse(resp.content)
         if not feed.entries:
             return [], name, "no_entries"
 

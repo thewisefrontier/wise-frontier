@@ -89,6 +89,14 @@ jobs:
 
       - name: RSS 수집 및 발송
         if: steps.guard.outputs.skip != 'true'
+        # ⚠️ 이 스텝만 timeout-minutes가 없어서, 소스 하나가 응답 없이 멈추면
+        # (2026-09-09 밤 실사고: fetch_source()의 socket.setdefaulttimeout()
+        # 전역상태 레이스로 1시간25분 소요) 잡 전체가 몇 시간이고 안 끝나고
+        # concurrency 큐에 후속 실행들이 계속 밀려 취소되며 발행이 멈췄다.
+        # 코드 쪽 근본원인(scripts/rss_fetcher.py fetch_source)은 수정했지만,
+        # 다른 스텝들처럼 이 안전장치도 같이 둔다.
+        timeout-minutes: 10
+        continue-on-error: true
         run: python scripts/rss_fetcher.py
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
