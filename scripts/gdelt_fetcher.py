@@ -63,6 +63,22 @@ GDELT_QUERIES = [
     "Ivory Coast OR Senegal OR Cote d'Ivoire (economy OR business)",
     "frontier markets investment",
     "emerging markets Africa business",
+    # 1차·2차 산업(원자재·제조업) — 2026-09-09 사용자 지적: "중진국, 신흥국의
+    # 경우는 1차, 2차산업 정보가 많이 나올텐데, 그런게 없어". 기존 "(economy
+    # OR business OR politics)" 식 국가별 포괄 쿼리는 GDELT 색인 상 정치·분쟁
+    # 기사에 밀려 산업·원자재 기사가 잘 안 걸린다(실측: 최근 30일 산업·기업+
+    # 자원·에너지 합쳐 전체 발행량의 6%대). 업종·품목명을 직접 검색어에 넣어
+    # 무역·산업 전문지 기사를 겨냥한다.
+    "steel OR shipbuilding Vietnam OR Indonesia OR Philippines",
+    "textile OR garment factory Bangladesh OR Vietnam OR Cambodia",
+    "mining OR minerals (copper OR cobalt OR lithium OR gold) Africa",
+    "rare earth OR nickel OR bauxite Indonesia OR DRC OR Zambia",
+    "agriculture OR commodity export Nigeria OR Kenya OR Ghana OR Ethiopia",
+    "cocoa OR coffee OR rubber OR palm oil Ivory Coast OR Ghana OR Vietnam OR Indonesia",
+    "manufacturing OR factory investment Vietnam OR Indonesia OR Bangladesh",
+    "oil OR gas OR petrochemical Nigeria OR Iraq OR Kazakhstan",
+    "cement OR fertilizer OR petrochemical plant Egypt OR Pakistan OR Bangladesh",
+    "port OR shipping OR logistics Vietnam OR Philippines OR Nigeria",
     # 해외 시각에서 본 한국 — 2026-09-08 사용자 지시: "국내 소스에서는
     # 다뤄지지 않았는데, 해외에서 국내 이야기를 다룬 게 있다면 그거는
     # 우리쪽에서 보도할만한 가치가 있을 것 같아". 아래 결과는 이 파일의
