@@ -119,7 +119,7 @@
     "countries": null,
     "is_published": true,
     "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/ff/Federal_Hall_August_2017_01.jpg/960px-Federal_Hall_August_2017_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-    "view_count": 0,
+    "view_count": 2,
     "first_published_at": null,
     "update_log": [],
     "byline": "뉴스파이널 편집국",
@@ -456,7 +456,7 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_ebola_virus_disease.jpg",
-    "view_count": 1,
+    "view_count": 2,
     "first_published_at": "2026-09-10T00:29:00",
     "update_log": [
       {
@@ -2044,59 +2044,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "이미지 출처: Wikimedia Commons",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 148144,
-    "title_en": "[국제유가] WTI 배럴당 94달러…지정학적 리스크와 수급 불안",
-    "title_ko": "[국제유가] WTI 배럴당 94달러…지정학적 리스크와 수급 불안",
-    "summary_ko": "국제유가가 8일(현지시간) 상승했다. 시장 집계에 따르면 WTI 원유 선물은 뉴욕상업거래소(NYMEX)에서 배럴당 94.31달러에 거래를 마쳤으며, 전일 종가(91.01달러) 대비 3.63%(3.30달러) 올랐다.\n\n브렌트유 역시 상승세를 보이며 배럴당 99.32달러를 기록했다. 전일 종가(95.63달러) 대비 3.86%(3.69달러) 상승한 수치다.\n\n이날 유가 상승은 중동 지역의 지정학적 긴장감과 주요 산유국의 정책 변화 등 공급 차질 우려가 복합적으로 작용한 결과로 나타났다. 주요 외신 보도에 따르면 이란 관련 봉쇄 조치 가능",
-    "url": "internal://oil_price_2026-09-08",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국제유가",
-    "region": "글로벌",
-    "country": "국제",
-    "country_flag": "🛢️",
-    "score": 1,
-    "created_at": "2026-09-09 06:08",
-    "countries": [
-      "미국",
-      "사우디아라비아",
-      "러시아"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/oil_2026_09_08.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-09T06:08:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-09 06:08",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "wti": {
-        "pct": 3.625975167564001,
-        "prev": 91.01,
-        "price": 94.31,
-        "change": 3.299999999999997
-      },
-      "date": "2026-09-08",
-      "brent": {
-        "pct": 3.858621771410643,
-        "prev": 95.63,
-        "price": 99.32,
-        "change": 3.6899999999999977
-      },
-      "source": "Yahoo Finance"
-    },
-    "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null
