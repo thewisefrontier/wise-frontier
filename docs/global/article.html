@@ -40,10 +40,29 @@
     .hero-image { width: 100%; max-height: 420px; object-fit: cover; margin-bottom: 24px; background: var(--bg3); }
     .body { white-space: pre-wrap; font-size: 16px; }
     .body p { margin-bottom: 1.2em; }
-    .source-note { margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 13px; color: var(--muted); }
-    .source-note a { color: var(--accent2); }
     .empty { color: var(--muted); text-align: center; padding: 60px 0; }
     [lang="hi"] body, body.lang-hi { font-family: 'Noto Sans Devanagari', 'Noto Sans', sans-serif; }
+    .source-link {
+      margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--border);
+      font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--muted);
+    }
+    .share-btn { float: right; background: none; border: 1px solid var(--border); border-radius: 6px; padding: 4px 12px; cursor: pointer; color: var(--text); font-size: 12px; }
+    .related { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--border); }
+    .related-title {
+      font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.08em; color: var(--text); margin-bottom: 14px; text-transform: uppercase;
+    }
+    .related-item { padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .related-item:last-child { border-bottom: none; }
+    .related-item-title { display: block; font-size: 14px; color: var(--text); text-decoration: none; }
+    .related-item-title:hover { color: var(--accent); }
+    .related-meta { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 4px; }
+    footer {
+      border-top: 1px solid var(--border); background: var(--bg2);
+      padding: 24px; text-align: center; font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px; color: var(--muted);
+    }
+    footer a { color: var(--muted); }
   </style>
 </head>
 <body>
@@ -58,13 +77,21 @@
     <a class="back" id="backLink" href="index.html">&larr; Back</a>
     <div id="content"><div class="empty">Loading…</div></div>
   </main>
+  <footer>
+    <div>NEWSFINAL © 2026</div>
+    <div style="margin-top:6px;">
+      <a href="https://newsfinal.co.kr/about.html">About</a> ·
+      <a href="https://newsfinal.co.kr/privacy.html">Privacy</a> ·
+      <a href="https://newsfinal.co.kr/terms.html">Terms</a>
+    </div>
+  </footer>
 
   <script>
     const LANGS = {
-      en: { name: "English", back: "← Back", source: "Source", notFound: "Article not found.", locale: "en-US" },
-      hi: { name: "हिन्दी", back: "← वापस", source: "स्रोत", notFound: "लेख नहीं मिला।", locale: "hi-IN" },
-      fr: { name: "Français", back: "← Retour", source: "Source", notFound: "Article introuvable.", locale: "fr-FR" },
-      es: { name: "Español", back: "← Volver", source: "Fuente", notFound: "Artículo no encontrado.", locale: "es-ES" },
+      en: { name: "English", back: "← Back", notFound: "Article not found.", locale: "en-US", share: "🔗 Share", related: "Related Articles", copied: "Link copied." },
+      hi: { name: "हिन्दी", back: "← वापस", notFound: "लेख नहीं मिला।", locale: "hi-IN", share: "🔗 साझा करें", related: "संबंधित लेख", copied: "लिंक कॉपी हो गया।" },
+      fr: { name: "Français", back: "← Retour", notFound: "Article introuvable.", locale: "fr-FR", share: "🔗 Partager", related: "Articles similaires", copied: "Lien copié." },
+      es: { name: "Español", back: "← Volver", notFound: "Artículo no encontrado.", locale: "es-ES", share: "🔗 Compartir", related: "Artículos relacionados", copied: "Enlace copiado." },
     };
     // domestic_kr_fetcher.py의 카테고리(한국어 원본) → 언어별 표시 라벨.
     const CATEGORY_LABELS = {
@@ -138,12 +165,29 @@
           imageHtml = `<img class="hero-image" src="${escapeHtml(article.image_url)}" alt="" loading="lazy" onerror="this.remove()">`;
         }
 
+        const related = (data.articles || [])
+          .filter(a => String(a.id) !== String(id) && a.category === article.category)
+          .slice(0, 4);
+        const relatedHtml = related.length ? `
+          <div class="related">
+            <div class="related-title">${escapeHtml(LANGS[lang].related)}</div>
+            ${related.map(r => `
+              <div class="related-item">
+                <a class="related-item-title" href="article.html?lang=${lang}&id=${r.id}">${escapeHtml(r.title)}</a>
+                <div class="related-meta">NewsFinal · ${escapeHtml(formatDate(r.created_at))}</div>
+              </div>
+            `).join('')}
+          </div>
+        ` : '';
+
         content.innerHTML = `
           ${categoryHtml}
           <h1>${escapeHtml(article.title)}</h1>
           <div class="meta">${escapeHtml(formatDate(article.created_at))}</div>
           ${imageHtml}
           <div class="body">${bodyToParagraphs(article.summary)}</div>
+          <div class="source-link">ⓒ NewsFinal <button class="share-btn" onclick="shareArticle()">${escapeHtml(LANGS[lang].share)}</button></div>
+          ${relatedHtml}
         `;
       })
       .catch(() => {
@@ -152,6 +196,21 @@
 
     function escapeHtml(s) {
       return (s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    async function shareArticle() {
+      const url = location.href;
+      const title = document.title;
+      if (navigator.share) {
+        try { await navigator.share({ title, url }); } catch (e) {}
+      } else {
+        try {
+          await navigator.clipboard.writeText(url);
+          alert(LANGS[lang].copied);
+        } catch (e) {
+          prompt('URL:', url);
+        }
+      }
     }
   </script>
 </body>

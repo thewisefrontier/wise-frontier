@@ -99,12 +99,6 @@ except Exception:
         return -1
 
 try:
-    from translate_guard import translate_article
-except Exception:
-    def translate_article(title_ko: str, body_ko: str, call_gemini_fn, max_tokens: int = 3500):
-        return "", ""
-
-try:
     from article_image import fetch_wikimedia_image
 except Exception:
     def fetch_wikimedia_image(query: str):
@@ -282,7 +276,9 @@ def insert_article(artwork: dict, title_ko: str, body_ko: str, iso_year: int, is
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
     internal_url = f"internal://art_weekly_{iso_year}W{iso_week:02d}"
 
-    title_en, summary_en = translate_article(title_ko, body_ko, call_gemini)
+    # 2026-09-09 제거(사용자 지시 — 다국어 채널이 이 번역을 재사용하지 않음).
+    # title_en은 artwork["title_en"](큐레이션된 원 작품명)로 계속 폴백됨.
+    title_en, summary_en = "", ""
 
     payload = {
         "title_en": title_en or artwork["title_en"],

@@ -65,13 +65,6 @@ except Exception:
 # 검증된 fetch_yahoo_quote 패턴 — chartPreviousClose 버그 수정 포함).
 from frontier_markets_writer import fetch_yahoo_quote
 
-# 검증된 한국어 기사를 영어로 번역(translate_guard.py 공용화).
-try:
-    from translate_guard import translate_article
-except Exception:
-    def translate_article(title_ko: str, body_ko: str, call_gemini_fn=None, max_tokens: int = 3500):
-        return "", ""
-
 KST = timezone(timedelta(hours=9))
 EDT = ZoneInfo("America/New_York")
 
@@ -211,7 +204,8 @@ def insert_article(title_ko: str, summary_ko: str, article_date: date, image_url
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
     internal_url = f"internal://us_market_holiday_{article_date.isoformat()}"
 
-    title_en, summary_en = translate_article(title_ko, summary_ko, None)
+    # 2026-09-09 제거(사용자 지시 — 다국어 채널이 이 번역을 재사용하지 않음).
+    title_en, summary_en = "", ""
 
     payload = {
         "title_en": title_en or title_ko,

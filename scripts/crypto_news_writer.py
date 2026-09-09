@@ -85,12 +85,6 @@ except Exception:
             return data[0].get("id", -1) if data else -1
         return -1
 
-try:
-    from translate_guard import translate_article
-except Exception:
-    def translate_article(title_ko: str, body_ko: str, call_gemini_fn, max_tokens: int = 3500) -> tuple[str, str]:
-        return "", ""
-
 # 야후 조회·팩트체크·시간 유틸은 frontier_markets_writer.py 재사용(2026-09-04).
 from frontier_markets_writer import (
     fetch_yahoo_quote, verify_no_fabricated_names, now_kst,
@@ -486,10 +480,8 @@ def insert_article(symbol: str, name_ko: str, title_ko: str, summary_ko: str,
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
     internal_url = f"internal://crypto_news_{article_date.isoformat()}"
 
-    print("  → 영어 번역 생성 중...")
-    title_en, summary_en = translate_article(title_ko, summary_ko, call_gemini)
-    if not summary_en:
-        print("  ⚠️ 영어 번역 실패 → 한국어만 저장")
+    # 2026-09-09 제거(사용자 지시 — 다국어 채널이 이 번역을 재사용하지 않음).
+    title_en, summary_en = "", ""
 
     payload = {
         "title_en": title_en or title_ko,

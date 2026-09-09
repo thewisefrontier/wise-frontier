@@ -118,19 +118,6 @@ except Exception:
     def is_placeholder_response(title: str, body: str) -> bool:
         return False
 
-# 영어 번역(2026-09-03) — "다른 기사도 [번역]해야지" 요청으로 트렌드 3개
-# 경로(run_trend_tracker/run_realtime_trend_tracker/run_external_trend_articles)
-# 전부에 확대. 이 파일은 전량 해외 이슈 트렌드라 국내 전용 콘텐츠 제외 대상이
-# 없다. 비용 고려해 항상 lite 계열(start_tier=3)로 고정 호출한다.
-try:
-    from translate_guard import translate_article
-except Exception:
-    def translate_article(title_ko: str, body_ko: str, call_gemini_fn, max_tokens: int = 3500) -> tuple[str, str]:
-        return "", ""
-
-
-def _call_gemini_for_translation(prompt: str, max_tokens: int = 3500):
-    return call_gemini(prompt, max_tokens=max_tokens, start_tier=3)
 
 load_dotenv()
 
@@ -1335,9 +1322,9 @@ def save_trend_article(group_name: str, title: str, body: str,
             return -1
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
 
+    # 2026-09-09 제거(사용자 지시 — 다국어 채널이 이 번역을 재사용하지 않아
+    # translate_article() 호출이 낭비였음): title_en/summary_en 생성 중단.
     title_en, summary_en = "", ""
-    if published:
-        title_en, summary_en = translate_article(title, body, _call_gemini_for_translation)
 
     payload = {
         "title_en": title_en or title, "title_ko": title,
@@ -2099,7 +2086,6 @@ JSON 배열로만 응답하세요 (마크다운 없이):
         title_en, summary_en = "", ""
         image_url, image_credit = "", ""
         if _will_publish:
-            title_en, summary_en = translate_article(title, body, _call_gemini_for_translation)
             # 2026-09-03 실사고(id=124782, 트럼프 관련 기사에 이미지 전혀 없음):
             # run_trend_tracker()만 fetch_article_image()를 부르고 있었고, 이
             # 실시간 트렌드 경로는 애초에 image_url을 payload에 넣지도 않아서
@@ -2444,7 +2430,6 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
         title_en, summary_en = "", ""
         image_url, image_credit = "", ""
         if not _mt_bad:
-            title_en, summary_en = translate_article(title, body, _call_gemini_for_translation)
             # 2026-09-03 실사고(id=124782) — run_realtime_trend_tracker()와 동일한
             # 원인(image_url을 payload에 아예 안 넣던 버그)이 이 경로에도 있었다.
             from article_image import fetch_article_image
