@@ -127,11 +127,6 @@
         canonical.href = 'https://global.newsfinal.co.kr/article.html?lang=' + lang + '&id=' + id;
         document.querySelector('meta[property="og:title"]').setAttribute('content', article.title);
 
-        let sourceHtml = '';
-        if (article.source_url) {
-          sourceHtml = `<div class="source-note">${LANGS[lang].source}: <a href="${escapeHtml(article.source_url)}" target="_blank" rel="noopener">${escapeHtml(article.source_domain || article.source_url)}</a></div>`;
-        }
-
         let categoryHtml = '';
         const catLabel = CATEGORY_LABELS[article.category];
         if (catLabel) {
@@ -149,7 +144,6 @@
           <div class="meta">${escapeHtml(formatDate(article.created_at))}</div>
           ${imageHtml}
           <div class="body">${bodyToParagraphs(article.summary)}</div>
-          ${sourceHtml}
         `;
       })
       .catch(() => {
