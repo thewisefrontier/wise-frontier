@@ -191,6 +191,7 @@
       <div class="sidebar-item" onclick="showArticles('rss',this)">📡 수집 기사</div>
       <div class="sidebar-item" onclick="showArticles('unpublished',this)">📋 미발행 기사</div>
       <div class="sidebar-item" onclick="showNeedsReview(this)">⚠️ 검토 필요</div>
+      <div class="sidebar-item" id="foreign-menu" onclick="showForeignArticles(this)">🌐 해외기사 (내부검증)</div>
       <div class="sidebar-divider"></div>
       <div class="sidebar-item" id="calendar-menu" onclick="showCalendar(this)">📅 경제 일정 관리</div>
       <div class="sidebar-divider"></div>
@@ -1017,6 +1018,88 @@
       btn.textContent = '실패';
       btn.disabled = false;
     }
+  }
+
+  // ── 해외기사(다국어 채널) 내부검증 ─────────────────────────
+  // 2026-09-10 신설 — 힌디어 한글 유출 재발·영불서 문단 미정리 등 품질
+  // 문제가 반복돼 공개 페이지(docs/global/*)를 내리고, 여기서만 확인하며
+  // 계속 고치기로 함(사용자 지시: "어드민에 해외기사란 만들어서 하루에
+  // 언어별로 두세개씩만 올려. 사이트에 배포는 하지 말고. 그거 보면서
+  // 계속 수정하자"). article_translations를 언어별 최신순으로 조회해
+  // 원문(한국어)과 나란히 대조하고, 한글 유출이 남아있으면 빨간 테두리로
+  // 바로 눈에 띄게 표시한다.
+
+  async function showForeignArticles(el) {
+    currentSection = 'foreign';
+    document.querySelectorAll('.sidebar-item').forEach(e => e.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('main-content').innerHTML = '<div class="loading">로딩 중...</div>';
+
+    const LANGS = ['en', 'hi', 'fr', 'es'];
+    const LANG_LABEL = { en: '🇺🇸 영어', hi: '🇮🇳 힌디어', fr: '🇫🇷 프랑스어', es: '🇪🇸 스페인어' };
+    const PER_LANG = 3;
+    const hangulRe = /[가-힣]/;
+    const esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    const results = await Promise.all(LANGS.map(lang =>
+      sb.from('article_translations')
+        .select('id,article_id,lang,title,summary,created_at,articles(title_ko,summary_ko,source,category)')
+        .eq('lang', lang)
+        .order('created_at', { ascending: false })
+        .limit(PER_LANG)
+    ));
+
+    const sections = LANGS.map((lang, i) => {
+      const { data, error } = results[i];
+      if (error) return `<div class="empty">[${lang}] 오류: ${esc(error.message)}</div>`;
+      if (!data?.length) {
+        return `
+          <div style="margin-bottom:24px;">
+            <div style="font-size:13px;font-weight:700;margin-bottom:8px;">${LANG_LABEL[lang]}</div>
+            <div class="empty" style="padding:16px;">아직 번역된 기사가 없습니다</div>
+          </div>`;
+      }
+
+      const cards = data.map(t => {
+        const art = t.articles || {};
+        const koreanLeak = hangulRe.test(t.title || '') || hangulRe.test(t.summary || '');
+        const bodyParas = (t.summary || '').split('\n\n').filter(p => p.trim());
+        return `
+          <div style="background:var(--bg2);border:1px solid ${koreanLeak ? 'var(--danger)' : 'var(--border)'};padding:14px;margin-bottom:10px;">
+            ${koreanLeak ? '<div style="font-size:10px;color:var(--danger);font-weight:700;margin-bottom:6px;">⚠️ 한글 유출 감지</div>' : ''}
+            <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">
+              id=${t.article_id} · ${esc(art.source)} · ${esc(art.category)} · 문단 ${bodyParas.length}개 · ${esc((t.created_at || '').slice(0, 16))}
+            </div>
+            <div style="font-size:13px;font-weight:700;margin-bottom:8px;">${esc(t.title)}</div>
+            <div style="font-size:12px;line-height:1.7;color:var(--text);margin-bottom:10px;">
+              ${bodyParas.map(p => `<p style="margin-bottom:8px;">${esc(p)}</p>`).join('')}
+            </div>
+            <details style="font-size:11px;color:var(--muted);">
+              <summary style="cursor:pointer;color:var(--accent2);">원문(한국어) 대조 보기</summary>
+              <div style="margin-top:8px;padding:10px;background:var(--bg3);border:1px solid var(--border);">
+                <div style="font-weight:700;margin-bottom:6px;">${esc(art.title_ko)}</div>
+                <div style="white-space:pre-wrap;line-height:1.6;">${esc(art.summary_ko)}</div>
+              </div>
+            </details>
+          </div>
+        `;
+      }).join('');
+
+      return `
+        <div style="margin-bottom:24px;">
+          <div style="font-size:13px;font-weight:700;margin-bottom:8px;">${LANG_LABEL[lang]} <span style="color:var(--muted);font-weight:400;">(최근 ${data.length}건)</span></div>
+          ${cards}
+        </div>
+      `;
+    }).join('');
+
+    document.getElementById('main-content').innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <span style="font-size:13px;font-weight:700;">🌐 해외기사 내부검증</span>
+        <span style="font-size:11px;color:var(--muted);">공개 안 됨 — 이 화면에서만 확인 가능 · 언어별 최근 ${PER_LANG}건</span>
+      </div>
+      ${sections}
+    `;
   }
 
   async function showPrompts(el) {
