@@ -2414,6 +2414,13 @@ _FOLLOWUP_KW_BLOCKLIST = set(COUNTRY_TO_REGION.keys()) | {
     "아프리카", "아시아", "유럽", "중동", "중남미", "북미", "동아시아", "오세아니아",
     "동남아시아", "중앙아시아", "남아시아", "카리브해", "라틴아메리카", "글로벌",
     "한국", "중국", "일본", "미국", "러시아", "인도", "영국", "프랑스", "독일",
+    # 2026-09-10 실사고(id=152113 — 헌터 바이든 밈코인 기사에 무관한 애플
+    # 아이폰 기사가 "후속 정보"로 붙음) 이후 추가: 뉴스 제목 어디에나 나올
+    # 만큼 흔해서 검색 키워드로 쓰면 사실상 아무 기사나 걸리는 발표·행위
+    # 동사형 명사. "출시"로 검색해 완전 무관한 애플 기사가 잡혔던 게 직접
+    # 원인.
+    "출시", "발표", "공개", "개최", "진행", "실시", "발생", "확인", "보도",
+    "전망", "계획", "예정", "방침", "결정", "추진", "단행", "발효", "시행",
 }
 
 
@@ -2432,7 +2439,7 @@ def search_followup(title: str, country: str, keyword_ko: str = "", keyword_en: 
         eng_kw = keyword_en.strip()
     else:
         # 폴백: 구조화 키워드가 없는 기사용 title 파싱 휴리스틱.
-        # 제목은 "국가명, 본문" 형식이라 첫 단어가 거의 항상 국가명이다. 국가명만으로
+        # 제목은 보통 "국가명, 본문" 형식이라 첫 단어가 거의 항상 국가명이다. 국가명만으로
         # 검색하면 무관한 기사가 붙는다(id=63237). 국가명 다음 실제 핵심어를 쓴다.
         #
         # ⚠️ 2026-09-07 실사고(id=137672, 138097): 트렌드 트래커(gemini_summarizer.py)가
@@ -2442,7 +2449,20 @@ def search_followup(title: str, country: str, keyword_ko: str = "", keyword_en: 
         # 검색해 완전 무관한 "이란 연료가격 인상" 기사가, "아프리카"로 검색해 케냐
         # 소상공인 금지 등 무관한 기사가 그대로 "후속 정보"로 붙었다. 쉼표 유무와
         # 무관하게 국가명·대륙명 자체는 항상 건너뛰고 그다음 실제 단어를 쓴다.
-        body_part = title.split(",", 1)[1] if "," in title else title
+        #
+        # ⚠️ 2026-09-10 실사고(id=152113): "쉼표가 있으면 그 앞은 무조건 국가명"이라는
+        # 가정 자체가 깨질 수 있다 — 이 기사는 수동 작성돼 "헌터 바이든 밈코인
+        # '$LAPTOP', 출시 2분 만에..."처럼 쉼표가 국가명과 무관한 위치에 있었다.
+        # 그 결과 "헌터 바이든 밈코인 '$LAPTOP'" 전체가 통째로 버려지고 쉼표 뒤
+        # 첫 단어 "출시"(매우 흔한 단어)가 키워드가 돼, "출시"로 검색된 완전
+        # 무관한 애플 아이폰 기사가 "후속 정보"로 붙는 사고로 이어졌다. 가정을
+        # 맹신하지 않고 실제 country 값이 쉼표 앞 구간에 들어있을 때만 그 구간을
+        # 건너뛴다 — 아니면(수동 작성 등으로 형식이 다르면) 제목 전체를 대상으로
+        # 키워드를 찾는다.
+        if "," in title and country and country in title.split(",", 1)[0]:
+            body_part = title.split(",", 1)[1]
+        else:
+            body_part = title
         kw_list = [w for w in body_part.replace(",", "").replace("\xb7", " ").split() if len(w) >= 2]
         kw_list = [w for w in kw_list if w not in _FOLLOWUP_KW_BLOCKLIST]
         kw = kw_list[0] if kw_list else ""
@@ -2491,6 +2511,53 @@ def search_followup(title: str, country: str, keyword_ko: str = "", keyword_en: 
             pass
 
     return results
+
+
+def _filter_relevant_followups(title: str, followups: list) -> list:
+    """search_followup()이 키워드 검색으로 찾아온 후보들이 실제로 같은 사안인지
+    LLM로 한 번 더 확인한다.
+
+    ⚠️ 2026-09-10 실사고(id=152113 — 헌터 바이든 밈코인 기사에 무관한 애플
+    아이폰 기사가 "후속 정보"로 통째로 붙음): search_followup()은 키워드
+    검색 결과를 그대로 반환하고, 이 함수를 부르는 update_live_articles()는
+    그 결과를 검증 없이 곧바로 "새로 확인된 내용"으로 기사화했다 — 키워드
+    추출 단계(find_continuing_story()에는 있는 "같은 사안인지" Gemini 확인이
+    이 경로엔 아예 없었다. 키워드 자체를 더 엄격히 걸러도(_FOLLOWUP_KW_
+    BLOCKLIST 확장) 근본적으로 '검색은 재현율, 판단은 별도 단계'가 맞다 —
+    같은 이유로 find_continuing_story()도 별도 LLM 판별을 거친다.
+    """
+    if not followups:
+        return followups
+    listing = "\n".join(
+        f"{i+1}. {(f.get('title_ko') or f.get('title_en') or '')[:80]}"
+        for i, f in enumerate(followups)
+    )
+    prompt = f"""아래 [기존 기사]가 다루는 사안과 실제로 같은 사안(같은 사건·같은 발표·같은 대상)을
+다루는 항목만 [후보 목록]에서 골라내세요. 단순히 비슷한 단어가 있다는 이유만으로
+고르지 마세요 — 완전히 다른 주제(예: 다른 회사, 다른 사건)인데 우연히 같은 단어를
+쓴 경우가 흔합니다.
+
+[기존 기사]
+{title}
+
+[후보 목록]
+{listing}
+
+같은 사안인 항목의 번호만 쉼표로 구분해 답하세요(예: "1,3"). 하나도 없으면 "없음"이라고만
+답하세요. 다른 말은 하지 마세요."""
+
+    try:
+        resp = call_gemini(prompt, max_tokens=30, start_tier=4)
+    except Exception:
+        return []
+    if not resp or "없음" in resp:
+        return []
+    idxs = set()
+    for m in re.finditer(r"\d+", resp):
+        i = int(m.group()) - 1
+        if 0 <= i < len(followups):
+            idxs.add(i)
+    return [f for i, f in enumerate(followups) if i in idxs]
 
 
 # ── 라이브 업데이트: 상단 블록 구조 ──────────────────────────────────
@@ -2673,6 +2740,11 @@ def update_live_articles():
         followups = search_followup(title, country, keyword_ko, keyword_en)
         if not followups:
             print(f"     후속 없음")
+            continue
+
+        followups = _filter_relevant_followups(title, followups)
+        if not followups:
+            print(f"     후속 후보 있었으나 관련성 검증 실패 — 생략")
             continue
 
         # search_followup()이 full_text(원문 전문)까지 조회해오는데도 여태 안 쓰고
