@@ -3092,6 +3092,14 @@ def run():
     _other_pool = [a for a in solo_candidates if a.get("id") not in _already_picked_ids]
     solo_selected += _other_pool[:5 - len(solo_selected)]
 
+    # 2026-09-09 중단(사용자 지시: "단일 소스로는 만들지 말라니까") — 소스가
+    # 1건뿐인 "단독(solo)" 기사는 원문 문장 구조를 그대로 따라가기 쉬운
+    # 위험이 있다(writer_rules에 이미 경고돼 있었지만 프롬프트 지시로만
+    # 막고 있었음, id=149227 실사고로 재확인). 강제 차단으로 격상 — 위
+    # solo_candidates/쿼터 선별 로직은 그대로 두되(추후 참고용) 실제 생성은
+    # 하지 않는다.
+    solo_selected = []
+
     solo_generated = 0
     for a in solo_selected:
         if processed >= MAX_CLUSTERS_PER_RUN + 5:
