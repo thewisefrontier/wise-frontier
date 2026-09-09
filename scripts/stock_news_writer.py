@@ -268,7 +268,7 @@ def build_article_prompt(ticker: str, name_ko: str, exchange: str, data: dict,
 - 현재가: {data['price']:.2f}달러 (전일比 {data['pct']:+.2f}%)
 - 당일 거래 범위: {data.get('day_low', 0):.2f} ~ {data.get('day_high', 0):.2f}달러
 - 52주 최고/최저: {data.get('fifty_two_week_high', 0):.2f} / {data.get('fifty_two_week_low', 0):.2f}달러
-- 거래량: {int(data.get('volume') or 0):,}주
+- 거래량: {to_won_style_amount(data.get('volume') or 0)}주
 
 [출력 형식] — 반드시 이 형식 그대로:
 TITLE: <제목>
@@ -319,12 +319,15 @@ TITLE_PREFIX = "[종목 동향]"
 # 대괄호([태그]) 형태만 인식해서, Gemini가 "종목동향, ..."처럼 평문으로
 # 접두어를 흘리면 태그가 중복 부착되는 결함이 있었다.
 try:
-    from style_guard import parse_article_output, ensure_paragraphs, enforce_title_prefix as _sg_enforce_title_prefix
+    from style_guard import parse_article_output, ensure_paragraphs, enforce_title_prefix as _sg_enforce_title_prefix, to_won_style_amount
 except Exception:
     def _sg_enforce_title_prefix(title, prefix, bare_name, particles=None):
         return f"{prefix} {(title or '').strip()}".strip()
     def ensure_paragraphs(text: str, target: int = 3, max_sentences_per_para: int = 4) -> str:
         return text
+    def to_won_style_amount(n) -> str:
+        n = int(round(n))
+        return f"{n:,}"
     def parse_article_output(text: str) -> tuple[str, str]:
         title, body = "", ""
         m_title = re.search(r"TITLE:\s*(.+?)(?:\n|$)", text)
