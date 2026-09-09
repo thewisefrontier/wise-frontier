@@ -1,5 +1,70 @@
 [
   {
+    "id": 152611,
+    "title_en": "[국내유가] 휘발유 리터당 1859원…전일 대비 소폭 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1859원…전일 대비 소폭 하락",
+    "summary_ko": "오피넷(한국석유공사)이 9월 10일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1859원으로 집계됐다. 전일 판매가격과 비교하면 리터당 0.09원 내린 수치다.\n\n이날 오피넷(한국석유공사)에 따르면 휘발유뿐만 아니라 경유와 LPG(부탄) 가격도 동반 하락세를 기록했다. 경유는 리터당 1843.54원으로 전일 대비 0.52원 하락했다. LPG(부탄) 역시 리터당 1098.30원으로 전일 대비 0.08원 낮아졌다.\n\n이 같은 유가 변동은 최근 국제유가 흐름과 정유사 공급가격 변화에 영향을 받은 것으로 분석된다. 일",
+    "url": "internal://opinet_price_2026-09-10",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-09-10 05:10",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_09_10.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-10T05:10:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-10 05:10",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-09-10",
+      "prices": {
+        "B027": {
+          "diff": -0.09,
+          "name": "휘발유",
+          "price": 1858.9
+        },
+        "B034": {
+          "diff": 0.17,
+          "name": "고급휘발유",
+          "price": 2313.8
+        },
+        "C004": {
+          "diff": -0.62,
+          "name": "실내등유",
+          "price": 1575.85
+        },
+        "D047": {
+          "diff": -0.52,
+          "name": "경유",
+          "price": 1843.54
+        },
+        "K015": {
+          "diff": -0.08,
+          "name": "LPG(부탄)",
+          "price": 1098.3
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
     "id": 152598,
     "title_en": "오세아니아, 쌀쌀한 환절기 속 뉴질랜드 거센 비바람",
     "title_ko": "오세아니아, 쌀쌀한 환절기 속 뉴질랜드 거센 비바람",
@@ -32,48 +97,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 151543,
-    "title_en": "콩고민주공화국 에볼라 사망자 3175명 넘어… 치료센터 확충과 식량 지원 시급",
-    "title_ko": "콩고민주공화국 에볼라 사망자 3175명 넘어… 치료센터 확충과 식량 지원 시급",
-    "summary_ko": "[업데이트]\n■ 9월 10일 04:03 — 콩고민주공화국 국경 인근의 에볼라 공포가 확산하면서 인접국인 남수단으로 피난민이 유입되는 사태가 벌어졌다. 웨스턴에쿠아토리아주의 남아 에드워드 부쿨루 보건장관은 콩고민주공화국 국경을 넘어 이바 카운티의 나반가 지역으로 수십 명의 콩고민주공화국 국적자와 남수단 난민이 유입됐다고 밝혔다. 현재까지 파악된 콩고민주공화국 출신 피난민은 56명이며 남수단 난민의 정확한 유입 규모는 아직 집계되지 않았다.\n\n미국 질병통제예방센터는 인접한 하우울레주 등에서 부디부교 균주 에볼라 바이러스 감염 사례가 발",
-    "url": "internal://trend_에볼라_2026091000",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "trend_에볼라",
-    "region": "africa",
-    "country": "콩고민주공화국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-10 04:03",
-    "countries": [
-      "콩고민주공화국",
-      "영국",
-      "우간다"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_ebola_virus_disease.jpg",
-    "view_count": 1,
-    "first_published_at": "2026-09-10T00:29:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-10 00:29",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-09-10 04:03",
-        "note": "콩고 에볼라 공포로 남수단에 피난민 유입"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: Wikimedia Commons",
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null
@@ -117,6 +140,48 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: Keitsist (CC BY-SA 3.0, Wikimedia Commons)",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
+    "id": 151543,
+    "title_en": "콩고민주공화국 에볼라 사망자 3175명 넘어… 치료센터 확충과 식량 지원 시급",
+    "title_ko": "콩고민주공화국 에볼라 사망자 3175명 넘어… 치료센터 확충과 식량 지원 시급",
+    "summary_ko": "[업데이트]\n■ 9월 10일 04:03 — 콩고민주공화국 국경 인근의 에볼라 공포가 확산하면서 인접국인 남수단으로 피난민이 유입되는 사태가 벌어졌다. 웨스턴에쿠아토리아주의 남아 에드워드 부쿨루 보건장관은 콩고민주공화국 국경을 넘어 이바 카운티의 나반가 지역으로 수십 명의 콩고민주공화국 국적자와 남수단 난민이 유입됐다고 밝혔다. 현재까지 파악된 콩고민주공화국 출신 피난민은 56명이며 남수단 난민의 정확한 유입 규모는 아직 집계되지 않았다.\n\n미국 질병통제예방센터는 인접한 하우울레주 등에서 부디부교 균주 에볼라 바이러스 감염 사례가 발",
+    "url": "internal://trend_에볼라_2026091000",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "trend_에볼라",
+    "region": "africa",
+    "country": "콩고민주공화국",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-10 04:03",
+    "countries": [
+      "콩고민주공화국",
+      "영국",
+      "우간다"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_ebola_virus_disease.jpg",
+    "view_count": 1,
+    "first_published_at": "2026-09-10T00:29:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-10 00:29",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-09-10 04:03",
+        "note": "콩고 에볼라 공포로 남수단에 피난민 유입"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "이미지 출처: Wikimedia Commons",
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null
@@ -1931,35 +1996,6 @@
         }
       }
     },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 147949,
-    "title_en": "[데일리 다이제스트] 지정학적 군사 충돌 확산과 글로벌 시장 및 기후 변동성",
-    "title_ko": "[데일리 다이제스트] 지정학적 군사 충돌 확산과 글로벌 시장 및 기후 변동성",
-    "summary_ko": "[글로벌 기후 이변에 따른 지역별 극단적 기온 편차와 기상 불안정]\n- 8일(현지시간)과 9일(현지시간)에 걸쳐 아시아, 유럽, 아프리카, 중남미, 북미 등 세계 전역에서 극단적인 기온 격차와 기상 이변이 관측됐다.\n- 중동 카타르 도하가 8일(현지시간) 최고기온 45도까지 치솟고 아프리카 이집트 카이로가 8일(현지시간) 38도를 기록한 반면, 오세아니아의 호주 캔버라는 9일(현지시간) 최저기온 4도를 기록하며 쌀쌀한 가을 날씨를 나타냈다.\n- 동아시아와 동남아시아에서도 지역별 날씨 격차가 뚜렷하게 나타나, 8일(현지시간) 일본 도",
-    "url": "internal://digest_20260909",
-    "source": "NewsFinal",
-    "category": "다이제스트",
-    "subcategory": "digest_20260909_crypto",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 38,
-    "created_at": "2026-09-09 05:05",
-    "countries": null,
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/digest_20260909.jpg",
-    "view_count": 0,
-    "first_published_at": null,
-    "update_log": [],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
     "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
