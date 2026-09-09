@@ -17,15 +17,29 @@
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: var(--bg); color: var(--text); font-family: 'Noto Sans', sans-serif; font-size: 16px; line-height: 1.7; }
-    header { background: var(--bg2); border-bottom: 3px solid var(--text); padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; }
+    header { background: var(--bg2); border-bottom: 3px solid var(--text); padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
     .logo { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 900; color: var(--text); text-decoration: none; }
     .logo span { color: var(--accent); }
+    .lang-switch { display: flex; gap: 6px; }
+    .lang-switch a, .lang-switch span {
+      font-family: 'IBM Plex Mono', monospace; font-size: 12px; padding: 6px 12px;
+      border: 1px solid var(--border); text-decoration: none; color: var(--muted); background: var(--bg2);
+    }
+    .lang-switch a:hover { border-color: var(--accent); color: var(--accent); }
+    .lang-switch .active { background: var(--text); color: #fff; border-color: var(--text); }
     main { max-width: 720px; margin: 0 auto; padding: 32px 24px 60px; }
     .back { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--muted); text-decoration: none; margin-bottom: 20px; }
     .back:hover { color: var(--accent); }
+    .category-badge {
+      display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 700;
+      color: var(--accent2); border: 1px solid var(--accent2); padding: 3px 9px; margin-bottom: 12px;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
     h1 { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 900; margin-bottom: 14px; }
     .meta { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--muted); margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+    .hero-image { width: 100%; max-height: 420px; object-fit: cover; margin-bottom: 24px; background: var(--bg3); }
     .body { white-space: pre-wrap; font-size: 16px; }
+    .body p { margin-bottom: 1.2em; }
     .source-note { margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 13px; color: var(--muted); }
     .source-note a { color: var(--accent2); }
     .empty { color: var(--muted); text-align: center; padding: 60px 0; }
@@ -37,6 +51,7 @@
     <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
       <a class="logo" href="index.html" id="homeLink">News<span>Final</span> Global</a>
       <a href="/" style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:5px 10px;">KR</a>
+      <nav class="lang-switch" id="langSwitch"></nav>
     </div>
   </header>
   <main>
@@ -46,10 +61,19 @@
 
   <script>
     const LANGS = {
-      en: { name: "English", back: "← Back", source: "Source", notFound: "Article not found." },
-      hi: { name: "हिन्दी", back: "← वापस", source: "स्रोत", notFound: "लेख नहीं मिला।" },
-      fr: { name: "Français", back: "← Retour", source: "Source", notFound: "Article introuvable." },
-      es: { name: "Español", back: "← Volver", source: "Fuente", notFound: "Artículo no encontrado." },
+      en: { name: "English", back: "← Back", source: "Source", notFound: "Article not found.", locale: "en-US" },
+      hi: { name: "हिन्दी", back: "← वापस", source: "स्रोत", notFound: "लेख नहीं मिला।", locale: "hi-IN" },
+      fr: { name: "Français", back: "← Retour", source: "Source", notFound: "Article introuvable.", locale: "fr-FR" },
+      es: { name: "Español", back: "← Volver", source: "Fuente", notFound: "Artículo no encontrado.", locale: "es-ES" },
+    };
+    // domestic_kr_fetcher.py의 카테고리(한국어 원본) → 언어별 표시 라벨.
+    const CATEGORY_LABELS = {
+      "문화·예술": { en: "Culture", hi: "संस्कृति", fr: "Culture", es: "Cultura" },
+      "경제": { en: "Economy", hi: "अर्थव्यवस्था", fr: "Économie", es: "Economía" },
+      "정치·외교": { en: "Politics", hi: "राजनीति", fr: "Politique", es: "Política" },
+      "IT·과학": { en: "Tech", hi: "तकनीक", fr: "Technologie", es: "Tecnología" },
+      "사회": { en: "Society", hi: "समाज", fr: "Société", es: "Sociedad" },
+      "글로벌": { en: "Korea", hi: "कोरिया", fr: "Corée", es: "Corea" },
     };
     const params = new URLSearchParams(location.search);
     const lang = LANGS[params.get('lang')] ? params.get('lang') : 'en';
@@ -59,6 +83,35 @@
     document.getElementById('homeLink').href = 'index.html?lang=' + lang;
     document.getElementById('backLink').href = 'index.html?lang=' + lang;
     document.getElementById('backLink').textContent = LANGS[lang].back;
+
+    const switchEl = document.getElementById('langSwitch');
+    Object.keys(LANGS).forEach(code => {
+      const el = document.createElement(code === lang ? 'span' : 'a');
+      if (code !== lang) el.href = 'article.html?lang=' + code + '&id=' + id;
+      el.className = code === lang ? 'active' : '';
+      el.textContent = code.toUpperCase();
+      switchEl.appendChild(el);
+    });
+
+    function formatDate(str) {
+      if (!str) return '';
+      const d = new Date(str);
+      if (isNaN(d)) return str;
+      try {
+        return new Intl.DateTimeFormat(LANGS[lang].locale, { dateStyle: 'medium', timeStyle: 'short' }).format(d);
+      } catch (e) {
+        return d.toISOString().slice(0, 16).replace('T', ' ');
+      }
+    }
+
+    function bodyToParagraphs(text) {
+      return (text || '')
+        .split(/\n\s*\n/)
+        .map(p => p.trim())
+        .filter(Boolean)
+        .map(p => `<p>${escapeHtml(p)}</p>`)
+        .join('');
+    }
 
     fetch('/data/global/' + lang + '.json')
       .then(r => r.json())
@@ -79,10 +132,23 @@
           sourceHtml = `<div class="source-note">${LANGS[lang].source}: <a href="${escapeHtml(article.source_url)}" target="_blank" rel="noopener">${escapeHtml(article.source_domain || article.source_url)}</a></div>`;
         }
 
+        let categoryHtml = '';
+        const catLabel = CATEGORY_LABELS[article.category];
+        if (catLabel) {
+          categoryHtml = `<div class="category-badge">${escapeHtml(catLabel[lang] || catLabel.en)}</div>`;
+        }
+
+        let imageHtml = '';
+        if (article.image_url) {
+          imageHtml = `<img class="hero-image" src="${escapeHtml(article.image_url)}" alt="" loading="lazy" onerror="this.remove()">`;
+        }
+
         content.innerHTML = `
+          ${categoryHtml}
           <h1>${escapeHtml(article.title)}</h1>
-          <div class="meta">${escapeHtml(article.created_at || '')}</div>
-          <div class="body">${escapeHtml(article.summary)}</div>
+          <div class="meta">${escapeHtml(formatDate(article.created_at))}</div>
+          ${imageHtml}
+          <div class="body">${bodyToParagraphs(article.summary)}</div>
           ${sourceHtml}
         `;
       })

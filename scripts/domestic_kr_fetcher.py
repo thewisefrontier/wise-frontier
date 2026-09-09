@@ -41,7 +41,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from db import init_db, is_url_exists, insert_article
-from text_crawl import crawl_full_text, clean_text
+from text_crawl import crawl_full_text, clean_text, extract_og_image, resolve_google_news_url
+
+try:
+    from image_store import store_image
+except Exception:
+    def store_image(src_url, key_hint="", timeout=30):
+        return src_url
 
 try:
     from dedup_guard import normalize_tags
@@ -191,6 +197,29 @@ def _age_days(iso_str: str):
         return None
 
 
+# 카테고리 추론(2026-09-09, 사용자 지적: "카테고리도 없고..." — 다국어
+# 채널 기사가 전부 category="글로벌" 하나로만 저장돼 실제로 뭘 다루는
+# 기사인지 프런트에서 구분할 방법이 없었음). 이 파일은 Gemini 분류 호출이
+# 없는 가벼운 수집기라 API 비용 없이 검색어/피드명·제목 키워드로 결정론적
+# 추정만 한다 — 완벽하지 않아도 "글로벌" 하나로 뭉뚱그리는 것보다는 낫다.
+_CATEGORY_KEYWORDS = [
+    ("문화·예술", ["텐아시아", "K-pop", "케이팝", "드라마", "영화", "가수", "배우", "아이돌",
+                  "음악", "예능", "콘서트", "한류", "celebrity", "drama", "movie", "film"]),
+    ("경제", ["증시", "코스피", "코스닥", "환율", "금리", "물가", "수출", "투자", "주식",
+             "기업", "삼성", "현대", "sk", "lg", "economy", "business", "stock", "kospi"]),
+    ("정치·외교", ["정부", "국회", "대통령", "장관", "정책", "외교", "선거"]),
+    ("IT·과학", ["ai", "인공지능", "챗gpt", "chatgpt", "기술", "스타트업", "반도체"]),
+]
+
+
+def _infer_category(title: str, tag: str) -> str:
+    hay = f"{title} {tag}".lower()
+    for cat, keywords in _CATEGORY_KEYWORDS:
+        if any(kw.lower() in hay for kw in keywords):
+            return cat
+    return "사회"
+
+
 def _save_candidate(title: str, link: str, domain: str, src_published: str, tag: str,
                      seen_titles: list) -> bool:
     """제목·링크가 유효하면 크롤링 후 저장. 저장했으면 True."""
@@ -208,15 +237,26 @@ def _save_candidate(title: str, link: str, domain: str, src_published: str, tag:
         # multilang_translate.py의 번역 재료가 너무 빈약함 — 스킵.
         return False
 
+    # 대표 이미지(og:image) 추출·영구 저장(2026-09-09, 사용자 지적:
+    # "사진도 없고" — 다국어 채널 기사에 이미지가 전혀 없었음). 이 파일은
+    # gemini_writer.py처럼 Gemini로 이미지를 찾는 fetch_article_image()를
+    # 쓸 GeminiClient가 없는 가벼운 수집기라, 순수 HTML 메타태그 파싱만
+    # 쓰는 extract_og_image()로 대체한다.
+    image_url = ""
+    og_image = extract_og_image(link, timeout=8)
+    if og_image:
+        image_url = store_image(og_image, key_hint=f"domestickr-{domain}")
+
     article_id = insert_article(
         title_en="", title_ko=title,
         summary_en="", summary_ko=full_text[:2000],
-        url=link, source=f"DomesticKR:{domain}", category="글로벌",
+        url=link, source=f"DomesticKR:{domain}", category=_infer_category(title, tag),
         subcategory="", region="korea",
         country="한국", country_flag="🇰🇷",
         score=0, full_text=full_text,
         countries=["한국"],
         is_published=False,
+        image_url=image_url,
         source_published_at=src_published or None,
         source_data={"tags": normalize_tags([tag], limit=10)},
     )
@@ -243,6 +283,12 @@ def run():
             scanned += 1
             title = clean_text(entry.get("title", ""))
             link = _normalize_url(entry.get("link", ""))
+            # 구글뉴스(한국판) 피드는 link가 news.google.com 리다이렉트라, 해독
+            # 안 하면 source/도메인이 실제 매체 대신 "news.google.com"으로
+            # 저장된다(2026-09-09 실사고). crawl_full_text()는 내부적으로
+            # 이미 해독하지만 그건 본문 크롤링용이고, 저장용 link는 별개라
+            # 여기서도 명시적으로 해독해야 한다.
+            link = resolve_google_news_url(link)
             src_published = ""
             if entry.get("published_parsed"):
                 import calendar as _cal

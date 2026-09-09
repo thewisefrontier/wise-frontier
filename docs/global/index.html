@@ -32,8 +32,11 @@
     .lang-switch .active { background: var(--text); color: #fff; border-color: var(--text); }
     main { max-width: 860px; margin: 0 auto; padding: 32px 24px 60px; }
     .subhead { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--muted); margin-bottom: 24px; text-transform: uppercase; letter-spacing: 0.05em; }
-    .card { display: block; background: var(--bg2); border: 1px solid var(--border); padding: 20px; margin-bottom: 14px; text-decoration: none; color: var(--text); }
+    .card { display: flex; gap: 16px; background: var(--bg2); border: 1px solid var(--border); padding: 20px; margin-bottom: 14px; text-decoration: none; color: var(--text); }
     .card:hover { border-color: var(--accent); }
+    .card-thumb { width: 96px; height: 96px; object-fit: cover; flex-shrink: 0; background: var(--bg3); }
+    .card-body { min-width: 0; flex: 1; }
+    .card-category { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 700; color: var(--accent2); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
     .card h2 { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 700; margin-bottom: 8px; }
     .card p { color: var(--muted); font-size: 14px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
     .card .meta { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--accent2); margin-top: 10px; }
@@ -58,13 +61,33 @@
 
   <script>
     const LANGS = {
-      en: { name: "English", subhead: "Korean news, translated", empty: "No articles yet." },
-      hi: { name: "हिन्दी", subhead: "कोरियाई समाचार, अनुवादित", empty: "अभी तक कोई लेख नहीं।" },
-      fr: { name: "Français", subhead: "Actualités coréennes, traduites", empty: "Aucun article pour l'instant." },
-      es: { name: "Español", subhead: "Noticias de Corea, traducidas", empty: "Aún no hay artículos." },
+      en: { name: "English", subhead: "Korean news, translated", empty: "No articles yet.", locale: "en-US" },
+      hi: { name: "हिन्दी", subhead: "कोरियाई समाचार, अनुवादित", empty: "अभी तक कोई लेख नहीं।", locale: "hi-IN" },
+      fr: { name: "Français", subhead: "Actualités coréennes, traduites", empty: "Aucun article pour l'instant.", locale: "fr-FR" },
+      es: { name: "Español", subhead: "Noticias de Corea, traducidas", empty: "Aún no hay artículos.", locale: "es-ES" },
     };
+    const CATEGORY_LABELS = {
+      "문화·예술": { en: "Culture", hi: "संस्कृति", fr: "Culture", es: "Cultura" },
+      "경제": { en: "Economy", hi: "अर्थव्यवस्था", fr: "Économie", es: "Economía" },
+      "정치·외교": { en: "Politics", hi: "राजनीति", fr: "Politique", es: "Política" },
+      "IT·과학": { en: "Tech", hi: "तकनीक", fr: "Technologie", es: "Tecnología" },
+      "사회": { en: "Society", hi: "समाज", fr: "Société", es: "Sociedad" },
+      "글로벌": { en: "Korea", hi: "कोरिया", fr: "Corée", es: "Corea" },
+    };
+    // 언어 파라미터가 없으면(=NewsFinal 로고 옆 GLOBAL 버튼으로 진입) 무조건
+    // 영어로 떨어지던 문제(2026-09-09, 사용자 지적: "글로벌 버튼을 누르면
+    // 무조건 영어부터 시작되는 점도 불편한데") — 브라우저 언어 설정 중
+    // 지원 언어와 일치하는 첫 번째 것으로 자동 선택한다. 그래도 없으면 영어.
+    function detectLang() {
+        const supported = Object.keys(LANGS);
+        for (const nl of (navigator.languages || [navigator.language || 'en'])) {
+            const code = nl.slice(0, 2).toLowerCase();
+            if (supported.includes(code)) return code;
+        }
+        return 'en';
+    }
     const params = new URLSearchParams(location.search);
-    const lang = LANGS[params.get('lang')] ? params.get('lang') : 'en';
+    const lang = LANGS[params.get('lang')] ? params.get('lang') : detectLang();
 
     document.documentElement.lang = lang;
     document.title = "NewsFinal Global — " + LANGS[lang].name;
@@ -80,6 +103,17 @@
       switchEl.appendChild(el);
     });
 
+    function formatDate(str) {
+      if (!str) return '';
+      const d = new Date(str);
+      if (isNaN(d)) return str;
+      try {
+        return new Intl.DateTimeFormat(LANGS[lang].locale, { dateStyle: 'medium', timeStyle: 'short' }).format(d);
+      } catch (e) {
+        return d.toISOString().slice(0, 16).replace('T', ' ');
+      }
+    }
+
     fetch('/data/global/' + lang + '.json')
       .then(r => r.json())
       .then(data => {
@@ -89,13 +123,22 @@
           list.innerHTML = '<div class="empty">' + LANGS[lang].empty + '</div>';
           return;
         }
-        list.innerHTML = items.map(a => `
+        list.innerHTML = items.map(a => {
+          const thumb = a.image_url ? `<img class="card-thumb" src="${escapeHtml(a.image_url)}" alt="" loading="lazy" onerror="this.remove()">` : '';
+          const catLabel = CATEGORY_LABELS[a.category];
+          const catHtml = catLabel ? `<div class="card-category">${escapeHtml(catLabel[lang] || catLabel.en)}</div>` : '';
+          return `
           <a class="card" href="article.html?lang=${lang}&id=${a.id}">
-            <h2>${escapeHtml(a.title)}</h2>
-            <p>${escapeHtml(a.summary)}</p>
-            <div class="meta">${escapeHtml(a.created_at || '')}</div>
+            ${thumb}
+            <div class="card-body">
+              ${catHtml}
+              <h2>${escapeHtml(a.title)}</h2>
+              <p>${escapeHtml(a.summary)}</p>
+              <div class="meta">${escapeHtml(formatDate(a.created_at))}</div>
+            </div>
           </a>
-        `).join('');
+        `;
+        }).join('');
       })
       .catch(() => {
         document.getElementById('list').innerHTML = '<div class="empty">' + LANGS[lang].empty + '</div>';

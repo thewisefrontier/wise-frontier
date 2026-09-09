@@ -112,8 +112,17 @@ def strip_photo_credits(text: str) -> str:
     return out
 
 
-def _resolve_google_news_url(url: str) -> str:
-    """news.google.com/rss/articles/... 리다이렉트 URL을 실제 게시처 URL로 해독."""
+def resolve_google_news_url(url: str) -> str:
+    """news.google.com/rss/articles/... 리다이렉트 URL을 실제 게시처 URL로 해독.
+
+    2026-09-09까지는 crawl_full_text() 내부에서만(본문 크롤링 시점) 쓰였고
+    private(_)로 숨겨져 있었다 — 그래서 domestic_kr_fetcher.py가 소스
+    태그·저장 URL을 결정할 때는 이 해독을 안 거친 원본 구글뉴스 리다이렉트
+    링크를 그대로 썼다(실사고: 다국어 채널 기사의 출처가 실제 매체 대신
+    "news.google.com"으로 표시됨, 사용자 지적: "Source: news.google.com...
+    우리가 언제 이런거 붙였지?"). rss_fetcher.py 등 본편은 애초에 이런
+    문제가 없었다 — public으로 바꿔 수집기들이 저장 시점에도 쓸 수 있게 한다.
+    """
     if gnewsdecoder is None or "news.google.com" not in url:
         return url
     try:
@@ -123,6 +132,10 @@ def _resolve_google_news_url(url: str) -> str:
     except Exception:
         pass
     return url
+
+
+# 기존 호출부(crawl_full_text 내부) 하위호환용 별칭.
+_resolve_google_news_url = resolve_google_news_url
 
 
 def _is_garbled(text: str, sample: int = 2000) -> bool:
@@ -188,6 +201,31 @@ def _postprocess_trafilatura_text(text: str) -> str:
             paras.append(p)
     joined = " ".join(paras)
     return clean_text(joined) if len(joined) > 100 else ""
+
+
+_OG_IMAGE_RE = re.compile(
+    r'<meta[^>]+(?:property|name)=["\'](?:og:image|twitter:image)(?::secure_url)?["\'][^>]+content=["\']([^"\']+)["\']',
+    re.IGNORECASE,
+)
+
+
+def extract_og_image(url: str, timeout: int = 8) -> str:
+    """페이지의 og:image/twitter:image 메타태그에서 대표 이미지 URL을 뽑는다.
+    Gemini 호출 없는 순수 HTML 파싱 — domestic_kr_fetcher.py처럼 이미지
+    검색용 Gemini 클라이언트가 없는 가벼운 수집기에서 쓴다(2026-09-09,
+    사용자 지적: "사진도 없고" — DomesticKR 기사에 이미지가 전혀 없었음)."""
+    try:
+        headers = {
+            "User-Agent": "Mozilla/5.0 (compatible; NewsFinalBot/1.0)",
+            "Accept": "text/html,application/xhtml+xml",
+        }
+        res = requests.get(url, headers=headers, timeout=timeout)
+        if res.status_code != 200:
+            return ""
+        m = _OG_IMAGE_RE.search(res.text[:200000])
+        return m.group(1).strip() if m else ""
+    except Exception:
+        return ""
 
 
 def crawl_full_text(url: str, timeout: int = 10) -> str:

@@ -86,7 +86,7 @@ def export_global():
     for i in range(0, len(article_ids), chunk):
         ids = article_ids[i:i + chunk]
         rows = _fetch_all("articles", {
-            "select": "id,url,source,country,created_at,source_published_at",
+            "select": "id,url,source,country,created_at,source_published_at,image_url,category,subcategory",
             "id": f"in.({','.join(str(x) for x in ids)})",
         })
         for r in rows:
@@ -110,6 +110,8 @@ def export_global():
             "source_url": art.get("url") or "",
             "country": art.get("country") or "",
             "created_at": t["created_at"],
+            "image_url": art.get("image_url") or "",
+            "category": art.get("category") or "",
         })
 
     for lang, items in by_lang.items():

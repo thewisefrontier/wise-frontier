@@ -118,6 +118,8 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
+          UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
 
       - name: 머니파이널 미국 시장뉴스 수집 (2026-09-03 신설)
         if: steps.guard.outputs.skip != 'true'

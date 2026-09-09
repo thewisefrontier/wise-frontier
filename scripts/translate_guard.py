@@ -35,6 +35,41 @@ scripts/translate_guard.py
 
 import re
 
+try:
+    from style_guard import ensure_paragraphs
+except Exception:
+    def ensure_paragraphs(text: str, target: int = 3, max_sentences_per_para: int = 4) -> str:
+        return text
+
+# 번역 결과에 한글이 남아있는지 검사(2026-09-09 실사고: hi/es 번역이 원문
+# 한국어를 그대로 반환하거나 일부 문구만 남긴 채 저장됨 — 사용자 지적:
+# "힌디쪽에 한글 그대로 올라가거나, 본문은 한글이거나 하는 기사들이 보이는데".
+# verify_translation()은 NVIDIA로 "사실 보존"만 검사하지 "번역이 실제로
+# 됐는지"는 검사하지 않아 원문 그대로인 응답도 사실은 100% 일치하니 통과돼
+# 버렸다 — 결정론적 정규식 검사를 별도 안전장치로 추가한다.
+# ⚠️ 임계값은 0(한 글자도 허용 안 함)이다 — 처음엔 3글자까지 봐줬는데
+# ("사 소스민", "구ンगजेोन 랜드"처럼 인명·고유명사 일부만 한글로 새어나온
+# 사례) 실사고 샘플에서 그마저도 못 잡는 경우가 나왔다. 프롬프트 자체가
+# "한글 단 한 글자도 남기지 말라"고 명시하므로 정상 번역이면 애초에 0이어야
+# 맞다.
+_HANGUL_RE = re.compile(r'[가-힣]')
+
+
+def _has_korean_leak(text: str, max_chars: int = 0) -> bool:
+    return len(_HANGUL_RE.findall(text or "")) > max_chars
+
+
+def _has_self_duplication(text: str, anchor_len: int = 200) -> bool:
+    """Gemini가 번역 본문 전체를 통째로 두 번 반복해 응답하는 사고 방지
+    (2026-09-09 실사고: id=149911 fr 번역이 같은 문단을 처음부터 끝까지
+    그대로 두 번 이어붙여 저장됨). 본문 앞부분(anchor)이 뒷부분에 다시
+    등장하면 자기복제로 간주한다."""
+    if not text or len(text) < anchor_len * 2:
+        return False
+    anchor = text[:anchor_len]
+    return anchor in text[anchor_len:]
+
+
 LANG_NAMES = {
     "en": "English",
     "hi": "Hindi",
@@ -75,12 +110,17 @@ def translate_article(title_ko: str, body_ko: str, call_gemini_fn, lang: str = "
 word-for-word — restructure sentences the way a native {lang_name} news writer
 would, but keep every number, date, percentage, name, and fact EXACTLY as in
 the original. Do not add commentary, opinion, or any fact not present in the
-Korean original. Do not invent anything. Write the TITLE and BODY entirely in
-{lang_name} (do not leave any Korean text).
+Korean original. Do not invent anything. The BODY must be written ENTIRELY in
+{lang_name} — every word, including names, must be transliterated or translated;
+do not leave a single Korean (Hangul) character anywhere in the output.
+Preserve the paragraph structure of the original: the Korean body below is
+split into paragraphs by blank lines (\\n\\n) — keep that same number of
+paragraph breaks in your {lang_name} translation, do not merge everything
+into one block.
 
 Output format (follow exactly, no extra text before or after):
 TITLE: <{lang_name} title>
-BODY: <{lang_name} body>
+BODY: <{lang_name} body, with paragraphs separated by a blank line>
 
 [Korean title]
 {title_ko}
@@ -97,6 +137,11 @@ Output:"""
     title_out, body_out = _parse_translation(text)
     if not title_out or not body_out:
         return "", ""
+    if _has_korean_leak(title_out) or _has_korean_leak(body_out):
+        return "", ""
+    if _has_self_duplication(body_out):
+        return "", ""
+    body_out = ensure_paragraphs(body_out)
     return title_out, body_out
 
 
@@ -112,6 +157,9 @@ def verify_translation(title_ko: str, body_ko: str, title_out: str, body_out: st
     if not title_out or not body_out:
         return "번역 결과 없음"
 
+    if _has_korean_leak(title_out) or _has_korean_leak(body_out):
+        return "번역 결과에 한글이 남아있음"
+
     if call_nvidia_fn is None:
         try:
             from nvidia_client import call_nvidia as call_nvidia_fn
@@ -120,10 +168,13 @@ def verify_translation(title_ko: str, body_ko: str, title_out: str, body_out: st
 
     lang_name = LANG_NAMES.get(lang, lang)
     prompt = f"""Compare this Korean news article with its {lang_name} translation.
-Check ONLY for: numbers/statistics changed, dates changed, names/places changed
-or mistranslated, facts added that aren't in the Korean original, facts dropped
-that change the meaning. Ignore stylistic differences — translation doesn't
-need to be word-for-word.
+First check: is the translation actually written in {lang_name}? If any part of
+it is still in Korean, or in a different language than {lang_name}, that is a
+failure — report it.
+Otherwise check ONLY for: numbers/statistics changed, dates changed, names/places
+changed or mistranslated, facts added that aren't in the Korean original, facts
+dropped that change the meaning. Ignore stylistic differences — translation
+doesn't need to be word-for-word.
 
 [Korean original]
 {title_ko}
@@ -195,8 +246,8 @@ Output:"""
     summary3_out = m_s3.group(1).strip() if m_s3 else ""
     investment_out = m_inv.group(1).strip() if m_inv else ""
 
-    if not summary_3lines_ko:
+    if not summary_3lines_ko or _has_korean_leak(summary3_out):
         summary3_out = ""
-    if not investment_idea_ko:
+    if not investment_idea_ko or _has_korean_leak(investment_out):
         investment_out = ""
     return summary3_out, investment_out

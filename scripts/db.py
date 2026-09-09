@@ -55,7 +55,7 @@ def insert_article(
     title_en, title_ko, summary_en, summary_ko,
     url, source, category, subcategory, region, country, country_flag, score,
     full_text="", countries=None, is_published=False, source_published_at=None,
-    source_data=None,
+    source_data=None, image_url=None,
 ) -> int:
     payload = {
         "title_en": title_en or "",
@@ -84,6 +84,11 @@ def insert_article(
     # 쓸 수 있게 원문 그대로 보존한다(2026-09-08, gemini_summarizer.py 참고).
     if source_data:
         payload["source_data"] = source_data
+    # 대표 이미지 — 수집 단계에서 이미 이미지를 구한 수집기(domestic_kr_fetcher.py
+    # 등)만 채운다. 값이 없을 때만 실어 기존 동작(발행 단계에서 gemini_writer.py가
+    # 채우는 흐름)에 영향 없게 한다.
+    if image_url:
+        payload["image_url"] = image_url
     headers = {**_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
     res = requests.post(_url(), headers=headers, json=payload, timeout=15)
     if res.status_code in (200, 201):
