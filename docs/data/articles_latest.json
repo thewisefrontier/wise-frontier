@@ -1,5 +1,43 @@
 [
   {
+    "id": 157781,
+    "title_en": "동아시아, 도쿄 비바람·베이징 31도 불볕더위",
+    "title_ko": "동아시아, 도쿄 비바람·베이징 31도 불볕더위",
+    "summary_ko": "11일(현지시간) 동아시아 주요국 수도는 최저기온 7°C에서 최고기온 31°C의 넓은 기온 분포를 기록한 가운데, 지역별로 극명하게 엇갈린 기상 상황을 나타냈다. 중국 베이징은 최고기온 31°C, 최저기온 17°C를 기록하며 이번 조사 대상 지역 중 가장 더운 곳으로 집계됐다. 베이징의 날씨는 맑았으며, 강수확률은 0%, 강수량은 0.0mm를 기록했다.\n\n반면 일본 도쿄는 최고기온 20°C, 최저기온 19°C에 머물렀으며, 강수량 52.7mm와 강수확률 100%를 동반한 비 소식이 이어지면서 가장 선선한 곳으로 나타났다.\n\n몽골 울",
+    "url": "internal://weather_group_동아시아_today20260911",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_동아시아_today20260911",
+    "region": "east_asia",
+    "country": "동아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-11 06:24",
+    "countries": [
+      "일본",
+      "중국",
+      "몽골"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_china_20260911.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-11T06:24:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-11 06:24",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
     "id": 157649,
     "title_en": "한국, 전국·일교차 큰 날씨…낮 최고 28도",
     "title_ko": "한국, 전국·일교차 큰 날씨…낮 최고 28도",
@@ -138,44 +176,6 @@
     "investment_idea_en": null
   },
   {
-    "id": 157448,
-    "title_en": "케냐 엠폭스 확진자 1200명 넘어... 말라위는 종식 선언",
-    "title_ko": "케냐 엠폭스 확진자 1200명 넘어... 말라위는 종식 선언",
-    "summary_ko": "9일(현지시간) 케냐 보건부는 성명을 통해 엠폭스 확진자가 1298명으로 늘어났고 사망자는 19명으로 집계되었다고 발표했다. 모바사가 452명으로 가장 많은 확진자를 기록했으며 그 뒤를 이어 나이로비에서 320명이 확인되는 등 전국 40개 이상의 카운티로 확산되었다. 보건 당국은 주요 교통 거점과 국경 인근에 위치한 7개 카운티를 고위험 지역으로 지정하고 검역과 감시를 강화했다.\n\n한편 말라위에서는 90일 이상 엠폭스 추가 확진 사례가 보고되지 않으면서 보건 당국이 9일(현지시간) 공식적으로 감염병 종식을 선언했다. 말라위 보건부에",
-    "url": "internal://trend_mpox_2026091105",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "trend_mpox",
-    "region": "africa",
-    "country": "케냐",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-11 05:10",
-    "countries": [
-      "케냐",
-      "말라위",
-      "중앙아프리카공화국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_mpox.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-11T05:10:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-11 05:10",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "사진: OWID (CC BY 4.0, Wikimedia Commons)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
     "id": 157449,
     "title_en": "[국내유가] 휘발유 리터당 1859원…정유사 공급가 논쟁 속 소폭 하락",
     "title_ko": "[국내유가] 휘발유 리터당 1859원…정유사 공급가 논쟁 속 소폭 하락",
@@ -236,6 +236,44 @@
       }
     },
     "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
+    "id": 157448,
+    "title_en": "케냐 엠폭스 확진자 1200명 넘어... 말라위는 종식 선언",
+    "title_ko": "케냐 엠폭스 확진자 1200명 넘어... 말라위는 종식 선언",
+    "summary_ko": "9일(현지시간) 케냐 보건부는 성명을 통해 엠폭스 확진자가 1298명으로 늘어났고 사망자는 19명으로 집계되었다고 발표했다. 모바사가 452명으로 가장 많은 확진자를 기록했으며 그 뒤를 이어 나이로비에서 320명이 확인되는 등 전국 40개 이상의 카운티로 확산되었다. 보건 당국은 주요 교통 거점과 국경 인근에 위치한 7개 카운티를 고위험 지역으로 지정하고 검역과 감시를 강화했다.\n\n한편 말라위에서는 90일 이상 엠폭스 추가 확진 사례가 보고되지 않으면서 보건 당국이 9일(현지시간) 공식적으로 감염병 종식을 선언했다. 말라위 보건부에",
+    "url": "internal://trend_mpox_2026091105",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "trend_mpox",
+    "region": "africa",
+    "country": "케냐",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-11 05:10",
+    "countries": [
+      "케냐",
+      "말라위",
+      "중앙아프리카공화국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_mpox.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-11T05:10:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-11 05:10",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "사진: OWID (CC BY 4.0, Wikimedia Commons)",
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null
@@ -2250,44 +2288,6 @@
         }
       ]
     },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 153033,
-    "title_en": "동아시아, 베이징 29도 늦더위 속 도쿄 빗줄기",
-    "title_ko": "동아시아, 베이징 29도 늦더위 속 도쿄 빗줄기",
-    "summary_ko": "10일(현지시간) 동아시아 주요국 수도는 최저기온 6°C에서 최고기온 29°C 사이의 기온 분포를 보였다. 중국 베이징은 최고기온 29°C를 기록하며 가장 더운 곳으로 나타났고, 몽골 울란바토르는 최저기온 6°C, 최고기온 21°C로 가장 선선한 곳을 기록했다. 두 지역 모두 폭우와 강풍은 관측되지 않았으며, 몽골 울란바토르는 흐린 날씨를 보였다.\n\n아시아 지역 전체에 걸쳐 기록적인 폭우와 태풍이 겹치면서 플래시 플러드와 해안가 침수 피해가 이어지는 가운데, 이번 기상 상황은 광범위한 폭우 전선과 대기 불안정의 영향을 받은 것으로 ",
-    "url": "internal://weather_group_동아시아_today20260910",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_동아시아_today20260910",
-    "region": "east_asia",
-    "country": "동아시아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-10 06:24",
-    "countries": [
-      "일본",
-      "중국",
-      "몽골"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_china_20260910.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-10T06:24:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-10 06:24",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
     "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
