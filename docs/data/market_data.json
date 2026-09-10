@@ -25,15 +25,15 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 7017.27,
-      "change_pct": 0.9,
+      "price": 7016.17,
+      "change_pct": 0.89,
       "up": true
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 830.84,
-      "change_pct": 2.34,
+      "price": 830.58,
+      "change_pct": 2.3,
       "up": true
     },
     {
@@ -53,14 +53,14 @@
     {
       "name": "SET (태국)",
       "symbol": "^SET.BK",
-      "price": 1615.1,
-      "change_pct": -0.17,
+      "price": 1614.45,
+      "change_pct": -0.21,
       "up": false
     },
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 6673.91,
+      "price": 6674.26,
       "change_pct": -0.06,
       "up": false
     },
@@ -121,15 +121,15 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 7017.27,
-        "change_pct": 0.9,
+        "price": 7016.17,
+        "change_pct": 0.89,
         "up": true
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 830.84,
-        "change_pct": 2.34,
+        "price": 830.58,
+        "change_pct": 2.3,
         "up": true
       }
     ],
@@ -151,14 +151,14 @@
       {
         "name": "SET (태국)",
         "symbol": "^SET.BK",
-        "price": 1615.1,
-        "change_pct": -0.17,
+        "price": 1614.45,
+        "change_pct": -0.21,
         "up": false
       },
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 6673.91,
+        "price": 6674.26,
         "change_pct": -0.06,
         "up": false
       },
@@ -198,8 +198,8 @@
     "ANTM": {
       "name": "Aneka Tambang Tbk",
       "symbol": "ANTM.JK",
-      "price": 3300.0,
-      "change_pct": 3.12,
+      "price": 3290.0,
+      "change_pct": 2.81,
       "up": true
     },
     "ACB": {
