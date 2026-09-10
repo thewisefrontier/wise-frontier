@@ -71,8 +71,22 @@ except Exception:
 try:
     from central_bank_rates import fetch_official_rate
 except Exception:
-    def fetch_official_rate(country: str):
+    def fetch_official_rate(country: str, event_date: str | None = None):
         return None
+
+# 배경 컨텍스트(총재 발언·결정 배경 등) 보강용 — gemini_writer.py의
+# 트렌드 기사 배경보강과 같은 함수 재사용(2026-09-11, 사용자 지적 — "ECB 관련
+# 기사가 이미 수십 건 수집돼 있는데 그걸 참고했다면 멘트도 넣을 수 있었을
+# 텐데"). econ_writer.py는 그동안 econ_events 테이블만 보고 메인 RSS/GDELT
+# 파이프라인이 이미 모아둔 articles 테이블을 전혀 참고하지 않아, 매번 맨땅에서
+# 배경·인용문을 지어내고 있었다(id=156302 라가르드 발언 누락 등 여러 신고의
+# 공통 원인). NVIDIA 우선 → 실패 시 검색 그라운딩 폴백 + 교차검증까지 이미
+# 갖춰진 함수라 새로 안전장치를 만들 필요가 없다.
+try:
+    from gemini_summarizer import fetch_background_context
+except Exception:
+    def fetch_background_context(query: str, source_context: str = "") -> str:
+        return ""
 
 # ── 설정 ────────────────────────────────────────────────────
 GEMINI_MODELS = [
@@ -133,6 +147,46 @@ except Exception:
 
 def _sb_events_url():
     return f"{SUPABASE_URL}/rest/v1/econ_events"
+
+
+# 2026-09-11 신설 — 메인 RSS/GDELT 파이프라인이 이미 수집해둔 관련 기사
+# 제목을 찾아 배경 컨텍스트의 source_context로 넘긴다(위 fetch_background_context
+# import 주석 참고). 본문 전체가 아니라 제목만 모아 넘기는 이유는 gemini_writer.py
+# find_continuing_story() 등 기존 패턴과 동일 — 제목만으로도 "이런 각도의 보도가
+# 실제로 있었다"는 근거는 충분하고, 본문까지 넣으면 프롬프트가 과도하게 길어진다.
+def _fetch_related_article_titles(country: str, bank_ko: str, event_date: str, limit: int = 12) -> str:
+    try:
+        ev = datetime.strptime(event_date, "%Y-%m-%d").date()
+    except ValueError:
+        return ""
+    start = (ev - timedelta(days=10)).isoformat()
+
+    m = re.search(r"\(([A-Za-z]+)\)", bank_ko)
+    abbr = m.group(1) if m else ""
+    or_filter = f"title_ko.ilike.*{abbr}*,title_ko.ilike.*{country}*" if abbr else f"title_ko.ilike.*{country}*"
+
+    try:
+        res = requests.get(
+            _sb_articles_url(),
+            headers=_sb_headers(),
+            params={
+                "select": "title_ko,created_at",
+                "or": f"({or_filter})",
+                "created_at": f"gte.{start}",
+                "order": "created_at.desc",
+                "limit": str(limit),
+            },
+            timeout=10,
+        )
+        if res.status_code not in (200, 206):
+            return ""
+        rows = res.json()
+    except Exception as e:
+        print(f"  [WARN] 관련기사 조회 실패: {e}")
+        return ""
+
+    titles = [r["title_ko"] for r in rows if r.get("title_ko")]
+    return "\n".join(f"- {t}" for t in titles)
 
 
 # ── 발표 시각 체크 ───────────────────────────────────────────
@@ -268,49 +322,103 @@ def build_search_prompt(event: dict) -> str:
     )
 
 
+# 중앙은행 한국어 정식명칭(영문 약칭 포함) — 2026-09-11 신설(실사고 id=156302:
+# "제목은 국가명 중앙은행 형태로"라는 일반 지시만 주니 유로존을 "유로존
+# 중앙은행"이라는 존재하지 않는 이름으로 지어냈다 — 정식명칭은 econ_events.title에
+# 이미 정확히 들어있는데도 프롬프트가 이를 무시하고 매번 새로 조합하게 시켰던 게
+# 근본 원인. 국가명 조합 대신 이 사전을 그대로 쓰도록 프롬프트에 못박는다.
+CENTRAL_BANK_KO = {
+    "나이지리아": "나이지리아 중앙은행(CBN)",
+    "케냐": "케냐 중앙은행(CBK)",
+    "인도네시아": "인도네시아 중앙은행(BI)",
+    "태국": "태국 중앙은행(BOT)",
+    "필리핀": "필리핀 중앙은행(BSP)",
+    "남아공": "남아공 중앙은행(SARB)",
+    "이집트": "이집트 중앙은행(CBE)",
+    "미국": "미국 연방준비제도(Fed)",
+    "유로존": "유럽중앙은행(ECB)",
+    "일본": "일본은행(BOJ)",
+    "영국": "영란은행(BOE)",
+}
+
+
 # ── 기사 생성 프롬프트 ───────────────────────────────────────
-def build_article_prompt(event: dict, actual_value: str) -> str:
+def build_article_prompt(event: dict, actual_value: str, context_block: str = "") -> str:
     title      = event.get("title", "")
     country    = event.get("country", "")
     event_date = str(event.get("event_date", ""))
     prev       = event.get("previous_value") or "N/A"
     forecast   = event.get("forecast_value") or "N/A"
     desc       = event.get("description") or ""
+    bank_ko    = CENTRAL_BANK_KO.get(country, f"{country} 중앙은행")
 
     try:
         av = float(actual_value.replace("%", ""))
         pv = float(str(prev).replace("%", "")) if prev != "N/A" else None
         if pv is not None:
-            direction = "인상" if av > pv else ("인하" if av < pv else "동결")
+            diff = round(av - pv, 4)
+            direction = "인상" if diff > 0 else ("인하" if diff < 0 else "동결")
+            direction_line = (
+                f"- 변화: 직전 {prev} 대비 {direction} (동결이면 변동폭 언급 불필요, "
+                f"인상/인하면 {abs(diff):g}%p {direction})"
+            )
         else:
-            direction = "결정"
+            direction = "확인불가"
+            direction_line = (
+                "- 변화: 직전 금리 정보가 없어 인상/인하/동결 여부를 알 수 없습니다. "
+                "단정적으로 서술하지 말고 방향을 명시하지 않는 중립적 표현("
+                "'기준금리를 X%로 결정했다' 형태)만 쓰세요."
+            )
     except Exception:
-        direction = "결정"
+        direction = "확인불가"
+        direction_line = "- 변화: 알 수 없음. 방향을 단정하지 마세요."
+
+    context_section = (
+        f"\n[참고 — 실제로 수집된 관련 보도 내용(이 안에 있는 사실·인용문만 사용)]\n{context_block}\n"
+        if context_block else
+        "\n[참고] 이번 회의에 대한 별도 수집 자료가 없습니다. 직접 인용문(따옴표)은 "
+        "절대 지어내지 말고, 위 [이벤트 정보]에 없는 구체적 수치·발언·전망치도 "
+        "새로 만들지 마세요.\n"
+    )
 
     return f"""당신은 프론티어 마켓 전문 경제 뉴스 기자입니다.
 아래 정보를 바탕으로 한국어 뉴스 스타일 기사를 작성하세요.
 
 [이벤트 정보]
 - 이벤트명: {title}
+- 중앙은행 정식명칭: {bank_ko}
 - 국가: {country}
 - 예정일: {event_date}
-- 결정 금리: {actual_value} ({direction})
-- 직전 금리: {prev}
+- 결정 금리: {actual_value}
+{direction_line}
 - 예상 금리: {forecast}
 - 추가 설명: {desc}
-
+{context_section}
 [작성 규칙]
 1. 제목(title)과 본문(body)을 분리해 아래 형식으로 출력하세요:
    TITLE: <제목>
    BODY: <본문>
 
-2. 제목은 "국가명 중앙은행, 기준금리 X% 동결/인상/인하" 형태로 간결하게.
-3. 본문은 700자 이상, 스트레이트 뉴스 문체(감정·논평 표현 금지).
-4. 날짜는 '현지시간' 기준으로 "N일(현지시간)" 형식. 절대날짜 금지, '오늘'·'현재' 금지.
-5. 금리 결정 내용, 전망치 대비 결과, 직전 금리 대비 변화를 포함.
-6. 해당 국가 경제 맥락(물가, 환율, 경제성장 등)을 간략히 언급.
-7. 비라틴 문자 국가명·지명은 반드시 한국어 음역.
-8. 논평/칼럼 문체 금지: '~를 보여줍니다', '~기대됩니다', '~주목됩니다' 등 사용 금지.
+2. 제목은 반드시 위에 명시된 "중앙은행 정식명칭"을 그대로 사용해
+   "{bank_ko}, 기준금리 {actual_value}로 {direction if direction != '확인불가' else '결정'}" 형태로 작성하세요.
+   국가명과 '중앙은행'을 임의로 조합해 다른 명칭을 새로 만들지 마세요
+   (예: 유로존이라고 "유로존 중앙은행"이라 쓰면 안 됩니다 — 정식명칭은 유럽중앙은행입니다).
+3. 본문 첫 문장에서만 중앙은행 정식명칭 전체를 쓰고, 그 이후 문단에서는
+   괄호 안 영문 약칭만 사용하세요(예: 첫 문장 "유럽중앙은행(ECB)은...", 이후 "ECB는...").
+4. 첫 문장은 "언제(N일 현지시간) 무엇을 결정했다"는 핵심 사실을 바로 전달하세요.
+   "~을 통해 ~을 점검했다/살펴봤다" 같은 우회적·완곡한 서술 대신 "~와 함께
+   ~을 발표했다"처럼 직접적으로 쓰세요.
+5. 본문은 700자 이상, 2~3문장으로 끊어 문단을 나누는 스트레이트 뉴스 문체
+   (감정·논평 표현 금지).
+6. 날짜는 '현지시간' 기준으로 "N일(현지시간)" 형식. 절대날짜 금지, '오늘'·'현재' 금지.
+7. 금리 결정 내용, 전망치 대비 결과, 직전 금리 대비 변화(위 [이벤트 정보]의
+   "변화" 항목 지시를 그대로 따를 것)를 포함.
+8. 해당 국가 경제 맥락(물가, 환율, 경제성장 등)은 반드시 위 [참고] 자료나
+   [이벤트 정보]에 근거해서만 쓰세요. 그런 자료가 없으면 "물가가 안정화되고
+   있다/우려된다" 같은 구체적 방향성 주장을 지어내지 말고, 중앙은행이
+   물가 안정을 위해 통화정책을 운영한다는 원론적 서술에 그치세요.
+9. 비라틴 문자 국가명·지명은 반드시 한국어 음역.
+10. 논평/칼럼 문체 금지: '~를 보여줍니다', '~기대됩니다', '~주목됩니다' 등 사용 금지.
 """
 
 
@@ -479,15 +587,27 @@ def main():
         # 데이터를 직접 조회해, 성공하면 Gemini 검색 전체를 건너뛴다.
         # 지원 안 되는 국가(일본 포함)는 official_rate가 None이라 그대로
         # 아래 기존 경로로 폴백한다.
+        #
+        # 2026-09-11 수정(실사고 id=156302 — ECB 9/10 회의 기사가 실제 결정
+        # 2.50%가 아니라 회의 직전 금리 2.25%를 그대로 오채택해 발행됨):
+        # central_bank_rates.fetch_official_rate()가 이제 event_date를 받아
+        # "이벤트일 직전 값"과 "지금 최신값"을 자체 비교해 실제로 안 바뀐
+        # 경우(=아직 발효 전이라 반영이 안 됐을 수 있는 경우) None을 반환한다
+        # — 여기서 추가 날짜 검증을 할 필요 없이 성공 시 그대로 신뢰한다.
+        # 직전값(prev_official)도 함께 받아 아래 build_article_prompt에 넘겨
+        # LLM이 인상/인하/동결을 직접 추론하게 두지 않고 결정론적으로 계산한다.
         actual_str = None
-        official = fetch_official_rate(country)
+        prev_official = None
+        official = fetch_official_rate(country, event_date=edate)
         if official:
-            off_rate, off_date = official
-            if off_date.isoformat() >= edate:
-                actual_str = f"{off_rate:.2f}%"
-                print(f"    ✓ 공식 소스 조회 성공: {actual_str} (기준일 {off_date})")
-            else:
-                print(f"    → 공식 소스 데이터가 아직 발표 시점({edate}) 이전({off_date}) → Gemini 검색으로 폴백")
+            off_rate, off_date, prev_official = official
+            actual_str = f"{off_rate:.2f}%"
+            print(f"    ✓ 공식 소스 조회 성공: {actual_str} (기준일 {off_date}, 직전 {prev_official})")
+        else:
+            print(f"    → 공식 소스로 확정 불가(미지원 국가 또는 아직 발효 반영 전) → Gemini 검색으로 폴백")
+
+        if prev_official is not None and event.get("previous_value") in (None, "", "N/A"):
+            event["previous_value"] = f"{prev_official:.2f}%"
 
         if actual_str is None:
             # ── Step 1: Gemini 검색 1차
@@ -543,9 +663,25 @@ def main():
             continue
         print(f"    ✓ econ_events 업데이트 완료")
 
+        # ── Step 4.5: 배경 컨텍스트 수집(2026-09-11 신설 — 사용자 지적:
+        # "한국에서 나온 ECB 관련 기사도 수십 개에 달하는데" 메인 파이프라인이
+        # 이미 모아둔 articles를 econ_writer.py가 전혀 안 보고 있었다). 먼저
+        # 실제 수집된 관련기사 제목을 찾아 source_context로 주고, 그걸 근거로
+        # fetch_background_context(NVIDIA→검색그라운딩+교차검증)가 총재 발언·
+        # 결정 배경을 보강한다. 아무것도 못 찾으면 빈 문자열 — build_article_prompt가
+        # 그 경우 "지어내지 말고 원론적 서술만" 쪽으로 자동 폴백한다.
+        bank_ko = CENTRAL_BANK_KO.get(country, f"{country} 중앙은행")
+        related_titles = _fetch_related_article_titles(country, bank_ko, edate)
+        if related_titles:
+            print(f"    → 관련기사 {related_titles.count(chr(10)) + 1}건 발견, 배경 보강 중...")
+        context_block = fetch_background_context(
+            f"{bank_ko} {edate} 통화정책회의 금리 {actual_str} 결정 배경, 총재 기자회견 핵심 발언",
+            source_context=related_titles,
+        )
+
         # ── Step 5: 기사 생성
         print(f"    → 기사 생성 중...")
-        article_text = call_gemini(build_article_prompt(event, actual_str),
+        article_text = call_gemini(build_article_prompt(event, actual_str, context_block),
                                    max_tokens=1500, use_search=False)
         time.sleep(8)
 
@@ -556,18 +692,18 @@ def main():
         if has_column_style(article_text):
             print(f"    ⚠️ 논평체 감지 → 재생성")
             retry_prompt = (
-                build_article_prompt(event, actual_str)
+                build_article_prompt(event, actual_str, context_block)
                 + "\n\n[재작성 지시] 앞서 작성한 결과에 논평/칼럼 문체가 섞였습니다. "
                   "감정·의견 표현을 완전히 배제하고 사실 전달 중심으로만 다시 작성하세요."
             )
             article_text = call_gemini(retry_prompt, max_tokens=1500, use_search=False) or article_text
             time.sleep(5)
 
-        fabricated = verify_no_fabricated_names(build_article_prompt(event, actual_str), article_text)
+        fabricated = verify_no_fabricated_names(build_article_prompt(event, actual_str, context_block), article_text)
         if fabricated:
             print(f"    ⚠️ 원문에 없는 고유명사 감지({fabricated}) → 재생성")
             retry_prompt2 = (
-                build_article_prompt(event, actual_str)
+                build_article_prompt(event, actual_str, context_block)
                 + f"\n\n[재작성 지시] 다음 이름을 원문에 없는 표현으로 잘못 지어냈습니다: {fabricated}. "
                   "고유명사는 원본 자료에 나온 표기를 그대로 옮기고, 확신할 수 없으면 지어내지 말고 원문 표기를 그대로 쓰세요."
             )
