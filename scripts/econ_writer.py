@@ -124,10 +124,29 @@ _gemini_client = GeminiClient(GEMINI_API_KEYS, GEMINI_MODELS)
 ANNOUNCEMENT_BUFFER_MINUTES = 30
 
 # actual_value 없는 이벤트를 최대 며칠 전까지 소급 처리할지
-MAX_LOOKBACK_DAYS = 5
+# 2026-09-11 5→14로 상향(사용자 지시 — "금리 결정 기사가 한두시간 정도 늦어도
+# 상관 없는데 숫자가 틀리면 절대 안돼"). ECB처럼 결정 발표일과 신규 금리
+# 발효일 사이에 최대 1주일 넘게 지연이 있는 국가는(central_bank_rates.py의
+# 2026-09-11 발효지연 수정 참고) 공식 소스가 확정될 때까지 기다려야 하는데,
+# 기존 5일로는 그 전에 이벤트가 조회 대상에서 빠져 확인도 못 하고 영구
+# 누락됐다. 정확성이 속도보다 우선이므로 여유 있게 늘린다.
+MAX_LOOKBACK_DAYS = 14
 
 # 두 Gemini 응답 숫자 허용 오차
 RATE_TOLERANCE = 0.01
+
+# 2026-09-11 신설(사용자 지시 — "숫자가 틀리면 절대 안돼"): 공식 데이터
+# 소스(FRED/BOE)가 이미 연결된 국가는 그 소스가 확정해줄 때까지 기다리고,
+# Gemini 검색으로 대체 추정하지 않는다. central_bank_rates.py가 이제 "진짜
+# 바뀐 경우"만 반환하도록 고쳐졌지만(발효지연 오판 방지), 그래도 공식 소스가
+# 아직 반영 전이라 None을 준 상황에서 굳이 Gemini 검색으로 넘어가면, 이번
+# ECB 건에서 새로 발견한 위험(같은 나라에 정책금리가 여러 개 — 예: ECB의
+# 예금금리/재융자금리/한계대출금리, 미국의 목표금리 상단/하단 — 검색 결과가
+# 어느 금리를 말하는지 모호해 두 번의 독립 검색이 우연히 "같은 값에서 합의"
+# 하더라도 실제로는 둘 다 다른 종류의 금리를 가리키는 경우)에 노출된다.
+# 공식 소스가 없는 나머지 국가(나이지리아 등)는 정책금리가 사실상 하나뿐이라
+# 이 위험이 낮고, 애초에 Gemini 검색이 유일한 경로라 기존대로 둔다.
+OFFICIAL_SOURCE_ONLY_COUNTRIES = {"미국", "유로존", "영국"}
 
 
 # ── Supabase 헬퍼 (article_store.py로 공용화, 2026-09-02) ──────────
@@ -301,6 +320,19 @@ def rates_match(r1: float, r2: float) -> bool:
     return abs(r1 - r2) <= RATE_TOLERANCE
 
 
+# 2026-09-11 신설(사용자 지시 — "숫자가 틀리면 절대 안돼"): 공식 소스가
+# 없어 이 Gemini 검색이 유일한 경로인 국가라도, 중앙은행에 따라 정책금리가
+# 여러 종류일 수 있다(예: 일본은행은 단기정책금리 외에 YCC 관련 금리도
+# 보도에 섞여 나옴). 어느 금리를 답해야 하는지 명시하지 않으면 두 번의
+# 독립 검색이 "같은 값에 합의"해도 사실은 서로 다른 종류의 금리를 가리키는
+# 채 우연히 일치했을 위험이 있다(ECB 건에서 예금금리/재융자금리/한계대출금리
+# 세 가지가 동시에 존재한다는 걸 알고 나서 역으로 확인된 위험). 국가별로
+# "이 금리"라고 콕 집어줄 수 있는 경우만 명시하고, 나머지는 범용 문구를 쓴다.
+_RATE_TYPE_HINT = {
+    "일본": "단기 정책금리(무담보 콜금리 유도목표, uncollateralized overnight call rate target) 하나만",
+}
+
+
 # ── 검색 프롬프트 ────────────────────────────────────────────
 def build_search_prompt(event: dict) -> str:
     title      = event.get("title", "")
@@ -308,6 +340,7 @@ def build_search_prompt(event: dict) -> str:
     event_date = str(event.get("event_date", ""))
     prev       = event.get("previous_value") or "N/A"
     forecast   = event.get("forecast_value") or "N/A"
+    rate_hint  = _RATE_TYPE_HINT.get(country, "해당 중앙은행이 공식적으로 발표하는 대표 기준금리(정책금리) 하나만")
 
     return (
         f"다음 중앙은행 금리결정 이벤트의 실제 결정 금리(actual policy rate)를 검색해 알려주세요.\n\n"
@@ -316,6 +349,9 @@ def build_search_prompt(event: dict) -> str:
         f"예정일: {event_date}\n"
         f"직전 금리: {prev}\n"
         f"예상 금리: {forecast}\n\n"
+        f"⚠️ 해당 중앙은행이 발표하는 금리가 여러 종류(예: 예금금리·재융자금리처럼)라면 "
+        f"절대 섞지 말고 {rate_hint} 답하세요. 어떤 금리를 답했는지 확신이 서지 않으면 "
+        f"'미발표'라고 답하세요(틀린 숫자를 추측해서 답하는 것보다 낫습니다).\n"
         f"오직 결정된 실제 금리 숫자(%)만 답변하세요. "
         f"결과가 아직 발표되지 않았다면 '미발표'라고만 답하세요. "
         f"다른 설명은 불필요합니다."
@@ -603,8 +639,14 @@ def main():
             off_rate, off_date, prev_official = official
             actual_str = f"{off_rate:.2f}%"
             print(f"    ✓ 공식 소스 조회 성공: {actual_str} (기준일 {off_date}, 직전 {prev_official})")
+        elif country in OFFICIAL_SOURCE_ONLY_COUNTRIES:
+            # 공식 소스가 있는 국가는 그게 확정해줄 때까지 기다린다(정확성
+            # 최우선 — 위 OFFICIAL_SOURCE_ONLY_COUNTRIES 주석 참고). Gemini
+            # 검색으로 대체 추정하지 않고 다음 사이클에 재시도한다.
+            print(f"    → 공식 소스 아직 미반영, Gemini 검색으로 대체하지 않고 대기 → 스킵(다음 사이클 재시도)")
+            continue
         else:
-            print(f"    → 공식 소스로 확정 불가(미지원 국가 또는 아직 발효 반영 전) → Gemini 검색으로 폴백")
+            print(f"    → 공식 소스 미지원 국가 → Gemini 검색으로 폴백")
 
         if prev_official is not None and event.get("previous_value") in (None, "", "N/A"):
             event["previous_value"] = f"{prev_official:.2f}%"
