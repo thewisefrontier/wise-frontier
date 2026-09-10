@@ -1051,6 +1051,18 @@ def _pb_prize_sentences(prize: dict) -> str:
         return ""
 
 
+# 2026-09-10 실사고(id=154226, 9월 7일자): fetch_powerball_prize_data()가
+# powerball.com 스크레이핑 실패로 None을 반환하면 build_powerball_article()이
+# 잭팟·등수별 당첨자 문단(prize_text)을 통째로 건너뛰어, "당첨번호를
+# 발표했다" 한 문장짜리 본문만 발행됐다(사용자 지적: "9월 7일자는 기사
+# 내용이 한줄 뿐이고", "문단 정리도 안됏고" — 문단이 애초에 1개뿐이라
+# 나뉠 게 없었을 뿐, 별도의 문단분할 버그는 아니었음). 연금복권720+
+# 경로(MIN_PENSION720_BODY_LEN)엔 이미 있던 "정보 누락 시 발행 보류,
+# 다음 주기 재시도" 안전장치가 파워볼 경로에만 빠져 있었다 — 같은
+# 패턴으로 추가.
+MIN_POWERBALL_BODY_LEN = 150
+
+
 def build_powerball_article(d: dict, prize: dict | None = None) -> tuple[str, str, str]:
     draw_date = datetime.strptime(d["draw_date"][:10], "%Y-%m-%d").date()
     nums = [int(n) for n in d["winning_numbers"].split()]
@@ -1144,9 +1156,13 @@ def run():
         else:
             prize = fetch_powerball_prize_data(pb_date)
             title, body, url_key = build_powerball_article(pb, prize)
-            image_url = get_powerball_image_url(pb_date, pb_white, pb_ball, pb_draw_date, pb_multiplier)
-            aid = insert_article(title, body, url_key, countries=["미국"], image_url=image_url)
-            print(f"  {'✓' if aid > 0 else '✗'} 파워볼 {pb_date}: id={aid}")
+            if len(body) < MIN_POWERBALL_BODY_LEN:
+                print(f"  ⚠️ 파워볼 {pb_date} 본문이 비정상적으로 짧음({len(body)}자, "
+                      f"잭팟·등수별 정보 누락 추정) → 이번 주기 발행 보류, 다음 주기 재시도")
+            else:
+                image_url = get_powerball_image_url(pb_date, pb_white, pb_ball, pb_draw_date, pb_multiplier)
+                aid = insert_article(title, body, url_key, countries=["미국"], image_url=image_url)
+                print(f"  {'✓' if aid > 0 else '✗'} 파워볼 {pb_date}: id={aid}")
     else:
         print("  → 파워볼 데이터 조회 실패")
 
