@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-10 13:43",
+  "updated_at": "2026-09-10 13:51",
   "indices": [
     {
       "name": "S&P 500",
@@ -25,15 +25,15 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 7005.22,
-      "change_pct": 0.73,
+      "price": 7017.27,
+      "change_pct": 0.9,
       "up": true
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 830.6,
-      "change_pct": 2.31,
+      "price": 830.84,
+      "change_pct": 2.34,
       "up": true
     },
     {
@@ -53,15 +53,15 @@
     {
       "name": "SET (태국)",
       "symbol": "^SET.BK",
-      "price": 1617.0,
-      "change_pct": -0.06,
+      "price": 1615.1,
+      "change_pct": -0.17,
       "up": false
     },
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 6668.87,
-      "change_pct": -0.14,
+      "price": 6673.91,
+      "change_pct": -0.06,
       "up": false
     },
     {
@@ -121,15 +121,15 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 7005.22,
-        "change_pct": 0.73,
+        "price": 7017.27,
+        "change_pct": 0.9,
         "up": true
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 830.6,
-        "change_pct": 2.31,
+        "price": 830.84,
+        "change_pct": 2.34,
         "up": true
       }
     ],
@@ -151,15 +151,15 @@
       {
         "name": "SET (태국)",
         "symbol": "^SET.BK",
-        "price": 1617.0,
-        "change_pct": -0.06,
+        "price": 1615.1,
+        "change_pct": -0.17,
         "up": false
       },
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 6668.87,
-        "change_pct": -0.14,
+        "price": 6673.91,
+        "change_pct": -0.06,
         "up": false
       },
       {
