@@ -1,5 +1,43 @@
 [
   {
+    "id": 153443,
+    "title_en": "중앙아시아, 37도 불볕더위…일교차 뚜렷",
+    "title_ko": "중앙아시아, 37도 불볕더위…일교차 뚜렷",
+    "summary_ko": "10일(현지시간) 중앙아시아 주요국 수도는 최저기온 17°C에서 최고기온 37°C 사이의 기온 분포를 보이며 지역별로 뚜렷한 기온 차를 나타냈다. 전 지역에 걸쳐 강수나 뇌우, 강풍 같은 특이기상은 관측되지 않았으며, 38°C 이상의 폭염을 기록한 지역도 없는 것으로 집계됐다.\n\n이날 가장 더운 곳은 37°C를 기록한 우즈베키스탄 타슈켄트로, 가장 선선한 곳인 카자흐스탄 아스타나의 최고기온 29°C보다 8°C 높았다. 우즈베키스탄 타슈켄트는 맑은 날씨 속에서 최고기온 37°C, 최저기온 22°C를 기록했으며 자외선지수는 6.3이었고",
+    "url": "internal://weather_group_중앙아시아_today20260910",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_중앙아시아_today20260910",
+    "region": "central_asia",
+    "country": "중앙아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-10 09:09",
+    "countries": [
+      "카자흐스탄",
+      "우즈베키스탄",
+      "키르기스스탄"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_kazakhstan_20260910.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-10T09:09:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-10 09:09",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
     "id": 153442,
     "title_en": "남아시아, 34도 폭염 속 곳곳 뇌우·이슬비",
     "title_ko": "남아시아, 34도 폭염 속 곳곳 뇌우·이슬비",
@@ -1068,48 +1106,6 @@
     "investment_idea_en": null
   },
   {
-    "id": 151543,
-    "title_en": "콩고민주공화국 에볼라 사망자 3175명 넘어… 치료센터 확충과 식량 지원 시급",
-    "title_ko": "콩고민주공화국 에볼라 사망자 3175명 넘어… 치료센터 확충과 식량 지원 시급",
-    "summary_ko": "[업데이트]\n■ 9월 10일 04:03 — 콩고민주공화국 국경 인근의 에볼라 공포가 확산하면서 인접국인 남수단으로 피난민이 유입되는 사태가 벌어졌다. 웨스턴에쿠아토리아주의 남아 에드워드 부쿨루 보건장관은 콩고민주공화국 국경을 넘어 이바 카운티의 나반가 지역으로 수십 명의 콩고민주공화국 국적자와 남수단 난민이 유입됐다고 밝혔다. 현재까지 파악된 콩고민주공화국 출신 피난민은 56명이며 남수단 난민의 정확한 유입 규모는 아직 집계되지 않았다.\n\n미국 질병통제예방센터는 인접한 하우울레주 등에서 부디부교 균주 에볼라 바이러스 감염 사례가 발",
-    "url": "internal://trend_에볼라_2026091000",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "trend_에볼라",
-    "region": "africa",
-    "country": "콩고민주공화국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-10 04:03",
-    "countries": [
-      "콩고민주공화국",
-      "영국",
-      "우간다"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_ebola_virus_disease.jpg",
-    "view_count": 2,
-    "first_published_at": "2026-09-10T00:29:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-10 00:29",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-09-10 04:03",
-        "note": "콩고 에볼라 공포로 남수단에 피난민 유입"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: Wikimedia Commons",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
     "id": 151544,
     "title_en": "중앙아프리카공화국, 바그너 유통 알코올 방치 속 수십억 달러 차관 축소와 정권 안보 위기 직면",
     "title_ko": "중앙아프리카공화국, 바그너 유통 알코올 방치 속 수십억 달러 차관 축소와 정권 안보 위기 직면",
@@ -1148,6 +1144,48 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: Keitsist (CC BY-SA 3.0, Wikimedia Commons)",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
+    "id": 151543,
+    "title_en": "콩고민주공화국 에볼라 사망자 3175명 넘어… 치료센터 확충과 식량 지원 시급",
+    "title_ko": "콩고민주공화국 에볼라 사망자 3175명 넘어… 치료센터 확충과 식량 지원 시급",
+    "summary_ko": "[업데이트]\n■ 9월 10일 04:03 — 콩고민주공화국 국경 인근의 에볼라 공포가 확산하면서 인접국인 남수단으로 피난민이 유입되는 사태가 벌어졌다. 웨스턴에쿠아토리아주의 남아 에드워드 부쿨루 보건장관은 콩고민주공화국 국경을 넘어 이바 카운티의 나반가 지역으로 수십 명의 콩고민주공화국 국적자와 남수단 난민이 유입됐다고 밝혔다. 현재까지 파악된 콩고민주공화국 출신 피난민은 56명이며 남수단 난민의 정확한 유입 규모는 아직 집계되지 않았다.\n\n미국 질병통제예방센터는 인접한 하우울레주 등에서 부디부교 균주 에볼라 바이러스 감염 사례가 발",
+    "url": "internal://trend_에볼라_2026091000",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "trend_에볼라",
+    "region": "africa",
+    "country": "콩고민주공화국",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-10 04:03",
+    "countries": [
+      "콩고민주공화국",
+      "영국",
+      "우간다"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_ebola_virus_disease.jpg",
+    "view_count": 2,
+    "first_published_at": "2026-09-10T00:29:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-10 00:29",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-09-10 04:03",
+        "note": "콩고 에볼라 공포로 남수단에 피난민 유입"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "이미지 출처: Wikimedia Commons",
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null
@@ -1906,50 +1944,6 @@
     "investment_idea_en": null
   },
   {
-    "id": 147308,
-    "title_en": "Myanmar Junta Drone Attack Kills Four; Vietnam and Myanmar Hold High-Level Talks",
-    "title_ko": "미얀마 군정 드론 공격으로 사상자 발생 및 베트남과의 고위급 회담 개최",
-    "summary_ko": "[업데이트]\n■ 9월 9일 09:17 — 라훌 티야기 특별 공판검사는 법정에서 이번 공소장에 UAPA 조항을 적용하지 않았으나 테러 공모 및 테러 캠프 조직 등의 혐의에 대한 조사는 유보 상태로 남겨두었으며, 혐의가 입증될 경우 추가 공소장을 제출할 수 있다고 밝혔다. 이들은 인도 국경을 불법으로 넘어 미얀마로 이동해 인도의 테러 조직을 지원하는 민족무장단체(EAG) 대원들을 상대로 드론 작전, 조립, 재밍 기술 등에 대한 사전 계획된 훈련을 제공한 혐의를 받아왔으며, 수사 과정에서 미얀마의 여객기를 목표물로 삼으려 장비를 조립하고",
-    "url": "internal://trend_미얀마_2026090901",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "trend_미얀마",
-    "region": "southeast_asia",
-    "country": "미얀마",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-09 09:17",
-    "countries": [
-      "미얀마",
-      "베트남",
-      "인도",
-      "미국",
-      "우크라이나"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_myanmar_civil_war.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-09T01:52:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-09 01:52",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-09-09 09:17",
-        "note": "파타야 숙소 화장실서 흉기 찔린 남성 사망"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "사진: Yuet Man Lee (CC BY-SA 4.0, Wikimedia Commons)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
     "id": 148140,
     "title_en": "Cholera Spreads Across Africa and Sudan as Authorities Intensify Containment Efforts",
     "title_ko": "아프리카 및 수단 등지에서 콜레라 확산과 방역 총력",
@@ -1989,6 +1983,50 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "이미지 출처: Wikimedia Commons",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
+    "id": 147308,
+    "title_en": "Myanmar Junta Drone Attack Kills Four; Vietnam and Myanmar Hold High-Level Talks",
+    "title_ko": "미얀마 군정 드론 공격으로 사상자 발생 및 베트남과의 고위급 회담 개최",
+    "summary_ko": "[업데이트]\n■ 9월 9일 09:17 — 라훌 티야기 특별 공판검사는 법정에서 이번 공소장에 UAPA 조항을 적용하지 않았으나 테러 공모 및 테러 캠프 조직 등의 혐의에 대한 조사는 유보 상태로 남겨두었으며, 혐의가 입증될 경우 추가 공소장을 제출할 수 있다고 밝혔다. 이들은 인도 국경을 불법으로 넘어 미얀마로 이동해 인도의 테러 조직을 지원하는 민족무장단체(EAG) 대원들을 상대로 드론 작전, 조립, 재밍 기술 등에 대한 사전 계획된 훈련을 제공한 혐의를 받아왔으며, 수사 과정에서 미얀마의 여객기를 목표물로 삼으려 장비를 조립하고",
+    "url": "internal://trend_미얀마_2026090901",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "trend_미얀마",
+    "region": "southeast_asia",
+    "country": "미얀마",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-09 09:17",
+    "countries": [
+      "미얀마",
+      "베트남",
+      "인도",
+      "미국",
+      "우크라이나"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_myanmar_civil_war.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-09T01:52:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-09 01:52",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-09-09 09:17",
+        "note": "파타야 숙소 화장실서 흉기 찔린 남성 사망"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "사진: Yuet Man Lee (CC BY-SA 4.0, Wikimedia Commons)",
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null
@@ -5233,6 +5271,42 @@
     "investment_idea_en": null
   },
   {
+    "id": 140447,
+    "title_en": "Guatemala City Warns of Major Traffic Delays Ahead of Protests Against Rising Fuel and Food Prices",
+    "title_ko": "과테말라시티, 연료 및 생필품 가격 인상 반대 대규모 행진 예고",
+    "summary_ko": "지속적인 연료 가격 상승에 항의하기 위해 과테말라 사회 각계가 수도 과테말라시티에서 대규모 이동 시위를 예고함에 따라 7일(현지시간) 교통 당국이 혼잡 가중을 경고하고 나섰다.\n\n토토니카판의 48개 칸톤(Los 48 Cantones de Totonicapán) 이사회 및 지역 촌장 협의회는 오는 8일 수도에서 평화 행진을 개최한다고 발표했다. 이들은 끊임없이 오르는 연료비와 기본 식료품 가격 상승에 항의하기 위해 이번 집회를 기획했으며, 원주민 지도부는 시위가 순수한 평화 행진으로 진행될 예정이며 시립 도로와 지방 도로의 어떠한 도",
+    "url": "internal://solo_20260907_a2bcf6ed",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "solo_20260907_a2bcf6ed",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-07 11:27",
+    "countries": [
+      "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_protest_march_fuel_station_grocery_store_prices.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-07T11:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-07 11:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": true,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
     "id": 140446,
     "title_en": "Oasis Reunion Documentary Premieres at Venice Film Festival",
     "title_ko": "오아시스 재결합 다룬 다큐멘터리, 베니스영화제서 첫 공개",
@@ -5264,42 +5338,6 @@
     ],
     "byline": "뉴스파이널 편집국",
     "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 140447,
-    "title_en": "Guatemala City Warns of Major Traffic Delays Ahead of Protests Against Rising Fuel and Food Prices",
-    "title_ko": "과테말라시티, 연료 및 생필품 가격 인상 반대 대규모 행진 예고",
-    "summary_ko": "지속적인 연료 가격 상승에 항의하기 위해 과테말라 사회 각계가 수도 과테말라시티에서 대규모 이동 시위를 예고함에 따라 7일(현지시간) 교통 당국이 혼잡 가중을 경고하고 나섰다.\n\n토토니카판의 48개 칸톤(Los 48 Cantones de Totonicapán) 이사회 및 지역 촌장 협의회는 오는 8일 수도에서 평화 행진을 개최한다고 발표했다. 이들은 끊임없이 오르는 연료비와 기본 식료품 가격 상승에 항의하기 위해 이번 집회를 기획했으며, 원주민 지도부는 시위가 순수한 평화 행진으로 진행될 예정이며 시립 도로와 지방 도로의 어떠한 도",
-    "url": "internal://solo_20260907_a2bcf6ed",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "solo_20260907_a2bcf6ed",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-07 11:27",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_protest_march_fuel_station_grocery_store_prices.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-07T11:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-07 11:27",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": true,
     "source_published_at": null,
     "source_data": null,
     "image_credit": "",
@@ -7080,42 +7118,6 @@
     "investment_idea_en": null
   },
   {
-    "id": 137377,
-    "title_en": "Weekend Traffic Accidents Across Guatemala Leave Two Dead, Cause Major Congestion",
-    "title_ko": "과테말라 전국서 주말 교통사고 잇따라…2명 사망·부상 및 정체 극심",
-    "summary_ko": "5일(현지시간) 과테말라 전국 각지의 도로와 도심에서 교통사고가 잇따라 발생해 최소 2명이 숨지고 여러 명이 다치는 등 차량 통행에 큰 차질이 빚어졌다. 이번 사고들은 국도와 수도권 도로를 가리지 않고 발생했으며 오토바이와 승용차, 대형 화물차 간의 충돌뿐만 아니라 차량 전복과 이탈 사고 등이 복합적으로 보고됐다.\n\n이날 오전 이사발주 모랄레스 지역의 아틀란틱 루트 CA-9 노스 260킬로미터 지점에서는 트레일러와 오토바이가 충돌하는 사고가 발생했다. 도로보호단위(Provial)에 따르면 이 사고로 현장에서 1명이 사망했으며 남행 ",
-    "url": "internal://solo_20260906_c64ae53d",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "solo_20260906_c64ae53d",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-06 13:04",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_image_shows_how_accident_bus_was_going_a.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-06T13:04:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-06 13:04",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": true,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
     "id": 137376,
     "title_en": "71-Year-Old Woman Shot and Killed After Opening Fire at Florida Police Station",
     "title_ko": "미 플로리다 경찰서서 71세 여성 총격 후 사살",
@@ -7144,6 +7146,42 @@
     ],
     "byline": "뉴스파이널 편집국",
     "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
+    "id": 137377,
+    "title_en": "Weekend Traffic Accidents Across Guatemala Leave Two Dead, Cause Major Congestion",
+    "title_ko": "과테말라 전국서 주말 교통사고 잇따라…2명 사망·부상 및 정체 극심",
+    "summary_ko": "5일(현지시간) 과테말라 전국 각지의 도로와 도심에서 교통사고가 잇따라 발생해 최소 2명이 숨지고 여러 명이 다치는 등 차량 통행에 큰 차질이 빚어졌다. 이번 사고들은 국도와 수도권 도로를 가리지 않고 발생했으며 오토바이와 승용차, 대형 화물차 간의 충돌뿐만 아니라 차량 전복과 이탈 사고 등이 복합적으로 보고됐다.\n\n이날 오전 이사발주 모랄레스 지역의 아틀란틱 루트 CA-9 노스 260킬로미터 지점에서는 트레일러와 오토바이가 충돌하는 사고가 발생했다. 도로보호단위(Provial)에 따르면 이 사고로 현장에서 1명이 사망했으며 남행 ",
+    "url": "internal://solo_20260906_c64ae53d",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "solo_20260906_c64ae53d",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-06 13:04",
+    "countries": [
+      "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_image_shows_how_accident_bus_was_going_a.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-06T13:04:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-06 13:04",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": true,
     "source_published_at": null,
     "source_data": null,
     "image_credit": "",
@@ -7487,42 +7525,6 @@
     "investment_idea_en": null
   },
   {
-    "id": 137099,
-    "title_en": "Kevin García Debuts as Comunicaciones Interim Manager with Draw in Guatemala's Primera División",
-    "title_ko": "과테말라 프리메라 디비시온…케빈 가르시아, 코무니카시오네스 임시 감독 데뷔전서 무승부",
-    "summary_ko": "과테말라 프로축구 클럽 코무니카시오네스의 임시 감독으로 부임한 케빈 가르시아가 6일(현지시간) 산토 도밍고 데 구스만 경기장에서 열린 믹스코와의 아페르투라 2026 토너먼트 7라운드 경기에서 1대 1 무승부를 기록하며 데뷔전을 치렀다.\n\n구단 유소년 팀에서 지도자 경력을 쌓아온 케빈 가르시아는 알보스(코무니카시오네스의 별칭) 팀을 이끄는 막중한 책임을 맡아 굳은 의지로 도전 과제에 임했다. 가르시아는 임시 감독이라는 직함이 책임을 덜어주지 않는다며 전적으로 책임을 지고 임하고 있다고 밝혔다.\n\n가르시아는 선수단을 잘 알고 있다는 점",
-    "url": "internal://solo_20260906_e226c99a",
-    "source": "NewsFinal",
-    "category": "글로벌",
-    "subcategory": "solo_20260906_e226c99a",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-06 10:27",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_football_stadium_soccer_match_soccer_players.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-06T10:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-06 10:27",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
     "id": 137098,
     "title_en": "Eswatini Railway Joins South African, Mozambican Operators for Joint Exhibition at Trade Fair",
     "title_ko": "에스바티니 철도공사, 무역박람회서 남아공·모잠비크 철도 운영사들과 연합 전시",
@@ -7556,6 +7558,42 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: Htonl (CC BY-SA 2.0, Wikimedia Commons)",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
+    "id": 137099,
+    "title_en": "Kevin García Debuts as Comunicaciones Interim Manager with Draw in Guatemala's Primera División",
+    "title_ko": "과테말라 프리메라 디비시온…케빈 가르시아, 코무니카시오네스 임시 감독 데뷔전서 무승부",
+    "summary_ko": "과테말라 프로축구 클럽 코무니카시오네스의 임시 감독으로 부임한 케빈 가르시아가 6일(현지시간) 산토 도밍고 데 구스만 경기장에서 열린 믹스코와의 아페르투라 2026 토너먼트 7라운드 경기에서 1대 1 무승부를 기록하며 데뷔전을 치렀다.\n\n구단 유소년 팀에서 지도자 경력을 쌓아온 케빈 가르시아는 알보스(코무니카시오네스의 별칭) 팀을 이끄는 막중한 책임을 맡아 굳은 의지로 도전 과제에 임했다. 가르시아는 임시 감독이라는 직함이 책임을 덜어주지 않는다며 전적으로 책임을 지고 임하고 있다고 밝혔다.\n\n가르시아는 선수단을 잘 알고 있다는 점",
+    "url": "internal://solo_20260906_e226c99a",
+    "source": "NewsFinal",
+    "category": "글로벌",
+    "subcategory": "solo_20260906_e226c99a",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-06 10:27",
+    "countries": [
+      "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_football_stadium_soccer_match_soccer_players.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-06T10:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-06 10:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null
@@ -8064,6 +8102,48 @@
     "investment_idea_en": null
   },
   {
+    "id": 135569,
+    "title_en": "India and Myanmar Push to Strengthen Rare Earths Supply Chain Cooperation",
+    "title_ko": "인도와 미얀마, 희토류 공급망 협력 강화 추진",
+    "summary_ko": "[업데이트]\n■ 9월 6일 04:37 — 중국 희토류 기업들이 지정학적 우려와 베이징 당국의 보복을 피하기 위해 미국으로의 일부 선적을 중단하고 있다고 3세기초 소식통들을 인용해 4일(현지시간) 보도됐다. 지난 8월 초 미국 공급망 감시 기관인 RBA에 대해 중국이 제재를 부과한 이후, 일부 중국 공급업체들은 RBA와 연계된 글로벌 광물 공급망 감사 프로그램인 RMI의 실사 프레임워크를 준수할 경우 베이징으로부터 처벌을 받을 것을 우려해 미국 기업으로의 희토류 선적을 거부하고 있다. 다른 일부 중국 기업들도 최근 몇 달간 금지된 사",
+    "url": "internal://extrend_Rare_earths_collabor_2026090522",
+    "source": "NewsFinal",
+    "category": "자원·에너지",
+    "subcategory": "extrend_Rare_earths_collabor",
+    "region": "southeast_asia",
+    "country": "인도",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-06 04:37",
+    "countries": [
+      "인도",
+      "미얀마",
+      "중국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_rare_earth_mine_mineral_processing_industrial_mining.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T22:42:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 22:42",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-09-06 04:37",
+        "note": "중국 희토류 기업, 미국행 선적 중단"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
     "id": 135993,
     "title_en": "Intense Fighting Between Sudan's Military and Paramilitary Forces and Spread of Cholera",
     "title_ko": "수단 군부와 준군사조직 교전 격화 및 콜레라 확산",
@@ -8096,48 +8176,6 @@
       {
         "timestamp": "2026-09-06 04:37",
         "note": "남수단, 심각한 식량 불안정으로 긴급 대책 요구됨"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 135569,
-    "title_en": "India and Myanmar Push to Strengthen Rare Earths Supply Chain Cooperation",
-    "title_ko": "인도와 미얀마, 희토류 공급망 협력 강화 추진",
-    "summary_ko": "[업데이트]\n■ 9월 6일 04:37 — 중국 희토류 기업들이 지정학적 우려와 베이징 당국의 보복을 피하기 위해 미국으로의 일부 선적을 중단하고 있다고 3세기초 소식통들을 인용해 4일(현지시간) 보도됐다. 지난 8월 초 미국 공급망 감시 기관인 RBA에 대해 중국이 제재를 부과한 이후, 일부 중국 공급업체들은 RBA와 연계된 글로벌 광물 공급망 감사 프로그램인 RMI의 실사 프레임워크를 준수할 경우 베이징으로부터 처벌을 받을 것을 우려해 미국 기업으로의 희토류 선적을 거부하고 있다. 다른 일부 중국 기업들도 최근 몇 달간 금지된 사",
-    "url": "internal://extrend_Rare_earths_collabor_2026090522",
-    "source": "NewsFinal",
-    "category": "자원·에너지",
-    "subcategory": "extrend_Rare_earths_collabor",
-    "region": "southeast_asia",
-    "country": "인도",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-06 04:37",
-    "countries": [
-      "인도",
-      "미얀마",
-      "중국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_rare_earth_mine_mineral_processing_industrial_mining.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T22:42:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 22:42",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-09-06 04:37",
-        "note": "중국 희토류 기업, 미국행 선적 중단"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -9095,6 +9133,42 @@
     "investment_idea_en": null
   },
   {
+    "id": 134224,
+    "title_en": "Antigua GFC Edges Aurora FC to Reclaim Apertura 2026 Lead",
+    "title_ko": "안티구아 GFC, 아우로라 FC 꺾고 아페르투라 2026 선두 복귀",
+    "summary_ko": "과테말라 프로축구 아페르투라 2026 토너먼트에서 안티구아 GFC가 5일(현지시간) 펜사티보 경기장에서 열린 개막 7라운드 경기에서 아우로라 FC를 상대로 2대 1 승리를 거뒀다.\n\n양 팀은 경기 초반부터 공방전을 벌이며 기회를 노렸으나 안티구아 GFC의 거센 공세는 아우로라 FC의 골키퍼 디에고 나바스의 선방에 막혀 쉽게 결실을 맺지 못했다. 팽팽하던 균형은 후반 들어 깨졌으며 후반 6분 케빈 로페스가 강력한 프리킥 슈팅으로 골키퍼의 실책을 유도해 선제골을 터뜨렸다.\n\n반격에 나선 아우로라 FC는 후반 26분 카를로스 몬테로스의 ",
+    "url": "internal://solo_20260905_0ba51e43",
+    "source": "NewsFinal",
+    "category": "글로벌",
+    "subcategory": "solo_20260905_0ba51e43",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-05 13:35",
+    "countries": [
+      "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_football_stadium_soccer_match_soccer_players.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T13:35:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 13:35",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
     "id": 134225,
     "title_en": "Israeli Military Issues Emergency Order to Seize Palestinian Land in West Bank",
     "title_ko": "이스라엘군, 요르단강 서안 제닌 남동쪽 팔레스타인 토지 긴급 압류",
@@ -9114,42 +9188,6 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_military_checkpoint_barbed_wire_fence_occupied_terri.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T13:35:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 13:35",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 134224,
-    "title_en": "Antigua GFC Edges Aurora FC to Reclaim Apertura 2026 Lead",
-    "title_ko": "안티구아 GFC, 아우로라 FC 꺾고 아페르투라 2026 선두 복귀",
-    "summary_ko": "과테말라 프로축구 아페르투라 2026 토너먼트에서 안티구아 GFC가 5일(현지시간) 펜사티보 경기장에서 열린 개막 7라운드 경기에서 아우로라 FC를 상대로 2대 1 승리를 거뒀다.\n\n양 팀은 경기 초반부터 공방전을 벌이며 기회를 노렸으나 안티구아 GFC의 거센 공세는 아우로라 FC의 골키퍼 디에고 나바스의 선방에 막혀 쉽게 결실을 맺지 못했다. 팽팽하던 균형은 후반 들어 깨졌으며 후반 6분 케빈 로페스가 강력한 프리킥 슈팅으로 골키퍼의 실책을 유도해 선제골을 터뜨렸다.\n\n반격에 나선 아우로라 FC는 후반 26분 카를로스 몬테로스의 ",
-    "url": "internal://solo_20260905_0ba51e43",
-    "source": "NewsFinal",
-    "category": "글로벌",
-    "subcategory": "solo_20260905_0ba51e43",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-05 13:35",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_football_stadium_soccer_match_soccer_players.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T13:35:00",
     "update_log": [
@@ -10015,6 +10053,43 @@
     "investment_idea_en": null
   },
   {
+    "id": 133463,
+    "title_en": "Trump Hints at Strike on Iran's 'Ax Mountain' Nuclear Facility as Tensions Rise in Strait of Hormuz",
+    "title_ko": "트럼프, 이란 '액스마운틴' 핵시설 공격 시사…호르무즈 해협 긴장 고조",
+    "summary_ko": "도널드 트럼프 미국 대통령이 이란의 핵심 핵시설인 액스마운틴에 대한 새로운 군사적 타격 가능성을 공개적으로 시사했다고 CNN 아랍어(CNN Arabic) 등 주요 외신이 4일(현지시간) 보도했다.\n\n외신 보도에 따르면 트럼프 대통령은 호르무즈 해협 인근에 위치한 액스마운틴 핵시설을 겨냥해 새로운 공격을 가할 수 있다고 위협했다. 이와 관련해 미 육군 당국도 이란을 상대로 한 새로운 군사 작전 개시를 공식 발표했다.\n\n현지 언론과 외신들은 테헤란 정권이 심각한 안보적 타격과 고통에 직면해 있다고 분석했다. 이란 타스님(Tasnim) ",
+    "url": "internal://cluster_20260905_e9e92d18",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "cluster_20260905_e9e92d18",
+    "region": "global",
+    "country": "미국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-05 07:34",
+    "countries": [
+      "미국",
+      "이란"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_nuclear_facility_military_jet_strait_of_hormuz.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T07:34:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 07:34",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
     "id": 133462,
     "title_en": "동남아, 36도 무더위 속 우박·뇌우 강타",
     "title_ko": "동남아, 36도 무더위 속 우박·뇌우 강타",
@@ -10053,43 +10128,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 133463,
-    "title_en": "Trump Hints at Strike on Iran's 'Ax Mountain' Nuclear Facility as Tensions Rise in Strait of Hormuz",
-    "title_ko": "트럼프, 이란 '액스마운틴' 핵시설 공격 시사…호르무즈 해협 긴장 고조",
-    "summary_ko": "도널드 트럼프 미국 대통령이 이란의 핵심 핵시설인 액스마운틴에 대한 새로운 군사적 타격 가능성을 공개적으로 시사했다고 CNN 아랍어(CNN Arabic) 등 주요 외신이 4일(현지시간) 보도했다.\n\n외신 보도에 따르면 트럼프 대통령은 호르무즈 해협 인근에 위치한 액스마운틴 핵시설을 겨냥해 새로운 공격을 가할 수 있다고 위협했다. 이와 관련해 미 육군 당국도 이란을 상대로 한 새로운 군사 작전 개시를 공식 발표했다.\n\n현지 언론과 외신들은 테헤란 정권이 심각한 안보적 타격과 고통에 직면해 있다고 분석했다. 이란 타스님(Tasnim) ",
-    "url": "internal://cluster_20260905_e9e92d18",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "cluster_20260905_e9e92d18",
-    "region": "global",
-    "country": "미국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-05 07:34",
-    "countries": [
-      "미국",
-      "이란"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_nuclear_facility_military_jet_strait_of_hormuz.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T07:34:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 07:34",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null
@@ -10751,42 +10789,6 @@
     "investment_idea_en": null
   },
   {
-    "id": 133056,
-    "title_en": "Lululemon Shares Plunge 20% After Cutting Annual Outlook Again",
-    "title_ko": "룰루레몬, 연간 전망치 추가 하향 속 주가 20% 급락",
-    "summary_ko": "4일(현지시간) 미국의 애슬레저 기업 룰루레몬 애슬레티카 주가가 연간 실적 전망치 하향 조정 여파로 20% 급락했다. 이번 주가 하락은 회사의 회계연도 2분기 수익이 월스트리트 예상치를 크게 밑돌고, 올해 들어 세 번째로 가이던스가 하향 조정되면서 발생했다. 이에 따라 주가는 8년 만의 최저 수준으로 떨어졌다.\n\n룰루레몬의 시그니처 상품인 레깅스 사업 부문에서 뚜렷한 매출 감소세가 확인됐다. 이번 분기 룰루레몬의 비교매출은 9% 감소해 대침체기 이후 최악의 실적 부진을 기록했다. 알로 요가와 부오리, 스킴스 등 경쟁 브랜드들이 애슬",
-    "url": "internal://realtrend_Lululemon_CEO_Transition_&_Slump_2026090504",
-    "source": "NewsFinal",
-    "category": "산업·기업",
-    "subcategory": "realtrend_Lululemon_CEO_Transi",
-    "region": "africa",
-    "country": "미국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-05 04:49",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_stock_market_retail_store_yoga_pants.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-05T04:49:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-05 04:49",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
     "id": 133055,
     "title_en": "Russian Forces Strike SBU Headquarters in Central Kyiv as US-Ukraine Tensions Rise",
     "title_ko": "러시아군, 키예프 중심부 SBU 본부 타격…미·우크라 긴장 고조",
@@ -10806,6 +10808,42 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_backfill_960px_sbu_headquarters.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-05T04:49:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-05 04:49",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
+    "id": 133056,
+    "title_en": "Lululemon Shares Plunge 20% After Cutting Annual Outlook Again",
+    "title_ko": "룰루레몬, 연간 전망치 추가 하향 속 주가 20% 급락",
+    "summary_ko": "4일(현지시간) 미국의 애슬레저 기업 룰루레몬 애슬레티카 주가가 연간 실적 전망치 하향 조정 여파로 20% 급락했다. 이번 주가 하락은 회사의 회계연도 2분기 수익이 월스트리트 예상치를 크게 밑돌고, 올해 들어 세 번째로 가이던스가 하향 조정되면서 발생했다. 이에 따라 주가는 8년 만의 최저 수준으로 떨어졌다.\n\n룰루레몬의 시그니처 상품인 레깅스 사업 부문에서 뚜렷한 매출 감소세가 확인됐다. 이번 분기 룰루레몬의 비교매출은 9% 감소해 대침체기 이후 최악의 실적 부진을 기록했다. 알로 요가와 부오리, 스킴스 등 경쟁 브랜드들이 애슬",
+    "url": "internal://realtrend_Lululemon_CEO_Transition_&_Slump_2026090504",
+    "source": "NewsFinal",
+    "category": "산업·기업",
+    "subcategory": "realtrend_Lululemon_CEO_Transi",
+    "region": "africa",
+    "country": "미국",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-05 04:49",
+    "countries": [
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_stock_market_retail_store_yoga_pants.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-05T04:49:00",
     "update_log": [
@@ -11712,43 +11750,6 @@
     "investment_idea_en": null
   },
   {
-    "id": 129718,
-    "title_en": "US Warns Threats to Democracy as Security Ties With Guatemala Deepen",
-    "title_ko": "미국, 과테말라와 안보 협력 강화 속 민주주의 위협 세력에 무관용 경고",
-    "summary_ko": "미국은 민주주의 제도와 안보를 위협하는 세력에 대해 비자 추가 취소 등 지속적인 조치를 취할 것이라고 3일(현지시간) 밝혔다. 주과테말라 미국 대사관은 아나 퀸타나 로베트 미국 국무부 중미 담당 부차관의 과테말라 방문을 계기로 이 같은 입장을 공개했다.\n\n방문 기간 아나 퀸타나 로베트 부차관은 베르나르도 아레발로 과테말라 대통령, 헨리 사엔스 라모스 국방장관, 가브리엘 에스투아도 가르시아 루나 검찰총장 겸 법무부 장관 등 고위 관료들과 연이어 회담을 가졌으며 양국 간 안보 및 협력 방안을 논의했다. 미국 대사관 측은 양국이 마약 밀",
-    "url": "internal://solo_20260904_624e0630",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "solo_20260904_624e0630",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-04 11:07",
-    "countries": [
-      "과테말라",
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_diplomatic_meeting_government_building_security_coop.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T11:07:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 11:07",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
     "id": 129717,
     "title_en": "Texas Court Acquits and Releases Former Guatemalan Aide on Cocaine Trafficking Charges",
     "title_ko": "텍사스 법원, 코카인 밀매 혐의 과테말라 출신 전직 보좌관 무죄 석방",
@@ -11770,6 +11771,43 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_courthouse_law_court_judge_gavel.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-04T11:07:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-04 11:07",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
+    "id": 129718,
+    "title_en": "US Warns Threats to Democracy as Security Ties With Guatemala Deepen",
+    "title_ko": "미국, 과테말라와 안보 협력 강화 속 민주주의 위협 세력에 무관용 경고",
+    "summary_ko": "미국은 민주주의 제도와 안보를 위협하는 세력에 대해 비자 추가 취소 등 지속적인 조치를 취할 것이라고 3일(현지시간) 밝혔다. 주과테말라 미국 대사관은 아나 퀸타나 로베트 미국 국무부 중미 담당 부차관의 과테말라 방문을 계기로 이 같은 입장을 공개했다.\n\n방문 기간 아나 퀸타나 로베트 부차관은 베르나르도 아레발로 과테말라 대통령, 헨리 사엔스 라모스 국방장관, 가브리엘 에스투아도 가르시아 루나 검찰총장 겸 법무부 장관 등 고위 관료들과 연이어 회담을 가졌으며 양국 간 안보 및 협력 방안을 논의했다. 미국 대사관 측은 양국이 마약 밀",
+    "url": "internal://solo_20260904_624e0630",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "solo_20260904_624e0630",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-04 11:07",
+    "countries": [
+      "과테말라",
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_diplomatic_meeting_government_building_security_coop.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-04T11:07:00",
     "update_log": [
@@ -12215,42 +12253,6 @@
     "investment_idea_en": null
   },
   {
-    "id": 129277,
-    "title_en": "Customized 'Airplane Car' Turns Heads on Guatemalan Roads, Goes Viral on Social Media",
-    "title_ko": "과테말라 산마르코스 달리는 ‘자동차 비행기’…SNS서 화제",
-    "summary_ko": "4일(현지시간) 과테말라 매체 프렌사 리브레에 따르면, 산마르코스주의 도로를 비행기 모양으로 개조한 자동차가 달리며 소셜미디어에서 큰 화제를 모으고 있다. 이 차량은 비록 하늘을 날 수는 없지만 비행기 동체와 날개 형태를 갖추고 도로를 주행하도록 제작됐다.\n\n이 차량을 만든 이는 만프레도 오르테가라는 인물로, 그는 세 명의 형제와 함께 수년간 자동차를 비행기 형태로 개조하겠다는 구상을 품어왔다. 지난 2020년부터 시작된 이 프로젝트는 인내와 창의력을 바탕으로 마침내 결실을 보게 됐다.\n\n만프레도 오르테가는 산마르코스주 테후틀라 시",
-    "url": "internal://solo_20260904_55647ddc",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "solo_20260904_55647ddc",
-    "region": "latin_america",
-    "country": "과테말라",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-04 08:15",
-    "countries": [
-      "과테말라"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_custom_car_converted_airplane_highway_traffic.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-04T08:15:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-04 08:15",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
     "id": 129278,
     "title_en": "Qatar Museums Launches Special Exhibitions on Uzbek Heritage at Museum of Islamic Art",
     "title_ko": "카타르 국립박물관, 이슬람 예술 박물관서 우즈베키스탄 문화유산 특별전 개막",
@@ -12283,6 +12285,42 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: 26D (CC BY-SA 4.0, Wikimedia Commons)",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
+    "id": 129277,
+    "title_en": "Customized 'Airplane Car' Turns Heads on Guatemalan Roads, Goes Viral on Social Media",
+    "title_ko": "과테말라 산마르코스 달리는 ‘자동차 비행기’…SNS서 화제",
+    "summary_ko": "4일(현지시간) 과테말라 매체 프렌사 리브레에 따르면, 산마르코스주의 도로를 비행기 모양으로 개조한 자동차가 달리며 소셜미디어에서 큰 화제를 모으고 있다. 이 차량은 비록 하늘을 날 수는 없지만 비행기 동체와 날개 형태를 갖추고 도로를 주행하도록 제작됐다.\n\n이 차량을 만든 이는 만프레도 오르테가라는 인물로, 그는 세 명의 형제와 함께 수년간 자동차를 비행기 형태로 개조하겠다는 구상을 품어왔다. 지난 2020년부터 시작된 이 프로젝트는 인내와 창의력을 바탕으로 마침내 결실을 보게 됐다.\n\n만프레도 오르테가는 산마르코스주 테후틀라 시",
+    "url": "internal://solo_20260904_55647ddc",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "solo_20260904_55647ddc",
+    "region": "latin_america",
+    "country": "과테말라",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-04 08:15",
+    "countries": [
+      "과테말라"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_custom_car_converted_airplane_highway_traffic.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-04T08:15:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-04 08:15",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "",
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null
@@ -15159,42 +15197,6 @@
     "investment_idea_en": null
   },
   {
-    "id": 124812,
-    "title_en": "쿠웨이트 검찰, 농지 및 토지 조작 연루 71명 형사재판 회부",
-    "title_ko": "쿠웨이트 검찰, 농지 및 토지 조작 연루 71명 형사재판 회부",
-    "summary_ko": "쿠웨이트 공공농업수산청(PAAAFR)이 관할하는 농업용지와 토지 관련 절차를 조작한 혐의로 피고인 71명이 형사재판에 회부됐다. 공공기소국은 2일(현지시간) 이 같은 내용을 밝혔다.\n\n검찰은 공공농업수산청이 소유한 농업용지와 토지의 절차 조작, 그리고 그로 인한 혜택과 용익권을 둘러싸고 벌어진 범죄를 대상으로 자금세탁 사건 153/2026호 및 형사수사 사건 16/2026호에 대한 수사를 진행했다. 이번 사건에 연루된 피고인 71명에는 공공 부문 직원들이 포함됐으며, 이들 중 일부는 지도 및 감독 직책을 맡고 있거나 다양한 공공기관",
-    "url": "internal://solo_20260903_6dce28f2",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "solo_20260903_6dce28f2",
-    "region": "middle_east",
-    "country": "쿠웨이트",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-03 05:26",
-    "countries": [
-      "쿠웨이트"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_farmland_government_building_court_trial.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-03T05:26:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-03 05:26",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
     "id": 124811,
     "title_en": "카타르 웹 서밋, 4회 행사 앞두고 70개 이상 글로벌 파트너사 확보",
     "title_ko": "카타르 웹 서밋, 4회 행사 앞두고 70개 이상 글로벌 파트너사 확보",
@@ -15231,29 +15233,29 @@
     "investment_idea_en": null
   },
   {
-    "id": 124809,
-    "title_en": "서울, 맑은 속 늦더위…부산·광주 비",
-    "title_ko": "서울, 맑은 가운데 늦더위…부산·광주 비",
-    "summary_ko": "3일 한국의 날씨는 전국이 대체로 구름이 많은 가운데, 서울을 비롯한 수도권은 맑고 남부지방과 제주도를 중심으로 비와 소나기가 내리는 날씨를 보인다. 기상청에 따르면 오늘 전국 최저기온은 22°C, 최고기온은 32°C의 분포를 나타내며, 지역별로 하늘 상태와 강수 양상이 엇갈린다.\n\n서울은 오전과 오후 모두 맑은 날씨가 이어지며, 최저기온 22°C, 최고기온 31°C를 기록할 것으로 예상된다. 서울의 오전과 오후 강수확률은 모두 0%이며, 최대풍속은 14km/h로 잔잔하다. 반면 부산과 광주는 오후 강수확률이 60% 이상으로 높아 ",
-    "url": "internal://weather_한국_today20260903",
+    "id": 124812,
+    "title_en": "쿠웨이트 검찰, 농지 및 토지 조작 연루 71명 형사재판 회부",
+    "title_ko": "쿠웨이트 검찰, 농지 및 토지 조작 연루 71명 형사재판 회부",
+    "summary_ko": "쿠웨이트 공공농업수산청(PAAAFR)이 관할하는 농업용지와 토지 관련 절차를 조작한 혐의로 피고인 71명이 형사재판에 회부됐다. 공공기소국은 2일(현지시간) 이 같은 내용을 밝혔다.\n\n검찰은 공공농업수산청이 소유한 농업용지와 토지의 절차 조작, 그리고 그로 인한 혜택과 용익권을 둘러싸고 벌어진 범죄를 대상으로 자금세탁 사건 153/2026호 및 형사수사 사건 16/2026호에 대한 수사를 진행했다. 이번 사건에 연루된 피고인 71명에는 공공 부문 직원들이 포함됐으며, 이들 중 일부는 지도 및 감독 직책을 맡고 있거나 다양한 공공기관",
+    "url": "internal://solo_20260903_6dce28f2",
     "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_한국_today20260903",
-    "region": "global",
-    "country": "한국",
+    "category": "사회",
+    "subcategory": "solo_20260903_6dce28f2",
+    "region": "middle_east",
+    "country": "쿠웨이트",
     "country_flag": "",
     "score": 1,
-    "created_at": "2026-09-03 05:25",
+    "created_at": "2026-09-03 05:26",
     "countries": [
-      "한국"
+      "쿠웨이트"
     ],
     "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20260903.jpg",
-    "view_count": 2,
-    "first_published_at": "2026-09-03T05:25:00",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_farmland_government_building_court_trial.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-03T05:26:00",
     "update_log": [
       {
-        "timestamp": "2026-09-03 05:25",
+        "timestamp": "2026-09-03 05:26",
         "note": "최초 게시"
       }
     ],
@@ -15261,7 +15263,7 @@
     "is_travel": false,
     "source_published_at": null,
     "source_data": null,
-    "image_credit": null,
+    "image_credit": "",
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null
@@ -15301,6 +15303,42 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: Chatham House (CC BY 2.0, Wikimedia Commons)",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
+    "id": 124809,
+    "title_en": "서울, 맑은 속 늦더위…부산·광주 비",
+    "title_ko": "서울, 맑은 가운데 늦더위…부산·광주 비",
+    "summary_ko": "3일 한국의 날씨는 전국이 대체로 구름이 많은 가운데, 서울을 비롯한 수도권은 맑고 남부지방과 제주도를 중심으로 비와 소나기가 내리는 날씨를 보인다. 기상청에 따르면 오늘 전국 최저기온은 22°C, 최고기온은 32°C의 분포를 나타내며, 지역별로 하늘 상태와 강수 양상이 엇갈린다.\n\n서울은 오전과 오후 모두 맑은 날씨가 이어지며, 최저기온 22°C, 최고기온 31°C를 기록할 것으로 예상된다. 서울의 오전과 오후 강수확률은 모두 0%이며, 최대풍속은 14km/h로 잔잔하다. 반면 부산과 광주는 오후 강수확률이 60% 이상으로 높아 ",
+    "url": "internal://weather_한국_today20260903",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_한국_today20260903",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-03 05:25",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20260903.jpg",
+    "view_count": 2,
+    "first_published_at": "2026-09-03T05:25:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-03 05:25",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null
