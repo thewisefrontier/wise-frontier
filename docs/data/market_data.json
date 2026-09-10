@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-10 19:57",
+  "updated_at": "2026-09-10 20:28",
   "indices": [
     {
       "name": "S&P 500",
@@ -18,8 +18,8 @@
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 52380.66,
-      "change_pct": -1.94,
+      "price": 52380.7,
+      "change_pct": -1.93,
       "up": false
     },
     {
@@ -39,15 +39,15 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 115711.9,
-      "change_pct": -0.69,
+      "price": 115616.53,
+      "change_pct": -0.78,
       "up": false
     },
     {
       "name": "EGX30 (이집트)",
       "symbol": "^CASE30",
-      "price": 56326.3,
-      "change_pct": -0.31,
+      "price": 56308.0,
+      "change_pct": -0.34,
       "up": false
     },
     {
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.09,
-      "change_pct": 0.53,
+      "price": 16.1,
+      "change_pct": 0.59,
       "up": true
     }
   ],
@@ -112,8 +112,8 @@
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 52380.66,
-        "change_pct": -1.94,
+        "price": 52380.7,
+        "change_pct": -1.93,
         "up": false
       }
     ],
@@ -137,15 +137,15 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 115711.9,
-        "change_pct": -0.69,
+        "price": 115616.53,
+        "change_pct": -0.78,
         "up": false
       },
       {
         "name": "EGX30 (이집트)",
         "symbol": "^CASE30",
-        "price": 56326.3,
-        "change_pct": -0.31,
+        "price": 56308.0,
+        "change_pct": -0.34,
         "up": false
       },
       {
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.09,
-        "change_pct": 0.53,
+        "price": 16.1,
+        "change_pct": 0.59,
         "up": true
       }
     ]
