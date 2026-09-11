@@ -1843,6 +1843,69 @@ def get_articles_for_keyword(keyword: str, articles: list, max_n: int = 10) -> l
     return matched[:max_n]
 
 
+# 2026-09-11 신설(실사고 id=158484 — "Anthropic"이 급증 키워드로 잡히자
+# 연구원 사임/AI 안전 경고, 러시아·중국의 클로드 악용 차단, 생물무기 연구
+# 악용 차단, 인터랙티브 브로커스發 IPO 자금유입설까지 전혀 무관한 4개
+# 소식이 한 기사로 뒤섞여 발행됨, 사용자 지적 — "전혀 다른 내용의 기사
+# 4개를 엮어놓은 것 같은데", "이렇게 하면 기사의 핵심이 뭔지 모르잖아").
+#
+# 원인: get_articles_for_keyword()는 단순 부분일치라 회사명·인명처럼 넓은
+# 키워드가 오면 그 이름이 들어간 모든 기사가 걸린다. TREND_KEYWORDS(고정
+# 트렌드 목록)는 과거 같은 문제(중앙아프리카·사헬·소말리아 등 국가명만으로
+# 무관 기사가 섞이던 사고)를 겪고 나서 키워드를 수동으로 좁혀 해결했지만,
+# 이 realtrend_(급증 키워드 자동탐지) 경로는 애초에 Gemini가 그때그때 새
+# 키워드를 뽑아내는 구조라 수동 큐레이션이 불가능하다 — search_followup()의
+# 같은 부류 사고(id=152113, gemini_writer.py _filter_relevant_followups)와
+# 동일한 성격의 문제라 동일한 해법(키워드 매칭은 재현율만 담당하고, 실제
+# 같은 사안인지는 별도 LLM 판정을 거친다)을 적용한다.
+def filter_same_topic_articles(issue_ko: str, topic: str, candidates: list) -> list:
+    """키워드/토픽 부분일치로 모인 candidates 중 실제로 issue_ko가 설명하는
+    그 사건을 다루는 기사만 남긴다. 회사명·인명 등 넓은 키워드가 여러 무관한
+    사건에 걸쳐 걸리는 경우를 걸러내기 위함 — 단순히 같은 회사/인물이
+    언급됐다는 이유만으로는 통과시키지 않는다."""
+    if not candidates or len(candidates) < 2:
+        return candidates
+
+    listing = "\n".join(
+        f"{i+1}. {(c.get('title_ko') or c.get('title_en') or '')[:100]}"
+        for i, c in enumerate(candidates)
+    )
+    prompt = f"""아래 [이슈]는 하나의 구체적 사건·발표를 가리킵니다. [후보 목록]에서
+그 사건과 실제로 같은 사건을 다루는 기사만 골라내세요.
+
+같은 회사·인물·국가가 언급된다는 이유만으로는 고르지 마세요 — 예를 들어
+같은 회사에 대한 완전히 다른 소식(경영진 사임 / 경쟁사 견제 조치 / 제품
+악용 차단 / 투자자금 동향)은 서로 다른 사건입니다. [이슈]와 같은 구체적
+사건·발표를 다루는 항목만 고르세요.
+
+[이슈]
+{issue_ko} (키워드: {topic})
+
+[후보 목록]
+{listing}
+
+같은 사건인 항목의 번호만 쉼표로 구분해 답하세요(예: "1,3"). 확신이 서지
+않으면 포함하지 마세요. 하나도 없으면 "없음"이라고만 답하세요. 다른 말은
+하지 마세요."""
+
+    # 판정 실패(호출 실패·응답 없음·번호 파싱 실패) 시 전부 통과가 아니라
+    # 전부 제외한다 — "관련 기사 없음 → 스킵"이 이 기사가 무관한 내용으로
+    # 뒤섞여 발행되는 것보다 안전하다(사용자 방침: 지연은 괜찮지만 오류는
+    # 안 된다).
+    try:
+        resp = call_gemini(prompt, max_tokens=40, start_tier=4)
+    except Exception:
+        return []
+    if not resp or "없음" in resp:
+        return []
+    idxs = set()
+    for m in re.finditer(r"\d+", resp):
+        i = int(m.group()) - 1
+        if 0 <= i < len(candidates):
+            idxs.add(i)
+    return [c for i, c in enumerate(candidates) if i in idxs]
+
+
 def run_realtime_trend_tracker():
     """실시간 트렌드 감지 및 기사 생성 (A+B)"""
     if not GEMINI_API_KEYS:
@@ -1957,6 +2020,19 @@ JSON 배열로만 응답하세요 (마크다운 없이):
             )
         if not related:
             print(f"  [{topic}] 관련 기사 없음 — 스킵")
+            continue
+
+        # 2026-09-11 신설(id=158484 사고 — "Anthropic" 키워드가 사임/China
+        # 캠페인 차단/생물무기 연구 차단/IPO 자금유입설 등 전혀 다른 4개
+        # 사건을 다 끌어옴) — 단순 키워드 매칭은 재현율만 담당하고, 실제로
+        # 같은 사건인지는 filter_same_topic_articles()의 별도 LLM 판정을
+        # 거친다.
+        before_n = len(related)
+        related = filter_same_topic_articles(issue_ko, topic, related)
+        if len(related) < before_n:
+            print(f"  [{topic}] 무관 기사 {before_n - len(related)}건 제외 ({before_n}→{len(related)})")
+        if not related:
+            print(f"  [{topic}] 동일 사건 기사 없음(키워드만 일치) — 스킵")
             continue
 
         # 기사 생성 프롬프트
