@@ -1,5 +1,48 @@
 [
   {
+    "id": 163715,
+    "title_en": "동남아시아, 최고 37도 폭염 속 곳곳 뇌우",
+    "title_ko": "동남아시아, 최고 37도 폭염 속 곳곳 뇌우",
+    "summary_ko": "12일(현지시간) 동남아시아 주요국은 최저기온 23°C에서 최고기온 37°C 사이의 기온 분포를 보이며 주말 날씨가 이어질 전망이다. 이번 주말 베트남, 태국, 필리핀, 미얀마, 캄보디아, 말레이시아 등 주요국 전역에 비 소식이 집중된 가운데, 인도네시아와 싱가포르를 포함한 각국 수도의 기상 상황이 엇갈리고 있다.\n\n토요일 베트남 수도는 최고 30°C·최저 23°C에 강수 확률 18%로 흐린 날씨를 보이고, 인도네시아 수도는 최고 35°C·최저 26°C에 강수 확률 20%로 약한 이슬비가 내린다. 태국 수도는 최고 31°C·최저 2",
+    "url": "internal://weather_group_동남아시아_weekend20260912",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_동남아시아_weekend20260912",
+    "region": "southeast_asia",
+    "country": "동남아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-12 07:28",
+    "countries": [
+      "베트남",
+      "인도네시아",
+      "태국",
+      "필리핀",
+      "미얀마",
+      "캄보디아",
+      "말레이시아",
+      "싱가포르"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_indonesia_20260912.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-12T07:28:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-12 07:28",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
     "id": 163620,
     "title_en": "[가상자산 동향] 리플 1.02% 상승…미 SEC 규제 불확실성 완화 기대",
     "title_ko": "[가상자산 동향] 리플 1.02% 상승…미 SEC 규제 불확실성 완화 기대",
@@ -1821,42 +1864,5 @@
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null
-  },
-  {
-    "id": 158081,
-    "title_en": "아르헨티나, 포클랜드 인근 석유 개발사 제재 속 하비에르 밀레이 대통령 영국 방문 취소",
-    "title_ko": "아르헨티나, 포클랜드 인근 석유 개발사 제재 속 하비에르 밀레이 대통령 영국 방문 취소",
-    "summary_ko": "10일(현지시간) 아르헨티나 정부의 포클랜드(아르헨티나명 말비나스) 영유권 주장을 둘러싼 갈등이 고조되는 가운데 하비에르 밀레이 아르헨티나 대통령이 오는 10월로 예정되었던 영국 방문을 취소했다.\n\n공식 소식통들은 밀레이 대통령이 런던을 방문하지 않을 것이라고 확인했으나 구체적인 취소 이유는 밝히지 않았다. 당초 밀레이 대통령은 10월 말 영국을 이틀간 방문할 계획이었다.\n\n아르헨티나 정부는 같은 날 포클랜드 제도 인근에서 석유 및 가스 탐사 활동을 벌여온 외국 기업들을 상대로 사법적 고발과 제재 조치에 착수했다. 이번 조치는 18",
-    "url": "internal://cluster_20260911_3c483d0c",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "cluster_20260911_3c483d0c",
-    "region": "latin_america",
-    "country": "아르헨티나",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-11 07:19",
-    "countries": [
-      "아르헨티나",
-      "영국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_oil_refinery_offshore_oil_rig_political_meeting.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-11T07:19:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-11 07:19",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": ""
   }
 ]
