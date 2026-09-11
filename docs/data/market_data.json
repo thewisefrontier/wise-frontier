@@ -1,24 +1,24 @@
 {
-  "updated_at": "2026-09-11 23:05",
+  "updated_at": "2026-09-11 23:10",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7668.45,
-      "change_pct": 0.42,
+      "price": 7669.88,
+      "change_pct": 0.44,
       "up": true
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 26376.56,
-      "change_pct": 0.47,
+      "price": 26379.55,
+      "change_pct": 0.48,
       "up": true
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 52646.69,
+      "price": 52650.41,
       "change_pct": 0.51,
       "up": true
     },
@@ -39,8 +39,8 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 115482.63,
-      "change_pct": 0.43,
+      "price": 115577.75,
+      "change_pct": 0.51,
       "up": true
     },
     {
@@ -74,9 +74,9 @@
     {
       "name": "USD/NGN",
       "symbol": "USDNGN=X",
-      "price": 1322.22,
-      "change_pct": -0.07,
-      "up": false
+      "price": 1325.3,
+      "change_pct": 0.17,
+      "up": true
     },
     {
       "name": "USD/KES",
@@ -89,7 +89,7 @@
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
       "price": 16.12,
-      "change_pct": 0.52,
+      "change_pct": 0.51,
       "up": true
     }
   ],
@@ -98,21 +98,21 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7668.45,
-        "change_pct": 0.42,
+        "price": 7669.88,
+        "change_pct": 0.44,
         "up": true
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 26376.56,
-        "change_pct": 0.47,
+        "price": 26379.55,
+        "change_pct": 0.48,
         "up": true
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 52646.69,
+        "price": 52650.41,
         "change_pct": 0.51,
         "up": true
       }
@@ -137,8 +137,8 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 115482.63,
-        "change_pct": 0.43,
+        "price": 115577.75,
+        "change_pct": 0.51,
         "up": true
       },
       {
@@ -174,9 +174,9 @@
       {
         "name": "USD/NGN",
         "symbol": "USDNGN=X",
-        "price": 1322.22,
-        "change_pct": -0.07,
-        "up": false
+        "price": 1325.3,
+        "change_pct": 0.17,
+        "up": true
       },
       {
         "name": "USD/KES",
@@ -189,7 +189,7 @@
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
         "price": 16.12,
-        "change_pct": 0.52,
+        "change_pct": 0.51,
         "up": true
       }
     ]
