@@ -25,15 +25,15 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 6857.52,
-      "change_pct": -2.75,
+      "price": 6853.23,
+      "change_pct": -2.81,
       "up": false
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 818.41,
-      "change_pct": -1.44,
+      "price": 818.01,
+      "change_pct": -1.49,
       "up": false
     },
     {
@@ -53,15 +53,15 @@
     {
       "name": "SET (태국)",
       "symbol": "^SET.BK",
-      "price": 1604.54,
-      "change_pct": -0.65,
+      "price": 1606.18,
+      "change_pct": -0.55,
       "up": false
     },
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 6495.32,
-      "change_pct": -1.43,
+      "price": 6494.46,
+      "change_pct": -1.44,
       "up": false
     },
     {
@@ -89,7 +89,7 @@
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
       "price": 16.19,
-      "change_pct": 0.93,
+      "change_pct": 0.92,
       "up": true
     }
   ],
@@ -121,15 +121,15 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 6857.52,
-        "change_pct": -2.75,
+        "price": 6853.23,
+        "change_pct": -2.81,
         "up": false
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 818.41,
-        "change_pct": -1.44,
+        "price": 818.01,
+        "change_pct": -1.49,
         "up": false
       }
     ],
@@ -151,15 +151,15 @@
       {
         "name": "SET (태국)",
         "symbol": "^SET.BK",
-        "price": 1604.54,
-        "change_pct": -0.65,
+        "price": 1606.18,
+        "change_pct": -0.55,
         "up": false
       },
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 6495.32,
-        "change_pct": -1.43,
+        "price": 6494.46,
+        "change_pct": -1.44,
         "up": false
       },
       {
@@ -189,7 +189,7 @@
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
         "price": 16.19,
-        "change_pct": 0.93,
+        "change_pct": 0.92,
         "up": true
       }
     ]
@@ -205,8 +205,8 @@
     "ACB": {
       "name": "Asia Commercial Joint Stock Bank",
       "symbol": "ACB.VN",
-      "price": 22200.0,
-      "change_pct": -0.45,
+      "price": 22250.0,
+      "change_pct": -0.22,
       "up": false
     }
   }
