@@ -1,5 +1,48 @@
 [
   {
+    "id": 160161,
+    "title_en": "중남미, 34도 폭염과 뇌우…곳곳 비상",
+    "title_ko": "중남미, 34도 폭염과 뇌우…곳곳 비상",
+    "summary_ko": "11일(현지시간) 중남미 주요국 수도의 기온이 최저 8°C에서 최고 34°C 분포를 보이는 가운데, 지역별로 극심한 기온 차와 함께 비와 뇌우가 이어지고 있다. 쿠바 아바나는 34°C까지 치솟아 가장 더운 지역으로 기록된 반면, 칠레 산티아고는 16°C에 머물러 가장 선선한 곳으로 나타났다. 특히 멕시코 몬테레이와 칸쿤, 쿠바 아바나, 도미니카공화국 산토도밍고 등은 최고기온이 38°C를 웃도는 폭염 지역으로 분류되며 뜨거운 대기 상태를 보였다.\n\n이와 함께 멕시코, 칠레, 콜롬비아, 쿠바 등에서는 비 소식이 이어졌으며, 브라질 상파",
+    "url": "internal://weather_group_중남미_today20260911",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_중남미_today20260911",
+    "region": "latin_america",
+    "country": "중남미",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-11 17:13",
+    "countries": [
+      "브라질",
+      "멕시코",
+      "아르헨티나",
+      "칠레",
+      "콜롬비아",
+      "페루",
+      "쿠바",
+      "도미니카공화국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_brazil_20260911.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-11T17:13:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-11 17:13",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
     "id": 159414,
     "title_en": "아프리카, 폭염과 뇌우 덮친 수도 날씨",
     "title_ko": "아프리카, 폭염과 뇌우 덮친 수도 날씨",
@@ -2004,49 +2047,6 @@
     "update_log": [
       {
         "timestamp": "2026-09-10 18:10",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 154968,
-    "title_en": "중남미, 34도 폭염과 뇌우·소나기 교차",
-    "title_ko": "중남미, 34도 폭염과 뇌우·소나기 교차",
-    "summary_ko": "10일(현지시간) 중남미 주요국 수도는 최저 9°C에서 최고 34°C에 이르는 기온 분포를 보였다. 가장 더운 곳은 34°C를 기록한 쿠바 아바나로 폭염이 발생했으며, 가장 선선한 곳은 18°C의 칠레 산티아고로 나타났다. 아바나는 산티아고보다 최고기온이 16°C 높아 대조를 이루었다.\n\n멕시코, 아르헨티나, 칠레, 콜롬비아, 쿠바, 도미니카공화국 등 다수 국가에 비 소식이 집중됐다. 이 가운데 멕시코의 멕시코시티·과달라하라·칸쿤, 쿠바의 아바나, 도미니카공화국의 산토도밍고 등에서는 뇌우가 발생했다. 특히 쿠바 아바나는 약한 우박을",
-    "url": "internal://weather_group_중남미_today20260910",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_중남미_today20260910",
-    "region": "latin_america",
-    "country": "중남미",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-10 17:11",
-    "countries": [
-      "브라질",
-      "멕시코",
-      "아르헨티나",
-      "칠레",
-      "콜롬비아",
-      "페루",
-      "쿠바",
-      "도미니카공화국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_brazil_20260910.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-10T17:11:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-10 17:11",
         "note": "최초 게시"
       }
     ],
