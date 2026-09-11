@@ -1,5 +1,42 @@
 [
   {
+    "id": 160419,
+    "title_en": "북미, 일교차 큰 맑은 날씨·비 오가는 수도권",
+    "title_ko": "북미, 일교차 큰 맑은 날씨·비 오가는 수도권",
+    "summary_ko": "11일(현지시간) 북미 주요국 수도의 기온은 최저 8°C에서 최고 26°C 사이의 분포를 보이는 가운데, 지역별로 뚜렷한 기온 차와 날씨 양상을 나타내고 있다. 오늘 북미에서 가장 더운 곳은 26°C를 기록한 미국 워싱턴DC이며, 가장 선선한 곳은 19°C에 머문 캐나다 오타와로 나타났다. 두 수도 간 최고기온은 7°C의 차이를 보이며 지역별로 다른 기후 환경을 형성하고 있다.\n\n미국 워싱턴DC는 최저 21°C, 최고 26°C의 기온 분포 속에서 비가 내리는 날씨를 보이고 있다. 워싱턴DC의 강수확률은 40%이며 5.2mm의 강수량",
+    "url": "internal://weather_group_북미_today20260911",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_북미_today20260911",
+    "region": "north_america",
+    "country": "북미",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-11 18:11",
+    "countries": [
+      "미국",
+      "캐나다"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_united_states_20260911.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-11T18:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-11 18:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
     "id": 160263,
     "title_en": "글로벌 유가 배럴당 108달러 돌파, 아시아 증시 급락세",
     "title_ko": "글로벌 유가 배럴당 108달러 돌파, 아시아 증시 급락세",
@@ -1326,44 +1363,6 @@
     "investment_idea_en": null
   },
   {
-    "id": 157448,
-    "title_en": "케냐 엠폭스 확진자 1200명 넘어... 말라위는 종식 선언",
-    "title_ko": "케냐 엠폭스 확진자 1200명 넘어... 말라위는 종식 선언",
-    "summary_ko": "9일(현지시간) 케냐 보건부는 성명을 통해 엠폭스 확진자가 1298명으로 늘어났고 사망자는 19명으로 집계되었다고 발표했다. 모바사가 452명으로 가장 많은 확진자를 기록했으며 그 뒤를 이어 나이로비에서 320명이 확인되는 등 전국 40개 이상의 카운티로 확산되었다. 보건 당국은 주요 교통 거점과 국경 인근에 위치한 7개 카운티를 고위험 지역으로 지정하고 검역과 감시를 강화했다.\n\n한편 말라위에서는 90일 이상 엠폭스 추가 확진 사례가 보고되지 않으면서 보건 당국이 9일(현지시간) 공식적으로 감염병 종식을 선언했다. 말라위 보건부에",
-    "url": "internal://trend_mpox_2026091105",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "trend_mpox",
-    "region": "africa",
-    "country": "케냐",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-11 05:10",
-    "countries": [
-      "케냐",
-      "말라위",
-      "중앙아프리카공화국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_mpox.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-11T05:10:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-11 05:10",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "사진: OWID (CC BY 4.0, Wikimedia Commons)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
     "id": 157449,
     "title_en": "[국내유가] 휘발유 리터당 1859원…정유사 공급가 논쟁 속 소폭 하락",
     "title_ko": "[국내유가] 휘발유 리터당 1859원…정유사 공급가 논쟁 속 소폭 하락",
@@ -1424,6 +1423,44 @@
       }
     },
     "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
+    "id": 157448,
+    "title_en": "케냐 엠폭스 확진자 1200명 넘어... 말라위는 종식 선언",
+    "title_ko": "케냐 엠폭스 확진자 1200명 넘어... 말라위는 종식 선언",
+    "summary_ko": "9일(현지시간) 케냐 보건부는 성명을 통해 엠폭스 확진자가 1298명으로 늘어났고 사망자는 19명으로 집계되었다고 발표했다. 모바사가 452명으로 가장 많은 확진자를 기록했으며 그 뒤를 이어 나이로비에서 320명이 확인되는 등 전국 40개 이상의 카운티로 확산되었다. 보건 당국은 주요 교통 거점과 국경 인근에 위치한 7개 카운티를 고위험 지역으로 지정하고 검역과 감시를 강화했다.\n\n한편 말라위에서는 90일 이상 엠폭스 추가 확진 사례가 보고되지 않으면서 보건 당국이 9일(현지시간) 공식적으로 감염병 종식을 선언했다. 말라위 보건부에",
+    "url": "internal://trend_mpox_2026091105",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "trend_mpox",
+    "region": "africa",
+    "country": "케냐",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-11 05:10",
+    "countries": [
+      "케냐",
+      "말라위",
+      "중앙아프리카공화국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_mpox.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-11T05:10:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-11 05:10",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "사진: OWID (CC BY 4.0, Wikimedia Commons)",
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null
@@ -2097,43 +2134,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: MDWiki(from Our World In Data) (CC BY 4.0, Wikimedia Commons)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 155215,
-    "title_en": "미국, 폭염 속 워싱턴DC 32도",
-    "title_ko": "미국, 폭염 속 워싱턴DC 32도",
-    "summary_ko": "10일(현지시간) 북미 주요국 수도 지역은 최저기온 23°C에서 최고기온 32°C 사이의 기온 분포를 보였다. 태평양 등지에서 발달한 거대 온난화 패턴과 맞물려 미국 전역에 기록적인 폭염과 극단적인 날씨가 이어지는 가운데, 미국 로스앤젤레스에서 최고기온 38°C를 기록하며 폭염 지역으로 분류됐다.\n\n미국 워싱턴DC는 최고기온 32°C, 최저기온 23°C를 기록했다. 워싱턴DC는 이번 조사에서 가장 더운 곳이자 가장 선선한 곳으로 동시에 나타났다. 이 지역은 이슬비가 내렸으며 강수확률은 29%, 강수량은 2.0mm로 집계됐다.\n\n자외",
-    "url": "internal://weather_group_북미_today20260910",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_북미_today20260910",
-    "region": "north_america",
-    "country": "북미",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-10 18:10",
-    "countries": [
-      "미국",
-      "캐나다"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_united_states_20260910.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-10T18:10:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-10 18:10",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null
