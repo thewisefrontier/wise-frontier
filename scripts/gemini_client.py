@@ -95,6 +95,33 @@ RETRY_DELAY = 2
 # 짧은 쿨다운 후 같은 프로세스 안에서도 다시 쓸 수 있게 한다.
 KEY_COOLDOWN_SECONDS = 65  # RPM 윈도우(60초)가 확실히 지나도록 여유를 둠
 
+# 2026-09-14 추가(사용자 지시 — "호출 사이에 텀을 둬서 전체 처리 속도를
+# 늦춰. 어쩔 수 없지."): 위 쿨다운은 이미 벌어진 429를 자동 복구시킬 뿐,
+# 애초에 429가 자주 뜨는 근본 원인(한 사이클 안에서 짧은 시간에 호출이
+# 몰려 개별 키의 분당 한도를 태움)은 그대로였다. 키별로 마지막 호출 후
+# 최소 이 간격만큼 지나야 그 키를 다시 쓰게 강제해 분당 한도 안에 들어오게
+# 한다 — 처리 속도가 느려지는 트레이드오프를 사용자가 감수하기로 함.
+#
+# 모델마다 실제 RPM이 달라(프리미엄 티어 RPM=5, lite 티어는 RPD 500 기준
+# 그보다 훨씬 높음) 간격도 모델별로 다르게 둔다. 프리미엄은 RPM=5 → 키당
+# 12초 간격(분당 5회, 딱 한도)이 아니라 여유를 둬 13초. lite는 정확한 RPM이
+# 공개돼 있지 않지만 RPD 500 규모에 비춰 5초(키당 분당 12회, 5키 합산
+# 최대 분당 60회)면 안전한 하한선으로 판단.
+_PREMIUM_MIN_INTERVAL = 13
+_LITE_MIN_INTERVAL = 5
+MIN_KEY_INTERVAL_SECONDS = {
+    "gemini-3.8-flash": _PREMIUM_MIN_INTERVAL,
+    "gemini-3.7-flash": _PREMIUM_MIN_INTERVAL,
+    "gemini-3.6-flash": _PREMIUM_MIN_INTERVAL,
+    "gemini-3.5-flash": _PREMIUM_MIN_INTERVAL,
+    "gemini-3.5-flash-lite": _LITE_MIN_INTERVAL,
+    "gemini-3.1-flash-lite": _LITE_MIN_INTERVAL,
+}
+
+
+def _min_interval(model: str) -> float:
+    return MIN_KEY_INTERVAL_SECONDS.get(model, _LITE_MIN_INTERVAL)
+
 
 def _is_per_day_quota(res) -> bool:
     """429 응답 본문에서 실제로 걸린 한도가 일일(PerDay)인지 확인한다.
@@ -118,10 +145,12 @@ class GeminiClient:
     def __init__(self, api_keys, models=None):
         self.api_keys = api_keys or []
         self.models = models or DEFAULT_GEMINI_MODELS
-        self._current_key_idx = 0
         # 모델별 키 상태: 없음=사용가능, True=일일 한도 소진(이 프로세스 동안
         # 영구 제외), 숫자=그 유닉스 시각 이후 재시도 가능(분당 한도 쿨다운).
         self._exhausted_keys = {m: {} for m in self.models}
+        # 모델별 키의 마지막 호출 시각 — 가장 오래 쉰 키부터 골라 쓰는 페이싱과
+        # 분당 한도 예방에 함께 쓰인다(아래 call()의 정렬 기준).
+        self._last_call_at = {m: {} for m in self.models}
 
     def _is_available(self, model: str, idx: int) -> bool:
         v = self._exhausted_keys[model].get(idx)
@@ -162,18 +191,28 @@ class GeminiClient:
                 print(f"  [{model}] 모든 키 소진/쿨다운 중 → 다음 모델로")
                 continue
 
-            ordered = sorted(available, key=lambda i: (i - self._current_key_idx) % n)
+            # 마지막 호출로부터 가장 오래 쉰 키부터 시도한다 — 아래 페이싱
+            # 대기 시간을 최소화하면서 자연히 5키에 고르게 분산시킨다.
+            last_at = self._last_call_at[model]
+            ordered = sorted(available, key=lambda i: last_at.get(i, 0))
 
             for idx in ordered:
+                # 이 키·모델 조합의 분당 한도 예방 페이싱 — 마지막 호출 후
+                # 최소 간격이 안 지났으면 나머지 시간만큼 대기 후 호출한다.
+                elapsed = time.time() - last_at.get(idx, 0)
+                wait = _min_interval(model) - elapsed
+                if wait > 0:
+                    time.sleep(wait)
+
                 api_key = self.api_keys[idx]
                 url = (
                     f"https://generativelanguage.googleapis.com/v1beta/models/"
                     f"{model}:generateContent?key={api_key}"
                 )
                 try:
+                    last_at[idx] = time.time()
                     res = requests.post(url, json=payload, timeout=timeout)
                     if res.status_code == 200:
-                        self._current_key_idx = (idx + 1) % n
                         body = res.json()
                         usage = body.get("usageMetadata", {}) or {}
                         _log_usage(model, idx + 1, "success",
