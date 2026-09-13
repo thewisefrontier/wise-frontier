@@ -115,9 +115,17 @@ def fetch_wikimedia_image(query: str):
             if info.get("mime") not in ("image/jpeg", "image/png", "image/webp", "image/svg+xml"):
                 continue
             title_lower = (page.get("title") or "").lower()
+            # 2026-09-14 실사고(사용자 재제보, id=171860 등 — 몇 주 전 이미
+            # 차단했다고 생각한 "Cholera deaths in Great Britain" OWID 차트가
+            # 계속 콜레라 기사에 다시 붙었다): 실제 파일명이
+            # "Cholera-deaths-in-great-britain.jpg"처럼 공백 대신 하이픈을
+            # 쓰고 있어서, _WIKI_TITLE_AVOID_WORDS의 "deaths in" 같은 공백
+            # 포함 문구가 부분일치조차 안 되고 있었다 — 아래에서만 정규화하고
+            # 원래 title_lower(anchor 비교 등)는 그대로 둔다.
+            title_norm = title_lower.replace("-", " ").replace("_", " ")
             if title_lower in _WIKI_TITLE_BLOCKLIST:
                 continue
-            if any(w in title_lower for w in _WIKI_TITLE_AVOID_WORDS):
+            if any(w in title_norm for w in _WIKI_TITLE_AVOID_WORDS):
                 continue
             if anchor and anchor not in title_lower:
                 continue
