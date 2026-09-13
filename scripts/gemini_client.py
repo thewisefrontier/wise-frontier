@@ -85,13 +85,51 @@ DEFAULT_GEMINI_MODELS = [
 # frontier_markets_writer.py 수동 실행이 5키×2모델 연속 호출로 RPM 초과).
 RETRY_DELAY = 2
 
+# 2026-09-13 실사고(사용자 지적 — "2번째 키 한도를 보니까 3.1플래시라이트는
+# 47개, 3.5플래시라이트는 158개만 썼네"): RPD 500인 lite 모델 키가 실제로는
+# 30%도 안 쓴 상태에서 "모든 키 소진"으로 몇 시간째 기사 생성이 0건이었다.
+# 원인은 429를 받으면 그게 분당 한도(RPM, 금방 풀림)든 일일 한도(RPD, 태평양
+# 자정까지 안 풀림)든 구분 없이 그 키를 이 프로세스가 끝날 때까지 영구 제외
+# 하던 것 — 5키가 각각 RPM 버스트로 429를 딱 한 번씩만 받아도 "가용 키 0개"가
+# 돼버린다. 429 응답 본문의 quotaId로 실제 어느 한도인지 구분해, RPD가 아니면
+# 짧은 쿨다운 후 같은 프로세스 안에서도 다시 쓸 수 있게 한다.
+KEY_COOLDOWN_SECONDS = 65  # RPM 윈도우(60초)가 확실히 지나도록 여유를 둠
+
+
+def _is_per_day_quota(res) -> bool:
+    """429 응답 본문에서 실제로 걸린 한도가 일일(PerDay)인지 확인한다.
+    파싱 실패·정보 없음은 보수적으로 False(=분당 한도로 간주, 쿨다운 후 재시도)
+    처리한다 — 진짜 일일 한도 소진을 분당으로 오판해 계속 재시도하는 낭비보다,
+    분당 한도를 일일로 오판해 남은 실행시간 내내 키를 놀리는 게 훨씬 큰
+    손실이었기 때문이다(위 실사고 참고)."""
+    try:
+        body = res.json()
+        for detail in body.get("error", {}).get("details", []):
+            for v in detail.get("violations", []):
+                qid = f"{v.get('quotaId', '')} {v.get('quotaMetric', '')}"
+                if "PerDay" in qid:
+                    return True
+        return False
+    except Exception:
+        return False
+
 
 class GeminiClient:
     def __init__(self, api_keys, models=None):
         self.api_keys = api_keys or []
         self.models = models or DEFAULT_GEMINI_MODELS
         self._current_key_idx = 0
-        self._exhausted_keys = {m: set() for m in self.models}
+        # 모델별 키 상태: 없음=사용가능, True=일일 한도 소진(이 프로세스 동안
+        # 영구 제외), 숫자=그 유닉스 시각 이후 재시도 가능(분당 한도 쿨다운).
+        self._exhausted_keys = {m: {} for m in self.models}
+
+    def _is_available(self, model: str, idx: int) -> bool:
+        v = self._exhausted_keys[model].get(idx)
+        if v is None:
+            return True
+        if v is True:
+            return False
+        return time.time() >= v
 
     def call(self, prompt, max_tokens=1500, start_tier=4, temperature=0.5,
              timeout=(10, 45), use_search=False, max_stages=None):
@@ -119,9 +157,9 @@ class GeminiClient:
             model_stages = model_stages[:max_stages]
 
         for model, exhausted in model_stages:
-            available = [i for i in range(n) if i not in exhausted]
+            available = [i for i in range(n) if self._is_available(model, i)]
             if not available:
-                print(f"  [{model}] 모든 키 소진 → 다음 모델로")
+                print(f"  [{model}] 모든 키 소진/쿨다운 중 → 다음 모델로")
                 continue
 
             ordered = sorted(available, key=lambda i: (i - self._current_key_idx) % n)
@@ -157,9 +195,13 @@ class GeminiClient:
                         text = "".join(p.get("text", "") for p in parts).strip()
                         return text if text else None
                     elif res.status_code == 429:
-                        print(f"  [429] {model} 키 {idx+1} 한도 초과 → 다음 키")
                         _log_usage(model, idx + 1, "429")
-                        exhausted.add(idx)
+                        if _is_per_day_quota(res):
+                            print(f"  [429] {model} 키 {idx+1} 일일 한도 소진 → 이번 실행 동안 제외")
+                            exhausted[idx] = True
+                        else:
+                            print(f"  [429] {model} 키 {idx+1} 분당 한도 → {KEY_COOLDOWN_SECONDS}초 후 재시도 대상, 다음 키로")
+                            exhausted[idx] = time.time() + KEY_COOLDOWN_SECONDS
                         time.sleep(RETRY_DELAY)
                         continue
                     elif res.status_code == 503:
