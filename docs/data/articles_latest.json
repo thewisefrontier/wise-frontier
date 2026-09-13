@@ -1,5 +1,43 @@
 [
   {
+    "id": 168425,
+    "title_en": "중앙아시아, 최저 11도에서 최고 34도 분포",
+    "title_ko": "중앙아시아, 최저 11도에서 최고 34도 분포",
+    "summary_ko": "13일(현지시간) 기상청 예보에 따르면, 다음주 월요일부터 금요일까지 중앙아시아 주요국의 전체 기온은 최저 11°C에서 최고 34°C의 분포를 기록할 것으로 예보되었다. 지역별로는 카자흐스탄, 우즈베키스탄, 키르기스스탄 등 주요 국가에서 각각 다른 기온 양상이 전개된다.\n\n카자흐스탄은 주간 최고 24°C, 최저 11°C로 중앙아시아 국가 중 가장 선선한 기온 분포를 보일 것으로 나타났다. 키르기스스탄은 주간 최고 30°C, 최저 14°C의 기온을 기록할 것으로 전망된다.\n\n우즈베키스탄은 주간 최고 34°C, 최저 19°C로 이번 예",
+    "url": "internal://weather_group_중앙아시아_weekly20260913",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_중앙아시아_weekly20260913",
+    "region": "central_asia",
+    "country": "중앙아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-13 09:09",
+    "countries": [
+      "카자흐스탄",
+      "우즈베키스탄",
+      "키르기스스탄"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_kazakhstan_20260913.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-13T09:09:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-13 09:09",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
     "id": 168424,
     "title_en": "남아시아, 최저 18도·최고 33도 속 곳곳 비",
     "title_ko": "남아시아, 최저 18도·최고 33도 속 곳곳 비",
@@ -1322,44 +1360,6 @@
       ]
     },
     "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 163984,
-    "title_en": "중앙아시아, 비 내리는 아스타나와 맑은 타슈켄트",
-    "title_ko": "중앙아시아, 비 내리는 아스타나와 맑은 타슈켄트",
-    "summary_ko": "12일(현지시간) 중앙아시아 주요국 주말 날씨 데이터에 따르면, 이번 주말 지역 전체의 기온은 최저 14°C에서 최고 32°C 사이의 분포를 보인다. 국가별 수도의 주말 예보는 지역에 따라 뚜렷한 기상 차이를 나타낸다.\n\n카자흐스탄 아스타나는 주말 동안 비 소식이 예고됐다. 토요일에는 약한 이슬비와 함께 최고기온 22°C, 최저기온 17°C를 기록하며 강수 확률은 82%에 달한다. 일요일에도 이슬비가 이어지며 최고기온 21°C, 최저기온 14°C, 강수 확률 51%를 보인\n\n반면 우즈베키스탄과 키르기스스탄은 대체로 맑은 날씨가 이어",
-    "url": "internal://weather_group_중앙아시아_weekend20260912",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_중앙아시아_weekend20260912",
-    "region": "central_asia",
-    "country": "중앙아시아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-12 09:05",
-    "countries": [
-      "카자흐스탄",
-      "우즈베키스탄",
-      "키르기스스탄"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_kazakhstan_20260912.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-12T09:05:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-12 09:05",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null
