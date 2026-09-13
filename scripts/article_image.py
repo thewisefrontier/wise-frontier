@@ -63,6 +63,16 @@ _WIKI_TITLE_AVOID_WORDS = (
     "trend in", "trends in", "by country", "by year", "per capita",
 )
 
+# 2026-09-14 실사고(사용자 재제보 — 위 차트를 걸렀더니 그 자리를 1831년
+# 콜레라 정치풍자화(해골 유령이 전장을 짓밟는 그림)가 대신함): 파일명만으론
+# 역사적 삽화·풍자화·회화를 못 거른다 — 대신 Commons의 Categories 태그에
+# 이런 성격이 명시적으로 붙어있으므로(예: "1831 cartoons", "Cholera in art",
+# "Personifications of disease") 그걸로 거른다.
+_WIKI_CATEGORY_AVOID_WORDS = (
+    "cartoon", "caricature", "satire", "engraving", "etching", "lithograph",
+    "woodcut", "painting", "drawing", "personification", " in art", "artworks",
+)
+
 
 def fetch_wikimedia_image(query: str):
     """위키미디어 커먼즈에서 CC/PD 라이선스 이미지를 검색한다.
@@ -132,6 +142,17 @@ def fetch_wikimedia_image(query: str):
             if (info.get("width") or 0) < 300 or (info.get("height") or 0) < 200:
                 continue
             meta = info.get("extmetadata") or {}
+            # 2026-09-14 추가(사용자 재제보 — 위 차트 문제를 고치자마자 그
+            # 자리를 대신한 결과가 1831년 콜레라를 해골 유령으로 그린 정치
+            # 풍자화(Robert Seymour 작, Commons 분류: "1831 cartoons",
+            # "Cholera in art", "Personifications of disease")였다. 파일명·
+            # 제목만으론 이런 역사적 삽화/풍자화를 못 걸렀는데, Commons가
+            # 분류(Categories)에 정확히 이런 태그를 달아두므로 그걸로 거른다
+            # — 통계 도표(위 title 필터)와 함께 "사진이 아닌 것" 전반을
+            # 배제하는 목적.
+            categories_lower = (meta.get("Categories", {}).get("value") or "").lower()
+            if any(w in categories_lower for w in _WIKI_CATEGORY_AVOID_WORDS):
+                continue
             license_key = (meta.get("License", {}).get("value") or "").lower()
             restrictions = (meta.get("Restrictions", {}).get("value") or "").strip()
             if restrictions or license_key not in _WIKI_LICENSE_ALLOW:
@@ -214,6 +235,20 @@ def fetch_seeded_pixabay_image(keywords: list, seed: int, key_hint: str) -> str:
     return ""
 
 
+# 2026-09-14 추가(사용자 재제보 3연속 — 콜레라 기사 이미지가 "영국 콜레라
+# 통계 차트" → (제목 정규화로 고침) "1831년 콜레라 정치풍자화" → (카테고리
+# 필터로 고침) "콜레라 독소 분자생물학 도해"로 계속 다른 비사진 콘텐츠가
+# 그 자리를 대신했다): 질병명 같은 범용 엔티티는 위키미디어 커먼즈에 사진
+# 보다 통계자료·역사삽화·생물학 도해가 압도적으로 많다(질병 자체가 백과
+# 문서화 대상이라 그런 자료가 먼저 쌓임) — 파일명/분류로 하나씩 걸러내는
+# 건 새 사례가 계속 나오는 한계가 뚜렷하다. 이런 엔티티는 위키미디어를
+# 아예 건너뛰고 곧장 아래 Gemini+Pixabay 경로로 간다 — Pixabay는
+# image_type=photo로 API 자체에서 실사진만 반환해 이 문제가 구조적으로
+# 없고, 검색어도 엔티티 하나가 아니라 기사 제목·본문 기반이라 더 맥락에
+# 맞는다.
+_WIKIMEDIA_UNRELIABLE_ENTITIES = {"cholera", "mpox", "ebola virus disease"}
+
+
 def fetch_article_image(title: str, body: str, entity: str, call_gemini_fn) -> tuple:
     """기사 이미지를 찾는다. 반환: (image_url, image_credit).
 
@@ -221,8 +256,11 @@ def fetch_article_image(title: str, body: str, entity: str, call_gemini_fn) -> t
     영문 키워드)가 있으면 위키미디어 커먼즈에서 먼저 찾고, 없으면 Pixabay
     일반 스톡사진으로 대체한다. call_gemini_fn은 호출 스크립트 자신의
     call_gemini(prompt, max_tokens=..., start_tier=...) 래퍼.
+
+    단, entity가 _WIKIMEDIA_UNRELIABLE_ENTITIES에 있으면 위키미디어를
+    건너뛰고 바로 Pixabay 경로로 간다(위 주석 참고).
     """
-    if entity:
+    if entity and entity.lower() not in _WIKIMEDIA_UNRELIABLE_ENTITIES:
         wiki_url, wiki_credit = fetch_wikimedia_image(entity)
         if wiki_url:
             # 2026-09-07 실사고(id=140160): 위키미디어 경로만 store_image()를
