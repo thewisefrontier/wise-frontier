@@ -1115,10 +1115,9 @@ function cleanBody(text) {
       // (실사고 2026-08-17, id=80581)를 막기 위함. 목록/날씨/브리핑은 항목이 많아
       // 매번 라이브 조회하면 비용이 커서 기존대로 스냅샷을 쓴다.
       // ⚠️ 2026-09-04: articles.json(7일치, ~400건)이 아니라 articles_latest.json
-      // (최근 24시간)을 쓴다 — 사용자 지적("첫 화면 20개만 보고 나가는 사람도
-      // 나머지 380개어치를 다 받는 구조"). 그보다 오래된 기사는 archive.html에서
-      // 날짜·국가·카테고리로 찾을 수 있다(2026-09-14: 홈의 "더 보기" 라이브
-      // 이어받기 버튼은 20건씩 15페이지 넘겨야 나오는 사실상 죽은 코드라 제거).
+      // (최근 24시간)을 기본으로 쓴다 — 사용자 지적("첫 화면 20개만 보고 나가는
+      // 사람도 나머지 380개어치를 다 받는 구조"). 그 창이 얇을 때만 아래에서
+      // articles.json으로 보충한다(2026-09-14 추가 — 최소 분량 로직 참고).
       const SUPABASE_URL = 'https://fotdngseksqaghvtcvqh.supabase.co';
       const SUPABASE_ANON_KEY = 'sb_publishable_rT3kSEAAdM0DJlDW5fEWww_M37h6dDW';
       const [res, digestRes] = await Promise.all([
@@ -1132,6 +1131,26 @@ function cleanBody(text) {
       const raw = await res.json();
       const weatherArticles = raw.filter(a => a.category === '날씨');
       allArticles = raw.filter(a => !(a.subcategory || '').startsWith('digest_') && a.category !== '날씨');
+
+      // 2026-09-14 추가(사용자 지적 — "15건만 만들어졌다고 페이지네이션이
+      // 안나오는 건 오류다, 이전 기사랑 합쳐서 나와야지"): 최근 24시간치가
+      // 얇으면(발행 지연·새벽 시간대 등) 목록 자체가 휑해지고 페이지네이션도
+      // 사라진다. 24시간 창을 쓰는 원래 이유(방문자마다 7일치 ~400건을 매번
+      // 다 받지 않게 하려는 성능 최적화, 2026-09-04)는 유지하되, 그 창이
+      // 최소 분량에 못 미칠 때만 7일치 스냅샷으로 보충해 정상적인 다중 페이지
+      // 목록을 유지한다.
+      const MIN_HOMEPAGE_ARTICLES = PAGE_SIZE * 3;
+      if (allArticles.length < MIN_HOMEPAGE_ARTICLES) {
+        try {
+          const fullRes = await fetch('data/articles.json');
+          if (fullRes.ok) {
+            const fullRaw = await fullRes.json();
+            const fullFiltered = fullRaw.filter(a => !(a.subcategory || '').startsWith('digest_') && a.category !== '날씨');
+            const seen = new Set(allArticles.map(a => a.id));
+            allArticles = [...allArticles, ...fullFiltered.filter(a => !seen.has(a.id))];
+          }
+        } catch (e) { /* 실패해도 24시간치로 계속 진행 */ }
+      }
 
       let liveDigest = null;
       if (digestRes && digestRes.ok) {
