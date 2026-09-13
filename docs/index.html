@@ -908,51 +908,7 @@
       html += `</div>`;
     }
 
-    if (page === totalPages && !currentQuery) {
-      html += `<div style="text-align:center;padding:16px 0 24px;">
-        <button id="load-more-btn" onclick="loadMoreFromSupabase()" style="padding:8px 28px;border:1px solid var(--border);background:var(--bg3);font-family:'IBM Plex Mono',monospace;font-size:12px;cursor:pointer;color:var(--accent2);">더 보기 ↓</button>
-      </div>`;
-    }
-
     container.innerHTML = html;
-  }
-
-  let supabaseOffset = 0;
-
-  async function loadMoreFromSupabase() {
-    const btn = document.getElementById('load-more-btn');
-    if (btn) btn.textContent = '로딩 중...';
-    const SUPABASE_URL = 'https://fotdngseksqaghvtcvqh.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_rT3kSEAAdM0DJlDW5fEWww_M37h6dDW';
-    const oldest = allArticles.length ? allArticles[allArticles.length - 1].created_at : null;
-    try {
-      const params = new URLSearchParams({
-        select: '*',
-        source: 'eq.NewsFinal',
-        is_published: 'eq.true',
-        order: 'created_at.desc',
-        limit: 100,
-      });
-      if (oldest) params.append('created_at', `lt.${oldest}`);
-      if (currentRegion !== 'all') params.append('region', `eq.${currentRegion}`);
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/articles?${params}`, {
-        headers: { 'apikey': SUPABASE_ANON_KEY }
-      });
-      if (!res.ok) throw new Error();
-      const newArticles = await res.json();
-      if (!newArticles.length) {
-        if (btn) { btn.textContent = '더 이상 기사가 없습니다'; btn.disabled = true; }
-        return;
-      }
-      const existingIds = new Set(allArticles.map(a => a.id));
-      const fresh = newArticles.filter(a => !existingIds.has(a.id));
-      allArticles = [...allArticles, ...fresh];
-      const totalPages = Math.ceil(allArticles.length / PAGE_SIZE);
-      renderArticles(allArticles, totalPages);
-      window.scrollTo(0, 0);
-    } catch(e) {
-      if (btn) { btn.textContent = '오류 — 다시 시도'; btn.disabled = false; }
-    }
   }
 
   // 상단 [업데이트] 블록을 걷어내고 원 본문만 반환한다. 요약·메타 설명 전용.
@@ -1160,8 +1116,9 @@ function cleanBody(text) {
       // 매번 라이브 조회하면 비용이 커서 기존대로 스냅샷을 쓴다.
       // ⚠️ 2026-09-04: articles.json(7일치, ~400건)이 아니라 articles_latest.json
       // (최근 24시간)을 쓴다 — 사용자 지적("첫 화면 20개만 보고 나가는 사람도
-      // 나머지 380개어치를 다 받는 구조"). 그보다 오래된 기사가 필요해지면
-      // (다음 페이지·필터) 이미 있는 loadMoreFromSupabase()가 라이브로 이어받는다.
+      // 나머지 380개어치를 다 받는 구조"). 그보다 오래된 기사는 archive.html에서
+      // 날짜·국가·카테고리로 찾을 수 있다(2026-09-14: 홈의 "더 보기" 라이브
+      // 이어받기 버튼은 20건씩 15페이지 넘겨야 나오는 사실상 죽은 코드라 제거).
       const SUPABASE_URL = 'https://fotdngseksqaghvtcvqh.supabase.co';
       const SUPABASE_ANON_KEY = 'sb_publishable_rT3kSEAAdM0DJlDW5fEWww_M37h6dDW';
       const [res, digestRes] = await Promise.all([
