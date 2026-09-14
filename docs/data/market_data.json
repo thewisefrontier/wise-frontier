@@ -1,25 +1,25 @@
 {
-  "updated_at": "2026-09-14 22:31",
+  "updated_at": "2026-09-14 22:35",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7600.99,
-      "change_pct": 0.12,
+      "price": 7599.95,
+      "change_pct": 0.11,
       "up": true
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 26021.83,
+      "price": 26022.75,
       "change_pct": -0.23,
       "up": false
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 52413.01,
-      "change_pct": 0.67,
+      "price": 52423.96,
+      "change_pct": 0.69,
       "up": true
     },
     {
@@ -39,8 +39,8 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 113862.86,
-      "change_pct": -1.13,
+      "price": 113895.57,
+      "change_pct": -1.1,
       "up": false
     },
     {
@@ -89,7 +89,7 @@
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
       "price": 16.32,
-      "change_pct": 0.72,
+      "change_pct": 0.73,
       "up": true
     }
   ],
@@ -98,22 +98,22 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7600.99,
-        "change_pct": 0.12,
+        "price": 7599.95,
+        "change_pct": 0.11,
         "up": true
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 26021.83,
+        "price": 26022.75,
         "change_pct": -0.23,
         "up": false
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 52413.01,
-        "change_pct": 0.67,
+        "price": 52423.96,
+        "change_pct": 0.69,
         "up": true
       }
     ],
@@ -137,8 +137,8 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 113862.86,
-        "change_pct": -1.13,
+        "price": 113895.57,
+        "change_pct": -1.1,
         "up": false
       },
       {
@@ -189,9 +189,25 @@
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
         "price": 16.32,
-        "change_pct": 0.72,
+        "change_pct": 0.73,
         "up": true
       }
     ]
+  },
+  "company_prices": {
+    "ANTM": {
+      "name": "Aneka Tambang Tbk",
+      "symbol": "ANTM.JK",
+      "price": 3190.0,
+      "change_pct": -2.45,
+      "up": false
+    },
+    "ACB": {
+      "name": "Asia Commercial Joint Stock Bank",
+      "symbol": "ACB.VN",
+      "price": 22050.0,
+      "change_pct": -1.56,
+      "up": false
+    }
   }
 }
