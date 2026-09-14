@@ -1061,29 +1061,22 @@ def is_coherent_cluster(cluster: list) -> bool:
     if len(article_kws) < 2:
         return True
 
-    # 공통 키워드가 있는 기사 쌍 비율 계산
-    # 절반 이상의 기사가 적어도 하나의 공통 키워드를 공유하면 단일 이슈
+    # 기사마다 클러스터 내 다른 기사와 공통 키워드가 하나라도 있는지 확인.
     n = len(article_kws)
-    connected = 0
-    for i in range(n):
-        for j in range(i+1, n):
-            if article_kws[i] & article_kws[j]:  # 공통 키워드 있으면
-                connected += 1
-                break  # 이 기사(i)는 연결됨
-        else:
-            # i번 기사가 어느 기사와도 키워드 안 겹치면 고립
-            pass
+    has_connection = [
+        any(article_kws[i] & article_kws[j] for j in range(n) if j != i)
+        for i in range(n)
+    ]
 
-    # 실제로 연결된 기사 수 계산
-    has_connection = []
-    for i in range(n):
-        linked = any(article_kws[i] & article_kws[j] for j in range(n) if j != i)
-        has_connection.append(linked)
-
-    connected_ratio = sum(has_connection) / n
-
-    # 절반 미만의 기사만 연결돼 있으면 엉터리 클러스터
-    if connected_ratio < 0.5:
+    # 2026-09-15 실사고(id=173044 — 트럼프·이란 기사에 완전히 무관한
+    # 튀르키예 성소수자 단속 소식이 섞여 발행됨, 사용자 지적: "기사
+    # 연관성 필터링이 제대로 안되나"): 예전 기준("절반 이상만 연결되면
+    # 통과")은 4건짜리 클러스터에 고립 기사가 딱 1건 섞여도 연결비율이
+    # 0.75라 그대로 통과시켰다. 절반이라는 다수결 기준 자체가 "일부는
+    # 무관해도 된다"는 뜻이 돼버려 이 문제의 근본 원인이었다 — 클러스터
+    # 안의 기사는 전부 다른 기사와 최소 하나는 연결돼야 하고, 단 하나라도
+    # 고립돼 있으면 그 클러스터 전체를 엉터리로 판정한다.
+    if not all(has_connection):
         return False
     return True
 
