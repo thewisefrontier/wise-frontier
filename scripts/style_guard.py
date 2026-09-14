@@ -155,7 +155,19 @@ def _pub_day_label(raw) -> str:
 
 def verify_single_topic(title: str, body: str, call_gemini_fn) -> bool:
     """하나의 토픽만 다루는지 Gemini로 검수. 판정 실패 시 True(통과).
-    call_gemini_fn은 호출 스크립트 자신의 call_gemini(prompt, max_tokens=..., start_tier=...) 래퍼."""
+    call_gemini_fn은 호출 스크립트 자신의 call_gemini(prompt, max_tokens=..., start_tier=...) 래퍼.
+
+    2026-09-14 실사고(id=173044 — 트럼프·이란 기사에 브릭스, 예멘 후티,
+    튀르키예 성소수자 단속까지 전혀 무관한 4개 사안이 한 기사로 묶여
+    발행됨, 사용자 지적: "기사 연관성 필터링이 제대로 안되나"): 이 안전
+    장치 자체는 이미 호출부에 연결돼 있었는데도 뚫렸다. 원인을 정확히
+    특정할 로그는 없지만, 이 시기 전체 파이프라인이 429(분당 한도)를
+    광범위하게 겪고 있었던 게 이미 확인됐다(gemini_client.py 관련 수정
+    참고) — call_gemini_fn 호출 1회가 실패하면 곧바로 "판정 불가 → 통과"
+    로 빠지는 구조라, 하필 검증이 필요한 바로 그 순간(파이프라인이
+    바쁘게 여러 기사를 동시에 처리 중이라 429 위험이 가장 큰 시점)에
+    조용히 무력화되기 쉬웠다. 실패 시 한 번 더 재시도한 뒤에만 통과
+    처리하도록 해 이 취약점을 줄인다."""
     if not title or not body:
         return True
 
@@ -171,6 +183,8 @@ def verify_single_topic(title: str, body: str, call_gemini_fn) -> bool:
 답변 (YES 또는 NO만):"""
 
     result = call_gemini_fn(prompt, max_tokens=5, start_tier=4)
+    if not result:
+        result = call_gemini_fn(prompt, max_tokens=5, start_tier=4)  # 1회 재시도(위 실사고 참고)
     if not result:
         return True
     return "YES" in result.upper()
