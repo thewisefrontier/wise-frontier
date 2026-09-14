@@ -1,5 +1,48 @@
 [
   {
+    "id": 174310,
+    "title_en": "중남미, 폭염과 뇌우 엇갈린 하늘…곳곳 소나기",
+    "title_ko": "중남미, 폭염과 뇌우 엇갈린 하늘…곳곳 소나기",
+    "summary_ko": "14일(현지시간) 중남미 주요국 수도는 최저기온 6°C에서 최고기온 33°C 사이의 폭넓은 기온 분포를 기록한 가운데 지역별로 극심한 기온 차와 비 소식을 보였다. 가장 더운 곳은 최고기온 33°C를 기록한 브라질 브라질리아였으며, 가장 선선한 곳은 최고기온 13°C와 최저기온 6°C에 머문 아르헨티나 부에노스아이레스였다. 브라질리아는 부에노스아이레스보다 최고기온이 20°C나 높아 대조를 이뤘다.\n\n또한 멕시코 칸쿤은 38°C 이상의 폭염 지역으로 분류됐다.\n\n멕시코, 콜롬비아, 쿠바, 도미니카공화국 등에서는 비 소식이 이어졌으며,",
+    "url": "internal://weather_group_중남미_today20260914",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_중남미_today20260914",
+    "region": "latin_america",
+    "country": "중남미",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-14 17:14",
+    "countries": [
+      "브라질",
+      "멕시코",
+      "아르헨티나",
+      "칠레",
+      "콜롬비아",
+      "페루",
+      "쿠바",
+      "도미니카공화국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_brazil_20260914.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-14T17:14:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-14 17:14",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
     "id": 174229,
     "title_en": "인도네시아 자바해에서 여객선 '버르고 트랜스포트' 전복…6명 사망·129명 실종",
     "title_ko": "인도네시아 자바해에서 여객선 '버르고 트랜스포트' 전복…6명 사망·129명 실종",
@@ -1122,49 +1165,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: OWID (CC BY 4.0, Wikimedia Commons)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 169595,
-    "title_en": "중남미, 최고 33도 찜통더위…곳곳 비",
-    "title_ko": "중남미, 최고 33도 찜통더위…곳곳 비",
-    "summary_ko": "13일(현지시간) 예보된 중남미 주요국의 다음주(월~금) 날씨는 최저기온 6°C에서 최고기온 33°C의 기온 분포를 보이며 지역별로 뚜렷한 차이를 나타낸다. 이번 주간 중남미 전역에서는 브라질과 멕시코를 비롯한 일부 국가에서 비 소식이 예고되어 있어 지역에 따른 기상 변화가 다르게 전개될 전망이다.\n\n국가별 상세 주간 기온 및 강수 현황을 보면 브라질은 주간 최고 33°C, 최저 18°C를 기록하며 비 소식이 함께 예보되었고, 멕시코는 주간 최고 24°C, 최저 12°C의 기온 속에서 비가 내릴 것으로 보인다. 콜롬비아는 주간 최고",
-    "url": "internal://weather_group_중남미_weekly20260913",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_중남미_weekly20260913",
-    "region": "latin_america",
-    "country": "중남미",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-13 17:12",
-    "countries": [
-      "브라질",
-      "멕시코",
-      "아르헨티나",
-      "칠레",
-      "콜롬비아",
-      "페루",
-      "쿠바",
-      "도미니카공화국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_brazil_20260913.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-13T17:12:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-13 17:12",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null
