@@ -36,7 +36,6 @@ stock_news/ny_market_open(본편+유럽판)은 대괄호([태그]) 형태만 인
 Gemini가 평문으로 접두어를 흘리면 태그가 중복 부착되는 결함이 있었다.
 """
 
-import math
 import re
 
 # ── 논평/칼럼체 검출 ────────────────────────────
@@ -177,15 +176,22 @@ def verify_single_topic(title: str, body: str, call_gemini_fn) -> bool:
     return "YES" in result.upper()
 
 
-def _regroup_sentences(sentences: list, target: int) -> str:
-    """문장 목록을 target개 안팎의 문단으로 균등 재배분."""
+def _regroup_sentences(sentences: list, target: int, max_sentences_per_para: int = 3) -> str:
+    """문장 목록을 문단으로 재배분한다. 문단당 최대 문장 수(max_sentences_per_para)를
+    넘지 않는 게 최우선 제약이고, target(목표 문단 개수)은 그 범위 안에서
+    쓰이는 참고값일 뿐이다 — 문장이 많으면 문단 개수가 target보다 많아지는
+    쪽이 맞다(하우스 스타일 규칙 자체가 "문단 개수"가 아니라 "문단 크기"에
+    대한 규칙이기 때문).
+
+    2026-09-14 실사고(id=172526, 172528 — 트렌드 기사가 \\n\\n 없이 통짜로
+    나왔을 때, 문장 11개를 옛 로직(size=ceil(11/target=3)=4)이 4+4+3으로
+    나눠 문단당 최대 3문장 규칙을 그대로 위반했다. "정확히 target개 문단"을
+    맞추는 게 "문단당 최대 문장 수"보다 우선시되던 게 근본 원인 — 아래
+    ensure_paragraphs()의 "블록별로 길이만 확인" 분기(문단당 max_sentences_per_para
+    단위로 그냥 순서대로 자름)와 동일한 방식으로 통일한다."""
     if len(sentences) < 2:
         return " ".join(sentences)
-    actual_target = min(target, len(sentences) - 1)
-    actual_target = max(actual_target, 2)
-    n = len(sentences)
-    size = math.ceil(n / actual_target)
-    groups = [sentences[i:i + size] for i in range(0, n, size)]
+    groups = [sentences[i:i + max_sentences_per_para] for i in range(0, len(sentences), max_sentences_per_para)]
     return "\n\n".join(" ".join(g) for g in groups)
 
 
@@ -225,7 +231,7 @@ def ensure_paragraphs(text: str, target: int = 3, max_sentences_per_para: int = 
         sentences = _split_sentences(text.strip())
         if len(sentences) < 2:
             return text  # 문장이 1개뿐이면 분할 불가
-        return _regroup_sentences(sentences, target)
+        return _regroup_sentences(sentences, target, max_sentences_per_para)
 
     # 이미 문단(블록)이 나뉜 텍스트
     blocks = [b.strip() for b in text.split("\n\n") if b.strip()]
@@ -237,7 +243,7 @@ def ensure_paragraphs(text: str, target: int = 3, max_sentences_per_para: int = 
     # 전체를 다시 모아 target 기준으로 재배분한다.
     if len(blocks) >= 3 and total_sentences and (total_sentences / len(blocks)) <= 1.5:
         all_sentences = [s for block in block_sentences for s in block]
-        return _regroup_sentences(all_sentences, target)
+        return _regroup_sentences(all_sentences, target, max_sentences_per_para)
 
     # 그 외에는 블록별로 길이만 확인해 너무 긴 블록만 추가로 쪼갠다 —
     # 이미 적당한 블록은 그대로 둔다.
