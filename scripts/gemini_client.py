@@ -22,6 +22,7 @@ script_leak.py·json_body_guard.py와 같은 이유로 공용화한다.
 
 import os
 import time
+import base64
 from collections import defaultdict
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
@@ -173,13 +174,24 @@ class GeminiClient:
         return time.time() >= v
 
     def call(self, prompt, max_tokens=1500, start_tier=4, temperature=0.5,
-             timeout=(10, 45), use_search=False, max_stages=None):
+             timeout=(10, 45), use_search=False, max_stages=None,
+             image_bytes=None, image_mime=None):
         if not self.api_keys:
             print("[ERROR] GEMINI_API_KEY 없음")
             return None
 
+        parts = [{"text": prompt}]
+        if image_bytes:
+            # 사진 워터마크 검사 등 멀티모달 호출용(2026-09-16 신설) — 이미지를
+            # 텍스트 프롬프트와 함께 한 요청에 넣는다(Gemini REST 표준 형식).
+            parts.append({
+                "inline_data": {
+                    "mime_type": image_mime or "image/jpeg",
+                    "data": base64.b64encode(image_bytes).decode("ascii"),
+                }
+            })
         payload = {
-            "contents": [{"parts": [{"text": prompt}]}],
+            "contents": [{"parts": parts}],
             "generationConfig": {"temperature": temperature, "maxOutputTokens": max_tokens},
         }
         if use_search:

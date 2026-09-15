@@ -192,6 +192,40 @@ def _parse_domestic_output(text: str) -> tuple[str, str]:
     return title, body
 
 
+_WATERMARK_CHECK_PROMPT = (
+    "Look at this image. Does it have a visible text watermark, logo, or brand "
+    "mark overlaid on the photo itself (e.g. a news outlet name, wire service "
+    "name, or photo agency mark printed in a corner or across the image)? "
+    "Answer with exactly one word: YES or NO."
+)
+
+
+def _image_has_watermark(image_url: str) -> bool:
+    """2026-09-16 사용자 지적: "텐아시아 로고가 사진에 박혀 잇네. 저것도
+    쓰면 안돼" — 사진 픽셀 자체에 워터마크가 찍혀 있으면(본문 텍스트에
+    캡션으로 안 남는 경우가 많아 기존 정규식 검사로는 못 잡음) 텍스트
+    검사와 별개로 Gemini 비전 호출로 직접 확인한다. 클러스터 대표 이미지
+    선정 시(실행당 최대 MAX_CLUSTERS_PER_RUN=5건)만 호출해 비용을 낮춘다.
+    호출 실패 시에는 판단 불가로 통과시키지 않고 안전하게 "워터마크 있음"
+    으로 간주해 스킵한다(사진 없는 것보다 저작권 위험이 더 크므로 fail-closed).
+    """
+    try:
+        res = requests.get(image_url, timeout=10)
+        if res.status_code != 200 or not res.content:
+            return True
+        mime = res.headers.get("Content-Type", "image/jpeg").split(";")[0].strip()
+        answer = _gw._gemini_client.call(
+            _WATERMARK_CHECK_PROMPT, max_tokens=10, temperature=0,
+            image_bytes=res.content, image_mime=mime,
+        )
+        if not answer:
+            return True
+        return answer.strip().upper().startswith("YES")
+    except Exception as e:
+        print(f"  ⚠️ 워터마크 검사 실패({e}) — 안전하게 사용 안 함")
+        return True
+
+
 def run():
     if not SUPABASE_URL or not SUPABASE_SERVICE_KEY:
         print("[SKIP] SUPABASE 환경변수 없음")
@@ -262,13 +296,20 @@ def run():
             if not x.get("image_url"):
                 continue
             xdomain = urlparse(x.get("url") or "").netloc
-            if _is_image_source_allowed(xdomain, x.get("full_text") or ""):
-                image_url = x["image_url"]
-                # 사용자 지적: "적어도 출처를 내가 알 수 있어야 할 것 같은데" —
-                # 클러스터 대표 이미지가 실제로 어느 매체(도메인)에서 왔는지
-                # 어드민 검증 화면에서 바로 보이도록 기록한다.
-                image_credit = xdomain
-                break
+            if not _is_image_source_allowed(xdomain, x.get("full_text") or ""):
+                continue
+            # 텍스트 캡션에 안 걸려도 사진 픽셀 자체에 매체 로고/워터마크가
+            # 찍혀 있는 경우가 있다(2026-09-16 사용자 지적: "텐아시아
+            # 로고가 사진에 박혀 잇네") — 최종 후보에 대해서만 비전 검사.
+            if _image_has_watermark(x["image_url"]):
+                print(f"  ⚠️ 워터마크 감지로 이미지 제외: {xdomain}")
+                continue
+            image_url = x["image_url"]
+            # 사용자 지적: "적어도 출처를 내가 알 수 있어야 할 것 같은데" —
+            # 클러스터 대표 이미지가 실제로 어느 매체(도메인)에서 왔는지
+            # 어드민 검증 화면에서 바로 보이도록 기록한다.
+            image_credit = xdomain
+            break
         category = cluster[0].get("category") or "사회"
 
         article_id = insert_article(
