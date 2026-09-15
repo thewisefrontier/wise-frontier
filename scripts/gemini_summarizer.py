@@ -689,6 +689,60 @@ except Exception:
 # 2026-09-01: 4번째 필드는 위키미디어 커먼즈 이미지 검색용 영문 쿼리(article_image.py).
 # keywords 리스트를 그대로 쓰면 "coup"·"al-shabaab" 등 검색 결과가 부정확해서
 # (예: "al-shabaab"만으로 검색하면 관련 없는 사진이 걸릴 수 있음) 별도로 둔다.
+# 2026-09-15 도입(사용자 지적 — id=179315, 우크라이나·러시아·폴란드 기사가
+# "🌍 아프리카"로 표시됨): run_trend_tracker()/run_realtime_trend_tracker()
+# 각자 따로 들고 있던 좁은 region_map(아프리카·동남아·일부 국가만 등재)이
+# 목록에 없는 국가는 전부 "africa"로 기본 처리하고 있었다 — 프론티어
+# 마켓 콘텐츠가 대부분 아프리카라 그렇게 짜여 있었겠지만, 우크라이나 전쟁
+# 같은 유럽 이슈까지 무조건 아프리카로 잘못 라벨링하는 부작용이 있었다.
+# 하나의 공용 맵으로 합치고, 목록에 없으면 "africa"(오답 가능성 높음)
+# 대신 "global"(모른다는 뜻, 최소한 틀리지는 않음)로 기본값을 바꾼다.
+COUNTRY_REGION_MAP = {
+    # 아프리카
+    "나이지리아": "africa", "케냐": "africa", "가나": "africa", "에티오피아": "africa",
+    "남아공": "africa", "탄자니아": "africa", "르완다": "africa", "우간다": "africa",
+    "수단": "africa", "콩고": "africa", "콩고민주공화국": "africa", "소말리아": "africa",
+    "이집트": "africa", "모로코": "africa", "잠비아": "africa", "짐바브웨": "africa",
+    "앙골라": "africa", "말리": "africa", "부르키나파소": "africa", "중앙아프리카": "africa",
+    "세네갈": "africa", "코트디부아르": "africa", "모잠비크": "africa", "니제르": "africa",
+    "차드": "africa", "말라위": "africa",
+    # 동남아시아
+    "베트남": "southeast_asia", "인도네시아": "southeast_asia", "태국": "southeast_asia",
+    "필리핀": "southeast_asia", "말레이시아": "southeast_asia", "미얀마": "southeast_asia",
+    "캄보디아": "southeast_asia", "라오스": "southeast_asia",
+    # 중앙아시아
+    "카자흐스탄": "central_asia", "우즈베키스탄": "central_asia", "키르기스스탄": "central_asia",
+    # 카리브해
+    "아이티": "caribbean", "자메이카": "caribbean", "도미니카공화국": "caribbean",
+    # 중동
+    "이란": "middle_east", "이라크": "middle_east", "사우디아라비아": "middle_east",
+    "아랍에미리트": "middle_east", "이스라엘": "middle_east", "예멘": "middle_east",
+    "시리아": "middle_east", "튀르키예": "middle_east", "요르단": "middle_east",
+    "카타르": "middle_east", "쿠웨이트": "middle_east", "레바논": "middle_east",
+    # 남아시아
+    "인도": "south_asia", "파키스탄": "south_asia", "방글라데시": "south_asia",
+    "스리랑카": "south_asia", "네팔": "south_asia",
+    # 유럽
+    "우크라이나": "europe", "러시아": "europe", "폴란드": "europe", "프랑스": "europe",
+    "독일": "europe", "영국": "europe", "이탈리아": "europe", "스페인": "europe",
+    "네덜란드": "europe", "벨기에": "europe", "스웨덴": "europe", "노르웨이": "europe",
+    "핀란드": "europe", "그리스": "europe", "포르투갈": "europe", "체코": "europe",
+    "헝가리": "europe", "루마니아": "europe", "몰도바": "europe", "벨라루스": "europe",
+    "유로존": "europe", "유럽연합": "europe", "EU": "europe",
+    # 동아시아
+    "중국": "east_asia", "일본": "east_asia", "대만": "east_asia", "몽골": "east_asia",
+    "북한": "east_asia",
+    # 북미
+    "미국": "north_america", "캐나다": "north_america", "멕시코": "north_america",
+    # 중남미
+    "브라질": "latin_america", "아르헨티나": "latin_america", "칠레": "latin_america",
+    "콜롬비아": "latin_america", "베네수엘라": "latin_america", "페루": "latin_america",
+    "에콰도르": "latin_america", "볼리비아": "latin_america",
+    # 오세아니아
+    "호주": "oceania", "뉴질랜드": "oceania", "파푸아뉴기니": "oceania",
+}
+
+
 TREND_KEYWORDS = [
     ("에볼라",       "사회",    ["ebola", "에볼라", "hemorrhagic fever", "출혈열", "MVD", "marburg"], "Ebola virus disease"),
     ("mpox",        "사회",    ["mpox", "monkeypox", "원숭이두창"], "Mpox"),
@@ -1591,13 +1645,7 @@ def run_trend_tracker():
             continue
 
         # 지역 추론
-        region_map = {
-            "아프리카": "africa", "나이지리아": "africa", "케냐": "africa",
-            "수단": "africa", "콩고": "africa", "소말리아": "africa",
-            "말리": "africa", "부르키나파소": "africa", "중앙아프리카": "africa",
-            "미얀마": "southeast_asia", "아이티": "caribbean",
-        }
-        region = region_map.get(country, "africa")
+        region = COUNTRY_REGION_MAP.get(country, "global")
 
         # 단일 토픽 검수 — 무관한 사건이 묶였으면 병합·발행 모두 차단
         _mt_bad = not verify_single_topic(title, body)
@@ -2121,18 +2169,7 @@ JSON 배열로만 응답하세요 (마크다운 없이):
         from collections import Counter
         country = Counter(countries_in_articles).most_common(1)[0][0] if countries_in_articles else ""
 
-        region_map = {
-            "나이지리아":"africa","케냐":"africa","가나":"africa","에티오피아":"africa",
-            "남아공":"africa","탄자니아":"africa","르완다":"africa","우간다":"africa",
-            "수단":"africa","콩고":"africa","소말리아":"africa","이집트":"africa",
-            "모로코":"africa","잠비아":"africa","짐바브웨":"africa","앙골라":"africa",
-            "말리":"africa","부르키나파소":"africa","중앙아프리카":"africa",
-            "베트남":"southeast_asia","인도네시아":"southeast_asia","태국":"southeast_asia",
-            "필리핀":"southeast_asia","말레이시아":"southeast_asia","미얀마":"southeast_asia",
-            "카자흐스탄":"central_asia","우즈베키스탄":"central_asia",
-            "아이티":"caribbean","자메이카":"caribbean",
-        }
-        region = region_map.get(country, "africa")
+        region = COUNTRY_REGION_MAP.get(country, "global")
 
         write_prompt = f"""당신은 프론티어 미디어 NewsFinal의 수석 에디터입니다.
 아래는 최근 급부상한 이슈 [{issue_ko}]에 관한 기사들입니다.
@@ -2299,7 +2336,7 @@ JSON 배열로만 응답하세요 (마크다운 없이):
             "source": "NewsFinal",
             "category": category,
             "subcategory": f"realtrend_{topic[:20].replace(' ','_')}",
-            "region": region_map.get(art_country, region),
+            "region": COUNTRY_REGION_MAP.get(art_country, region),
             "country": art_country,
             "country_flag": "",
             "countries": ([art_country] + [c for c in (art_countries or []) if c and c != art_country]) if art_country else (art_countries or []),

@@ -234,6 +234,12 @@ def _capture_dhlottery_result_image(result_url: str, round_no: int) -> bytes | N
             try:
                 page = browser.new_page(
                     viewport={"width": 900, "height": 800},
+                    # 2026-09-15 추가(사용자 지적 — "캡처사진은 화질이 되게
+                    # 안좋던데"): device_scale_factor 미지정 시 1배(표준 DPI)로
+                    # 캡처돼 흐릿하다. 2배로 캡처해 실제 표시 크기보다 2배
+                    # 해상도로 저장하면 화면에서 축소 표시될 때 훨씬 선명하다
+                    # (video-forge 프로젝트에서 이미 같은 원인으로 검증된 해법).
+                    device_scale_factor=2,
                     user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
                                "(KHTML, like Gecko) Chrome/120.0 Safari/537.36",
                 )
@@ -286,7 +292,10 @@ def generate_lotto645_ball_image(nums: list[int], bonus: int, round_no: int) -> 
             draw.text((x, y), str(b), font=num_font, fill="white", anchor="mm")
         x += 2 * r + gap
 
-    draw.text((W / 2, H - 25), "뉴스파이널", font=small_font, fill="#999999", anchor="mm")
+    # 2026-09-15 조정(사용자 지시 — "워터마크는 좀 흐릿하게 넣어야지",
+    # "오른쪽 아래에 흐릿하게 넣는 걸로 바꿔"): 중앙 하단에서 우측 하단으로,
+    # 색도 더 옅게.
+    draw.text((W - 12, H - 12), "뉴스파이널", font=small_font, fill="#D8D8D8", anchor="rm")
 
     buf = io.BytesIO()
     img.save(buf, format="PNG")
@@ -333,7 +342,7 @@ def generate_pension720_ball_image(bnd: str, num: str, bonus_num: str, round_no:
     draw_row(110, "1등", bnd, num, "#FF7272")
     draw_row(170, "보너스", "", bonus_num, "#69C8F2")
 
-    draw.text((W / 2, H - 22), "뉴스파이널", font=label_font, fill="#999999", anchor="mm")
+    draw.text((W - 12, H - 12), "뉴스파이널", font=label_font, fill="#D8D8D8", anchor="rm")
 
     buf = io.BytesIO()
     img.save(buf, format="PNG")
@@ -426,6 +435,12 @@ def capture_powerball_result_image(draw_date_str: str) -> bytes | None:
             try:
                 page = browser.new_page(
                     viewport={"width": 900, "height": 800},
+                    # 2026-09-15 추가(사용자 지적 — "캡처사진은 화질이 되게
+                    # 안좋던데"): device_scale_factor 미지정 시 1배(표준 DPI)로
+                    # 캡처돼 흐릿하다. 2배로 캡처해 실제 표시 크기보다 2배
+                    # 해상도로 저장하면 화면에서 축소 표시될 때 훨씬 선명하다
+                    # (video-forge 프로젝트에서 이미 같은 원인으로 검증된 해법).
+                    device_scale_factor=2,
                     user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
                                "(KHTML, like Gecko) Chrome/120.0 Safari/537.36",
                 )
@@ -478,7 +493,7 @@ def generate_powerball_ball_image(white_balls: list[int], powerball: int, draw_d
     if multiplier:
         draw.text((W / 2, 165), f"파워플레이 {multiplier}배", font=small_font, fill="#666666", anchor="mm")
 
-    draw.text((W / 2, H - 22), "뉴스파이널", font=small_font, fill="#999999", anchor="mm")
+    draw.text((W - 12, H - 12), "뉴스파이널", font=small_font, fill="#D8D8D8", anchor="rm")
 
     buf = io.BytesIO()
     img.save(buf, format="PNG")
