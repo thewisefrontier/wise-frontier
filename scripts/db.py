@@ -55,7 +55,7 @@ def insert_article(
     title_en, title_ko, summary_en, summary_ko,
     url, source, category, subcategory, region, country, country_flag, score,
     full_text="", countries=None, is_published=False, source_published_at=None,
-    source_data=None, image_url=None,
+    source_data=None, image_url=None, image_credit=None,
 ) -> int:
     payload = {
         "title_en": title_en or "",
@@ -89,6 +89,8 @@ def insert_article(
     # 채우는 흐름)에 영향 없게 한다.
     if image_url:
         payload["image_url"] = image_url
+    if image_credit:
+        payload["image_credit"] = image_credit
     headers = {**_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
     res = requests.post(_url(), headers=headers, json=payload, timeout=15)
     if res.status_code in (200, 201):

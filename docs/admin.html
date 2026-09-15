@@ -1059,7 +1059,7 @@
 
     const results = await Promise.all(LANGS.map(lang =>
       sb.from('article_translations')
-        .select('id,article_id,lang,title,summary,created_at,articles(title_ko,summary_ko,source,category,image_url)')
+        .select('id,article_id,lang,title,summary,created_at,articles(title_ko,summary_ko,source,category,image_url,image_credit)')
         .eq('lang', lang)
         .order('created_at', { ascending: false })
         .limit(PER_LANG)
@@ -1087,7 +1087,10 @@
               id=${t.article_id} · ${esc(art.source)} · ${esc(art.category)} · 문단 ${bodyParas.length}개 · ${esc((t.created_at || '').slice(0, 16))}
             </div>
             <div style="font-size:13px;font-weight:700;margin-bottom:8px;">${esc(t.title)}</div>
-            ${art.image_url ? `<img src="${esc(art.image_url)}" style="max-width:240px;max-height:160px;object-fit:cover;display:block;margin-bottom:10px;border:1px solid var(--border);" loading="lazy">` : '<div style="font-size:11px;color:var(--danger);margin-bottom:10px;">⚠️ 이미지 없음</div>'}
+            ${art.image_url ? `
+              <img src="${esc(art.image_url)}" style="max-width:100%;width:480px;max-height:320px;object-fit:cover;display:block;margin-bottom:4px;border:1px solid var(--border);" loading="lazy">
+              <div style="font-size:10px;color:var(--muted);margin-bottom:10px;">출처: ${esc(art.image_credit) || '알 수 없음'}</div>
+            ` : '<div style="font-size:11px;color:var(--danger);margin-bottom:10px;">⚠️ 이미지 없음</div>'}
             <div style="font-size:12px;line-height:1.7;color:var(--text);margin-bottom:10px;">
               ${bodyParas.map(p => `<p style="margin-bottom:8px;">${esc(p)}</p>`).join('')}
             </div>

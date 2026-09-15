@@ -257,12 +257,17 @@ def run():
         # 전에 이미 저장된 과거 이미지도 있을 수 있어 선택 시점에 한 번 더
         # 걸러 이중 방어한다).
         image_url = None
+        image_credit = None
         for x in cluster:
             if not x.get("image_url"):
                 continue
             xdomain = urlparse(x.get("url") or "").netloc
             if _is_image_source_allowed(xdomain, x.get("full_text") or ""):
                 image_url = x["image_url"]
+                # 사용자 지적: "적어도 출처를 내가 알 수 있어야 할 것 같은데" —
+                # 클러스터 대표 이미지가 실제로 어느 매체(도메인)에서 왔는지
+                # 어드민 검증 화면에서 바로 보이도록 기록한다.
+                image_credit = xdomain
                 break
         category = cluster[0].get("category") or "사회"
 
@@ -278,6 +283,7 @@ def run():
             countries=["한국"],
             is_published=False,
             image_url=image_url,
+            image_credit=image_credit,
         )
         if article_id > 0:
             written += 1
