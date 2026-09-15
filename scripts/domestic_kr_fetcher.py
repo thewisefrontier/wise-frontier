@@ -126,10 +126,18 @@ KR_RSS_FEEDS = [
 # 실패 시에만 쓰이는 최소 안전망(주요 통신사만 하드코딩 — 2026-09-15
 # 사용자 지시로 유료 사진 판매 사이트도 차단 대상에 추가됐으나, 그 전체
 # 목록은 이 파일이 아니라 DB(domestic_photo_credit_gate)에만 있다).
+# allowed_credit_regex는 "명시적 출처가 기사에 해당하는 기업에서 배포한
+# 사진, 다트 캡처 등은 써도 돼"(2026-09-15 사용자 지시)에 따른 허용
+# 신호 — 이 패턴에 걸리면 아래 차단 패턴보다 우선한다. 기업이 직접
+# 배포한 홍보사진("OOO 제공")은 애초에 차단 정규식에 안 걸리므로 별도
+# 허용 목록이 필요 없고(통신사·유료 사진 업체만 특정해 차단하는 구조라
+# 기본값이 허용), 다트(전자공시) 캡처처럼 예외적으로 오탐 위험이 있는
+# 것만 명시적으로 우선 허용한다.
 _PHOTO_GATE_FALLBACK = {
     "blocked_domains": ["yna.co.kr", "www.yna.co.kr", "newsis.com", "www.newsis.com",
                          "news1.kr", "www.news1.kr"],
-    "blocked_credit_regex": r"연합뉴스|뉴시스|뉴스1",
+    "allowed_credit_regex": r"다트|DART|전자공시(?:시스템)?|금융감독원|인스타그램|instagram|페이스북|facebook",
+    "blocked_credit_regex": r"연합뉴스|뉴시스|뉴스1|사진\s*[=:]?\s*[가-힣]{2,4}\s?기자",
 }
 _photo_gate_cache = None
 
@@ -166,6 +174,9 @@ def _load_photo_gate() -> dict:
 
 def _is_image_source_allowed(domain: str, full_text: str) -> bool:
     gate = _load_photo_gate()
+    allow_re = gate.get("allowed_credit_regex")
+    if full_text and allow_re and re.search(allow_re, full_text):
+        return True  # 다트 캡처·SNS 등 명시적 허용 신호는 차단 목록보다 우선
     if any(domain.endswith(d) for d in gate["blocked_domains"]):
         return False
     if full_text and re.search(gate["blocked_credit_regex"], full_text):
