@@ -1008,6 +1008,42 @@ def articles_are_related(a, b):
     return False
 
 
+def extract_core_kw(text):
+    """제목·리드에서 핵심 키워드(집합) 추출 (고유명사 위주)."""
+    if not text:
+        return set()
+    text = text.lower()
+    text = re.sub(r'[^\w\s가-힣]', ' ', text)
+    words = text.split()
+    stopwords = {
+        'the','a','an','in','on','at','to','of','for','and','or','is',
+        'are','was','with','by','from','as','its','new','says','said',
+        '및','에서','으로','이후','위해','통해','대한','관련','주요',
+        '발표','강화','확대','추진','계획','정부','시장','경제','기업',
+    }
+    result = set()
+    for w in words:
+        if w in stopwords:
+            continue
+        if re.search(r'[가-힣]', w) and len(w) >= 2:
+            result.add(w)
+        elif not re.search(r'[가-힣]', w) and len(w) >= 4:
+            result.add(w)
+    return result
+
+
+# 2026-09-15 도입 시도 및 철회 기록(사용자 지시 — "본질적으로 코드
+# 자체의 고도화가 필요할 것 같아"): 제목 키워드 집합 겹침 대신 TF-IDF +
+# 코사인 유사도로 바꿔봤으나, 클러스터 하나가 보통 2~8건뿐이라 IDF가
+# 통계적으로 의미를 가질 만한 문서 모집단 자체가 너무 작았다 — 실측
+# 결과 진짜 같은 사안(트럼프/이란 ↔ 이란/브릭스, "이란" 공유)의 코사인
+# 유사도가 0.04, 완전 무관 쌍(이란/브릭스 ↔ 튀르키예)은 0.00으로 나와
+# 차이가 있긴 했지만, 문턱값을 그 사이 어디에 둬도 실제 관련 기사 쌍까지
+# 대거 걸러내는 회귀가 검증 단계에서 바로 드러났다. 대량 라벨링된
+# 데이터 없이 이 문턱값을 안전하게 잡을 근거가 없어 배포 전 철회하고
+# 원래 방식(키워드 집합 겹침)으로 되돌렸다 — 이 방식은 아래 "전원 연결"
+# 기준(원래 있던 "절반 이상"의 후속 강화)으로 이미 id=173044를 정확히
+# 잡아내는 것까지 검증됐다.
 def is_coherent_cluster(cluster: list) -> bool:
     """
     클러스터가 실제로 같은 이슈인지 키워드 기반으로 판단.
@@ -1018,43 +1054,19 @@ def is_coherent_cluster(cluster: list) -> bool:
     # 실사고(2026-08-10): "소규모는 통과"가 <4였는데, 실제 잡탕 사고 다수가
     # 정확히 2개짜리 클러스터였다(articles_are_related가 무관한 기사 둘을
     # 잘못 묶으면 그대로 여기를 건너뛰어 발행됨 — id=63029, 62142, 6273 등).
-    # 아래 로직 자체는 N=2에도 그대로 성립한다(키워드 공유 없는 쌍 = 고립 =
-    # 연결비율 0 = False). 1개(=단독)만 자명하게 통과시킨다.
+    # 아래 로직 자체는 N=2에도 그대로 성립한다. 1개(=단독)만 자명하게 통과시킨다.
     if len(cluster) < 2:
         return True  # 단독 기사는 자명하게 단일 이슈
 
-    import re
-
-    def extract_core_kw(text):
-        """제목에서 핵심 키워드 추출 (고유명사 위주)"""
-        if not text:
-            return set()
-        text = text.lower()
-        text = re.sub(r'[^\w\s가-힣]', ' ', text)
-        words = text.split()
-        stopwords = {
-            'the','a','an','in','on','at','to','of','for','and','or','is',
-            'are','was','with','by','from','as','its','new','says','said',
-            '및','에서','으로','이후','위해','통해','대한','관련','주요',
-            '발표','강화','확대','추진','계획','정부','시장','경제','기업',
-        }
-        result = set()
-        for w in words:
-            if w in stopwords:
-                continue
-            if re.search(r'[가-힣]', w) and len(w) >= 2:
-                result.add(w)
-            elif not re.search(r'[가-힣]', w) and len(w) >= 4:
-                result.add(w)
-        return result
-
-    # 각 기사의 핵심 키워드 추출
+    # 각 기사의 핵심 키워드 추출 (제목 + 리드 2문단 — 제목만으로는 어휘가
+    # 너무 적어 우연히 하나도 안 겹치는 경우가 있어 리드까지 넓힌다)
     article_kws = []
     for a in cluster:
         if a.get("__needs_review__"):
             continue
         title = a.get("title_ko") or a.get("title_en") or ""
-        kw = extract_core_kw(title)
+        lead = get_lead(a.get("summary_ko") or a.get("summary_en") or "")
+        kw = extract_core_kw(title) | extract_core_kw(lead)
         if kw:
             article_kws.append(kw)
 
