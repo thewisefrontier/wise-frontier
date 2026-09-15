@@ -109,6 +109,86 @@ KR_RSS_FEEDS = [
     ("구글뉴스 한국-기업", "https://news.google.com/rss/search?q=%ED%95%9C%EA%B5%AD+%EA%B8%B0%EC%97%85&hl=ko&gl=KR&ceid=KR:ko"),
 ]
 
+# 사진 출처 저작권 가드(2026-09-15 사용자 지시): "사진의 경우 공통된 건
+# 써도 되는데, 출처에 연합뉴스, 뉴시스가 붙어 있거나 기자 이름이 붙은
+# 사진은 쓰면 안돼" + "반면 인스타그램, 페이스북 등이 출처로 붙은 건
+# 써도 된다" — 연합뉴스/뉴시스 등 통신사 전재 사진·기자가 직접 촬영한
+# 사진은 저작권 리스크가 높아 제외하고, SNS 출처(인스타그램/페이스북 등,
+# 연예 기사가 흔히 쓰는 형태)는 그대로 허용한다. 기사 본문(크롤링 텍스트)에
+# 남아있는 캡션 문구로 판별 — 완벽하지 않지만(캡션이 본문에 안 남는 경우도
+# 있음) 확인 가능한 범위에서 고위험만 걸러낸다.
+#
+# 실제 차단 도메인·정규식은 코드에 두지 않고 Supabase `prompts` 테이블
+# (name='domestic_photo_credit_gate')에서 불러온다(2026-09-15 사용자 지시:
+# "프롬프트, 기사 걸러내는 게이트 같은 것들은 매우 중요한 정보라서, 깃허브에
+# 두지 말고 DB에 올려서 유출되지 않도록 해둘 것" — "그게 우리 노하우고
+# 핵심이기 때문에 다른데서 코드를 가져가도 쓸 수 없도록"). 아래는 DB 접근
+# 실패 시에만 쓰이는 최소 안전망(주요 통신사만 하드코딩 — 2026-09-15
+# 사용자 지시로 유료 사진 판매 사이트도 차단 대상에 추가됐으나, 그 전체
+# 목록은 이 파일이 아니라 DB(domestic_photo_credit_gate)에만 있다).
+# allowed_credit_regex는 "명시적 출처가 기사에 해당하는 기업에서 배포한
+# 사진, 다트 캡처 등은 써도 돼"(2026-09-15 사용자 지시)에 따른 허용
+# 신호 — 이 패턴에 걸리면 아래 차단 패턴보다 우선한다. 기업이 직접
+# 배포한 홍보사진("OOO 제공")은 애초에 차단 정규식에 안 걸리므로 별도
+# 허용 목록이 필요 없고(통신사·유료 사진 업체만 특정해 차단하는 구조라
+# 기본값이 허용), 다트(전자공시) 캡처처럼 예외적으로 오탐 위험이 있는
+# 것만 명시적으로 우선 허용한다.
+_PHOTO_GATE_FALLBACK = {
+    "blocked_domains": ["yna.co.kr", "www.yna.co.kr", "newsis.com", "www.newsis.com",
+                         "news1.kr", "www.news1.kr"],
+    "allowed_credit_regex": r"다트|DART|전자공시(?:시스템)?|금융감독원|인스타그램|instagram|페이스북|facebook",
+    "blocked_credit_regex": (
+        r"연합뉴스|뉴시스|뉴스1"
+        r"|사진\s*[=:]?\s*[가-힣]{2,4}\s?기자"
+        r"|[가-힣]{2,4}\s?기자\s*(?:가\s*)?촬영"
+        r"|촬영\s*[=:]?\s*[가-힣]{2,4}\s?기자"
+    ),
+}
+_photo_gate_cache = None
+
+
+def _load_photo_gate() -> dict:
+    global _photo_gate_cache
+    if _photo_gate_cache is not None:
+        return _photo_gate_cache
+    try:
+        sb_url = os.getenv("SUPABASE_URL", "").rstrip("/")
+        sb_key = os.getenv("SUPABASE_SERVICE_KEY", "")
+        res = requests.get(
+            f"{sb_url}/rest/v1/prompts",
+            headers={"apikey": sb_key, "Authorization": f"Bearer {sb_key}"},
+            params={"name": "eq.domestic_photo_credit_gate", "is_active": "eq.true",
+                    "order": "version.desc", "limit": "1"},
+            timeout=10,
+        )
+        if res.status_code in (200, 206):
+            data = res.json()
+            if data:
+                import json as _json
+                cfg = _json.loads(data[0]["content"])
+                cfg["blocked_domains"] = set(cfg.get("blocked_domains", []))
+                _photo_gate_cache = cfg
+                return cfg
+    except Exception as e:
+        print(f"[WARN] 사진 출처 가드 설정 로드 실패, 폴백 사용: {e}")
+    fallback = dict(_PHOTO_GATE_FALLBACK)
+    fallback["blocked_domains"] = set(fallback["blocked_domains"])
+    _photo_gate_cache = fallback
+    return fallback
+
+
+def _is_image_source_allowed(domain: str, full_text: str) -> bool:
+    gate = _load_photo_gate()
+    allow_re = gate.get("allowed_credit_regex")
+    if full_text and allow_re and re.search(allow_re, full_text):
+        return True  # 다트 캡처·SNS 등 명시적 허용 신호는 차단 목록보다 우선
+    if any(domain.endswith(d) for d in gate["blocked_domains"]):
+        return False
+    if full_text and re.search(gate["blocked_credit_regex"], full_text):
+        return False
+    return True
+
+
 MAX_RECORDS_PER_QUERY = 5  # 2026-09-09 10건→5건: crawl_full_text()가 사이클당 소요시간의
                             # 대부분을 차지해 10분 타임아웃을 반복 유발함(아래 QUERIES_PER_CYCLE 참고)
 TIMESPAN = "6h"
@@ -243,9 +323,10 @@ def _save_candidate(title: str, link: str, domain: str, src_published: str, tag:
     # 쓸 GeminiClient가 없는 가벼운 수집기라, 순수 HTML 메타태그 파싱만
     # 쓰는 extract_og_image()로 대체한다.
     image_url = ""
-    og_image = extract_og_image(link, timeout=8)
-    if og_image:
-        image_url = store_image(og_image, key_hint=f"domestickr-{domain}")
+    if _is_image_source_allowed(domain, full_text):
+        og_image = extract_og_image(link, timeout=8)
+        if og_image:
+            image_url = store_image(og_image, key_hint=f"domestickr-{domain}")
 
     article_id = insert_article(
         title_en="", title_ko=title,
