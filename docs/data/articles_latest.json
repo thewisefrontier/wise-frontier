@@ -1,5 +1,79 @@
 [
   {
+    "id": 180001,
+    "title_en": "북미, 완연한 초가을 기온 속 수도별 날씨 엇갈려",
+    "title_ko": "북미, 완연한 초가을 기온 속 수도별 날씨 엇갈려",
+    "summary_ko": "15일(현지시간) 북미 주요국 수도의 기온이 최저 4°C에서 최고 26°C 사이의 분포를 보이는 가운데, 지역별로 뚜렷한 기온 차를 나타내고 있다. 전체 북미 주요국 수도 중 가장 더운 곳은 26°C를 기록한 미국 워싱턴DC이며, 가장 선선한 곳은 18°C에 머문 캐나다 오타와다. 미국의 워싱턴DC가 캐나다의 오타와보다 최고기온이 8°C 더 높게 나타나 국가 간 온도 차가 뚜렷하다.\n\n미국 워싱턴DC는 최고 26°C, 최저 13°C의 기온을 보이며 강수확률 1%, 강수량 0.0mm로 맑은 날씨를 기록했다. 자외선지수는 6.3이며, ",
+    "url": "internal://weather_group_북미_today20260915",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_북미_today20260915",
+    "region": "north_america",
+    "country": "북미",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-15 18:08",
+    "countries": [
+      "미국",
+      "캐나다"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_united_states_20260915.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-15T18:08:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-15 18:08",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
+    "id": 179763,
+    "title_en": "스페인 그라나다대, 멕시코 모렐로스대 교환학생 프로그램 취소",
+    "title_ko": "스페인 그라나다대, 멕시코 모렐로스대 교환학생 프로그램 취소",
+    "summary_ko": "스페인 그라나다 대학(Universidad de Granada)은 15일(현지시간) 멕시코 모렐로스 자치대학(UAEM)과의 교환학생 프로그램을 전면 취소한다고 밝혔다. 이번 결정은 최근 멕시코에서 발생한 스페인 출신 교환학생 클라우디아 타코론테(Claudia Tacoronte)의 피살 사건에 따른 후속 조치다.\n\n그라나다 대학은 현재 멕시코 내 대학에 머물고 있는 자교 소속 학생 17명에게 상황을 통보했다. 대학 측은 학생들에게 안전을 위한 재배치 신청을 허용하며 현지 치안 상황에 따른 긴급 대응에 나섰다.\n\n모렐로스 자치대학에서는",
+    "url": "internal://realtrend_Claudia_Tacoronte_Femicide_and_Student_Exchange_Cancellation_2026091517",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "realtrend_Claudia_Tacoronte_Fe",
+    "region": "north_america",
+    "country": "멕시코",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-15 17:42",
+    "countries": [
+      "멕시코",
+      "스페인"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_university_campus_international_students_classroom_l.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-15T17:42:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-15 17:42",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
     "id": 179710,
     "title_en": "콩고민주공화국 동부 북키부·남키부 일대, 반군 공세로 피난민 급증",
     "title_ko": "콩고민주공화국 동부 북키부·남키부 일대, 반군 공세로 피난민 급증",
@@ -758,24 +832,22 @@
     "investment_idea_en": null
   },
   {
-    "id": 177549,
-    "title_en": "[종목 동향] 마이크로소프트 주가 1.97% 상승…AI 인프라 확장 가속화",
-    "title_ko": "[종목 동향] 마이크로소프트 주가 1.97% 상승…AI 인프라 확장 가속화",
-    "summary_ko": "◆ 주가 동향\n나스닥에서 마이크로소프트 주가는 14일(현지시간) 전일 대비 1.97% 상승한 505.41달러에 장을 마감했다. 이번 상승세는 마이크로소프트가 차세대 데이터센터를 위한 맞춤형 AI 칩 '마이아(Maia) 200'의 성능 개선안을 발표하며 클라우드 인프라 효율성을 극대화하겠다는 전략을 밝힌 데 따른 결과다.\n\n최근 월가 투자은행들은 마이크로소프트의 클라우드 서비스인 애저(Azure)의 매출 성장세가 인공지능 수요와 맞물려 견고한 흐름을 유지하고 있다고 평가했다. 특히 기업용 소프트웨어에 통합된 코파일럿(Copilot)의",
-    "url": "internal://stock_news_2026-09-14",
+    "id": 177550,
+    "title_en": "[가상자산 동향] 솔라나 2.36% 상승…네트워크 활성도 회복세",
+    "title_ko": "[가상자산 동향] 솔라나 2.36% 상승…네트워크 활성도 회복세",
+    "summary_ko": "◆ 가격 동향\n\n15일 06:27(한국시간) 야후 파이낸스에 따르면 솔라나 가격은 전일 대비 2.36% 상승한 103.69달러를 기록했다. 최근 솔라나 생태계 내 탈중앙화 거래소의 거래량이 증가하며 네트워크 활성도가 개선된 점이 가격 상승을 견인했다.\n\n주요 기관 투자자들이 솔라나 기반의 스테이킹 상품에 자금을 재배치하면서 매수세가 유입됐다. 또한 미국 연방준비제도의 금리 인하 가능성에 따른 거시경제적 불확실성 완화가 위험 자산 전반에 긍정적인 영향을 미쳤다.\n\n한편 비트코인은 7만8896.79달러(+2.09%), 이더리움은 255",
+    "url": "internal://crypto_news_2026-09-15",
     "source": "NewsFinal",
     "category": "금융",
-    "subcategory": "종목동향",
+    "subcategory": "가상자산동향_crypto",
     "region": "global",
-    "country": "미국",
-    "country_flag": "🇺🇸",
+    "country": "글로벌",
+    "country_flag": "🌐",
     "score": 1,
     "created_at": "2026-09-15 06:27",
-    "countries": [
-      "미국"
-    ],
+    "countries": [],
     "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/stock_news_2026_09_14.jpg",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_09_15.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-15T06:27:00",
     "update_log": [
@@ -794,22 +866,24 @@
     "investment_idea_en": null
   },
   {
-    "id": 177550,
-    "title_en": "[가상자산 동향] 솔라나 2.36% 상승…네트워크 활성도 회복세",
-    "title_ko": "[가상자산 동향] 솔라나 2.36% 상승…네트워크 활성도 회복세",
-    "summary_ko": "◆ 가격 동향\n\n15일 06:27(한국시간) 야후 파이낸스에 따르면 솔라나 가격은 전일 대비 2.36% 상승한 103.69달러를 기록했다. 최근 솔라나 생태계 내 탈중앙화 거래소의 거래량이 증가하며 네트워크 활성도가 개선된 점이 가격 상승을 견인했다.\n\n주요 기관 투자자들이 솔라나 기반의 스테이킹 상품에 자금을 재배치하면서 매수세가 유입됐다. 또한 미국 연방준비제도의 금리 인하 가능성에 따른 거시경제적 불확실성 완화가 위험 자산 전반에 긍정적인 영향을 미쳤다.\n\n한편 비트코인은 7만8896.79달러(+2.09%), 이더리움은 255",
-    "url": "internal://crypto_news_2026-09-15",
+    "id": 177549,
+    "title_en": "[종목 동향] 마이크로소프트 주가 1.97% 상승…AI 인프라 확장 가속화",
+    "title_ko": "[종목 동향] 마이크로소프트 주가 1.97% 상승…AI 인프라 확장 가속화",
+    "summary_ko": "◆ 주가 동향\n나스닥에서 마이크로소프트 주가는 14일(현지시간) 전일 대비 1.97% 상승한 505.41달러에 장을 마감했다. 이번 상승세는 마이크로소프트가 차세대 데이터센터를 위한 맞춤형 AI 칩 '마이아(Maia) 200'의 성능 개선안을 발표하며 클라우드 인프라 효율성을 극대화하겠다는 전략을 밝힌 데 따른 결과다.\n\n최근 월가 투자은행들은 마이크로소프트의 클라우드 서비스인 애저(Azure)의 매출 성장세가 인공지능 수요와 맞물려 견고한 흐름을 유지하고 있다고 평가했다. 특히 기업용 소프트웨어에 통합된 코파일럿(Copilot)의",
+    "url": "internal://stock_news_2026-09-14",
     "source": "NewsFinal",
     "category": "금융",
-    "subcategory": "가상자산동향_crypto",
+    "subcategory": "종목동향",
     "region": "global",
-    "country": "글로벌",
-    "country_flag": "🌐",
+    "country": "미국",
+    "country_flag": "🇺🇸",
     "score": 1,
     "created_at": "2026-09-15 06:27",
-    "countries": [],
+    "countries": [
+      "미국"
+    ],
     "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_09_15.jpg",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/stock_news_2026_09_14.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-15T06:27:00",
     "update_log": [
@@ -1811,43 +1885,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: Yuet Man Lee (CC BY-SA 4.0, Wikimedia Commons)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 174783,
-    "title_en": "북미, 일교차 큰 선선한 날씨 속 완연한 봄",
-    "title_ko": "북미, 일교차 큰 선선한 날씨 속 완연한 봄",
-    "summary_ko": "14일(현지시간) 북미 주요국 수도의 기온은 최저 10°C에서 최고 27°C의 분포를 보였다. 미국 워싱턴DC는 최고기온 27°C, 최저기온 18°C를 기록하며 흐린 날씨를 보였다. 반면 캐나다 오타와는 최고기온 18°C, 최저기온 10°C로 나타났다.\n\n미국 워싱턴DC는 캐나다 오타와보다 최고기온이 9°C 더 높아 북미 주요국 수도 중 가장 더운 곳으로 기록됐다. 반면 캐나다 오타와는 최저기온이 10°C까지 떨어지며 가장 선선한 곳으로 파악됐다. 두 지역 모두 자외선지수는 워싱턴DC 6.2, 오타와 5.2를 각각 기록했다.\n\n내일",
-    "url": "internal://weather_group_북미_today20260914",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_북미_today20260914",
-    "region": "north_america",
-    "country": "북미",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-14 18:06",
-    "countries": [
-      "미국",
-      "캐나다"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_united_states_20260914.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-14T18:06:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-14 18:06",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null
