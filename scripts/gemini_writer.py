@@ -1044,12 +1044,32 @@ def extract_core_kw(text):
 # 원래 방식(키워드 집합 겹침)으로 되돌렸다 — 이 방식은 아래 "전원 연결"
 # 기준(원래 있던 "절반 이상"의 후속 강화)으로 이미 id=173044를 정확히
 # 잡아내는 것까지 검증됐다.
+# 임베딩 코사인 유사도가 이 값 이상이면 "연결됨"으로 구제한다. 실측
+# (2026-09-15, gemini-embedding-001, 트럼프/이란·이란/브릭스·예멘/후티
+# vs 튀르키예/성소수자 시나리오): 진짜 연관 쌍은 0.56~0.65, 완전 무관
+# 쌍(튀르키예 관련)은 전부 0.49~0.52로 나와 그 사이인 0.55로 설정 —
+# 튀르키예는 안전하게 계속 고립 판정되면서, 표현만 다른 진짜 연관 기사는
+# 구제된다.
+_CLUSTER_EMBED_SIM_THRESHOLD = 0.55
+
+
+def _cosine_sim(v1: list, v2: list) -> float:
+    if not v1 or not v2:
+        return 0.0
+    dot = sum(x * y for x, y in zip(v1, v2))
+    n1 = math.sqrt(sum(x * x for x in v1))
+    n2 = math.sqrt(sum(x * x for x in v2))
+    return dot / (n1 * n2) if n1 and n2 else 0.0
+
+
 def is_coherent_cluster(cluster: list) -> bool:
     """
-    클러스터가 실제로 같은 이슈인지 키워드 기반으로 판단.
-    기사들이 공통 핵심 키워드(주체/사건/기관명)를 공유하면 단일 이슈.
-    공통 키워드 없이 각자 다른 주제면 엉터리.
-    Gemini 호출 없이 규칙 기반으로 처리.
+    클러스터가 실제로 같은 이슈인지 판단.
+    1차: 핵심 키워드(주체/사건/기관명) 공유 여부 — 공짜, 즉시 판정.
+    2차(1차에서 고립된 기사만): gemini-embedding-001 의미 유사도로 구제
+    시도 — 표현이 달라 키워드가 하나도 안 겹치지만 실제로는 같은 사안인
+    경우(파라프레이즈)를 잡아낸다. 잘 연결된(=흔한) 클러스터는 임베딩
+    호출이 아예 없어 지연·쿼터 소모가 없다.
     """
     # 실사고(2026-08-10): "소규모는 통과"가 <4였는데, 실제 잡탕 사고 다수가
     # 정확히 2개짜리 클러스터였다(articles_are_related가 무관한 기사 둘을
@@ -1058,22 +1078,24 @@ def is_coherent_cluster(cluster: list) -> bool:
     if len(cluster) < 2:
         return True  # 단독 기사는 자명하게 단일 이슈
 
-    # 각 기사의 핵심 키워드 추출 (제목 + 리드 2문단 — 제목만으로는 어휘가
-    # 너무 적어 우연히 하나도 안 겹치는 경우가 있어 리드까지 넓힌다)
-    article_kws = []
+    # 각 기사의 텍스트(제목 + 리드 2문단)와 핵심 키워드 추출 — 제목만으로는
+    # 어휘가 너무 적어 우연히 하나도 안 겹치는 경우가 있어 리드까지 넓힌다.
+    article_texts, article_kws = [], []
     for a in cluster:
         if a.get("__needs_review__"):
             continue
         title = a.get("title_ko") or a.get("title_en") or ""
         lead = get_lead(a.get("summary_ko") or a.get("summary_en") or "")
+        text = f"{title}. {lead}".strip()
         kw = extract_core_kw(title) | extract_core_kw(lead)
         if kw:
+            article_texts.append(text)
             article_kws.append(kw)
 
     if len(article_kws) < 2:
         return True
 
-    # 기사마다 클러스터 내 다른 기사와 공통 키워드가 하나라도 있는지 확인.
+    # 1차: 기사마다 클러스터 내 다른 기사와 공통 키워드가 하나라도 있는지 확인.
     n = len(article_kws)
     has_connection = [
         any(article_kws[i] & article_kws[j] for j in range(n) if j != i)
@@ -1088,6 +1110,32 @@ def is_coherent_cluster(cluster: list) -> bool:
     # 무관해도 된다"는 뜻이 돼버려 이 문제의 근본 원인이었다 — 클러스터
     # 안의 기사는 전부 다른 기사와 최소 하나는 연결돼야 하고, 단 하나라도
     # 고립돼 있으면 그 클러스터 전체를 엉터리로 판정한다.
+    isolated = [i for i in range(n) if not has_connection[i]]
+    if not isolated:
+        return True
+
+    # 2차(2026-09-15 추가, 사용자 지시 — "Gemini 임베딩 API 호출로는
+    # 안되나?"): 키워드로 고립된 기사만 의미 임베딩으로 구제 시도. RPM
+    # 100/TPM 30k/RPD 1000(사용자 확인) 정도면 이 용도엔 여유롭다.
+    embeddings = {}
+
+    def _embed(i):
+        if i not in embeddings:
+            embeddings[i] = _gemini_client.embed(article_texts[i])
+        return embeddings[i]
+
+    for i in isolated:
+        vi = _embed(i)
+        if not vi:
+            continue  # 임베딩 실패 시 이 기사는 그냥 고립 판정 유지(안전한 쪽)
+        for j in range(n):
+            if j == i:
+                continue
+            vj = _embed(j)
+            if vj and _cosine_sim(vi, vj) >= _CLUSTER_EMBED_SIM_THRESHOLD:
+                has_connection[i] = True
+                break
+
     if not all(has_connection):
         return False
     return True
