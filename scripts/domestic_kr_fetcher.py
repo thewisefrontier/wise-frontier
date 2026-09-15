@@ -137,7 +137,12 @@ _PHOTO_GATE_FALLBACK = {
     "blocked_domains": ["yna.co.kr", "www.yna.co.kr", "newsis.com", "www.newsis.com",
                          "news1.kr", "www.news1.kr"],
     "allowed_credit_regex": r"다트|DART|전자공시(?:시스템)?|금융감독원|인스타그램|instagram|페이스북|facebook",
-    "blocked_credit_regex": r"연합뉴스|뉴시스|뉴스1|사진\s*[=:]?\s*[가-힣]{2,4}\s?기자",
+    "blocked_credit_regex": (
+        r"연합뉴스|뉴시스|뉴스1"
+        r"|사진\s*[=:]?\s*[가-힣]{2,4}\s?기자"
+        r"|[가-힣]{2,4}\s?기자\s*(?:가\s*)?촬영"
+        r"|촬영\s*[=:]?\s*[가-힣]{2,4}\s?기자"
+    ),
 }
 _photo_gate_cache = None
 
