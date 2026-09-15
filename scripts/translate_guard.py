@@ -59,6 +59,38 @@ def _has_korean_leak(text: str, max_chars: int = 0) -> bool:
     return len(_HANGUL_RE.findall(text or "")) > max_chars
 
 
+# 한국식 억/만 단위 금액을 아라비아 숫자로 미리 계산해 프롬프트에 넣는다
+# (2026-09-15 실사고: 힌디어 번역에서 "7억5810만7962원" 같은 금액을 Gemini가
+# 인도식 라크/크로르 자릿수로 직접 재계산하다가 0을 하나 더 붙여 10배로
+# 부풀리는 사고 발생 — id=156440에서 11개 금액 중 5개가 이랬다. "지연은
+# 괜찮지만 숫자가 틀리면 절대 안돼"는 이 프로젝트 전역 원칙이므로, LLM이
+# 단위 조합 산술을 하게 두는 대신 파이썬에서 미리 정확히 계산해 그냥
+# "그대로 베끼기만 하면 되는" 아라비아 숫자로 바꿔서 넘긴다 — 번역 대상
+# 언어를 불문하고 이 산술 실수 자체가 구조적으로 발생할 수 없게 만든다.)
+_WON_AMOUNT_RE = re.compile(
+    r'(?:(\d[\d,]*)조)?(?:(\d[\d,]*)억)?(?:(\d[\d,]*)만)?\s?(\d[\d,]*)?원'
+)
+
+
+def _normalize_won_amounts(text: str) -> str:
+    if not text:
+        return text
+
+    def _replace(m: "re.Match") -> str:
+        jo, eok, man, rest = m.groups()
+        if not any((jo, eok, man, rest)):
+            return m.group(0)  # "지원"처럼 금액이 아닌 "원" — 그대로 둔다
+        value = (
+            int((jo or "0").replace(",", "")) * 1_000_000_000_000
+            + int((eok or "0").replace(",", "")) * 100_000_000
+            + int((man or "0").replace(",", "")) * 10_000
+            + int((rest or "0").replace(",", ""))
+        )
+        return f"{value:,}원"
+
+    return _WON_AMOUNT_RE.sub(_replace, text)
+
+
 def _has_self_duplication(text: str, anchor_len: int = 200) -> bool:
     """Gemini가 번역 본문 전체를 통째로 두 번 반복해 응답하는 사고 방지
     (2026-09-09 실사고: id=149911 fr 번역이 같은 문단을 처음부터 끝까지
@@ -105,6 +137,14 @@ def translate_article(title_ko: str, body_ko: str, call_gemini_fn, lang: str = "
 
     lang_name = LANG_NAMES.get(lang, LANG_NAMES["en"])
 
+    # 억/만 단위 금액을 미리 계산된 아라비아 숫자로 바꿔서 넘긴다 — 모델이
+    # 단위를 직접 재계산하게 두면 자릿수를 잘못 붙이는 사고가 난다(위 함수
+    # 주석 참고). 프롬프트에도 "이미 계산된 숫자이니 재계산하지 말고 자릿수
+    # 그대로 베끼라"고 명시해 다른 지역 자릿수 표기(라크/크로르 등)로
+    # 재포맷하지 않도록 한다.
+    title_ko_norm = _normalize_won_amounts(title_ko)
+    body_ko_norm = _normalize_won_amounts(body_ko)
+
     prompt = f"""Translate the following Korean news article into natural, professional
 {lang_name} news writing (AP style equivalent for that language). Do not translate
 word-for-word — restructure sentences the way a native {lang_name} news writer
@@ -118,15 +158,22 @@ split into paragraphs by blank lines (\\n\\n) — keep that same number of
 paragraph breaks in your {lang_name} translation, do not merge everything
 into one block.
 
+IMPORTANT — numbers: every amount below has already been computed into plain
+digits with comma thousands-separators (e.g. 758,107,962). Do NOT recompute,
+re-group, or re-format these digits into any other numbering convention
+(e.g. do not convert to Indian lakh/crore grouping). Copy the exact same
+digit sequence as-is, only translating the currency word (e.g. "원" -> "won"
+or the local word for won) next to it.
+
 Output format (follow exactly, no extra text before or after):
 TITLE: <{lang_name} title>
 BODY: <{lang_name} body, with paragraphs separated by a blank line>
 
 [Korean title]
-{title_ko}
+{title_ko_norm}
 
 [Korean body]
-{body_ko[:4000]}
+{body_ko_norm[:4000]}
 
 Output:"""
 
