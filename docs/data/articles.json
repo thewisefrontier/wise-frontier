@@ -1,5 +1,50 @@
 [
   {
+    "id": 178705,
+    "title_en": "아프리카, 폭염과 빗줄기 교차…극단적 날씨",
+    "title_ko": "아프리카, 폭염과 빗줄기 교차…극단적 날씨",
+    "summary_ko": "15일(현지시간) 아프리카 주요국은 최저기온 11°C에서 최고기온 37°C 사이의 폭넓은 기온 분포를 보인 가운데, 북부와 서부 지역을 중심으로 극심한 폭염이 기승을 부렸다. 가장 더운 곳은 최고 37°C를 기록한 이집트 카이로였으며, 이집트의 아스완과 룩소르, 나이지리아 카노, 모로코 마라케시에서도 최고기온이 38°C를 웃도는 폭염 지역으로 분류됐다. 반면 에티오피아 아디스아바바는 최고기온이 20°C, 최저기온이 11°C에 머물며 아프리카 주요국 수도 중 가장 선선한 날씨를 나타냈다.\n\n아디스아바바의 최고기온은 가장 더운 카이로에",
+    "url": "internal://weather_group_아프리카_today20260915",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_아프리카_today20260915",
+    "region": "africa",
+    "country": "아프리카",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-15 13:22",
+    "countries": [
+      "나이지리아",
+      "케냐",
+      "남아공",
+      "이집트",
+      "모로코",
+      "알제리",
+      "에티오피아",
+      "가나",
+      "탄자니아",
+      "앙골라"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_nigeria_20260915.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-15T13:22:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-15 13:22",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
     "id": 178662,
     "title_en": "[복권] 美 파워볼 9월 14일 당첨번호 19, 20, 57, 61, 67+파워볼 22",
     "title_ko": "[복권] 美 파워볼 9월 14일 당첨번호 19, 20, 57, 61, 67+파워볼 22",
@@ -426,40 +471,6 @@
     "investment_idea_en": null
   },
   {
-    "id": 177550,
-    "title_en": "[가상자산 동향] 솔라나 2.36% 상승…네트워크 활성도 회복세",
-    "title_ko": "[가상자산 동향] 솔라나 2.36% 상승…네트워크 활성도 회복세",
-    "summary_ko": "◆ 가격 동향\n\n15일 06:27(한국시간) 야후 파이낸스에 따르면 솔라나 가격은 전일 대비 2.36% 상승한 103.69달러를 기록했다. 최근 솔라나 생태계 내 탈중앙화 거래소의 거래량이 증가하며 네트워크 활성도가 개선된 점이 가격 상승을 견인했다.\n\n주요 기관 투자자들이 솔라나 기반의 스테이킹 상품에 자금을 재배치하면서 매수세가 유입됐다. 또한 미국 연방준비제도의 금리 인하 가능성에 따른 거시경제적 불확실성 완화가 위험 자산 전반에 긍정적인 영향을 미쳤다.\n\n한편 비트코인은 7만8896.79달러(+2.09%), 이더리움은 255",
-    "url": "internal://crypto_news_2026-09-15",
-    "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "가상자산동향_crypto",
-    "region": "global",
-    "country": "글로벌",
-    "country_flag": "🌐",
-    "score": 1,
-    "created_at": "2026-09-15 06:27",
-    "countries": [],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_09_15.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-15T06:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-15 06:27",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
     "id": 177549,
     "title_en": "[종목 동향] 마이크로소프트 주가 1.97% 상승…AI 인프라 확장 가속화",
     "title_ko": "[종목 동향] 마이크로소프트 주가 1.97% 상승…AI 인프라 확장 가속화",
@@ -478,6 +489,40 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/stock_news_2026_09_14.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-15T06:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-15 06:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
+    "id": 177550,
+    "title_en": "[가상자산 동향] 솔라나 2.36% 상승…네트워크 활성도 회복세",
+    "title_ko": "[가상자산 동향] 솔라나 2.36% 상승…네트워크 활성도 회복세",
+    "summary_ko": "◆ 가격 동향\n\n15일 06:27(한국시간) 야후 파이낸스에 따르면 솔라나 가격은 전일 대비 2.36% 상승한 103.69달러를 기록했다. 최근 솔라나 생태계 내 탈중앙화 거래소의 거래량이 증가하며 네트워크 활성도가 개선된 점이 가격 상승을 견인했다.\n\n주요 기관 투자자들이 솔라나 기반의 스테이킹 상품에 자금을 재배치하면서 매수세가 유입됐다. 또한 미국 연방준비제도의 금리 인하 가능성에 따른 거시경제적 불확실성 완화가 위험 자산 전반에 긍정적인 영향을 미쳤다.\n\n한편 비트코인은 7만8896.79달러(+2.09%), 이더리움은 255",
+    "url": "internal://crypto_news_2026-09-15",
+    "source": "NewsFinal",
+    "category": "금융",
+    "subcategory": "가상자산동향_crypto",
+    "region": "global",
+    "country": "글로벌",
+    "country_flag": "🌐",
+    "score": 1,
+    "created_at": "2026-09-15 06:27",
+    "countries": [],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_09_15.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-15T06:27:00",
     "update_log": [
