@@ -1,5 +1,70 @@
 [
   {
+    "id": 183027,
+    "title_en": "[국내유가] 휘발유 리터당 1858원…전일 대비 소폭 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1858원…전일 대비 소폭 하락",
+    "summary_ko": "한국석유공사 오피넷이 16일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1858원으로 집계됐다.\n\n이날 오피넷에 따르면 경유는 리터당 1843.37원, LPG 부탄은 리터당 1098.16원으로 각각 전일 대비 하락세를 기록했다. 휘발유는 전일보다 0.07원 내렸고, 경유는 0.55원, LPG는 0.05원 하락했다.\n\n이번 유가 하락은 국제유가 흐름과 정유사 공급가 변동에 영향을 받은 것으로 나타났다. 정유사 공급가격 조정과 관련해 업계 내에서는 정유사 공급가와 원가 부담 요인이 복합적으로 작용하고 있으며, 나프",
+    "url": "internal://opinet_price_2026-09-16",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-09-16 05:12",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_09_16.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-16T05:12:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-16 05:12",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-09-16",
+      "prices": {
+        "B027": {
+          "diff": -0.07,
+          "name": "휘발유",
+          "price": 1858.5
+        },
+        "B034": {
+          "diff": 0.4,
+          "name": "고급휘발유",
+          "price": 2315.87
+        },
+        "C004": {
+          "diff": -0.16,
+          "name": "실내등유",
+          "price": 1575.0
+        },
+        "D047": {
+          "diff": -0.55,
+          "name": "경유",
+          "price": 1843.37
+        },
+        "K015": {
+          "diff": -0.05,
+          "name": "LPG(부탄)",
+          "price": 1098.16
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
     "id": 182853,
     "title_en": "미 의회예산처, 이란과의 갈등으로 국방비 380억달러 지출 및 미사일 재고 고갈 확인",
     "title_ko": "미 의회예산처, 이란과의 갈등으로 국방비 380억달러 지출 및 미사일 재고 고갈 확인",
@@ -1779,71 +1844,6 @@
     "is_travel": false,
     "source_published_at": null,
     "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 177102,
-    "title_en": "[국내유가] 휘발유 리터당 1859원…정유사 공급가 논쟁 속 소폭 하락",
-    "title_ko": "[국내유가] 휘발유 리터당 1859원…정유사 공급가 논쟁 속 소폭 하락",
-    "summary_ko": "한국석유공사 오피넷이 15일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1859원으로 집계됐다. 전일과 비교해 0.06원 내렸다.\n\n경유와 LPG 가격도 동반 하락세를 기록했다. 경유는 리터당 1843.46원으로 전일보다 0.54원 하락했고, LPG 부탄은 리터당 1098.11원으로 0.22원 내렸다. 오피넷에 따르면 유종별 가격은 전반적으로 소폭 하락하는 흐름을 보였다.\n\n최근 유가 변동을 두고 정유사의 공급 가격과 유통 구조를 둘러싼 논쟁이 이어지고 있다. 주유소 협회 측은 기름값 급등의 일차적 원인이 정유",
-    "url": "internal://opinet_price_2026-09-15",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국내유가",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "🇰🇷",
-    "score": 1,
-    "created_at": "2026-09-15 05:10",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_09_15.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-15T05:10:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-15 05:10",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "date": "2026-09-15",
-      "prices": {
-        "B027": {
-          "diff": -0.06,
-          "name": "휘발유",
-          "price": 1858.63
-        },
-        "B034": {
-          "diff": 0.68,
-          "name": "고급휘발유",
-          "price": 2315.0
-        },
-        "C004": {
-          "diff": -0.13,
-          "name": "실내등유",
-          "price": 1575.23
-        },
-        "D047": {
-          "diff": -0.54,
-          "name": "경유",
-          "price": 1843.46
-        },
-        "K015": {
-          "diff": -0.22,
-          "name": "LPG(부탄)",
-          "price": 1098.11
-        }
-      }
-    },
     "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
