@@ -32,6 +32,7 @@ export_articles.py도 source=eq.NewsFinal 필터라 애초에 안 잡힌다.
 import os
 import re
 import time
+import hashlib
 from urllib.parse import urlparse, urlunparse
 
 import feedparser
@@ -322,11 +323,19 @@ def _save_candidate(title: str, link: str, domain: str, src_published: str, tag:
     # gemini_writer.py처럼 Gemini로 이미지를 찾는 fetch_article_image()를
     # 쓸 GeminiClient가 없는 가벼운 수집기라, 순수 HTML 메타태그 파싱만
     # 쓰는 extract_og_image()로 대체한다.
+    #
+    # ⚠️ 2026-09-16 실사고 발견: key_hint를 도메인만으로 줬더니(store_image()
+    # 자체 설계상 "같은 힌트는 같은 R2 파일로 덮어쓴다") 같은 매체에서 수집한
+    # 모든 기사가 R2의 파일 하나를 계속 덮어써왔다 — 서로 무관한 기사들이
+    # 전부 "그 매체에서 가장 최근에 수집된 아무 기사의 사진"을 공유하고
+    # 있었다(사용자가 연합뉴스 크레딧 사진이 전혀 다른 기사에 붙어있는 걸
+    # 발견해 드러남). URL 해시를 힌트에 더해 기사마다 고유 파일로 저장한다.
     image_url = ""
     if _is_image_source_allowed(domain, full_text):
         og_image = extract_og_image(link, timeout=8)
         if og_image:
-            image_url = store_image(og_image, key_hint=f"domestickr-{domain}")
+            link_hash = hashlib.md5(link.encode()).hexdigest()[:10]
+            image_url = store_image(og_image, key_hint=f"domestickr-{domain}-{link_hash}")
 
     article_id = insert_article(
         title_en="", title_ko=title,
