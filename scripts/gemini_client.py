@@ -22,6 +22,7 @@ script_leak.py·json_body_guard.py와 같은 이유로 공용화한다.
 
 import os
 import time
+from collections import defaultdict
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 
@@ -123,6 +124,15 @@ def _min_interval(model: str) -> float:
     return MIN_KEY_INTERVAL_SECONDS.get(model, _LITE_MIN_INTERVAL)
 
 
+# 임베딩 모델(gemini-embedding-001) 전용 페이싱 — 생성 모델과는 별도
+# 쿼터 풀. 사용자가 공식 수치로 확인: RPM 100 / TPM 30k / RPD 1000
+# (Gemini Embedding 1·2 공통, 키 1개 기준). RPM 100 → 키당 최소 0.6초
+# 간격이면 한도에 딱 맞지만, 여유를 둬 1초(키당 분당 60회, 5키 합산
+# 최대 분당 300회)로 설정 — 이 프로젝트의 "실사용량을 실측해 조정" 방침상
+# _log_usage()로 쌓이는 gemini_usage_daily를 보고 필요하면 더 낮춰도 된다.
+_EMBED_MIN_INTERVAL = 1
+
+
 def _is_per_day_quota(res) -> bool:
     """429 응답 본문에서 실제로 걸린 한도가 일일(PerDay)인지 확인한다.
     파싱 실패·정보 없음은 보수적으로 False(=분당 한도로 간주, 쿨다운 후 재시도)
@@ -147,10 +157,12 @@ class GeminiClient:
         self.models = models or DEFAULT_GEMINI_MODELS
         # 모델별 키 상태: 없음=사용가능, True=일일 한도 소진(이 프로세스 동안
         # 영구 제외), 숫자=그 유닉스 시각 이후 재시도 가능(분당 한도 쿨다운).
-        self._exhausted_keys = {m: {} for m in self.models}
+        # defaultdict라 self.models에 미리 등록 안 된 모델(예: 아래 embed()의
+        # 임베딩 전용 모델)도 처음 쓰이는 순간 자동으로 빈 상태에서 시작한다.
+        self._exhausted_keys = defaultdict(dict)
         # 모델별 키의 마지막 호출 시각 — 가장 오래 쉰 키부터 골라 쓰는 페이싱과
         # 분당 한도 예방에 함께 쓰인다(아래 call()의 정렬 기준).
-        self._last_call_at = {m: {} for m in self.models}
+        self._last_call_at = defaultdict(dict)
 
     def _is_available(self, model: str, idx: int) -> bool:
         v = self._exhausted_keys[model].get(idx)
@@ -260,4 +272,74 @@ class GeminiClient:
                     return None
 
         print("[ERROR] 모든 모델/키 소진")
+        return None
+
+    # 2026-09-15 추가(사용자 지시 — "고민되는데... Gemini 임베딩 API 호출로는
+    # 안되나?" — is_coherent_cluster()의 키워드 집합 겹침을 의미 기반으로
+    # 강화하려는 시도. TF-IDF는 클러스터당 문서가 2~8건뿐이라 통계적으로
+    # 무의미했음(별도 커밋 참고) — 실제 학습된 임베딩 모델을 쓰면 그 한계가
+    # 없다. 생성 모델(gemini-3.x-flash 계열)과 완전히 다른 모델·엔드포인트라
+    # 오늘 하루 종일 겪은 생성 모델 RPM/RPD 쿼터와는 별도 풀일 가능성이
+    # 높지만, 구글이 이 한도를 대시보드 전용으로만 공개해(문서에 고정 수치
+    # 없음) 확답은 못 한다 — 그래서 이 프로젝트의 기존 방침대로(_log_usage
+    # 자체 집계) 실사용량을 그대로 재면서 안전하게 페이싱한다. 키 로테이션·
+    # 페이싱·쿨다운은 call()과 동일한 방식을 쓰되, self.models에 없는 모델
+    # 이라 별도 딕셔너리 항목("gemini-embedding-001")으로 자연히 분리된다.
+    def embed(self, text: str, timeout=(10, 20)) -> list | None:
+        """텍스트 임베딩 벡터(float 리스트)를 반환. 실패 시 None."""
+        if not self.api_keys or not (text or "").strip():
+            return None
+
+        model = "gemini-embedding-001"
+        n = len(self.api_keys)
+        exhausted = self._exhausted_keys[model]
+        available = [i for i in range(n) if self._is_available(model, i)]
+        if not available:
+            print(f"  [embed] {model} 모든 키 소진/쿨다운 중")
+            return None
+
+        last_at = self._last_call_at[model]
+        ordered = sorted(available, key=lambda i: last_at.get(i, 0))
+
+        for idx in ordered:
+            elapsed = time.time() - last_at.get(idx, 0)
+            wait = _EMBED_MIN_INTERVAL - elapsed
+            if wait > 0:
+                time.sleep(wait)
+
+            api_key = self.api_keys[idx]
+            url = (
+                f"https://generativelanguage.googleapis.com/v1beta/models/"
+                f"{model}:embedContent?key={api_key}"
+            )
+            try:
+                last_at[idx] = time.time()
+                res = requests.post(
+                    url,
+                    json={"content": {"parts": [{"text": text[:8000]}]}},
+                    timeout=timeout,
+                )
+                if res.status_code == 200:
+                    _log_usage(model, idx + 1, "success")
+                    values = (res.json().get("embedding") or {}).get("values")
+                    return values or None
+                elif res.status_code == 429:
+                    _log_usage(model, idx + 1, "429")
+                    if _is_per_day_quota(res):
+                        exhausted[idx] = True
+                    else:
+                        exhausted[idx] = time.time() + KEY_COOLDOWN_SECONDS
+                    continue
+                else:
+                    print(f"[ERROR] embed {res.status_code}: {res.text[:200]}")
+                    _log_usage(model, idx + 1, "other")
+                    return None
+            except requests.exceptions.Timeout:
+                print(f"  [TIMEOUT] embed 키 {idx+1} → 다음 키")
+                continue
+            except Exception as e:
+                print(f"[ERROR] embed {e}")
+                return None
+
+        print("[ERROR] embed 모든 키 소진")
         return None
