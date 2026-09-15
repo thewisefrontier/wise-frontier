@@ -123,10 +123,13 @@ KR_RSS_FEEDS = [
 # "프롬프트, 기사 걸러내는 게이트 같은 것들은 매우 중요한 정보라서, 깃허브에
 # 두지 말고 DB에 올려서 유출되지 않도록 해둘 것" — "그게 우리 노하우고
 # 핵심이기 때문에 다른데서 코드를 가져가도 쓸 수 없도록"). 아래는 DB 접근
-# 실패 시에만 쓰이는 최소 안전망(가장 위험도가 높은 두 통신사만 하드코딩).
+# 실패 시에만 쓰이는 최소 안전망(주요 통신사만 하드코딩 — 2026-09-15
+# 사용자 지시로 유료 사진 판매 사이트도 차단 대상에 추가됐으나, 그 전체
+# 목록은 이 파일이 아니라 DB(domestic_photo_credit_gate)에만 있다).
 _PHOTO_GATE_FALLBACK = {
-    "blocked_domains": ["yna.co.kr", "www.yna.co.kr", "newsis.com", "www.newsis.com"],
-    "blocked_credit_regex": r"연합뉴스|뉴시스",
+    "blocked_domains": ["yna.co.kr", "www.yna.co.kr", "newsis.com", "www.newsis.com",
+                         "news1.kr", "www.news1.kr"],
+    "blocked_credit_regex": r"연합뉴스|뉴시스|뉴스1",
 }
 _photo_gate_cache = None
 
