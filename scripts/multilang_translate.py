@@ -109,15 +109,17 @@ def _sb_url(table: str) -> str:
 
 
 def fetch_candidates(limit: int = MAX_ARTICLES_PER_CYCLE) -> list:
-    """번역 대상 후보 조회: DomesticKR 원본 기사 + 한국 관련 데이터저널리즘
-    (오피넷 국내유가) 기사 중, 아직 article_translations에 언어 4개가
-    다 안 채워진 것들. 최신순으로 limit건."""
+    """번역 대상 후보 조회: 국내기사 다중소스 종합 집필본(DomesticKR-Synth,
+    domestic_kr_writer.py가 생성 — 2026-09-15부터. 원문 그대로가 아니라
+    여러 매체를 클러스터링해 뉴스파이널이 직접 쓴 기사만 번역 대상으로
+    삼는다) + 한국 관련 데이터저널리즘(오피넷 국내유가) 기사 중, 아직
+    article_translations에 언어 4개가 다 안 채워진 것들. 최신순으로 limit건."""
     res = requests.get(
         _sb_url("articles"),
         headers=_sb_headers(),
         params={
             "select": "id,title_ko,summary_ko,source,subcategory",
-            "or": "(source.like.DomesticKR:*,subcategory.eq.국내유가)",
+            "or": "(source.eq.DomesticKR-Synth,subcategory.eq.국내유가)",
             "order": "created_at.desc",
             "limit": "200",  # 넉넉히 가져와서 아래서 미번역분만 추림(limit건)
         },
