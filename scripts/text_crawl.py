@@ -208,12 +208,47 @@ _OG_IMAGE_RE = re.compile(
     re.IGNORECASE,
 )
 
+# 사진 캡션/크레딧 추출용(2026-09-16, 사용자 지적: "한겨레 기사 찾아보니
+# ...연합뉴스 이렇게 써 있네" — 캡션이 <em class="img_desc"> 등 본문과
+# 분리된 태그에 있어서 crawl_full_text()의 본문 추출 결과(trafilatura는
+# 캡션을 본문이 아닌 것으로 보고 걸러내는 경우가 흔함)에는 안 남고,
+# domestic_kr_fetcher.py의 사진 출처 가드는 그 본문 텍스트만 검사해서
+# "연합뉴스" 크레딧이 있는 사진을 걸러내지 못했다). 사이트마다 마크업이
+# 달라 완벽하지 않지만, 흔한 캡션 컨테이너 클래스명을 넓게 잡아 최대한
+# 잡아낸다.
+_CAPTION_TAG_RE = re.compile(
+    r'<(figcaption|em|span|p|div)\b[^>]*class=["\'][^"\']*'
+    r'(?:img_desc|caption|photo_desc|photoDesc|img_txt|imgtxt|figure_caption)'
+    r'[^"\']*["\'][^>]*>(.*?)</\1>',
+    re.IGNORECASE | re.DOTALL,
+)
+_TAG_STRIP_RE = re.compile(r'<[^>]+>')
+
+
+def _extract_caption_from_html(html: str) -> str:
+    captions = []
+    for m in _CAPTION_TAG_RE.finditer(html):
+        text = _TAG_STRIP_RE.sub('', m.group(2)).strip()
+        if text:
+            captions.append(text)
+        if len(captions) >= 5:
+            break
+    return ' / '.join(captions)
+
 
 def extract_og_image(url: str, timeout: int = 8) -> str:
     """페이지의 og:image/twitter:image 메타태그에서 대표 이미지 URL을 뽑는다.
     Gemini 호출 없는 순수 HTML 파싱 — domestic_kr_fetcher.py처럼 이미지
     검색용 Gemini 클라이언트가 없는 가벼운 수집기에서 쓴다(2026-09-09,
     사용자 지적: "사진도 없고" — DomesticKR 기사에 이미지가 전혀 없었음)."""
+    img, _ = extract_og_image_and_caption(url, timeout=timeout)
+    return img
+
+
+def extract_og_image_and_caption(url: str, timeout: int = 8) -> tuple[str, str]:
+    """og:image URL과 사진 캡션(있으면)을 한 번의 요청으로 함께 뽑는다.
+    캡션은 사진 출처 가드(연합뉴스/뉴시스 등 크레딧 검사)가 실제 캡션
+    텍스트를 볼 수 있게 하기 위한 것 — full_text(본문)에는 안 남는다."""
     try:
         headers = {
             "User-Agent": "Mozilla/5.0 (compatible; NewsFinalBot/1.0)",
@@ -221,11 +256,14 @@ def extract_og_image(url: str, timeout: int = 8) -> str:
         }
         res = requests.get(url, headers=headers, timeout=timeout)
         if res.status_code != 200:
-            return ""
-        m = _OG_IMAGE_RE.search(res.text[:200000])
-        return m.group(1).strip() if m else ""
+            return "", ""
+        html = res.text[:200000]
+        m = _OG_IMAGE_RE.search(html)
+        img = m.group(1).strip() if m else ""
+        caption = _extract_caption_from_html(html)
+        return img, caption
     except Exception:
-        return ""
+        return "", ""
 
 
 def crawl_full_text(url: str, timeout: int = 10) -> str:

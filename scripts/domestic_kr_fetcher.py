@@ -42,7 +42,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from db import init_db, is_url_exists, insert_article
-from text_crawl import crawl_full_text, clean_text, extract_og_image, resolve_google_news_url
+from text_crawl import crawl_full_text, clean_text, extract_og_image_and_caption, resolve_google_news_url
 
 try:
     from image_store import store_image
@@ -330,12 +330,16 @@ def _save_candidate(title: str, link: str, domain: str, src_published: str, tag:
     # 전부 "그 매체에서 가장 최근에 수집된 아무 기사의 사진"을 공유하고
     # 있었다(사용자가 연합뉴스 크레딧 사진이 전혀 다른 기사에 붙어있는 걸
     # 발견해 드러남). URL 해시를 힌트에 더해 기사마다 고유 파일로 저장한다.
+    #
+    # ⚠️ 2026-09-16 두 번째 실사고: "연합뉴스" 크레딧이 기사 본문(full_text)
+    # 이 아니라 <em class="img_desc"> 같은 별도 캡션 태그에만 있어서(예:
+    # 한겨레 "이재명 대통령이... 연합뉴스"), full_text만 검사하는 가드가
+    # 못 걸렀다 — 캡션을 따로 뽑아 같이 검사한다(extract_og_image_and_caption).
     image_url = ""
-    if _is_image_source_allowed(domain, full_text):
-        og_image = extract_og_image(link, timeout=8)
-        if og_image:
-            link_hash = hashlib.md5(link.encode()).hexdigest()[:10]
-            image_url = store_image(og_image, key_hint=f"domestickr-{domain}-{link_hash}")
+    og_image, caption = extract_og_image_and_caption(link, timeout=8)
+    if og_image and _is_image_source_allowed(domain, f"{full_text}\n{caption}"):
+        link_hash = hashlib.md5(link.encode()).hexdigest()[:10]
+        image_url = store_image(og_image, key_hint=f"domestickr-{domain}-{link_hash}")
 
     article_id = insert_article(
         title_en="", title_ko=title,
