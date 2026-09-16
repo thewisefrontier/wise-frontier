@@ -1,5 +1,48 @@
 [
   {
+    "id": 185350,
+    "title_en": "중남미, 뇌우·폭우 덮친 수도권 날씨",
+    "title_ko": "중남미, 뇌우·폭우 덮친 수도권 날씨",
+    "summary_ko": "16일(현지시간) 중남미 주요국 수도는 최저기온 5°C에서 최고기온 32°C의 넓은 기온 범위를 기록했다. 쿠바 아바나가 32°C로 가장 더운 곳으로 기록된 반면, 아르헨티나 부에노스아이레스는 최고기온 12°C, 최저기온 5°C로 가장 선선한 날씨를 보였다. 두 지역 간의 최고기온 차이는 20°C에 달해 대륙 전반의 기온 편차가 컸으며, 부에노스아이레스는 16일 최고기온 12°C에서 내일 최고기온 21°C로 기온이 크게 오를 전망이다.\n\n이날 멕시코, 콜롬비아, 쿠바, 도미니카공화국 등 4개국 수도에는 비 소식이 이어졌다. 특히 멕",
+    "url": "internal://weather_group_중남미_today20260916",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_중남미_today20260916",
+    "region": "latin_america",
+    "country": "중남미",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-16 17:13",
+    "countries": [
+      "브라질",
+      "멕시코",
+      "아르헨티나",
+      "칠레",
+      "콜롬비아",
+      "페루",
+      "쿠바",
+      "도미니카공화국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_brazil_20260916.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-16T17:13:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-16 17:13",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
     "id": 184467,
     "title_en": "아프리카, 37도 폭염과 수도권 뇌우 교차",
     "title_ko": "아프리카, 37도 폭염과 수도권 뇌우 교차",
@@ -1276,7 +1319,7 @@
     "id": 182781,
     "title_en": "콩고 에볼라 확산세 속 확진 7000명 넘어... 서부 수두우방이주까지 도달",
     "title_ko": "콩고 에볼라 확산세 속 확진 7000명 넘어... 서부 수두우방이주까지 도달",
-    "summary_ko": "15일(현지시간) 유엔 세계보건기구(WHO) 등 국제기구와 보건 당국에 따르면, 콩고민주공화국에서 발생한 치명적인 에볼라 바이러스 확산세가 지속되면서 누적 확진자가 7200명에 육박하고 사망자도 3500명에 근접한 것으로 집계됐다. 이번 사태는 역사상 가장 빠르게 확산되는 에볼라 유행으로 기록되었으며, 최근 북서부 수두우방이주(Sud-Ubangi)의 불루(Bulu) 보건지구에서 분디부교 바이러스 감염 사례가 확인되면서 바이러스 유입 지역이 7개 주로 늘어났다.\n\n수두우방이주 당국에 따르면 사망한 23세 남성은 남키부주를 출발해 르완",
+    "summary_ko": "[업데이트]\n■ 9월 16일 16:42 — 콩고민주공화국에서 사상 최단기간 확산세를 기록 중인 에볼라 발병과 관련해 12일 현지 당국은 누적 확진자 7022명, 사망자 3398명으로 집계됐다고 밝혔다. 수드우방기주 잔르네 갈렉와 분다웨 주지사는 국립연구소가 불루 보건지구의 시료를 검사한 결과 희귀종 분디부교 바이러스가 검출됐다고 확인했으며, 현지 하원의원이자 전 보건부 장관인 잔자크 음붕가니는 수드우방기주 그와카에서 사망한 23세 남성이 확진 판정을 받았다고 전했다.\n\n이 남성은 발열과 혈토 증상을 보이다가 9일 사망한 뒤 시료 분",
     "url": "internal://trend_에볼라_2026091604",
     "source": "NewsFinal",
     "category": "사회",
@@ -1301,6 +1344,10 @@
       {
         "timestamp": "2026-09-16 04:41",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-09-16 16:42",
+        "note": "수드우방기주서 첫 사망자 및 확진 확인"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -1579,49 +1626,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: Foreign, Commonwealth & Development Office (CC BY 4.0, Wikimedia Commons)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 179537,
-    "title_en": "중남미, 33도 폭염과 뇌우…극단적 날씨",
-    "title_ko": "중남미, 33도 폭염과 뇌우…극단적 날씨",
-    "summary_ko": "15일(현지시간) 중남미 주요국 수도와 주요 지역은 최저기온 9°C에서 최고기온 33°C 사이의 폭넓은 기온 분포를 보인 가운데, 지역별로 극심한 기상 편차를 나타냈다. 가장 더운 곳은 33°C를 기록한 쿠바 아바나이며, 가장 선선한 곳은 19°C에 머문 아르헨티나 부에노스아이레스로 두 지역 간 기온 차가 14도에 달해 대조를 이뤘다. 특히 쿠바 아바나와 멕시코 칸쿤은 최고기온이 38°C를 웃도는 폭염 지역으로 분류됐다.\n\n이 과정에서 지속되는 폭염과 강한 폭풍우로 인해 동부 해안 지역을 중심으로 침수와 강풍 위협이 고조되는 등 기",
-    "url": "internal://weather_group_중남미_today20260915",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_중남미_today20260915",
-    "region": "latin_america",
-    "country": "중남미",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-15 17:11",
-    "countries": [
-      "브라질",
-      "멕시코",
-      "아르헨티나",
-      "칠레",
-      "콜롬비아",
-      "페루",
-      "쿠바",
-      "도미니카공화국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_brazil_20260915.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-15T17:11:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-15 17:11",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null
