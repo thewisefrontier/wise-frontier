@@ -113,7 +113,7 @@ def get_domestic_candidates(hours: int = CANDIDATE_WINDOW_HOURS, limit: int = 30
         _sb_url(),
         headers=_sb_headers(),
         params={
-            "select": "id,title_ko,summary_ko,full_text,category,country,region,url,image_url,created_at",
+            "select": "id,title_ko,summary_ko,full_text,category,country,region,url,image_url,image_credit,created_at",
             "source": "like.DomesticKR:*",
             "created_at": f"gte.{since}",
             "order": "created_at.desc",
@@ -305,10 +305,12 @@ def run():
                 print(f"  ⚠️ 워터마크 감지로 이미지 제외: {xdomain}")
                 continue
             image_url = x["image_url"]
-            # 사용자 지적: "적어도 출처를 내가 알 수 있어야 할 것 같은데" —
-            # 클러스터 대표 이미지가 실제로 어느 매체(도메인)에서 왔는지
-            # 어드민 검증 화면에서 바로 보이도록 기록한다.
-            image_credit = xdomain
+            # 사용자 지적: "적어도 출처를 내가 알 수 있어야 할 것 같은데" →
+            # "캡션에서 실제 크레딧 문구를 뽑아 표시하도록" — domestic_kr_
+            # fetcher.py가 수집 시점에 캡션+크레딧을 이미 image_credit에
+            # 저장해뒀으면 그걸 그대로 쓰고(도메인만 아는 것보다 정확함),
+            # 옛날 방식으로 도메인만 들어있는 값이면 그대로 폴백한다.
+            image_credit = x.get("image_credit") or xdomain
             break
         category = cluster[0].get("category") or "사회"
 

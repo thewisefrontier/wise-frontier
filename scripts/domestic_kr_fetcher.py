@@ -178,6 +178,37 @@ def _load_photo_gate() -> dict:
     return fallback
 
 
+_TRAILING_CREDIT_RE = re.compile(r'(?:[.!?다요]\s+)([가-힣A-Za-z0-9()·\s]{2,20})\s*$')
+
+
+def extract_credit_label(caption: str, fallback: str) -> str:
+    """캡션 문구에서 실제 크레딧(제공처) 이름만 뽑는다(2026-09-16 사용자
+    지시: "캡션에서 실제 크레딧 문구를 뽑아 표시하도록" — 지금까지는 사진이
+    나온 기사의 도메인만 보여줘서 "출처: www.hani.co.kr"처럼 실제로는
+    연합뉴스 사진인데 한겨레가 찍은 것처럼 오해할 수 있었다). 못 찾으면
+    도메인 등 fallback을 그대로 쓴다."""
+    if not caption:
+        return fallback
+    known = re.search(r'연합뉴스|뉴시스|뉴스1|게티이미지(?:코리아)?|getty\s*images?', caption, re.IGNORECASE)
+    if known:
+        return known.group(0)
+    m = re.search(r'([가-힣A-Za-z0-9]{2,20})\s*(?:측\s*)?(?:제공|배포)', caption)
+    if m:
+        name = re.sub(r'[가이]$', '', m.group(1)).strip()
+        if name:
+            return f"{name} 제공"
+    m = re.search(r'([가-힣]{2,4})\s?기자', caption)
+    if m:
+        return f"{m.group(1)} 기자"
+    m = re.search(r'인스타그램|페이스북|트위터|유튜브|instagram|facebook|twitter|youtube', caption, re.IGNORECASE)
+    if m:
+        return m.group(0)
+    m = _TRAILING_CREDIT_RE.search(caption)
+    if m and m.group(1).strip():
+        return m.group(1).strip()
+    return fallback
+
+
 def _is_image_source_allowed(domain: str, full_text: str) -> bool:
     gate = _load_photo_gate()
     allow_re = gate.get("allowed_credit_regex")
@@ -336,10 +367,19 @@ def _save_candidate(title: str, link: str, domain: str, src_published: str, tag:
     # 한겨레 "이재명 대통령이... 연합뉴스"), full_text만 검사하는 가드가
     # 못 걸렀다 — 캡션을 따로 뽑아 같이 검사한다(extract_og_image_and_caption).
     image_url = ""
+    image_credit = ""
     og_image, caption = extract_og_image_and_caption(link, timeout=8)
     if og_image and _is_image_source_allowed(domain, f"{full_text}\n{caption}"):
         link_hash = hashlib.md5(link.encode()).hexdigest()[:10]
         image_url = store_image(og_image, key_hint=f"domestickr-{domain}-{link_hash}")
+        if image_url:
+            # 2026-09-16 사용자 지시: "캡션에서 실제 크레딧 문구를 뽑아
+            # 표시하도록 하고. 문구를 적고 제공 : 어느 회사 이런 식으로." —
+            # 도메인만 보여주면(예: "www.hani.co.kr") 실제로는 연합뉴스
+            # 사진인데 한겨레가 찍은 것처럼 오해할 수 있어, 캡션 원문과
+            # 그 안에서 뽑은 크레딧 이름을 같이 저장한다.
+            label = extract_credit_label(caption, domain)
+            image_credit = f"{caption}\n제공: {label}" if caption else domain
 
     article_id = insert_article(
         title_en="", title_ko=title,
@@ -351,6 +391,7 @@ def _save_candidate(title: str, link: str, domain: str, src_published: str, tag:
         countries=["한국"],
         is_published=False,
         image_url=image_url,
+        image_credit=image_credit or None,
         source_published_at=src_published or None,
         source_data={"tags": normalize_tags([tag], limit=10)},
     )
