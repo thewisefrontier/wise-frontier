@@ -1,5 +1,70 @@
 [
   {
+    "id": 188500,
+    "title_en": "[국내유가] 휘발유 리터당 1859원…경유·LPG는 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1859원…경유·LPG는 하락",
+    "summary_ko": "한국석유공사 오피넷이 17일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1859원으로 집계됐다. 이번에 공개된 수치에 따르면 전국 휘발유 평균가는 리터당 1858.58원으로 전일 대비 변동 없이 보합세를 나타냈다.\n\n같은 기간 경유 판매가격은 리터당 1843.49원으로 전일 대비 0.34원 내려 하락세를 보였다. LPG 부탄 역시 리터당 1098.15원을 기록하며 전일보다 0.15원 하락한 것으로 나타났다.\n\n이 같은 유가 흐름은 국제시세 변동에 따른 정유사의 공급가격 조정과 유통 마진 등이 복합적으로 작용한 ",
+    "url": "internal://opinet_price_2026-09-17",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-09-17 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_09_17.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-17T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-17 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-09-17",
+      "prices": {
+        "B027": {
+          "diff": 0.0,
+          "name": "휘발유",
+          "price": 1858.58
+        },
+        "B034": {
+          "diff": 0.58,
+          "name": "고급휘발유",
+          "price": 2317.35
+        },
+        "C004": {
+          "diff": -0.23,
+          "name": "실내등유",
+          "price": 1575.15
+        },
+        "D047": {
+          "diff": -0.34,
+          "name": "경유",
+          "price": 1843.49
+        },
+        "K015": {
+          "diff": -0.15,
+          "name": "LPG(부탄)",
+          "price": 1098.15
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
     "id": 188478,
     "title_en": "[데일리 다이제스트] 글로벌 통화정책 긴축과 지정학적 공급망 리스크 심화",
     "title_ko": "[데일리 다이제스트] 글로벌 통화정책 긴축과 지정학적 공급망 리스크 심화",
@@ -1721,107 +1786,6 @@
         "change": 0.8400000000000034
       },
       "source": "Yahoo Finance"
-    },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 183028,
-    "title_en": "한국, 서울·전국·맑은 가운데 큰 일교차…낮 최고 29도",
-    "title_ko": "한국, 서울·전국·맑은 가운데 큰 일교차…낮 최고 29도",
-    "summary_ko": "16일 한국의 날씨는 전국이 대체로 맑은 가운데 낮과 밤의 기온차가 크게 벌어질 것으로 예상된다. 기상청에 따르면 전국 최저기온은 15°C, 최고기온은 29°C 분포를 보이겠다. 서울은 오전과 오후 모두 맑은 날씨가 이어지겠으며, 최저기온 15°C, 최고기온 28°C로 예보됐다.\n\n서울의 오전과 오후 강수확률은 모두 0%이며, 최대풍속은 8km/h를 기록하겠다.\n\n주요 지역별 상세 날씨를 보면, 부산은 오전 구름많음에서 오후 맑음으로 날씨가 개겠고 최저 21°C, 최고 27°C, 최대풍속 19km/h를 나타내겠다. 대구는 오전 구름",
-    "url": "internal://weather_한국_today20260916",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_한국_today20260916",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-16 05:23",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20260916.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-16T05:23:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-16 05:23",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 183027,
-    "title_en": "[국내유가] 휘발유 리터당 1858원…전일 대비 소폭 하락",
-    "title_ko": "[국내유가] 휘발유 리터당 1858원…전일 대비 소폭 하락",
-    "summary_ko": "한국석유공사 오피넷이 16일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1858원으로 집계됐다.\n\n이날 오피넷에 따르면 경유는 리터당 1843.37원, LPG 부탄은 리터당 1098.16원으로 각각 전일 대비 하락세를 기록했다. 휘발유는 전일보다 0.07원 내렸고, 경유는 0.55원, LPG는 0.05원 하락했다.\n\n이번 유가 하락은 국제유가 흐름과 정유사 공급가 변동에 영향을 받은 것으로 나타났다. 정유사 공급가격 조정과 관련해 업계 내에서는 정유사 공급가와 원가 부담 요인이 복합적으로 작용하고 있으며, 나프",
-    "url": "internal://opinet_price_2026-09-16",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국내유가",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "🇰🇷",
-    "score": 1,
-    "created_at": "2026-09-16 05:12",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_09_16.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-16T05:12:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-16 05:12",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "date": "2026-09-16",
-      "prices": {
-        "B027": {
-          "diff": -0.07,
-          "name": "휘발유",
-          "price": 1858.5
-        },
-        "B034": {
-          "diff": 0.4,
-          "name": "고급휘발유",
-          "price": 2315.87
-        },
-        "C004": {
-          "diff": -0.16,
-          "name": "실내등유",
-          "price": 1575.0
-        },
-        "D047": {
-          "diff": -0.55,
-          "name": "경유",
-          "price": 1843.37
-        },
-        "K015": {
-          "diff": -0.05,
-          "name": "LPG(부탄)",
-          "price": 1098.16
-        }
-      }
     },
     "image_credit": null,
     "continuation_of_id": null,
