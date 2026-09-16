@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-16 15:15",
+  "updated_at": "2026-09-16 15:42",
   "indices": [
     {
       "name": "S&P 500",
@@ -25,15 +25,15 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 6687.69,
-      "change_pct": 0.05,
+      "price": 6711.45,
+      "change_pct": 0.41,
       "up": true
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 814.11,
-      "change_pct": 0.91,
+      "price": 815.47,
+      "change_pct": 1.08,
       "up": true
     },
     {
@@ -60,15 +60,15 @@
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 6484.1,
-      "change_pct": 0.36,
+      "price": 6485.07,
+      "change_pct": 0.37,
       "up": true
     },
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 5905.65,
-      "change_pct": -1.7,
+      "price": 5901.37,
+      "change_pct": -1.77,
       "up": false
     },
     {
@@ -121,15 +121,15 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 6687.69,
-        "change_pct": 0.05,
+        "price": 6711.45,
+        "change_pct": 0.41,
         "up": true
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 814.11,
-        "change_pct": 0.91,
+        "price": 815.47,
+        "change_pct": 1.08,
         "up": true
       }
     ],
@@ -158,15 +158,15 @@
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 6484.1,
-        "change_pct": 0.36,
+        "price": 6485.07,
+        "change_pct": 0.37,
         "up": true
       },
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 5905.65,
-        "change_pct": -1.7,
+        "price": 5901.37,
+        "change_pct": -1.77,
         "up": false
       }
     ],
@@ -205,8 +205,8 @@
     "ACB": {
       "name": "Asia Commercial Joint Stock Bank",
       "symbol": "ACB.VN",
-      "price": 22050.0,
-      "change_pct": 0.0,
+      "price": 22200.0,
+      "change_pct": 0.68,
       "up": true
     }
   }
