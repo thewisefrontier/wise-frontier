@@ -1,5 +1,99 @@
 [
   {
+    "id": 193733,
+    "title_en": "[국내유가] 휘발유 리터당 1859원…전일 대비 소폭 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1859원…전일 대비 소폭 하락",
+    "summary_ko": "한국석유공사 오피넷이 18일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1859원으로 집계됐다. 이는 직전 집계일과 비교해 소폭 내린 수준이다.\n\n이날 오피넷에 따르면 휘발유는 리터당 1858.53원으로 전일 대비 0.02원 하락했다. 경유는 리터당 1843.58원으로 전일보다 0.42원 내렸으며, LPG 부탄은 리터당 1098.19원으로 전일 대비 0.05원 하락했다. 모든 주요 유종이 하락세를 기록했다.\n\n최근 유가 변동을 둘러싸고 국제유가 흐름과 정유사 공급가 를 둘러싼 논쟁이 이어지고 있다. 특히 주유소",
+    "url": "internal://opinet_price_2026-09-18",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-09-18 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_09_18.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-18T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-18 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-09-18",
+      "prices": {
+        "B027": {
+          "diff": -0.02,
+          "name": "휘발유",
+          "price": 1858.53
+        },
+        "B034": {
+          "diff": 0.56,
+          "name": "고급휘발유",
+          "price": 2318.5
+        },
+        "C004": {
+          "diff": -0.14,
+          "name": "실내등유",
+          "price": 1575.13
+        },
+        "D047": {
+          "diff": -0.42,
+          "name": "경유",
+          "price": 1843.58
+        },
+        "K015": {
+          "diff": -0.05,
+          "name": "LPG(부탄)",
+          "price": 1098.19
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
+    "id": 193629,
+    "title_en": "[데일리 다이제스트] 글로벌 지정학적 갈등과 기상 이변의 확산",
+    "title_ko": "[데일리 다이제스트] 글로벌 지정학적 갈등과 기상 이변의 확산",
+    "summary_ko": "[글로벌 무역 갈등 및 제재 조치 강화]\n\n- 미국 하원은 17일(현지시간) 러시아와 이란을 대상으로 한 포괄적인 제재 및 관세 법안을 가결하고 이를 트럼프 대통령에게 이송했다. - 도널드 트럼프 미국 대통령은 17일(현지시간) 이란과의 전쟁이 최종 단계에 접어들었다고 언급하며 제재를 한층 더 강화하겠다고 경고했다. - 미국 정부는 16일(현지시간) 반백인 차별 주장을 내세우며 일부 남아공 관료들을 대상으로 신규 비자 제한 조치를 발표했고, 이에 남아공 정부는 자국의 국내 정책을 오인한 결과라고 반박했다.\n\n[중동 및 아프리카 지역",
+    "url": "internal://digest_20260918",
+    "source": "NewsFinal",
+    "category": "다이제스트",
+    "subcategory": "digest_20260918",
+    "region": "global",
+    "country": "",
+    "country_flag": "",
+    "score": 39,
+    "created_at": "2026-09-18 05:01",
+    "countries": null,
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/digest_20260918.jpg",
+    "view_count": 0,
+    "first_published_at": null,
+    "update_log": [],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
     "id": 193468,
     "title_en": "오세아니아, 최저 2도 쌀쌀한 기온 속 뉴질랜드 비",
     "title_ko": "오세아니아, 최저 2도 쌀쌀한 기온 속 뉴질랜드 비",
@@ -1830,35 +1924,6 @@
         }
       }
     },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 188478,
-    "title_en": "[데일리 다이제스트] 글로벌 통화정책 긴축과 지정학적 공급망 리스크 심화",
-    "title_ko": "[데일리 다이제스트] 글로벌 통화정책 긴축과 지정학적 공급망 리스크 심화",
-    "summary_ko": "[미국 연방준비제도 기준금리 인상과 글로벌 증시 약세]\n- 미국 연방준비제도(Fed)는 16일(현지시간) 연방공개시장위원회(FOMC) 정례회의를 마치고 기준금리를 3.75~4.00%로 0.25%포인트 인상했다고 17일(현지시간) 밝혔으며, 이는 2023년 7월 이후 3년 만의 인상이다. - 뉴욕증시(NYSE)에서 나스닥종합지수는 15일(현지시간) 전일 대비 0.78% 하락한 25981.57에 마감했고, 다우존스산업평균지수와 S&P500 지수도 각각 0.63%, 0.45% 내려 3대 지수가 일제히 약세를 기록했다.\n\n[중동 지정학적 ",
-    "url": "internal://digest_20260917",
-    "source": "NewsFinal",
-    "category": "다이제스트",
-    "subcategory": "digest_20260917",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 35,
-    "created_at": "2026-09-17 05:02",
-    "countries": null,
-    "is_published": true,
-    "image_url": "https://pixabay.com/get/g65dfec168ddfdd0654214aedbad62a2e0a6d2a5435b4f90812efdcdf190e7be19a51ef1a7e96ddebba73475faa67e1a6b88d4ae6e8b5a13f037aa312eeb3c208_640.jpg",
-    "view_count": 0,
-    "first_published_at": null,
-    "update_log": [],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
     "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
