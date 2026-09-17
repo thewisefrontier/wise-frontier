@@ -192,6 +192,13 @@ def extract_credit_label(caption: str, fallback: str) -> str:
     known = re.search(r'연합뉴스|뉴시스|뉴스1|게티이미지(?:코리아)?|getty\s*images?', caption, re.IGNORECASE)
     if known:
         return known.group(0)
+    # "/사진=수은"처럼 "사진=" 뒤에 바로 크레딧명이 오는 가장 흔한 한국
+    # 언론 표기(2026-09-17 실사고: "사진=수은"이 마침표 직후 공백 없이
+    # 붙어있어(...이다./사진=수은) 아래 _TRAILING_CREDIT_RE의 "문장부호+
+    # 공백" 전제에 안 걸렸다 — 사용자가 머니투데이 기사로 직접 발견).
+    m = re.search(r'사진\s*[=:]\s*([가-힣A-Za-z0-9·]{1,20})', caption)
+    if m:
+        return m.group(1).strip()
     m = re.search(r'([가-힣A-Za-z0-9]{2,20})\s*(?:측\s*)?(?:제공|배포)', caption)
     if m:
         name = re.sub(r'[가이]$', '', m.group(1)).strip()

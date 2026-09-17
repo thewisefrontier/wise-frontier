@@ -13,6 +13,7 @@ rss_fetcher.py 쪽 원본을 고치면 이 파일도 맞춰 갱신할 것.
 """
 
 import re
+import html
 import unicodedata
 from urllib.parse import urlparse
 
@@ -225,12 +226,27 @@ _CAPTION_TAG_RE = re.compile(
 _TAG_STRIP_RE = re.compile(r'<[^>]+>')
 
 
-def _extract_caption_from_html(html: str) -> str:
+_OG_IMAGE_ALT_RE = re.compile(
+    r'<meta[^>]+property=["\']og:image:alt["\'][^>]+content=["\']([^"\']*)["\']',
+    re.IGNORECASE,
+)
+
+
+def _extract_caption_from_html(html_text: str) -> str:
+    # og:image:alt 메타태그가 있으면 최우선(2026-09-17 실사고: 머니투데이는
+    # 캡션을 본문 어디에도 태그로 안 넣고 이 메타태그 하나에만 넣어서,
+    # figcaption류 태그만 찾던 기존 방식이 완전히 못 잡았다 — "출처가
+    # 수은인데 머니투데이가 출처로 뜬다"는 사용자 신고로 발견). Open Graph
+    # 표준 필드라 다른 사이트에서도 흔하고, 있으면 가장 신뢰도 높다.
+    m = _OG_IMAGE_ALT_RE.search(html_text)
+    if m and m.group(1).strip():
+        return html.unescape(m.group(1)).strip()
+
     captions = []
-    for m in _CAPTION_TAG_RE.finditer(html):
+    for m in _CAPTION_TAG_RE.finditer(html_text):
         text = _TAG_STRIP_RE.sub('', m.group(2)).strip()
         if text:
-            captions.append(text)
+            captions.append(html.unescape(text))
         if len(captions) >= 5:
             break
     return ' / '.join(captions)
@@ -257,10 +273,10 @@ def extract_og_image_and_caption(url: str, timeout: int = 8) -> tuple[str, str]:
         res = requests.get(url, headers=headers, timeout=timeout)
         if res.status_code != 200:
             return "", ""
-        html = res.text[:200000]
-        m = _OG_IMAGE_RE.search(html)
+        html_text = res.text[:200000]
+        m = _OG_IMAGE_RE.search(html_text)
         img = m.group(1).strip() if m else ""
-        caption = _extract_caption_from_html(html)
+        caption = _extract_caption_from_html(html_text)
         return img, caption
     except Exception:
         return "", ""
