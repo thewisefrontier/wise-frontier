@@ -1,5 +1,90 @@
 [
   {
+    "id": 193837,
+    "title_en": "한국, 서울·부산·구름 많고 비…전국 19~28도",
+    "title_ko": "한국, 서울·부산·구름 많고 비…전국 19~28도",
+    "summary_ko": "18일 한국의 날씨는 전국이 대체로 흐린 가운데 서울의 최저기온 19°C, 최고기온 28°C를 기록하며 오전에는 맑고 오후에는 구름이 많겠다고 기상청은 예보했다. 서울의 오전 강수확률은 0%, 오후 강수확률은 20이며, 최대풍속은 16km/h로 나타났다.\n\n부산과 광주, 제주 등은 강수확률이 60% 이상을 기록하며 흐리고 비가 내리는 날씨를 보이고 있다. 지역별 상세 날씨를 보면 부산은 오전과 오후 모두 흐리고 비가 오겠으며 최저 21°C, 최고 25°C, 강수확률 60%, 최대풍속 16km/h다. 광주는 오전과 오후 모두 흐리고 ",
+    "url": "internal://weather_한국_today20260918",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_한국_today20260918",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-18 05:23",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20260918.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-18T05:23:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-18 05:23",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
+    "id": 193826,
+    "title_en": "연방준비제도, 2023년 이후 첫 금리 인상 단행… 글로벌 금융시장 파장",
+    "title_ko": "연방준비제도, 2023년 이후 첫 금리 인상 단행… 글로벌 금융시장 파장",
+    "summary_ko": "연방준비제도(Fed)가 17일(현지시간) 인플레이션 압박에 대응하기 위해 2023년 이후 처음으로 기준금리 인상을 단행했다. 이번 결정은 도널드 트럼프 전 대통령이 요구해 온 1% 금리 목표치를 수용하지 않고 독자적인 통화 정책 기조를 고수한 결과다.\n\n연방준비제도는 이번 금리 인상을 통해 과열된 물가 상승세를 억제하고 통화 정책의 정상화를 추진하겠다는 의지를 보였다. 시장 일각에서는 정치적 압박에도 불구하고 연방준비제도가 독립적인 의사결정 체계를 유지했다는 점에 주목했다.\n\n금리 인상 소식이 전해진 직후 글로벌 금융시장은 즉각적인",
+    "url": "internal://realtrend_Fed_First_Rate_Hike_Since_2023_2026091805",
+    "source": "NewsFinal",
+    "category": "금융",
+    "subcategory": "realtrend_Fed_First_Rate_Hike__crypto",
+    "region": "north_america",
+    "country": "미국",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-18 05:20",
+    "countries": [
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pixabay.com/get/geee30bb28c36964e6670008caa5c61d3660a2c5953cc467285d4ea7abdc1bee5893e3b9886aa2794f7fb20b6c31bea31ce12ecc398fad77051ae4129bb5c1897_640.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-18T05:20:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-18 05:20",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "tags": [
+        "dia",
+        "dji",
+        "eugenio catone",
+        "ivv",
+        "iwm",
+        "ndx",
+        "qqq",
+        "rty",
+        "sp500",
+        "spx"
+      ]
+    },
+    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
     "id": 193733,
     "title_en": "[국내유가] 휘발유 리터당 1859원…전일 대비 소폭 하락",
     "title_ko": "[국내유가] 휘발유 리터당 1859원…전일 대비 소폭 하락",
@@ -357,7 +442,7 @@
     "id": 191359,
     "title_en": "도널드 트럼프, EU의 캐나다 준회원국 추진에 관세 보복 경고",
     "title_ko": "도널드 트럼프, EU의 캐나다 준회원국 추진에 관세 보복 경고",
-    "summary_ko": "우르줄라 폰데어라이엔(Ursula von der Leyen) EU 집행위원장은 18일(현지시간) 스트라스부르에서 열린 연례 유럽연합 국정연설을 통해 캐나다의 EU 준회원국(associate member) 가입을 추진하겠다는 계획을 발표했다. 이번 구상은 캐나다와 유럽 간의 경제적·정치적 결속력을 강화하고, 글로벌 공급망과 안보 협력을 공고히 하기 위한 전략적 조치로 풀이된다.\n\n도널드 트럼프 전 미국 대통령은 폰데어라이엔 위원장의 발표 직후, 캐나다와 EU의 밀착이 미국의 무역 이익을 침해할 수 있다고 주장하며 강력한 관세 보복을 ",
+    "summary_ko": "[업데이트]\n■ 9월 18일 05:19 — 마크 카니 캐나다 총리는 17일(현지시간) 유럽연합(EU)의 준회원국 가입 제안을 수용하며 미국의 압박에도 불구하고 독자적인 파트너십을 구축하겠다는 입장을 공식화했다. 앞서 16일(현지시간) 도널드 트럼프 미국 대통령은 캐나다의 해당 계획을 우스꽝스럽다고 비판하며, 캐나다와 EU가 긴밀한 관계를 맺을 경우 EU를 상대로 심각한 수준의 관세를 부과하겠다고 위협했다. 미국 정부는 캐나다를 사실상 미국의 51번째 주처럼 관리하려는 의도를 보여왔으나, 이번 파트너십 논의가 가시화되면서 양국 관계의",
     "url": "internal://realtrend_EU-Canada_Associate_Membership_&_Trump_Tariff_Threat_2026091719",
     "source": "NewsFinal",
     "category": "정치·외교",
@@ -380,6 +465,10 @@
       {
         "timestamp": "2026-09-17 19:16",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-09-18 05:19",
+        "note": "캐나다, 미국의 압박 속 EU 준회원국 가입 공식화."
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -1859,71 +1948,6 @@
     "is_travel": false,
     "source_published_at": null,
     "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 188500,
-    "title_en": "[국내유가] 휘발유 리터당 1859원…경유·LPG는 하락",
-    "title_ko": "[국내유가] 휘발유 리터당 1859원…경유·LPG는 하락",
-    "summary_ko": "한국석유공사 오피넷이 17일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1859원으로 집계됐다. 이번에 공개된 수치에 따르면 전국 휘발유 평균가는 리터당 1858.58원으로 전일 대비 변동 없이 보합세를 나타냈다.\n\n같은 기간 경유 판매가격은 리터당 1843.49원으로 전일 대비 0.34원 내려 하락세를 보였다. LPG 부탄 역시 리터당 1098.15원을 기록하며 전일보다 0.15원 하락한 것으로 나타났다.\n\n이 같은 유가 흐름은 국제시세 변동에 따른 정유사의 공급가격 조정과 유통 마진 등이 복합적으로 작용한 ",
-    "url": "internal://opinet_price_2026-09-17",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국내유가",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "🇰🇷",
-    "score": 1,
-    "created_at": "2026-09-17 05:11",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_09_17.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-17T05:11:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-17 05:11",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "date": "2026-09-17",
-      "prices": {
-        "B027": {
-          "diff": 0.0,
-          "name": "휘발유",
-          "price": 1858.58
-        },
-        "B034": {
-          "diff": 0.58,
-          "name": "고급휘발유",
-          "price": 2317.35
-        },
-        "C004": {
-          "diff": -0.23,
-          "name": "실내등유",
-          "price": 1575.15
-        },
-        "D047": {
-          "diff": -0.34,
-          "name": "경유",
-          "price": 1843.49
-        },
-        "K015": {
-          "diff": -0.15,
-          "name": "LPG(부탄)",
-          "price": 1098.15
-        }
-      }
-    },
     "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
