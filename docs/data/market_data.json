@@ -1,25 +1,25 @@
 {
-  "updated_at": "2026-09-17 23:16",
+  "updated_at": "2026-09-17 23:21",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7621.9,
-      "change_pct": 0.48,
+      "price": 7625.8,
+      "change_pct": 0.53,
       "up": true
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 26378.89,
-      "change_pct": 1.53,
+      "price": 26374.12,
+      "change_pct": 1.51,
       "up": true
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 51698.01,
-      "change_pct": -0.76,
+      "price": 51773.17,
+      "change_pct": -0.61,
       "up": false
     },
     {
@@ -39,8 +39,8 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 113971.13,
-      "change_pct": 0.37,
+      "price": 114070.69,
+      "change_pct": 0.46,
       "up": true
     },
     {
@@ -89,7 +89,7 @@
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
       "price": 16.24,
-      "change_pct": -0.19,
+      "change_pct": -0.16,
       "up": false
     }
   ],
@@ -98,22 +98,22 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7621.9,
-        "change_pct": 0.48,
+        "price": 7625.8,
+        "change_pct": 0.53,
         "up": true
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 26378.89,
-        "change_pct": 1.53,
+        "price": 26374.12,
+        "change_pct": 1.51,
         "up": true
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 51698.01,
-        "change_pct": -0.76,
+        "price": 51773.17,
+        "change_pct": -0.61,
         "up": false
       }
     ],
@@ -137,8 +137,8 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 113971.13,
-        "change_pct": 0.37,
+        "price": 114070.69,
+        "change_pct": 0.46,
         "up": true
       },
       {
@@ -189,7 +189,7 @@
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
         "price": 16.24,
-        "change_pct": -0.19,
+        "change_pct": -0.16,
         "up": false
       }
     ]
