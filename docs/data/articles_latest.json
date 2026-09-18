@@ -1,5 +1,106 @@
 [
   {
+    "id": 198997,
+    "title_en": "한국, 서울·전국·주말 완연한 가을 하늘…일교차 10도 안팎",
+    "title_ko": "한국, 서울·전국·주말 완연한 가을 하늘…일교차 10도 안팎",
+    "summary_ko": "19일 이번 주말 한국의 날씨는 전국이 대체로 맑은 하늘을 보이는 가운데 큰 일교차가 나타나는 쾌적한 주말이 될 전망이다. 한국기상청에 따르면 이번 주말 동안 발효된 기상 특보는 없으며, 전국적으로 강수확률 60% 이상의 비 소식 없이 안정적인 기상 상태가 이어질 것으로 분석됐다.\n\n서울의 토요일인 19일은 오전에 구름이 많다가 오후 들어 맑아지겠으며, 최저기온 19도에서 최고기온 29도를 기록하겠다. 이어 일요일인 20일 서울은 오전과 오후 모두 맑은 날씨가 지속되는 가운데, 최저기온 18도, 최고기온 29도로 토요일과 비슷한 기",
+    "url": "internal://weather_한국_weekend20260919",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_한국_weekend20260919",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-19 05:23",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20260919.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-19T05:23:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-19 05:23",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
+    "id": 198996,
+    "title_en": "[국내유가] 휘발유 리터당 1858원…전국 평균 소폭 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1858원…전국 평균 소폭 하락",
+    "summary_ko": "한국석유공사 오피넷이 19일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1858원으로 집계됐다. 이는 전일 대비 0.09원 하락한 수치다.\n\n경유와 LPG 부탄 가격도 동반 하락세를 나타냈다. 오피넷에 따르면 경유는 리터당 1843.46원으로 전일 대비 0.44원 내렸으며, LPG 부탄은 리터당 1097.99원으로 전일보다 0.08원 하락했다.\n\n최근 석유제품 가격 변동과 관련해 국제유가 흐름과 정유사 공급가 산정 방식을 둘러싼 논쟁이 이어지고 있다. 특히 주유소업계와 정유사 간의 공급가격 책정 원인을 두고 다",
+    "url": "internal://opinet_price_2026-09-19",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-09-19 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_09_19.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-19T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-19 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-09-19",
+      "prices": {
+        "B027": {
+          "diff": -0.09,
+          "name": "휘발유",
+          "price": 1858.43
+        },
+        "B034": {
+          "diff": 1.14,
+          "name": "고급휘발유",
+          "price": 2321.41
+        },
+        "C004": {
+          "diff": 0.03,
+          "name": "실내등유",
+          "price": 1575.29
+        },
+        "D047": {
+          "diff": -0.44,
+          "name": "경유",
+          "price": 1843.46
+        },
+        "K015": {
+          "diff": -0.08,
+          "name": "LPG(부탄)",
+          "price": 1097.99
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
     "id": 198995,
     "title_en": "[데일리 다이제스트] 글로벌 통화정책 전환과 지정학적 리스크 확산",
     "title_ko": "[데일리 다이제스트] 글로벌 통화정책 전환과 지정학적 리스크 확산",
@@ -1797,124 +1898,6 @@
     "is_travel": false,
     "source_published_at": null,
     "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 193826,
-    "title_en": "연방준비제도, 2023년 이후 첫 금리 인상 단행… 글로벌 금융시장 파장",
-    "title_ko": "연방준비제도, 2023년 이후 첫 금리 인상 단행… 글로벌 금융시장 파장",
-    "summary_ko": "[업데이트]\n■ 9월 19일 00:21 — 미국 주요 은행들이 16일(현지시간) 연방준비제도의 2023년 이후 첫 금리 인상 발표 직후 프라임레이트를 일제히 인상했다. 금리 인상 발표 직후인 17일 나스닥 지수가 1.7퍼센트 상승했고 비트코인은 소폭 상승세를 보였으며, 관련 시장에서는 상장지수펀드(ETF) 동향과 함께 금리 인상이 디지털 자산 유동성에 미치는 파장을 분석하고 있다.\n────────\n\n연방준비제도(Fed)가 17일(현지시간) 인플레이션 압박에 대응하기 위해 2023년 이후 처음으로 기준금리 인상을 단행했다. 이번 결정",
-    "url": "internal://realtrend_Fed_First_Rate_Hike_Since_2023_2026091805",
-    "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "realtrend_Fed_First_Rate_Hike__crypto",
-    "region": "north_america",
-    "country": "미국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-18 05:20",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pixabay.com/get/geee30bb28c36964e6670008caa5c61d3660a2c5953cc467285d4ea7abdc1bee5893e3b9886aa2794f7fb20b6c31bea31ce12ecc398fad77051ae4129bb5c1897_640.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-18T05:20:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-18 05:20",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-09-19 00:22",
-        "note": "미국 주요 은행, 금리 인상 직후 프라임레이트 일제 인상"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "tags": [
-        "dia",
-        "dji",
-        "eugenio catone",
-        "ivv",
-        "iwm",
-        "ndx",
-        "qqq",
-        "rty",
-        "sp500",
-        "spx"
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 193733,
-    "title_en": "[국내유가] 휘발유 리터당 1859원…전일 대비 소폭 하락",
-    "title_ko": "[국내유가] 휘발유 리터당 1859원…전일 대비 소폭 하락",
-    "summary_ko": "한국석유공사 오피넷이 18일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1859원으로 집계됐다. 이는 직전 집계일과 비교해 소폭 내린 수준이다.\n\n이날 오피넷에 따르면 휘발유는 리터당 1858.53원으로 전일 대비 0.02원 하락했다. 경유는 리터당 1843.58원으로 전일보다 0.42원 내렸으며, LPG 부탄은 리터당 1098.19원으로 전일 대비 0.05원 하락했다. 모든 주요 유종이 하락세를 기록했다.\n\n최근 유가 변동을 둘러싸고 국제유가 흐름과 정유사 공급가 를 둘러싼 논쟁이 이어지고 있다. 특히 주유소",
-    "url": "internal://opinet_price_2026-09-18",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국내유가",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "🇰🇷",
-    "score": 1,
-    "created_at": "2026-09-18 05:11",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_09_18.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-18T05:11:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-18 05:11",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "date": "2026-09-18",
-      "prices": {
-        "B027": {
-          "diff": -0.02,
-          "name": "휘발유",
-          "price": 1858.53
-        },
-        "B034": {
-          "diff": 0.56,
-          "name": "고급휘발유",
-          "price": 2318.5
-        },
-        "C004": {
-          "diff": -0.14,
-          "name": "실내등유",
-          "price": 1575.13
-        },
-        "D047": {
-          "diff": -0.42,
-          "name": "경유",
-          "price": 1843.58
-        },
-        "K015": {
-          "diff": -0.05,
-          "name": "LPG(부탄)",
-          "price": 1098.19
-        }
-      }
-    },
     "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
