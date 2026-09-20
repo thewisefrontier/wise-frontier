@@ -1,5 +1,106 @@
 [
   {
+    "id": 207586,
+    "title_en": "서울, 맑은 날씨 속 낮 최고 30도",
+    "title_ko": "서울, 맑은 날씨 속 낮 최고 30도",
+    "summary_ko": "21일 한국의 날씨는 전국이 대체로 맑고 구름 많은 하늘을 보이는 가운데, 한국 기상청에 따르면 서울은 오전과 오후 모두 맑은 날씨가 이어질 것으로 예보됐다. 이날 서울의 최저기온은 18°C, 최고기온은 30°C를 기록하겠으며 오전 강수확률은 20%, 오후 강수확률은 0%, 최대풍속은 6km/h로 나타났다. 주요 지역별 상세 날씨를 보면 부산은 오전과 오후 모두 구름많음\n\n상태를 보이며 최저 19°C, 최고 28°C, 오전과 오후 강수확률 각 20%, 최대풍속 13km/h를 나타낸다. 대구는 오전과 오후 맑은 날씨 속 최저 15°C",
+    "url": "internal://weather_한국_today20260921",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_한국_today20260921",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-21 05:23",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20260921.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-21T05:23:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-21 05:23",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
+    "id": 207585,
+    "title_en": "[국내유가] 휘발유 리터당 1858원…정유사 공급가 논쟁 속 혼조세",
+    "title_ko": "[국내유가] 휘발유 리터당 1858원…정유사 공급가 논쟁 속 혼조세",
+    "summary_ko": "한국석유공사 오피넷이 21일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1858.42원으로 집계됐다. 이는 전일 판매가격 대비 0.08원 상승한 수치다.\n\n반면 경유와 LPG 등 다른 주요 유종은 하락세를 나타냈다. 경유는 리터당 1843.57원으로 전일보다 0.02원 내렸고, LPG 부탄은 리터당 1098.05원으로 전일 대비 0.06원 하락했다.\n\n이러한 유가 변동은 국제시세와 정유사 공급가격을 둘러싼 원가 부담 및 유통 구조에 대한 업계 내 논쟁이 이어지는 과정에서 발생했다. 주유소협회 측이 최근 기름값 ",
+    "url": "internal://opinet_price_2026-09-21",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-09-21 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_09_21.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-21T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-21 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-09-21",
+      "prices": {
+        "B027": {
+          "diff": 0.08,
+          "name": "휘발유",
+          "price": 1858.42
+        },
+        "B034": {
+          "diff": -0.01,
+          "name": "고급휘발유",
+          "price": 2322.79
+        },
+        "C004": {
+          "diff": -0.01,
+          "name": "실내등유",
+          "price": 1575.1
+        },
+        "D047": {
+          "diff": -0.02,
+          "name": "경유",
+          "price": 1843.57
+        },
+        "K015": {
+          "diff": -0.06,
+          "name": "LPG(부탄)",
+          "price": 1098.05
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
     "id": 207584,
     "title_en": "[데일리 다이제스트] 글로벌 지정학적 리스크 심화와 각국 보건·안보 위기 대응",
     "title_ko": "[데일리 다이제스트] 글로벌 지정학적 리스크 심화와 각국 보건·안보 위기 대응",
@@ -113,6 +214,43 @@
     "investment_idea_en": null
   },
   {
+    "id": 207467,
+    "title_en": "콩고민주공화국, 최악의 에볼라 확산 대응해 최전선 보건 의료진 백신 접종 본격 개시",
+    "title_ko": "콩고민주공화국, 최악의 에볼라 확산 대응해 최전선 보건 의료진 백신 접종 본격 개시",
+    "summary_ko": "콩고민주공화국 보건당국은 20일(현지시간) 이투리주의 중심지인 부니아에서 최전선 의료진을 대상으로 에볼라 백신 접종 캠페인을 시작했다. 이번 접종은 기존 자이어(Zaire) 균주 유행에서 효과가 입증된 에르베보(Ervebo) 백신을 활용하며, 사망자가 속출하는 부니아와 몽그왈루 지역을 겨냥해 진행됐다. 당국은 이번 사태의 원인인 부디부교(Bundibugyo) 바이러스에 대한 교차 보호 효과를 확인하고 의료진을 보호하기 위해 7만 회분의 백신을 확보해 배포 중이다.\n\n이투리주 로고 치료센터에서는 에볼라 환자 15명이 완치되어 퇴원했다",
+    "url": "internal://trend_에볼라_2026092104",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "trend_에볼라",
+    "region": "africa",
+    "country": "콩고민주공화국",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-21 04:13",
+    "countries": [
+      "콩고민주공화국",
+      "우간다"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_medical_workers_vaccination_hospital_interior.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-21T04:13:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-21 04:13",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
     "id": 207471,
     "title_en": "남아프리카공화국과 콩고민주공화국 등서 엠폭스 확산 지속",
     "title_ko": "남아프리카공화국과 콩고민주공화국 등서 엠폭스 확산 지속",
@@ -134,43 +272,6 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_mpox_virus_medical_laboratory_vaccine_vials.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-21T04:13:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-21 04:13",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 207467,
-    "title_en": "콩고민주공화국, 최악의 에볼라 확산 대응해 최전선 보건 의료진 백신 접종 본격 개시",
-    "title_ko": "콩고민주공화국, 최악의 에볼라 확산 대응해 최전선 보건 의료진 백신 접종 본격 개시",
-    "summary_ko": "콩고민주공화국 보건당국은 20일(현지시간) 이투리주의 중심지인 부니아에서 최전선 의료진을 대상으로 에볼라 백신 접종 캠페인을 시작했다. 이번 접종은 기존 자이어(Zaire) 균주 유행에서 효과가 입증된 에르베보(Ervebo) 백신을 활용하며, 사망자가 속출하는 부니아와 몽그왈루 지역을 겨냥해 진행됐다. 당국은 이번 사태의 원인인 부디부교(Bundibugyo) 바이러스에 대한 교차 보호 효과를 확인하고 의료진을 보호하기 위해 7만 회분의 백신을 확보해 배포 중이다.\n\n이투리주 로고 치료센터에서는 에볼라 환자 15명이 완치되어 퇴원했다",
-    "url": "internal://trend_에볼라_2026092104",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "trend_에볼라",
-    "region": "africa",
-    "country": "콩고민주공화국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-21 04:13",
-    "countries": [
-      "콩고민주공화국",
-      "우간다"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_medical_workers_vaccination_hospital_interior.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-21T04:13:00",
     "update_log": [
@@ -677,6 +778,42 @@
     "investment_idea_en": null
   },
   {
+    "id": 204539,
+    "title_en": "[복권] 美 파워볼 9월 19일 당첨번호 18, 30, 41, 45, 68+파워볼 10",
+    "title_ko": "[복권] 美 파워볼 9월 19일 당첨번호 18, 30, 41, 45, 68+파워볼 10",
+    "summary_ko": "미국 파워볼이 9월 19일(현지시간) 추첨한 당첨번호를 발표했다. 당첨번호는 18, 30, 41, 45, 68이며 파워볼 번호는 10이다. 이날 파워플레이 배수는 2배였다.\n\n이번 추첨의 추정 잭팟은 2억 7100만 달러(현금가치 1억 1520만 달러)였다. 잭팟 금액은 29년에 걸쳐 나눠 받는 연금 지급 기준 총액이고, 현금가치는 당첨자가 한 번에 일시불로 받을 경우 받는 금액이라 잭팟보다 작다. 이번 추첨에서 1등(잭팟) 당첨자는 나오지 않았다. 2등(5개 번호 일치)은 0명으로 각자 100만 달러를 받는다. 이 밖에 3등(파워",
+    "url": "internal://powerball_2026-09-19",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "복권당첨정보",
+    "region": "global",
+    "country": "미국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-20 12:16",
+    "countries": [
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/powerball_2026_09_19.png",
+    "view_count": 0,
+    "first_published_at": "2026-09-20T12:16:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-20 12:16",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "뉴스파이널",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
     "id": 204541,
     "title_en": "유럽, 31도 불볕더위 속 동유럽 중심 비 소식",
     "title_ko": "유럽, 31도 불볕더위 속 동유럽 중심 비 소식",
@@ -715,42 +852,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 204539,
-    "title_en": "[복권] 美 파워볼 9월 19일 당첨번호 18, 30, 41, 45, 68+파워볼 10",
-    "title_ko": "[복권] 美 파워볼 9월 19일 당첨번호 18, 30, 41, 45, 68+파워볼 10",
-    "summary_ko": "미국 파워볼이 9월 19일(현지시간) 추첨한 당첨번호를 발표했다. 당첨번호는 18, 30, 41, 45, 68이며 파워볼 번호는 10이다. 이날 파워플레이 배수는 2배였다.\n\n이번 추첨의 추정 잭팟은 2억 7100만 달러(현금가치 1억 1520만 달러)였다. 잭팟 금액은 29년에 걸쳐 나눠 받는 연금 지급 기준 총액이고, 현금가치는 당첨자가 한 번에 일시불로 받을 경우 받는 금액이라 잭팟보다 작다. 이번 추첨에서 1등(잭팟) 당첨자는 나오지 않았다. 2등(5개 번호 일치)은 0명으로 각자 100만 달러를 받는다. 이 밖에 3등(파워",
-    "url": "internal://powerball_2026-09-19",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "복권당첨정보",
-    "region": "global",
-    "country": "미국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-20 12:16",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/powerball_2026_09_19.png",
-    "view_count": 0,
-    "first_published_at": "2026-09-20T12:16:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-20 12:16",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "뉴스파이널",
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null
@@ -1140,136 +1241,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 203429,
-    "title_en": "서울, 맑은 날씨 속 30도 안팎 더위",
-    "title_ko": "서울, 맑은 날씨 속 30도 안팎 더위",
-    "summary_ko": "20일 기준 다음 주 한국의 날씨는 전국적으로 맑고 구름 많은 날씨가 이어지는 가운데 낮과 밤의 기온 차가 크게 나타날 것으로 전망된다. 한국 기상청에 따르면 이번 예보 기간 동안 서울을 비롯한 주요 지역의 기온은 최고 30도까지 오르며 완연한 초가을 날씨를 보일 것으로 예상된다.\n\n서울의 요일별 상세 날씨를 살펴보면, 월요일인 첫날은 맑은 하늘 아래 최고기온 30도, 최저기온 18도를 기록하며 한 주 가운데 가장 높은 기온을 나타낸다. 이어지는 화요일과 수요일 역시 맑은 날씨가 지속되며 최고기온 29도, 최저기온 18도의 기온 분",
-    "url": "internal://weather_한국_weekly20260920",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_한국_weekly20260920",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-20 05:22",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20260920.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-20T05:22:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-20 05:22",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 203428,
-    "title_en": "[국내유가] 휘발유 리터당 1858원…전국 평균 소폭 하락",
-    "title_ko": "[국내유가] 휘발유 리터당 1858원…전국 평균 소폭 하락",
-    "summary_ko": "한국석유공사 오피넷이 20일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1858원으로 집계됐다.\n\n오피넷에 따르면 이날 경유 평균 판매가격은 리터당 1843.53원, LPG(부탄)는 리터당 1097.98원으로 각각 전일 대비 하락세를 기록했다. 경유는 전일보다 0.23원 내렸고, LPG는 0.17원 하락했다. 휘발유 역시 전일 대비 0.01원 내리며 전 유종이 하향 조정됐다.\n\n이번 유가 하락은 정유사의 공급가격 조정 움직임과 국제유가 흐름이 맞물린 결과로 분석된다. 주유소협회 등 관련 업계에서는 최근 기름값 ",
-    "url": "internal://opinet_price_2026-09-20",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국내유가",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "🇰🇷",
-    "score": 1,
-    "created_at": "2026-09-20 05:11",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_09_20.jpg",
-    "view_count": 1,
-    "first_published_at": "2026-09-20T05:11:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-20 05:11",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "date": "2026-09-20",
-      "prices": {
-        "B027": {
-          "diff": -0.01,
-          "name": "휘발유",
-          "price": 1858.4
-        },
-        "B034": {
-          "diff": 0.22,
-          "name": "고급휘발유",
-          "price": 2322.31
-        },
-        "C004": {
-          "diff": -0.1,
-          "name": "실내등유",
-          "price": 1575.08
-        },
-        "D047": {
-          "diff": -0.23,
-          "name": "경유",
-          "price": 1843.53
-        },
-        "K015": {
-          "diff": -0.17,
-          "name": "LPG(부탄)",
-          "price": 1097.98
-        }
-      }
-    },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 203427,
-    "title_en": "[데일리 다이제스트] 글로벌 에너지 시장 변동성 확대와 세계 각국의 안보·보건 위기",
-    "title_ko": "[데일리 다이제스트] 글로벌 에너지 시장 변동성 확대와 세계 각국의 안보·보건 위기",
-    "summary_ko": "[국제 유가 하락과 주요국 에너지·물류 시설의 안보 불안 심화]\n- 뉴욕상업거래소에서 18일(현지시간) WTI 원유 선물은 수요 둔화 전망의 영향으로 전일 대비 5.87% 하락한 배럴당 95.44달러에 거래를 마쳤으며, 브렌트유 역시 6.57% 내린 배럴당 98.74달러로 마감됐다. - 사우디아라비아 수도 리야드에 위치한 킹 칼리드 국제공항 인근 아람코 소유의 연료탱크에서 19일(현지시간) 대형 화재가 발생해 검은 연기가 솟구치는 등 에너지 시설을 둘러싼 불안이 고조됐다. - 나이지리아의 단고테 정유소는 19일(현지시간) 레키 정유",
-    "url": "internal://digest_20260920",
-    "source": "NewsFinal",
-    "category": "다이제스트",
-    "subcategory": "digest_20260920",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 37,
-    "created_at": "2026-09-20 05:01",
-    "countries": null,
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/digest_20260920.jpg",
-    "view_count": 2,
-    "first_published_at": null,
-    "update_log": [],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null
