@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-20 12:40",
+  "updated_at": "2026-09-20 12:46",
   "indices": [
     {
       "name": "S&P 500",
@@ -20,6 +20,13 @@
       "symbol": "^DJI",
       "price": 51682.64,
       "change_pct": 0.43,
+      "up": true
+    },
+    {
+      "name": "코스피",
+      "symbol": "^KS11",
+      "price": 6894.23,
+      "change_pct": 2.62,
       "up": true
     },
     {
@@ -111,6 +118,13 @@
       }
     ],
     "kr": [
+      {
+        "name": "코스피",
+        "symbol": "^KS11",
+        "price": 6894.23,
+        "change_pct": 2.62,
+        "up": true
+      },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
