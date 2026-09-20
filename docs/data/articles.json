@@ -1,5 +1,48 @@
 [
   {
+    "id": 205304,
+    "title_en": "중남미, 최고 34도 찜통더위…곳곳 비 구름",
+    "title_ko": "중남미, 최고 34도 찜통더위…곳곳 비 구름",
+    "summary_ko": "20일(현지시간) 예보된 중남미 주요국 날씨는 최저기온 9°C에서 최고기온 34°C의 넓은 기온 범위를 나타낸다. 지역별로 브라질은 주간 최고 34°C, 최저 19°C를 기록하며 가장 높은 기온 분포를 보이는 가운데 비 소식이 함께 예보되었다. 칠레는 주간 최저 9°C로 이번 주간 예보된 지역 중 가장 낮은 최저기온을 기록하며 최고 23°C의 기온 분포와 함께 비가 내릴 것으로 예상된다.\n\n콜롬비아는 주간 최고 24°C, 최저 11°C의 기온을 보이며 비 소식이 포함되었고, 페루는 주간 최고 24°C, 최저 18°C의 기온 분포를 ",
+    "url": "internal://weather_group_중남미_weekly20260920",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_중남미_weekly20260920",
+    "region": "latin_america",
+    "country": "중남미",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-20 17:13",
+    "countries": [
+      "브라질",
+      "멕시코",
+      "아르헨티나",
+      "칠레",
+      "콜롬비아",
+      "페루",
+      "쿠바",
+      "도미니카공화국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_brazil_20260920.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-20T17:13:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-20 17:13",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
     "id": 205238,
     "title_en": "니에메이 쿠데타 이후 고립 심화된 티아니, 반대파 국적 박탈로 통제 강화",
     "title_ko": "니에메이 쿠데타 이후 고립 심화된 티아니, 반대파 국적 박탈로 통제 강화",
@@ -1437,42 +1480,6 @@
     "investment_idea_en": null
   },
   {
-    "id": 200800,
-    "title_en": "김승원 법무장관 후보자, 지명 20일 만에 자진 사퇴",
-    "title_ko": "김승원 법무장관 후보자, 지명 20일 만에 자진 사퇴",
-    "summary_ko": "김승원 법무부 장관 후보자가 19일(현지시간) 후보자 지명 20일 만에 전격 자진 사퇴했다. 김 후보자는 이날 국회에서 기자회견을 열고 깊은 고민 끝에 법무부 장관 후보자직을 내려놓기로 결심했다고 밝혔다.\n\n김 후보자는 국민 눈높이에 미치지 못했음을 무겁게 받아들이며 자신의 부족함을 깊이 성찰하겠다고 말했다. 이어 이재명 대통령이 전날 기자회견에서 자신의 임명 문제에 대해 국민의 눈높이 등을 고려해 신중하게 결정하겠다고 밝힌 하루 만에 이러한 결정을 내렸다고 설명했다.\n\n그는 후보자로 지명해 준 대통령에게 감사드리며 기대에 부응하지",
-    "url": "internal://cluster_20260919_a9c0869d",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "cluster_20260919_a9c0869d",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-19 14:27",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_kim_seung_won.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-19T14:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-19 14:27",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: Wikimedia Commons",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": ""
-  },
-  {
     "id": 200801,
     "title_en": "체코 정부, 교사 평균 임금 7만 5000체코코루나 공언…예산 갈등 지속",
     "title_ko": "체코 정부, 교사 평균 임금 7만 5000체코코루나 공언…예산 갈등 지속",
@@ -1504,6 +1511,42 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "continuation_of_id": null,
+    "summary_3lines_en": "",
+    "investment_idea_en": ""
+  },
+  {
+    "id": 200800,
+    "title_en": "김승원 법무장관 후보자, 지명 20일 만에 자진 사퇴",
+    "title_ko": "김승원 법무장관 후보자, 지명 20일 만에 자진 사퇴",
+    "summary_ko": "김승원 법무부 장관 후보자가 19일(현지시간) 후보자 지명 20일 만에 전격 자진 사퇴했다. 김 후보자는 이날 국회에서 기자회견을 열고 깊은 고민 끝에 법무부 장관 후보자직을 내려놓기로 결심했다고 밝혔다.\n\n김 후보자는 국민 눈높이에 미치지 못했음을 무겁게 받아들이며 자신의 부족함을 깊이 성찰하겠다고 말했다. 이어 이재명 대통령이 전날 기자회견에서 자신의 임명 문제에 대해 국민의 눈높이 등을 고려해 신중하게 결정하겠다고 밝힌 하루 만에 이러한 결정을 내렸다고 설명했다.\n\n그는 후보자로 지명해 준 대통령에게 감사드리며 기대에 부응하지",
+    "url": "internal://cluster_20260919_a9c0869d",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "cluster_20260919_a9c0869d",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-19 14:27",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_kim_seung_won.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-19T14:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-19 14:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "이미지 출처: Wikimedia Commons",
     "continuation_of_id": null,
     "summary_3lines_en": "",
     "investment_idea_en": ""
@@ -9599,24 +9642,22 @@
     "investment_idea_en": null
   },
   {
-    "id": 177549,
-    "title_en": "[종목 동향] 마이크로소프트 주가 1.97% 상승…AI 인프라 확장 가속화",
-    "title_ko": "[종목 동향] 마이크로소프트 주가 1.97% 상승…AI 인프라 확장 가속화",
-    "summary_ko": "◆ 주가 동향\n나스닥에서 마이크로소프트 주가는 14일(현지시간) 전일 대비 1.97% 상승한 505.41달러에 장을 마감했다. 이번 상승세는 마이크로소프트가 차세대 데이터센터를 위한 맞춤형 AI 칩 '마이아(Maia) 200'의 성능 개선안을 발표하며 클라우드 인프라 효율성을 극대화하겠다는 전략을 밝힌 데 따른 결과다.\n\n최근 월가 투자은행들은 마이크로소프트의 클라우드 서비스인 애저(Azure)의 매출 성장세가 인공지능 수요와 맞물려 견고한 흐름을 유지하고 있다고 평가했다. 특히 기업용 소프트웨어에 통합된 코파일럿(Copilot)의",
-    "url": "internal://stock_news_2026-09-14",
+    "id": 177550,
+    "title_en": "[가상자산 동향] 솔라나 2.36% 상승…네트워크 활성도 회복세",
+    "title_ko": "[가상자산 동향] 솔라나 2.36% 상승…네트워크 활성도 회복세",
+    "summary_ko": "◆ 가격 동향\n\n15일 06:27(한국시간) 야후 파이낸스에 따르면 솔라나 가격은 전일 대비 2.36% 상승한 103.69달러를 기록했다. 최근 솔라나 생태계 내 탈중앙화 거래소의 거래량이 증가하며 네트워크 활성도가 개선된 점이 가격 상승을 견인했다.\n\n주요 기관 투자자들이 솔라나 기반의 스테이킹 상품에 자금을 재배치하면서 매수세가 유입됐다. 또한 미국 연방준비제도의 금리 인하 가능성에 따른 거시경제적 불확실성 완화가 위험 자산 전반에 긍정적인 영향을 미쳤다.\n\n한편 비트코인은 7만8896.79달러(+2.09%), 이더리움은 255",
+    "url": "internal://crypto_news_2026-09-15",
     "source": "NewsFinal",
     "category": "금융",
-    "subcategory": "종목동향",
+    "subcategory": "가상자산동향_crypto",
     "region": "global",
-    "country": "미국",
-    "country_flag": "🇺🇸",
+    "country": "글로벌",
+    "country_flag": "🌐",
     "score": 1,
     "created_at": "2026-09-15 06:27",
-    "countries": [
-      "미국"
-    ],
+    "countries": [],
     "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/stock_news_2026_09_14.jpg",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_09_15.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-15T06:27:00",
     "update_log": [
@@ -9635,22 +9676,24 @@
     "investment_idea_en": null
   },
   {
-    "id": 177550,
-    "title_en": "[가상자산 동향] 솔라나 2.36% 상승…네트워크 활성도 회복세",
-    "title_ko": "[가상자산 동향] 솔라나 2.36% 상승…네트워크 활성도 회복세",
-    "summary_ko": "◆ 가격 동향\n\n15일 06:27(한국시간) 야후 파이낸스에 따르면 솔라나 가격은 전일 대비 2.36% 상승한 103.69달러를 기록했다. 최근 솔라나 생태계 내 탈중앙화 거래소의 거래량이 증가하며 네트워크 활성도가 개선된 점이 가격 상승을 견인했다.\n\n주요 기관 투자자들이 솔라나 기반의 스테이킹 상품에 자금을 재배치하면서 매수세가 유입됐다. 또한 미국 연방준비제도의 금리 인하 가능성에 따른 거시경제적 불확실성 완화가 위험 자산 전반에 긍정적인 영향을 미쳤다.\n\n한편 비트코인은 7만8896.79달러(+2.09%), 이더리움은 255",
-    "url": "internal://crypto_news_2026-09-15",
+    "id": 177549,
+    "title_en": "[종목 동향] 마이크로소프트 주가 1.97% 상승…AI 인프라 확장 가속화",
+    "title_ko": "[종목 동향] 마이크로소프트 주가 1.97% 상승…AI 인프라 확장 가속화",
+    "summary_ko": "◆ 주가 동향\n나스닥에서 마이크로소프트 주가는 14일(현지시간) 전일 대비 1.97% 상승한 505.41달러에 장을 마감했다. 이번 상승세는 마이크로소프트가 차세대 데이터센터를 위한 맞춤형 AI 칩 '마이아(Maia) 200'의 성능 개선안을 발표하며 클라우드 인프라 효율성을 극대화하겠다는 전략을 밝힌 데 따른 결과다.\n\n최근 월가 투자은행들은 마이크로소프트의 클라우드 서비스인 애저(Azure)의 매출 성장세가 인공지능 수요와 맞물려 견고한 흐름을 유지하고 있다고 평가했다. 특히 기업용 소프트웨어에 통합된 코파일럿(Copilot)의",
+    "url": "internal://stock_news_2026-09-14",
     "source": "NewsFinal",
     "category": "금융",
-    "subcategory": "가상자산동향_crypto",
+    "subcategory": "종목동향",
     "region": "global",
-    "country": "글로벌",
-    "country_flag": "🌐",
+    "country": "미국",
+    "country_flag": "🇺🇸",
     "score": 1,
     "created_at": "2026-09-15 06:27",
-    "countries": [],
+    "countries": [
+      "미국"
+    ],
     "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_09_15.jpg",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/stock_news_2026_09_14.jpg",
     "view_count": 0,
     "first_published_at": "2026-09-15T06:27:00",
     "update_log": [
@@ -12007,6 +12050,42 @@
     "investment_idea_en": null
   },
   {
+    "id": 168851,
+    "title_en": "[복권] 美 파워볼 9월 12일 당첨번호 14, 16, 23, 58, 69+파워볼 3",
+    "title_ko": "[복권] 美 파워볼 9월 12일 당첨번호 14, 16, 23, 58, 69+파워볼 3",
+    "summary_ko": "미국 파워볼이 9월 12일(현지시간) 추첨한 당첨번호를 발표했다. 당첨번호는 14, 16, 23, 58, 69이며 파워볼 번호는 3이다. 이날 파워플레이 배수는 2배였다.\n\n이번 추첨의 추정 잭팟은 2억 700만 달러(현금가치 8940만 달러)였다. 잭팟 금액은 29년에 걸쳐 나눠 받는 연금 지급 기준 총액이고, 현금가치는 당첨자가 한 번에 일시불로 받을 경우 받는 금액이라 잭팟보다 작다. 이번 추첨에서 1등(잭팟) 당첨자는 나오지 않았다. 2등(5개 번호 일치)은 0명으로 각자 100만 달러를 받는다. 이 밖에 3등(파워볼 포함 ",
+    "url": "internal://powerball_2026-09-12",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "복권당첨정보",
+    "region": "global",
+    "country": "미국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-13 12:16",
+    "countries": [
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/powerball_2026_09_12.png",
+    "view_count": 0,
+    "first_published_at": "2026-09-13T12:16:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-13 12:16",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "뉴스파이널",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null
+  },
+  {
     "id": 168852,
     "title_en": "유럽, 35도 불볕더위…독일·폴란드 비",
     "title_ko": "유럽, 35도 불볕더위…독일·폴란드 비",
@@ -12045,42 +12124,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null
-  },
-  {
-    "id": 168851,
-    "title_en": "[복권] 美 파워볼 9월 12일 당첨번호 14, 16, 23, 58, 69+파워볼 3",
-    "title_ko": "[복권] 美 파워볼 9월 12일 당첨번호 14, 16, 23, 58, 69+파워볼 3",
-    "summary_ko": "미국 파워볼이 9월 12일(현지시간) 추첨한 당첨번호를 발표했다. 당첨번호는 14, 16, 23, 58, 69이며 파워볼 번호는 3이다. 이날 파워플레이 배수는 2배였다.\n\n이번 추첨의 추정 잭팟은 2억 700만 달러(현금가치 8940만 달러)였다. 잭팟 금액은 29년에 걸쳐 나눠 받는 연금 지급 기준 총액이고, 현금가치는 당첨자가 한 번에 일시불로 받을 경우 받는 금액이라 잭팟보다 작다. 이번 추첨에서 1등(잭팟) 당첨자는 나오지 않았다. 2등(5개 번호 일치)은 0명으로 각자 100만 달러를 받는다. 이 밖에 3등(파워볼 포함 ",
-    "url": "internal://powerball_2026-09-12",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "복권당첨정보",
-    "region": "global",
-    "country": "미국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-13 12:16",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/powerball_2026_09_12.png",
-    "view_count": 0,
-    "first_published_at": "2026-09-13T12:16:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-13 12:16",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "뉴스파이널",
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null
