@@ -73,6 +73,8 @@ JST = ZoneInfo("Asia/Tokyo")  # KST와 시차는 없지만(둘 다 UTC+9) 명확
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 
+JP_PUBLISH_AFTER = (15, 45)  # (시, 분) JST — 이 시각 이후에만 발행
+
 NIKKEI_SYMBOL = "^N225"
 NIKKEI_AV_PROXY = "EWJ"  # frontier_markets_writer.MAJOR_INDEX_AV_PROXY["^N225"]와 동일
 
@@ -177,7 +179,15 @@ def main():
         print("  [SKIP] SUPABASE 환경변수 없음")
         return
 
-    trade_date = now_jst().date()
+    now = now_jst()
+    trade_date = now.date()
+
+    # 도쿄증권거래소 정규장은 2024-11부터 15:30 JST 마감 — 마감 직후엔 종가가
+    # 아직 확정 전일 수 있어 여유 15분을 두고 그 이후에만 발행한다(장중 호출 시
+    # 야후 시세가 "현재가"라 마감 전 수치가 종가처럼 기사화되는 사고 방지).
+    if (now.hour, now.minute) < JP_PUBLISH_AFTER:
+        print(f"  → 아직 마감 전/직후({now.strftime('%H:%M')} JST < 15:45) → 스킵")
+        return
 
     if trade_date.weekday() >= 5:
         print(f"  → {trade_date}는 주말 → 스킵")
