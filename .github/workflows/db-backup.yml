@@ -65,10 +65,10 @@ jobs:
           rm -f roundtrip.enc
 
 
-      # 2차 사본: 구글 드라이브(최근 7일). R2와 저장소 제공사가 달라 한쪽이 막혀도 남는다.
+      # 2차 사본: 구글 드라이브(최근 30일, 유료 용량이라 R2와 같은 보관 기간). R2와 저장소 제공사가 달라 한쪽이 막혀도 남는다.
       # 시크릿 RCLONE_DRIVE_TOKEN(rclone authorize 출력 JSON) 또는 RCLONE_CONFIG(rclone.conf 전체, remote 이름 gdrive)가 없으면 조용히 건너뛴다.
       # 실패해도 백업 자체는 R2에 이미 있으므로 실행을 실패시키지 않는다(단계만 빨갛게 표시).
-      - name: 구글 드라이브 사본 (최근 7일)
+      - name: 구글 드라이브 사본 (최근 30일)
         continue-on-error: true
         env:
           RCLONE_CONFIG_DATA: ${{ secrets.RCLONE_CONFIG }}
@@ -78,11 +78,29 @@ jobs:
           sudo apt-get install -y -qq rclone
           mkdir -p ~/.config/rclone
           if [ -n "$RCLONE_CONFIG_DATA" ]; then printf '%s' "$RCLONE_CONFIG_DATA" > ~/.config/rclone/rclone.conf
-          else printf '[gdrive]\ntype = drive\nscope = drive.file\ntoken = %s\n' "$RCLONE_DRIVE_TOKEN" > ~/.config/rclone/rclone.conf; fi
+          else
+            # rclone authorize 출력은 두 가지 형태: 토큰 JSON({...}) 또는 base64 묶음(client_id/secret/token). 둘 다 받는다.
+            python3 - <<'PY'
+          import os, json, base64
+          v = os.environ["RCLONE_DRIVE_TOKEN"].strip()
+          conf = ["[gdrive]", "type = drive", "scope = drive.file"]
+          if v.startswith("{"):
+              tok = v
+          else:
+              b = v + "=" * (-len(v) % 4)
+              try: d = json.loads(base64.urlsafe_b64decode(b))
+              except Exception: d = json.loads(base64.b64decode(b))
+              tok = d["token"] if isinstance(d["token"], str) else json.dumps(d["token"])
+              for k in ("client_id", "client_secret"):
+                  if d.get(k): conf.append(f"{k} = {d[k]}")
+          conf.append("token = " + tok)
+          open(os.path.expanduser("~/.config/rclone/rclone.conf"), "w").write("\n".join(conf) + "\n")
+          PY
+          fi
           f=$(ls newsfinal-*.dump.enc)
           rclone copyto "$f" "gdrive:newsfinal-backups/$f"
           rclone lsl "gdrive:newsfinal-backups/$f"   # copyto가 업로드 후 해시를 대조한다
-          rclone delete gdrive:newsfinal-backups --min-age 7d
+          rclone delete gdrive:newsfinal-backups --min-age 30d
           rclone size gdrive:newsfinal-backups
 
       # R2 업로드 뒤에 검증한다: 이 단계가 잘못돼도 백업 자체는 이미 저장돼 있다.
