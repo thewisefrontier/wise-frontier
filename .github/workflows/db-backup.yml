@@ -65,6 +65,24 @@ jobs:
           rm -f roundtrip.enc
 
 
+      # 2차 사본: 구글 드라이브(최근 7일). R2와 저장소 제공사가 달라 한쪽이 막혀도 남는다.
+      # 시크릿 RCLONE_CONFIG(rclone.conf 내용, remote 이름 gdrive)가 없으면 조용히 건너뛴다.
+      # 실패해도 백업 자체는 R2에 이미 있으므로 실행을 실패시키지 않는다(단계만 빨갛게 표시).
+      - name: 구글 드라이브 사본 (최근 7일)
+        continue-on-error: true
+        env:
+          RCLONE_CONFIG_DATA: ${{ secrets.RCLONE_CONFIG }}
+        run: |
+          if [ -z "$RCLONE_CONFIG_DATA" ]; then echo "RCLONE_CONFIG 시크릿 없음 - 드라이브 복사 건너뜀"; exit 0; fi
+          sudo apt-get install -y -qq rclone
+          mkdir -p ~/.config/rclone
+          printf '%s' "$RCLONE_CONFIG_DATA" > ~/.config/rclone/rclone.conf
+          f=$(ls newsfinal-*.dump.enc)
+          rclone copyto "$f" "gdrive:newsfinal-backups/$f"
+          rclone lsl "gdrive:newsfinal-backups/$f"   # copyto가 업로드 후 해시를 대조한다
+          rclone delete gdrive:newsfinal-backups --min-age 7d
+          rclone size gdrive:newsfinal-backups
+
       # R2 업로드 뒤에 검증한다: 이 단계가 잘못돼도 백업 자체는 이미 저장돼 있다.
       # 복호화 → 아카이브 목차 읽기 → 핵심 테이블 데이터 존재 확인. 깨진/빈 덤프면 실행이 빨갛게 실패한다.
       - name: 복구 가능 검증 (복호화 + 목차 확인)
