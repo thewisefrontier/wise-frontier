@@ -189,8 +189,12 @@ def call_gemini(prompt, max_tokens=3000, start_tier=4):
 # 사본이라 그 뒤 추가된 패턴(화자 없는 전망/분석형 마무리 문장 7종,
 # 2026-07-28)과 합쇼체(-습니다) 감지·자동변환을 못 받고 있었다.
 try:
-    from style_guard import has_column_style, has_polite_ending, to_plain_style, _pub_day_label, ensure_paragraphs
+    from style_guard import has_column_style, has_polite_ending, to_plain_style, _pub_day_label, ensure_paragraphs, keep_first_local_time
 except Exception:
+    def keep_first_local_time(text: str) -> str:
+        i = (text or "").find("(현지시간)")
+        return text if i < 0 else text[:i + 6] + text[i + 6:].replace("(현지시간)", "")
+
     def ensure_paragraphs(text: str, target: int = 3, max_sentences_per_para: int = 4) -> str:
         return text
     def _pub_day_label(raw) -> str:
@@ -340,6 +344,29 @@ def build_digest_prompt(articles):
 본문: (다이제스트 본문)"""
 
 
+_HEADER_RE = re.compile(r"^\[[^\]\n]{2,60}\]$")
+
+
+def format_digest_body(body: str) -> str:
+    """다이제스트는 "[섹션]" + "- 불릿" 구조라 문장 재분할(ensure_paragraphs)을 쓰면 안 된다 —
+    불릿들이 한 줄로 이어붙고 섹션이 뭉개진다(2026-09-22 id=212962, "문단 정리도 제대로
+    안 되고 있어"). 대신 구조만 정규화: 인라인으로 붙은 불릿을 줄로 분리하고, 섹션 제목
+    앞에는 빈 줄, 같은 섹션의 불릿 사이에는 빈 줄 없이(프론트가 빈 줄 단위로 블록을 나눠
+    <ul>을 끊기 때문)."""
+    if not body:
+        return body
+    body = re.sub(r"(?<=[.)다]) - (?=\S)", "\n- ", body)          # "...다. - 다음 불릿" → 줄바꿈
+    lines = [l.rstrip() for l in body.strip().split("\n")]
+    out = []
+    for l in lines:
+        if not l.strip():
+            continue
+        if _HEADER_RE.match(l.strip()) and out:
+            out.append("")
+        out.append(l.strip())
+    return "\n".join(out)
+
+
 def parse_title_and_body(text):
     title = ""
     body = text
@@ -480,14 +507,17 @@ def run():
     title, body = parse_title_and_body(content)
     if not title:
         title = "[데일리 다이제스트] 주요 동향"
-    body = ensure_paragraphs(body)
-
-    image_url = fetch_article_image(title, body or content)
+    raw_body = body  # 날짜 환각 검사는 "(현지시간)"이 전부 남은 원문으로(각 날짜가 검사 근거)
 
     # 날짜 환각 판정 — 원기사에 근거 없는 "N일(현지시간)"이면 미발행
     _dg_bad, _dg_reason = check_date_hallucination(
-        body or content, _digest_sources(articles), base_date=now_kst().date()
+        raw_body or content, _digest_sources(articles), base_date=now_kst().date()
     )
+
+    # 표시용 정리: "(현지시간)"은 첫 표기만, 섹션·불릿 구조 정규화(문장 재분할 금지)
+    body = format_digest_body(keep_first_local_time(body))
+
+    image_url = fetch_article_image(title, body or content)
     if _dg_bad:
         print(f"⛔ 날짜 환각 의심 → 미발행: {_dg_reason}")
 

@@ -227,6 +227,19 @@ def _regroup_sentences(sentences: list, target: int, max_sentences_per_para: int
     return "\n\n".join(" ".join(g) for g in groups)
 
 
+def keep_first_local_time(text: str) -> str:
+    """"(현지시간)"은 기사 전체에서 첫 표기에만 남기고 나머지는 지운다(사이트 공통 규칙,
+    2026-09-22 다이제스트에 6~12회씩 반복 표기된 사고로 결정론적 안전장치 신설 — 프롬프트
+    지시만으로는 그동안 반복 재발했다). 날짜 환각 검사(date_guard)는 각 "N일(현지시간)"을
+    근거로 하므로 반드시 이 함수 적용 전 원문으로 먼저 돌릴 것."""
+    marker = "(현지시간)"
+    i = (text or "").find(marker)
+    if i < 0:
+        return text
+    cut = i + len(marker)
+    return text[:cut] + text[cut:].replace(marker, "")
+
+
 def ensure_paragraphs(text: str, target: int = 3, max_sentences_per_para: int = 3) -> str:
     """Gemini가 프롬프트의 '문단으로 나누어 작성' 지시를 어기고
     \\n\\n 없이 한 덩어리로 응답하는 경우가 있어(강제성 없는 지시라 준수율이
