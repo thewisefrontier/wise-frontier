@@ -14,7 +14,10 @@ scripts/explainer_writer.py
   2. 작성: Gemini는 그 자료에 있는 사실만으로 쓴다(프롬프트는 DB prompts.explainer_rules).
   3. 검증: 본문의 모든 수치가 자료에 있는지 결정론적으로 대조(숫자 오류 방지 —
      "지연은 괜찮지만 숫자가 틀리면 절대 안돼"), 고유명사 날조·문체·단일주제 검사는
-     gemini_writer.call_gemini_article()/verify_single_topic() 재사용.
+     자체 off_topic() 사용. call_gemini_article()·verify_single_topic()은 쓰지 않는다 — 앞의 것은 스트레이트
+     뉴스용 문체·고유명사 검사가 해설체("~로 풀이된다")를 논평으로 오탐하고 기본 lite 모델(tier 4)이라 품질도
+     낮으며, 뒤의 것은 max_tokens=5라 lite 모델이 항상 MAX_TOKENS로 실패해 "판정 불가→통과"로 사실상 꺼져
+     있다(2026-09-22 로컬 시험에서 확인, 20토큰 이상이면 정상 판정).
   4. 저장: is_published=False, subcategory='이슈파이널' → 어드민 "📝 이슈 파이널 검토"에서 승인.
 
 하루 상한(DAILY_CAP)과 기사당 1회 작성(url=internal://explainer_{원기사id})으로 물량을 묶는다.
@@ -29,9 +32,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from gemini_writer import (now_kst, call_gemini_article, verify_single_topic, load_prompt)
+from gemini_writer import (now_kst, load_prompt, _gemini_client)
 from gemini_summarizer import fetch_background_context
-from style_guard import ensure_paragraphs
+from style_guard import ensure_paragraphs, has_polite_ending
 from article_store import insert_final_article, sb_headers, sb_url
 
 try:
@@ -94,6 +97,21 @@ def unsupported_claims(body: str, facts: str) -> str:
     return "" if not resp or resp.upper().startswith("OK") else resp[:600]
 
 
+def off_topic(title: str, body: str) -> str:
+    """제목 사안과 무관한 문장(스포츠 결과·다른 사건 등)을 골라낸다. trend_ 기사 본문에 무관한 소식이 섞여 있어
+    해설이 그걸 따라 쓰는 경우(2026-09-22 시험: 아이티 갱단 해설 끝에 축구 클럽 소식)를 막는다.
+    max_tokens는 넉넉히(lite 모델은 생각 토큰까지 출력 한도에 포함돼 작으면 MAX_TOKENS로 실패). 판정 실패 시 ""(통과)."""
+    prompt = ("아래 해설 기사에서 제목이 가리키는 핵심 사안과 직접 관련 없는 소식(예: 스포츠 경기 결과, 다른 나라·다른 사건)이 "
+              "담긴 문장만 그대로 나열하세요. 같은 사안의 배경·영향·전망·국제사회 대응은 관련 있는 내용입니다. "
+              "관련 없는 문장이 없으면 정확히 OK 한 단어만 출력하세요.\n\n"
+              f"제목: {title}\n본문:\n{body[:4000]}")
+    try:
+        resp = (_gemini_client.call(prompt, max_tokens=800, start_tier=4, temperature=0.2, timeout=(10, 60)) or "").strip()
+    except Exception:
+        return ""
+    return "" if not resp or resp.upper().startswith("OK") else resp[:500]
+
+
 def copied_ratio(body: str, base_body: str) -> float:
     """본문 문장 중 원 기사에 그대로 들어있는 비율. 해설은 원 기사를 재구성해야 하는데
     (2026-09-22 시험 작성에서 Gemini가 원 기사를 거의 그대로 되돌려줌) 이 검사가 없으면
@@ -146,14 +164,23 @@ def related_archive(base: dict) -> list:
     if not toks:
         return []
     since = (now_kst() - timedelta(days=ARCHIVE_DAYS)).strftime("%Y-%m-%d %H:%M")
-    res = requests.get(sb_url(), headers=sb_headers(), params={
+    params = {
         "select": "id,title_ko,summary_ko,created_at,subcategory",
         "source": "eq.NewsFinal", "is_published": "eq.true", "id": f"neq.{base.get('id', 0)}",
         "created_at": f"gte.{since}",
         "or": "(" + ",".join(f"title_ko.ilike.*{t}*" for t in toks) + ")",
         "order": "created_at.desc", "limit": "60",
-    }, timeout=30)
-    if res.status_code not in (200, 206):
+    }
+    res = None
+    for _ in range(2):  # 일시 오류(타임아웃 등)는 1회 재시도
+        try:
+            res = requests.get(sb_url(), headers=sb_headers(), params=params, timeout=30)
+            if res.status_code in (200, 206):
+                break
+        except requests.RequestException as e:
+            print(f"  ⚠️ 관련 기사 조회 예외: {e}")
+    if res is None or res.status_code not in (200, 206):
+        print(f"  ⚠️ 관련 기사 조회 실패 status={getattr(res, 'status_code', None)}")
         return []
     need = 2 if len(toks) >= 2 else 1
     scored = []
@@ -176,6 +203,22 @@ def archive_block(items: list) -> str:
     return "[관련 기사 — 뉴스파이널 기발행, 그 이후 상황이 바뀌었을 수 있음]\n" + "\n\n".join(parts) if parts else ""
 
 
+def _generate(prompt: str):
+    """해설 본문 생성. 고품질 모델(tier 0=가장 앞선 flash)부터, 길이가 긴 응답(생각 토큰 포함)이라 출력 한도·읽기
+    타임아웃을 넉넉히 준다 — 기본값(lite, 3000토큰, 30초)에서는 MAX_TOKENS로 잘려 모든 모델이 소진됐다.
+    하루 1~3회 호출이라 쿼터 부담은 없고, 소진되면 클라이언트가 다음 모델로 내려간다."""
+    return _gemini_client.call(prompt, max_tokens=8000, start_tier=0, temperature=0.5, timeout=(10, 120))
+
+
+def _clean_placeholders(title: str, body: str):
+    """모델이 출력 형식의 자리표시자("<제목>", "<본문>")를 그대로 옮기는 경우를 벗겨낸다.
+    제목이 자리표시자 자체면 빈 문자열을 돌려줘 재시도하게 한다."""
+    if re.search(r"<[^>\n]{1,40}>", title or ""):
+        return "", body
+    body = re.sub(r"^\s*<[^>\n]{1,40}>\s*", "", body or "")
+    return title, body
+
+
 def write_explainer(base: dict):
     """base 기사 dict → (title, body, background) 또는 None. DB 접근은 related_archive()뿐."""
     title0 = base.get("title_ko") or ""
@@ -195,12 +238,17 @@ def write_explainer(base: dict):
     prompt = rules.format(base_title=title0, base_body=body0[:3500], background=background)
 
     for attempt in range(MAX_RETRY + 1):
-        content = call_gemini_article(prompt, max_tokens=3000)
+        content = _generate(prompt)
         title, body = _parse(content)
+        title, body = _clean_placeholders(title, body)
         if not title or not body:
-            print("  ❌ 파싱 실패")
+            print("  ❌ 파싱 실패(응답 없음/자리표시자 제목)")
             continue
         body = ensure_paragraphs(body)
+        if has_polite_ending(body):
+            print(f"  ⚠️ 합쇼체(-습니다) 감지 → 재작성({attempt + 1}/{MAX_RETRY})")
+            prompt += "\n\n[재작성 지시] 모든 문장을 '-다'로 끝내세요. '-습니다/-입니다'는 쓰지 마세요."
+            continue
         title = f"{LABEL} " + re.sub(r"^\s*\[[^\]]{1,12}\]\s*", "", title)  # 말머리는 코드가 보장(모델이 다른 걸 붙여도 교정)
         ratio = copied_ratio(body, body0)
         if ratio > COPY_LIMIT:
@@ -220,8 +268,11 @@ def write_explainer(base: dict):
             prompt += ("\n\n[재작성 지시] 방금 결과에 자료에 근거 없는 서술이 있었습니다: "
                        f"{claims}\n해당 내용을 빼고, 자료에 있는 사실만으로 다시 작성하세요.")
             continue
-        if not verify_single_topic(title, body):
-            print("  ⚠️ 단일주제 검증 실패")
+        off = off_topic(title, body)
+        if off:
+            print(f"  ⚠️ 제목 사안과 무관한 문장 감지 → 재작성({attempt + 1}/{MAX_RETRY}): {off[:120]}")
+            prompt += ("\n\n[재작성 지시] 방금 결과에 제목이 가리키는 핵심 사안과 무관한 내용이 있었습니다: "
+                       f"{off}\n무관한 소식은 빼고 핵심 사안만 해설하세요.")
             continue
         return title, body, background
     return None
