@@ -47,3 +47,17 @@ jobs:
           name: db-backup-${{ github.run_id }}
           path: "*.dump.enc"
           retention-days: 30
+
+      # 업로드 뒤에 검증한다: 이 단계가 잘못돼도 백업 자체는 이미 저장돼 있다.
+      # 복호화 → 아카이브 목차 읽기 → 핵심 테이블 데이터 존재 확인. 깨진/빈 덤프면 실행이 빨갛게 실패한다.
+      - name: 복구 가능 검증 (복호화 + 목차 확인)
+        env:
+          BACKUP_PASSWORD: ${{ secrets.BACKUP_PASSWORD }}
+        run: |
+          openssl enc -d -aes-256-cbc -pbkdf2 -in newsfinal-*.dump.enc -out verify.dump -pass env:BACKUP_PASSWORD
+          pg_restore -l verify.dump > toc.txt
+          echo "TOC 항목 수: $(wc -l < toc.txt)"
+          for t in articles prompts user_roles article_translations; do
+            grep -Eq "TABLE DATA public $t( |$)" toc.txt || { echo "::error::$t 테이블 데이터가 덤프에 없음"; exit 1; }
+          done
+          rm -f verify.dump toc.txt
