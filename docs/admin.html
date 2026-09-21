@@ -152,6 +152,23 @@
     .empty { text-align: center; padding: 50px; color: var(--muted); font-size: 13px; }
     .loading { text-align: center; padding: 30px; color: var(--muted); }
 
+    /* 수정 이력 */
+    .hist-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 150; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 4vh 12px; }
+    .hist-overlay.open { display: flex; }
+    .hist-modal { background: var(--bg2); border: 1px solid var(--border); width: min(960px, 100%); }
+    .hist-head { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 12px; position: sticky; top: 0; background: var(--bg2); }
+    .hist-body { padding: 14px 18px; display: flex; flex-direction: column; gap: 14px; }
+    .rev { border: 1px solid var(--border); background: var(--bg); }
+    .rev-top { padding: 8px 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; border-bottom: 1px solid var(--border); font-size: 11px; }
+    .rev-note { color: var(--accent); }
+    .rev-field { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+    .rev-field:last-child { border-bottom: none; }
+    .rev-label { font-size: 10px; color: var(--muted); margin-bottom: 4px; }
+    .diff { font-size: 12px; line-height: 1.7; white-space: pre-wrap; word-break: break-word; }
+    .diff del { background: rgba(200,80,80,0.25); color: #f0a0a0; text-decoration: line-through; }
+    .diff ins { background: rgba(80,200,120,0.2); color: #9fe0b8; text-decoration: none; }
+    .diff .skip { color: var(--muted); }
+
     /* 사용자 관리 섹션 - admin만 표시 */
     .admin-only { display: none; }
   </style>
@@ -199,6 +216,7 @@
       <div class="sidebar-item admin-only" id="user-menu" onclick="showUsers(this)">👥 사용자 관리</div>
       <div class="sidebar-item admin-only" id="prompt-menu" onclick="showPrompts(this)">✏️ 프롬프트 관리</div>
       <div class="sidebar-item admin-only" id="rss-menu" onclick="showRssSources(this)">📡 RSS 소스 관리</div>
+      <div class="sidebar-item" id="history-menu" onclick="showRevisions(this)">🕘 수정 이력</div>
       <div class="sidebar-item" id="duplicate-menu" onclick="showDuplicates(this)">🔁 중복기사</div>
       <div class="sidebar-item" id="stats-menu" onclick="showStats(this)">📊 발행 통계</div>
     </div>
@@ -303,10 +321,21 @@
       </div>
     </div>
     <div class="edit-footer">
+      <button class="btn-sm" id="history-btn" onclick="openHistory(document.getElementById('edit-id').value)">🕘 수정 이력</button>
       <button class="btn-sm btn-sm-danger admin-only" id="delete-btn" onclick="deleteArticle()">삭제</button>
       <button class="btn btn-secondary" style="font-size:11px;" onclick="closeEdit()">취소</button>
       <button class="btn btn-primary" style="font-size:11px;" onclick="saveArticle()">저장</button>
     </div>
+  </div>
+</div>
+
+<div class="hist-overlay" id="hist-overlay" onclick="if(event.target===this)closeHistory()">
+  <div class="hist-modal">
+    <div class="hist-head">
+      <div class="edit-title-label" id="hist-title">수정 이력</div>
+      <button class="btn-sm" onclick="closeHistory()">✕ 닫기</button>
+    </div>
+    <div class="hist-body" id="hist-body"></div>
   </div>
 </div>
 
@@ -498,6 +527,7 @@
           <td class="muted">${a.view_count || 0}</td>
           <td class="actions">
             <button class="btn-sm" onclick="openEdit(${a.id})">편집</button>
+            ${isOwn ? `<button class="btn-sm" onclick="openHistory(${a.id})">이력</button>` : ''}
             ${isUnpublished ? `<button class="btn-sm" style="border-color:var(--success);color:var(--success);" onclick="publishArticle(${a.id})">발행</button>` : ''}
             ${currentRole === 'admin' ? `<button class="btn-sm btn-sm-danger" onclick="confirmDelete(${a.id})">삭제</button>` : ''}
           </td>
@@ -569,6 +599,7 @@
     document.getElementById('explainer-bg-field').style.display = bg ? 'block' : 'none';
     document.getElementById('explainer-bg').textContent = bg || '';
 
+    document.getElementById('history-btn').style.display = data.source === 'NewsFinal' ? '' : 'none';
     document.getElementById('edit-panel').classList.add('open');
     document.getElementById('overlay').classList.add('open');
   }
@@ -600,6 +631,7 @@
     document.getElementById('edit-image-url').value = '';
     document.getElementById('image-preview').style.display = 'none';
     document.getElementById('url-field').style.display = 'none';
+    document.getElementById('history-btn').style.display = 'none';
     document.getElementById('edit-panel').classList.add('open');
     document.getElementById('overlay').classList.add('open');
   }
@@ -1795,6 +1827,183 @@
           ${vTopRows}
         </div>
       </div>`;
+  }
+
+  // ── 수정 이력 ─────────────────────────────────────────
+  // article_revisions(DB 트리거가 기록)는 "수정 직전 값"만 담는다. 어떤 수정의 "수정 후 값"은
+  // 같은 컬럼을 다음에 바꾼 이력의 old_values, 없으면 현재 기사 값이다.
+
+  const HIST_COLS = ['title_ko','title_en','summary_ko','summary_en','summary_3lines','summary_3lines_en',
+    'investment_idea','investment_idea_en','category','subcategory','region','country','countries',
+    'is_published','image_url','image_credit','byline','noindex','source_data','update_log','continuation_of_id','url'];
+  const HIST_LABEL = { title_ko:'제목', title_en:'제목(영문 필드)', summary_ko:'본문', summary_en:'본문(영문 필드)',
+    summary_3lines:'3줄 요약', summary_3lines_en:'3줄 요약(영문)', investment_idea:'투자 아이디어',
+    investment_idea_en:'투자 아이디어(영문)', category:'분야', subcategory:'세부 분류', region:'지역', country:'국가',
+    countries:'관련 국가', is_published:'발행 여부', image_url:'대표 이미지', image_credit:'이미지 출처',
+    byline:'바이라인', noindex:'검색 제외', source_data:'원천 데이터', update_log:'업데이트 기록',
+    continuation_of_id:'후속 원본', url:'원문 URL' };
+
+  const hEsc = s => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const histTime = t => new Date(t).toLocaleString('ko-KR', { timeZone:'Asia/Seoul', hour12:false });
+  const histVal = v => v == null ? '' : (typeof v === 'string' ? v : JSON.stringify(v, null, typeof v === 'object' ? 1 : 0));
+  function histActor(a) {
+    const s = String(a || '');
+    if (s.startsWith('service_role')) return '자동(파이프라인)';
+    if (s.startsWith('authenticated')) return '어드민 편집';
+    return s ? 'DB 직접 · ' + s.split('|')[0].trim() : '알 수 없음';
+  }
+
+  // 단어 단위 diff: 앞뒤 공통부를 먼저 걷어내고 가운데만 LCS. 너무 크면 통째 교체로 표시.
+  function diffHtml(a, b) {
+    const tok = s => String(s).match(/\s+|[^\s]+/g) || [];
+    const A = tok(a), B = tok(b);
+    let s = 0; while (s < A.length && s < B.length && A[s] === B[s]) s++;
+    let ea = A.length, eb = B.length;
+    while (ea > s && eb > s && A[ea-1] === B[eb-1]) { ea--; eb--; }
+    const am = A.slice(s, ea), bm = B.slice(s, eb);
+    const ops = []; // [kind, text]  kind: '=' | '-' | '+'
+    ops.push(['=', A.slice(0, s).join('')]);
+    if (am.length * bm.length <= 4e6) {
+      const w = bm.length + 1, L = new Uint16Array((am.length + 1) * w);
+      for (let i = am.length - 1; i >= 0; i--)
+        for (let j = bm.length - 1; j >= 0; j--)
+          L[i*w+j] = am[i] === bm[j] ? L[(i+1)*w+j+1] + 1 : Math.max(L[(i+1)*w+j], L[i*w+j+1]);
+      let i = 0, j = 0;
+      while (i < am.length || j < bm.length) {
+        if (i < am.length && j < bm.length && am[i] === bm[j]) { ops.push(['=', am[i]]); i++; j++; }
+        else if (i < am.length && (j === bm.length || L[(i+1)*w+j] >= L[i*w+j+1])) { ops.push(['-', am[i++]]); }
+        else { ops.push(['+', bm[j++]]); }
+      }
+    } else {
+      ops.push(['-', am.join('')], ['+', bm.join('')]);
+    }
+    ops.push(['=', A.slice(ea).join('')]);
+    // 같은 종류 연속 병합
+    const m = [];
+    for (const [k, t] of ops) { if (!t) continue; if (m.length && m[m.length-1][0] === k) m[m.length-1][1] += t; else m.push([k, t]); }
+    return m.map(([k, t], idx) => {
+      if (k === '-') return `<del>${hEsc(t)}</del>`;
+      if (k === '+') return `<ins>${hEsc(t)}</ins>`;
+      // 변경 없는 긴 구간은 앞뒤 100자만 남기고 접는다
+      if (t.length > 260) {
+        const head = idx === 0 ? '' : hEsc(t.slice(0, 100));
+        const tail = idx === m.length - 1 ? '' : hEsc(t.slice(-100));
+        return `${head}<span class="skip"> … (변경 없음 ${t.length - head.length - tail.length}자) … </span>${tail}`;
+      }
+      return hEsc(t);
+    }).join('');
+  }
+
+  let histState = { id: null, art: null, revs: [] };
+
+  // 되돌리기 = 그 수정 "직전 값"을 기사에 다시 써넣는다. 이 동작도 하나의 새 수정이라 이력에 남는다.
+  // col 생략 시 해당 수정에서 바뀐 항목 전체. 삭제 이력이면 기사 자체를 복구한다(원문 크롤링 텍스트는 이력에 없음).
+  async function restoreRevision(revId, col) {
+    const r = histState.revs.find(x => x.id === revId);
+    if (!r) return;
+    const when = histTime(r.changed_at);
+    let error;
+    if (r.op === 'DELETE') {
+      if (!confirm(`삭제된 기사를 복구합니다.\n(삭제 시각 ${when} · 원문 크롤링 텍스트는 복구되지 않음)`)) return;
+      ({ error } = await sb.from('articles').insert(r.old_values));
+    } else {
+      const cols = col ? [col] : r.changed_columns;
+      const names = cols.map(c => HIST_LABEL[c] || c).join(', ');
+      if (!confirm(`[${names}]을(를) ${when} 수정 이전 값으로 되돌립니다.\n현재 값은 새 이력으로 남습니다.`)) return;
+      const payload = Object.fromEntries(cols.map(c => [c, r.old_values[c] ?? null]));
+      const res = await sb.from('articles').update(payload).eq('id', r.article_id).select('id');
+      error = res.error || (res.data && res.data.length ? null : { message: '수정 권한이 없거나 기사가 없습니다' });
+    }
+    if (error) { toast(`되돌리기 실패: ${error.message}`, 'error'); return; }
+    toast('되돌렸습니다', 'success');
+    const id = histState.id;
+    await openHistory(id);
+    // 편집 패널이 같은 기사로 열려 있으면 옛 값이 남아 저장 시 덮어쓰므로 다시 불러온다
+    if (document.getElementById('edit-panel').classList.contains('open') && Number(document.getElementById('edit-id').value) === id) openEdit(id);
+  }
+
+  function closeHistory() { document.getElementById('hist-overlay').classList.remove('open'); }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeHistory(); });
+
+  async function openHistory(id) {
+    id = Number(id);
+    if (!id) return;
+    const ov = document.getElementById('hist-overlay'), body = document.getElementById('hist-body');
+    document.getElementById('hist-title').textContent = `수정 이력 · 기사 #${id}`;
+    body.innerHTML = '<div class="loading">로딩 중...</div>';
+    ov.classList.add('open');
+
+    const [artRes, revRes] = await Promise.all([
+      sb.from('articles').select(['id', ...HIST_COLS].join(',')).eq('id', id).maybeSingle(),
+      sb.from('article_revisions').select('*').eq('article_id', id)
+        .order('changed_at', { ascending: true }).order('id', { ascending: true }),
+    ]);
+    if (revRes.error) { body.innerHTML = `<div class="empty">오류: ${hEsc(revRes.error.message)}</div>`; return; }
+    const art = artRes.data, revs = revRes.data || [];
+    histState = { id, art, revs };
+    if (art) document.getElementById('hist-title').textContent = `수정 이력 · ${art.title_ko || '#' + id}`;
+    if (!revs.length) { body.innerHTML = '<div class="empty">기록된 수정 이력이 없습니다.<br><span style="font-size:11px;">(이력 기능은 2026-09-22부터 기록되며, 이후 수정분만 남습니다)</span></div>'; return; }
+
+    const cards = revs.map((r, i) => {
+      const differs = c => art && JSON.stringify(art[c] ?? null) !== JSON.stringify((r.old_values || {})[c] ?? null);
+      const restoreAll = r.op === 'DELETE'
+        ? (art ? '' : `<button class="btn-sm" style="margin-left:auto;" onclick="restoreRevision(${r.id})">↩ 기사 복구</button>`)
+        : ((r.changed_columns || []).some(differs) ? `<button class="btn-sm" style="margin-left:auto;" onclick="restoreRevision(${r.id})">↩ 이 수정 전체 되돌리기</button>` : '');
+      const top = `<div class="rev-top">
+        <b>${histTime(r.changed_at)}</b>
+        <span class="tag">${r.op === 'DELETE' ? '삭제' : '수정'}</span>
+        <span class="muted">${hEsc(histActor(r.actor))}</span>
+        ${r.note ? `<span class="rev-note">${hEsc(r.note)}</span>` : ''}
+        ${restoreAll}
+      </div>`;
+      if (r.op === 'DELETE') {
+        const o = r.old_values || {};
+        return `<div class="rev">${top}<div class="rev-field"><div class="rev-label">삭제 당시 기사</div>
+          <div class="diff"><b>${hEsc(o.title_ko || '')}</b>\n\n${hEsc(o.summary_ko || '')}</div></div></div>`;
+      }
+      const fields = (r.changed_columns || []).map(c => {
+        let after;
+        const next = revs.slice(i + 1).find(x => x.op === 'UPDATE' && (x.changed_columns || []).includes(c));
+        if (next) after = next.old_values[c]; else if (art) after = art[c]; else after = undefined;
+        const btn = !art ? '' : differs(c)
+          ? `<button class="btn-sm" style="margin-left:8px;" onclick="restoreRevision(${r.id},'${c}')">↩ 이 값으로 되돌리기</button>`
+          : '<span style="margin-left:8px;">· 현재 값과 동일</span>';
+        return `<div class="rev-field"><div class="rev-label">${HIST_LABEL[c] || c}${btn}</div>
+          <div class="diff">${diffHtml(histVal(r.old_values[c]), histVal(after))}</div></div>`;
+      }).join('');
+      return `<div class="rev">${top}${fields}</div>`;
+    });
+    body.innerHTML = cards.reverse().join(''); // 최신이 위
+  }
+
+  async function showRevisions(el) {
+    currentSection = 'revisions';
+    document.querySelectorAll('.sidebar-item').forEach(e => e.classList.remove('active'));
+    el.classList.add('active');
+    const main = document.getElementById('main-content');
+    main.innerHTML = '<div class="loading">로딩 중...</div>';
+    const { data, error } = await sb.from('article_revisions')
+      .select('id,article_id,op,changed_at,changed_columns,note,actor,old_values')
+      .order('changed_at', { ascending: false }).limit(100);
+    if (error) { main.innerHTML = `<div class="empty">오류: ${hEsc(error.message)}</div>`; return; }
+    if (!data.length) { main.innerHTML = '<div class="empty">기록된 수정 이력이 없습니다.<br><span style="font-size:11px;">(2026-09-22부터 기록)</span></div>'; return; }
+    const ids = [...new Set(data.map(r => r.article_id))];
+    const { data: arts } = await sb.from('articles').select('id,title_ko').in('id', ids);
+    const title = Object.fromEntries((arts || []).map(a => [a.id, a.title_ko]));
+    const rows = data.map(r => {
+      const t = title[r.article_id] || (r.old_values && r.old_values.title_ko) || '(삭제된 기사)';
+      const cols = r.op === 'DELETE' ? '기사 삭제' : (r.changed_columns || []).map(c => HIST_LABEL[c] || c).join(', ');
+      return `<tr>
+        <td class="muted">${histTime(r.changed_at)}</td>
+        <td><span class="article-title-text" onclick="openHistory(${r.article_id})" title="${hEsc(t).replace(/"/g,'&quot;')}">${hEsc(t)}</span></td>
+        <td>${hEsc(cols)}</td>
+        <td class="muted">${hEsc(histActor(r.actor))}</td>
+        <td style="white-space:normal;color:var(--accent);">${hEsc(r.note || '')}</td>
+      </tr>`;
+    }).join('');
+    main.innerHTML = `<div class="toolbar"><span style="font-size:12px;color:var(--accent);font-weight:700;">🕘 최근 수정 이력</span>
+      <span style="font-size:11px;color:var(--muted);margin-left:auto;">최근 ${data.length}건 · 제목을 누르면 변경 내용을 볼 수 있습니다</span></div>
+      <table class="calendar-table"><thead><tr><th>시각</th><th>기사</th><th>바뀐 항목</th><th>수정 주체</th><th>사유</th></tr></thead><tbody>${rows}</tbody></table>`;
   }
 
   // ── 토스트 ────────────────────────────────────────────
