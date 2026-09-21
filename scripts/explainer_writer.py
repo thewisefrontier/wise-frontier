@@ -63,20 +63,38 @@ BODY: <본문>
 
 Output:"""
 
-_NUM_RE = re.compile(r"\d[\d,]*(?:\.\d+)?")
+# 한국어 수 표기("9만3,873", "1억 2천만", "25만3725")를 하나의 값으로 환산해 대조한다. 조각 숫자로 쪼개 비교하면
+# 모델이 "9만3873"을 "93만873"으로 옮겨도 조각("93", "873")이 우연히 자료에 있어 통과한다
+# (2026-09-22 주간 정리 시험에서 실제로 통과했음 — 자릿수가 통째로 틀린 수치).
+_NUM_SPAN_RE = re.compile(r"\d[\d,]*(?:\.\d+)?(?:\s*[조억만천](?:\s*\d[\d,]*(?:\.\d+)?)?)*")
+_UNIT = {"조": 10 ** 12, "억": 10 ** 8, "만": 10 ** 4, "천": 10 ** 3}
+
+
+def _span_value(span: str) -> float:
+    total, cur = 0.0, None
+    for tok in re.findall(r"\d[\d,]*(?:\.\d+)?|[조억만천]", span):
+        if tok in _UNIT:
+            total += (cur if cur is not None else 1) * _UNIT[tok]
+            cur = None
+        else:
+            if cur is not None:      # 단위 없이 이어진 수(예: 9만 3873의 3873)는 그대로 더한다
+                total += cur
+            cur = float(tok.replace(",", ""))
+    return total + (cur or 0)
 
 
 def _numbers(text: str) -> set:
-    return {m.replace(",", "") for m in _NUM_RE.findall(text or "")}
+    return {round(_span_value(m.group(0)), 4) for m in _NUM_SPAN_RE.finditer(text or "")}
 
 
 def unsupported_numbers(body: str, facts: str) -> list:
-    """본문에 있는데 자료(기사+배경)에는 없는 수치. 한 자리 정수는 열거·서수 등
+    """본문에 있는데 자료(기사+배경)에는 없는 수치(환산값 기준). 한 자리 정수는 열거·서수 등
     오탐이 많아 제외한다.
-    ponytail: 숫자 문자열 존재 여부만 본다 — 자료 속 다른 맥락의 같은 숫자가 우연히 일치하면
-    못 잡는다. 필요해지면 수치 주변 단어까지 대조하도록 강화."""
+    ponytail: 값 일치만 본다 — 자료 속 다른 맥락의 같은 값이 우연히 일치하면 못 잡는다.
+    필요해지면 수치 주변 단어까지 대조하도록 강화."""
     known = _numbers(facts)
-    return sorted(n for n in _numbers(body) - known if len(n.replace(".", "")) >= 2 or "." in n)
+    bad = [v for v in _numbers(body) - known if v >= 10 or v != int(v)]
+    return sorted(f"{v:,.0f}" if v == int(v) else f"{v:g}" for v in bad)
 
 
 def unsupported_claims(body: str, facts: str) -> str:

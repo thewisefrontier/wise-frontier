@@ -227,6 +227,31 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
 
+      - name: 주간 시세 카드 — 토요일 10시(KST) 이후 주 1회, 결정론적 집계 (2026-09-22 신설)
+        if: steps.guard.outputs.skip != 'true'
+        timeout-minutes: 5
+        continue-on-error: true
+        run: python scripts/weekly_market_card.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+
+      - name: 주간 정리 초안 — 일요일 20시(KST) 이후 주 1회, 어드민 검토 후 발행 (2026-09-22 신설)
+        if: steps.guard.outputs.skip != 'true'
+        timeout-minutes: 10
+        continue-on-error: true
+        run: python scripts/weekly_recap_writer.py
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
+          GEMINI_API_KEY_4: ${{ secrets.GEMINI_API_KEY_4 }}
+          GEMINI_API_KEY_5: ${{ secrets.GEMINI_API_KEY_5 }}
+          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+          NVIDIA_API_KEY_L: ${{ secrets.NVIDIA_API_KEY_L }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+
       - name: 다국어 채널 번역 배치 (2026-09-08 신설)
         if: steps.guard.outputs.skip != 'true'
         timeout-minutes: 10

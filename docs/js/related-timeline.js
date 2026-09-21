@@ -28,9 +28,11 @@ function dayLabel(createdAt) {
 // rows: related_articles() 결과, current: {id, title_ko, created_at}(지금 보는 기사 — 흐름 속 위치 표시용)
 export function relatedTimelineHtml(rows, esc, current) {
   if (!Array.isArray(rows) || rows.length === 0) return '';
+  const isRecap = !!current && current.subcategory === '주간정리';
   const items = rows.map((r) => ({ id: r.id, title: r.title_ko, at: r.created_at, here: false }));
-  if (current) items.push({ id: current.id, title: current.title_ko || current.title_en, at: current.created_at, here: true });
-  items.sort((a, b) => String(a.at).localeCompare(String(b.at))); // 오래된 것 → 최신
+  if (current && !isRecap) items.push({ id: current.id, title: current.title_ko || current.title_en, at: current.created_at, here: true });
+  // 사안 흐름은 오래된 것 → 최신, 주간 정리의 "이번 주 다룬 기사"는 최신순
+  items.sort((a, b) => isRecap ? String(b.at).localeCompare(String(a.at)) : String(a.at).localeCompare(String(b.at)));
   const li = items.map((it) => `
       <li style="padding:7px 0 7px 14px;position:relative;border-left:2px solid ${it.here ? 'var(--accent2)' : 'var(--border)'};">
         <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);display:block;">${esc(dayLabel(it.at))}${it.here ? ' · 지금 보는 기사' : ''}</span>
@@ -40,7 +42,7 @@ export function relatedTimelineHtml(rows, esc, current) {
       </li>`).join('');
   return `
       <section class="issue-timeline" style="margin-top:40px;padding:16px 18px;border:1px solid var(--border);border-radius:8px;">
-        <div class="related-title" style="margin-bottom:10px;">이 사안의 흐름</div>
+        <div class="related-title" style="margin-bottom:10px;">${isRecap ? '이번 주 다룬 기사' : '이 사안의 흐름'}</div>
         <ol style="list-style:none;margin:0;padding:0;">${li}
         </ol>
       </section>`;

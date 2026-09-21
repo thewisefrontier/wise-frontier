@@ -208,7 +208,7 @@
       <div class="sidebar-item" onclick="showArticles('rss',this)">📡 수집 기사</div>
       <div class="sidebar-item" onclick="showArticles('unpublished',this)">📋 미발행 기사</div>
       <div class="sidebar-item" onclick="showNeedsReview(this)">⚠️ 검토 필요</div>
-      <div class="sidebar-item" onclick="showArticles('explainer',this)">📝 이슈 파이널 검토</div>
+      <div class="sidebar-item" onclick="showArticles('explainer',this)">📝 해설·주간정리 검토</div>
       <div class="sidebar-item" id="foreign-menu" onclick="showForeignArticles(this)">🌐 해외기사 (내부검증)</div>
       <div class="sidebar-divider"></div>
       <div class="sidebar-item" id="calendar-menu" onclick="showCalendar(this)">📅 경제 일정 관리</div>
@@ -452,7 +452,7 @@
     else if (currentFilter === 'rss') query = query.neq('source', 'NewsFinal');
     else if (currentFilter === 'cluster') query = query.eq('source', 'NewsFinal').ilike('subcategory', 'cluster_%');
     else if (currentFilter === 'unpublished') query = query.eq('source', 'NewsFinal').eq('is_published', false);
-    else if (currentFilter === 'explainer') query = query.eq('source', 'NewsFinal').eq('is_published', false).ilike('subcategory', '이슈파이널%'); // explainer_writer.py 초안 — 편집 후 발행
+    else if (currentFilter === 'explainer') query = query.eq('source', 'NewsFinal').eq('is_published', false).or('subcategory.ilike.이슈파이널%,subcategory.ilike.주간정리%'); // explainer_writer.py·weekly_recap_writer.py 초안 — 편집 후 발행
 
     const searchQ = document.getElementById('search-input')?.value?.trim();
     if (searchQ) query = query.or(`title_ko.ilike.%${searchQ}%,title_en.ilike.%${searchQ}%,country.ilike.%${searchQ}%,source.ilike.%${searchQ}%`);
