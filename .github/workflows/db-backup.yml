@@ -41,6 +41,29 @@ jobs:
         env:
           BACKUP_PASSWORD: ${{ secrets.BACKUP_PASSWORD }}
 
+      # 백업 저장소: Cloudflare R2 비공개 버킷. 이 저장소는 public이라 Actions 아티팩트는
+      # GitHub 계정만 있으면 누구나 내려받을 수 있다(2026-09-22 점검) — 프롬프트·설정 테이블이 든
+      # 덤프를 그렇게 둘 수 없어 옮긴다. 버킷은 공개 접근/커스텀 도메인을 켜지 않는 한 비공개.
+      # 한계: wrangler object put은 파일 1개 약 300MB 상한(현재 덤프 약 130MB) — 넘으면 S3 멀티파트로 전환.
+      - name: R2 버킷 준비 (비공개, 30일 만료)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          npx --yes wrangler@4 r2 bucket info newsfinal-backups >/dev/null 2>&1 || npx --yes wrangler@4 r2 bucket create newsfinal-backups
+          npx --yes wrangler@4 r2 bucket lifecycle list newsfinal-backups 2>&1 | grep -q expire-30d || npx --yes wrangler@4 r2 bucket lifecycle add newsfinal-backups expire-30d "" --expire-days 30 --force
+
+      - name: R2 업로드 + 무결성 대조
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          f=$(ls newsfinal-*.dump.enc)
+          npx --yes wrangler@4 r2 object put "newsfinal-backups/$f" --file "$f" --remote
+          npx --yes wrangler@4 r2 object get "newsfinal-backups/$f" --file "roundtrip.enc" --remote
+          cmp "$f" roundtrip.enc && echo "R2 왕복 대조 일치: $(stat -c %s "$f") bytes"
+          rm -f roundtrip.enc
+
       - name: 백업 업로드 (30일 보관)
         uses: actions/upload-artifact@v4
         with:
