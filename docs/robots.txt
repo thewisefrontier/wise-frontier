@@ -10,6 +10,30 @@ Allow: /
 User-agent: Yeti
 Allow: /
 
+# AI 검색·실시간 조회용 봇은 허용(2026-09-22, 사용자 결정 — GEO: AI 검색이 기사를
+# 인용하려면 이 봇들이 열려 있어야 한다). 학습용 봇(GPTBot·ClaudeBot·CCBot 등)은
+# 아래에서 계속 차단한다. 봇 이름은 각 사 공식 문서 기준 — 이름이 바뀌면 갱신할 것.
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
+
 # AI 학습 크롤러 차단
 # 2026-09-09 업데이트 — "학습 크롤러(training)"와 "검색/실시간 조회
 # 크롤러(search/user)"가 봇마다 별도 user-agent로 분리된 게 최근 흐름
@@ -18,9 +42,6 @@ Allow: /
 # 여기선 검색엔진 노출(Googlebot 등)은 유지하되, 학습용 크롤러는 최대한
 # 폭넓게 차단한다. 기존 항목은 안전하게 유지, 실제 학습용 봇을 추가.
 User-agent: GPTBot
-Disallow: /
-
-User-agent: ChatGPT-User
 Disallow: /
 
 User-agent: ClaudeBot
@@ -57,9 +78,6 @@ User-agent: PetalBot
 Disallow: /
 
 User-agent: cohere-ai
-Disallow: /
-
-User-agent: PerplexityBot
 Disallow: /
 
 User-agent: Amazonbot
