@@ -65,11 +65,11 @@ jobs:
           rm -f roundtrip.enc
 
 
-      # 2차 사본: 구글 드라이브(최근 30일, 유료 용량이라 R2와 같은 보관 기간). R2와 저장소 제공사가 달라 한쪽이 막혀도 남는다.
-      # 시크릿 RCLONE_DRIVE_TOKEN(rclone authorize 출력 JSON) 또는 RCLONE_CONFIG(rclone.conf 전체, remote 이름 gdrive)가 없으면 조용히 건너뛴다.
-      # 실패해도 백업 자체는 R2에 이미 있으므로 실행을 실패시키지 않는다(단계만 빨갛게 표시).
-      - name: 구글 드라이브 사본 (최근 30일)
-        continue-on-error: true
+      # 최종 백업: 구글 드라이브(유료 용량 600GB+). 지우지 않고 영구 보관한다(2026-09-22 사용자 결정) —
+      # R2는 30일 지나면 자동 삭제되는 임시 사본이고, 드라이브가 마지막 보루다. 이 단계에는 삭제 명령을 넣지 말 것.
+      # 시크릿 RCLONE_DRIVE_TOKEN(rclone authorize 출력) 또는 RCLONE_CONFIG(rclone.conf 전체, remote 이름 gdrive)가 없으면 건너뛴다.
+      # 최종 백업이라 실패하면 실행을 빨갛게 실패시킨다(검증 단계는 if: always()로 그래도 돈다).
+      - name: 구글 드라이브 최종 백업 (영구 보관)
         env:
           RCLONE_CONFIG_DATA: ${{ secrets.RCLONE_CONFIG }}
           RCLONE_DRIVE_TOKEN: ${{ secrets.RCLONE_DRIVE_TOKEN }}
@@ -100,12 +100,12 @@ jobs:
           f=$(ls newsfinal-*.dump.enc)
           rclone copyto "$f" "gdrive:newsfinal-backups/$f"
           rclone lsl "gdrive:newsfinal-backups/$f"   # copyto가 업로드 후 해시를 대조한다
-          rclone delete gdrive:newsfinal-backups --min-age 30d
           rclone size gdrive:newsfinal-backups
 
       # R2 업로드 뒤에 검증한다: 이 단계가 잘못돼도 백업 자체는 이미 저장돼 있다.
       # 복호화 → 아카이브 목차 읽기 → 핵심 테이블 데이터 존재 확인. 깨진/빈 덤프면 실행이 빨갛게 실패한다.
       - name: 복구 가능 검증 (복호화 + 목차 확인)
+        if: always()
         env:
           BACKUP_PASSWORD: ${{ secrets.BACKUP_PASSWORD }}
         run: |
