@@ -557,15 +557,8 @@ function cleanBody(text) {
       <div class="article-tags">
         ${a.category ? `<a class="tag" href="/?category=${encodeURIComponent(a.category)}">${window.esc(a.category)}</a>` : ''}
         ${a.subcategory && a.subcategory !== a.category
-          && !a.subcategory.startsWith('cluster_')
-          && !a.subcategory.startsWith('solo_')
-          && !a.subcategory.startsWith('digest_')
-          && !a.subcategory.startsWith('trend_')
-          && !a.subcategory.startsWith('realtrend_')
-          && !a.subcategory.startsWith('extrend_')
-          && !a.subcategory.startsWith('weather_')
-          && !a.subcategory.endsWith('briefing')
-          ? `<span class="tag">${window.esc(a.subcategory)}</span>` : ''}
+          && !a.subcategory.includes('_') /* 내부 키(econ_rate_11, trend_*, 가상자산동향_crypto 등)는 전부 '_' 포함 — 사람이 읽는 서브카테고리는 없음 */
+          ?`<span class="tag">${window.esc(a.subcategory)}</span>` : ''}
         ${a.region && regionKo(a.region) !== a.category ? `<span class="tag">${window.esc(regionKo(a.region))}</span>` : ''}
         ${a.countries && a.countries.length > 0
           ? a.countries.map(c => `<a class="tag" href="/?country=${encodeURIComponent(c)}">${window.esc(c)}</a>`).join('')

@@ -140,14 +140,10 @@ function buildWrapperHtml(a) {
   const isTrend = a.source === 'NewsFinal'
     && ['trend_', 'realtrend_', 'extrend_'].some((p) => (a.subcategory || '').startsWith(p));
 
+  // 내부 키(econ_rate_11, trend_*, 가상자산동향_crypto 등)는 전부 '_' 포함 —
+  // article.html/index.html과 동일 규칙(2026-09-22, econ_rate_11 노출 신고).
   const showSub = a.subcategory && a.subcategory !== a.category
-    && !a.subcategory.startsWith('cluster_')
-    && !a.subcategory.startsWith('solo_')
-    && !a.subcategory.startsWith('digest_')
-    && !a.subcategory.startsWith('trend_')
-    && !a.subcategory.startsWith('realtrend_')
-    && !a.subcategory.startsWith('extrend_')
-    && !a.subcategory.endsWith('briefing');
+    && !a.subcategory.includes('_');
 
   const countries = Array.isArray(a.countries) ? a.countries : [];
 
