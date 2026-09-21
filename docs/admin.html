@@ -1907,7 +1907,8 @@
       if (!confirm(`삭제된 기사를 복구합니다.\n(삭제 시각 ${when} · 원문 크롤링 텍스트는 복구되지 않음)`)) return;
       ({ error } = await sb.from('articles').insert(r.old_values));
     } else {
-      const cols = col ? [col] : r.changed_columns;
+      // 어드민 저장은 title_en에도 제목을 복사해 두므로(saveArticle) 제목만 되돌릴 때도 짝을 맞춘다
+      const cols = col ? (col === 'title_ko' && r.changed_columns.includes('title_en') ? ['title_ko', 'title_en'] : [col]) : r.changed_columns;
       const names = cols.map(c => HIST_LABEL[c] || c).join(', ');
       if (!confirm(`[${names}]을(를) ${when} 수정 이전 값으로 되돌립니다.\n현재 값은 새 이력으로 남습니다.`)) return;
       const payload = Object.fromEntries(cols.map(c => [c, r.old_values[c] ?? null]));
@@ -1916,6 +1917,7 @@
     }
     if (error) { toast(`되돌리기 실패: ${error.message}`, 'error'); return; }
     toast('되돌렸습니다', 'success');
+    triggerExport(); // 저장/발행/삭제와 동일하게 공개 목록 스냅샷 재생성
     const id = histState.id;
     await openHistory(id);
     // 편집 패널이 같은 기사로 열려 있으면 옛 값이 남아 저장 시 덮어쓰므로 다시 불러온다
