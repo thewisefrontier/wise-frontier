@@ -80,6 +80,26 @@ def sb_url(table: str = "articles") -> str:
     return f"{SUPABASE_URL}/rest/v1/{table}"
 
 
+def _supersede_older_trends(payload: dict, new_id: int) -> None:
+    """같은 트렌드 주제(subcategory)의 이전 기사는 색인 제외(noindex) — 주제당
+    최신 1건만 검색에 노출한다(2026-09-22: 수단 분쟁 94건·DRC 89건처럼 같은
+    주제가 수십 건 쌓여 애드센스 "가치가 별로 없는 콘텐츠"로 볼 위험).
+    세 트렌드 writer(trend/realtrend/extrend)가 전부 이 함수를 거치므로 여기 한 곳에서 처리."""
+    sub = payload.get("subcategory") or ""
+    if payload.get("source") != "NewsFinal" or not re.match(r"^(trend|realtrend|extrend)_", sub):
+        return
+    try:
+        requests.patch(
+            sb_url(),
+            headers={**sb_headers(), "Prefer": "return=minimal"},
+            params={"source": "eq.NewsFinal", "subcategory": f"eq.{sub}", "id": f"lt.{new_id}", "noindex": "eq.false"},
+            json={"noindex": True},
+            timeout=15,
+        )
+    except Exception as e:
+        print(f"  ⚠️ 트렌드 구버전 noindex 처리 실패(무시): {e}")
+
+
 def insert_final_article(payload: dict) -> int:
     """완성된 payload dict를 articles 테이블에 삽입한다.
 
@@ -93,7 +113,10 @@ def insert_final_article(payload: dict) -> int:
         res = requests.post(sb_url(), headers=headers, json=payload, timeout=15)
         if res.status_code in (200, 201):
             data = res.json()
-            return data[0].get("id", -1) if data else -1
+            new_id = data[0].get("id", -1) if data else -1
+            if new_id > 0:
+                _supersede_older_trends(payload, new_id)
+            return new_id
         print(f"  ⚠️ 기사 저장 실패: {res.status_code} — {res.text[:300]}")
     except Exception as e:
         print(f"  ⚠️ 기사 저장 예외: {e}")

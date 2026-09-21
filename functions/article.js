@@ -302,6 +302,9 @@ export async function onRequestGet(context) {
     const resp = new Response(transformed.body, transformed);
     resp.headers.set('content-type', 'text/html; charset=utf-8');
     resp.headers.set('cache-control', 'no-store');
+    // 얇은/템플릿형/트렌드 구버전 — DB 트리거가 판정한 articles.noindex (2026-09-22).
+    // 링크 따라가기(follow)는 허용해 내부 링크 흐름은 유지.
+    if (a.noindex) resp.headers.set('x-robots-tag', 'noindex, follow');
     return resp;
   } catch (e) {
     // ⚠️ 실사고(2026-08-16, GSC "Soft 404" 253건): 렌더링 단계 예외를 전부

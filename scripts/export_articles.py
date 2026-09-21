@@ -333,6 +333,10 @@ def generate_sitemap(articles):
                 params={
                     "select": "id,created_at",
                     "is_published": "eq.true",
+                    # 얇은/템플릿형/트렌드 구버전은 색인 제외(articles.noindex,
+                    # DB 트리거가 판정 — 2026-09-22 애드센스 "가치가 별로 없는
+                    # 콘텐츠" 대응). 사이트맵에서도 뺀다.
+                    "noindex": "eq.false",
                     "order": "created_at.desc",
                 },
                 timeout=30
