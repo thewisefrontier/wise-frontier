@@ -200,9 +200,12 @@ def verify_single_topic(title: str, body: str, call_gemini_fn) -> bool:
 
 답변 (YES 또는 NO만):"""
 
-    result = call_gemini_fn(prompt, max_tokens=5, start_tier=4)
+    # ⚠️ 2026-09-22: 예전엔 max_tokens=5였는데 lite 모델은 생각 토큰까지 출력 한도에 포함돼 5토큰이면 항상 MAX_TOKENS로
+    # 잘려 None → "판정 불가=통과"로 이 검사가 프로덕션에서 사실상 꺼져 있었다(실측: 5토큰 전 모델 100% 실패, 10토큰 이상 정상).
+    # 64로 올려 실제로 작동시킨다. 트렌드(여러 소식을 묶는 로운다운) 기사는 호출부(gemini_summarizer)에서 제외한다 — 사용자 결정.
+    result = call_gemini_fn(prompt, max_tokens=64, start_tier=4)
     if not result:
-        result = call_gemini_fn(prompt, max_tokens=5, start_tier=4)  # 1회 재시도(위 실사고 참고)
+        result = call_gemini_fn(prompt, max_tokens=64, start_tier=4)  # 1회 재시도(위 실사고 참고)
     if not result:
         return True
     return "YES" in result.upper()

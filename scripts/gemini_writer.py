@@ -2292,7 +2292,7 @@ def verify_single_topic(title: str, body: str) -> bool:
 {body[:2500]}
 
 답변 (YES 또는 NO만):"""
-    result = call_gemini(prompt, max_tokens=5, start_tier=4)
+    result = call_gemini(prompt, max_tokens=64, start_tier=4)
     if not result:
         return True
     return "YES" in result.upper()

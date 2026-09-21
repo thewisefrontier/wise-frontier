@@ -1434,8 +1434,16 @@ except Exception:
     _sg_verify_single_topic = None
 
 
+# 트렌드(trend_/realtrend_/extrend_)는 여러 나라·여러 소식을 한 주제로 묶는 로운다운이 설계라 "서로 다른 국가·무관한 사건이면
+# NO" 검사와 충돌한다. 2026-09-22 실측: 이 검사를 켜면 발행된 트렌드·클러스터 기사 40건 표본의 30%가 걸림(대부분 트렌드).
+# 사용자 결정(2026-09-22): 단일 사건 기사(gemini_writer.py의 cluster/solo)에만 켜고 트렌드는 제외 → 아래는 의도된 통과.
+TREND_SINGLE_TOPIC_CHECK = False
+
+
 def verify_single_topic(title: str, body: str) -> bool:
     """style_guard.verify_single_topic()에 이 파일의 call_gemini를 주입해서 위임."""
+    if not TREND_SINGLE_TOPIC_CHECK:
+        return True
     if _sg_verify_single_topic:
         return _sg_verify_single_topic(title, body, call_gemini)
     if not title or not body:
@@ -1450,7 +1458,7 @@ def verify_single_topic(title: str, body: str) -> bool:
 {body[:2500]}
 
 답변 (YES 또는 NO만):"""
-    result = call_gemini(prompt, max_tokens=5, start_tier=4)
+    result = call_gemini(prompt, max_tokens=64, start_tier=4)
     if not result:
         return True
     return "YES" in result.upper()
