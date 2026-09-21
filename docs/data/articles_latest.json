@@ -1,5 +1,71 @@
 [
   {
+    "id": 213042,
+    "title_en": "[국내유가] 휘발유 리터당 1858원…정유사 도매가 조정 및 유류세 인하 영향",
+    "title_ko": "[국내유가] 휘발유 리터당 1858원…정유사 도매가 조정 및 유류세 인하 영향",
+    "summary_ko": "한국석유공사 오피넷이 22일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1858.39원으로 집계됐다. 이는 전일 대비 0.06원 하락한 수치다.\n\n이날 오피넷에 따르면 경유 판매가격은 리터당 1843.46원으로 전일보다 0.62원 내렸고, LPG 부탄은 리터당 1097.94원으로 0.12원 하락했다. 주요 유종 모두 전일 대비 소폭 하락세를 나타냈다.\n\n이번 유가 변동은 최근 정부의 유류세 인하 확대 조치와 정유사 도매가 조정 등이 복합적으로 작용한 결과로 분석된다. 일각에서는 고유가 부담을 완화하기 위한 지원",
+    "url": "internal://opinet_price_2026-09-22",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-09-22 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_09_22.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-22T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-22 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-09-22",
+      "prices": {
+        "B027": {
+          "diff": -0.06,
+          "name": "휘발유",
+          "price": 1858.39
+        },
+        "B034": {
+          "diff": 0.58,
+          "name": "고급휘발유",
+          "price": 2324.66
+        },
+        "C004": {
+          "diff": -0.2,
+          "name": "실내등유",
+          "price": 1574.71
+        },
+        "D047": {
+          "diff": -0.62,
+          "name": "경유",
+          "price": 1843.46
+        },
+        "K015": {
+          "diff": -0.12,
+          "name": "LPG(부탄)",
+          "price": 1097.94
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 212962,
     "title_en": "[데일리 다이제스트] 글로벌 지정학적 제재와 보건·기후 위기 동시 확산",
     "title_ko": "[데일리 다이제스트] 글로벌 지정학적 제재와 보건·기후 위기 동시 확산",
@@ -26,7 +92,8 @@
     "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": false
   },
   {
     "id": 212817,
@@ -62,7 +129,8 @@
     "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 212561,
@@ -99,7 +167,8 @@
     "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 212215,
@@ -138,7 +207,8 @@
     "image_credit": "사진: Lukt64 (CC BY-SA 4.0, Wikimedia Commons)",
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 211891,
@@ -174,7 +244,8 @@
     "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 211773,
@@ -211,7 +282,8 @@
     "image_credit": "사진: Keitsist (CC BY-SA 3.0, Wikimedia Commons)",
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 211736,
@@ -249,7 +321,8 @@
     "image_credit": "사진: Foreign, Commonwealth & Development Office (CC BY 4.0, Wikimedia Commons)",
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 211709,
@@ -287,7 +360,8 @@
     "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 211197,
@@ -323,7 +397,8 @@
     "image_credit": "사진: 颐园居 (CC BY-SA 4.0, Wikimedia Commons)",
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": false
   },
   {
     "id": 210987,
@@ -369,7 +444,8 @@
     "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 210531,
@@ -409,7 +485,8 @@
     "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 210522,
@@ -449,7 +526,8 @@
     "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 210462,
@@ -489,7 +567,8 @@
     "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 210389,
@@ -525,7 +604,8 @@
     "image_credit": "이미지 출처: Wikimedia Commons",
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": false
   },
   {
     "id": 210376,
@@ -562,7 +642,8 @@
     "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 209934,
@@ -599,7 +680,8 @@
     "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 209672,
@@ -642,7 +724,8 @@
     "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 209529,
@@ -681,7 +764,8 @@
     "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
     "continuation_of_id": null,
     "summary_3lines_en": "",
-    "investment_idea_en": ""
+    "investment_idea_en": "",
+    "noindex": true
   },
   {
     "id": 209138,
@@ -722,7 +806,8 @@
     "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": false
   },
   {
     "id": 209110,
@@ -764,7 +849,8 @@
     "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 209060,
@@ -802,7 +888,8 @@
     "image_credit": "사진: Lukt64 (CC BY-SA 4.0, Wikimedia Commons)",
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 208776,
@@ -847,7 +934,8 @@
     "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 208743,
@@ -883,7 +971,8 @@
     "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 208741,
@@ -926,7 +1015,8 @@
     "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 208740,
@@ -964,7 +1054,8 @@
     "image_credit": "사진: Foreign, Commonwealth & Development Office (CC BY 4.0, Wikimedia Commons)",
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 208466,
@@ -1007,7 +1098,8 @@
     "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 208172,
@@ -1045,7 +1137,8 @@
     "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 208171,
@@ -1085,7 +1178,8 @@
     "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 207471,
@@ -1128,7 +1222,8 @@
     "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 208095,
@@ -1164,7 +1259,8 @@
     "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 208079,
@@ -1217,7 +1313,8 @@
     "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 207830,
@@ -1260,7 +1357,8 @@
     "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 207828,
@@ -1294,7 +1392,8 @@
     "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": false
   },
   {
     "id": 207827,
@@ -1332,7 +1431,8 @@
     "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 207586,
@@ -1368,7 +1468,8 @@
     "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 207585,
@@ -1433,6 +1534,7 @@
     "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
-    "investment_idea_en": null
+    "investment_idea_en": null,
+    "noindex": true
   }
 ]
