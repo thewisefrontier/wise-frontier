@@ -191,6 +191,7 @@
       <div class="sidebar-item" onclick="showArticles('rss',this)">📡 수집 기사</div>
       <div class="sidebar-item" onclick="showArticles('unpublished',this)">📋 미발행 기사</div>
       <div class="sidebar-item" onclick="showNeedsReview(this)">⚠️ 검토 필요</div>
+      <div class="sidebar-item" onclick="showArticles('explainer',this)">📝 이슈 파이널 검토</div>
       <div class="sidebar-item" id="foreign-menu" onclick="showForeignArticles(this)">🌐 해외기사 (내부검증)</div>
       <div class="sidebar-divider"></div>
       <div class="sidebar-item" id="calendar-menu" onclick="showCalendar(this)">📅 경제 일정 관리</div>
@@ -222,6 +223,10 @@
       <div>
         <div class="field-label">본문</div>
         <textarea class="field-textarea" id="edit-summary-ko" placeholder="기사 본문..."></textarea>
+      </div>
+      <div id="explainer-bg-field" style="display:none;">
+        <div class="field-label">배경 정보 <span style="color:var(--danger);font-weight:400;">(검토용 · 이슈 파이널 초안이 참고한 자료 — 원 기사에 없는 내용은 여기서 사실 확인)</span></div>
+        <div id="explainer-bg" style="font-size:12px;line-height:1.6;white-space:pre-wrap;border:1px solid var(--border);border-radius:6px;padding:8px 10px;background:var(--bg2);color:var(--muted);"></div>
       </div>
       <div>
         <div class="field-label">업데이트 기록 <span style="color:var(--danger);font-weight:400;">(내부 전용 · 독자 화면 비공개)</span></div>
@@ -418,6 +423,7 @@
     else if (currentFilter === 'rss') query = query.neq('source', 'NewsFinal');
     else if (currentFilter === 'cluster') query = query.eq('source', 'NewsFinal').ilike('subcategory', 'cluster_%');
     else if (currentFilter === 'unpublished') query = query.eq('source', 'NewsFinal').eq('is_published', false);
+    else if (currentFilter === 'explainer') query = query.eq('source', 'NewsFinal').eq('is_published', false).ilike('subcategory', '이슈파이널%'); // explainer_writer.py 초안 — 편집 후 발행
 
     const searchQ = document.getElementById('search-input')?.value?.trim();
     if (searchQ) query = query.or(`title_ko.ilike.%${searchQ}%,title_en.ilike.%${searchQ}%,country.ilike.%${searchQ}%,source.ilike.%${searchQ}%`);
@@ -557,6 +563,11 @@
     document.getElementById('url-field').style.display = isInternal ? 'none' : 'block';
 
     renderAdminUpdateLog(data.update_log);
+
+    // 이슈 파이널(해설) 초안: 작성에 쓴 배경 정보를 검토용으로 노출(explainer_writer.py가 source_data에 저장)
+    const bg = data.source_data && data.source_data.background;
+    document.getElementById('explainer-bg-field').style.display = bg ? 'block' : 'none';
+    document.getElementById('explainer-bg').textContent = bg || '';
 
     document.getElementById('edit-panel').classList.add('open');
     document.getElementById('overlay').classList.add('open');
