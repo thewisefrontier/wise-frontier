@@ -1894,6 +1894,34 @@
     }).join('');
   }
 
+  let histState = { id: null, art: null, revs: [] };
+
+  // 되돌리기 = 그 수정 "직전 값"을 기사에 다시 써넣는다. 이 동작도 하나의 새 수정이라 이력에 남는다.
+  // col 생략 시 해당 수정에서 바뀐 항목 전체. 삭제 이력이면 기사 자체를 복구한다(원문 크롤링 텍스트는 이력에 없음).
+  async function restoreRevision(revId, col) {
+    const r = histState.revs.find(x => x.id === revId);
+    if (!r) return;
+    const when = histTime(r.changed_at);
+    let error;
+    if (r.op === 'DELETE') {
+      if (!confirm(`삭제된 기사를 복구합니다.\n(삭제 시각 ${when} · 원문 크롤링 텍스트는 복구되지 않음)`)) return;
+      ({ error } = await sb.from('articles').insert(r.old_values));
+    } else {
+      const cols = col ? [col] : r.changed_columns;
+      const names = cols.map(c => HIST_LABEL[c] || c).join(', ');
+      if (!confirm(`[${names}]을(를) ${when} 수정 이전 값으로 되돌립니다.\n현재 값은 새 이력으로 남습니다.`)) return;
+      const payload = Object.fromEntries(cols.map(c => [c, r.old_values[c] ?? null]));
+      const res = await sb.from('articles').update(payload).eq('id', r.article_id).select('id');
+      error = res.error || (res.data && res.data.length ? null : { message: '수정 권한이 없거나 기사가 없습니다' });
+    }
+    if (error) { toast(`되돌리기 실패: ${error.message}`, 'error'); return; }
+    toast('되돌렸습니다', 'success');
+    const id = histState.id;
+    await openHistory(id);
+    // 편집 패널이 같은 기사로 열려 있으면 옛 값이 남아 저장 시 덮어쓰므로 다시 불러온다
+    if (document.getElementById('edit-panel').classList.contains('open') && Number(document.getElementById('edit-id').value) === id) openEdit(id);
+  }
+
   function closeHistory() { document.getElementById('hist-overlay').classList.remove('open'); }
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeHistory(); });
 
@@ -1912,15 +1940,21 @@
     ]);
     if (revRes.error) { body.innerHTML = `<div class="empty">오류: ${hEsc(revRes.error.message)}</div>`; return; }
     const art = artRes.data, revs = revRes.data || [];
+    histState = { id, art, revs };
     if (art) document.getElementById('hist-title').textContent = `수정 이력 · ${art.title_ko || '#' + id}`;
     if (!revs.length) { body.innerHTML = '<div class="empty">기록된 수정 이력이 없습니다.<br><span style="font-size:11px;">(이력 기능은 2026-09-22부터 기록되며, 이후 수정분만 남습니다)</span></div>'; return; }
 
     const cards = revs.map((r, i) => {
+      const differs = c => art && JSON.stringify(art[c] ?? null) !== JSON.stringify((r.old_values || {})[c] ?? null);
+      const restoreAll = r.op === 'DELETE'
+        ? (art ? '' : `<button class="btn-sm" style="margin-left:auto;" onclick="restoreRevision(${r.id})">↩ 기사 복구</button>`)
+        : ((r.changed_columns || []).some(differs) ? `<button class="btn-sm" style="margin-left:auto;" onclick="restoreRevision(${r.id})">↩ 이 수정 전체 되돌리기</button>` : '');
       const top = `<div class="rev-top">
         <b>${histTime(r.changed_at)}</b>
         <span class="tag">${r.op === 'DELETE' ? '삭제' : '수정'}</span>
         <span class="muted">${hEsc(histActor(r.actor))}</span>
         ${r.note ? `<span class="rev-note">${hEsc(r.note)}</span>` : ''}
+        ${restoreAll}
       </div>`;
       if (r.op === 'DELETE') {
         const o = r.old_values || {};
@@ -1931,7 +1965,10 @@
         let after;
         const next = revs.slice(i + 1).find(x => x.op === 'UPDATE' && (x.changed_columns || []).includes(c));
         if (next) after = next.old_values[c]; else if (art) after = art[c]; else after = undefined;
-        return `<div class="rev-field"><div class="rev-label">${HIST_LABEL[c] || c}</div>
+        const btn = !art ? '' : differs(c)
+          ? `<button class="btn-sm" style="margin-left:8px;" onclick="restoreRevision(${r.id},'${c}')">↩ 이 값으로 되돌리기</button>`
+          : '<span style="margin-left:8px;">· 현재 값과 동일</span>';
+        return `<div class="rev-field"><div class="rev-label">${HIST_LABEL[c] || c}${btn}</div>
           <div class="diff">${diffHtml(histVal(r.old_values[c]), histVal(after))}</div></div>`;
       }).join('');
       return `<div class="rev">${top}${fields}</div>`;
