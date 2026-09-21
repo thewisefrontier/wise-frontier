@@ -243,6 +243,9 @@
   import { publicUpdateLog } from '/js/update-log-filter.js';
   import { imageCreditLabel } from '/js/image-credit.js';
   import { esc } from '/js/esc.js';
+  import { fetchRelatedTimeline, relatedTimelineHtml } from '/js/related-timeline.js';
+  window.fetchRelatedTimeline = fetchRelatedTimeline;
+  window.relatedTimelineHtml = relatedTimelineHtml;
   window.publicUpdateLog = publicUpdateLog;
   window.imageCreditLabel = imageCreditLabel;
   window.esc = esc;
@@ -388,6 +391,7 @@ function cleanBody(text) {
       }
 
       renderArticle(article, articles);
+      loadIssueTimeline(article);
 
       // view_count 증가
       fetch(`${SUPABASE_URL}/rest/v1/rpc/increment_view_count`, {
@@ -616,6 +620,8 @@ function cleanBody(text) {
 
       <div class="source-link">ⓒ NewsFinal <button onclick="shareArticle()" style="float:right;background:none;border:1px solid var(--border);border-radius:6px;padding:4px 12px;cursor:pointer;color:var(--text);font-size:12px;">🔗 공유</button></div>
 
+      <div id="issue-timeline"></div>
+
       ${related.length ? `
         <div class="related">
           <div class="related-title">관련 기사</div>
@@ -628,6 +634,14 @@ function cleanBody(text) {
         </div>
       ` : ''}
     `;
+  }
+
+  // 이 사안의 흐름 — renderArticle이 wrapper를 통째로 다시 그린 뒤 비동기로 채운다(functions/article.js SSR과 같은 모듈)
+  function loadIssueTimeline(a) {
+    const el = document.getElementById('issue-timeline');
+    if (!el || !window.fetchRelatedTimeline) return;
+    window.fetchRelatedTimeline(SUPABASE_URL, SUPABASE_ANON_KEY, a.id)
+      .then(rows => { el.innerHTML = window.relatedTimelineHtml(rows, window.esc, a); });
   }
 
   function __startPage() {
