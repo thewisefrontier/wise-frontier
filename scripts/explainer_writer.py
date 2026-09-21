@@ -8,8 +8,9 @@ scripts/explainer_writer.py
 기사도 만들 수 있어?" → "응 검토 화면 방식으로 시작해".
 
 설계(사람이 직접 썼을 때 품질을 만든 게 글쓰기가 아니라 검증이라는 판단):
-  1. 자료: 이미 발행된 NewsFinal 기사 본문 + fetch_background_context()의 배경 정보
-     (NVIDIA 우선 → 검색 그라운딩 폴백 + 교차검증까지 이미 갖춰진 함수 재사용)
+  1. 자료: 이미 발행된 NewsFinal 기사 본문 + 배경 정보 두 갈래
+     ① 뉴스파이널 기발행 관련 기사(최근 30일, related_archive) — 이미 검증해 낸 사실이라 우선
+     ② fetch_background_context() 외부 배경(NVIDIA 우선 → 검색 그라운딩 폴백 + 교차검증) — 검증 필요 표시
   2. 작성: Gemini는 그 자료에 있는 사실만으로 쓴다(프롬프트는 DB prompts.explainer_rules).
   3. 검증: 본문의 모든 수치가 자료에 있는지 결정론적으로 대조(숫자 오류 방지 —
      "지연은 괜찮지만 숫자가 틀리면 절대 안돼"), 고유명사 날조·문체·단일주제 검사는
@@ -113,14 +114,81 @@ def _parse(text: str):
     return (mt.group(1).strip() if mt else ""), (mb.group(1).strip() if mb else "")
 
 
+ARCHIVE_DAYS = 30           # 관련 기발행 기사를 찾는 기간
+ARCHIVE_LIMIT = 4           # 배경으로 붙일 관련 기사 수
+ARCHIVE_BODY_CHARS = 700    # 기사당 본문 발췌 길이(앞부분이 사실 요약)
+# 사건 유형 동사·범용어는 "같은 사안" 신호가 못 된다(예: 나이지리아+별세만 겹쳐도 다른 사건). ponytail: 목록식 휴리스틱 —
+# 오탐이 보이면 어휘를 더 넣거나 제목 임베딩 유사도로 교체.
+_TITLE_STOP = {"관련", "이후", "가운데", "속에", "따른", "대한", "위한", "통해", "지난", "올해", "오늘", "발표", "전망", "논의",
+               "별세", "발생", "개막", "확산", "체결", "단행", "개편", "표명", "시도", "격상", "우려", "지지", "결정", "합의", "강화", "재개"}
+
+
+def _title_tokens(title: str) -> list:
+    """제목에서 검색용 핵심어(말머리 제외, 2자 이상 한글·영문·숫자 혼합어). 앞쪽이 주제어인 경우가 많아 6개까지."""
+    t = re.sub(r"^\s*\[[^\]]*\]\s*", "", title or "")
+    toks = [x for x in re.findall(r"[가-힣A-Za-z0-9]{2,}", t) if x not in _TITLE_STOP and not x.isdigit()]
+    return toks[:6]
+
+
+def _body_only(text: str) -> str:
+    """갱신 기사의 [업데이트] 블록을 걷어내고 원 본문만(사실 요약이 앞에 있음)."""
+    t = (text or "").lstrip()
+    if t.startswith("[업데이트]") and "\n────────" in t:
+        t = t.split("\n────────", 1)[1].lstrip("\n")
+    return t
+
+
+def related_archive(base: dict) -> list:
+    """뉴스파이널이 이미 발행한 관련 기사(최근 ARCHIVE_DAYS일). 이 사이트가 이미 검증해 낸 사실이라
+    모델 기억(NVIDIA)·검색 결과보다 환각 위험이 낮은 배경 자료다 — "이 사안의 이전 전개"를 채운다.
+    제목 핵심어 2개 이상 겹치는 것만(우연한 겹침 배제). 이슈파이널·날씨·다이제스트는 제외."""
+    toks = _title_tokens(base.get("title_ko") or "")
+    if not toks:
+        return []
+    since = (now_kst() - timedelta(days=ARCHIVE_DAYS)).strftime("%Y-%m-%d %H:%M")
+    res = requests.get(sb_url(), headers=sb_headers(), params={
+        "select": "id,title_ko,summary_ko,created_at,subcategory",
+        "source": "eq.NewsFinal", "is_published": "eq.true", "id": f"neq.{base.get('id', 0)}",
+        "created_at": f"gte.{since}",
+        "or": "(" + ",".join(f"title_ko.ilike.*{t}*" for t in toks) + ")",
+        "order": "created_at.desc", "limit": "60",
+    }, timeout=30)
+    if res.status_code not in (200, 206):
+        return []
+    need = 2 if len(toks) >= 2 else 1
+    scored = []
+    for a in res.json() or []:
+        sub = a.get("subcategory") or ""
+        if sub.startswith(("이슈파이널", "weather", "digest_")):
+            continue
+        hit = sum(1 for t in toks if t in (a.get("title_ko") or ""))
+        if hit >= need:
+            scored.append((hit, a.get("created_at") or "", a))
+    scored.sort(key=lambda x: (x[0], x[1]), reverse=True)
+    return [a for _, _, a in scored[:ARCHIVE_LIMIT]]
+
+
+def archive_block(items: list) -> str:
+    parts = []
+    for a in items:
+        date = (a.get("created_at") or "")[:10]
+        parts.append(f"- ({date} 발행) {a.get('title_ko')}\n{_body_only(a.get('summary_ko'))[:ARCHIVE_BODY_CHARS]}")
+    return "[관련 기사 — 뉴스파이널 기발행, 그 이후 상황이 바뀌었을 수 있음]\n" + "\n\n".join(parts) if parts else ""
+
+
 def write_explainer(base: dict):
-    """base 기사 dict → (title, body, background) 또는 None. DB 접근 없음(테스트 가능)."""
+    """base 기사 dict → (title, body, background) 또는 None. DB 접근은 related_archive()뿐."""
     title0 = base.get("title_ko") or ""
     body0 = base.get("summary_ko") or ""
-    background = fetch_background_context(title0, source_context=f"{title0}\n{body0[:400]}")
-    if not background:
+    archive = related_archive(base)
+    print(f"  관련 기발행 기사 {len(archive)}건 배경으로 사용")
+    external = fetch_background_context(title0, source_context=f"{title0}\n{body0[:400]}")
+    parts = [p for p in (archive_block(archive),
+                         "[외부 배경 지식 — 모델 지식·검색 기반, 검증 필요]\n" + external if external else "") if p]
+    if not parts:
         print("  ⚠️ 배경 정보 확보 실패 — 원 기사만으로는 해설 재료 부족, 스킵")
         return None
+    background = "\n\n".join(parts)
     facts = f"{title0}\n{body0}\n{background}"
 
     rules = load_prompt("explainer_rules", fallback=_FALLBACK_RULES)
@@ -164,7 +232,7 @@ def _candidates():
     res = requests.get(sb_url(), headers=sb_headers(), params={
         "select": "id,title_ko,summary_ko,category,country,region,countries,image_url,image_credit,score,subcategory",
         "source": "eq.NewsFinal", "is_published": "eq.true", "created_at": f"gte.{since}",
-        "or": "(subcategory.like.cluster_*,subcategory.like.econ_rate_*)",
+        "or": "(subcategory.like.cluster_*,subcategory.like.econ_rate_*,subcategory.like.trend_*)",  # trend_는 이어지는 사안이라 기발행 배경이 풍부
         "order": "created_at.desc", "limit": "60",
     }, timeout=30)
     if res.status_code not in (200, 206):
