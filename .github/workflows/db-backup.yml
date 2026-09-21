@@ -94,6 +94,8 @@ jobs:
               for k in ("client_id", "client_secret"):
                   if d.get(k): conf.append(f"{k} = {d[k]}")
           conf.append("token = " + tok)
+          # 진단(값은 출력하지 않음): 형식 확인용
+          print("secret len=%d head=%s | token len=%d head=%s valid_json=%s" % (len(v), v[:3], len(tok), tok[:1], (lambda s: (json.loads(s) is not None))(tok) if tok[:1] == "{" else False))
           open(os.path.expanduser("~/.config/rclone/rclone.conf"), "w").write("\n".join(conf) + "\n")
           PY
           fi
