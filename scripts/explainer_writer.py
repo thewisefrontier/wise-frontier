@@ -240,7 +240,9 @@ def _candidates():
         return []
     out = []
     for a in res.json() or []:
-        if len(a.get("summary_ko") or "") < MIN_BASE_LEN:
+        # trend_ 기사는 본문이 짧은 대신(500~1100자) 기발행 관련 기사가 배경으로 붙어 재료가 충분하다
+        min_len = 500 if (a.get("subcategory") or "").startswith("trend_") else MIN_BASE_LEN
+        if len(_body_only(a.get("summary_ko"))) < min_len:
             continue
         out.append(a)
     # 클러스터 score는 소스 수가 아니라 1로 고정돼 있어 중요도 지표로 못 쓴다(2026-09-22 실측).
