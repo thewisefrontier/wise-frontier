@@ -78,11 +78,7 @@ jobs:
           sudo apt-get install -y -qq rclone
           mkdir -p ~/.config/rclone
           if [ -n "$RCLONE_CONFIG_DATA" ]; then printf '%s' "$RCLONE_CONFIG_DATA" > ~/.config/rclone/rclone.conf
-          else printf '[gdrive]
-type = drive
-scope = drive.file
-token = %s
-' "$RCLONE_DRIVE_TOKEN" > ~/.config/rclone/rclone.conf; fi
+          else printf '[gdrive]\ntype = drive\nscope = drive.file\ntoken = %s\n' "$RCLONE_DRIVE_TOKEN" > ~/.config/rclone/rclone.conf; fi
           f=$(ls newsfinal-*.dump.enc)
           rclone copyto "$f" "gdrive:newsfinal-backups/$f"
           rclone lsl "gdrive:newsfinal-backups/$f"   # copyto가 업로드 후 해시를 대조한다
