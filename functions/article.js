@@ -17,6 +17,7 @@
 import { publicUpdateLog } from '../docs/js/update-log-filter.js';
 import { imageCreditLabel } from '../docs/js/image-credit.js';
 import { esc } from '../docs/js/esc.js';
+import { fetchRelatedTimeline, relatedTimelineHtml } from '../docs/js/related-timeline.js';
 
 const SUPABASE_URL = 'https://fotdngseksqaghvtcvqh.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_rT3kSEAAdM0DJlDW5fEWww_M37h6dDW';
@@ -90,7 +91,7 @@ function toIsoKST(str) {
 // article.html renderArticle()의 본문 처리(관련기사 제외)를 서버에서 재현.
 // 관련기사 내부링크는 sitemap 전체등록이 발견을 담당하고, 사용자 화면엔
 // 클라 renderArticle이 채우므로 SSR에서는 생략(함수 단순화·DB 쿼리 1건 유지).
-function buildWrapperHtml(a) {
+function buildWrapperHtml(a, related) {
   const title = a.title_ko || a.title_en || '';
   const body = cleanBody(a.summary_ko || a.summary_en || '');
 
@@ -217,7 +218,8 @@ ${updateLogHtml}
       </div>
 ${investHtml}
 
-      <div class="source-link">ⓒ NewsFinal <button onclick="shareArticle()" style="float:right;background:none;border:1px solid var(--border);border-radius:6px;padding:4px 12px;cursor:pointer;color:var(--text);font-size:12px;">🔗 공유</button></div>`;
+      <div class="source-link">ⓒ NewsFinal <button onclick="shareArticle()" style="float:right;background:none;border:1px solid var(--border);border-radius:6px;padding:4px 12px;cursor:pointer;color:var(--text);font-size:12px;">🔗 공유</button></div>
+      <div id="issue-timeline">${relatedTimelineHtml(related, esc, a)}</div>`;
 }
 
 export async function onRequestGet(context) {
@@ -240,6 +242,8 @@ export async function onRequestGet(context) {
     // 캐시될 수 있다 — 이 응답에 실어 보내는 no-store 헤더는 우리가 브라우저에
     // 주는 응답에만 적용되고, 이 서브리퀘스트 자체와는 무관하다. 그 결과 기사가
     // 갱신돼도 낡은 캐시가 한동안 노출되는 문제가 있었다(실사고: id=63237).
+    // 이 사안의 흐름(관련 기사)은 기사 조회와 병렬로 — 실패해도 빈 배열이라 렌더에 영향 없음
+    const relatedP = fetchRelatedTimeline(SUPABASE_URL, SUPABASE_ANON_KEY, id);
     const dbRes = await fetch(apiUrl, { headers: { apikey: SUPABASE_ANON_KEY }, cache: 'no-store' });
 
     // ⚠️ 실사고(2026-08-16): dbRes.ok가 false인 걸 "기사 없음"과 똑같이 취급해
@@ -273,7 +277,7 @@ export async function onRequestGet(context) {
     const publishedIso = toIsoKST(a.created_at);
     const kwParts = [a.category, a.country, regionKo(a.region)].filter(Boolean);
     const newsKeywords = kwParts.join(', ');
-    const wrapperHtml = buildWrapperHtml(a);
+    const wrapperHtml = buildWrapperHtml(a, await relatedP);
 
     // og:type 요소 뒤에 붙일 추가 메타(원본 head에 없는 것들)
     const extraHead =
