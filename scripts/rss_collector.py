@@ -44,7 +44,7 @@ def collect():
     print(f"[수집] {len(sources)}개 소스 병렬 수집 시작...")
 
     seen_titles = []
-    queued = skipped_noise = skipped_dup = 0
+    queued = skipped_noise = skipped_dup = buffered = 0
     src_ok = src_fail = src_too_old = 0
     fail_samples = []  # 진단용 — 실패 사유 앞부분만 몇 개 수집(2026-09-22, 라이브 실행 결과 이상 조사)
     buf = []  # 아직 큐에 반영 안 한 대기분 — FLUSH_EVERY마다 한 번에 내보낸다
@@ -93,6 +93,7 @@ def collect():
                     skipped_dup += 1
                     continue
                 seen_titles.append(title)
+                buffered += 1
 
                 buf.append({
                     "link": link, "title": title, "source_name": name,
@@ -107,7 +108,7 @@ def collect():
         flush()  # 남은 대기분(FLUSH_EVERY 미만) 마무리
 
     save_state()
-    print(f"[수집 완료] 큐 적재 {queued}건 | 노이즈제외 {skipped_noise} | 유사중복 {skipped_dup}")
+    print(f"[수집 완료] 큐 적재 {queued}건(버퍼 {buffered}건 중) | 노이즈제외 {skipped_noise} | 유사중복 {skipped_dup}")
     print(f"[소스 결과] 성공 {src_ok} | 발행일초과 {src_too_old} | 실패 {src_fail} (총 {len(sources)})")
     for s in fail_samples:
         print(f"  [실패예시] {s}")
