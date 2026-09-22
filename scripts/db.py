@@ -51,6 +51,25 @@ def is_url_exists(url: str) -> bool:
     return False
 
 
+def existing_urls(urls: list, chunk: int = 50) -> set:
+    """urls 중 articles에 이미 있는 것만 집합으로 반환 — 항목마다 is_url_exists()를
+    따로 부르면(왕복 1회씩) 소스당 최대 5개, 1200+소스에서 실측 초당 1건 수준으로
+    병목이 됐다(2026-09-22, rss_collector.py 최초 실전 시험: 13분에 689건). 대신 배치
+    전체를 IN 쿼리로 묶되, GET 쿼리스트링 길이 상한(게이트웨이 통상 8~16KB)을 피하려
+    chunk개씩 나눠 보낸다."""
+    found = set()
+    for i in range(0, len(urls), chunk):
+        part = urls[i:i + chunk]
+        quoted = ",".join(f'"{u}"' for u in part)
+        res = requests.get(
+            _url(), headers=_headers(),
+            params={"select": "url", "url": f"in.({quoted})"}, timeout=10,
+        )
+        if res.status_code in (200, 206):
+            found.update(r["url"] for r in res.json())
+    return found
+
+
 def insert_article(
     title_en, title_ko, summary_en, summary_ko,
     url, source, category, subcategory, region, country, country_flag, score,
