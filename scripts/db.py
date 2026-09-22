@@ -245,27 +245,62 @@ def queue_insert(link, title, source_name, category, subcategory,
     return -1
 
 
+def _pg_text(s):
+    """Postgres text 컬럼이 거부하는 임베디드 NUL(\\x00)·기타 C0 제어문자를 제거.
+    2026-09-22 실전 시험에서 발견: 배치(80건) 안에 한 건이라도 이게 섞이면 그 배치
+    전체가 INSERT 자체에서 실패한다(단일 문장이라 부분성공이 안 됨) — buffered
+    4631건 중 실제 삽입 160건에 그쳤던 사고의 원인. 일부 RSS(특히 인코딩이 불안정한
+    소규모 현지 매체)가 제목·요약에 NUL을 흘려보낸다."""
+    if not s:
+        return s
+    return "".join(c for c in s if c == "\n" or c == "\t" or ord(c) >= 0x20)
+
+
 def queue_insert_bulk(rows: list) -> int:
     """rss_raw_queue에 여러 행을 한 번의 POST로 적재. 2026-09-22 실전 시험에서 건마다
     개별 POST(queue_insert)를 부르면 소스 1200+개 × 최대 5건에서 순차 왕복이 쌓여
     15분+에도 안 끝났다(존재-확인 병목을 없앤 뒤에도 남아있던 두 번째 병목). rows는
     각각 queue_insert()와 같은 키(link/title/source_name/category/subcategory/
     summary_en/source_published_at/raw_tags)의 dict. 반환값은 실제 삽입된 건수
-    (link 충돌로 조용히 스킵된 건 제외)."""
+    (link 충돌로 조용히 스킵된 건 제외).
+
+    ⚠️ 배치 전체가 한 SQL 문이라 이 함수 자체의 정제만으로는 못 막는 오류(그 외
+    제약 위반 등)가 또 나올 수 있다 — 실패 시 배치를 반으로 쪼개 재시도하고,
+    그래도 안 되면(단일 행까지 쪼개도 실패) 그 행만 버리고 계속 진행해
+    한 건이 전체를 막지 않게 한다."""
     if not rows:
         return 0
-    payload = [{
-        "link": r["link"], "title": r["title"], "source_name": r["source_name"],
-        "category": r.get("category"), "subcategory": r.get("subcategory"),
-        "summary_en": r.get("summary_en") or "",
-        **({"source_published_at": r["source_published_at"]} if r.get("source_published_at") else {}),
-        **({"raw_tags": r["raw_tags"]} if r.get("raw_tags") else {}),
-    } for r in rows]
-    headers = {**_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
-    res = requests.post(_url("rss_raw_queue"), headers=headers, json=payload, timeout=30)
-    if res.status_code in (200, 201):
-        return len(res.json())
-    return 0
+
+    def build(rs):
+        return [{
+            "link": r["link"], "title": _pg_text(r["title"]), "source_name": r["source_name"],
+            "category": r.get("category"), "subcategory": r.get("subcategory"),
+            "summary_en": _pg_text(r.get("summary_en")) or "",
+            **({"source_published_at": r["source_published_at"]} if r.get("source_published_at") else {}),
+            **({"raw_tags": r["raw_tags"]} if r.get("raw_tags") else {}),
+        } for r in rs]
+
+    def post(rs):
+        headers = {**_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
+        try:
+            res = requests.post(_url("rss_raw_queue"), headers=headers, json=build(rs), timeout=30)
+        except requests.RequestException as e:
+            print(f"  [WARN] queue_insert_bulk 네트워크 오류({len(rs)}건): {e}")
+            return None
+        if res.status_code in (200, 201):
+            return len(res.json())
+        print(f"  [WARN] queue_insert_bulk 실패 status={res.status_code} 건수={len(rs)} body={res.text[:300]}")
+        return None
+
+    n = post(rows)
+    if n is not None:
+        return n
+    if len(rows) == 1:
+        print(f"  [DROP] 단건도 실패해 포기: {rows[0].get('link')}")
+        return 0
+    # 절반으로 쪼개 재시도 — 배치 안의 문제 행 하나가 전체를 막지 않게 이분 탐색
+    mid = len(rows) // 2
+    return queue_insert_bulk(rows[:mid]) + queue_insert_bulk(rows[mid:])
 
 
 def queue_claim_batch(limit: int = 150) -> list:
