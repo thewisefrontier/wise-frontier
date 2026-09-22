@@ -832,7 +832,7 @@ def fetch_source(s):
     """단일 소스에서 최근 기사 다건 수집 (발행일 필터 적용)
 
     ⚠️ socket.setdefaulttimeout()으로 타임아웃을 걸면 프로세스 전역 상태라
-    ThreadPoolExecutor(max_workers=20)의 다른 스레드가 먼저 끝나며 그 값을
+    ThreadPoolExecutor(max_workers=40)의 다른 스레드가 먼저 끝나며 그 값을
     되돌리는 순간(원래값 None으로), 아직 통신 중인 스레드의 타임아웃이 함께
     사라져 무한정 블록될 수 있다(2026-09-09 밤 실사고 — RSS 수집 단계가
     1시간 25분 걸려 파이프라인 전체가 큐에 밀려 3시간+ 발행 중단됨). requests로
@@ -883,7 +883,12 @@ seen_titles = []
 # 병렬로 RSS 수집
 print(f"[수집] {len(sources)}개 소스 병렬 수집 시작...")
 results = []
-with ThreadPoolExecutor(max_workers=20) as executor:
+# 2026-09-22: RSS 소스를 430→1200+개로 대폭 확충(대륙별 검증된 국가 매체 목록 반영)하며
+# max_workers를 20→40으로 올렸다. 소스 수집은 순수 I/O 대기(HTTP 요청)라 스레드를 늘려도
+# GIL 경합이 거의 없고, 430개 기준 이미 10분 타임아웃에 육박(612초)했던 걸 감안하면 늘리지
+# 않을 경우 스텝이 통째로 타임아웃돼(처리·저장은 수집 루프 종료 후 시작이라 부분 저장도 안 됨)
+# 오히려 발행량이 줄어드는 역효과가 난다. run.yml의 이 스텝 timeout-minutes도 15로 함께 올림.
+with ThreadPoolExecutor(max_workers=40) as executor:
     futures = {executor.submit(fetch_source, s): s for s in sources}
     for future in as_completed(futures):
         data, name, status = future.result()
