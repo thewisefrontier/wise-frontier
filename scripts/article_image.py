@@ -267,19 +267,27 @@ _PIXABAY_NAME_BLOCKLIST = {
 }
 
 
-def _hit_has_blocked_name(hit: dict) -> bool:
+def _hit_has_blocked_name(hit: dict, allow: set) -> bool:
     tags = (hit.get("tags") or "").lower()
-    return any(name in tags for name in _PIXABAY_NAME_BLOCKLIST)
+    return any(name in tags for name in _PIXABAY_NAME_BLOCKLIST if name not in allow)
 
 
-def pick_safe_pixabay_hit(hits: list):
+def pick_safe_pixabay_hit(hits: list, allow_name: str = ""):
     """Pixabay 검색 결과 중 (1) 블록리스트 인물이 안 나오고 (2) 최근 24시간
     내 다른 기사에 안 쓰인 것을 우선 선택한다. 인물 필터를 통과하는 후보가
     하나도 없으면(드묾) 어쩔 수 없이 필터 없이 진행하되 로그를 남긴다 —
-    그 경우에도 최근 재사용 체크는 유지한다."""
+    그 경우에도 최근 재사용 체크는 유지한다.
+
+    allow_name: 이 기사의 실제 대상 인물(entity)이 있으면 넘긴다 — 블록리스트
+    인물이라도 이 값과 일치하면 걸러내지 않는다. "트럼프 기사엔 트럼프 사진이
+    맞다"(2026-09-22 사용자 지적) — 블록리스트는 "이 경로가 원래 인명을 안 쓰는
+    일반 검색인데 엉뚱한 정치인이 섞여 나오는" 경우만 막으려는 것이지, 그
+    인물 본인에 대한 기사까지 막으려는 게 아니다."""
     if not hits:
         return None
-    candidates = [h for h in hits if not _hit_has_blocked_name(h)]
+    allow_low = (allow_name or "").lower().replace("-", " ")
+    allow = {name for name in _PIXABAY_NAME_BLOCKLIST if allow_low and (name in allow_low or allow_low in name)}
+    candidates = [h for h in hits if not _hit_has_blocked_name(h, allow)]
     if not candidates:
         print("  ⚠️ 모든 후보가 인물 블록리스트에 걸림 — 필터 없이 진행")
         candidates = hits
@@ -351,7 +359,7 @@ def fetch_article_image(title: str, body: str, entity: str, call_gemini_fn) -> t
         if res.status_code == 200:
             hits = res.json().get("hits", [])
             if hits:
-                pick = pick_safe_pixabay_hit(hits)
+                pick = pick_safe_pixabay_hit(hits, allow_name=entity)
                 # webformatURL(최대 640px) 사용 — largeImageURL(1280px)은 히어로
                 # 이미지 표시 크기(max-height:420px)에 과잉이라 R2 용량만 낭비.
                 raw_url = pick.get("webformatURL", "") or pick.get("largeImageURL", "")
