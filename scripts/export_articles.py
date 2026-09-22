@@ -4,6 +4,12 @@ import re
 import requests
 from datetime import datetime, timedelta, timezone
 
+# 2026-09-22: 일시적 connection reset 하나에 재시도 없이 죽어 그 사이클의
+# 웹사이트 반영·커밋/푸시가 통째로 스킵됐던 실사고 수정 — requests 대신
+# 자동 재시도 세션(http_retry.py) 사용.
+from http_retry import get_session
+requests = get_session()
+
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 OUTPUT_FILE = "docs/data/articles.json"
