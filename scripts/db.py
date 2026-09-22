@@ -314,6 +314,28 @@ def update_source_health(outcomes: dict, fail_threshold: int) -> dict:
 # 같은 원칙: 새 테이블은 GRANT도 RLS와 별도로 확인 — 이미 반영됨, apply_migration
 # rss_raw_queue_grants 참고).
 
+def image_used_recently(fragment: str, hours: int = 24) -> bool:
+    """image_url에 fragment(보통 Pixabay 사진 고유 id)가 포함된 기사가 최근
+    hours 시간 내에 있으면 True.
+
+    실사고(2026-09-22): 러시아 총선 기사와 베를린 지방선거 기사가 서로 다른
+    검색어("election ballot voting booth" vs "ballot political protest city
+    hall")로 Pixabay를 검색했는데도 둘 다 같은 스톡사진(같은 photo id)이
+    1등으로 나와, 무관한 두 기사에 같은 사진이 2시간 간격으로 실렸다
+    (사용자 지적). article_image.py의 일반 Pixabay 검색 경로(entity 없이
+    제목/본문 키워드로 찾는 경우)에서만 쓴다 — 위키미디어 entity 경로(백악관
+    기사에 백악관 사진처럼 "같은 대상은 같은 사진이 맞는" 경우)는 의도된
+    재사용이라 이 체크 대상이 아니다."""
+    since = (now_kst() - timedelta(hours=hours)).strftime("%Y-%m-%d %H:%M")
+    res = requests.get(
+        _url("articles"), headers=_headers(),
+        params={"select": "id", "image_url": f"ilike.*{fragment}*",
+                "created_at": f"gte.{since}", "limit": "1"},
+        timeout=10,
+    )
+    return res.status_code in (200, 206) and len(res.json()) > 0
+
+
 def queue_link_exists(link: str) -> bool:
     res = requests.get(
         _url("rss_raw_queue"), headers=_headers(),

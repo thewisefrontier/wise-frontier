@@ -25,6 +25,8 @@ import re
 
 import requests
 
+from db import image_used_recently
+
 PIXABAY_API_KEY = os.getenv("PIXABAY_API_KEY", "")
 
 # 위키미디어 커먼즈는 CC/PD 라이선스 파일만 호스팅하지만, 드물게 마이그레이션
@@ -305,9 +307,31 @@ def fetch_article_image(title: str, body: str, entity: str, call_gemini_fn) -> t
         if res.status_code == 200:
             hits = res.json().get("hits", [])
             if hits:
+                # 2026-09-22 실사고: 서로 다른 검색어로도 같은 1등 스톡사진이
+                # 반복 선택돼(러시아 총선/베를린 지방선거 기사가 같은 투표함
+                # 사진) 무관한 두 기사에 같은 사진이 실렸다. per_page=3으로
+                # 이미 후보 3개를 받아오면서도 항상 hits[0]만 썼던 게 원인 —
+                # 이 경로는 애초에 인물·지명을 뺀 "일반 소재" 검색이라(아래
+                # 주석 참고) 같은 사진이 서로 다른 기사에 실려도 편집상
+                # 맞을 이유가 없다. 최근 24시간 내 이미 쓰인 사진(photo id
+                # 기준)은 건너뛰고 다음 후보로 넘어간다 — 셋 다 최근에 썼으면
+                # (드묾) 사진 없는 것보다 나으니 1등을 그대로 쓴다.
+                pick = hits[0]
+                for hit in hits:
+                    frag = f"pixabay_{hit.get('id')}"
+                    try:
+                        if not image_used_recently(frag):
+                            pick = hit
+                            break
+                    except Exception as e:
+                        print(f"  ⚠️ 최근 사용 이미지 확인 실패(그냥 진행): {e}")
+                        pick = hit
+                        break
+                else:
+                    print(f"  ⚠️ 후보 {len(hits)}개 전부 최근 24시간 내 사용됨 — 1등 그대로 사용")
                 # webformatURL(최대 640px) 사용 — largeImageURL(1280px)은 히어로
                 # 이미지 표시 크기(max-height:420px)에 과잉이라 R2 용량만 낭비.
-                raw_url = hits[0].get("webformatURL", "") or hits[0].get("largeImageURL", "")
+                raw_url = pick.get("webformatURL", "") or pick.get("largeImageURL", "")
                 # 2026-09-08 사용자 지적(id=140448, 과테말라 가수 파올라 페를롭
                 # 기사에 무관한 여성 기타리스트 스톡사진이 붙음 — "저 사진이
                 # 파올라 페를롭 본인이 아니니까"): 이 경로는 프롬프트 자체가
@@ -319,9 +343,13 @@ def fetch_article_image(title: str, body: str, entity: str, call_gemini_fn) -> t
                 disclaimer = "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)"
                 # Pixabay 이미지 URL은 ~24시간 후 만료되는 임시 URL이라
                 # R2에 영구 저장해서 링크가 안 깨지게 한다(image_store.py 참조).
+                # key_hint를 검색어가 아니라 photo id로 고정 — 같은 사진이 다른
+                # 검색어로 다시 뽑혀도 R2에 중복 저장되지 않고 같은 파일로
+                # 수렴한다(image_store.py의 "같은 대상은 같은 키" 원칙 그대로).
+                key_hint = f"article_pixabay_{pick.get('id')}"
                 try:
                     from image_store import store_image
-                    return store_image(raw_url, key_hint=f"article_{query}"), disclaimer
+                    return store_image(raw_url, key_hint=key_hint), disclaimer
                 except Exception as e:
                     print(f"  ⚠️ R2 저장 실패, 원본 URL 사용: {e}")
                     return raw_url, disclaimer
