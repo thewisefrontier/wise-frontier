@@ -105,6 +105,54 @@ def _supersede_older_trends(payload: dict, new_id: int) -> None:
         print(f"  ⚠️ 트렌드 구버전 noindex 처리 실패(무시): {e}")
 
 
+# ── 트렌드 기사 분량 게이트 ─────────────────────────────────
+# 2026-09-22 사용자 지적(id=214590 "뭐야 이건, 기사라고 볼 수도 없는데"):
+# gemini_writer.py는 분량 미달 기사를 미발행 처리하는 게이트를 갖고 있는데
+# (MIN_BODY_LEN_HARD_FLOOR=700, id=145092 사고 후 추가), gemini_summarizer.py의
+# 트렌드 writer 3종(trend/realtrend/extrend)에는 그게 이식되지 않아 실질 내용이
+# 한 문장뿐인 기사도 그대로 발행되고 있었다(extrend는 9/15 이후 발행분 7건이
+# 전부 700자 미만, 평균 352자).
+#
+# ⚠️ 하한을 700이 아니라 400으로 잡은 근거(2026-09-22 실측). 450~700자 구간의
+# realtrend 기사들은 "26kg 금괴·8200만리라·부동산 11채"처럼 구체적 사실이 담긴
+# 멀쩡한 기사였다(멀쩡 표본 최소 459자). 반면 빈약한 기사는 197·229·302·312·396자로
+# 전부 400 아래에 몰려 있었다. 700을 그대로 쓰면 멀쩡한 기사를 절반이나 죽인다.
+# ⚠️ 처음엔 "문장 간 재진술 유사도"와 "빈말 상투구 빈도"로 정보 밀도를 재려 했으나,
+# 실제 데이터에서 좋은 기사와 나쁜 기사가 전혀 갈리지 않아(유사도 양쪽 다 33~40,
+# "전해졌다" 같은 정상 표현이 상투구로 오탐) 기각했다 — 길이 말고 싸게 쓸 만한
+# 판별 지표는 아직 못 찾았다. 밀도 판정이 정말 필요해지면 LLM 판정이 필요하다.
+TREND_MIN_BODY_LEN = 400
+_TREND_SUB_RE = re.compile(r"^(trend|realtrend|extrend)_")
+
+
+def is_thin_trend_body(body: str) -> bool:
+    """트렌드 기사 본문이 발행 하한 미달인지."""
+    return len(body or "") < TREND_MIN_BODY_LEN
+
+
+def _gate_thin_trend(payload: dict) -> None:
+    """분량 하한 미달 트렌드 기사는 발행하지 않고 어드민 검토로 돌린다.
+    버리지는 않는다 — is_published=False로 저장돼 데스킹 툴(docs/admin.html)에 뜬다.
+    세 트렌드 writer가 전부 insert_final_article()을 거치므로 여기 한 곳에서 처리한다
+    (_supersede_older_trends와 같은 이유)."""
+    if payload.get("source") != "NewsFinal":
+        return
+    if not _TREND_SUB_RE.match(payload.get("subcategory") or ""):
+        return
+    if not payload.get("is_published"):
+        return  # 이미 다른 사유로 미발행(다주제 혼입·날짜 환각 등)이면 그 사유를 유지
+    body_len = len(payload.get("summary_ko") or "")
+    if body_len >= TREND_MIN_BODY_LEN:
+        return
+    payload["is_published"] = False
+    note = (f"분량 부족 미발행 — 트렌드 신호가 빈약해 실질 내용 없음"
+            f"({body_len}자, 하한 {TREND_MIN_BODY_LEN}자)")
+    log = payload.get("update_log")
+    if isinstance(log, list) and log and isinstance(log[0], dict):
+        log[0]["note"] = note   # 미발행 사유는 update_log[0].note에 적는다(save_article과 동일 관례)
+    print(f"  ⚠️ [분량 부족 {body_len}자] → 미발행 저장(어드민 검토 대기)")
+
+
 def insert_final_article(payload: dict) -> int:
     """완성된 payload dict를 articles 테이블에 삽입한다.
 
@@ -113,6 +161,7 @@ def insert_final_article(payload: dict) -> int:
     스크립트가 url을 유니크 키로 써서 재실행 시 중복 삽입을 막는 용도).
     """
     _tag_crypto(payload)
+    _gate_thin_trend(payload)
     headers = {**sb_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
     try:
         res = requests.post(sb_url(), headers=headers, json=payload, timeout=15)

@@ -1190,6 +1190,89 @@ def _has_real_content(a: dict) -> bool:
     return not _is_garbled_headline_mashup(title, summary)
 
 
+# ── 클러스터 중요도 ─────────────────────────────────────────
+# 2026-09-22 사용자 지적: "처리 못한 나머지 클러스터는 다음 실행에 계속된다면 결국
+# 신선한 기사가 밀려날 수도 있다는거 아냐. 중요도 시스템을 만들어야겠는데".
+# 한 실행에 MAX_CLUSTERS_PER_RUN(7)개만 쓰는데 정렬 기준이 '클러스터 크기'뿐이라,
+# 아직 소스가 2곳뿐인 진짜 속보가 매 사이클 8위 밖으로 밀려 계속 안 써질 수 있었다
+# (실측: 340건 후보에서 클러스터 17개 발견 → 7개만 처리).
+#
+# 설계 원칙: 추가 API 호출·DB 조회 없이 이미 메모리에 있는 값만 쓴다. 매 사이클
+# 도는 경로라 비용이 붙으면 안 된다.
+_SEVERITY_HIGH = (
+    # 대형 인명피해·국가 단위 급변 — 소스가 적어도 먼저 써야 하는 사안
+    "사망", "숨져", "숨진", "사망자", "참사", "붕괴", "폭발", "지진", "쿠데타",
+    "계엄", "침공", "전쟁", "비상사태", "대피", "테러", "학살", "실종",
+    "killed", "death toll", "casualt", "earthquake", "coup", "invasion",
+    "state of emergency", "evacuat", "massacre", "explosion", "collapse",
+)
+_SEVERITY_MID = (
+    "제재", "디폴트", "탄핵", "파업", "휴전", "정전협정", "규제", "리콜", "금리 인상",
+    "금리 인하", "총선", "대선", "봉쇄", "발병", "확산",
+    "sanction", "default", "impeach", "ceasefire", "strike", "outbreak",
+    "recall", "lockdown", "election",
+)
+
+
+def _cluster_latest_dt(cluster):
+    """클러스터에서 가장 최근 시각. created_at은 'YYYY-MM-DD HH:MM'(KST) 문자열."""
+    latest = None
+    for a in cluster:
+        raw = (a.get("source_published_at") or a.get("created_at") or "")[:16]
+        if not raw:
+            continue
+        for fmt in ("%Y-%m-%d %H:%M", "%Y-%m-%dT%H:%M"):
+            try:
+                dt = datetime.strptime(raw, fmt).replace(tzinfo=KST)
+                if latest is None or dt > latest:
+                    latest = dt
+                break
+            except ValueError:
+                continue
+    return latest
+
+
+def cluster_importance(cluster) -> float:
+    """클러스터 처리 우선순위 점수. 높을수록 먼저 기사화한다."""
+    members = [a for a in cluster if not a.get("__needs_review__")]
+    if not members:
+        return 0.0
+
+    # 1) 독립 소스 수 — 같은 매체가 여러 건 쓴 것보다 서로 다른 매체가 동시에
+    #    다룬 사안이 실제로 더 중요하다. 종전의 len(cluster)는 한 매체가 3건
+    #    쓴 것과 3개 매체가 1건씩 쓴 것을 똑같이 취급했다.
+    distinct_sources = len({(a.get("source") or "").strip() for a in members})
+    score = distinct_sources * 10.0
+
+    # 2) 실질 내용 보유율 — 제목만 있는 클러스터는 어차피 검증에서 걸려 미발행되므로
+    #    7칸짜리 슬롯만 낭비한다. 0건이면 40%, 전원 보유면 100%로 깎는다.
+    real = sum(1 for a in members if _has_real_content(a))
+    score *= 0.4 + 0.6 * (real / len(members))
+
+    # 3) 중대성 — 소스가 2곳뿐이어도 대형 참사·쿠데타는 먼저 써야 한다.
+    blob = " ".join(
+        f"{a.get('title_ko') or ''} {a.get('title_en') or ''} {a.get('summary_ko') or ''}"
+        for a in members
+    ).lower()
+    if any(t in blob for t in _SEVERITY_HIGH):
+        score += 25.0
+    elif any(t in blob for t in _SEVERITY_MID):
+        score += 10.0
+
+    # 4) 신선도 — 최근 12시간 이내 소식에 가산해, 오래된 클러스터가 상위에
+    #    눌러앉아 새 속보를 밀어내는 걸 막는다.
+    latest = _cluster_latest_dt(members)
+    if latest:
+        age_h = (now_kst() - latest).total_seconds() / 3600.0
+        score += max(0.0, 12.0 - age_h)
+
+    # 5) 검토필요 표시(다국가 혼합·제목뿐)는 어차피 미발행 저장이라 맨 뒤로 민다.
+    if any(a.get("__needs_review__") for a in cluster):
+        score *= 0.3
+
+    return score
+
+
 def cluster_articles(articles):
     """기사를 이슈별로 클러스터링"""
     clusters = []
@@ -1221,8 +1304,8 @@ def cluster_articles(articles):
                 cluster.append({"__needs_review__": True})
             clusters.append(cluster)
 
-    # 큰 클러스터 우선
-    clusters.sort(key=lambda c: len(c), reverse=True)
+    # 중요도 순(2026-09-22). 종전엔 len(c) 내림차순 = 클러스터 크기만 봤다.
+    clusters.sort(key=cluster_importance, reverse=True)
     return clusters
 
 

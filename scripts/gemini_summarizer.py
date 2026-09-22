@@ -74,9 +74,19 @@ except Exception:
 # POST 블록이 3벌 있던 걸 article_store.py로 공용화). import 실패해도 죽지
 # 않도록 이 파일 자체의 _sb_headers()/_sb_url()로 폴백한다.
 try:
-    from article_store import insert_final_article
+    from article_store import insert_final_article, is_thin_trend_body, TREND_MIN_BODY_LEN
 except Exception:
+    # 폴백 경로에도 분량 게이트를 같이 둔다 — 여기만 게이트가 없으면 import가
+    # 깨진 날에 빈약한 기사가 조용히 발행된다(2026-09-22).
+    TREND_MIN_BODY_LEN = 400
+
+    def is_thin_trend_body(body: str) -> bool:
+        return len(body or "") < TREND_MIN_BODY_LEN
+
     def insert_final_article(payload: dict) -> int:
+        if (payload.get("is_published") and re.match(r"^(trend|realtrend|extrend)_", payload.get("subcategory") or "")
+                and is_thin_trend_body(payload.get("summary_ko"))):
+            payload["is_published"] = False
         headers = {**_sb_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
         try:
             res = requests.post(_sb_url(), headers=headers, json=payload, timeout=15)
@@ -1703,8 +1713,10 @@ def run_trend_tracker():
 
         if article_id > 0:
             print(f"  [{group_name}] ✅ 추적 기사 생성 (id={article_id}): {title}")
-            # 텔레그램 발송
-            if TELEGRAM_TOKEN:
+            # 텔레그램 발송 — 미발행 저장된 기사는 보내지 않는다. 종전엔 다주제
+            # 혼입·날짜 환각으로 미발행된 기사도 링크가 채널에 나가 독자가 눌러도
+            # 볼 수 없었다(2026-09-22 분량 게이트 추가하며 같이 수정).
+            if TELEGRAM_TOKEN and not (_mt_bad or _dg_bad) and not is_thin_trend_body(body):
                 try:
                     preview = body[:300]
                     url = f"https://newsfinal.co.kr/article?id={article_id}"
@@ -2380,8 +2392,9 @@ JSON 배열로만 응답하세요 (마크다운 없이):
             save_article_keywords(art_id, keyword_ko=topic if _is_ko_topic else "",
                                    keyword_en=topic if not _is_ko_topic else "")
 
-            # 텔레그램 발송
-            if TELEGRAM_TOKEN:
+            # 텔레그램 발송 — payload는 insert_final_article()이 제자리에서 고치므로
+            # 분량 게이트·다주제 혼입 등으로 미발행된 경우가 여기 그대로 반영된다.
+            if TELEGRAM_TOKEN and payload.get("is_published"):
                 try:
                     preview = body[:300]
                     url = f"https://newsfinal.co.kr/article?id={art_id}"
@@ -2718,7 +2731,8 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
             _is_ko_topic = any("가" <= c <= "힣" for c in topic)
             save_article_keywords(art_id, keyword_ko=topic if _is_ko_topic else "",
                                    keyword_en=topic if not _is_ko_topic else "")
-            if TELEGRAM_TOKEN:
+            # 미발행 저장분은 채널에 보내지 않는다(위 실시간 트렌드와 같은 이유).
+            if TELEGRAM_TOKEN and payload.get("is_published"):
                 try:
                     preview = body[:300]
                     url = f"https://newsfinal.co.kr/article?id={art_id}"
