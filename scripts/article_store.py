@@ -163,20 +163,16 @@ def judge_thin_by_llm(body: str) -> tuple:
     판정 불가(키 없음·503·형식 이탈)면 (False, "")로 통과시킨다 — 외부 API
     상태가 발행을 막으면 안 된다."""
     try:
-        from nvidia_client import call_nvidia
+        from nvidia_client import call_nvidia   # 페이싱·429/503 재시도는 클라이언트가 담당
     except Exception:
         return False, ""
-    for attempt in range(2):   # 실측 503 비율 약 11% → 1회 재시도로 충분히 낮아진다
-        out = call_nvidia(_DENSITY_PROMPT.format(body=body), max_tokens=80, temperature=0.0)
-        if out:
-            head = out.strip().splitlines()[0][:120]
-            if re.search(r"VERDICT\s*:\s*THIN", head, re.I):
-                return True, head
-            if re.search(r"VERDICT\s*:\s*OK", head, re.I):
-                return False, head
-        if attempt == 0:
-            time.sleep(2)
-    return False, ""
+    out = call_nvidia(_DENSITY_PROMPT.format(body=body), max_tokens=80, temperature=0.0)
+    if not out:
+        return False, ""
+    head = out.strip().splitlines()[0][:120]
+    if re.search(r"VERDICT\s*:\s*THIN", head, re.I):
+        return True, head
+    return False, head   # OK거나 형식을 벗어났으면 통과(fail-open)
 
 
 def _gate_thin_trend(payload: dict) -> None:
