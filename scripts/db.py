@@ -245,6 +245,29 @@ def queue_insert(link, title, source_name, category, subcategory,
     return -1
 
 
+def queue_insert_bulk(rows: list) -> int:
+    """rss_raw_queue에 여러 행을 한 번의 POST로 적재. 2026-09-22 실전 시험에서 건마다
+    개별 POST(queue_insert)를 부르면 소스 1200+개 × 최대 5건에서 순차 왕복이 쌓여
+    15분+에도 안 끝났다(존재-확인 병목을 없앤 뒤에도 남아있던 두 번째 병목). rows는
+    각각 queue_insert()와 같은 키(link/title/source_name/category/subcategory/
+    summary_en/source_published_at/raw_tags)의 dict. 반환값은 실제 삽입된 건수
+    (link 충돌로 조용히 스킵된 건 제외)."""
+    if not rows:
+        return 0
+    payload = [{
+        "link": r["link"], "title": r["title"], "source_name": r["source_name"],
+        "category": r.get("category"), "subcategory": r.get("subcategory"),
+        "summary_en": r.get("summary_en") or "",
+        **({"source_published_at": r["source_published_at"]} if r.get("source_published_at") else {}),
+        **({"raw_tags": r["raw_tags"]} if r.get("raw_tags") else {}),
+    } for r in rows]
+    headers = {**_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
+    res = requests.post(_url("rss_raw_queue"), headers=headers, json=payload, timeout=30)
+    if res.status_code in (200, 201):
+        return len(res.json())
+    return 0
+
+
 def queue_claim_batch(limit: int = 150) -> list:
     """처리 대기 중(processed=false)인 항목을 오래된 순으로 가져온다.
 

@@ -26,9 +26,12 @@ from rss_fetcher import (
     entry_published_iso, state, rss_health, save_state,
 )
 from dedup_guard import normalize_tags
-from db import queue_insert
+from db import queue_insert_bulk
 
-MAX_WORKERS = 40  # rss_fetcher.py의 이전 결정과 동일 — 순수 I/O 대기라 GIL 경합 없음
+MAX_WORKERS = 40   # rss_fetcher.py의 이전 결정과 동일 — 순수 I/O 대기라 GIL 경합 없음
+FLUSH_EVERY = 80    # 이만큼 모이면 한 번의 POST로 큐에 적재(개별 POST는 3000여 건에서
+                    # 15분+ 걸림 — 2026-09-22 두 번째 병목 실측). 값은 타임아웃에 걸려도
+                    # 잃는 양(최대 이 개수)과 요청 수(총건수/이 값)의 절충.
 
 
 def _raw_tags(entry) -> list:
@@ -42,6 +45,13 @@ def collect():
 
     seen_titles = []
     queued = skipped_noise = skipped_dup = 0
+    buf = []  # 아직 큐에 반영 안 한 대기분 — FLUSH_EVERY마다 한 번에 내보낸다
+
+    def flush():
+        nonlocal queued, buf
+        if buf:
+            queued += queue_insert_bulk(buf)
+            buf = []
 
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
         futures = {executor.submit(fetch_source, s): s for s in sources}
@@ -77,15 +87,17 @@ def collect():
                     continue
                 seen_titles.append(title)
 
-                row_id = queue_insert(
-                    link=link, title=title, source_name=name,
-                    category=s["category"], subcategory=s["subcategory"],
-                    summary_en=extract_summary(entry),
-                    source_published_at=entry_published_iso(entry),
-                    raw_tags=_raw_tags(entry) or None,
-                )
-                if row_id > 0:
-                    queued += 1
+                buf.append({
+                    "link": link, "title": title, "source_name": name,
+                    "category": s["category"], "subcategory": s["subcategory"],
+                    "summary_en": extract_summary(entry),
+                    "source_published_at": entry_published_iso(entry),
+                    "raw_tags": _raw_tags(entry) or None,
+                })
+                if len(buf) >= FLUSH_EVERY:
+                    flush()
+
+        flush()  # 남은 대기분(FLUSH_EVERY 미만) 마무리
 
     save_state()
     print(f"[수집 완료] 큐 적재 {queued}건 | 노이즈제외 {skipped_noise} | 유사중복 {skipped_dup}")
