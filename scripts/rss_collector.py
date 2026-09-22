@@ -22,16 +22,19 @@ import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from rss_fetcher import (
-    load_rss, fetch_source, is_noise, is_duplicate, extract_summary,
+    fetch_source, is_noise, is_duplicate, extract_summary,
     entry_published_iso, state, rss_health, save_state,
 )
 from dedup_guard import normalize_tags
-from db import queue_insert_bulk
+from db import queue_insert_bulk, load_rss_with_health, update_source_health
 
 MAX_WORKERS = 40   # rss_fetcher.py의 이전 결정과 동일 — 순수 I/O 대기라 GIL 경합 없음
 FLUSH_EVERY = 80    # 이만큼 모이면 한 번의 POST로 큐에 적재(개별 POST는 3000여 건에서
                     # 15분+ 걸림 — 2026-09-22 두 번째 병목 실측). 값은 타임아웃에 걸려도
                     # 잃는 양(최대 이 개수)과 요청 수(총건수/이 값)의 절충.
+FAIL_THRESHOLD = 20  # 이 횟수 연속 실패하면 자동으로 is_active=false(대략 30분 주기 기준
+                     # 열흘 안팎 — 일시적 서버 점검과 구분하려 넉넉히 잡음). "발행일초과"는
+                     # 실패로 안 치므로(그냥 최근에 새 글이 없다는 뜻) 카운트에서 제외.
 
 
 def _raw_tags(entry) -> list:
@@ -40,11 +43,14 @@ def _raw_tags(entry) -> list:
 
 
 def collect():
-    sources = load_rss()
+    sources = load_rss_with_health()
     print(f"[수집] {len(sources)}개 소스 병렬 수집 시작...")
 
     seen_titles = []
-    queued = skipped_noise = skipped_dup = 0
+    queued = skipped_noise = skipped_dup = buffered = 0
+    src_ok = src_fail = src_too_old = 0
+    fail_samples = []  # 진단용 — 실패 사유 앞부분만 몇 개 수집
+    outcomes = {}  # {source_id: 'ok'|'fail'|'too_old'} — 실행 끝에 한 번에 건강 상태 반영
     buf = []  # 아직 큐에 반영 안 한 대기분 — FLUSH_EVERY마다 한 번에 내보낸다
 
     def flush():
@@ -62,13 +68,22 @@ def collect():
             if name not in rss_health:
                 rss_health[name] = {"ok": 0, "fail": 0, "status": "active"}
 
+            src = futures[future]
             if status == "too_old":
                 rss_health[name]["too_old"] = rss_health[name].get("too_old", 0) + 1
+                src_too_old += 1
+                outcomes[src["id"]] = "too_old"
                 continue
             if status != "ok" or not items:
                 rss_health[name]["fail"] += 1
+                src_fail += 1
+                outcomes[src["id"]] = "fail"
+                if len(fail_samples) < 15:
+                    fail_samples.append(f"{name}: {status}")
                 continue
             rss_health[name]["ok"] += 1
+            src_ok += 1
+            outcomes[src["id"]] = "ok"
 
             # 노이즈·유사중복은 제목만으로 판단(네트워크 없음). "이미 articles에 있는
             # 링크인지"는 여기서 항목마다 확인하지 않는다 — 1200+소스에서 항목마다
@@ -86,6 +101,7 @@ def collect():
                     skipped_dup += 1
                     continue
                 seen_titles.append(title)
+                buffered += 1
 
                 buf.append({
                     "link": link, "title": title, "source_name": name,
@@ -100,7 +116,17 @@ def collect():
         flush()  # 남은 대기분(FLUSH_EVERY 미만) 마무리
 
     save_state()
-    print(f"[수집 완료] 큐 적재 {queued}건 | 노이즈제외 {skipped_noise} | 유사중복 {skipped_dup}")
+    print(f"[수집 완료] 큐 적재 {queued}건(버퍼 {buffered}건 중) | 노이즈제외 {skipped_noise} | 유사중복 {skipped_dup}")
+    print(f"[소스 결과] 성공 {src_ok} | 발행일초과 {src_too_old} | 실패 {src_fail} (총 {len(sources)})")
+    for s in fail_samples:
+        print(f"  [실패예시] {s}")
+
+    health = update_source_health(outcomes, FAIL_THRESHOLD)
+    print(f"[소스 건강] 갱신 {health['updated']}건 | 자동 제외 {len(health['deactivated'])}건")
+    if health["deactivated"]:
+        by_id = {s["id"]: s["name"] for s in sources}
+        for sid in health["deactivated"]:
+            print(f"  [자동제외] {by_id.get(sid, sid)} — {FAIL_THRESHOLD}회 연속 실패")
 
 
 if __name__ == "__main__":

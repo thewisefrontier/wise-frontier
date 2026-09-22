@@ -213,6 +213,74 @@ def get_unposted_articles(limit: int = 10) -> list:
     return []
 
 
+# ── RSS 소스 자동 관리 (2026-09-22) ──────────────────────────────────
+# 소스 건강 상태(연속 실패·마지막 정상 응답 시각)를 rss_sources 테이블 자체에 남겨
+# 어드민에서 보고 SQL로 조회할 수 있게 한다(이전엔 로컬 data/state.json에만 있어서
+# 안 보였다). rss_collector.py가 실행 하나당 한 번의 배치 UPSERT로만 갱신한다
+# (개별 소스마다 UPDATE를 부르면 queue_insert 초기 버전과 같은 병목이 재발한다).
+
+def load_rss_with_health() -> list:
+    """활성 소스 + 건강 컬럼(연속실패 등)을 페이지네이션으로 전량 로드."""
+    sources, offset, page = [], 0, 1000
+    while True:
+        res = requests.get(
+            _url("rss_sources"), headers=_headers(),
+            params={"select": "id,name,category,subcategory,url,consecutive_fails",
+                    "is_active": "eq.true", "order": "id.asc",
+                    "limit": str(page), "offset": str(offset)},
+            timeout=15,
+        )
+        res.raise_for_status()
+        batch = res.json()
+        sources.extend(batch)
+        if len(batch) < page:
+            break
+        offset += page
+    return sources
+
+
+def update_source_health(outcomes: dict, fail_threshold: int) -> dict:
+    """outcomes: {source_id: 'ok'|'fail'|'too_old'}. 한 번의 배치 UPSERT로 반영하고
+    연속 실패가 fail_threshold를 넘긴 소스는 is_active=false로 자동 비활성화한다.
+    반환값: {"updated": n, "deactivated": [id, ...]}."""
+    if not outcomes:
+        return {"updated": 0, "deactivated": []}
+    current = load_rss_with_health()
+    fails_by_id = {s["id"]: s.get("consecutive_fails") or 0 for s in current}
+    now_iso = datetime.now(timezone.utc).isoformat()
+
+    rows, deactivated = [], []
+    for sid, outcome in outcomes.items():
+        prev_fails = fails_by_id.get(sid, 0)
+        row = {"id": sid, "last_checked_at": now_iso}
+        # total_ok/total_fail(누적치)은 "현재값+1"이 필요해 REST 배치 UPSERT로 한 번에
+        # 못 한다(PostgREST는 증분식 UPSERT 미지원) — 소스당 개별 PATCH를 부르면
+        # queue_insert 초기 버전과 같은 병목이 재발하므로 아예 갱신 안 함. 지금
+        # 판단에 필요한 건 누적치가 아니라 "연속 실패 중인지"뿐이라 없어도 무해하다.
+        if outcome == "ok":
+            row.update(consecutive_fails=0, last_ok_at=now_iso)
+        elif outcome == "too_old":
+            row.update(consecutive_fails=0)
+        else:  # fail
+            new_fails = prev_fails + 1
+            row.update(consecutive_fails=new_fails)
+            if new_fails >= fail_threshold:
+                row.update(is_active=False, deactivated_reason=f"{new_fails}회 연속 실패(자동)")
+                deactivated.append(sid)
+        rows.append(row)
+
+    headers = {**_headers(), "Prefer": "resolution=merge-duplicates,return=minimal"}
+    updated = 0
+    for i in range(0, len(rows), 200):
+        chunk = rows[i:i + 200]
+        res = requests.post(f'{_url("rss_sources")}?on_conflict=id', headers=headers, json=chunk, timeout=30)
+        if res.status_code in (200, 201, 204):
+            updated += len(chunk)
+        else:
+            print(f"  [WARN] update_source_health 실패 status={res.status_code} body={res.text[:200]}")
+    return {"updated": updated, "deactivated": deactivated}
+
+
 # ── RSS 수집/처리 분리 큐 (2026-09-22) ──────────────────────────────
 # rss_collector.py가 채우고 rss_processor.py가 비운다. articles 테이블과 완전히
 # 별개라 다른 writer의 소비 로직에 영향이 없다(newsfinal_db_backup_architecture와
@@ -245,27 +313,62 @@ def queue_insert(link, title, source_name, category, subcategory,
     return -1
 
 
+def _pg_text(s):
+    """Postgres text 컬럼이 거부하는 임베디드 NUL(\\x00)·기타 C0 제어문자를 제거.
+    2026-09-22 실전 시험에서 발견: 배치(80건) 안에 한 건이라도 이게 섞이면 그 배치
+    전체가 INSERT 자체에서 실패한다(단일 문장이라 부분성공이 안 됨) — buffered
+    4631건 중 실제 삽입 160건에 그쳤던 사고의 원인. 일부 RSS(특히 인코딩이 불안정한
+    소규모 현지 매체)가 제목·요약에 NUL을 흘려보낸다."""
+    if not s:
+        return s
+    return "".join(c for c in s if c == "\n" or c == "\t" or ord(c) >= 0x20)
+
+
 def queue_insert_bulk(rows: list) -> int:
     """rss_raw_queue에 여러 행을 한 번의 POST로 적재. 2026-09-22 실전 시험에서 건마다
     개별 POST(queue_insert)를 부르면 소스 1200+개 × 최대 5건에서 순차 왕복이 쌓여
     15분+에도 안 끝났다(존재-확인 병목을 없앤 뒤에도 남아있던 두 번째 병목). rows는
     각각 queue_insert()와 같은 키(link/title/source_name/category/subcategory/
     summary_en/source_published_at/raw_tags)의 dict. 반환값은 실제 삽입된 건수
-    (link 충돌로 조용히 스킵된 건 제외)."""
+    (link 충돌로 조용히 스킵된 건 제외).
+
+    ⚠️ 배치 전체가 한 SQL 문이라 이 함수 자체의 정제만으로는 못 막는 오류(그 외
+    제약 위반 등)가 또 나올 수 있다 — 실패 시 배치를 반으로 쪼개 재시도하고,
+    그래도 안 되면(단일 행까지 쪼개도 실패) 그 행만 버리고 계속 진행해
+    한 건이 전체를 막지 않게 한다."""
     if not rows:
         return 0
-    payload = [{
-        "link": r["link"], "title": r["title"], "source_name": r["source_name"],
-        "category": r.get("category"), "subcategory": r.get("subcategory"),
-        "summary_en": r.get("summary_en") or "",
-        **({"source_published_at": r["source_published_at"]} if r.get("source_published_at") else {}),
-        **({"raw_tags": r["raw_tags"]} if r.get("raw_tags") else {}),
-    } for r in rows]
-    headers = {**_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
-    res = requests.post(_url("rss_raw_queue"), headers=headers, json=payload, timeout=30)
-    if res.status_code in (200, 201):
-        return len(res.json())
-    return 0
+
+    def build(rs):
+        return [{
+            "link": r["link"], "title": _pg_text(r["title"]), "source_name": r["source_name"],
+            "category": r.get("category"), "subcategory": r.get("subcategory"),
+            "summary_en": _pg_text(r.get("summary_en")) or "",
+            **({"source_published_at": r["source_published_at"]} if r.get("source_published_at") else {}),
+            **({"raw_tags": r["raw_tags"]} if r.get("raw_tags") else {}),
+        } for r in rs]
+
+    def post(rs):
+        headers = {**_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
+        try:
+            res = requests.post(_url("rss_raw_queue"), headers=headers, json=build(rs), timeout=30)
+        except requests.RequestException as e:
+            print(f"  [WARN] queue_insert_bulk 네트워크 오류({len(rs)}건): {e}")
+            return None
+        if res.status_code in (200, 201):
+            return len(res.json())
+        print(f"  [WARN] queue_insert_bulk 실패 status={res.status_code} 건수={len(rs)} body={res.text[:300]}")
+        return None
+
+    n = post(rows)
+    if n is not None:
+        return n
+    if len(rows) == 1:
+        print(f"  [DROP] 단건도 실패해 포기: {rows[0].get('link')}")
+        return 0
+    # 절반으로 쪼개 재시도 — 배치 안의 문제 행 하나가 전체를 막지 않게 이분 탐색
+    mid = len(rows) // 2
+    return queue_insert_bulk(rows[:mid]) + queue_insert_bulk(rows[mid:])
 
 
 def queue_claim_batch(limit: int = 150) -> list:
