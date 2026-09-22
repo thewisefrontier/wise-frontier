@@ -1232,6 +1232,19 @@ def _cluster_latest_dt(cluster):
     return latest
 
 
+def _cluster_hits_severity(members, keywords) -> bool:
+    blob = " ".join(
+        f"{a.get('title_ko') or ''} {a.get('title_en') or ''} {a.get('summary_ko') or ''}"
+        for a in members
+    ).lower()
+    return any(t in blob for t in keywords)
+
+
+def _cluster_hits_severity_high(members) -> bool:
+    """속보 경로(run_breaking)와 cluster_importance가 공유하는 중대성 판정."""
+    return _cluster_hits_severity(members, _SEVERITY_HIGH)
+
+
 def cluster_importance(cluster) -> float:
     """클러스터 처리 우선순위 점수. 높을수록 먼저 기사화한다."""
     members = [a for a in cluster if not a.get("__needs_review__")]
@@ -1250,13 +1263,9 @@ def cluster_importance(cluster) -> float:
     score *= 0.4 + 0.6 * (real / len(members))
 
     # 3) 중대성 — 소스가 2곳뿐이어도 대형 참사·쿠데타는 먼저 써야 한다.
-    blob = " ".join(
-        f"{a.get('title_ko') or ''} {a.get('title_en') or ''} {a.get('summary_ko') or ''}"
-        for a in members
-    ).lower()
-    if any(t in blob for t in _SEVERITY_HIGH):
+    if _cluster_hits_severity_high(members):
         score += 25.0
-    elif any(t in blob for t in _SEVERITY_MID):
+    elif _cluster_hits_severity(members, _SEVERITY_MID):
         score += 10.0
 
     # 4) 신선도 — 최근 12시간 이내 소식에 가산해, 오래된 클러스터가 상위에
@@ -2979,35 +2988,48 @@ BBC·CNN 라이브 업데이트처럼, 이 항목 하나만 읽어도 무슨 일
 
     print(f"[라이브 업데이트] {updated}건 완료")
 
-def run():
+def run(clusters_override=None, max_clusters=None, skip_extras=False):
+    """clusters_override/max_clusters는 run_breaking() 전용 진입점 — 클러스터링
+    단계를 건너뛰고 이미 골라둔 클러스터만, 정규 MAX_CLUSTERS_PER_RUN 대신 작은
+    상한으로 처리한다. 이후 검증·발행 로직은 정규 경로와 완전히 동일(중복 구현
+    없음) — run_breaking이 골라준 클러스터가 이미 발행돼 있으면(prev_count 이상)
+    아래 기존 SKIP 분기가 그대로 걸러준다. skip_extras=True면 단독기사화(이미
+    2026-09-09부로 비활성 — solo_selected=[] 하드코딩, 사실상 no-op)와
+    update_live_articles()(실제 Gemini 호출 발생)를 건너뛴다 — 속보 경로는
+    "지금 이 클러스터만 빨리"가 목적이라 무관한 작업까지 끌고 갈 이유가 없다."""
     if not GEMINI_API_KEYS:
         print("[SKIP] GEMINI_API_KEY 없음")
         return
 
-    print("\n[클러스터링] 오늘 기사 분석 중...")
-    all_articles = get_today_articles(limit=300)
+    if clusters_override is not None:
+        all_articles = []  # today_own_articles 조회에만 쓰이므로 아래서 따로 로드
+        clusters = clusters_override
+    else:
+        print("\n[클러스터링] 오늘 기사 분석 중...")
+        all_articles = get_today_articles(limit=300)
 
-    opinion_skipped = [
-        a for a in all_articles
-        if is_opinion_column(a.get("title_en") or a.get("title_ko") or "", a.get("full_text") or "")
-    ]
-    if opinion_skipped:
-        print(f"  [제외] 칼럼/오피니언 장르 라벨 {len(opinion_skipped)}건 → 기사화 대상에서 제외")
-        skip_ids = {a["id"] for a in opinion_skipped}
-        all_articles = [a for a in all_articles if a["id"] not in skip_ids]
+        opinion_skipped = [
+            a for a in all_articles
+            if is_opinion_column(a.get("title_en") or a.get("title_ko") or "", a.get("full_text") or "")
+        ]
+        if opinion_skipped:
+            print(f"  [제외] 칼럼/오피니언 장르 라벨 {len(opinion_skipped)}건 → 기사화 대상에서 제외")
+            skip_ids = {a["id"] for a in opinion_skipped}
+            all_articles = [a for a in all_articles if a["id"] not in skip_ids]
 
-    clusters = cluster_articles(all_articles)
-    print(f"  → {len(all_articles)}건 중 {len(clusters)}개 클러스터 발견\n")
+        clusters = cluster_articles(all_articles)
+        print(f"  → {len(all_articles)}건 중 {len(clusters)}개 클러스터 발견\n")
 
     today_own_articles = get_today_own_articles()
 
     generated = 0
     updated   = 0
     processed = 0
+    limit = max_clusters if max_clusters is not None else MAX_CLUSTERS_PER_RUN
 
     for i, cluster in enumerate(clusters):
-        if processed >= MAX_CLUSTERS_PER_RUN:
-            print(f"[STOP] 이번 실행 최대 처리 수 도달 ({MAX_CLUSTERS_PER_RUN}개) — 다음 실행에 계속")
+        if processed >= limit:
+            print(f"[STOP] 이번 실행 최대 처리 수 도달 ({limit}개) — 다음 실행에 계속")
             break
 
         country     = cluster[0].get("country") or ""
@@ -3238,6 +3260,10 @@ def run():
 
         time.sleep(CALL_INTERVAL)
         processed += 1
+
+    if skip_extras:
+        print(f"✅ 완료(속보 경로) — 클러스터 {generated}건 생성 / {updated}건 업데이트")
+        return
 
     # ── 단독 기사화 ──
     # 공식 소스(OFFICIAL_SOURCE_NAMES)는 선진국 제외 요건을 우회 — 백악관/
@@ -3566,5 +3592,48 @@ def run():
     update_live_articles()
 
 
+# ── 속보 경로 (2026-09-23 신설) ────────────────────────────────────────
+# 사용자 지적: "순차적으로 돌던가, 분리해야 하는거 아냐?" — collectors(수집)와
+# heavy(60분 배치 집필)를 job으로 완전히 분리했더니, 수집 직후 들어온 진짜
+# 속보가 다음 heavy 사이클(최대 60~90분)까지 묻히는 문제가 생겼다. collectors
+# 바로 뒤(run.yml의 breaking job, needs: [collectors])에서 도는 가벼운 경로 —
+# 중대성 높고(_SEVERITY_HIGH) 신선한 클러스터 1~2개만 즉시 써서 발행한다.
+# 가드 없이 디스패치(30분)마다 돌지만, 이미 heavy가 먼저 처리한 클러스터는
+# run()의 기존 SKIP 분기(cur_count<=prev_count)가 걸러주므로 중복 집필 없음.
+BREAKING_MAX_CLUSTERS_PER_RUN = 2
+BREAKING_MAX_AGE_HOURS = 3   # 오래된 참사의 후속 보도까지 "속보" 취급하지 않는다
+
+
+def run_breaking():
+    if not GEMINI_API_KEYS:
+        print("[SKIP] GEMINI_API_KEY 없음")
+        return
+
+    print("\n[속보 경로] 방금 수집분 중 중대성 높은 클러스터 확인...")
+    all_articles = get_today_articles(limit=300)
+    clusters = cluster_articles(all_articles)
+
+    breaking = []
+    for c in clusters:
+        members = [a for a in c if not a.get("__needs_review__")]
+        if not members or not _cluster_hits_severity_high(members):
+            continue
+        latest = _cluster_latest_dt(members)
+        if latest and (now_kst() - latest).total_seconds() / 3600.0 > BREAKING_MAX_AGE_HOURS:
+            continue
+        breaking.append(c)
+
+    if not breaking:
+        print("  [속보 경로] 대상 없음 — 스킵")
+        return
+
+    print(f"  [속보 경로] 후보 {len(breaking)}개 — 최대 {BREAKING_MAX_CLUSTERS_PER_RUN}개 처리")
+    run(clusters_override=breaking, max_clusters=BREAKING_MAX_CLUSTERS_PER_RUN, skip_extras=True)
+
+
 if __name__ == "__main__":
-    run()
+    import sys
+    if "--breaking" in sys.argv:
+        run_breaking()
+    else:
+        run()
