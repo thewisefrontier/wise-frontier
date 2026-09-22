@@ -103,7 +103,7 @@ jobs:
           d=$(( ( $(date -u +%s) - $(date -u -d "$last" +%s) ) / 60 ))
           echo "직전 사이클 완료: $last (${d}분 전)"
           if [ "$d" -lt 60 ]; then
-            echo "60분 이내 -> RSS 수집/처리만 실행, 나머지(무거운 스텝)는 통과(success)"
+            echo "60분 이내 -> 가드 대상 아닌 수집 스텝들만 실행, 진짜 무거운 나머지는 통과(success)"
             echo "skip=true" >> "$GITHUB_OUTPUT"
           fi
 
@@ -157,8 +157,20 @@ jobs:
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
 
+      # ⚠️ 2026-09-22: 아래 4개(GDELT~market news)도 RSS와 같은 이유로 가드
+      # 대상에서 뺐다 — 8개 무거운 스텝 합계가 77~95분으로 60분 목표를
+      # 넘던 문제를 조사하다(사용자 지시로 착수), 이 4개는 전부 (a) git
+      # 커밋 없는 멱등적 DB 수집/집필 작업이고 (b) 서로도, 뒤 Gemini
+      # 단계와도 같은 잡 안에서 순서를 지켜야 할 실제 의존성이 없다는 걸
+      # 코드로 확인했다 — domestic_kr_writer는 DB의 현재 상태(source
+      # like DomesticKR:*)를 읽을 뿐 이 잡의 국내뉴스 수집 스텝과 직접
+      # 연결돼 있지 않고, multilang_translate도 DomesticKR-Synth를
+      # 그때그때 조회할 뿐이라 국내기사 집필이 몇 분 전에 다른 실행에서
+      # 끝나 있어도 전혀 문제없다. gemini_summarizer의 외부 트렌드
+      # 감지도 GDELT API를 직접 호출해(external_trends.py) 이 GDELT
+      # 수집 스텝과 무관하다. 합계 ~21.5분을 빼면 무거운 체인이 55~73분
+      # 대로 줄어 60분 목표 안에 다시 들어온다.
       - name: GDELT 글로벌 뉴스 검색 수집 (2026-09-08 신설)
-        if: steps.guard.outputs.skip != 'true'
         continue-on-error: true
         timeout-minutes: 8
         run: python scripts/gdelt_fetcher.py
@@ -167,7 +179,6 @@ jobs:
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
 
       - name: 국내(한국) 뉴스 수집 — 다국어 채널 전용 (2026-09-08 신설)
-        if: steps.guard.outputs.skip != 'true'
         continue-on-error: true
         timeout-minutes: 8
         run: python scripts/domestic_kr_fetcher.py
@@ -178,7 +189,6 @@ jobs:
           UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
 
       - name: 국내기사 클러스터링·집필 — 다국어 채널 전용 (2026-09-15 신설)
-        if: steps.guard.outputs.skip != 'true'
         continue-on-error: true
         timeout-minutes: 10
         run: python scripts/domestic_kr_writer.py
@@ -192,7 +202,6 @@ jobs:
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
 
       - name: 머니파이널 미국 시장뉴스 수집 (2026-09-03 신설)
-        if: steps.guard.outputs.skip != 'true'
         continue-on-error: true
         run: python scripts/market_news_fetcher.py
         env:
