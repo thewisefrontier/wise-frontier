@@ -87,25 +87,31 @@ jobs:
         if: steps.guard.outputs.skip != 'true'
         run: pip install -r requirements.txt
 
-      - name: RSS 수집 및 발송
+      - name: RSS 수집 (큐 적재 전용, 2026-09-22 수집/집필 분리)
         if: steps.guard.outputs.skip != 'true'
-        # ⚠️ 이 스텝만 timeout-minutes가 없어서, 소스 하나가 응답 없이 멈추면
-        # (2026-09-09 밤 실사고: fetch_source()의 socket.setdefaulttimeout()
-        # 전역상태 레이스로 1시간25분 소요) 잡 전체가 몇 시간이고 안 끝나고
-        # concurrency 큐에 후속 실행들이 계속 밀려 취소되며 발행이 멈췄다.
-        # 코드 쪽 근본원인(scripts/rss_fetcher.py fetch_source)은 수정했지만,
-        # 다른 스텝들처럼 이 안전장치도 같이 둔다.
-        # 2026-09-22: 소스 430→1200+개 확충 + max_workers 20→40 상향에 맞춰 여유를 15분으로.
+        # 수집/발송을 합쳐 15분+ 걸리던 구조를 분리 — 수집만 하면 40 워커 기준
+        # 1200+ 소스도 3분 내 끝난다(rss_split_test.yml 실전 검증, 2026-09-22).
+        # 그래도 동일한 이유(개별 소스 hang)로 안전장치는 유지.
+        timeout-minutes: 10
+        continue-on-error: true
+        run: python scripts/rss_collector.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+
+      - name: RSS 큐 처리 및 발송 (2026-09-22 수집/집필 분리)
+        if: steps.guard.outputs.skip != 'true'
         timeout-minutes: 15
         continue-on-error: true
-        run: python scripts/rss_fetcher.py
+        run: python scripts/rss_processor.py
         env:
+          # 기본값 150은 시간당 신규 수집량(실전 첫 버스트 4531건)에 비해 턱없이
+          # 작아 큐가 무한히 쌓인다 — 초당 처리량(번역 API 속도 제한 sleep(0.1)
+          # 기준)으로는 15분 타임아웃 안에 넉넉히 처리 가능해 상한을 올린다.
+          # 실제 안전장치는 개수가 아니라 timeout-minutes(그 시점까지 처리분은
+          # queue_delete로 이미 반영돼 유실 없음).
+          MAX_PROCESS_PER_RUN: "1500"
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
-          GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
-          GEMINI_API_KEY_4: ${{ secrets.GEMINI_API_KEY_4 }}
-          GEMINI_API_KEY_5: ${{ secrets.GEMINI_API_KEY_5 }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
