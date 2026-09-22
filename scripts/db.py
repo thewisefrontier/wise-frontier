@@ -268,17 +268,27 @@ def update_source_health(outcomes: dict, fail_threshold: int) -> dict:
     if not outcomes:
         return {"updated": 0, "deactivated": []}
     current = load_rss_with_health()
-    fails_by_id = {s["id"]: s.get("consecutive_fails") or 0 for s in current}
+    by_id = {s["id"]: s for s in current}
     now_iso = datetime.now(timezone.utc).isoformat()
     headers = {**_headers(), "Prefer": "resolution=merge-duplicates,return=minimal"}
+
+    def base(sid):
+        # ⚠️ PostgREST의 POST+on_conflict UPSERT는 내부적으로 "INSERT 시도 후 충돌
+        # 시 UPDATE"라, id만 보내면 name/category/subcategory/url(NOT NULL)이 비어
+        # INSERT 단계에서 거절된다(23502, 2026-09-22 실전 시험 — 1213건 전부 실패).
+        # 실제로는 항상 기존 행이라 값이 바뀔 일 없지만, 방금 읽어온 현재값을 그대로
+        # 함께 실어 INSERT 쪽 제약을 만족시킨다(진짜 UPDATE는 결과적으로 동일).
+        s = by_id.get(sid, {})
+        return {"name": s.get("name", ""), "category": s.get("category", ""),
+                "subcategory": s.get("subcategory", ""), "url": s.get("url", "")}
 
     # total_ok/total_fail(누적치)은 "현재값+1"이 필요해 REST 배치 UPSERT로 한 번에
     # 못 한다(PostgREST는 증분식 UPSERT 미지원) — 소스당 개별 PATCH를 부르면
     # queue_insert 초기 버전과 같은 병목이 재발하므로 아예 갱신 안 함. 지금
     # 판단에 필요한 건 누적치가 아니라 "연속 실패 중인지"뿐이라 없어도 무해하다.
-    ok_rows = [{"id": sid, "last_checked_at": now_iso, "consecutive_fails": 0, "last_ok_at": now_iso}
+    ok_rows = [{"id": sid, **base(sid), "last_checked_at": now_iso, "consecutive_fails": 0, "last_ok_at": now_iso}
                for sid, o in outcomes.items() if o == "ok"]
-    too_old_rows = [{"id": sid, "last_checked_at": now_iso, "consecutive_fails": 0}
+    too_old_rows = [{"id": sid, **base(sid), "last_checked_at": now_iso, "consecutive_fails": 0}
                      for sid, o in outcomes.items() if o == "too_old"]
 
     deactivated = []
@@ -286,13 +296,13 @@ def update_source_health(outcomes: dict, fail_threshold: int) -> dict:
     for sid, o in outcomes.items():
         if o != "fail":
             continue
-        new_fails = fails_by_id.get(sid, 0) + 1
+        new_fails = (by_id.get(sid, {}).get("consecutive_fails") or 0) + 1
         if new_fails >= fail_threshold:
-            deact_rows.append({"id": sid, "last_checked_at": now_iso, "consecutive_fails": new_fails,
+            deact_rows.append({"id": sid, **base(sid), "last_checked_at": now_iso, "consecutive_fails": new_fails,
                                 "is_active": False, "deactivated_reason": f"{new_fails}회 연속 실패(자동)"})
             deactivated.append(sid)
         else:
-            fail_rows.append({"id": sid, "last_checked_at": now_iso, "consecutive_fails": new_fails})
+            fail_rows.append({"id": sid, **base(sid), "last_checked_at": now_iso, "consecutive_fails": new_fails})
 
     updated = sum(_bulk_upsert_sources(rows, headers) for rows in (ok_rows, too_old_rows, fail_rows, deact_rows))
     return {"updated": updated, "deactivated": deactivated}
