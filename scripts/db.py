@@ -439,10 +439,21 @@ def queue_claim_batch(limit: int = 150) -> list:
     ⚠️ 여러 처리기 실행이 동시에 돌면 같은 행을 중복으로 집어갈 수 있다 — 하지만
     run.yml이 concurrency 그룹(cancel-in-progress: false)으로 겹침 자체를 막고 있어
     (newsfinal-auto-run) 지금 구조에서는 발생하지 않는다. 나중에 별도 워크플로에서
-    이 큐를 처리하게 되면 SELECT ... FOR UPDATE SKIP LOCKED 같은 잠금이 필요해진다."""
+    이 큐를 처리하게 되면 SELECT ... FOR UPDATE SKIP LOCKED 같은 잠금이 필요해진다.
+
+    ⚠️ 2026-09-22 실사고: order를 fetched_at.asc 하나로만 뒀더니, 큐 적체를
+    조사하다 특정 행들이 attempts=0인 채로 8시간 넘게 전혀 안 뽑히는 걸 발견했다.
+    원인은 rss_collector.py의 벌크 INSERT(queue_insert_bulk)가 한 번의 SQL
+    문장 안에서 처리되는 행들의 fetched_at 기본값(now())을 문장당 한 번만
+    평가해, 같은 배치의 행 수십~수백 건이 마이크로초까지 완전히 같은 값을
+    가진다(실측: 78건이 동일 타임스탬프). 2차 정렬 키가 없으면 동석
+    타임스탬프 안에서의 순서를 Postgres/PostgREST가 보장하지 않아, 같은
+    쿼리를 다시 실행해도 그 그룹 안 어떤 행이 뽑히고 어떤 행이 빠지는지가
+    매번 달라질 수 있다 — 그 결과 일부 행이 영원히 못 뽑히는 "고아" 상태가
+    됐다. id.asc를 2차 키로 추가해 결정적 순서를 보장한다."""
     res = requests.get(
         _url("rss_raw_queue"), headers=_headers(),
-        params={"select": "*", "processed": "eq.false", "order": "fetched_at.asc", "limit": str(limit)},
+        params={"select": "*", "processed": "eq.false", "order": "fetched_at.asc,id.asc", "limit": str(limit)},
         timeout=20,
     )
     return res.json() if res.status_code in (200, 206) else []
