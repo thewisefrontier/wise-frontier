@@ -239,45 +239,62 @@ def load_rss_with_health() -> list:
     return sources
 
 
+def _bulk_upsert_sources(rows: list, headers: dict) -> int:
+    """rows는 이미 전부 같은 키 집합이어야 한다(PGRST102, queue_insert_bulk와 동일 함정).
+    호출부가 outcome 종류별로 나눠 불러 이 조건을 보장한다."""
+    updated = 0
+    for i in range(0, len(rows), 200):
+        chunk = rows[i:i + 200]
+        if not chunk:
+            continue
+        res = requests.post(f'{_url("rss_sources")}?on_conflict=id', headers=headers, json=chunk, timeout=30)
+        if res.status_code in (200, 201, 204):
+            updated += len(chunk)
+        else:
+            print(f"  [WARN] update_source_health 실패 status={res.status_code} 건수={len(chunk)} body={res.text[:200]}")
+    return updated
+
+
 def update_source_health(outcomes: dict, fail_threshold: int) -> dict:
-    """outcomes: {source_id: 'ok'|'fail'|'too_old'}. 한 번의 배치 UPSERT로 반영하고
+    """outcomes: {source_id: 'ok'|'fail'|'too_old'}. 배치 UPSERT로 반영하고
     연속 실패가 fail_threshold를 넘긴 소스는 is_active=false로 자동 비활성화한다.
-    반환값: {"updated": n, "deactivated": [id, ...]}."""
+    반환값: {"updated": n, "deactivated": [id, ...]}.
+
+    ⚠️ outcome 종류별로 UPSERT를 따로 보낸다(같은 요청 안 행끼리 키 집합이 달라지면
+    PostgREST가 통째로 거부한다 — PGRST102, queue_insert_bulk와 같은 함정). "값이
+    없으면 None으로 채워 키를 맞춘다" 대신 이 방식을 쓴 이유: last_ok_at처럼
+    outcome이 아닐 때 "건드리지 않아야"(None으로 덮어쓰면 안 됨) 하는 컬럼이 섞여
+    있어, 같은 요청에 넣으려면 어차피 현재값을 다시 읽어와 채워야 해 더 복잡해진다."""
     if not outcomes:
         return {"updated": 0, "deactivated": []}
     current = load_rss_with_health()
     fails_by_id = {s["id"]: s.get("consecutive_fails") or 0 for s in current}
     now_iso = datetime.now(timezone.utc).isoformat()
-
-    rows, deactivated = [], []
-    for sid, outcome in outcomes.items():
-        prev_fails = fails_by_id.get(sid, 0)
-        row = {"id": sid, "last_checked_at": now_iso}
-        # total_ok/total_fail(누적치)은 "현재값+1"이 필요해 REST 배치 UPSERT로 한 번에
-        # 못 한다(PostgREST는 증분식 UPSERT 미지원) — 소스당 개별 PATCH를 부르면
-        # queue_insert 초기 버전과 같은 병목이 재발하므로 아예 갱신 안 함. 지금
-        # 판단에 필요한 건 누적치가 아니라 "연속 실패 중인지"뿐이라 없어도 무해하다.
-        if outcome == "ok":
-            row.update(consecutive_fails=0, last_ok_at=now_iso)
-        elif outcome == "too_old":
-            row.update(consecutive_fails=0)
-        else:  # fail
-            new_fails = prev_fails + 1
-            row.update(consecutive_fails=new_fails)
-            if new_fails >= fail_threshold:
-                row.update(is_active=False, deactivated_reason=f"{new_fails}회 연속 실패(자동)")
-                deactivated.append(sid)
-        rows.append(row)
-
     headers = {**_headers(), "Prefer": "resolution=merge-duplicates,return=minimal"}
-    updated = 0
-    for i in range(0, len(rows), 200):
-        chunk = rows[i:i + 200]
-        res = requests.post(f'{_url("rss_sources")}?on_conflict=id', headers=headers, json=chunk, timeout=30)
-        if res.status_code in (200, 201, 204):
-            updated += len(chunk)
+
+    # total_ok/total_fail(누적치)은 "현재값+1"이 필요해 REST 배치 UPSERT로 한 번에
+    # 못 한다(PostgREST는 증분식 UPSERT 미지원) — 소스당 개별 PATCH를 부르면
+    # queue_insert 초기 버전과 같은 병목이 재발하므로 아예 갱신 안 함. 지금
+    # 판단에 필요한 건 누적치가 아니라 "연속 실패 중인지"뿐이라 없어도 무해하다.
+    ok_rows = [{"id": sid, "last_checked_at": now_iso, "consecutive_fails": 0, "last_ok_at": now_iso}
+               for sid, o in outcomes.items() if o == "ok"]
+    too_old_rows = [{"id": sid, "last_checked_at": now_iso, "consecutive_fails": 0}
+                     for sid, o in outcomes.items() if o == "too_old"]
+
+    deactivated = []
+    fail_rows, deact_rows = [], []
+    for sid, o in outcomes.items():
+        if o != "fail":
+            continue
+        new_fails = fails_by_id.get(sid, 0) + 1
+        if new_fails >= fail_threshold:
+            deact_rows.append({"id": sid, "last_checked_at": now_iso, "consecutive_fails": new_fails,
+                                "is_active": False, "deactivated_reason": f"{new_fails}회 연속 실패(자동)"})
+            deactivated.append(sid)
         else:
-            print(f"  [WARN] update_source_health 실패 status={res.status_code} body={res.text[:200]}")
+            fail_rows.append({"id": sid, "last_checked_at": now_iso, "consecutive_fails": new_fails})
+
+    updated = sum(_bulk_upsert_sources(rows, headers) for rows in (ok_rows, too_old_rows, fail_rows, deact_rows))
     return {"updated": updated, "deactivated": deactivated}
 
 
@@ -340,12 +357,17 @@ def queue_insert_bulk(rows: list) -> int:
         return 0
 
     def build(rs):
+        # ⚠️ PostgREST 배치 INSERT는 배열 안 모든 객체가 "완전히 같은 키 집합"이어야
+        # 한다(PGRST102 "All object keys must match") — 값이 없다고 키 자체를 생략하면
+        # 배치마다 키 구성이 달라져 요청 전체가 거부된다(2026-09-22 실전 시험: 이분
+        # 재시도가 거의 매번 1건까지 쪼개져 15분+ 걸린 진짜 원인. NUL 문자는 원인이
+        # 아니었음). 값이 없으면 None으로 채워 키는 항상 동일하게 유지한다.
         return [{
             "link": r["link"], "title": _pg_text(r["title"]), "source_name": r["source_name"],
             "category": r.get("category"), "subcategory": r.get("subcategory"),
             "summary_en": _pg_text(r.get("summary_en")) or "",
-            **({"source_published_at": r["source_published_at"]} if r.get("source_published_at") else {}),
-            **({"raw_tags": r["raw_tags"]} if r.get("raw_tags") else {}),
+            "source_published_at": r.get("source_published_at"),
+            "raw_tags": r.get("raw_tags"),
         } for r in rs]
 
     def post(rs):
