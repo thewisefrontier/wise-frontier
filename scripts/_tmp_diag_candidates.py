@@ -1,53 +1,29 @@
 """
-일회성 진단 스크립트 — gemini_writer.py의 get_today_articles()가 실제로는
-15,528건이 매칭되는데도 40건만 반환한 이유를 CI 환경(진짜 서비스 키)에서
-재현한다. 진단 후 이 파일과 워크플로우는 삭제한다.
+일회성 진단 스크립트 2 — get_today_articles()와 is_opinion_column() 필터를
+gemini_writer.py에서 그대로 불러와, 어느 단계에서 500건 → 40건으로 줄어드는지
+확인한다. 진단 후 이 파일과 워크플로우는 삭제한다.
 """
-import os
-import requests
-from datetime import datetime, timezone, timedelta
+import gemini_writer as gw
 
-KST = timezone(timedelta(hours=9))
-def now_kst():
-    return datetime.now(timezone.utc).astimezone(KST)
+all_articles = gw.get_today_articles(limit=300)
+print(f"get_today_articles() 반환: {len(all_articles)}건")
 
-SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
-SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
+sources_count = {}
+for a in all_articles:
+    s = a.get("source") or "?"
+    sources_count[s] = sources_count.get(s, 0) + 1
+top_sources = sorted(sources_count.items(), key=lambda x: -x[1])[:15]
+print("상위 소스:", top_sources)
 
-def sb_url():
-    return f"{SUPABASE_URL}/rest/v1/articles"
+opinion_skipped = [
+    a for a in all_articles
+    if gw.is_opinion_column(a.get("title_en") or a.get("title_ko") or "", a.get("full_text") or "")
+]
+print(f"is_opinion_column 필터로 제외: {len(opinion_skipped)}건")
+remaining = [a for a in all_articles if a["id"] not in {x["id"] for x in opinion_skipped}]
+print(f"필터 후 남은 건수: {len(remaining)}건")
 
-def sb_headers():
-    return {
-        "apikey": SUPABASE_SERVICE_KEY,
-        "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
-        "Content-Type": "application/json",
-        "Prefer": "return=representation",
-    }
-
-since = (now_kst() - timedelta(hours=96)).strftime("%Y-%m-%d %H:%M")
-print("since:", since, "now_kst:", now_kst())
-
-# gemini_writer.py와 똑같은 요청 재현
-res = requests.get(
-    sb_url(),
-    headers={**sb_headers(), "Range": "0-499"},
-    params={
-        "select": "id,created_at,source",
-        "sent_telegram": "eq.1",
-        "source": "neq.NewsFinal",
-        "created_at": f"gte.{since}",
-        "order": "score.desc,created_at.desc",
-    },
-    timeout=30,
-)
-print("status:", res.status_code)
-print("Content-Range:", res.headers.get("Content-Range"))
-print("all response headers:", dict(res.headers))
-data = res.json()
-print("returned rows:", len(data))
-if isinstance(data, list) and data:
-    print("first:", data[0])
-    print("last:", data[-1])
-else:
-    print("raw body[:500]:", res.text[:500])
+if opinion_skipped:
+    print("제외된 샘플 5건:")
+    for a in opinion_skipped[:5]:
+        print(" -", (a.get("title_ko") or a.get("title_en") or "")[:60])
