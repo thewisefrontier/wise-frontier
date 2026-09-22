@@ -51,6 +51,27 @@ ITEMS = [
 MIN_ITEMS = 6           # 검증을 통과한 항목이 이보다 적으면 발행하지 않는다
 CRYPTO = {"BTC-USD"}    # 24시간 거래라 야후 regularMarketPrice 대조를 건너뛴다(대조 시점이 어긋남)
 
+# 2026-09-22 추가(사용자 지적 — "주간 상승률이 가장 컸던 항목이 비트코인이니
+# 비트코인 이미지 넣으면 되잖아"): 그 주 등락률이 가장 컸던 항목의 이미지를
+# 넣는다. article_image.py의 fetch_seeded_pixabay_image(오일/환율 등 다른
+# 데일리 템플릿 기사가 이미 쓰는 결정론적 Pixabay 헬퍼, Gemini 호출 없음)를
+# 그대로 재사용 — seed=week_end.toordinal()이라 같은 주는 항상 같은 사진.
+_IMAGE_KEYWORDS = {
+    "S&P500": ["wall street stock exchange", "new york stock market"],
+    "나스닥종합": ["technology stock market", "wall street"],
+    "다우존스": ["wall street stock exchange", "new york stock market"],
+    "코스피": ["seoul stock exchange", "korea stock market"],
+    "코스닥": ["seoul stock exchange", "korea stock market"],
+    "닛케이225": ["tokyo stock exchange", "japan stock market"],
+    "DAX": ["frankfurt stock exchange", "germany stock market"],
+    "CAC40": ["paris stock exchange", "france stock market"],
+    "FTSE100": ["london stock exchange", "uk stock market"],
+    "원/달러 환율": ["currency exchange dollar", "foreign exchange money"],
+    "WTI 원유": ["oil rig petroleum", "crude oil barrel"],
+    "금": ["gold bars bullion", "gold market"],
+    "비트코인": ["bitcoin cryptocurrency", "cryptocurrency coin"],
+}
+
 
 def now_kst() -> datetime:
     return datetime.now(timezone.utc).astimezone(KST)
@@ -206,11 +227,22 @@ def main():
     if dry:
         print(title + "\n\n" + body)
         return
+
+    # 그 주 등락률이 가장 컸던 항목(본문 리드 문장과 동일한 기준) 이미지를 넣는다.
+    best_name = max(results, key=lambda x: x[5]["pct"])[1]
+    image_url = ""
+    try:
+        from article_image import fetch_seeded_pixabay_image
+        keywords = _IMAGE_KEYWORDS.get(best_name, ["stock market finance"])
+        image_url = fetch_seeded_pixabay_image(keywords, seed=week_end.toordinal(), key_hint=f"weekly_market_{week_end.isoformat()}")
+    except Exception as e:
+        print(f"  [WARN] 이미지 조회 실패(본문은 그대로 발행): {e}")
+
     now_str = now.strftime("%Y-%m-%d %H:%M")
     art_id = insert_final_article({
         "title_en": title, "title_ko": title, "summary_en": "", "summary_ko": body, "url": url,
         "source": "NewsFinal", "category": "경제", "subcategory": "주간시세",
-        "region": "global", "country": "", "country_flag": "", "image_url": "", "countries": [],
+        "region": "global", "country": "", "country_flag": "", "image_url": image_url, "countries": [],
         "score": 1, "created_at": now_str, "first_published_at": now_str,
         "update_log": [{"timestamp": now_str, "note": "주간 시세 카드 자동 기사(결정론적 집계)"}],
         "source_data": {"week_end": week_end.isoformat(), "items": [
