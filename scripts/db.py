@@ -12,6 +12,14 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# 2026-09-22: 이 모듈이 프로젝트에서 가장 널리 쓰이는 공유 DB 헬퍼라, 다른
+# 곳(export_articles.py, gemini_writer.py)에서 발견된 것과 같은 유형의
+# 일시적 connection reset 실패에 똑같이 노출돼 있다 — 재시도 세션으로 교체.
+# queue_insert_bulk()의 기존 이분 재시도(PGRST102 등 응답 자체의 실패 처리)와는
+# 겹치지 않고 상호보완적(이쪽은 요청 자체가 끊기는 전송 계층 문제를 먼저 흡수).
+from http_retry import get_session
+requests = get_session()
+
 KST = timezone(timedelta(hours=9))
 
 def now_kst() -> datetime:
