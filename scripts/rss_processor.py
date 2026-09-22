@@ -13,6 +13,7 @@ rss_raw_queue를 배치로 비우며 번역·본문크롤링·텔레그램 발�
 
 import os
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from deep_translator import GoogleTranslator
 
@@ -26,6 +27,17 @@ from db import (
 )
 
 MAX_PROCESS_PER_RUN = int(os.getenv("MAX_PROCESS_PER_RUN", "150"))
+
+# 2026-09-22 실사고: 항목 하나당 크롤링→번역(제목)→번역(요약)→텔레그램→DB저장을
+# 순차로 처리해(전부 네트워크 I/O 대기) 실측 처리량이 15분에 200건(시간당
+# 800건)뿐이었다 — MAX_PROCESS_PER_RUN=1500은 애초에 도달 불가능한 상한이었고,
+# 큐가 8,400건→10,698건으로 오히려 늘어나는 걸 보고 발견했다. collector.py와
+# 같은 이유(다른 서버로 나가는 I/O 대기 작업)로 병렬화한다. 다만 번역 대상이
+# translate.google.com·api.telegram.org로 소수 엔드포인트에 몰려 collector의
+# 40 워커처럼 공격적으로 가면 그 서비스만 자체 유발 과호출로 막힐 수 있어
+# 보수적으로 6개만 쓴다. 기존 sleep(0.1) 단일 스로틀은 동시성 자체가 자연스러운
+# 페이싱이 되므로 제거.
+PROCESS_WORKERS = int(os.getenv("PROCESS_WORKERS", "6"))
 
 
 def process_row(row: dict) -> bool:
@@ -152,20 +164,25 @@ def main():
     if dup:
         print(f"[스킵] 이미 발행된 링크 {len(dup)}건 — 큐에서만 제거")
 
-    done = failed = 0
-    for row in batch:
+    def _safe_process_row(row):
         try:
-            ok = process_row(row)
+            return process_row(row)
         except Exception as e:
             print(f"[ERROR] id={row['id']} {row['title'][:40]}: {e}")
-            ok = False
-        if ok:
-            queue_delete(row["id"])
-            done += 1
-        else:
-            queue_mark_failed(row["id"], "processing failed")
-            failed += 1
-        time.sleep(0.1)  # 번역 API 과호출 방지(무료 비공식 엔드포인트)
+            return False
+
+    done = failed = 0
+    with ThreadPoolExecutor(max_workers=PROCESS_WORKERS) as ex:
+        futures = {ex.submit(_safe_process_row, row): row for row in batch}
+        for fut in as_completed(futures):
+            row = futures[fut]
+            ok = fut.result()
+            if ok:
+                queue_delete(row["id"])
+                done += 1
+            else:
+                queue_mark_failed(row["id"], "processing failed")
+                failed += 1
     print(f"[처리 완료] 성공 {done} | 재시도대상 {failed}")
 
 

@@ -109,8 +109,11 @@ jobs:
       - name: RSS 수집 (큐 적재 전용, 2026-09-22 수집/집필 분리)
         # 수집/발송을 합쳐 15분+ 걸리던 구조를 분리 — 수집만 하면 40 워커 기준
         # 1200+ 소스도 3분 내 끝난다(rss_split_test.yml 실전 검증, 2026-09-22).
-        # 그래도 동일한 이유(개별 소스 hang)로 안전장치는 유지.
-        timeout-minutes: 10
+        # 그래도 동일한 이유(개별 소스 hang)로 안전장치는 유지. 2026-09-22
+        # 10분→15분: RSS를 30분마다 무조건 돌리기 시작한 직후 실행 중 한 번
+        # 10분 타임아웃에 걸림(일시적인지 30분 주기 자체 부하인지 아직 불명) —
+        # 여유를 늘려 지켜본다. continue-on-error라 타임아웃 나도 뒷 스텝은 진행됨.
+        timeout-minutes: 15
         continue-on-error: true
         run: python scripts/rss_collector.py
         env:
@@ -118,16 +121,19 @@ jobs:
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
 
       - name: RSS 큐 처리 및 발송 (2026-09-22 수집/집필 분리)
-        timeout-minutes: 15
+        timeout-minutes: 20
         continue-on-error: true
         run: python scripts/rss_processor.py
         env:
-          # 기본값 150은 시간당 신규 수집량(실전 첫 버스트 4531건)에 비해 턱없이
-          # 작아 큐가 무한히 쌓인다 — 초당 처리량(번역 API 속도 제한 sleep(0.1)
-          # 기준)으로는 15분 타임아웃 안에 넉넉히 처리 가능해 상한을 올린다.
-          # 실제 안전장치는 개수가 아니라 timeout-minutes(그 시점까지 처리분은
-          # queue_delete로 이미 반영돼 유실 없음).
-          MAX_PROCESS_PER_RUN: "1500"
+          # 2026-09-22 실사고로 1500→1000 정정. 항목 하나당 크롤링→번역→번역→
+          # 텔레그램→DB저장을 순차 처리해 실측 처리량이 15분에 200건(시간당
+          # 800건)뿐이었다 — 1500은 도달 불가능한 상한이었고 그사이 큐가
+          # 8,400→10,698건으로 늘어나는 걸 보고 발견했다(rss_processor.py의
+          # 병렬화로 같이 대응). 1000인 이유: queue_claim_batch가 PostgREST
+          # 서버 기본 행 상한(추정 db-max-rows=1000)에 걸려 1500을 요청해도
+          # 실제로는 1000건만 돌아왔다 — 그 이상 올리려면 페이지네이션부터
+          # 추가해야 하므로, 지금은 실제로 받아오는 만큼만 상한값도 맞춘다.
+          MAX_PROCESS_PER_RUN: "1000"
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
