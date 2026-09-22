@@ -268,8 +268,16 @@ jobs:
           IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
           UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
 
+      # ⚠️ 2026-09-22: 이슈파이널·다국어번역도 가드에서 뺐다(사용자 지적 —
+      # "이슈파이널하고 다국어번역은 따로 떼도 되는거 아냐"). 코드로 확인:
+      # explainer_writer._candidates()는 DAILY_CAP=1로 하루 한 번만 실제
+      # 생성하고(자주 돌아도 나머지는 "이미 작성 — 스킵"으로 즉시 끝남) 최근
+      # 발행분을 그때그때 조회할 뿐이라 같은 잡의 자체기사 생성 뒤에 와야 할
+      # 이유가 없다. multilang_translate도 DomesticKR-Synth를 그때그때
+      # 조회하는데, 그 원본(국내기사 집필)은 이미 위에서 가드 없이 30분마다
+      # 돌고 있어 쌓인 게 늘 있다. 두 스텝 합계 ~20분을 더 빼면 무거운
+      # 체인이 더 줄어든다.
       - name: 이슈 파이널(해설) 초안 작성 — 어드민 검토 후 발행 (2026-09-22 신설)
-        if: steps.guard.outputs.skip != 'true'
         timeout-minutes: 10
         continue-on-error: true
         run: python scripts/explainer_writer.py
@@ -310,7 +318,6 @@ jobs:
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
 
       - name: 다국어 채널 번역 배치 (2026-09-08 신설)
-        if: steps.guard.outputs.skip != 'true'
         timeout-minutes: 10
         continue-on-error: true
         run: python scripts/multilang_translate.py
