@@ -26,7 +26,7 @@ from rss_fetcher import (
     entry_published_iso, state, rss_health, save_state,
 )
 from dedup_guard import normalize_tags
-from db import is_url_exists, queue_insert
+from db import queue_insert
 
 MAX_WORKERS = 40  # rss_fetcher.py의 이전 결정과 동일 — 순수 I/O 대기라 GIL 경합 없음
 
@@ -41,7 +41,7 @@ def collect():
     print(f"[수집] {len(sources)}개 소스 병렬 수집 시작...")
 
     seen_titles = []
-    queued = skipped_noise = skipped_dup = skipped_existing = 0
+    queued = skipped_noise = skipped_dup = 0
 
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
         futures = {executor.submit(fetch_source, s): s for s in sources}
@@ -60,6 +60,12 @@ def collect():
                 continue
             rss_health[name]["ok"] += 1
 
+            # 노이즈·유사중복은 제목만으로 판단(네트워크 없음). "이미 articles에 있는
+            # 링크인지"는 여기서 항목마다 확인하지 않는다 — 1200+소스에서 항목마다
+            # DB 왕복(is_url_exists)을 걸면 초당 1건 수준으로 병목(2026-09-22 첫 실전
+            # 시험: 13분에 689건). 그 확인은 처리기가 자기 배치(최대 150건) 전체를
+            # 한 번의 IN 쿼리로 묶어서 한다(rss_processor.py) — 큐 자체는 link UNIQUE라
+            # 같은 미처리 링크를 반복 수집해도 안전하게 무시된다.
             for data in items:
                 title, link, entry, s = data["title"], data["link"], data["entry"], data["source"]
 
@@ -70,9 +76,6 @@ def collect():
                     skipped_dup += 1
                     continue
                 seen_titles.append(title)
-                if is_url_exists(link):  # 이미 승격된(articles) 링크 — 재수집 불필요
-                    skipped_existing += 1
-                    continue
 
                 row_id = queue_insert(
                     link=link, title=title, source_name=name,
@@ -85,7 +88,7 @@ def collect():
                     queued += 1
 
     save_state()
-    print(f"[수집 완료] 큐 적재 {queued}건 | 노이즈제외 {skipped_noise} | 유사중복 {skipped_dup} | 기존기사 {skipped_existing}")
+    print(f"[수집 완료] 큐 적재 {queued}건 | 노이즈제외 {skipped_noise} | 유사중복 {skipped_dup}")
 
 
 if __name__ == "__main__":

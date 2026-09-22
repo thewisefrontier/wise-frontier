@@ -21,7 +21,9 @@ from rss_fetcher import (
     crawl_full_text, arxiv_id_from_url, fetch_arxiv_meta, _iso_age_days, ARXIV_MAX_AGE_DAYS,
 )
 from geo_detect import detect_region, detect_country, detect_countries, GLOBAL_COUNTRIES
-from db import insert_article, mark_sent_telegram, queue_claim_batch, queue_delete, queue_mark_failed
+from db import (
+    insert_article, mark_sent_telegram, queue_claim_batch, queue_delete, queue_mark_failed, existing_urls,
+)
 
 MAX_PROCESS_PER_RUN = int(os.getenv("MAX_PROCESS_PER_RUN", "150"))
 
@@ -138,6 +140,18 @@ def process_row(row: dict) -> bool:
 def main():
     batch = queue_claim_batch(MAX_PROCESS_PER_RUN)
     print(f"[처리] 대기 {len(batch)}건 (최대 {MAX_PROCESS_PER_RUN})")
+
+    # "이미 articles에 있는 링크인지"는 배치 전체를 한 번의 IN 쿼리로 확인한다(수집기가
+    # 이 확인을 안 하고 그냥 쌓기만 하므로 — rss_collector.py 참고). 이미 있으면 번역·
+    # 크롤링·텔레그램 없이 큐에서만 지운다(그 링크는 이전 주기에 이미 정상 발행됐다는 뜻).
+    already = existing_urls([r["link"] for r in batch])
+    dup = [r for r in batch if r["link"] in already]
+    batch = [r for r in batch if r["link"] not in already]
+    for row in dup:
+        queue_delete(row["id"])
+    if dup:
+        print(f"[스킵] 이미 발행된 링크 {len(dup)}건 — 큐에서만 제거")
+
     done = failed = 0
     for row in batch:
         try:
