@@ -164,6 +164,53 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
 
+  # ── 속보 경로 (2026-09-23 신설) ──────────────────────────────────────
+  # 사용자 지적: "순차적으로 돌던가, 분리해야 하는거 아냐?" — collectors와
+  # heavy를 완전히 분리하니, 수집 직후 들어온 진짜 속보가 heavy의 60분
+  # 배치까지 묻히는 문제가 생겼다. needs: [collectors]로 진짜 순차 연결 —
+  # collectors가 끝난 직후, 방금 모은 신선한 데이터를 바로 이어받아 중대성
+  # 높은 클러스터 1~2개만 즉시 써서 발행한다(gemini_writer.py run_breaking).
+  # 가드 없이 디스패치(30분)마다 돌지만, heavy가 이미 처리한 클러스터는
+  # run()의 기존 SKIP 분기가 걸러줘 중복 집필 없음. 나머지 일반 기사는
+  # 그대로 heavy가 시간당 배치로 처리.
+  breaking:
+    needs: collectors
+    runs-on: ubuntu-latest
+    concurrency:
+      group: newsfinal-breaking
+      cancel-in-progress: false
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - name: Python 설정
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: 패키지 설치
+        run: pip install -r requirements.txt
+
+      - name: 속보 판단 및 즉시 발행
+        timeout-minutes: 10
+        continue-on-error: true
+        run: python scripts/gemini_writer.py --breaking
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
+          GEMINI_API_KEY_4: ${{ secrets.GEMINI_API_KEY_4 }}
+          GEMINI_API_KEY_5: ${{ secrets.GEMINI_API_KEY_5 }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
+          UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
+
   # ── 무거운 계열 — Gemini 클러스터링·집필 + 사이트 반영/커밋 ────────────
   # 이 job만 60분 가드가 걸린다. 실측(2026-09-22, collectors 분리 후) 총
   # 55~61분 안팎 — 30분 디스패치 격자 + 가드 임계 60분과 맞물려 시간당
