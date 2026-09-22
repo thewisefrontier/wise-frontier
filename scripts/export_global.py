@@ -22,6 +22,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# 2026-09-22: export_articles.py와 같은 이유(일시적 connection reset에
+# 재시도 없이 죽는 문제) — 자동 재시도 세션으로 교체.
+from http_retry import get_session
+requests = get_session()
+
 from translate_guard import LANG_NAMES
 
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")

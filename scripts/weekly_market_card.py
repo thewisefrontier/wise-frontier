@@ -69,7 +69,10 @@ _IMAGE_KEYWORDS = {
     "원/달러 환율": ["currency exchange dollar", "foreign exchange money"],
     "WTI 원유": ["oil rig petroleum", "crude oil barrel"],
     "금": ["gold bars bullion", "gold market"],
-    "비트코인": ["bitcoin cryptocurrency", "cryptocurrency coin"],
+    # "cryptocurrency coin"처럼 인명을 뺀 일반 검색어를 썼더니 실제로는
+    # 스팀(Steem) 코인 사진이 나온 적이 있어(2026-09-22), 비트코인만은
+    # 두 키워드 모두 "bitcoin"을 명시해 다른 알트코인이 안 걸리게 한다.
+    "비트코인": ["bitcoin coin", "bitcoin cryptocurrency logo"],
 }
 
 
