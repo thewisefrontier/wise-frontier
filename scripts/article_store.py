@@ -33,6 +33,7 @@ update_log 등 최종 기사 필드가 없음)이고, 이 모듈은 합성이 �
 
 import os
 import re
+import time
 import requests
 
 # 2026-09-22: 이 모듈을 공유하는 writer들이 전부 같은 위험에 노출돼 있어
@@ -124,10 +125,58 @@ def _supersede_older_trends(payload: dict, new_id: int) -> None:
 TREND_MIN_BODY_LEN = 400
 _TREND_SUB_RE = re.compile(r"^(trend|realtrend|extrend)_")
 
+# 길이만으로는 "400자는 넘겼지만 알맹이는 없는" 기사를 못 잡는다. 이 구간만
+# 계열이 다른 모델(NVIDIA nemotron)에 2차 판정을 맡긴다 — Gemini가 쓴 걸 Gemini가
+# 검증하면 맹점이 반복된다는 기존 원칙 그대로(nvidia_client.py 참조).
+#
+# 판정 대상을 400~700자로 좁힌 근거(2026-09-22 실측 13건): THIN으로 잡힌 건 딱
+# 하나였고 그게 440자였다. 625·632·676·771·804자 기사는 전부 구체적 사실이 8~10개
+# 들어간 정상 기사였다. 긴 기사까지 전부 판정을 돌리면 호출만 두 배가 된다.
+# ⚠️ 실측 18콜 중 2콜이 503(Service temporarily overloaded)이었다. 외부 API가
+# 흔들린다고 발행이 막히면 안 되므로 판정 실패 시에는 무조건 통과시킨다(fail-open).
+TREND_DENSITY_CHECK_MAX_LEN = 700
+
 
 def is_thin_trend_body(body: str) -> bool:
-    """트렌드 기사 본문이 발행 하한 미달인지."""
+    """트렌드 기사 본문이 발행 하한 미달인지(길이 기준만)."""
     return len(body or "") < TREND_MIN_BODY_LEN
+
+
+_DENSITY_PROMPT = """다음은 자동 생성된 뉴스 기사 본문이다. 이 글이 독자에게 실제 정보를 전달하는 기사인지, 아니면 사실 한두 개를 빈말과 재진술로 부풀린 껍데기인지 판정하라.
+
+판정 기준:
+- 구체적 사실(누가/무엇을/언제/어디서/수치/고유명사)이 몇 가지나 들어 있는가
+- "이목이 집중됐다", "귀추가 주목된다"처럼 내용이 없는 문장의 비중
+- 앞 문장을 말만 바꿔 되풀이하는 문장이 있는가
+- 길이가 짧아도 구체적 사실이 여러 개면 정상 기사다.
+
+다른 말 없이 아래 한 줄 형식으로만 답하라.
+VERDICT: OK 또는 THIN | 사실수: N | 이유: (20자 이내)
+
+본문:
+{body}"""
+
+
+def judge_thin_by_llm(body: str) -> tuple:
+    """NVIDIA 교차 판정. 반환 (thin_여부, 사유문자열).
+
+    판정 불가(키 없음·503·형식 이탈)면 (False, "")로 통과시킨다 — 외부 API
+    상태가 발행을 막으면 안 된다."""
+    try:
+        from nvidia_client import call_nvidia
+    except Exception:
+        return False, ""
+    for attempt in range(2):   # 실측 503 비율 약 11% → 1회 재시도로 충분히 낮아진다
+        out = call_nvidia(_DENSITY_PROMPT.format(body=body), max_tokens=80, temperature=0.0)
+        if out:
+            head = out.strip().splitlines()[0][:120]
+            if re.search(r"VERDICT\s*:\s*THIN", head, re.I):
+                return True, head
+            if re.search(r"VERDICT\s*:\s*OK", head, re.I):
+                return False, head
+        if attempt == 0:
+            time.sleep(2)
+    return False, ""
 
 
 def _gate_thin_trend(payload: dict) -> None:
@@ -141,8 +190,21 @@ def _gate_thin_trend(payload: dict) -> None:
         return
     if not payload.get("is_published"):
         return  # 이미 다른 사유로 미발행(다주제 혼입·날짜 환각 등)이면 그 사유를 유지
-    body_len = len(payload.get("summary_ko") or "")
+    body = payload.get("summary_ko") or ""
+    body_len = len(body)
     if body_len >= TREND_MIN_BODY_LEN:
+        # 길이는 통과했지만 알맹이가 없을 수 있는 구간만 교차 판정한다.
+        if body_len >= TREND_DENSITY_CHECK_MAX_LEN:
+            return
+        thin, why = judge_thin_by_llm(body)
+        if not thin:
+            return
+        payload["is_published"] = False
+        note = f"밀도 부족 미발행(NVIDIA 교차판정) — {why}"
+        log = payload.get("update_log")
+        if isinstance(log, list) and log and isinstance(log[0], dict):
+            log[0]["note"] = note
+        print(f"  ⚠️ [밀도 부족 {body_len}자] → 미발행 저장(어드민 검토 대기): {why}")
         return
     payload["is_published"] = False
     note = (f"분량 부족 미발행 — 트렌드 신호가 빈약해 실질 내용 없음"
