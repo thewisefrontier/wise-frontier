@@ -1,5 +1,202 @@
 [
   {
+    "id": 213871,
+    "title_en": "중앙아시아, 타슈켄트 32도 최고 기온",
+    "title_ko": "중앙아시아, 타슈켄트 32도 최고 기온",
+    "summary_ko": "22일(현지시간) 중앙아시아 주요국 수도는 최저기온 13°C에서 최고기온 32°C의 기온 분포를 보이고 있다.\n\n우즈베키스탄 타슈켄트는 최고기온 32°C, 최저기온 18°C를 기록하며 이번 조사 지역 중 가장 더운 곳으로 나타났다. 반면 키르기스스탄 비슈케크는 최고기온 28°C, 최저기온 13°C로 가장 선선한 곳으로 집계되었으며, 타슈켄트가 비슈케크보다 최고기온이 4°C 높다. 두 지역 모두 날씨는 흐림을 보이고 있으며, 강수확률은 0%, 강수량은 0.0mm로 나타났다.\n\n타슈켄트의 자외선지수는 5.7, 비슈케크의 자외선지수는 5",
+    "url": "internal://weather_group_중앙아시아_today20260922",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_중앙아시아_today20260922",
+    "region": "central_asia",
+    "country": "중앙아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-22 09:10",
+    "countries": [
+      "카자흐스탄",
+      "우즈베키스탄",
+      "키르기스스탄"
+    ],
+    "is_published": true,
+    "image_url": "https://pixabay.com/get/gdc1e7a1917ab45f6cb68dd1ff841dbe4ea37f335aef2bd7923ead0d294892867598779d501cec963618dd80b3868a8b15bfc86fa7775701625a85da908f92d8b_640.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-22T09:10:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-22 09:10",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 213872,
+    "title_en": "[주간 시세] 9월 14~18일 글로벌 증시·환율·유가·금·비트코인 한 주 성적표",
+    "title_ko": "[주간 시세] 9월 14~18일 글로벌 증시·환율·유가·금·비트코인 한 주 성적표",
+    "summary_ko": "9월 14일부터 18일까지 한 주 동안 집계 대상 시세 10개 가운데 7개가 올랐고 3개가 내렸다. 주간 상승률이 가장 컸던 항목은 비트코인(+4.83%), 하락률이 가장 컸던 항목은 다우존스(-1.69%)다.\n\n[증시]\n- S&P500(뉴욕증시): 9월 18일 종가 7,650.50, 주간 -0.08% (직전 주 9월 11일 종가 7,656.98)\n- 나스닥종합(뉴욕증시): 9월 18일 종가 26,522.54, 주간 +0.72% (직전 주 9월 11일 종가 26,333.04)\n- 다우존스(뉴욕증시): 9월 18일 종가 51,682.",
+    "url": "internal://weekly_market_2026-09-18",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "주간시세_crypto",
+    "region": "global",
+    "country": "",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-22 09:10",
+    "countries": [],
+    "is_published": true,
+    "image_url": "",
+    "view_count": 0,
+    "first_published_at": "2026-09-22T09:10:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-22 09:10",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "items": [
+        {
+          "end": 7650.5,
+          "pct": -0.0846,
+          "name": "S&P500",
+          "prev": 7656.97998046875,
+          "end_date": "2026-09-18",
+          "prev_date": "2026-09-11"
+        },
+        {
+          "end": 26522.5390625,
+          "pct": 0.7196,
+          "name": "나스닥종합",
+          "prev": 26333.0390625,
+          "end_date": "2026-09-18",
+          "prev_date": "2026-09-11"
+        },
+        {
+          "end": 51682.640625,
+          "pct": -1.6941,
+          "name": "다우존스",
+          "prev": 52573.2890625,
+          "end_date": "2026-09-18",
+          "prev_date": "2026-09-11"
+        },
+        {
+          "end": 65018.94921875,
+          "pct": 1.5741,
+          "name": "닛케이225",
+          "prev": 64011.33984375,
+          "end_date": "2026-09-18",
+          "prev_date": "2026-09-11"
+        },
+        {
+          "end": 8065.02001953125,
+          "pct": -1.4029,
+          "name": "CAC40",
+          "prev": 8179.77001953125,
+          "end_date": "2026-09-18",
+          "prev_date": "2026-09-11"
+        },
+        {
+          "end": 10659.099609375,
+          "pct": 0.0817,
+          "name": "FTSE100",
+          "prev": 10650.400390625,
+          "end_date": "2026-09-18",
+          "prev_date": "2026-09-11"
+        },
+        {
+          "end": 1379.530029296875,
+          "pct": 2.3261,
+          "name": "원/달러 환율",
+          "prev": 1348.1700439453125,
+          "end_date": "2026-09-18",
+          "prev_date": "2026-09-11"
+        },
+        {
+          "end": 100.30000305175781,
+          "pct": 0.2499,
+          "name": "WTI 원유",
+          "prev": 100.05000305175781,
+          "end_date": "2026-09-18",
+          "prev_date": "2026-09-11"
+        },
+        {
+          "end": 4424.89990234375,
+          "pct": 0.3629,
+          "name": "금",
+          "prev": 4408.89990234375,
+          "end_date": "2026-09-18",
+          "prev_date": "2026-09-11"
+        },
+        {
+          "end": 80901.4609375,
+          "pct": 4.8302,
+          "name": "비트코인",
+          "prev": 77173.796875,
+          "end_date": "2026-09-18",
+          "prev_date": "2026-09-11"
+        }
+      ],
+      "week_end": "2026-09-18"
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
+    "id": 213833,
+    "title_en": "러시아 국가두마 선거서 여당 통합 러시아 헌정 과반 유지 승리",
+    "title_ko": "러시아 국가두마 선거서 여당 통합 러시아 헌정 과반 유지 승리",
+    "summary_ko": "러시아 국가두마 선거에서 집권 여당인 통합 러시아가 헌정 과반 의석을 유지하며 승리를 거뒀다고 21일(현지시간) 알자지라 등 외신이 보도했다. 이번 선거는 18일부터 20일까지 사흘 동안 진행됐다.\n\n가디언 등 주요 외신에 따르면 이번 선거를 통해 우크라이나 전쟁에 참전했던 군인 49명이 새로 하원에 입성했다. 이를 통해 크렘린궁은 정권 장악력을 한층 더 공고히 했다고 매체들은 전했다.\n\n영국 텔레그래프는 블라디미르 푸틴 대통령의 측근 세력이 이번 선거에서 기록적인 수의 의석을 확보했다고 보도했다. 선거 과정 전반에 걸쳐 큰 이변은",
+    "url": "internal://realtrend_2026_Russian_State_Duma_Election_2026092209",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "realtrend_2026_Russian_State_D",
+    "region": "europe",
+    "country": "러시아",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-22 09:08",
+    "countries": [
+      "러시아",
+      "우크라이나",
+      "영국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_russian_parliament_election_ballot_voting_booth.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-22T09:08:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-22 09:08",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 213825,
     "title_en": "일본 증시, 22일 '국민휴일'로 휴장",
     "title_ko": "일본 증시, 22일 '국민휴일'로 휴장",
