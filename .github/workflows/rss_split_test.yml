@@ -1,0 +1,34 @@
+name: RSS 수집/처리 분리 검증 (일회성)
+
+# rss_collector.py + rss_processor.py 실제 환경 검증용. 확인 끝나면 이 파일은 삭제한다.
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v5
+
+      - name: Python 설정
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: 패키지 설치
+        run: pip install -r requirements.txt
+
+      - name: 수집기 실행
+        run: python scripts/rss_collector.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+
+      - name: 처리기 실행 (소량만)
+        run: python scripts/rss_processor.py
+        env:
+          MAX_PROCESS_PER_RUN: "5"
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}

@@ -194,5 +194,69 @@ def get_unposted_articles(limit: int = 10) -> list:
     return []
 
 
+# ── RSS 수집/처리 분리 큐 (2026-09-22) ──────────────────────────────
+# rss_collector.py가 채우고 rss_processor.py가 비운다. articles 테이블과 완전히
+# 별개라 다른 writer의 소비 로직에 영향이 없다(newsfinal_db_backup_architecture와
+# 같은 원칙: 새 테이블은 GRANT도 RLS와 별도로 확인 — 이미 반영됨, apply_migration
+# rss_raw_queue_grants 참고).
+
+def queue_link_exists(link: str) -> bool:
+    res = requests.get(
+        _url("rss_raw_queue"), headers=_headers(),
+        params={"select": "id", "link": f"eq.{link}", "limit": "1"}, timeout=10,
+    )
+    return res.status_code in (200, 206) and len(res.json()) > 0
+
+
+def queue_insert(link, title, source_name, category, subcategory,
+                  summary_en="", source_published_at=None, raw_tags=None) -> int:
+    payload = {
+        "link": link, "title": title, "source_name": source_name,
+        "category": category, "subcategory": subcategory, "summary_en": summary_en or "",
+    }
+    if source_published_at:
+        payload["source_published_at"] = source_published_at
+    if raw_tags:
+        payload["raw_tags"] = raw_tags
+    headers = {**_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
+    res = requests.post(_url("rss_raw_queue"), headers=headers, json=payload, timeout=15)
+    if res.status_code in (200, 201):
+        data = res.json()
+        return data[0]["id"] if data else -1
+    return -1
+
+
+def queue_claim_batch(limit: int = 150) -> list:
+    """처리 대기 중(processed=false)인 항목을 오래된 순으로 가져온다.
+
+    ⚠️ 여러 처리기 실행이 동시에 돌면 같은 행을 중복으로 집어갈 수 있다 — 하지만
+    run.yml이 concurrency 그룹(cancel-in-progress: false)으로 겹침 자체를 막고 있어
+    (newsfinal-auto-run) 지금 구조에서는 발생하지 않는다. 나중에 별도 워크플로에서
+    이 큐를 처리하게 되면 SELECT ... FOR UPDATE SKIP LOCKED 같은 잠금이 필요해진다."""
+    res = requests.get(
+        _url("rss_raw_queue"), headers=_headers(),
+        params={"select": "*", "processed": "eq.false", "order": "fetched_at.asc", "limit": str(limit)},
+        timeout=20,
+    )
+    return res.json() if res.status_code in (200, 206) else []
+
+
+def queue_delete(row_id: int):
+    requests.delete(f'{_url("rss_raw_queue")}?id=eq.{row_id}', headers=_headers(), timeout=10)
+
+
+def queue_mark_failed(row_id: int, error: str, max_attempts: int = 3):
+    """실패 시 attempts를 늘리고, 상한을 넘으면 영구 실패로 보고 큐에서 지운다
+    (깨진 링크 하나가 매 실행 재시도되며 배치를 계속 잡아먹는 걸 방지)."""
+    res = requests.get(_url("rss_raw_queue"), headers=_headers(),
+                        params={"select": "attempts", "id": f"eq.{row_id}"}, timeout=10)
+    attempts = (res.json()[0]["attempts"] + 1) if res.status_code in (200, 206) and res.json() else 1
+    if attempts >= max_attempts:
+        queue_delete(row_id)
+        return
+    requests.patch(f'{_url("rss_raw_queue")}?id=eq.{row_id}', headers=_headers(),
+                    json={"attempts": attempts, "last_error": str(error)[:500]}, timeout=10)
+
+
 if __name__ == "__main__":
     init_db()

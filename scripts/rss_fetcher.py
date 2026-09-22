@@ -105,20 +105,31 @@ if state["last_reset"] != today:
 # =========================
 
 def load_rss():
-    """Supabase rss_sources 테이블에서 소스 로드 (파일 노출 방지)"""
+    """Supabase rss_sources 테이블에서 소스 로드 (파일 노출 방지)
+
+    ⚠️ 2026-09-22: 소스를 430→1200+개로 확충하면서 이전의 고정 limit=1000이
+    조용히 상한에 걸릴 뻔했다(PostgREST 기본 max-rows 설정에 따라 1000을
+    넘겨도 요청 자체는 성공하고 앞쪽 1000개만 돌아와, 장애 없이 나머지가
+    누락된다 — 발견하기 어려운 유형). limit 숫자를 계속 올려 맞추는 대신
+    페이지네이션으로 상한 자체를 없앤다(앞으로 소스가 더 늘어도 안전)."""
     supabase_url = os.getenv("SUPABASE_URL", "").rstrip("/")
     supabase_key = os.getenv("SUPABASE_SERVICE_KEY", "")
-    res = requests.get(
-        f"{supabase_url}/rest/v1/rss_sources",
-        headers={
-            "apikey": supabase_key,
-            "Authorization": f"Bearer {supabase_key}",
-        },
-        params={"select": "name,category,subcategory,url", "is_active": "eq.true", "limit": "1000"},
-        timeout=15,
-    )
-    res.raise_for_status()
-    sources = res.json()
+    headers = {"apikey": supabase_key, "Authorization": f"Bearer {supabase_key}"}
+    sources, offset, page = [], 0, 1000
+    while True:
+        res = requests.get(
+            f"{supabase_url}/rest/v1/rss_sources",
+            headers=headers,
+            params={"select": "name,category,subcategory,url", "is_active": "eq.true",
+                    "order": "id.asc", "limit": str(page), "offset": str(offset)},
+            timeout=15,
+        )
+        res.raise_for_status()
+        batch = res.json()
+        sources.extend(batch)
+        if len(batch) < page:
+            break
+        offset += page
     if not sources:
         raise RuntimeError("rss_sources 테이블이 비어 있습니다. 마이그레이션 SQL을 먼저 실행하세요.")
     print(f"✅ RSS 소스 {len(sources)}개 로드 (Supabase)")
@@ -828,6 +839,23 @@ def entry_published_iso(entry):
     return None
 
 
+# 언어 감지(간단한 휴리스틱). 2026-09-22: 처리 단계(rss_processor.py)에서도 써야 해서
+# 원래 처리 루프 안에 있던 중첩 함수를 모듈 레벨로 승격.
+def detect_lang(text):
+    if not text:
+        return "en"
+    t = text[:200]
+    if any('؀' <= c <= 'ۿ' for c in t):
+        return "ar"
+    if any(c in t for c in "éèêëàâùûüôîïœç"):
+        return "fr"
+    if any(c in t for c in "ãõçáéíóúâêîôû") and any(w in t.lower() for w in ["da","de","do","dos","das","em","para","por"]):
+        return "pt"
+    if any(w in t.lower().split() for w in ["yang","dan","untuk","dengan","dalam","tidak","ini","itu","dari","pada"]):
+        return "id"
+    return "en"
+
+
 def fetch_source(s):
     """단일 소스에서 최근 기사 다건 수집 (발행일 필터 적용)
 
@@ -877,220 +905,210 @@ def fetch_source(s):
 # MAIN
 # =========================
 
-sources    = load_rss()
-seen_titles = []
-
-# 병렬로 RSS 수집
-print(f"[수집] {len(sources)}개 소스 병렬 수집 시작...")
-results = []
-# 2026-09-22: RSS 소스를 430→1200+개로 대폭 확충(대륙별 검증된 국가 매체 목록 반영)하며
-# max_workers를 20→40으로 올렸다. 소스 수집은 순수 I/O 대기(HTTP 요청)라 스레드를 늘려도
-# GIL 경합이 거의 없고, 430개 기준 이미 10분 타임아웃에 육박(612초)했던 걸 감안하면 늘리지
-# 않을 경우 스텝이 통째로 타임아웃돼(처리·저장은 수집 루프 종료 후 시작이라 부분 저장도 안 됨)
-# 오히려 발행량이 줄어드는 역효과가 난다. run.yml의 이 스텝 timeout-minutes도 15로 함께 올림.
-with ThreadPoolExecutor(max_workers=40) as executor:
-    futures = {executor.submit(fetch_source, s): s for s in sources}
-    for future in as_completed(futures):
-        data, name, status = future.result()
-        if name not in rss_health:
-            rss_health[name] = {"ok": 0, "fail": 0, "status": "active"}
-        if status == "ok" and data:
-            results.extend(data)
-        elif status == "too_old":
-            # 발행일 초과로 수집 대상이 없는 정상 상태 — 소스 장애로 집계하지 않음
-            rss_health[name]["too_old"] = rss_health[name].get("too_old", 0) + 1
-            print(f"[SKIP] 발행일 초과 — {name}")
-        else:
-            rss_health[name]["fail"] += 1
-
-print(f"[수집] {len(results)}개 기사 수집 완료")
-
-# 수집된 기사 처리 및 발송
-for data in results:
-    s           = data["source"]
-    name        = s["name"]
-    category    = s["category"]
-    subcategory = s["subcategory"]
-    region      = detect_region(name)
-    title       = data["title"]
-    link        = data["link"]
-    latest      = data["entry"]
-    src_published = entry_published_iso(latest)
-
-    # arXiv는 페이지 크롤링 대신 공식 API로 초록·제출일을 받는다(위 주석 참조)
-    arxiv_abstract = ""
-    _axid = arxiv_id_from_url(link)
-    if _axid:
-        _abs, _pub = fetch_arxiv_meta(_axid)
-        if _pub:
-            src_published = _pub
-            _age = _iso_age_days(_pub)
-            if _age is not None and _age > ARXIV_MAX_AGE_DAYS:
-                print(f"[SKIP] arXiv 제출 {_age:.0f}일 경과 — {title[:50]}")
+def legacy_main():
+    sources    = load_rss()
+    seen_titles = []
+    
+    # 병렬로 RSS 수집
+    print(f"[수집] {len(sources)}개 소스 병렬 수집 시작...")
+    results = []
+    # 2026-09-22: RSS 소스를 430→1200+개로 대폭 확충(대륙별 검증된 국가 매체 목록 반영)하며
+    # max_workers를 20→40으로 올렸다. 소스 수집은 순수 I/O 대기(HTTP 요청)라 스레드를 늘려도
+    # GIL 경합이 거의 없고, 430개 기준 이미 10분 타임아웃에 육박(612초)했던 걸 감안하면 늘리지
+    # 않을 경우 스텝이 통째로 타임아웃돼(처리·저장은 수집 루프 종료 후 시작이라 부분 저장도 안 됨)
+    # 오히려 발행량이 줄어드는 역효과가 난다. run.yml의 이 스텝 timeout-minutes도 15로 함께 올림.
+    with ThreadPoolExecutor(max_workers=40) as executor:
+        futures = {executor.submit(fetch_source, s): s for s in sources}
+        for future in as_completed(futures):
+            data, name, status = future.result()
+            if name not in rss_health:
+                rss_health[name] = {"ok": 0, "fail": 0, "status": "active"}
+            if status == "ok" and data:
+                results.extend(data)
+            elif status == "too_old":
+                # 발행일 초과로 수집 대상이 없는 정상 상태 — 소스 장애로 집계하지 않음
+                rss_health[name]["too_old"] = rss_health[name].get("too_old", 0) + 1
+                print(f"[SKIP] 발행일 초과 — {name}")
+            else:
+                rss_health[name]["fail"] += 1
+    
+    print(f"[수집] {len(results)}개 기사 수집 완료")
+    
+    # 수집된 기사 처리 및 발송
+    for data in results:
+        s           = data["source"]
+        name        = s["name"]
+        category    = s["category"]
+        subcategory = s["subcategory"]
+        region      = detect_region(name)
+        title       = data["title"]
+        link        = data["link"]
+        latest      = data["entry"]
+        src_published = entry_published_iso(latest)
+    
+        # arXiv는 페이지 크롤링 대신 공식 API로 초록·제출일을 받는다(위 주석 참조)
+        arxiv_abstract = ""
+        _axid = arxiv_id_from_url(link)
+        if _axid:
+            _abs, _pub = fetch_arxiv_meta(_axid)
+            if _pub:
+                src_published = _pub
+                _age = _iso_age_days(_pub)
+                if _age is not None and _age > ARXIV_MAX_AGE_DAYS:
+                    print(f"[SKIP] arXiv 제출 {_age:.0f}일 경과 — {title[:50]}")
+                    continue
+            if not _abs:
+                # 초록이 없으면 본문이 페이지 UI 안내문으로 채워진다 → 수집하지 않는다
+                print(f"[SKIP] arXiv 초록 확보 실패 — {title[:50]}")
                 continue
-        if not _abs:
-            # 초록이 없으면 본문이 페이지 UI 안내문으로 채워진다 → 수집하지 않는다
-            print(f"[SKIP] arXiv 초록 확보 실패 — {title[:50]}")
+            arxiv_abstract = _abs
+    
+        fp = fingerprint(title, name)
+    
+        if is_url_exists(link):
             continue
-        arxiv_abstract = _abs
-
-    fp = fingerprint(title, name)
-
-    if is_url_exists(link):
-        continue
-
-    if is_duplicate(title, seen_titles):
-        print(f"[SKIP] 유사 기사 중복 — {title[:50]}")
-        continue
-    seen_titles.append(title)
-
-    if is_noise(title):
-        print(f"[SKIP] 노이즈 — {title[:50]}")
-        continue
-
-    # 소프트 노이즈 — DB에만 저장, 텔레그램/홈페이지 발송 안 함
-    soft_noise = is_soft_noise(title)
-
-
-    # 요약 추출
-    summary_en = extract_summary(latest)
-
-    # 언어 감지 (간단한 휴리스틱)
-    def detect_lang(text):
-        if not text:
-            return "en"
-        t = text[:200]
-        if any('\u0600' <= c <= '\u06ff' for c in t):
-            return "ar"
-        if any(c in t for c in "éèêëàâùûüôîïœç"):
-            return "fr"
-        if any(c in t for c in "ãõçáéíóúâêîôû") and any(w in t.lower() for w in ["da","de","do","dos","das","em","para","por"]):
-            return "pt"
-        if any(w in t.lower().split() for w in ["yang","dan","untuk","dengan","dalam","tidak","ini","itu","dari","pada"]):
-            return "id"
-        return "en"
-
-    src_lang = detect_lang(title + " " + (summary_en or ""))
-
-    # 원문 크롤링 (타임아웃 8초, 실패해도 계속) — arXiv는 API 초록을 그대로 쓴다
-    full_text = arxiv_abstract or crawl_full_text(link, timeout=8)
-    if full_text:
-        print(f"  [크롤링] {len(full_text)}자 추출")
-
-    # 국가 감지 — 기사 내용 기반으로만 판단 (소스 국가는 폴백으로만 사용 안 함)
-    content_flag, content_country = detect_country(title + " " + summary_en, source=name)
-    all_countries = detect_countries(title + " " + summary_en, source=name)
-    country_names = [n for _, n in all_countries]
-
-    if country_names:
-        # 프론티어 국가 우선
-        frontier_countries = [n for n in country_names if n not in GLOBAL_COUNTRIES]
-        if frontier_countries:
-            country_name = frontier_countries[0]
-            country_flag = next((f for f, n in all_countries if n == country_name), "")
+    
+        if is_duplicate(title, seen_titles):
+            print(f"[SKIP] 유사 기사 중복 — {title[:50]}")
+            continue
+        seen_titles.append(title)
+    
+        if is_noise(title):
+            print(f"[SKIP] 노이즈 — {title[:50]}")
+            continue
+    
+        # 소프트 노이즈 — DB에만 저장, 텔레그램/홈페이지 발송 안 함
+        soft_noise = is_soft_noise(title)
+    
+    
+        # 요약 추출
+        summary_en = extract_summary(latest)
+    
+        src_lang = detect_lang(title + " " + (summary_en or ""))
+    
+        # 원문 크롤링 (타임아웃 8초, 실패해도 계속) — arXiv는 API 초록을 그대로 쓴다
+        full_text = arxiv_abstract or crawl_full_text(link, timeout=8)
+        if full_text:
+            print(f"  [크롤링] {len(full_text)}자 추출")
+    
+        # 국가 감지 — 기사 내용 기반으로만 판단 (소스 국가는 폴백으로만 사용 안 함)
+        content_flag, content_country = detect_country(title + " " + summary_en, source=name)
+        all_countries = detect_countries(title + " " + summary_en, source=name)
+        country_names = [n for _, n in all_countries]
+    
+        if country_names:
+            # 프론티어 국가 우선
+            frontier_countries = [n for n in country_names if n not in GLOBAL_COUNTRIES]
+            if frontier_countries:
+                country_name = frontier_countries[0]
+                country_flag = next((f for f, n in all_countries if n == country_name), "")
+            else:
+                # 주요국만 있으면 글로벌
+                country_name = country_names[0]
+                country_flag = next((f for f, n in all_countries if n == country_name), "")
+                category = "글로벌"
+                region = "global"
         else:
-            # 주요국만 있으면 글로벌
-            country_name = country_names[0]
-            country_flag = next((f for f, n in all_countries if n == country_name), "")
+            # 내용에서 어떤 국가도 감지 안 됨 → 글로벌
+            country_name, country_flag = "", ""
             category = "글로벌"
             region = "global"
-    else:
-        # 내용에서 어떤 국가도 감지 안 됨 → 글로벌
-        country_name, country_flag = "", ""
-        category = "글로벌"
-        region = "global"
-        country_names = []
-
-    # 한국어 번역
-    try:
-        title_ko = GoogleTranslator(source="auto", target="ko").translate(title[:500])
-        title_ko = clean_text(title_ko)
-        if _is_bad_translation(title_ko):
-            print(f"[번역실패] 원문 유지 — {title[:50]}")
-            title_ko = title
-    except Exception:
-        title_ko = title
-
-    # 요약 번역
-    # 2026-08-30 사용자 지적: 300자 제한에 근거 없었음. deep_translator의
-    # GoogleTranslator는 대략 5000자까지 지원하므로 그 안에서 넉넉하게 씀
-    # (한도 초과 시에도 아래 except가 잡아 기존과 동일하게 빈 문자열로
-    # 폴백하므로 더 나빠질 게 없음).
-    summary_ko = ""
-    if summary_en:
+            country_names = []
+    
+        # 한국어 번역
         try:
-            summary_ko = GoogleTranslator(source="auto", target="ko").translate(summary_en[:4500])
-            summary_ko = clean_text(summary_ko)
-            if _is_bad_translation(summary_ko):
-                summary_ko = ""
+            title_ko = GoogleTranslator(source="auto", target="ko").translate(title[:500])
+            title_ko = clean_text(title_ko)
+            if _is_bad_translation(title_ko):
+                print(f"[번역실패] 원문 유지 — {title[:50]}")
+                title_ko = title
         except Exception:
-            summary_ko = ""
+            title_ko = title
+    
+        # 요약 번역
+        # 2026-08-30 사용자 지적: 300자 제한에 근거 없었음. deep_translator의
+        # GoogleTranslator는 대략 5000자까지 지원하므로 그 안에서 넉넉하게 씀
+        # (한도 초과 시에도 아래 except가 잡아 기존과 동일하게 빈 문자열로
+        # 폴백하므로 더 나빠질 게 없음).
+        summary_ko = ""
+        if summary_en:
+            try:
+                summary_ko = GoogleTranslator(source="auto", target="ko").translate(summary_en[:4500])
+                summary_ko = clean_text(summary_ko)
+                if _is_bad_translation(summary_ko):
+                    summary_ko = ""
+            except Exception:
+                summary_ko = ""
+    
+    
+        # 비영어 소스면 full_text 앞에 언어 태그 추가
+        if src_lang != "en" and full_text:
+            lang_labels = {"fr": "[원문: 프랑스어]", "ar": "[원문: 아랍어]",
+                           "pt": "[원문: 포르투갈어]", "id": "[원문: 인도네시아어]"}
+            lang_tag = lang_labels.get(src_lang, "[원문: " + src_lang + "]")
+            full_text = lang_tag + "\n" + full_text
+    
+        # RSS 원문 태그(<category> 등, feedparser entry.tags) — 실측(2026-09-08):
+        # Cointelegraph/CryptoPotato/NewsBTC/Decrypt 전부 태그를 갖고 있고, 일부는
+        # "Latest News"/"AA News" 같은 범용 버킷이지만 "Robinhood Chain"/"bitwise"처럼
+        # 구체적인 개체명도 섞여 있다. 여기선 정제 없이 원문 그대로 보존만 하고,
+        # 노이즈 필터링·매칭 판단은 소비 쪽(gemini_summarizer.py find_similar_trend)
+        # 책임으로 둔다 — 사용자 제안("트렌드 기사 묶이는 거 보면 #bitcoin #liquid
+        # #network 이런 식으로 태그를 줘서 묶고 있는데, 태그를 좀 더 다양하게
+        # 써먹던가... 내부적으로 분류하는데 써먹던가") 반영: country가 파이프라인마다
+        # 다르게 뽑히거나 아예 안 뽑히는 문제(리퀴드 네트워크 해킹 트렌드 기사 중복,
+        # 국가 없는 글로벌 이슈)를 언어 중립적인 원문 태그로 보완한다.
+        raw_tags = [t.get("term", "").strip() for t in (latest.get("tags") or []) if t.get("term")]
+        raw_tags = normalize_tags(raw_tags, limit=10)  # 정리(정규화+포함관계 제거)+정렬(dedup_guard.py)
+        tag_source_data = {"tags": raw_tags} if raw_tags else None
+    
+        # 텔레그램 발송 (소프트 노이즈는 스킵)
+        if soft_noise:
+            article_id = insert_article(
+                title_en=title, title_ko=title_ko,
+                summary_en=summary_en, summary_ko=summary_ko,
+                url=link, source=name, category=category,
+                subcategory=subcategory, region=region,
+                country=country_name, country_flag=country_flag,
+                score=0, full_text=full_text,
+                countries=country_names,
+                is_published=False,
+                source_published_at=src_published,
+                source_data=tag_source_data,
+            )
+            print(f"[SOFT] [{category}] [{country_name}] {title_ko[:50]}")
+            continue
+    
+        res = send_telegram(title_ko, summary_ko, link, name, category, subcategory, region, country_name)
+    
+        if res.get("ok"):
+            state["daily_count"] += 1
+            rss_health[name]["ok"] += 1
+    
+            # DB 저장 — RSS 기사는 is_published=False (홈페이지 미노출)
+            article_id = insert_article(
+                title_en=title, title_ko=title_ko,
+                summary_en=summary_en, summary_ko=summary_ko,
+                url=link, source=name, category=category,
+                subcategory=subcategory, region=region,
+                country=country_name, country_flag=country_flag,
+                score=0, full_text=full_text,
+                countries=country_names,
+                is_published=False,
+                source_published_at=src_published,
+                source_data=tag_source_data,
+            )
+            if article_id > 0:
+                mark_sent_telegram(article_id)
+    
+            print(f"[SENT] [{category}>{subcategory}] [{country_name}] {title_ko}")
+        else:
+            print(f"[FAIL] {res}")
+            rss_health[name]["fail"] += 1
+    
+    save_state()
+    print(f"\n✅ 완료")
 
 
-    # 비영어 소스면 full_text 앞에 언어 태그 추가
-    if src_lang != "en" and full_text:
-        lang_labels = {"fr": "[원문: 프랑스어]", "ar": "[원문: 아랍어]",
-                       "pt": "[원문: 포르투갈어]", "id": "[원문: 인도네시아어]"}
-        lang_tag = lang_labels.get(src_lang, "[원문: " + src_lang + "]")
-        full_text = lang_tag + "\n" + full_text
-
-    # RSS 원문 태그(<category> 등, feedparser entry.tags) — 실측(2026-09-08):
-    # Cointelegraph/CryptoPotato/NewsBTC/Decrypt 전부 태그를 갖고 있고, 일부는
-    # "Latest News"/"AA News" 같은 범용 버킷이지만 "Robinhood Chain"/"bitwise"처럼
-    # 구체적인 개체명도 섞여 있다. 여기선 정제 없이 원문 그대로 보존만 하고,
-    # 노이즈 필터링·매칭 판단은 소비 쪽(gemini_summarizer.py find_similar_trend)
-    # 책임으로 둔다 — 사용자 제안("트렌드 기사 묶이는 거 보면 #bitcoin #liquid
-    # #network 이런 식으로 태그를 줘서 묶고 있는데, 태그를 좀 더 다양하게
-    # 써먹던가... 내부적으로 분류하는데 써먹던가") 반영: country가 파이프라인마다
-    # 다르게 뽑히거나 아예 안 뽑히는 문제(리퀴드 네트워크 해킹 트렌드 기사 중복,
-    # 국가 없는 글로벌 이슈)를 언어 중립적인 원문 태그로 보완한다.
-    raw_tags = [t.get("term", "").strip() for t in (latest.get("tags") or []) if t.get("term")]
-    raw_tags = normalize_tags(raw_tags, limit=10)  # 정리(정규화+포함관계 제거)+정렬(dedup_guard.py)
-    tag_source_data = {"tags": raw_tags} if raw_tags else None
-
-    # 텔레그램 발송 (소프트 노이즈는 스킵)
-    if soft_noise:
-        article_id = insert_article(
-            title_en=title, title_ko=title_ko,
-            summary_en=summary_en, summary_ko=summary_ko,
-            url=link, source=name, category=category,
-            subcategory=subcategory, region=region,
-            country=country_name, country_flag=country_flag,
-            score=0, full_text=full_text,
-            countries=country_names,
-            is_published=False,
-            source_published_at=src_published,
-            source_data=tag_source_data,
-        )
-        print(f"[SOFT] [{category}] [{country_name}] {title_ko[:50]}")
-        continue
-
-    res = send_telegram(title_ko, summary_ko, link, name, category, subcategory, region, country_name)
-
-    if res.get("ok"):
-        state["daily_count"] += 1
-        rss_health[name]["ok"] += 1
-
-        # DB 저장 — RSS 기사는 is_published=False (홈페이지 미노출)
-        article_id = insert_article(
-            title_en=title, title_ko=title_ko,
-            summary_en=summary_en, summary_ko=summary_ko,
-            url=link, source=name, category=category,
-            subcategory=subcategory, region=region,
-            country=country_name, country_flag=country_flag,
-            score=0, full_text=full_text,
-            countries=country_names,
-            is_published=False,
-            source_published_at=src_published,
-            source_data=tag_source_data,
-        )
-        if article_id > 0:
-            mark_sent_telegram(article_id)
-
-        print(f"[SENT] [{category}>{subcategory}] [{country_name}] {title_ko}")
-    else:
-        print(f"[FAIL] {res}")
-        rss_health[name]["fail"] += 1
-
-save_state()
-print(f"\n✅ 완료")
+if __name__ == "__main__":
+    legacy_main()
