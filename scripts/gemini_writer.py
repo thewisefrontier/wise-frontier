@@ -19,6 +19,13 @@ from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
 from rapidfuzz import fuzz
 
+# 2026-09-22 실사고: get_today_articles()의 Supabase REST 호출이 일시적
+# connection reset 한 번에 후보 340건을 40건으로 반환해, 그 사이클
+# 클러스터링이 사실상 거의 안 돌아 신규 기사가 0건 나왔다(export_articles.py
+# 사고와 같은 유형 — http_retry.py 참고). 재시도 세션으로 교체.
+from http_retry import get_session
+requests = get_session()
+
 try:
     from date_guard import check_date_hallucination
 except Exception:

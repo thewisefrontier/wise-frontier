@@ -35,6 +35,11 @@ import os
 import re
 import requests
 
+# 2026-09-22: 이 모듈을 공유하는 writer들이 전부 같은 위험에 노출돼 있어
+# (gemini_writer.py의 같은 유형 실사고 참고 — http_retry.py) 재시도 세션으로 교체.
+from http_retry import get_session
+requests = get_session()
+
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 
