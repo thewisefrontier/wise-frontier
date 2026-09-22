@@ -251,6 +251,50 @@ def fetch_seeded_pixabay_image(keywords: list, seed: int, key_hint: str) -> str:
 _WIKIMEDIA_UNRELIABLE_ENTITIES = {"cholera", "mpox", "ebola virus disease"}
 
 
+# 이 목록에 있는 이름이 Pixabay 태그에 섞여 있으면 후보에서 제외한다.
+# 2026-09-22 실사고: "political rally campaign speech crowd"처럼 인명을 뺀
+# 지극히 일반적인 검색어에도 트럼프 유세 사진이 1등으로 나옴 — Pixabay가
+# 유명 정치인의 편집 사진을 일반 정치 키워드에도 광범위하게 태깅해두기
+# 때문. 이 경로(entity 없는 일반 소재 검색)는 애초에 "특정 인물을 담지
+# 않은 사진"이 전제라, 무관한 기사에 실제 정치 지도자 얼굴이 실리면 본인
+# 관련 기사로 오인될 위험이 스톡사진 재사용보다 훨씬 크다. 위키미디어
+# 파일명 블록리스트(_WIKI_TITLE_BLOCKLIST)와 같은 패턴 — 새 사례가 나오면
+# 추가한다.
+_PIXABAY_NAME_BLOCKLIST = {
+    "trump", "biden", "putin", "xi jinping", "zelensky", "zelenskyy",
+    "modi", "macron", "netanyahu", "kim jong un", "kim jong-un",
+    "obama", "boris johnson", "keir starmer",
+}
+
+
+def _hit_has_blocked_name(hit: dict) -> bool:
+    tags = (hit.get("tags") or "").lower()
+    return any(name in tags for name in _PIXABAY_NAME_BLOCKLIST)
+
+
+def pick_safe_pixabay_hit(hits: list):
+    """Pixabay 검색 결과 중 (1) 블록리스트 인물이 안 나오고 (2) 최근 24시간
+    내 다른 기사에 안 쓰인 것을 우선 선택한다. 인물 필터를 통과하는 후보가
+    하나도 없으면(드묾) 어쩔 수 없이 필터 없이 진행하되 로그를 남긴다 —
+    그 경우에도 최근 재사용 체크는 유지한다."""
+    if not hits:
+        return None
+    candidates = [h for h in hits if not _hit_has_blocked_name(h)]
+    if not candidates:
+        print("  ⚠️ 모든 후보가 인물 블록리스트에 걸림 — 필터 없이 진행")
+        candidates = hits
+    for h in candidates:
+        frag = f"pixabay_{h.get('id')}"
+        try:
+            if not image_used_recently(frag):
+                return h
+        except Exception as e:
+            print(f"  ⚠️ 최근 사용 이미지 확인 실패(그냥 진행): {e}")
+            return h
+    print(f"  ⚠️ 후보 {len(candidates)}개 전부 최근 24시간 내 사용됨 — 1등 그대로 사용")
+    return candidates[0]
+
+
 def fetch_article_image(title: str, body: str, entity: str, call_gemini_fn) -> tuple:
     """기사 이미지를 찾는다. 반환: (image_url, image_credit).
 
@@ -300,35 +344,14 @@ def fetch_article_image(title: str, body: str, entity: str, call_gemini_fn) -> t
                 "q": query,
                 "image_type": "photo",
                 "safesearch": "true",
-                "per_page": 3,
+                "per_page": 10,
             },
             timeout=15
         )
         if res.status_code == 200:
             hits = res.json().get("hits", [])
             if hits:
-                # 2026-09-22 실사고: 서로 다른 검색어로도 같은 1등 스톡사진이
-                # 반복 선택돼(러시아 총선/베를린 지방선거 기사가 같은 투표함
-                # 사진) 무관한 두 기사에 같은 사진이 실렸다. per_page=3으로
-                # 이미 후보 3개를 받아오면서도 항상 hits[0]만 썼던 게 원인 —
-                # 이 경로는 애초에 인물·지명을 뺀 "일반 소재" 검색이라(아래
-                # 주석 참고) 같은 사진이 서로 다른 기사에 실려도 편집상
-                # 맞을 이유가 없다. 최근 24시간 내 이미 쓰인 사진(photo id
-                # 기준)은 건너뛰고 다음 후보로 넘어간다 — 셋 다 최근에 썼으면
-                # (드묾) 사진 없는 것보다 나으니 1등을 그대로 쓴다.
-                pick = hits[0]
-                for hit in hits:
-                    frag = f"pixabay_{hit.get('id')}"
-                    try:
-                        if not image_used_recently(frag):
-                            pick = hit
-                            break
-                    except Exception as e:
-                        print(f"  ⚠️ 최근 사용 이미지 확인 실패(그냥 진행): {e}")
-                        pick = hit
-                        break
-                else:
-                    print(f"  ⚠️ 후보 {len(hits)}개 전부 최근 24시간 내 사용됨 — 1등 그대로 사용")
+                pick = pick_safe_pixabay_hit(hits)
                 # webformatURL(최대 640px) 사용 — largeImageURL(1280px)은 히어로
                 # 이미지 표시 크기(max-height:420px)에 과잉이라 R2 용량만 낭비.
                 raw_url = pick.get("webformatURL", "") or pick.get("largeImageURL", "")

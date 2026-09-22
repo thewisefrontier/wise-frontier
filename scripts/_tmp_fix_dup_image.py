@@ -1,16 +1,22 @@
 """
 일회성 스크립트 — id=214175(베를린 선거 기사) 이미지를 213833(러시아 총선
-기사)과 겹치지 않는 다른 사진으로 교체한다. 로컬에 PIXABAY_API_KEY가 없어
-CI(secrets)에서만 실행 가능. 실행 후 이 파일과 대응 워크플로우는 삭제한다.
+기사)과 겹치지 않고, 특정 정치인 얼굴도 아닌 사진으로 교체한다. 로컬에
+PIXABAY_API_KEY가 없어(CI 시크릿 전용) 임시 워크플로우로 실행. 실행 확인
+후 이 파일과 대응 워크플로우는 삭제한다.
+
+2026-09-22 2차 수정: 1차 실행이 "political rally campaign speech crowd"로
+검색해 트럼프 유세 사진을 골라버림(pick_safe_pixabay_hit 도입 전) — 즉시
+발견해 이번엔 인물이 안 나올 만한 중립 검색어 + 새 필터 함수로 재실행.
 """
 import os
 import requests
-from db import image_used_recently, _url, _headers
+from db import _url, _headers
 from image_store import store_image
+from article_image import pick_safe_pixabay_hit
 
 PIXABAY_API_KEY = os.getenv("PIXABAY_API_KEY", "")
 ARTICLE_ID = 214175
-QUERY = "political rally campaign speech crowd"
+QUERY = "city council chamber government building europe"
 
 res = requests.get(
     "https://pixabay.com/api/",
@@ -21,16 +27,10 @@ res = requests.get(
 res.raise_for_status()
 hits = res.json().get("hits", [])
 print(f"후보 {len(hits)}건")
-
-pick = None
 for h in hits:
-    frag = f"pixabay_{h.get('id')}"
-    if not image_used_recently(frag, hours=48):
-        pick = h
-        break
-if not pick and hits:
-    pick = hits[0]
+    print(" ", h.get("id"), h.get("tags"))
 
+pick = pick_safe_pixabay_hit(hits)
 if not pick:
     print("후보 없음 — 중단")
     raise SystemExit(1)
