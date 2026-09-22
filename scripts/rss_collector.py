@@ -45,6 +45,8 @@ def collect():
 
     seen_titles = []
     queued = skipped_noise = skipped_dup = 0
+    src_ok = src_fail = src_too_old = 0
+    fail_samples = []  # 진단용 — 실패 사유 앞부분만 몇 개 수집(2026-09-22, 라이브 실행 결과 이상 조사)
     buf = []  # 아직 큐에 반영 안 한 대기분 — FLUSH_EVERY마다 한 번에 내보낸다
 
     def flush():
@@ -64,11 +66,16 @@ def collect():
 
             if status == "too_old":
                 rss_health[name]["too_old"] = rss_health[name].get("too_old", 0) + 1
+                src_too_old += 1
                 continue
             if status != "ok" or not items:
                 rss_health[name]["fail"] += 1
+                src_fail += 1
+                if len(fail_samples) < 15:
+                    fail_samples.append(f"{name}: {status}")
                 continue
             rss_health[name]["ok"] += 1
+            src_ok += 1
 
             # 노이즈·유사중복은 제목만으로 판단(네트워크 없음). "이미 articles에 있는
             # 링크인지"는 여기서 항목마다 확인하지 않는다 — 1200+소스에서 항목마다
@@ -101,6 +108,9 @@ def collect():
 
     save_state()
     print(f"[수집 완료] 큐 적재 {queued}건 | 노이즈제외 {skipped_noise} | 유사중복 {skipped_dup}")
+    print(f"[소스 결과] 성공 {src_ok} | 발행일초과 {src_too_old} | 실패 {src_fail} (총 {len(sources)})")
+    for s in fail_samples:
+        print(f"  [실패예시] {s}")
 
 
 if __name__ == "__main__":
