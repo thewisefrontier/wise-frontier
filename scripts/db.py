@@ -34,7 +34,10 @@ def _headers():
         "apikey": SUPABASE_SERVICE_KEY,
         "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
         "Content-Type": "application/json",
-        "Prefer": "return=representation",
+        # 2026-09-23: representation이 기본이었을 땐 PATCH/DELETE마다 full_text까지
+        # 든 행 전체를 돌려받아 Supabase 무료 이그레스(5GB)를 넘겼다. 본문이 필요한
+        # 호출부는 각자 Prefer를 덮어쓴다(GET은 이 값과 무관).
+        "Prefer": "return=minimal",
     }
 
 def _url(table="articles"):
@@ -119,7 +122,7 @@ def insert_article(
     if image_credit:
         payload["image_credit"] = image_credit
     headers = {**_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
-    res = requests.post(_url(), headers=headers, json=payload, timeout=15)
+    res = requests.post(_url() + "?select=id", headers=headers, json=payload, timeout=15)
     if res.status_code in (200, 201):
         data = res.json()
         if data:
@@ -363,7 +366,7 @@ def queue_insert(link, title, source_name, category, subcategory,
     if raw_tags:
         payload["raw_tags"] = raw_tags
     headers = {**_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
-    res = requests.post(_url("rss_raw_queue"), headers=headers, json=payload, timeout=15)
+    res = requests.post(_url("rss_raw_queue") + "?select=id", headers=headers, json=payload, timeout=15)
     if res.status_code in (200, 201):
         data = res.json()
         return data[0]["id"] if data else -1
@@ -420,7 +423,7 @@ def queue_insert_bulk(rows: list) -> int:
         # 계속 재발하고 있었다.
         headers = {**_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
         try:
-            res = requests.post(_url("rss_raw_queue") + "?on_conflict=link", headers=headers, json=build(rs), timeout=30)
+            res = requests.post(_url("rss_raw_queue") + "?on_conflict=link&select=id", headers=headers, json=build(rs), timeout=30)
         except requests.RequestException as e:
             print(f"  [WARN] queue_insert_bulk 네트워크 오류({len(rs)}건): {e}")
             return None
