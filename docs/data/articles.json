@@ -1,5 +1,71 @@
 [
   {
+    "id": 255910,
+    "title_en": "[국내유가] 휘발유 리터당 1856원…전국 평균 유가 동반 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1856원…전국 평균 유가 동반 하락",
+    "summary_ko": "한국석유공사 오피넷이 24일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1856원으로 집계됐다. 이는 전일 대비 2.30원 하락한 수치다.\n\n이날 오피넷에 따르면 경유 판매가격은 리터당 1841.50원으로 전일보다 2.36원 내렸다. LPG 부탄 역시 리터당 1091.36원을 기록하며 전일 대비 6.82원 하락했다. 주요 유종 가격이 모두 전일 대비 하락세를 나타냈다.\n\n이번 유가 하락은 최근 국제유가 흐름과 정유사 공급가 변동 등이 복합적으로 작용한 결과다. 일각에서는 정유사 도매가 조정과 유류세 영향 등을 ",
+    "url": "internal://opinet_price_2026-09-24",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-09-24 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_09_24_pid6999638.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-24T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-24 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-09-24",
+      "prices": {
+        "B027": {
+          "diff": -2.3,
+          "name": "휘발유",
+          "price": 1856.17
+        },
+        "B034": {
+          "diff": 0.0,
+          "name": "고급휘발유",
+          "price": 2329.43
+        },
+        "C004": {
+          "diff": 0.09,
+          "name": "실내등유",
+          "price": 1574.2
+        },
+        "D047": {
+          "diff": -2.36,
+          "name": "경유",
+          "price": 1841.5
+        },
+        "K015": {
+          "diff": -6.82,
+          "name": "LPG(부탄)",
+          "price": 1091.36
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 255905,
     "title_en": "[데일리 다이제스트] 지정학적 갈등과 글로벌 원자재 및 금융시장 변동성 확대",
     "title_ko": "[데일리 다이제스트] 지정학적 갈등과 글로벌 원자재 및 금융시장 변동성 확대",
