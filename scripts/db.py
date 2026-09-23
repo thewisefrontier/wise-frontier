@@ -347,6 +347,61 @@ def image_used_recently(fragment: str, hours: int = 24) -> bool:
     return res.status_code in (200, 206) and len(res.json()) > 0
 
 
+def hydrate_full_text(rows: list, check_db: bool = True, workers: int = 8) -> int:
+    """기사 재료로 쓰기 직전의 원자재 행에 원문 본문(full_text)을 채운다(제자리 수정).
+
+    2026-09-23부터 RSS 처리기는 본문을 저장하지 않는다 — 하루 2만 건 넘는 원자재
+    본문이 무료 DB(500MB)를 넘기고 건당 크롤링이 처리량의 병목이었다. 실제로
+    기사화되는 소수 행만 여기서 DB 저장분 → 없으면 크롤링 순으로 채우고, 크롤링
+    결과는 다시 저장해 다음 사이클이 재사용한다(96시간 뒤 cleanup_stale_raw가 비움).
+    크롤링 실패는 ""로 저장해 같은 링크를 매 사이클 다시 긁지 않는다. 채운 건수 반환."""
+    todo = [r for r in rows if isinstance(r, dict) and r.get("id") and r.get("full_text") is None
+            and (r.get("source") or "") != "NewsFinal"]
+    if not todo:
+        return 0
+
+    if check_db:
+        ids = ",".join(str(r["id"]) for r in todo)
+        try:
+            res = requests.get(_url(), headers=_headers(), timeout=15,
+                               params={"select": "id,full_text", "id": f"in.({ids})", "full_text": "not.is.null"})
+            stored = {x["id"]: x["full_text"] for x in res.json()} if res.status_code in (200, 206) else {}
+        except Exception as e:
+            print(f"  ⚠️ 저장된 본문 조회 실패(크롤링으로 진행): {e}")
+            stored = {}
+        for r in todo:
+            if r["id"] in stored:
+                r["full_text"] = stored[r["id"]]
+        todo = [r for r in todo if r.get("full_text") is None]
+
+    todo = [r for r in todo if str(r.get("url") or "").startswith("http")]
+    if not todo:
+        return 0
+
+    from concurrent.futures import ThreadPoolExecutor
+    from text_crawl import crawl_full_text
+
+    def _crawl(r):
+        try:
+            return crawl_full_text(r["url"], timeout=8) or ""
+        except Exception:
+            return ""
+
+    with ThreadPoolExecutor(max_workers=workers) as ex:
+        texts = list(ex.map(_crawl, todo))
+
+    filled = 0
+    for r, text in zip(todo, texts):
+        r["full_text"] = text
+        filled += bool(text)
+        try:
+            requests.patch(f"{_url()}?id=eq.{r['id']}", headers=_headers(), json={"full_text": text}, timeout=15)
+        except Exception:
+            pass
+    print(f"  [본문 보강] {len(todo)}건 크롤링 → {filled}건 확보")
+    return filled
+
+
 def queue_link_exists(link: str) -> bool:
     res = requests.get(
         _url("rss_raw_queue"), headers=_headers(),

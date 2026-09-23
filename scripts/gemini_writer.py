@@ -274,6 +274,9 @@ STOPWORDS = {
 # ── DB 헬퍼 (Supabase REST API) ───────────────────────────
 
 def get_today_articles(limit=300):
+    # 2026-09-23: full_text는 조회하지 않는다 — 클러스터링엔 제목·요약이면 충분하고,
+    # 매 실행 300건+ 본문을 받는 게 이그레스를 크게 먹었다. 실제 기사화하는
+    # 클러스터만 _prepare_cluster_material()에서 본문을 채운다.
     since = (now_kst() - timedelta(hours=96)).strftime("%Y-%m-%d %H:%M")
     articles = []
     offset = 0
@@ -283,7 +286,7 @@ def get_today_articles(limit=300):
             _sb_url(),
             headers={**_sb_headers(), "Range": f"{offset}-{offset+batch-1}"},
             params={
-                "select": "id,title_ko,title_en,summary_ko,summary_en,source,category,subcategory,country,region,url,created_at,score,full_text,source_published_at",
+                "select": "id,title_ko,title_en,summary_ko,summary_en,source,category,subcategory,country,region,url,created_at,score,source_published_at",
                 "sent_telegram": "eq.1",
                 "source": "neq.NewsFinal",
                 "created_at": f"gte.{since}",
@@ -319,7 +322,7 @@ def get_today_articles(limit=300):
             _sb_url(),
             headers=_sb_headers(),
             params={
-                "select": "id,title_ko,title_en,summary_ko,summary_en,source,category,subcategory,country,region,url,created_at,score,full_text,source_published_at",
+                "select": "id,title_ko,title_en,summary_ko,summary_en,source,category,subcategory,country,region,url,created_at,score,source_published_at",
                 "subcategory": "eq.parked_topic",
                 "created_at": f"gte.{since}",
                 "order": "created_at.desc",
@@ -347,7 +350,7 @@ def get_today_articles(limit=300):
                 _sb_url(),
                 headers=_sb_headers(),
                 params={
-                    "select": "id,title_ko,title_en,summary_ko,summary_en,source,category,subcategory,country,region,url,created_at,score,full_text,source_published_at",
+                    "select": "id,title_ko,title_en,summary_ko,summary_en,source,category,subcategory,country,region,url,created_at,score,source_published_at",
                     "source": f"in.({source_filter})",
                     "created_at": f"gte.{since}",
                     "order": "created_at.desc",
@@ -1243,6 +1246,18 @@ def _cluster_hits_severity(members, keywords) -> bool:
 def _cluster_hits_severity_high(members) -> bool:
     """속보 경로(run_breaking)와 cluster_importance가 공유하는 중대성 판정."""
     return _cluster_hits_severity(members, _SEVERITY_HIGH)
+
+
+def _prepare_cluster_material(cluster):
+    """기사화 직전에만 원문 본문을 채우고(db.hydrate_full_text), 본문 첫머리로
+    칼럼/오피니언을 다시 거른다 — 클러스터링 단계는 본문 없이 제목만으로 걸렀다."""
+    from db import hydrate_full_text
+    hydrate_full_text(cluster)
+    kept = [a for a in cluster
+            if not is_opinion_column(a.get("title_en") or a.get("title_ko") or "", a.get("full_text") or "")]
+    if len(kept) < len(cluster):
+        print(f"  [제외] 본문 확인 결과 칼럼/오피니언 {len(cluster) - len(kept)}건")
+    return kept
 
 
 def cluster_importance(cluster) -> float:
@@ -3050,6 +3065,9 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
                 print(f"  [SKIP] 새 기사 없음 ({cur_count}건 동일)\n")
                 continue
 
+            cluster = _prepare_cluster_material(cluster)
+            if not cluster:
+                continue
             print(f"  → 기존 기사 업데이트 ({prev_count}건 → {cur_count}건)")
             prompt  = build_issue_prompt(cluster, existing["summary_ko"])
             has_full = any(a.get("full_text") for a in cluster)
@@ -3090,6 +3108,11 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
             if (country in ADVANCED_ECONOMIES and cur_count < CLUSTER_MIN_SIZE_ADVANCED
                     and not _has_official_source(cluster)):
                 print(f"  [SKIP] 선진국({country}) 저중복 이슈 ({cur_count}건 < {CLUSTER_MIN_SIZE_ADVANCED}건) — 프론티어마켓 편집방향상 제외\n")
+                continue
+
+            cluster = _prepare_cluster_material(cluster)
+            if len(cluster) < CLUSTER_MIN_SIZE:
+                print(f"  [SKIP] 칼럼 제외 후 기사 부족 ({len(cluster)}건)\n")
                 continue
 
             probe_title = titles[0][:80] if titles else ""
@@ -3310,6 +3333,10 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
              or (a.get("source") or "") in OFFICIAL_SOURCE_NAMES
              or (a.get("source") or "") in QUOTA_SOURCE_NAMES)
     ]
+
+    # 복수 주제 파킹은 본문이 있어야 토픽을 쪼갤 수 있다 — 후보(제목 기준, 소수)만 본문 보강.
+    from db import hydrate_full_text
+    hydrate_full_text([a for a in all_articles if is_multi_topic_title(a.get("title_en","") or a.get("title_ko",""))])
 
     multi_topic_skipped = [
         a for a in all_articles

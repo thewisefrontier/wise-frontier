@@ -19,7 +19,7 @@ from deep_translator import GoogleTranslator
 
 from rss_fetcher import (
     clean_text, _is_bad_translation, is_soft_noise, send_telegram, detect_lang,
-    crawl_full_text, arxiv_id_from_url, fetch_arxiv_meta, _iso_age_days, ARXIV_MAX_AGE_DAYS,
+    arxiv_id_from_url, fetch_arxiv_meta, _iso_age_days, ARXIV_MAX_AGE_DAYS,
 )
 from geo_detect import detect_region, detect_country, detect_countries, GLOBAL_COUNTRIES
 from db import (
@@ -78,9 +78,11 @@ def process_row(row: dict) -> bool:
     soft_noise = is_soft_noise(title)
     src_lang = detect_lang(title + " " + summary_en)
 
-    full_text = arxiv_abstract or crawl_full_text(link, timeout=8)
-    if full_text:
-        print(f"  [크롤링] {len(full_text)}자 추출")
+    # 2026-09-23: 여기서 본문을 크롤링·저장하지 않는다(arXiv 초록만 예외). 하루
+    # 2만 건 넘는 원자재 본문이 무료 DB 한도(500MB)를 넘겼고, 건당 최대 8초인
+    # 크롤링이 이 처리기의 병목이었다. 기사화 직전에 db.hydrate_full_text()가
+    # 실제 재료가 되는 소수 행만 채운다.
+    full_text = arxiv_abstract
 
     region = detect_region(name)
     content_flag, content_country = detect_country(title + " " + summary_en, source=name)

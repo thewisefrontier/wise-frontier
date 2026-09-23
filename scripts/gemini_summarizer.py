@@ -226,7 +226,7 @@ def get_articles_to_summarize(limit: int) -> list:
         _sb_url(),
         headers=_sb_headers(),
         params={
-            "select": "id,title_en,title_ko,summary_en,summary_ko,source,category,subcategory,region,country,full_text",
+            "select": "id,url,title_en,title_ko,summary_en,summary_ko,source,category,subcategory,region,country,full_text",
             "created_at": f"gte.{since}",
             "summary_ko": "is.null",
             "order": "created_at.desc",
@@ -238,7 +238,7 @@ def get_articles_to_summarize(limit: int) -> list:
         _sb_url(),
         headers=_sb_headers(),
         params={
-            "select": "id,title_en,title_ko,summary_en,summary_ko,source,category,subcategory,region,country,full_text",
+            "select": "id,url,title_en,title_ko,summary_en,summary_ko,source,category,subcategory,region,country,full_text",
             "created_at": f"gte.{since}",
             "order": "created_at.desc",
             "limit": str(limit),
@@ -848,7 +848,7 @@ def _fetch_source_details(rows: list) -> list:
             _sb_url(),
             headers=_sb_headers(),
             params={
-                "select": "id,full_text,title_en,summary_en,source_published_at",
+                "select": "id,url,full_text,title_en,summary_en,source_published_at",
                 "id": f"in.({','.join(ids)})",
                 "limit": str(len(ids)),
             },
@@ -871,9 +871,12 @@ def _merge_source_details(rows: list) -> list:
     프롬프트(보도일 표기)와 date_guard가 같은 리스트를 공유할 수 있고,
     보강 조회도 경로당 1회로 줄어든다.
     """
+    from db import hydrate_full_text
     got = _fetch_source_details(rows)
     if got is rows:
-        return rows or []
+        rows = [dict(r) if isinstance(r, dict) else r for r in (rows or [])]
+        hydrate_full_text(rows)
+        return rows
     by_id = {r.get("id"): r for r in (got or []) if isinstance(r, dict)}
     out = []
     for r in (rows or []):
@@ -883,10 +886,13 @@ def _merge_source_details(rows: list) -> list:
         extra = by_id.get(r.get("id"))
         if extra:
             merged = dict(r)
-            merged.update({k: v for k, v in extra.items() if v})
+            # full_text ""(크롤링 실패로 기록됨)도 병합해 hydrate가 같은 링크를 다시 긁지 않게 한다
+            merged.update({k: v for k, v in extra.items() if v or (k == "full_text" and v == "")})
             out.append(merged)
         else:
             out.append(r)
+    # 2026-09-23: RSS 처리기가 본문을 저장하지 않으므로 DB에도 없던 건 여기서 크롤링
+    hydrate_full_text(out, check_db=False)
     return out
 
 
@@ -2770,6 +2776,8 @@ def run():
 
     articles = get_articles_to_summarize(MAX_ARTICLES)
     print(f"[요약 고도화] 대상 기사 {len(articles)}건")
+    from db import hydrate_full_text  # RSS 처리기가 본문을 저장하지 않으므로(2026-09-23) 여기서 채움
+    hydrate_full_text(articles)
 
     success = 0
     for i, article in enumerate(articles):
