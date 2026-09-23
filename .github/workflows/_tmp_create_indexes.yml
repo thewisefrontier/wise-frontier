@@ -21,6 +21,9 @@ jobs:
           psql -h aws-1-ap-northeast-2.pooler.supabase.com -p 5432 \
             -U postgres.fotdngseksqaghvtcvqh -d postgres -v ON_ERROR_STOP=1 <<'SQL'
           \timing on
+          SET statement_timeout = 0;
+          SET lock_timeout = 0;
+          SHOW statement_timeout;
           DROP INDEX IF EXISTS public.articles_source_created_idx;
           DROP INDEX IF EXISTS public.articles_source_subcategory_idx;
           DROP INDEX IF EXISTS public.articles_pub_noindex_created_idx;
