@@ -14,6 +14,15 @@ from dotenv import load_dotenv
 from rapidfuzz import fuzz
 from db import init_db, is_url_exists, insert_article, mark_sent_telegram, now_kst
 
+# 2026-09-23 실사고: send_telegram()이 재시도 없는 raw requests라, 병렬
+# 워커(rss_processor.py, 10개)가 거의 동시에 발송하면서 텔레그램 자체
+# 속도제한(429 Too Many Requests)에 걸려 1000건 중 845건이 실패 처리됐다.
+# http_retry.py로 교체(429는 Retry-After 헤더를 존중해 자동 재시도) — 이
+# 파일의 다른 requests 호출(fetch_source의 RSS 피드 요청 등)에도 같이 적용돼
+# 무해하다(이미 개별 timeout이 있어 재시도가 붙어도 상한이 있음).
+from http_retry import get_session
+requests = get_session()
+
 try:
     from dedup_guard import normalize_tags
 except Exception:
