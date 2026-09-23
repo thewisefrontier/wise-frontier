@@ -61,9 +61,16 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: RSS 수집 (큐 적재 전용)
-        # 수집/발송을 합쳐 15분+ 걸리던 구조를 분리 — 수집만 하면 40 워커 기준
-        # 1200+ 소스도 3분 내 끝난다(rss_split_test.yml 실전 검증, 2026-09-22).
-        # 그래도 동일한 이유(개별 소스 hang)로 안전장치는 유지.
+        # 2026-09-22 검증 당시(rss_split_test.yml)엔 3분 내 끝났지만, 실제
+        # production에서는 매 사이클 예외 없이 여기 timeout-minutes(15분)에
+        # 강제 종료되고 있었다(2026-09-23 로그로 확인: "has timed out after
+        # 15 minutes"). continue-on-error가 이를 "success"로 가려서 안
+        # 보였을 뿐 — 결과로 rss_collector.py 루프 끝의 소스 건강 갱신/자동
+        # 제외 로직이 단 한 번도 실행되지 못했다. 원인은 requests timeout=10이
+        # 청크 단위라 일부 소스의 트리클 응답이 그걸 우회해서였다(재시도
+        # shadow 버그와는 무관 — 그 버그 유무와 상관없이 항상 재현됨).
+        # rss_collector.py에 내부 데드라인(780s)을 둬 외부 킬 전에 항상
+        # 스스로 마무리하도록 고쳤다 — 이 15분은 그 위의 순수 안전장치.
         timeout-minutes: 15
         continue-on-error: true
         run: python scripts/rss_collector.py
@@ -81,10 +88,12 @@ jobs:
           # 채우고 다시 타임아웃(원인: 텔레그램 429 방지를 위해 발송 자체를
           # 초당 1건으로 직렬화했다 — rss_fetcher.py TELEGRAM_MIN_INTERVAL,
           # CHAT_ID가 단일 채널이라 이게 진짜 근본 병목). 발송만 놓고 보면
-          # 20분에 최대 약 1,140건(1200*60/1.05)이 물리적 한계라 그 아래로
-          # 잡는다. 안전장치는 여전히 개수가 아니라 timeout-minutes(그
-          # 시점까지 처리분은 queue_delete로 이미 반영돼 유실 없음).
-          MAX_PROCESS_PER_RUN: "1200"
+          # 20분에 최대 약 1,140건(1200*60/1.05)인데, 1200을 그대로 상한으로
+          # 잡은 건 계산 실수였다 — 1200*1.05=1260s로 20분(1200s)을 이미
+          # 넘겨 매번 여기도 강제 종료되고 있었다(2026-09-23 로그로 재확인:
+          # "has timed out after 20 minutes"). 번역·크롤링 여유분까지 감안해
+          # 900으로 낮춘다(900*1.05=945s, ~4분 여유).
+          MAX_PROCESS_PER_RUN: "900"
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
