@@ -289,12 +289,25 @@ jobs:
         if: steps.guard.outputs.skip != 'true'
         run: pip install -r requirements.txt
 
+      # 2026-09-24: 트렌드 감지가 매 실행 9일치 원자재 전량(~90MB)을 받아 무료
+      # 이그레스를 혼자 넘겼다 — 받아둔 행을 Actions 캐시에 두고 새 행만 받는다
+      # (scripts/title_cache.py). 캐시는 불변이라 실행마다 새 키로 저장하고
+      # 접두사로 가장 최근 것을 복원. 경로는 저장소 밖(아래 커밋 단계가 git add -A).
+      - name: 트렌드 제목 캐시 복원
+        if: steps.guard.outputs.skip != 'true'
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/rt_title_cache.json.gz
+          key: rt-titles-${{ github.run_id }}
+          restore-keys: rt-titles-
+
       - name: Gemini 요약 고도화
         if: steps.guard.outputs.skip != 'true'
         timeout-minutes: 20
         continue-on-error: true
         run: python scripts/gemini_summarizer.py
         env:
+          RT_CACHE_PATH: ${{ runner.temp }}/rt_title_cache.json.gz
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
           GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
@@ -306,6 +319,14 @@ jobs:
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
           IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
           UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
+
+      - name: 트렌드 제목 캐시 저장
+        if: always() && steps.guard.outputs.skip != 'true'
+        continue-on-error: true
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ runner.temp }}/rt_title_cache.json.gz
+          key: rt-titles-${{ github.run_id }}
 
       - name: API 한도 대기 (60초)
         if: steps.guard.outputs.skip != 'true'

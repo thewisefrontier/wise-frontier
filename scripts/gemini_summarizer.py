@@ -965,29 +965,20 @@ def _trend_relevance(a: dict, keywords: list) -> int:
 
 def get_trend_articles(keywords: list, days: int = 7) -> list:
     """지난 N일간 특정 키워드가 포함된 수집 기사 반환"""
-    since = (now_kst() - timedelta(days=days)).strftime("%Y-%m-%d %H:%M")
+    # 2026-09-24: 키워드마다 DB에 ilike 조회하던 걸 증분 캐시(title_cache)에서
+    # 로컬로 거른다(이그레스). 조건은 동일 — 제목(영/한)·영문요약 부분일치, 최신순 50건.
+    from title_cache import load_recent
+    recent = load_recent(days)
     all_articles = []
     for kw in keywords:
-        try:
-            res = requests.get(
-                _sb_url(),
-                headers=_sb_headers(),
-                params={
-                    # full_text는 받지 않는다(이그레스) — 기사 재료로 쓰는 상위 8건은
-                    # 저장 직전 _merge_source_details()가 따로 보강한다.
-                    "select": "id,title_en,title_ko,summary_ko,summary_en,source,country,category,region,created_at",
-                    "source": "neq.NewsFinal",
-                    "created_at": f"gte.{since}",
-                    "or": f"(title_en.ilike.*{kw}*,title_ko.ilike.*{kw}*,summary_en.ilike.*{kw}*)",
-                    "order": "created_at.desc",
-                    "limit": "50",
-                },
-                timeout=15
-            )
-            if res.status_code in (200, 206):
-                all_articles.extend(res.json())
-        except Exception as e:
-            print(f"  ⚠️ 트렌드 조회 실패 ({kw}): {e}")
+        k = (kw or "").lower()
+        if not k:
+            continue
+        hits = [a for a in recent
+                if k in (a.get("title_en") or "").lower()
+                or k in (a.get("title_ko") or "").lower()
+                or k in (a.get("summary_en") or "").lower()]
+        all_articles.extend(hits[:50])
 
     # 중복 제거
     seen = set()
@@ -1802,36 +1793,14 @@ RT_CHECK_HOURS = 6   # 중복 방지: 같은 토픽 N시간 이내 재생성 금
 
 
 def fetch_recent_titles(days: int) -> list:
-    """최근 N일간 수집 기사 제목+요약 반환"""
-    since = (now_kst() - timedelta(days=days)).strftime("%Y-%m-%d %H:%M")
-    articles = []
-    offset = 0
-    while True:
-        try:
-            res = requests.get(
-                _sb_url(),
-                headers={**_sb_headers(), "Range": f"{offset}-{offset+499}"},
-                params={
-                    "select": "id,title_en,title_ko,summary_en,summary_ko,country,category,region,created_at,source,source_data",
-                    "source": "neq.NewsFinal",
-                    "created_at": f"gte.{since}",
-                    "order": "created_at.desc",
-                },
-                timeout=20
-            )
-            if res.status_code not in (200, 206):
-                break
-            batch = res.json()
-            if not batch:
-                break
-            articles.extend(batch)
-            if len(batch) < 500:
-                break
-            offset += 500
-        except Exception as e:
-            print(f"  ⚠️ 기사 조회 실패: {e}")
-            break
-    return articles
+    """최근 N일간 수집 기사 제목+요약 반환(최신순). 2026-09-24부터 증분 캐시에서 —
+    매 실행 전량 조회가 실행당 ~90MB로 무료 이그레스를 혼자 넘겼다(title_cache.py)."""
+    from title_cache import load_recent
+    try:
+        return load_recent(days)
+    except Exception as e:
+        print(f"  ⚠️ 기사 조회 실패: {e}")
+        return []
 
 
 def extract_ngrams(text: str, n: int = 2) -> list:
@@ -2030,14 +1999,6 @@ def filter_same_topic_articles(issue_ko: str, topic: str, candidates: list) -> l
 def run_realtime_trend_tracker():
     """실시간 트렌드 감지 및 기사 생성 (A+B)"""
     if not GEMINI_API_KEYS:
-        return
-
-    # ⚠️ 2026-09-24 응급: 이 감지는 매 실행 9일치 원자재 전량(7만 행+, 실행당 ~90MB)을
-    # 받아 Supabase 무료 이그레스(5GB/월)를 혼자 넘기는 수준이었다(원자재 전량 저장
-    # 전환 후 모집단이 4배로 커짐). 6시간마다만 돌리고, 같은 데이터를 두 번 받던 것도
-    # 한 번으로 줄인다. 근본 해결(증분 캐시)은 별도.
-    if now_kst().hour % 6 != 0:
-        print("\n[실시간 트렌드] 6시간 주기 아님 — 스킵(이그레스 절감)")
         return
 
     print("\n[실시간 트렌드] 분석 시작...")
