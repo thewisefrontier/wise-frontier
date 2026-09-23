@@ -973,7 +973,9 @@ def get_trend_articles(keywords: list, days: int = 7) -> list:
                 _sb_url(),
                 headers=_sb_headers(),
                 params={
-                    "select": "id,title_en,title_ko,summary_ko,summary_en,full_text,source,country,category,region,created_at",
+                    # full_text는 받지 않는다(이그레스) — 기사 재료로 쓰는 상위 8건은
+                    # 저장 직전 _merge_source_details()가 따로 보강한다.
+                    "select": "id,title_en,title_ko,summary_ko,summary_en,source,country,category,region,created_at",
                     "source": "neq.NewsFinal",
                     "created_at": f"gte.{since}",
                     "or": f"(title_en.ilike.*{kw}*,title_ko.ilike.*{kw}*,summary_en.ilike.*{kw}*)",
@@ -2030,14 +2032,21 @@ def run_realtime_trend_tracker():
     if not GEMINI_API_KEYS:
         return
 
+    # ⚠️ 2026-09-24 응급: 이 감지는 매 실행 9일치 원자재 전량(7만 행+, 실행당 ~90MB)을
+    # 받아 Supabase 무료 이그레스(5GB/월)를 혼자 넘기는 수준이었다(원자재 전량 저장
+    # 전환 후 모집단이 4배로 커짐). 6시간마다만 돌리고, 같은 데이터를 두 번 받던 것도
+    # 한 번으로 줄인다. 근본 해결(증분 캐시)은 별도.
+    if now_kst().hour % 6 != 0:
+        print("\n[실시간 트렌드] 6시간 주기 아님 — 스킵(이그레스 절감)")
+        return
+
     print("\n[실시간 트렌드] 분석 시작...")
 
-    # A. 기사 수집
-    now_articles  = fetch_recent_titles(days=RT_WINDOW_NOW)
-    prev_articles = fetch_recent_titles(days=RT_WINDOW_NOW + RT_WINDOW_PREV)
-    # prev는 전체 기간 - 현재 기간
-    now_ids = {a["id"] for a in now_articles}
-    prev_only = [a for a in prev_articles if a["id"] not in now_ids]
+    # A. 기사 수집 — 9일치를 한 번만 받아 최근 2일/이전 7일로 나눈다
+    all_recent = fetch_recent_titles(days=RT_WINDOW_NOW + RT_WINDOW_PREV)
+    since_now = (now_kst() - timedelta(days=RT_WINDOW_NOW)).strftime("%Y-%m-%d %H:%M")
+    now_articles = [a for a in all_recent if (a.get("created_at") or "") >= since_now]
+    prev_only = [a for a in all_recent if (a.get("created_at") or "") < since_now]
 
     print(f"  현재({RT_WINDOW_NOW}일): {len(now_articles)}건 / 이전({RT_WINDOW_PREV}일): {len(prev_only)}건")
 
