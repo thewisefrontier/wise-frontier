@@ -16,9 +16,7 @@ concurrency:
 jobs:
   dedup:
     runs-on: ubuntu-latest
-    # ⚠️ 임시 일시정지(2026-09-23): DB CPU 과부하 — run.yml 쪽 주석 참고. 끝나면
-    # 앞의 "false && "만 지우면 원래대로.
-    if: ${{ false && (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success') }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: 코드 체크아웃
