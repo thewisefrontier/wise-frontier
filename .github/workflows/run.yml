@@ -89,7 +89,10 @@ jobs:
           # (최신순·매체당 2건) — 처리량은 번역 속도에 따른다. 본문 크롤링도
           # 기사화 직전으로 옮겼다(db.hydrate_full_text). 유입 ~2.8만/일 대비
           # 900×48사이클=4.3만/일 여유로 적체분(3.2만)을 소화한다.
-          MAX_PROCESS_PER_RUN: "900"
+          # → 첫 실측(21:17 사이클): 900건 중 836건을 4분에 처리(분당 ~200건).
+          # 사이클 유입이 ~1,400건이라 900으론 적체가 안 줄어 2000으로 올림
+          # (~10분). 번역 API(구글) 과호출을 피하려 3000까지는 안 올렸다.
+          MAX_PROCESS_PER_RUN: "2000"
           TELEGRAM_MAX_PER_RUN: "30"
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
