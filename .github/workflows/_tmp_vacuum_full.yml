@@ -1,0 +1,35 @@
+name: _tmp vacuum full articles
+
+# 2026-09-24 일회성: 무료 DB 한도(500MB) 초과 대응. 삭제로 생긴 빈 공간을 실제로
+# 반환하려면 테이블 재작성(VACUUM FULL)이 필요하다. 파이프라인 일시정지 상태에서만
+# 실행. 끝나면 삭제.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  vacuum:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: VACUUM FULL + created_at 인덱스
+        env:
+          PGPASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+        run: |
+          psql -h aws-1-ap-northeast-2.pooler.supabase.com -p 5432 \
+            -U postgres.fotdngseksqaghvtcvqh -d postgres -v ON_ERROR_STOP=1 <<'SQL'
+          \timing on
+          SET statement_timeout = 0;
+          SELECT pg_size_pretty(pg_database_size(current_database())) AS before_db,
+                 pg_size_pretty(pg_total_relation_size('public.articles')) AS before_articles;
+          SET lock_timeout = '120s';
+          VACUUM (FULL, VERBOSE) public.rss_raw_queue;
+          VACUUM (FULL, VERBOSE) public.articles;
+          SET lock_timeout = 0;
+          CREATE INDEX IF NOT EXISTS articles_created_idx ON public.articles (created_at);
+          SELECT pg_size_pretty(pg_database_size(current_database())) AS after_db,
+                 pg_size_pretty(pg_total_relation_size('public.articles')) AS after_articles,
+                 current_setting('default_transaction_read_only') AS read_only;
+          SQL

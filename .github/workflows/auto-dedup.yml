@@ -16,7 +16,8 @@ concurrency:
 jobs:
   dedup:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    # ⚠️ 임시 일시정지(2026-09-24): VACUUM FULL 작업 중.
+    if: ${{ false && (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success') }}
 
     steps:
       - name: 코드 체크아웃
