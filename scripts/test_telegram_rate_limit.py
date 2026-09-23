@@ -23,6 +23,7 @@ os.environ.setdefault("SUPABASE_URL", "http://fake")
 os.environ.setdefault("SUPABASE_SERVICE_KEY", "fake")
 
 import rss_fetcher as rf  # noqa: E402
+import http_retry  # noqa: E402
 
 
 class FakeResp:
@@ -41,7 +42,11 @@ def test_concurrent_calls_are_spaced_out():
         call_times.append(time.monotonic())
         return FakeResp()
 
-    rf.requests.post = fake_post
+    # send_telegram()은 http_retry.get_session().post(...)를 호출한다
+    # (rf.requests가 아님 — RSS 피드 fetch까지 재시도가 번지지 않도록
+    # 전역 shadow를 되돌리고 텔레그램 발송에만 지역적으로 세션을 쓰게
+    # 고친 뒤 패치 대상도 맞춰 바꿨다).
+    http_retry.get_session().post = fake_post
 
     N = 8
     with ThreadPoolExecutor(max_workers=N) as ex:
@@ -68,7 +73,7 @@ def test_single_call_no_unnecessary_wait():
     def fake_post(url, data=None):
         return FakeResp()
 
-    rf.requests.post = fake_post
+    http_retry.get_session().post = fake_post
 
     t0 = time.monotonic()
     rf.send_telegram("제목", "요약", "https://x", "src", "정치", "sub", "region", "country")

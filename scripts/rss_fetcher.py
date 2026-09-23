@@ -17,11 +17,18 @@ from db import init_db, is_url_exists, insert_article, mark_sent_telegram, now_k
 # 2026-09-23 실사고: send_telegram()이 재시도 없는 raw requests라, 병렬
 # 워커(rss_processor.py, 10개)가 거의 동시에 발송하면서 텔레그램 자체
 # 속도제한(429 Too Many Requests)에 걸려 1000건 중 845건이 실패 처리됐다.
-# http_retry.py로 교체(429는 Retry-After 헤더를 존중해 자동 재시도) — 이
-# 파일의 다른 requests 호출(fetch_source의 RSS 피드 요청 등)에도 같이 적용돼
-# 무해하다(이미 개별 timeout이 있어 재시도가 붙어도 상한이 있음).
-from http_retry import get_session
-requests = get_session()
+#
+# ⚠️ 처음엔 이 파일 전체의 requests를 http_retry.get_session()으로 바꿔
+# "다른 호출부(fetch_source의 RSS 피드 요청)에도 같이 적용돼 무해하다"고
+# 판단했는데 틀렸다 — 그 직후 "RSS 수집" 스텝이 원래 3분이면 끝나던 게
+# 15분 타임아웃에 걸리는 회귀가 났다. 1213개 소스 중 불안정한 소스가
+# 5xx/429를 반환할 때마다 최대 4번 재시도+backoff(1.5+3+4.5초...)가 걸려
+# 40워커 전체 처리 시간이 크게 늘어난 것. fetch_source()는 애초에 재시도가
+# 필요 없다 — 한 소스가 이번에 실패해도 다음 사이클(30분 후)에 전체를
+# 다시 훑으므로 재시도로 시간을 버는 것보다 그냥 넘어가는 게 낫다. 반면
+# send_telegram()은 큐 항목 단위로 관리돼 재시도가 실제로 유효하다.
+# → 전역 교체를 되돌리고, send_telegram() 안에서만 지역적으로 재시도
+# 세션을 쓴다.
 
 try:
     from dedup_guard import normalize_tags
@@ -807,7 +814,8 @@ def send_telegram(title_ko, summary_ko, link, source_name, category, subcategory
         wait = TELEGRAM_MIN_INTERVAL - (time.monotonic() - _telegram_last_sent_at[0])
         if wait > 0:
             time.sleep(wait)
-        res = requests.post(url, data={
+        from http_retry import get_session
+        res = get_session().post(url, data={
             "chat_id":    CHAT_ID,
             "text":       msg,
             "parse_mode": "HTML"
