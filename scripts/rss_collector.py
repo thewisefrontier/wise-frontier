@@ -18,8 +18,10 @@ RSS 수집 전용(번역·본문크롤링·텔레그램 발송 없음) — "일�
 실행: python scripts/rss_collector.py
 """
 
+import os
 import sys
-from concurrent.futures import ThreadPoolExecutor, as_completed
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as FutureTimeoutError
 
 from rss_fetcher import (
     fetch_source, is_noise, is_duplicate, extract_summary,
@@ -35,6 +37,12 @@ FLUSH_EVERY = 80    # 이만큼 모이면 한 번의 POST로 큐에 적재(개�
 FAIL_THRESHOLD = 20  # 이 횟수 연속 실패하면 자동으로 is_active=false(대략 30분 주기 기준
                      # 열흘 안팎 — 일시적 서버 점검과 구분하려 넉넉히 잡음). "발행일초과"는
                      # 실패로 안 치므로(그냥 최근에 새 글이 없다는 뜻) 카운트에서 제외.
+
+COLLECT_DEADLINE_SEC = 780  # run.yml의 이 스텝 timeout-minutes(15=900s)보다 먼저 내부에서
+                            # 마무리한다. 2026-09-23 실측: requests timeout=10은 청크
+                            # 단위라 일부 소스가 트리클로 훨씬 오래 붙잡아, 이 없이는 매
+                            # 사이클 외부 900s 킬을 맞아 update_source_health()(죽은 소스
+                            # 자동 제외)가 단 한 번도 실행되지 못하고 있었다(로그로 확인).
 
 
 def _raw_tags(entry) -> list:
@@ -59,11 +67,13 @@ def collect():
             queued += queue_insert_bulk(buf)
             buf = []
 
-    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-        futures = {executor.submit(fetch_source, s): s for s in sources}
+    executor = ThreadPoolExecutor(max_workers=MAX_WORKERS)
+    futures = {executor.submit(fetch_source, s): s for s in sources}
+    deadline_hit = False
+    try:
         # 소스 하나가 끝날 때마다 바로 큐에 적재한다 — 전체 완료를 기다리는 순간
         # 이 워크플로 타임아웃에 걸려 죽으면 그때까지 모은 게 통째로 날아간다.
-        for future in as_completed(futures):
+        for future in as_completed(futures, timeout=COLLECT_DEADLINE_SEC):
             items, name, status = future.result()
             if name not in rss_health:
                 rss_health[name] = {"ok": 0, "fail": 0, "status": "active"}
@@ -112,8 +122,16 @@ def collect():
                 })
                 if len(buf) >= FLUSH_EVERY:
                     flush()
+    except FutureTimeoutError:
+        deadline_hit = True
+        done_n = sum(1 for f in futures if f.done())
+        print(f"[내부 데드라인] {COLLECT_DEADLINE_SEC}s 경과 — {done_n}/{len(futures)}개 소스만 "
+              f"반영하고 마무리(나머지는 다음 사이클에서 다시 시도)")
 
-        flush()  # 남은 대기분(FLUSH_EVERY 미만) 마무리
+    flush()  # 남은 대기분(FLUSH_EVERY 미만) 마무리
+    # 데드라인에 걸렸으면 미완료 스레드가 붙잡혀 있어 shutdown(wait=True)이 다시
+    # 외부 타임아웃까지 블록될 수 있다 — 기다리지 않고 바로 넘어간다.
+    executor.shutdown(wait=not deadline_hit, cancel_futures=deadline_hit)
 
     save_state()
     print(f"[수집 완료] 큐 적재 {queued}건(버퍼 {buffered}건 중) | 노이즈제외 {skipped_noise} | 유사중복 {skipped_dup}")
@@ -136,4 +154,8 @@ if __name__ == "__main__":
         # 부분 적재는 소스 완료마다 이미 커밋됐으므로 여기서 죽어도 유실은 rss_health
         # 갱신분 정도다. continue-on-error 워크플로에서 다음 실행이 이어받는다.
         print(f"[ERROR] 수집 중단: {e}")
-        sys.exit(1)
+        os._exit(1)
+    # 내부 데드라인에 걸렸으면 아직 응답을 기다리는 fetch_source 스레드(non-daemon)가
+    # 남아있어 평범한 종료로는 그것들이 다 끝날 때까지 프로세스가 물려있는다 —
+    # os._exit로 즉시 끝낸다(정리할 상태는 이미 위에서 다 flush/save 했다).
+    os._exit(0)
