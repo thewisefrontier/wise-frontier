@@ -60,16 +60,20 @@ def _headers():
 def _batched(filters: dict, apply) -> int:
     """filters에 맞는 행 id를 BATCH개씩 조회해 apply(id목록)를 반복. 처리 건수 반환."""
     url = f"{SUPABASE_URL}/rest/v1/articles"
-    done = 0
+    done, last = 0, 0
     while True:
+        # id>last로 이어서 조회한다 — 매번 앞에서부터 다시 찾으면 방금 지운(아직
+        # vacuum 전) 죽은 행을 반복해서 훑어 점점 느려지다 타임아웃(실측 1.2만 건째).
         res = requests.get(url, headers=_headers(), timeout=60,
-                           params={**filters, "select": "id", "order": "id", "limit": str(BATCH)})
+                           params={**filters, "id": f"gt.{last}", "select": "id", "order": "id",
+                                   "limit": str(BATCH)})
         res.raise_for_status()
         ids = [r["id"] for r in res.json()]
         if not ids:
             return done
         r = apply(url, f"in.({','.join(map(str, ids))})")
         r.raise_for_status()
+        last = ids[-1]
         done += len(ids)
         if done % 3000 < BATCH:
             print(f"    … {done}건")
