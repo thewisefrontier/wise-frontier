@@ -42,8 +42,6 @@ jobs:
   # DAILY_CAP=1이라 자주 돌아도 실제 생성은 하루 한 번뿐). 그래서 가드 없이
   # 무조건 실행 — heavy job의 60분 제한과 무관하게 디스패치(30분)마다 돈다.
   collectors:
-    # ⚠️ 임시 일시정지(2026-09-24): VACUUM FULL 작업 중. 끝나면 이 두 줄 삭제.
-    if: false
     runs-on: ubuntu-latest
     concurrency:
       group: newsfinal-collectors
@@ -227,8 +225,6 @@ jobs:
   # 55~61분 안팎 — 30분 디스패치 격자 + 가드 임계 60분과 맞물려 시간당
   # 1회 안팎으로 자연 수렴한다(사용자 2026-09-09 결정: "한 시간에 한 번").
   heavy:
-    # ⚠️ 임시 일시정지(2026-09-24): VACUUM FULL 작업 중. 끝나면 이 두 줄 삭제.
-    if: false
     runs-on: ubuntu-latest
     concurrency:
       group: newsfinal-heavy
