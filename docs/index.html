@@ -1111,15 +1111,16 @@ function cleanBody(text) {
       // (최근 24시간)을 기본으로 쓴다 — 사용자 지적("첫 화면 20개만 보고 나가는
       // 사람도 나머지 380개어치를 다 받는 구조"). 그 창이 얇을 때만 아래에서
       // articles.json으로 보충한다(2026-09-14 추가 — 최소 분량 로직 참고).
+      // ⚠️ 2026-09-23: 다이제스트 라이브 조회(Supabase REST, 3rd-party 도메인)를
+      // articles_latest.json과 Promise.all로 묶어뒀더니, 다이제스트 쪽이 느려질 때
+      // (그날 실측: 정상 시 1.3초인데 한 번은 1분+ — Cloudflare 챌린지 등 3rd-party
+      // 지연 가능성, 사용자 실사용 중 목격) 이미 받아온 기사 목록까지 같이 붙잡혀
+      // "로딩 중"이 통째로 멈췄다. 기사 목록은 그 자체로 완결된 요청이라 다이제스트를
+      // 기다릴 이유가 없다 — 목록을 먼저 렌더링하고, 다이제스트는 타임아웃을 걸어
+      // 별도로 붙인다(실패/지연해도 목록엔 영향 없음).
       const SUPABASE_URL = 'https://fotdngseksqaghvtcvqh.supabase.co';
       const SUPABASE_ANON_KEY = 'sb_publishable_rT3kSEAAdM0DJlDW5fEWww_M37h6dDW';
-      const [res, digestRes] = await Promise.all([
-        fetch('data/articles_latest.json'),
-        fetch(
-          `${SUPABASE_URL}/rest/v1/articles?select=*&source=eq.NewsFinal&is_published=eq.true&subcategory=like.digest_*&order=created_at.desc&limit=1`,
-          { headers: { apikey: SUPABASE_ANON_KEY } }
-        ).catch(() => null),
-      ]);
+      const res = await fetch('data/articles_latest.json');
       if (!res.ok) throw new Error();
       const raw = await res.json();
       const weatherArticles = raw.filter(a => a.category === '날씨');
@@ -1145,17 +1146,23 @@ function cleanBody(text) {
         } catch (e) { /* 실패해도 24시간치로 계속 진행 */ }
       }
 
-      let liveDigest = null;
-      if (digestRes && digestRes.ok) {
-        try {
-          const rows = await digestRes.json();
-          liveDigest = rows[0] || null;
-        } catch (e) { /* 무시 — 스냅샷의 다이제스트로 폴백 */ }
-      }
-      renderDigest(liveDigest ? [liveDigest, ...raw] : raw);
+      renderDigest(raw);
       renderArticles(allArticles);
       renderBriefing(allArticles);
       renderWeatherWidget(weatherArticles);
+
+      // 목록 렌더링과 무관하게 별도로 진행 — 늦게 오거나 실패해도 위에서 이미
+      // 스냅샷 기준으로 그려둔 다이제스트를 그대로 둔다.
+      fetch(
+        `${SUPABASE_URL}/rest/v1/articles?select=*&source=eq.NewsFinal&is_published=eq.true&subcategory=like.digest_*&order=created_at.desc&limit=1`,
+        { headers: { apikey: SUPABASE_ANON_KEY }, signal: AbortSignal.timeout(5000) }
+      )
+        .then(r => r.ok ? r.json() : null)
+        .then(rows => {
+          const liveDigest = rows && rows[0];
+          if (liveDigest) renderDigest([liveDigest, ...raw]);
+        })
+        .catch(() => { /* 타임아웃/실패 — 스냅샷의 다이제스트로 그대로 둔다 */ });
     } catch(e) {
       document.getElementById('articles-container').innerHTML = `<div class="empty">아직 기사 데이터가 없습니다.<br>곧 업데이트됩니다.</div>`;
     }
