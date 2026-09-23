@@ -9,7 +9,7 @@ from db import _url, _headers
 from image_store import store_image
 
 ARTICLE_ID = 220558
-QUERY = "stock exchange board"  # 종목 시세판 — 가장 명확하게 금융 연상되는 검색어로 직접 지정
+QUERY = "financial district skyline"  # 3차 시도 — "stock exchange board"는 상위 10건 전부 암호화폐 사진이었음(2차 실패 원인)
 
 PIXABAY_API_KEY = os.getenv("PIXABAY_API_KEY", "")
 res = requests.get(
@@ -27,7 +27,15 @@ for h in hits:
 if not hits:
     raise SystemExit(1)
 
-pick = hits[0]
+# 2차 시도가 "stock exchange board" 상위 10건 전부 비트코인/암호화폐 사진이던
+# 걸 겪고 나서 추가 — "비자 주가 하락" 같은 전통 주식 기사에 암호화폐 이미지가
+# 나오면 안 되므로 태그로 걸러낸다.
+BAD_TAGS = ("bitcoin", "cryptocurrency", "crypto")
+candidates = [h for h in hits if not any(t in (h.get("tags") or "").lower() for t in BAD_TAGS)]
+if not candidates:
+    print("⚠️ 전부 암호화폐 태그 — 중단, 검색어를 바꿔야 함")
+    raise SystemExit(1)
+pick = candidates[0]
 print(f"선택: id={pick.get('id')} tags={pick.get('tags')}")
 
 raw_url = pick.get("webformatURL") or pick.get("largeImageURL")
