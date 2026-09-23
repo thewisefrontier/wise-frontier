@@ -219,7 +219,25 @@ def fetch_seeded_pixabay_image(keywords: list, seed: int, key_hint: str) -> str:
         if not hits:
             print(f"  ⚠️ Pixabay 결과 없음: {query}")
             return ""
-        hit = hits[seed % len(hits)]
+        # 2026-09-23 실사고(사용자 지적 — "종목동향이랑 글로벌마켓동향의 사진이
+        # 같다"): 서로 다른 데일리 템플릿 스크립트(frontier_markets_writer.py,
+        # stock_news_writer.py 등 총 12곳)가 같은 날 비슷한 금융 키워드로 검색해
+        # seed%len(hits) 고정 인덱스가 우연히 같은 사진을 가리켰다. 시작 인덱스는
+        # 그대로 seed로 정하되, 최근 20시간 내 다른 스크립트가 이미 쓴 사진(photo
+        # id 기준)은 건너뛰고 첫 미사용 후보를 쓴다 — 여전히 결정론적(같은 seed+
+        # 같은 사용 이력이면 같은 결과)이라 멱등성은 유지되면서 크로스스크립트
+        # 충돌만 줄어든다. 전부 최근 사용이면 원래 고정 인덱스로 후퇴.
+        start = seed % len(hits)
+        hit = hits[start]
+        try:
+            from db import image_used_recently
+            for offset in range(len(hits)):
+                cand = hits[(start + offset) % len(hits)]
+                if not image_used_recently(f"seeded_pixabay_{cand.get('id')}", hours=20):
+                    hit = cand
+                    break
+        except Exception as e:
+            print(f"  ⚠️ 최근 사용 이미지 확인 실패(그냥 진행): {e}")
         # largeImageURL(최대 1280px)이 아니라 webformatURL(최대 640px)을 쓴다
         # — 기사 히어로 이미지는 CSS상 max-height:420px라 1280px가 과잉이고,
         # R2 저장 용량만 몇 배로 먹는다(2026-09-04 사용자 지적 — "사진이
@@ -229,7 +247,10 @@ def fetch_seeded_pixabay_image(keywords: list, seed: int, key_hint: str) -> str:
         if not raw_url:
             return ""
         from image_store import store_image
-        url = store_image(raw_url, key_hint=key_hint)
+        # key_hint에 photo id를 접미사로 남겨야 image_used_recently()가 다음번에
+        # 매치할 수 있다 — 스크립트별 접두어(oil_/frontier_markets_ 등)는 그대로
+        # 유지해 파일명으로 어느 스크립트가 만들었는지 여전히 식별 가능하다.
+        url = store_image(raw_url, key_hint=f"{key_hint}_pid{hit.get('id')}")
         print(f"  🖼️ 이미지: {query} → {url[:70]}")
         return url or ""
     except Exception as e:
