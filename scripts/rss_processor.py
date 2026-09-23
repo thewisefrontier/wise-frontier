@@ -35,9 +35,16 @@ MAX_PROCESS_PER_RUN = int(os.getenv("MAX_PROCESS_PER_RUN", "150"))
 # 같은 이유(다른 서버로 나가는 I/O 대기 작업)로 병렬화한다. 다만 번역 대상이
 # translate.google.com·api.telegram.org로 소수 엔드포인트에 몰려 collector의
 # 40 워커처럼 공격적으로 가면 그 서비스만 자체 유발 과호출로 막힐 수 있어
-# 보수적으로 6개만 쓴다. 기존 sleep(0.1) 단일 스로틀은 동시성 자체가 자연스러운
+# 보수적으로 6개만 썼다. 기존 sleep(0.1) 단일 스로틀은 동시성 자체가 자연스러운
 # 페이싱이 되므로 제거.
-PROCESS_WORKERS = int(os.getenv("PROCESS_WORKERS", "6"))
+#
+# ⚠️ 2026-09-23: 6워커+큐 조회 1000행 상한(queue_claim_batch, db.py)이
+# 겹쳐서도 여전히 큐가 순증가(시간당 유입 1,000~1,900건 vs 처리 상한
+# 1,000건/30분)했다. db.py 쪽 1000행 상한은 페이지네이션으로 풀었고,
+# 여기서는 워커를 10으로 올린다 — 소스 확충(430→1,213) 이후 유입이
+# 구조적으로 커진 만큼 번역 엔드포인트 쪽 여유도 다시 실측해서 맞춘다.
+# 과호출 신호(429/과도한 번역실패)가 보이면 낮출 것.
+PROCESS_WORKERS = int(os.getenv("PROCESS_WORKERS", "10"))
 
 
 def process_row(row: dict) -> bool:

@@ -76,15 +76,14 @@ jobs:
         continue-on-error: true
         run: python scripts/rss_processor.py
         env:
-          # 2026-09-22 실사고로 1500→1000 정정. 항목 하나당 크롤링→번역→번역→
-          # 텔레그램→DB저장을 순차 처리해 실측 처리량이 15분에 200건(시간당
-          # 800건)뿐이었다 — 1500은 도달 불가능한 상한이었고 그사이 큐가
-          # 8,400→10,698건으로 늘어나는 걸 보고 발견했다(rss_processor.py의
-          # 병렬화로 같이 대응). 1000인 이유: queue_claim_batch가 PostgREST
-          # 서버 기본 행 상한(추정 db-max-rows=1000)에 걸려 1500을 요청해도
-          # 실제로는 1000건만 돌아왔다 — 그 이상 올리려면 페이지네이션부터
-          # 추가해야 하므로, 지금은 실제로 받아오는 만큼만 상한값도 맞춘다.
-          MAX_PROCESS_PER_RUN: "1000"
+          # 2026-09-22 1500→1000 정정, 2026-09-23 다시 2000으로: 병렬화(10워커,
+          # rss_processor.py)해도 큐가 계속 순증가했다(사용자 확인: 시간당
+          # 유입 1,000~1,900건 vs 처리 상한 1,000건/30분). queue_claim_batch가
+          # PostgREST 서버 기본 행 상한(추정 db-max-rows=1000)에 걸려 있던 걸
+          # 페이지네이션으로 풀어(db.py) 이제 상한값을 실제 필요한 만큼 올릴
+          # 수 있다. 안전장치는 여전히 개수가 아니라 timeout-minutes(그
+          # 시점까지 처리분은 queue_delete로 이미 반영돼 유실 없음).
+          MAX_PROCESS_PER_RUN: "2000"
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}

@@ -450,13 +450,32 @@ def queue_claim_batch(limit: int = 150) -> list:
     타임스탬프 안에서의 순서를 Postgres/PostgREST가 보장하지 않아, 같은
     쿼리를 다시 실행해도 그 그룹 안 어떤 행이 뽑히고 어떤 행이 빠지는지가
     매번 달라질 수 있다 — 그 결과 일부 행이 영원히 못 뽑히는 "고아" 상태가
-    됐다. id.asc를 2차 키로 추가해 결정적 순서를 보장한다."""
-    res = requests.get(
-        _url("rss_raw_queue"), headers=_headers(),
-        params={"select": "*", "processed": "eq.false", "order": "fetched_at.asc,id.asc", "limit": str(limit)},
-        timeout=20,
-    )
-    return res.json() if res.status_code in (200, 206) else []
+    됐다. id.asc를 2차 키로 추가해 결정적 순서를 보장한다.
+
+    ⚠️ 2026-09-23: limit을 1000 넘게 줘도 PostgREST 서버 기본 행 상한(추정
+    db-max-rows=1000)에 걸려 실제로는 항상 1000건까지만 돌아왔다 —
+    run.yml의 MAX_PROCESS_PER_RUN을 1500→1000으로 낮춰 임시 봉합했었는데
+    (병렬화 전 실측 처리량 15분/200건 기준으로는 그걸로 충분해 보였다),
+    병렬화 이후에도 큐가 계속 순증가(사용자 확인: 시간당 유입 1,000~1,900건
+    vs 처리 상한 1,000건/30분)해 진짜 원인(1000행 캡)을 마저 고친다.
+    load_rss_with_health()와 같은 방식으로 1000건씩 여러 페이지 돌려
+    limit 전체를 채운다."""
+    rows, offset, page = [], 0, 1000
+    while len(rows) < limit:
+        res = requests.get(
+            _url("rss_raw_queue"), headers=_headers(),
+            params={"select": "*", "processed": "eq.false", "order": "fetched_at.asc,id.asc",
+                    "limit": str(min(page, limit - len(rows))), "offset": str(offset)},
+            timeout=20,
+        )
+        if res.status_code not in (200, 206):
+            break
+        batch = res.json()
+        rows.extend(batch)
+        if len(batch) < page:
+            break
+        offset += page
+    return rows
 
 
 def queue_delete(row_id: int):
