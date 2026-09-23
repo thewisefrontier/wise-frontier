@@ -23,7 +23,7 @@ from rss_fetcher import (
 )
 from geo_detect import detect_region, detect_country, detect_countries, GLOBAL_COUNTRIES
 from db import (
-    insert_article, mark_sent_telegram, queue_claim_batch, queue_delete, queue_mark_failed, existing_urls,
+    insert_article, queue_claim_batch, queue_delete, queue_mark_failed, existing_urls,
 )
 
 MAX_PROCESS_PER_RUN = int(os.getenv("MAX_PROCESS_PER_RUN", "150"))
@@ -45,6 +45,12 @@ MAX_PROCESS_PER_RUN = int(os.getenv("MAX_PROCESS_PER_RUN", "150"))
 # 구조적으로 커진 만큼 번역 엔드포인트 쪽 여유도 다시 실측해서 맞춘다.
 # 과호출 신호(429/과도한 번역실패)가 보이면 낮출 것.
 PROCESS_WORKERS = int(os.getenv("PROCESS_WORKERS", "10"))
+
+# 2026-09-23: 원자재마다 텔레그램에 보내던 걸 사이클당 이만큼만 골라 보낸다.
+# 텔레그램 봇은 같은 채널에 분당 20건이 공식 한도라(core.telegram.org/bots/faq)
+# 전량 발송 구조에선 처리량이 사이클당 약 400건에 묶였고, 채널에도 3초에 한 건씩
+# 쏟아졌다. 저장(기사 재료)은 전량, 발송만 선별(사용자 결정).
+TELEGRAM_MAX_PER_RUN = int(os.getenv("TELEGRAM_MAX_PER_RUN", "30"))
 
 
 def process_row(row: dict) -> bool:
@@ -140,22 +146,21 @@ def process_row(row: dict) -> bool:
         print(f"[SOFT] [{category}] [{country_name}] {title_ko[:50]}")
         return True
 
-    res = send_telegram(title_ko, summary_ko, link, name, category, subcategory, region, country_name)
-    if not res.get("ok"):
-        print(f"[FAIL] 텔레그램 발송 실패 — {res}")
-        return False  # 재시도 대상(일시적 오류일 수 있음)
-
+    # sent_telegram=1은 이 코드베이스에서 "기사 재료로 쓸 수 있는 원자재" 표시다
+    # (gemini_writer.get_today_articles 등이 eq.1로 거름 — market_news_fetcher도
+    # 발송 없이 세운다). 텔레그램 실제 발송은 main()이 소수만 골라 따로 한다.
     article_id = insert_article(
         title_en=title, title_ko=title_ko, summary_en=summary_en, summary_ko=summary_ko,
         url=link, source=name, category=category, subcategory=subcategory,
         region=region, country=country_name, country_flag=country_flag,
         score=0, full_text=full_text, countries=country_names, is_published=False,
-        source_published_at=src_published, source_data=tag_source_data,
+        source_published_at=src_published, source_data=tag_source_data, sent_telegram=1,
     )
-    if article_id > 0:
-        mark_sent_telegram(article_id)
-    print(f"[SENT] [{category}>{subcategory}] [{country_name}] {title_ko}")
-    return True
+    if article_id <= 0:
+        return True  # 이미 있던 링크 — 다시 발송하지 않는다
+    print(f"[SAVE] [{category}>{subcategory}] [{country_name}] {title_ko[:60]}")
+    return {"args": (title_ko, summary_ko, link, name, category, subcategory, region, country_name),
+            "source": name, "published": src_published or ""}
 
 
 def main():
@@ -181,6 +186,7 @@ def main():
             return False
 
     done = failed = 0
+    candidates = []
     with ThreadPoolExecutor(max_workers=PROCESS_WORKERS) as ex:
         futures = {ex.submit(_safe_process_row, row): row for row in batch}
         for fut in as_completed(futures):
@@ -189,10 +195,35 @@ def main():
             if ok:
                 queue_delete(row["id"])
                 done += 1
+                if isinstance(ok, dict):
+                    candidates.append(ok)
             else:
                 queue_mark_failed(row["id"], "processing failed")
                 failed += 1
     print(f"[처리 완료] 성공 {done} | 재시도대상 {failed}")
+
+    picked = pick_for_telegram(candidates, TELEGRAM_MAX_PER_RUN)
+    sent = 0
+    for c in picked:
+        try:
+            if send_telegram(*c["args"]).get("ok"):
+                sent += 1
+        except Exception as e:
+            print(f"[FAIL] 텔레그램 발송 실패 — {e}")
+    print(f"[텔레그램] 후보 {len(candidates)}건 중 {len(picked)}건 선별 → {sent}건 발송")
+
+
+def pick_for_telegram(candidates: list, limit: int, per_source: int = 2) -> list:
+    """최신 발행순으로, 같은 매체는 per_source건까지만 골라 limit건을 채운다."""
+    picked, per = [], {}
+    for c in sorted(candidates, key=lambda c: c["published"], reverse=True):
+        if len(picked) >= limit:
+            break
+        if per.get(c["source"], 0) >= per_source:
+            continue
+        per[c["source"]] = per.get(c["source"], 0) + 1
+        picked.append(c)
+    return picked
 
 
 if __name__ == "__main__":

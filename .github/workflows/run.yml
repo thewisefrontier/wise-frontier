@@ -83,17 +83,14 @@ jobs:
         continue-on-error: true
         run: python scripts/rss_processor.py
         env:
-          # 2026-09-22 1500→1000, 2026-09-23 2000→1200: 병렬화(10워커)+큐
-          # 1000행 상한 페이지네이션 제거까지 했는데도 2000을 20분 안에 못
-          # 채우고 다시 타임아웃(원인: 텔레그램 429 방지를 위해 발송 자체를
-          # 초당 1건으로 직렬화했다 — rss_fetcher.py TELEGRAM_MIN_INTERVAL,
-          # CHAT_ID가 단일 채널이라 이게 진짜 근본 병목). 발송만 놓고 보면
-          # 20분에 최대 약 1,140건(1200*60/1.05)인데, 1200을 그대로 상한으로
-          # 잡은 건 계산 실수였다 — 1200*1.05=1260s로 20분(1200s)을 이미
-          # 넘겨 매번 여기도 강제 종료되고 있었다(2026-09-23 로그로 재확인:
-          # "has timed out after 20 minutes"). 번역·크롤링 여유분까지 감안해
-          # 900으로 낮춘다(900*1.05=945s, ~4분 여유).
+          # 2026-09-23 실측: 원자재마다 텔레그램에 보내던 구조에선 처리량이
+          # 분당 20건(텔레그램 공식 채널 한도)에 고정돼 사이클당 ~400건뿐이었다.
+          # 이제 저장은 전량, 발송은 사이클당 TELEGRAM_MAX_PER_RUN건만 선별
+          # (최신순·매체당 2건) — 처리량은 번역 속도에 따른다. 본문 크롤링도
+          # 기사화 직전으로 옮겼다(db.hydrate_full_text). 유입 ~2.8만/일 대비
+          # 900×48사이클=4.3만/일 여유로 적체분(3.2만)을 소화한다.
           MAX_PROCESS_PER_RUN: "900"
+          TELEGRAM_MAX_PER_RUN: "30"
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
