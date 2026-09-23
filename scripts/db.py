@@ -411,9 +411,16 @@ def queue_insert_bulk(rows: list) -> int:
         } for r in rs]
 
     def post(rs):
+        # ⚠️ 2026-09-23 실전 로그로 발견: resolution=ignore-duplicates만으로는 PK(id)
+        # 기준 ON CONFLICT를 잡아서, link UNIQUE 제약(rss_raw_queue_link_key, PK가
+        # 아님) 충돌은 여전히 그대로 23505/409로 터졌다 — on_conflict=link로 대상
+        # 제약을 명시해야 실제로 무시된다. 이게 안 걸려 있던 탓에 큐 백로그가 쌓일
+        # 수록(재수집될 때마다 중복 폭증) 아래 이분 재시도가 매 배치 수십 번씩
+        # 터져, 이 함수 docstring이 "해결됐다"고 적어둔 15분+ 병목이 실제로는
+        # 계속 재발하고 있었다.
         headers = {**_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
         try:
-            res = requests.post(_url("rss_raw_queue"), headers=headers, json=build(rs), timeout=30)
+            res = requests.post(_url("rss_raw_queue") + "?on_conflict=link", headers=headers, json=build(rs), timeout=30)
         except requests.RequestException as e:
             print(f"  [WARN] queue_insert_bulk 네트워크 오류({len(rs)}건): {e}")
             return None
