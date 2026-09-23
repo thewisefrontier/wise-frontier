@@ -76,14 +76,15 @@ jobs:
         continue-on-error: true
         run: python scripts/rss_processor.py
         env:
-          # 2026-09-22 1500→1000 정정, 2026-09-23 다시 2000으로: 병렬화(10워커,
-          # rss_processor.py)해도 큐가 계속 순증가했다(사용자 확인: 시간당
-          # 유입 1,000~1,900건 vs 처리 상한 1,000건/30분). queue_claim_batch가
-          # PostgREST 서버 기본 행 상한(추정 db-max-rows=1000)에 걸려 있던 걸
-          # 페이지네이션으로 풀어(db.py) 이제 상한값을 실제 필요한 만큼 올릴
-          # 수 있다. 안전장치는 여전히 개수가 아니라 timeout-minutes(그
+          # 2026-09-22 1500→1000, 2026-09-23 2000→1200: 병렬화(10워커)+큐
+          # 1000행 상한 페이지네이션 제거까지 했는데도 2000을 20분 안에 못
+          # 채우고 다시 타임아웃(원인: 텔레그램 429 방지를 위해 발송 자체를
+          # 초당 1건으로 직렬화했다 — rss_fetcher.py TELEGRAM_MIN_INTERVAL,
+          # CHAT_ID가 단일 채널이라 이게 진짜 근본 병목). 발송만 놓고 보면
+          # 20분에 최대 약 1,140건(1200*60/1.05)이 물리적 한계라 그 아래로
+          # 잡는다. 안전장치는 여전히 개수가 아니라 timeout-minutes(그
           # 시점까지 처리분은 queue_delete로 이미 반영돼 유실 없음).
-          MAX_PROCESS_PER_RUN: "2000"
+          MAX_PROCESS_PER_RUN: "1200"
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}

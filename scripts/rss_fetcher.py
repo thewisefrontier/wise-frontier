@@ -47,6 +47,21 @@ CHAT_ID = "@TheWiseFrontier"
 
 STATE_FILE = "data/state.json"
 
+# 2026-09-23 실사고: rss_processor.py가 병렬 워커(10개)로 send_telegram()을
+# 거의 동시에 호출하며 텔레그램 자체 속도제한("같은 채팅방엔 초당 1메시지"
+# 공식 제한)에 걸려 대량 429가 났다(1000건 중 845건 실패). http_retry.py에
+# 429 재시도를 추가했지만, 재시도 대기시간이 누적되면서 오히려 처리 속도가
+# 떨어져 20분 타임아웃 안에 목표 건수를 못 채우는 새 문제가 생겼다 — 재시도는
+# 대증요법이고, CHAT_ID가 단일 채널인 이상 "동시에 여러 워커가 같은 채널에
+# 발송"하는 구조 자체가 원인이다. 근본 해결: 발송만 전역 락+최소 간격으로
+# 직렬화한다(크롤링·번역은 여전히 병렬 — 병목이 아니었던 부분까지 순차화하지
+# 않는다). 이러면 워커가 몇 개든 텔레그램 쪽에서는 초당 1개씩만 나가
+# 429가 애초에 거의 안 발생한다.
+import threading
+_telegram_lock = threading.Lock()
+_telegram_last_sent_at = [0.0]
+TELEGRAM_MIN_INTERVAL = 1.05  # 공식 제한(초당 1메시지)+여유
+
 # RSS 발행일 필터 — 이 일수를 초과한 기사는 수집하지 않음
 MAX_AGE_DAYS = float(os.getenv("MAX_ARTICLE_AGE_DAYS", "3"))
 # 소스당 1회 수집 상한 (발행일 필터 통과분 기준)
@@ -785,11 +800,19 @@ def send_telegram(title_ko, summary_ko, link, source_name, category, subcategory
     )
 
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
-    res = requests.post(url, data={
-        "chat_id":    CHAT_ID,
-        "text":       msg,
-        "parse_mode": "HTML"
-    })
+    # 락 안에서만 대기+발송해 여러 워커가 동시에 대기했다가 몰려서 나가는
+    # 걸 막는다(대기는 락 밖에서 하면 락 획득 순간 여러 스레드가 거의
+    # 동시에 깨어나 다시 몰릴 수 있음).
+    with _telegram_lock:
+        wait = TELEGRAM_MIN_INTERVAL - (time.monotonic() - _telegram_last_sent_at[0])
+        if wait > 0:
+            time.sleep(wait)
+        res = requests.post(url, data={
+            "chat_id":    CHAT_ID,
+            "text":       msg,
+            "parse_mode": "HTML"
+        })
+        _telegram_last_sent_at[0] = time.monotonic()
     return res.json()
 
 # =========================
