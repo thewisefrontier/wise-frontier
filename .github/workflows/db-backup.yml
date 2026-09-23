@@ -4,15 +4,41 @@ on:
   # GitHub 자체 schedule: 트리거는 이 저장소에서 반복적으로 무응답/지연
   # 사고를 낸 전례가 있어 다른 워크플로와 동일하게 외부 크론(cron-job.org)의
   # workflow_dispatch로 대체한다(2026-09-03 점검 — 이 워크플로만 옛날
-  # schedule: 그대로 남아있었음). 원래 주기: 매일 03:00 KST.
+  # schedule: 그대로 남아있었음).
+  #
+  # 2026-09-23: 매일 → 주 1회(일요일)로 변경(사용자 결정). Supabase 무료 플랜
+  # 이그레스 한도(5GB) 초과로 유예기간 진입 — pg_dump는 매번 DB 전체를 밖으로
+  # 빼내(압축 전 수백 MB) 매일이면 이것만으로 한도에 육박한다. 그날 덤프는
+  # IO 스로틀 상태에서 71분 걸리며 사이트까지 느려지게 했다. cron-job.org는
+  # 그대로 매일 호출하고, 여기서 요일로 거른다. 급하게 따로 백업이 필요하면
+  # 수동 실행 시 force=true.
   workflow_dispatch:
+    inputs:
+      force:
+        description: '요일과 무관하게 지금 백업 실행'
+        required: false
+        default: 'false'
 
 concurrency:
   group: db-backup
   cancel-in-progress: false
 
 jobs:
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.day.outputs.run }}
+    steps:
+      - id: day
+        env:
+          FORCE: ${{ inputs.force }}
+        run: |
+          if [ "$FORCE" = "true" ] || [ "$(date -u +%u)" = "7" ]; then echo "run=true" >> "$GITHUB_OUTPUT"
+          else echo "run=false" >> "$GITHUB_OUTPUT"; echo "일요일 아님 — 주 1회 백업이라 건너뜀"; fi
+
   backup:
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: PostgreSQL 17 클라이언트 설치
