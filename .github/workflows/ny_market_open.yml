@@ -1,15 +1,17 @@
 name: NewsFinal - NY Market Open Preview
 
-# ?�욕증시 개장(?��? 09:30 ET) ?�리�?기사. GitHub ?�체 schedule: ?�리거는
-# ???�?�소?�서 반복?�으�?무응??지???�고�????��?가 ?�어(run.yml/
-# frontier_markets.yml/lotto.yml ??참조) 처음부???��? ?�는?????��? ?�론
-# (cron-job.org)??workflow_dispatch�??�시 ?�출.
+# 뉴욕증시 개장(현지 09:30 ET) 프리뷰 기사. GitHub 자체 schedule: 트리거는
+# 이 저장소에서 반복적으로 무응답/지연 사고를 낸 전례가 있어(run.yml/
+# frontier_markets.yml/lotto.yml 등 참조) 처음부터 쓰지 않는다 — 외부 크론
+# (cron-job.org)의 workflow_dispatch로 정시 호출.
 #
-# ?�️ 09:30 ET???�머?�?�에 ?�라 22:30 KST(3??중순~11??�? EDT) ?�는
-# 23:30 KST(11??�?3??중순, EST)�?바뀐다. cron-job.org ?��? ?????�각??# ???�함?�는 ???? 22:20~23:40 KST, 5~10�?간격)?�로 ?�주 ?�출?�도�?# ?�정??�????�크립트 ?�신??market_just_opened()???�욕 로컬?�간(DST
-# ?�동 반영, ZoneInfo)?�로 09:30~09:59 구간?�만 ?�제�??�작?�고, �?밖의
-# ?�출?� 즉시 ?�킵?�다(frontier_markets.yml�??�일??"?�주 불러???�전??
-# ?�계 ??already_published()가 같�? ??중복 발행??막는??.
+# ⚠️ 09:30 ET는 서머타임에 따라 22:30 KST(3월 중순~11월 초, EDT) 또는
+# 23:30 KST(11월 초~3월 중순, EST)로 바뀐다. cron-job.org 잡은 이 두 시각을
+# 다 포함하는 폭(예: 22:20~23:40 KST, 5~10분 간격)으로 자주 호출하도록
+# 설정할 것 — 스크립트 자신의 market_just_opened()이 뉴욕 로컬시간(DST
+# 자동 반영, ZoneInfo)으로 09:30~09:59 구간에만 실제로 동작하고, 그 밖의
+# 호출은 즉시 스킵한다(frontier_markets.yml과 동일한 "자주 불러도 안전한"
+# 설계 — already_published()가 같은 날 중복 발행도 막는다).
 on:
   workflow_dispatch:
 
@@ -25,23 +27,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 코드 체크?�웃
+      - name: 코드 체크아웃
         uses: actions/checkout@v5
 
-      - name: Python ?�정
+      - name: Python 설정
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
-      - name: ?�키지 ?�치
+      - name: 패키지 설치
         run: pip install -r requirements.txt
 
-      - name: ?�욕증시 개장 ?�리�?기사 ?�성
+      - name: 뉴욕증시 개장 프리뷰 기사 생성
         run: python scripts/ny_market_open_writer.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
           GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
@@ -52,14 +53,13 @@ jobs:
           IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
           UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
 
-      - name: ?�사?�트 ?�이???�보?�기
+      - name: 웹사이트 데이터 내보내기
         run: python scripts/export_articles.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
 
-      - name: 변경사??커밋 �??�시
+      - name: 변경사항 커밋 및 푸시
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"

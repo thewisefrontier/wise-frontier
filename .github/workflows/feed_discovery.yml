@@ -1,15 +1,15 @@
 name: NewsFinal - RSS Feed Discovery
 
-# ?�보 매체 ?�페?��??�서 RSS/Atom ?�드�??�동 ?�색??rss_sources ?�이블에
-# 검???��?is_active=false) ?�태�??�록?�다(2026-09-08 ?�설, ?�용??지????
-# "RSS ?�드 ?�동 ?�색 ?�구??진행??). ?�시 ?�동?��? ?�니????매체�?
-# 추�??�고 ?�을 ???�동?�로 ?�행?�는 ?�구 ??homepages ?�력???�보
-# ?�페?��? URL??공백?�로 구분???�달?�다.
+# 후보 매체 홈페이지에서 RSS/Atom 피드를 자동 탐색해 rss_sources 테이블에
+# 검수 대기(is_active=false) 상태로 등록한다(2026-09-08 신설, 사용자 지시 —
+# "RSS 피드 자동 탐색 도구도 진행해"). 상시 자동화가 아니라 새 매체를
+# 추가하고 싶을 때 수동으로 실행하는 도구 — homepages 입력에 후보
+# 홈페이지 URL을 공백으로 구분해 전달한다.
 on:
   workflow_dispatch:
     inputs:
       homepages:
-        description: '?�보 ?�페?��? URL(공백?�로 구분, ?? https://a.com https://b.com)'
+        description: '후보 홈페이지 URL(공백으로 구분, 예: https://a.com https://b.com)'
         required: true
 
 permissions:
@@ -20,23 +20,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 코드 체크?�웃
+      - name: 코드 체크아웃
         uses: actions/checkout@v5
 
-      - name: Python ?�정
+      - name: Python 설정
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
-      - name: ?�키지 ?�치
+      - name: 패키지 설치
         run: pip install -r requirements.txt
 
-      - name: RSS ?�드 ?�색 �?검???��??�록
-        # ?�️ ?�크?�로???�력??run: ?�에 직접 보간?�면 ?�크립트 ?�젝???�험??
-        # ?�다(GitHub Actions ?�려�??�티?�턴) ??env�??�달?????�장???�한??
+      - name: RSS 피드 탐색 및 검수 대기 등록
+        # ⚠️ 워크플로우 입력을 run: 셸에 직접 보간하면 스크립트 인젝션 위험이
+        # 있다(GitHub Actions 알려진 안티패턴) — env로 전달해 셸 확장을 피한다.
         run: python scripts/feed_discovery.py $HOMEPAGES
         env:
           HOMEPAGES: ${{ github.event.inputs.homepages }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}

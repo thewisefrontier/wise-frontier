@@ -1,127 +1,123 @@
 name: NewsFinal - Auto Run
 
 on:
-  # 2026-08-27: GitHub ?�체 schedule ?�리거�? 11:11~18:47(7?�간 �? ?�안
-  # ????번도 ???�던 ?�고 발생(?��? 2026-07-29, 08-03?�도 같�? ?�형??
-  # ?�락??반복?�었?????�중 cron?�로??�?막음). schedule ?�리거�? ?�전??
-  # ?�거?�고 ?��? ?�론 ???�비??cron-job.org, wise-frontier-trigger ??가
-  # workflow_dispatch�?30분마???�출?�는 방식?�로 ?�환(newsissue ?�로?�트??
-  # fetch_news.yml?�서 2026-08-19??먼�? ?�용??검증된 ?�턴).
-  # ?�️ cron-job.org 계정/?�큰 ?�태가 죽으�????�이?�라???�체가 같이
-  # 멈춘????가???�인??�?
+  # 2026-08-27: GitHub 자체 schedule 트리거가 11:11~18:47(7시간 반) 동안
+  # 단 한 번도 안 쐈던 사고 발생(이미 2026-07-29, 08-03에도 같은 유형의
+  # 누락이 반복됐었음 — 이중 cron으로도 못 막음). schedule 트리거를 완전히
+  # 제거하고 외부 크론 핑 서비스(cron-job.org, wise-frontier-trigger 잡)가
+  # workflow_dispatch를 30분마다 호출하는 방식으로 전환(newsissue 프로젝트의
+  # fetch_news.yml에서 2026-08-19에 먼저 적용해 검증된 패턴).
+  # ⚠️ cron-job.org 계정/토큰 상태가 죽으면 이 파이프라인 전체가 같이
+  # 멈춘다 — 가끔 확인할 것.
   workflow_dispatch:
 
 permissions:
   contents: write
 
 env:
-  # Python?� stdout??TTY가 ?�니�??�이?�로 GH Actions???�힐 ?��? 그렇??
-  # 기본??블록 버퍼링이?? print()가 즉시 ???�오�??�백~?�천 줄이 ??번에
-  # 몰려 ?�온?? ???�문??"Gemini ?�약 고도??가 20�??�?�아?�으�?강제
-  # 종료?�는?�도 로그???�무 출력???�어 ?�제�?멈춘 건�? ?�만 ?�고
-  # ?�었?��?조차 구분?????�다(2026-09-22, ?�인 조사 �?발견). ?�버?�드�?
-  # 강제???�?�아????진단???�시간으�?가?�하�??�다.
+  # Python은 stdout이 TTY가 아니면(파이프로 GH Actions에 잡힐 때가 그렇다)
+  # 기본이 블록 버퍼링이라, print()가 즉시 안 나오고 수백~수천 줄이 한 번에
+  # 몰려 나온다. 이 때문에 "Gemini 요약 고도화"가 20분 타임아웃으로 강제
+  # 종료됐는데도 로그엔 아무 출력이 없어 실제로 멈춘 건지 일만 하고
+  # 있었는지조차 구분이 안 됐다(2026-09-22, 원인 조사 중 발견). 언버퍼드로
+  # 강제해 타임아웃/행 진단이 실시간으로 가능하게 한다.
   PYTHONUNBUFFERED: "1"
 
-# ?�️ 2026-09-22 ?�키?�처 변�? ?�일 job + ?�일 concurrency?�??�?job 2개로
-# 쪼갰??collectors / heavy, ?�래 jobs: 참고). �?결과 ?�크?�로???�벨
-# concurrency?????�상 ???�다 ??�?job???�기 concurrency�??�로 갖는??
-# 경위: 가?�로 "무거???�텝�? 60�??�한??걸어???�집 계열(RSS·GDELT·
-# �?��?�스 ????같�? job ?�에 같이 ?�으�?무거???�이???�시 ?�측 90�?
-# ?�팎)???�날 ?�까지 ?�에???�기해???�다(?�측: ???�스?�치가 23�?
-# ?��????�작). ?�용??지??"RSS+GDELT ?�걸 메인?�서 분리?�서 ?�로
-# ?�리?�고")?�로 job ?�체�?분리 ???�제 ?�집 계열?� 무거??계열??�?
-# ?�든 ?��??�이 ?�기 concurrency ?�에??30분마???�다.
+# ⚠️ 2026-09-22 아키텍처 변경: 단일 job + 단일 concurrency였던 걸 job 2개로
+# 쪼갰다(collectors / heavy, 아래 jobs: 참고). 그 결과 워크플로우 레벨
+# concurrency는 더 이상 안 쓴다 — 각 job이 자기 concurrency를 따로 갖는다.
+# 경위: 가드로 "무거운 스텝만" 60분 제한을 걸어도 수집 계열(RSS·GDELT·
+# 국내뉴스 등)이 같은 job 안에 같이 있으면 무거운 사이클(당시 실측 90분
+# 안팎)이 끝날 때까지 큐에서 대기해야 했다(실측: 한 디스패치가 23분
+# 대기 후 시작). 사용자 지적("RSS+GDELT 이걸 메인에서 분리해서 따로
+# 돌리자고")으로 job 자체를 분리 — 이제 수집 계열은 무거운 계열이 뭘
+# 하든 상관없이 자기 concurrency 큐에서 30분마다 돈다.
 jobs:
-  # ?�?� ?�집/집필 계열 ??git 커밋 ?�이 DB�??�는 멱등???�업 ?�?�?�?�?�?�?�?�?�?�?�?�?�?�
-  # ?��? (a) 링크/?�러?�터???�니???�약 ?�으�??�실?�에 ?�전?�고 (b) ?�로??
-  # 무거??계열과도 같�? ?�이???�에???�서�?지켜야 ???�제 ?�존?�이 ?�다
-  # (코드�??�인: domestic_kr_writer??DB ?�재 ?�태�??�고, multilang_translate??
-  # DomesticKR-Synth�?그때그때 조회, gemini_summarizer???��? ?�렌??감�???
-  # GDELT API�?직접 ?�출????job??GDELT ?�집�?무�?, explainer_writer??
-  # DAILY_CAP=1?�라 ?�주 ?�아???�제 ?�성?� ?�루 ??번뿐). 그래??가???�이
-  # 무조�??�행 ??heavy job??60�??�한�?무�??�게 ?�스?�치(30�?마다 ?�다.
+  # ── 수집/집필 계열 — git 커밋 없이 DB만 쓰는 멱등적 작업 ──────────────
+  # 전부 (a) 링크/클러스터키 유니크 제약 등으로 재실행에 안전하고 (b) 서로도
+  # 무거운 계열과도 같은 사이클 안에서 순서를 지켜야 할 실제 의존성이 없다
+  # (코드로 확인: domestic_kr_writer는 DB 현재 상태만 읽고, multilang_translate도
+  # DomesticKR-Synth를 그때그때 조회, gemini_summarizer의 외부 트렌드 감지는
+  # GDELT API를 직접 호출해 이 job의 GDELT 수집과 무관, explainer_writer는
+  # DAILY_CAP=1이라 자주 돌아도 실제 생성은 하루 한 번뿐). 그래서 가드 없이
+  # 무조건 실행 — heavy job의 60분 제한과 무관하게 디스패치(30분)마다 돈다.
   collectors:
     runs-on: ubuntu-latest
     concurrency:
       group: newsfinal-collectors
       cancel-in-progress: false
     steps:
-      - name: 코드 체크?�웃
+      - name: 코드 체크아웃
         uses: actions/checkout@v5
         with:
           ref: main
 
-      - name: Python ?�정
+      - name: Python 설정
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
-      - name: ?�키지 ?�치
+      - name: 패키지 설치
         run: pip install -r requirements.txt
 
-      - name: RSS ?�집 (???�재 ?�용)
-        # 2026-09-22 검�??�시(rss_split_test.yml)??3�????�났지�? ?�제
-        # production?�서??�??�이???�외 ?�이 ?�기 timeout-minutes(15�???
-        # 강제 종료?�고 ?�었??2026-09-23 로그�??�인: "has timed out after
-        # 15 minutes"). continue-on-error가 ?��? "success"�?가?�서 ??
-        # 보�???�???결과�?rss_collector.py 루프 ?�의 ?�스 건강 갱신/?�동
-        # ?�외 로직??????번도 ?�행?��? 못했?? ?�인?� requests timeout=10??
-        # �?�� ?�위???��? ?�스???�리???�답??그걸 ?�회?�서?�???�시??
-        # shadow 버그?�??무�? ??�?버그 ?�무?� ?��??�이 ??�� ?�현??.
-        # rss_collector.py???��? ?�드?�인(780s)?????��? ???�에 ??��
-        # ?�스�?마무리하?�록 고쳤??????15분�? �??�의 ?�수 ?�전?�치.
+      - name: RSS 수집 (큐 적재 전용)
+        # 2026-09-22 검증 당시(rss_split_test.yml)엔 3분 내 끝났지만, 실제
+        # production에서는 매 사이클 예외 없이 여기 timeout-minutes(15분)에
+        # 강제 종료되고 있었다(2026-09-23 로그로 확인: "has timed out after
+        # 15 minutes"). continue-on-error가 이를 "success"로 가려서 안
+        # 보였을 뿐 — 결과로 rss_collector.py 루프 끝의 소스 건강 갱신/자동
+        # 제외 로직이 단 한 번도 실행되지 못했다. 원인은 requests timeout=10이
+        # 청크 단위라 일부 소스의 트리클 응답이 그걸 우회해서였다(재시도
+        # shadow 버그와는 무관 — 그 버그 유무와 상관없이 항상 재현됨).
+        # rss_collector.py에 내부 데드라인(780s)을 둬 외부 킬 전에 항상
+        # 스스로 마무리하도록 고쳤다 — 이 15분은 그 위의 순수 안전장치.
         timeout-minutes: 15
         continue-on-error: true
         run: python scripts/rss_collector.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
 
-      - name: RSS ??처리 �?발송
+      - name: RSS 큐 처리 및 발송
         timeout-minutes: 20
         continue-on-error: true
         run: python scripts/rss_processor.py
         env:
-          # 2026-09-23 ?�측: ?�자?�마???�레그램??보내??구조?�선 처리?�이
-          # 분당 20�??�레그램 공식 채널 ?�도)??고정???�이?�당 ~400건뿐?�었??
-          # ?�제 ?�?��? ?�량, 발송?� ?�이?�당 TELEGRAM_MAX_PER_RUN건만 ?�별
-          # (최신?�·매체당 2�? ??처리?��? 번역 ?�도???�른?? 본문 ?�롤링도
-          # 기사??직전?�로 ??��??db.hydrate_full_text). ?�입 ~2.8�????��?
-          # 900×48?�이??4.3�????�유�??�체�?3.2�????�화?�다.
-          # ??�??�측(21:17 ?�이??: 900�?�?836건을 4분에 처리(분당 ~200�?.
-          # ?�이???�입??~1,400건이??900?�론 ?�체가 ??줄어 2000?�로 ?�림
-          # (~10�?. 번역 API(구�?) 과호출을 ?�하??3000까�??????�렸??
+          # 2026-09-23 실측: 원자재마다 텔레그램에 보내던 구조에선 처리량이
+          # 분당 20건(텔레그램 공식 채널 한도)에 고정돼 사이클당 ~400건뿐이었다.
+          # 이제 저장은 전량, 발송은 사이클당 TELEGRAM_MAX_PER_RUN건만 선별
+          # (최신순·매체당 2건) — 처리량은 번역 속도에 따른다. 본문 크롤링도
+          # 기사화 직전으로 옮겼다(db.hydrate_full_text). 유입 ~2.8만/일 대비
+          # 900×48사이클=4.3만/일 여유로 적체분(3.2만)을 소화한다.
+          # → 첫 실측(21:17 사이클): 900건 중 836건을 4분에 처리(분당 ~200건).
+          # 사이클 유입이 ~1,400건이라 900으론 적체가 안 줄어 2000으로 올림
+          # (~10분). 번역 API(구글) 과호출을 피하려 3000까지는 안 올렸다.
           MAX_PROCESS_PER_RUN: "2000"
           TELEGRAM_MAX_PER_RUN: "30"
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
 
-      - name: GDELT 글로벌 ?�스 검???�집 (2026-09-08 ?�설)
+      - name: GDELT 글로벌 뉴스 검색 수집 (2026-09-08 신설)
         continue-on-error: true
         timeout-minutes: 8
         run: python scripts/gdelt_fetcher.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
 
-      - name: �?��(?�국) ?�스 ?�집 ???�국??채널 ?�용 (2026-09-08 ?�설)
+      - name: 국내(한국) 뉴스 수집 — 다국어 채널 전용 (2026-09-08 신설)
         continue-on-error: true
         timeout-minutes: 8
         run: python scripts/domestic_kr_fetcher.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
           IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
           UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
 
-      - name: �?��기사 ?�러?�터링·집?????�국??채널 ?�용 (2026-09-15 ?�설)
+      - name: 국내기사 클러스터링·집필 — 다국어 채널 전용 (2026-09-15 신설)
         continue-on-error: true
         timeout-minutes: 10
         run: python scripts/domestic_kr_writer.py
@@ -133,20 +129,18 @@ jobs:
           GEMINI_API_KEY_5: ${{ secrets.GEMINI_API_KEY_5 }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
 
-      - name: 머니?�이??미국 ?�장?�스 ?�집 (2026-09-03 ?�설)
+      - name: 머니파이널 미국 시장뉴스 수집 (2026-09-03 신설)
         continue-on-error: true
         run: python scripts/market_news_fetcher.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
           MONEYFINAL_FEED_KEY: ${{ secrets.MONEYFINAL_FEED_KEY }}
 
-      - name: ?�슈 ?�이???�설) 초안 ?�성 ???�드�?검????발행 (2026-09-22 ?�설)
-        # DAILY_CAP=1(explainer_writer.py) ???�주 ?�아???�루 ??번만 ?�제 ?�성,
-        # ?�머지 ?�출?� "?��? ?�성 ???�킵"?�로 즉시 ?�난??
+      - name: 이슈 파이널(해설) 초안 작성 — 어드민 검토 후 발행 (2026-09-22 신설)
+        # DAILY_CAP=1(explainer_writer.py) — 자주 돌아도 하루 한 번만 실제 생성,
+        # 나머지 호출은 "이미 작성 — 스킵"으로 즉시 끝난다.
         timeout-minutes: 10
         continue-on-error: true
         run: python scripts/explainer_writer.py
@@ -160,12 +154,11 @@ jobs:
           NVIDIA_API_KEY_L: ${{ secrets.NVIDIA_API_KEY_L }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
 
-      - name: ?�국??채널 번역 배치 (2026-09-08 ?�설)
-        # DomesticKR-Synth �?article_translations???�어 4개�? ?�직 ??채워�?
-        # 것만 골라 번역?�는 멱등??배치 ???�본(�?��기사 집필)?� 바로 ?�에??
-        # �??�행 ?�고 ?�어 ?�료가 ??�� ?�여 ?�다.
+      - name: 다국어 채널 번역 배치 (2026-09-08 신설)
+        # DomesticKR-Synth 중 article_translations에 언어 4개가 아직 안 채워진
+        # 것만 골라 번역하는 멱등적 배치 — 원본(국내기사 집필)은 바로 위에서
+        # 매 실행 돌고 있어 재료가 항상 쌓여 있다.
         timeout-minutes: 10
         continue-on-error: true
         run: python scripts/multilang_translate.py
@@ -179,17 +172,16 @@ jobs:
           NVIDIA_API_KEY_L: ${{ secrets.NVIDIA_API_KEY_L }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
 
-  # ?�?� ?�보 경로 (2026-09-23 ?�설) ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
-  # ?�용??지?? "?�차?�으�??�던가, 분리?�야 ?�는�??�냐?" ??collectors?�
-  # heavy�??�전??분리?�니, ?�집 직후 ?�어??진짜 ?�보가 heavy??60�?
-  # 배치까�? 묻히??문제가 ?�겼?? needs: [collectors]�?진짜 ?�차 ?�결 ??
-  # collectors가 ?�난 직후, 방금 모�? ?�선???�이?��? 바로 ?�어받아 중�???
-  # ?��? ?�러?�터 1~2개만 즉시 ?�서 발행?�다(gemini_writer.py run_breaking).
-  # 가???�이 ?�스?�치(30�?마다 ?��?�? heavy가 ?��? 처리???�러?�터??
-  # run()??기존 SKIP 분기가 걸러�?중복 집필 ?�음. ?�머지 ?�반 기사??
-  # 그�?�?heavy가 ?�간??배치�?처리.
+  # ── 속보 경로 (2026-09-23 신설) ──────────────────────────────────────
+  # 사용자 지적: "순차적으로 돌던가, 분리해야 하는거 아냐?" — collectors와
+  # heavy를 완전히 분리하니, 수집 직후 들어온 진짜 속보가 heavy의 60분
+  # 배치까지 묻히는 문제가 생겼다. needs: [collectors]로 진짜 순차 연결 —
+  # collectors가 끝난 직후, 방금 모은 신선한 데이터를 바로 이어받아 중대성
+  # 높은 클러스터 1~2개만 즉시 써서 발행한다(gemini_writer.py run_breaking).
+  # 가드 없이 디스패치(30분)마다 돌지만, heavy가 이미 처리한 클러스터는
+  # run()의 기존 SKIP 분기가 걸러줘 중복 집필 없음. 나머지 일반 기사는
+  # 그대로 heavy가 시간당 배치로 처리.
   breaking:
     needs: collectors
     runs-on: ubuntu-latest
@@ -197,20 +189,20 @@ jobs:
       group: newsfinal-breaking
       cancel-in-progress: false
     steps:
-      - name: 코드 체크?�웃
+      - name: 코드 체크아웃
         uses: actions/checkout@v5
         with:
           ref: main
 
-      - name: Python ?�정
+      - name: Python 설정
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
-      - name: ?�키지 ?�치
+      - name: 패키지 설치
         run: pip install -r requirements.txt
 
-      - name: ?�보 ?�단 �?즉시 발행
+      - name: 속보 판단 및 즉시 발행
         timeout-minutes: 10
         continue-on-error: true
         run: python scripts/gemini_writer.py --breaking
@@ -223,86 +215,85 @@ jobs:
           GEMINI_API_KEY_5: ${{ secrets.GEMINI_API_KEY_5 }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
           IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
           UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
 
-  # ?�?� 무거??계열 ??Gemini ?�러?�터링·집??+ ?�이??반영/커밋 ?�?�?�?�?�?�?�?�?�?�?�?�
-  # ??job�?60�?가?��? 걸린?? ?�측(2026-09-22, collectors 분리 ?? �?
-  # 55~61�??�팎 ??30�??�스?�치 격자 + 가???�계 60분과 맞물???�간??
-  # 1???�팎?�로 ?�연 ?�렴?�다(?�용??2026-09-09 결정: "???�간????�?).
+  # ── 무거운 계열 — Gemini 클러스터링·집필 + 사이트 반영/커밋 ────────────
+  # 이 job만 60분 가드가 걸린다. 실측(2026-09-22, collectors 분리 후) 총
+  # 55~61분 안팎 — 30분 디스패치 격자 + 가드 임계 60분과 맞물려 시간당
+  # 1회 안팎으로 자연 수렴한다(사용자 2026-09-09 결정: "한 시간에 한 번").
   heavy:
     runs-on: ubuntu-latest
     concurrency:
       group: newsfinal-heavy
       cancel-in-progress: false
     steps:
-      - name: 코드 체크?�웃
+      - name: 코드 체크아웃
         uses: actions/checkout@v5
         with:
-          # ?�️ ref�?명시?��? ?�으�?actions/checkout??기본?�로 github.sha�??�는??
-          # ?�건 "???�크?�로?��? ?�리거된 ?�점"??SHA�?고정?�다. concurrency가 ??번째
-          # ?�행???�기시?�는 ?�안 ?��?중인 ?�행??SHA가 ???�태�?굳어버려?? ?�제�?
-          # ?�이 ?�작?????�격????커밋???�라가 ?�어??�?커밋???�는 ???�태�?
-          # 체크?�웃?�다. �?결과 가?��? "직전 ?�이???�음"?�로 ?�판??25~30�?만에
-          # ?� ?�이 중복 ?�행?�다(?�사�?2026-08-09~10, ?�루 6???�상 관�?.
-          # ref�?브랜치명?�로 명시?�면 ?�이 ?�제�??�작?�는 ?�점??최신 ?�태�??�시 조회?�다.
+          # ⚠️ ref를 명시하지 않으면 actions/checkout이 기본으로 github.sha를 쓰는데,
+          # 이건 "이 워크플로우가 트리거된 시점"의 SHA로 고정된다. concurrency가 두 번째
+          # 실행을 대기시키는 동안 대기 중인 실행의 SHA가 옛 상태로 굳어버려서, 실제로
+          # 잡이 시작될 땐 원격에 새 커밋이 올라가 있어도 그 커밋이 없는 옛 상태를
+          # 체크아웃한다. 그 결과 가드가 "직전 사이클 없음"으로 오판해 25~30분 만에
+          # 풀 런이 중복 실행됐다(실사고 2026-08-09~10, 하루 6회 이상 관측).
+          # ref를 브랜치명으로 명시하면 잡이 실제로 시작되는 시점에 최신 상태를 다시 조회한다.
           ref: main
-          # 가?��? git log�?직전 ?�이???�료 ?�각???�어???��?�??�스?�리 ?�보.
-          # ?�이?�당 커밋 2�??�팎?�라 100?�면 ?��?�??�상?�다.
+          # 가드가 git log로 직전 사이클 완료 시각을 읽어야 하므로 히스토리 확보.
+          # 사이클당 커밋 2건 안팎이라 100이면 이틀치 이상이다.
           fetch-depth: 100
 
-      # ?�계 60�?2026-09-09 ?�용??결정: "그냥 ?�플?�게 ?�시간에 ?�번?�
-      # ?�아가?�록"). ?�리거�? 30�?격자???�계?� 무�??�게 최�? 30분의
-      # 반올림이 ??붙는??
+      # 임계 60분(2026-09-09 사용자 결정: "그냥 심플하게 한시간에 한번은
+      # 돌아가도록"). 트리거가 30분 격자라 임계와 무관하게 최대 30분의
+      # 반올림이 더 붙는다.
       #
-      # ?�️ ??가?��? 지?�려???�?�이 ?�간??지?�며 계속 바뀌었?????�스?�리:
-      # 2026-08-06 100�?�??�절 GitHub ?�체 schedule ?�리거의 ??? ?�락 ?�문,
-      # 지금�? ?��? cron-job.org??무�?) ??2026-09-09 60분으�??�화, 그런??
-      # GDELT/�?��?�스 ?�설�??�이?�이 2?�간+�??�어???�고 발생(?�인?�정:
-      # 커서 ?�환 ?�입) ??2026-09-22 RSS ?�집/처리 ?�설�?무거???�텝 총합??
-      # ?�시 60분을 ?�어 ?�이??간격??135분까지 벌어�? 그런??�?조사 �?
-      # 9/20~9/21(RSS 분리 ?�전) 기록???�측?�보???��? 그때부???�균 122�?
-      # (108~134�??�었?�는 �??�러??"RSS가 ?��?�??�으켰다"??진단?� ?�?�고,
-      # ?�래??무거???�텝 ?�체(?�집 계열 ?�함 8�??�차 ?�행) ?�계가 60분을
-      # ?�고 ?�었??�?진짜 ?�인?�었?? 최종 조치: ?�집 계열(RSS·GDELT·
-      # �?��?�스·�?��집필·market news·?�슈?�이?�·다�?��번역)???�예 별도
-      # job(collectors, ??참고)?�로 분리 ????job???�제 진짜 Gemini
-      # ?�러?�터링·집?�과 ?�이??반영�??�아 60�??�에 ?�시 ?�어?�다(?�측
-      # 55~61�?. ?�용??지??"RSS+GDELT ?�걸 메인?�서 분리?�서 ?�로
-      # ?�리?�고")?�로 job 분리까�? 진행.
-      - name: 중복 ?�행 가??(직전 ?�이???�료 ??60�?미만?�면 ?�킵)
+      # ⚠️ 이 가드가 지키려는 대상이 시간이 지나며 계속 바뀌었다 — 히스토리:
+      # 2026-08-06 100분(그 시절 GitHub 자체 schedule 트리거의 잦은 누락 때문,
+      # 지금은 외부 cron-job.org라 무관) → 2026-09-09 60분으로 완화, 그런데
+      # GDELT/국내뉴스 신설로 사이클이 2시간+로 늘어난 사고 발생(원인수정:
+      # 커서 순환 도입) → 2026-09-22 RSS 수집/처리 신설로 무거운 스텝 총합이
+      # 다시 60분을 넘어 사이클 간격이 135분까지 벌어짐. 그런데 그 조사 중
+      # 9/20~9/21(RSS 분리 이전) 기록을 실측해보니 이미 그때부터 평균 122분
+      # (108~134분)이었다는 게 드러나 "RSS가 회귀를 일으켰다"는 진단은 틀렸고,
+      # 원래도 무거운 스텝 자체(수집 계열 포함 8개 순차 실행) 합계가 60분을
+      # 넘고 있었던 게 진짜 원인이었다. 최종 조치: 수집 계열(RSS·GDELT·
+      # 국내뉴스·국내집필·market news·이슈파이널·다국어번역)을 아예 별도
+      # job(collectors, 위 참고)으로 분리 — 이 job엔 이제 진짜 Gemini
+      # 클러스터링·집필과 사이트 반영만 남아 60분 안에 다시 들어온다(실측
+      # 55~61분). 사용자 지적("RSS+GDELT 이걸 메인에서 분리해서 따로
+      # 돌리자고")으로 job 분리까지 진행.
+      - name: 중복 실행 가드 (직전 사이클 완료 후 60분 미만이면 스킵)
         id: guard
         run: |
           last=$(git log -1 --format=%cI --grep='^Update articles & state$' || true)
           if [ -z "$last" ]; then
-            echo "직전 ?�이??커밋 ?�음 -> 진행"
+            echo "직전 사이클 커밋 없음 -> 진행"
             exit 0
           fi
           d=$(( ( $(date -u +%s) - $(date -u -d "$last" +%s) ) / 60 ))
-          echo "직전 ?�이???�료: $last (${d}�???"
+          echo "직전 사이클 완료: $last (${d}분 전)"
           if [ "$d" -lt 60 ]; then
-            echo "60�??�내 -> ?�번 ?�행?� ?�업 ?�이 ?�과(success)"
+            echo "60분 이내 -> 이번 실행은 작업 없이 통과(success)"
             echo "skip=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Python ?�정
+      - name: Python 설정
         if: steps.guard.outputs.skip != 'true'
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
-      - name: ?�키지 ?�치
+      - name: 패키지 설치
         if: steps.guard.outputs.skip != 'true'
         run: pip install -r requirements.txt
 
-      # 2026-09-24: ?�렌??감�?가 �??�행 9?�치 ?�자???�량(~90MB)??받아 무료
-      # ?�그?�스�??�자 ?�겼????받아???�을 Actions 캐시???�고 ???�만 받는??
-      # (scripts/title_cache.py). 캐시??불�??�라 ?�행마다 ???�로 ?�?�하�?
-      # ?�두?�로 가??최근 것을 복원. 경로???�?�소 �??�래 커밋 ?�계가 git add -A).
-      - name: ?�렌???�목 캐시 복원
+      # 2026-09-24: 트렌드 감지가 매 실행 9일치 원자재 전량(~90MB)을 받아 무료
+      # 이그레스를 혼자 넘겼다 — 받아둔 행을 Actions 캐시에 두고 새 행만 받는다
+      # (scripts/title_cache.py). 캐시는 불변이라 실행마다 새 키로 저장하고
+      # 접두사로 가장 최근 것을 복원. 경로는 저장소 밖(아래 커밋 단계가 git add -A).
+      - name: 트렌드 제목 캐시 복원
         if: steps.guard.outputs.skip != 'true'
         uses: actions/cache/restore@v4
         with:
@@ -310,7 +301,7 @@ jobs:
           key: rt-titles-${{ github.run_id }}
           restore-keys: rt-titles-
 
-      - name: Gemini ?�약 고도??
+      - name: Gemini 요약 고도화
         if: steps.guard.outputs.skip != 'true'
         timeout-minutes: 20
         continue-on-error: true
@@ -324,13 +315,12 @@ jobs:
           GEMINI_API_KEY_5: ${{ secrets.GEMINI_API_KEY_5 }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
           IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
           UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
 
-      - name: ?�렌???�목 캐시 ?�??
+      - name: 트렌드 제목 캐시 저장
         if: always() && steps.guard.outputs.skip != 'true'
         continue-on-error: true
         uses: actions/cache/save@v4
@@ -338,11 +328,11 @@ jobs:
           path: ${{ runner.temp }}/rt_title_cache.json.gz
           key: rt-titles-${{ github.run_id }}
 
-      - name: API ?�도 ?��?(60�?
+      - name: API 한도 대기 (60초)
         if: steps.guard.outputs.skip != 'true'
         run: sleep 60
 
-      - name: Gemini ?�체 기사 ?�성 (30분마???�러?�터 감�?)
+      - name: Gemini 자체 기사 생성 (30분마다 클러스터 감지)
         if: steps.guard.outputs.skip != 'true'
         timeout-minutes: 15
         continue-on-error: true
@@ -356,13 +346,12 @@ jobs:
           GEMINI_API_KEY_5: ${{ secrets.GEMINI_API_KEY_5 }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
           IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
           UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
 
-      - name: 경제 ?�정 금리결정 기사 ?�동?�성
+      - name: 경제 일정 금리결정 기사 자동생성
         if: steps.guard.outputs.skip != 'true'
         timeout-minutes: 10
         continue-on-error: true
@@ -375,13 +364,12 @@ jobs:
           GEMINI_API_KEY_5: ${{ secrets.GEMINI_API_KEY_5 }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
           IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
           UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
 
-      - name: 주간 ?�세 카드 ???�요??10??KST) ?�후 �?1?? 결정론적 집계 (2026-09-22 ?�설)
+      - name: 주간 시세 카드 — 토요일 10시(KST) 이후 주 1회, 결정론적 집계 (2026-09-22 신설)
         if: steps.guard.outputs.skip != 'true'
         timeout-minutes: 5
         continue-on-error: true
@@ -389,9 +377,8 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
 
-      - name: 주간 ?�리 초안 ???�요??20??KST) ?�후 �?1?? ?�드�?검????발행 (2026-09-22 ?�설)
+      - name: 주간 정리 초안 — 일요일 20시(KST) 이후 주 1회, 어드민 검토 후 발행 (2026-09-22 신설)
         if: steps.guard.outputs.skip != 'true'
         timeout-minutes: 10
         continue-on-error: true
@@ -406,27 +393,24 @@ jobs:
           NVIDIA_API_KEY_L: ${{ secrets.NVIDIA_API_KEY_L }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
 
-      - name: ?�사?�트 ?�이???�보?�기
+      - name: 웹사이트 데이터 내보내기
         if: steps.guard.outputs.skip != 'true'
         run: python scripts/export_articles.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
 
-      - name: ?�국??채널 ?�이???�보?�기 (2026-09-08 ?�설)
+      - name: 다국어 채널 데이터 내보내기 (2026-09-08 신설)
         if: steps.guard.outputs.skip != 'true'
         continue-on-error: true
         run: python scripts/export_global.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
 
-      - name: 변경사??커밋 �??�시 (docs/ + state)
+      - name: 변경사항 커밋 및 푸시 (docs/ + state)
         if: steps.guard.outputs.skip != 'true'
         run: |
           git config user.name "github-actions"

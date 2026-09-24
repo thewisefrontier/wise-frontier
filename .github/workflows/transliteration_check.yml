@@ -1,10 +1,10 @@
 name: NewsFinal - Transliteration Check
 
 on:
-  # GitHub ?�체 schedule: ?�리거는 ???�?�소?�서 반복?�으�?무응??지??
-  # ?�고�????��?가 ?�어 ?�른 ?�크?�로?� ?�일?�게 ?��? ?�론(cron-job.org)??
-  # workflow_dispatch�??�체한??2026-09-03 ?��? ?????�크?�로�??�날
-  # schedule: 그�?�??�아?�었??. ?�래 주기: 매일 UTC 21:00 = KST 06:00.
+  # GitHub 자체 schedule: 트리거는 이 저장소에서 반복적으로 무응답/지연
+  # 사고를 낸 전례가 있어 다른 워크플로와 동일하게 외부 크론(cron-job.org)의
+  # workflow_dispatch로 대체한다(2026-09-03 점검 — 이 워크플로만 옛날
+  # schedule: 그대로 남아있었음). 원래 주기: 매일 UTC 21:00 = KST 06:00.
   workflow_dispatch:
 
 jobs:
@@ -12,22 +12,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 코드 체크?�웃
+      - name: 코드 체크아웃
         uses: actions/checkout@v5
 
-      - name: Python ?�정
+      - name: Python 설정
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
-      - name: ?�키지 ?�치
+      - name: 패키지 설치
         run: pip install -r requirements.txt
 
-      - name: ?�역 ?�류 ?��? �??�동 교정
+      - name: 음역 오류 점검 및 자동 교정
         run: python scripts/check_transliteration.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}

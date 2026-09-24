@@ -1,19 +1,19 @@
 name: NewsFinal - Frontier Market Holiday Notice
 
-# ?�아�?JSE)·?�도?�시??IDX)·말레?�시??Bursa Malaysia) 증시 ?�장??
-# ?�내 기사. us/jp/eu_market_holiday.yml�??�일???�턴(?�용???�청
-# 2026-09-08: "?�프리카, ?�남?�쪽?� ?�떻�??�스�?못구?�나?" ??진행)
-# ??결정론적 ?�플릿이??GEMINI_API_KEY 불필??
+# 남아공(JSE)·인도네시아(IDX)·말레이시아(Bursa Malaysia) 증시 휴장일
+# 안내 기사. us/jp/eu_market_holiday.yml과 동일한 패턴(사용자 요청
+# 2026-09-08: "아프리카, 동남아쪽은 어떻게 소스를 못구하나?" → 진행)
+# — 결정론적 템플릿이라 GEMINI_API_KEY 불필요.
 #
-# ?�️ ?�장??캘린??market_calendar.py)??�?거래??공식 ?�이?��?
-# Cloudflare �?차단(JSE) ?�으�?막�? exchange_calendars ?�픈?�스
-# ?�이브러�?+ ?�짜 교차검증으�??�보?�다 ??말레?�시?�는 ?�슬?�력 ??
-# ?�동?�일??많아 ?�반 가까이 구체??명칭 ?�이 "?�동?�일(공휴??"로만
-# ?�기?�다(?�짜 ?�체???�확). 매년 �?가?�하�?�?거래??공식 캘린?�로
-# ?�확?�할 �?
+# ⚠️ 휴장일 캘린더(market_calendar.py)는 각 거래소 공식 사이트가
+# Cloudflare 봇 차단(JSE) 등으로 막혀 exchange_calendars 오픈소스
+# 라이브러리 + 날짜 교차검증으로 확보했다 — 말레이시아는 이슬람력 등
+# 이동휴일이 많아 절반 가까이 구체적 명칭 없이 "이동휴일(공휴일)"로만
+# 표기된다(날짜 자체는 정확). 매년 초 가능하면 각 거래소 공식 캘린더로
+# 재확인할 것.
 #
-# ?�국?�간 ?�전 �?�??�장 개장 ?�후) 1?�면 충분 ??already_published()가
-# 같�? ?�짜 중복 발행??막는??
+# 한국시간 오전 중(각 시장 개장 전후) 1회면 충분 — already_published()가
+# 같은 날짜 중복 발행을 막는다.
 on:
   workflow_dispatch:
 
@@ -29,35 +29,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 코드 체크?�웃
+      - name: 코드 체크아웃
         uses: actions/checkout@v5
 
-      - name: Python ?�정
+      - name: Python 설정
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
-      - name: ?�키지 ?�치
+      - name: 패키지 설치
         run: pip install -r requirements.txt
 
-      - name: ?�아공·인?�네?�아·말레?�시??증시 ?�장 ?�내 기사 ?�성
+      - name: 남아공·인도네시아·말레이시아 증시 휴장 안내 기사 생성
         run: python scripts/frontier_market_holiday_writer.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
           IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
           UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
 
-      - name: ?�사?�트 ?�이???�보?�기
+      - name: 웹사이트 데이터 내보내기
         run: python scripts/export_articles.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
 
-      - name: 변경사??커밋 �??�시
+      - name: 변경사항 커밋 및 푸시
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"

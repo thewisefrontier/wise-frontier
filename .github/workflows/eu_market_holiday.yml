@@ -1,17 +1,17 @@
 name: NewsFinal - EU Market Holiday Notice
 
-# ?�국(LSE)·?�일(?�랑?�푸르트)·?�랑???�리) 증시 ?�장???�내 기사.
-# us_market_holiday.yml/jp_market_holiday.yml�??�일???�턴(?�용???�청
-# 2026-09-08: "?�국/?�일/?�랑?�도 ?�간 ????마�? 만들?�줘") ??결정론적
-# ?�플릿이??GEMINI_API_KEY 불필?? 3개국??eu_market_holiday_writer.py
-# ?�나가 ?�회?�며 각각 ?�정·발행?�다.
+# 영국(LSE)·독일(프랑크푸르트)·프랑스(파리) 증시 휴장일 안내 기사.
+# us_market_holiday.yml/jp_market_holiday.yml과 동일한 패턴(사용자 요청
+# 2026-09-08: "영국/독일/프랑스도 시간 될 때 마저 만들어줘") — 결정론적
+# 템플릿이라 GEMINI_API_KEY 불필요. 3개국을 eu_market_holiday_writer.py
+# 하나가 순회하며 각각 판정·발행한다.
 #
-# ?�️ ?�장??캘린??market_calendar.py)??�?거래??공식 ?�이???�근??
-# 막�? exchange_calendars ?�픈?�스 ?�이브러리로 ?�보?�다 ??미국
-# 캘린?�보???�뢰?��? ??��??매년 �?가?�하�??�확?�할 �?
+# ⚠️ 휴장일 캘린더(market_calendar.py)는 각 거래소 공식 사이트 접근이
+# 막혀 exchange_calendars 오픈소스 라이브러리로 확보했다 — 미국
+# 캘린더보다 신뢰도가 낮으니 매년 초 가능하면 재확인할 것.
 #
-# ?�국?�간 ?�후 5~6?�경(?�럽 각국 ?�규??개장 ?�후) 1?�면 충분 ??
-# already_published()가 같�? ?�짜 중복 발행??막는??
+# 한국시간 오후 5~6시경(유럽 각국 정규장 개장 전후) 1회면 충분 —
+# already_published()가 같은 날짜 중복 발행을 막는다.
 on:
   workflow_dispatch:
 
@@ -27,35 +27,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 코드 체크?�웃
+      - name: 코드 체크아웃
         uses: actions/checkout@v5
 
-      - name: Python ?�정
+      - name: Python 설정
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
-      - name: ?�키지 ?�치
+      - name: 패키지 설치
         run: pip install -r requirements.txt
 
-      - name: ?�국·?�일·?�랑??증시 ?�장 ?�내 기사 ?�성
+      - name: 영국·독일·프랑스 증시 휴장 안내 기사 생성
         run: python scripts/eu_market_holiday_writer.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
           IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
           UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
 
-      - name: ?�사?�트 ?�이???�보?�기
+      - name: 웹사이트 데이터 내보내기
         run: python scripts/export_articles.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
 
-      - name: 변경사??커밋 �??�시
+      - name: 변경사항 커밋 및 푸시
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"

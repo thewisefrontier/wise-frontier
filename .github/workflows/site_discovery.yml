@@ -1,10 +1,10 @@
 name: NewsFinal - Site-wide Article Discovery
 
-# newspaper4k???�이???�체 기사 발견 기능?�로, ?��? ?�뢰?�는 매체
-# ?�페?��?�??�어 RSS ?�드????걸린 기사�?찾는??2026-09-08 ?�설,
-# ?�용??지????"newspaper4k???�이???�체 기사 발견 기능... 진행??).
-# ?�이???�나???�롤??무겁�?�??�행마다 ?�번(cursor)만큼�??�으므�?
-# 30�?주기 메인 ?�이?�라??run.yml)�?분리????? 빈도�??�린??
+# newspaper4k의 사이트 전체 기사 발견 기능으로, 이미 신뢰하는 매체
+# 홈페이지를 훑어 RSS 피드에 안 걸린 기사를 찾는다(2026-09-08 신설,
+# 사용자 지시 — "newspaper4k의 사이트 전체 기사 발견 기능... 진행해").
+# 사이트 하나당 크롤이 무겁고 매 실행마다 순번(cursor)만큼만 훑으므로
+# 30분 주기 메인 파이프라인(run.yml)과 분리해 낮은 빈도로 돌린다.
 on:
   workflow_dispatch:
 
@@ -20,25 +20,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 코드 체크?�웃
+      - name: 코드 체크아웃
         uses: actions/checkout@v5
 
-      - name: Python ?�정
+      - name: Python 설정
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
-      - name: ?�키지 ?�치
+      - name: 패키지 설치
         run: pip install -r requirements.txt
 
-      - name: ?�이???�체 기사 발견
+      - name: 사이트 전체 기사 발견
         run: python scripts/site_discovery.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
 
-      - name: ?�번(cursor) ?�태 커밋
+      - name: 순번(cursor) 상태 커밋
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"

@@ -1,11 +1,11 @@
 name: NewsFinal - Daily Domestic Oil Price (Opinet)
 
 on:
-  # 2026-08-28: ???�크?�로?��? 08:00 KST ?�정?�서 7?�간 ?�게 ??? 15:50?�야
-  # 처음 ?�행??것을 ?�인(run.yml�?같�? GitHub schedule ?�리�?무응??
-  # ?�고, 같�? ???�?�소 ?�반??걸쳐 발생). schedule ?�거, ?��? ?�론
-  # (cron-job.org)??workflow_dispatch�??�환. ?�크립트 ?�체가
-  # already_published()�?게이?�하므�??�주 ?�출?�도 ?�전.
+  # 2026-08-28: 이 워크플로우가 08:00 KST 예정에서 7시간 넘게 늦은 15:50에야
+  # 처음 실행된 것을 확인(run.yml과 같은 GitHub schedule 트리거 무응답
+  # 사고, 같은 날 저장소 전반에 걸쳐 발생). schedule 제거, 외부 크론
+  # (cron-job.org)의 workflow_dispatch로 전환. 스크립트 자체가
+  # already_published()로 게이트하므로 자주 호출해도 안전.
   workflow_dispatch:
 
 permissions:
@@ -20,23 +20,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 코드 체크?�웃
+      - name: 코드 체크아웃
         uses: actions/checkout@v5
 
-      - name: Python ?�정
+      - name: Python 설정
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
-      - name: ?�키지 ?�치
+      - name: 패키지 설치
         run: pip install -r requirements.txt
 
-      - name: �?�� ?��? 기사 ?�성
+      - name: 국내 유가 기사 생성
         run: python scripts/opinet_price_writer.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
           GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
@@ -47,14 +46,13 @@ jobs:
           IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
           UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
 
-      - name: ?�사?�트 ?�이???�보?�기
+      - name: 웹사이트 데이터 내보내기
         run: python scripts/export_articles.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
 
-      - name: 변경사??커밋 �??�시
+      - name: 변경사항 커밋 및 푸시
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
