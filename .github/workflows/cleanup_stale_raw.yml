@@ -29,3 +29,11 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
+
+      # 고PV 기사 패턴 분석용 실측 PV 적재(GA4 → article_pv_daily). 최근 3일 덮어쓰기.
+      - name: 기사별 PV 수집 (GA4)
+        run: python scripts/pv_stats.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          GA4_SERVICE_ACCOUNT_JSON: ${{ secrets.GA4_SERVICE_ACCOUNT_JSON }}
