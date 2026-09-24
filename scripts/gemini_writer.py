@@ -3139,8 +3139,12 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
                 print(f"  [SKIP] 기사 부족 ({cur_count}건)\n")
                 continue
 
-            if (country in ADVANCED_ECONOMIES and cur_count < CLUSTER_MIN_SIZE_ADVANCED
-                    and not _has_official_source(cluster)):
+            # 속보 경로(run_breaking, clusters_override로 진입)는 이미
+            # _cluster_hits_severity_high+3시간 신선도로 따로 걸러져 있어,
+            # 이 4중복 게이트까지 얹으면 진짜 속보(터진 직후 1~2곳만 보도)가
+            # 막혀 경로 자체의 목적(빠른 발행)과 충돌한다 — 속보는 면제.
+            if (clusters_override is None and country in ADVANCED_ECONOMIES
+                    and cur_count < CLUSTER_MIN_SIZE_ADVANCED and not _has_official_source(cluster)):
                 print(f"  [SKIP] 선진국({country}) 저중복 이슈 ({cur_count}건 < {CLUSTER_MIN_SIZE_ADVANCED}건) — 프론티어마켓 편집방향상 제외\n")
                 continue
 
