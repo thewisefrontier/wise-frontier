@@ -3085,7 +3085,8 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
             clusters, cluster_importance, _cluster_hits_severity_high, make_cluster_key,
             # 부가 기능이라 과부하 때 키 10개×30초를 다 기다리지 않게 한 모델·짧은 타임아웃만
             lambda p: _gemini_client.call(p, max_tokens=800, start_tier=4, temperature=0.2,
-                                          timeout=(5, 15), max_stages=1))
+                                          timeout=(5, 15), max_stages=1),
+            bonus_eligible=lambda c: (c[0].get("country") or "") not in ADVANCED_ECONOMIES | {""})
 
     today_own_articles = get_today_own_articles()
 

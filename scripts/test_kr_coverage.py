@@ -74,3 +74,12 @@ assert "kr_trend" not in info.get("말라위 옥수수", {})
 s = kc.demand_prompt_suffix(ct[0])
 assert "일본 대 우루과이" in s and "2,000" in s and "우루과이, 일본에 1-3 패배" in s and "원문에 없는" in s
 print("ok")
+
+# 가산점은 프론티어 국가만(선진국 연예 기사가 +15 받던 실운영 사고), 감점은 그대로
+US, ML = cl("미국 배우", "미국"), cl("말라위 옥수수", "말라위")
+imp3 = {id(US): 20, id(ML): 10}
+q3 = lambda p: json.dumps({"1": "미국 배우", "2": "말라위 옥수수"}, ensure_ascii=False)
+out, info = kc.rerank([US, ML], lambda c: imp3[id(c)], lambda c: False, key, q3,
+                      count=lambda q: 0, fetch_trends=NO_TRENDS, bonus_eligible=lambda c: c[0]["country"] != "미국")
+assert out[0] is ML, [c[0] for c in out]  # 말라위 10+15=25 > 미국 20+0
+print("ok2")

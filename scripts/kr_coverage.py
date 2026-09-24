@@ -181,11 +181,14 @@ def measure(cluster, query, count=count_kr_coverage):
 
 
 def rerank(clusters, importance, is_severe, cluster_key, call_llm,
-           count=count_kr_coverage, fetch_trends=fetch_kr_trending, top_n=TOP_N):
+           count=count_kr_coverage, fetch_trends=fetch_kr_trending, top_n=TOP_N,
+           bonus_eligible=lambda c: True):
     """상위 top_n 후보 + 한국 검색 수요와 맞는 클러스터를 보정 점수로 재정렬.
     - 검색 수요 매칭: +30, 희소성 감점 없음(국내 보도가 많아도 수요가 더 크다).
     - 나머지: 희소성 가감점. 중대성 높은 사안은 감점하지 않는다(국내 언론이 다룰 만큼
-      크다는 게 배제 사유가 아니라는 기존 방침).
+      크다는 게 배제 사유가 아니라는 기존 방침). 가산점은 bonus_eligible(프론티어 국가)만 —
+      첫 실운영(9/24)에서 국가 제한 없이 주니 "미국 배우 샘 워싱턴" 같은 선진국 연예
+      기사가 +15를 받았다. 근거였던 7월 상위 노출은 프론티어 국가의 틈새 주제였다.
     반환: (재정렬된 clusters, {cluster_key: {"kr_coverage_30d": n} 또는 {"kr_trend": {...}}}).
     실패하면 원래 순서."""
     try:
@@ -218,6 +221,8 @@ def rerank(clusters, importance, is_severe, cluster_key, call_llm,
                 continue
             n, bonus = measure(c, q, count)
             if bonus < 0 and is_severe(c):
+                bonus = 0.0
+            if bonus > 0 and not bonus_eligible(c):
                 bonus = 0.0
             scores[id(c)] = importance(c) + bonus
             info[cluster_key(c)] = {"kr_coverage_30d": n}
