@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-24 18:46",
+  "updated_at": "2026-09-24 18:56",
   "indices": [
     {
       "name": "S&P 500",
@@ -46,15 +46,15 @@
     {
       "name": "EGX30 (이집트)",
       "symbol": "^CASE30",
-      "price": 53784.7,
-      "change_pct": -0.81,
+      "price": 53695.6,
+      "change_pct": -0.98,
       "up": false
     },
     {
       "name": "SET (태국)",
       "symbol": "^SET.BK",
-      "price": 1601.1,
-      "change_pct": -0.6,
+      "price": 1602.58,
+      "change_pct": -0.5,
       "up": false
     },
     {
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.43,
-      "change_pct": 1.63,
+      "price": 16.42,
+      "change_pct": 1.61,
       "up": true
     }
   ],
@@ -144,15 +144,15 @@
       {
         "name": "EGX30 (이집트)",
         "symbol": "^CASE30",
-        "price": 53784.7,
-        "change_pct": -0.81,
+        "price": 53695.6,
+        "change_pct": -0.98,
         "up": false
       },
       {
         "name": "SET (태국)",
         "symbol": "^SET.BK",
-        "price": 1601.1,
-        "change_pct": -0.6,
+        "price": 1602.58,
+        "change_pct": -0.5,
         "up": false
       },
       {
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.43,
-        "change_pct": 1.63,
+        "price": 16.42,
+        "change_pct": 1.61,
         "up": true
       }
     ]
