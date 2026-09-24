@@ -6,6 +6,7 @@ IPv6 문제 없이 HTTP로 동작
 
 import os
 import time
+import threading
 import requests
 import psycopg2
 from psycopg2.extras import Json
@@ -62,6 +63,18 @@ def init_db():
 # 건드릴 위험이 있다(link로 다시 조회해야 안전한데, 지금은 범위 밖).
 AIVEN_SERVICE_URI = os.getenv("AIVEN_SERVICE_URI", "")
 _aiven_conn = None
+# ⚠️ 2026-09-24 발견: insert_article()이 rss_processor.py의 ThreadPoolExecutor
+# (PROCESS_WORKERS=10)에서 동시에 호출되는데, _mirror()가 전역 커넥션 하나를
+# 락 없이 공유했다. psycopg2는 커넥션 자체는 스레드 간 공유가 되지만 동시
+# execute()는 내부적으로 직렬화될 뿐이라 오염은 안 나도, 그 직렬화 대기가
+# 그대로 각 워커 스레드를 막는다 — 여기에 statement_timeout까지 없어서
+# Aiven 무료 플랜이 느려지는 순간(이미 대량 이전 때 실측) 워커 10개가
+# 전부 그 느린 쿼리 하나를 기다리며 멈출 수 있었다. 오늘 아침 고친 RSS
+# 처리 속도를 이 미러 기능이 조용히 다시 깎아먹을 뻔한 것 — 락으로 명시적
+# 직렬화하고, statement_timeout으로 한 번의 느린 쿼리가 잡아먹는 시간의
+# 상한을 둔다(그래도 넘으면 그 건만 실패 처리하고 계속 진행).
+_aiven_lock = threading.Lock()
+AIVEN_STATEMENT_TIMEOUT_MS = 3000
 
 
 def _aiven_conn_get():
@@ -70,7 +83,10 @@ def _aiven_conn_get():
         return None
     try:
         if _aiven_conn is None or _aiven_conn.closed:
-            _aiven_conn = psycopg2.connect(AIVEN_SERVICE_URI, connect_timeout=5)
+            _aiven_conn = psycopg2.connect(
+                AIVEN_SERVICE_URI, connect_timeout=5,
+                options=f"-c statement_timeout={AIVEN_STATEMENT_TIMEOUT_MS}",
+            )
             _aiven_conn.autocommit = True
         return _aiven_conn
     except Exception as e:
@@ -81,21 +97,23 @@ def _aiven_conn_get():
 
 def _mirror(sql: str, params: tuple = ()):
     """Aiven에 best-effort로 반영. 실패해도 예외를 밖으로 던지지 않는다 —
-    호출부(Supabase 기준 메인 흐름)는 이 함수가 무슨 일을 하는지 몰라도 된다."""
-    conn = _aiven_conn_get()
-    if conn is None:
-        return
+    호출부(Supabase 기준 메인 흐름)는 이 함수가 무슨 일을 하는지 몰라도 된다.
+    호출부가 여러 스레드에서 동시에 부를 수 있어 락으로 직렬화한다."""
     global _aiven_conn
-    try:
-        with conn.cursor() as cur:
-            cur.execute(sql, params)
-    except Exception as e:
-        print(f"  [WARN] Aiven 미러 실패: {e}")
+    with _aiven_lock:
+        conn = _aiven_conn_get()
+        if conn is None:
+            return
         try:
-            conn.close()
-        except Exception:
-            pass
-        _aiven_conn = None
+            with conn.cursor() as cur:
+                cur.execute(sql, params)
+        except Exception as e:
+            print(f"  [WARN] Aiven 미러 실패: {e}")
+            try:
+                conn.close()
+            except Exception:
+                pass
+            _aiven_conn = None
 
 
 

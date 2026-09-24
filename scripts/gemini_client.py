@@ -125,6 +125,25 @@ def _min_interval(model: str) -> float:
     return MIN_KEY_INTERVAL_SECONDS.get(model, _LITE_MIN_INTERVAL)
 
 
+_SHARED_WAIT_CAP = 20  # 이 이상은 기다리지 않고 그냥 진행 — 다른 키/모델로
+                       # 넘어가는 게 나을 수도 있는 상황을 여기서 무한정 막지 않는다.
+
+
+def _wait_for_shared_slot(model: str, idx: int, min_interval: float) -> None:
+    """다른 프로세스가 이 키·모델을 방금 썼으면 그만큼 기다린 뒤 우리 몫을
+    예약한다. 총 대기가 _SHARED_WAIT_CAP을 넘으면 포기하고 그냥 진행한다."""
+    waited = 0.0
+    for _ in range(4):
+        wait = _claim_key_shared(model, idx, min_interval)
+        if wait <= 0:
+            return
+        wait = min(wait, _SHARED_WAIT_CAP - waited)
+        if wait <= 0:
+            return
+        time.sleep(wait)
+        waited += wait
+
+
 # 임베딩 모델(gemini-embedding-001) 전용 페이싱 — 생성 모델과는 별도
 # 쿼터 풀. 사용자가 공식 수치로 확인: RPM 100 / TPM 30k / RPD 1000
 # (Gemini Embedding 1·2 공통, 키 1개 기준). RPM 100 → 키당 최소 0.6초
@@ -132,6 +151,43 @@ def _min_interval(model: str) -> float:
 # 최대 분당 300회)로 설정 — 이 프로젝트의 "실사용량을 실측해 조정" 방침상
 # _log_usage()로 쌓이는 gemini_usage_daily를 보고 필요하면 더 낮춰도 된다.
 _EMBED_MIN_INTERVAL = 1
+
+# 2026-09-24 실사고: run.yml이 collectors/breaking/heavy 3개 job으로 쪼개지며
+# 서로 다른 프로세스(domestic_kr_writer.py, explainer_writer.py,
+# multilang_translate.py, gemini_summarizer.py, gemini_writer.py 등)가 같은
+# 5개 키를 동시에 호출하게 됐다. 위 _min_interval() 페이싱은 프로세스 메모리
+# 안에서만 유지돼 서로의 존재를 몰랐다 — 각자 "안전하게" 페이싱해도 합산하면
+# 분당 한도를 넘겨, 무거운 실행마다 429가 14~22회 났다(고쳐지지 않은 경우
+# 이전/이후 비교해도 동일해 이 원인임을 확인). Supabase에 실제 마지막 호출
+# 시각을 남겨 프로세스 경계를 넘어 공유한다(claim_gemini_key RPC). DB 호출
+# 자체가 실패하면(네트워크 등) 막지 않고 기존 프로세스 내 페이싱만으로
+# 진행한다 — 이 프로젝트 방침대로 부가 기능이 본 기능을 막지 않는다.
+_PACING_SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
+_PACING_SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
+
+
+def _claim_key_shared(model: str, idx: int, min_interval: float) -> float:
+    """다른 프로세스와 공유된 페이싱을 확인한다. 호출해도 되면 0(대기 불필요),
+    아니면 기다려야 할 초를 반환한다. DB 호출 실패 시 0(=막지 않음)."""
+    if not _PACING_SUPABASE_URL or not _PACING_SUPABASE_KEY:
+        return 0.0
+    try:
+        res = requests.post(
+            f"{_PACING_SUPABASE_URL}/rest/v1/rpc/claim_gemini_key",
+            headers={
+                "apikey": _PACING_SUPABASE_KEY,
+                "Authorization": f"Bearer {_PACING_SUPABASE_KEY}",
+                "Content-Type": "application/json",
+            },
+            json={"p_model": model, "p_key_index": idx, "p_min_interval": min_interval},
+            timeout=5,
+        )
+        if res.status_code in (200, 201):
+            row = (res.json() or [{}])[0]
+            return 0.0 if row.get("allowed") else float(row.get("wait_seconds") or 0)
+    except Exception:
+        pass
+    return 0.0
 
 
 def _is_per_day_quota(res) -> bool:
@@ -227,6 +283,10 @@ class GeminiClient:
                 wait = _min_interval(model) - elapsed
                 if wait > 0:
                     time.sleep(wait)
+                # 같은 키를 동시에 쓰는 다른 프로세스(job)가 없는지도 확인 —
+                # 이 프로세스 메모리만 보는 위 계산으론 collectors/breaking/heavy가
+                # 겹칠 때 합산 호출량이 한도를 넘는 걸 못 막는다.
+                _wait_for_shared_slot(model, idx, _min_interval(model))
 
                 api_key = self.api_keys[idx]
                 url = (
@@ -318,6 +378,7 @@ class GeminiClient:
             wait = _EMBED_MIN_INTERVAL - elapsed
             if wait > 0:
                 time.sleep(wait)
+            _wait_for_shared_slot(model, idx, _EMBED_MIN_INTERVAL)
 
             api_key = self.api_keys[idx]
             url = (
