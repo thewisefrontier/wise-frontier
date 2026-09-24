@@ -85,10 +85,28 @@ select * from settings where key = '_smoke_test';
 delete from settings where key = '_smoke_test';
 ```
 
-## 참고: Supabase 쪽 별개 보안 권고 (이번 작업과 무관)
+## 참고: Supabase 쪽 별개 보안 권고 (이번 작업과 무관, 처리 완료)
 
 Supabase MCP 어드바이저가 `public.travel_guides` 테이블의 RLS(Row Level
-Security)가 꺼져 있다고 표시함 — anon/authenticated 키로 전체 행 읽기/쓰기가
-가능한 상태. 이번 DB 스탠바이 작업과는 별개 이슈이며, 자동으로 고치지 않음
-(정책 없이 RLS만 켜면 모든 접근이 막힐 수 있어 정책 설계가 먼저 필요).
-필요시 별도로 다뤄야 함.
+Security)가 꺼져 있다고 표시했었음 — anon/authenticated 키로 전체 행
+읽기/쓰기가 가능한 상태였음. 이 프로젝트의 `econ_events`/`stock_prices`에
+이미 쓰이던 "공개 읽기 + service_role만 쓰기" 패턴을 그대로 적용해 처리함
+(2026-09-24):
+
+```sql
+ALTER TABLE public.travel_guides ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY travel_guides_public_read ON public.travel_guides
+FOR SELECT
+USING (true);
+
+CREATE POLICY travel_guides_service_all ON public.travel_guides
+FOR ALL
+USING (auth.role() = 'service_role')
+WITH CHECK (auth.role() = 'service_role');
+```
+
+적용 후 보안 어드바이저 재확인 결과 `travel_guides` 관련 `rls_disabled`
+항목은 사라짐. Aiven 쪽 `migrations/aiven_init.sql`에는 이 정책을 옮기지
+않음 — Aiven은 PostgREST/anon 키 접근 모델 자체가 없어(순수 Postgres),
+RLS 정책이 적용될 대상이 없음.
