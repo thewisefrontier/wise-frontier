@@ -68,7 +68,7 @@ def fetch_google_trends(timeout: int = 8) -> list:
     results = []
     for geo, (country_ko, region) in GTRENDS_COUNTRIES.items():
         try:
-            url = f"https://trends.google.com/trends/trendingsearches/daily/rss?geo={geo}"
+            url = f"https://trends.google.com/trending/rss?geo={geo}"
             feed = feedparser.parse(url, request_headers=HEADERS)
             if not feed.entries:
                 continue
