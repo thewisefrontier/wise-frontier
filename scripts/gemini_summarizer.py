@@ -1399,17 +1399,22 @@ def merge_trend_article(existing: dict, new_title: str, new_body: str, note: str
     headline = _generate_update_headline(delta)
     new_log = existing_log + [{"timestamp": now_str, "note": note, **({"headline": headline} if headline else {})}]
     try:
+        patch_fields = {
+            "summary_ko": new_summary,
+            # created_at은 최초 게시일 보호 — 업데이트 시 변경 금지
+            "update_log": new_log,
+        }
         res = requests.patch(
             f"{_sb_url()}?id=eq.{art_id}",
             headers=_sb_headers(),
-            json={
-                "summary_ko": new_summary,
-                # created_at은 최초 게시일 보호 — 업데이트 시 변경 금지
-                "update_log": new_log,
-            },
+            json=patch_fields,
             timeout=15
         )
-        return res.status_code in (200, 204)
+        ok = res.status_code in (200, 204)
+        if ok:
+            from db import mirror_article_update
+            mirror_article_update(art_id, patch_fields)
+        return ok
     except Exception as e:
         print(f"    → 병합 실패: {e}")
         return False

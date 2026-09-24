@@ -19,13 +19,9 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq postgresql-client-17
 
-      - name: 현황 조회
+      - name: 미발행분 최신 유입 확인
         env:
           PGCONNSTR: ${{ secrets.AIVEN_SERVICE_URI }}
         run: |
-          psql "$PGCONNSTR" -c "select pg_size_pretty(pg_database_size(current_database())) db_size;"
-          psql "$PGCONNSTR" -c "select is_published, count(*) from articles group by is_published;"
-          psql "$PGCONNSTR" -c "select pg_size_pretty(pg_total_relation_size('articles')) articles_size, pg_size_pretty(pg_total_relation_size('raw_candidates')) raw_candidates_size;"
-          psql "$PGCONNSTR" -c "select min(created_at), max(created_at) from articles where is_published=false;"
-          psql "$PGCONNSTR" -c "select min(created_at), max(created_at) from articles where is_published=true;"
-          psql "$PGCONNSTR" -c "select count(*) from raw_candidates;"
+          psql "$PGCONNSTR" -c "select id, created_at, source from articles where is_published=false order by id desc limit 10;"
+          psql "$PGCONNSTR" -c "select count(*) from articles where is_published=false;"

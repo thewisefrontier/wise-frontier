@@ -9,9 +9,16 @@ on:
   # 2026-09-23: 매일 → 주 1회(일요일)로 변경(사용자 결정). Supabase 무료 플랜
   # 이그레스 한도(5GB) 초과로 유예기간 진입 — pg_dump는 매번 DB 전체를 밖으로
   # 빼내(압축 전 수백 MB) 매일이면 이것만으로 한도에 육박한다. 그날 덤프는
-  # IO 스로틀 상태에서 71분 걸리며 사이트까지 느려지게 했다. cron-job.org는
-  # 그대로 매일 호출하고, 여기서 요일로 거른다. 급하게 따로 백업이 필요하면
-  # 수동 실행 시 force=true.
+  # IO 스로틀 상태에서 71분 걸리며 사이트까지 느려지게 했다.
+  #
+  # 2026-09-24: 주 1회로도 여전히 이그레스를 태우는 근본 원인(DB 전체 pg_dump)
+  # 은 그대로라 완전히 중단한다(사용자 결정) — 대신 Aiven 스탠바이의 실시간
+  # 미러(발행된 NewsFinal 자체 기사만, article_store.insert_final_article
+  # 경유 — 수집 원자재는 raw_candidates로 분리돼 애초에 미러 대상 아님)가
+  # 백업 역할을 대신한다. 트레이드오프: 미러는 실시간이라 특정 시점으로
+  # 되돌리는 복구(예: 실수로 지운 데이터)는 안 된다 — 사용자가 감수하기로 함.
+  # cron-job.org는 그대로 매일 호출하지만 아래 gate가 항상 건너뛴다.
+  # 급하게 필요하면 수동 실행 시 force=true로 여전히 돌릴 수 있다.
   workflow_dispatch:
     inputs:
       force:
@@ -33,8 +40,8 @@ jobs:
         env:
           FORCE: ${{ inputs.force }}
         run: |
-          if [ "$FORCE" = "true" ] || [ "$(date -u +%u)" = "7" ]; then echo "run=true" >> "$GITHUB_OUTPUT"
-          else echo "run=false" >> "$GITHUB_OUTPUT"; echo "일요일 아님 — 주 1회 백업이라 건너뜀"; fi
+          if [ "$FORCE" = "true" ]; then echo "run=true" >> "$GITHUB_OUTPUT"
+          else echo "run=false" >> "$GITHUB_OUTPUT"; echo "pg_dump 백업 중단됨(2026-09-24, 사용자 결정) — Aiven 실시간 미러로 대체. 수동 실행 시 force=true로 우회 가능"; fi
 
   backup:
     needs: gate

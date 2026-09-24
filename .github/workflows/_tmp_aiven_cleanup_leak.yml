@@ -1,0 +1,39 @@
+name: _tmp aiven cleanup leak
+
+# 2026-09-24 일회성: Aiven articles에 미발행 원자재가 99,687건(359MB) 새어
+# 들어가 있었다(오늘 아침 Aiven 미러가 발행 여부 구분 없이 전부 미러링하던
+# 시기 + 초기 대량 이전분). 지금은 발행분만 미러링하도록 고쳤고
+# (article_store.insert_final_article), 원자재 자체도 raw_candidates로
+# 분리돼 Aiven 미러 대상에서 아예 빠졌다. 남아있는 유출분만 정리한다.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: PostgreSQL 17 클라이언트 설치
+        run: |
+          sudo install -d /usr/share/postgresql-common/pgdg
+          sudo curl -sSf -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc
+          echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-client-17
+
+      - name: 미발행 원자재 삭제 + VACUUM
+        env:
+          PGCONNSTR: ${{ secrets.AIVEN_SERVICE_URI }}
+        run: |
+          psql "$PGCONNSTR" -v ON_ERROR_STOP=1 <<'SQL'
+          \timing on
+          SELECT count(*) AS before_unpublished FROM articles WHERE is_published = false;
+          DELETE FROM articles WHERE is_published = false;
+          VACUUM (VERBOSE) articles;
+          SELECT is_published, count(*) FROM articles GROUP BY is_published;
+          SELECT pg_size_pretty(pg_total_relation_size('articles')) articles_size,
+                 pg_size_pretty(pg_database_size(current_database())) db_size;
+          SQL

@@ -804,24 +804,31 @@ def update_article(article_id, title_ko, summary_ko, note: str = "업데이트",
     # 주체국(country)을 관련국(countries)에 항상 병합 — 결함 A 재발 방지
     merged_countries = ([country] + [c for c in (countries or []) if c and c != country]) if country else (countries or [])
 
+    patch_fields = {
+        "title_ko": title_ko,
+        # title_en은 건드리지 않는다(2026-09-03) — 예전엔 title_ko 복사값을
+        # 매번 덮어썼는데, 이제 title_en에 실제 번역이 들어갈 수 있어서 그걸
+        # 한국어 업데이트마다 지워버리는 꼴이 된다.
+        "summary_ko": summary_ko,
+        "created_at": now_str,
+        "update_log": new_log,
+        **( {"countries": merged_countries} if merged_countries else {} ),
+        **( {"summary_3lines": summary_3lines} if summary_3lines is not None else {} ),
+        **( {"investment_idea": investment_idea} if investment_idea is not None else {} ),
+    }
     res = requests.patch(
         f"{_sb_url()}?id=eq.{article_id}",
         headers=_sb_headers(),
-        json={
-            "title_ko": title_ko,
-            # title_en은 건드리지 않는다(2026-09-03) — 예전엔 title_ko 복사값을
-            # 매번 덮어썼는데, 이제 title_en에 실제 번역이 들어갈 수 있어서 그걸
-            # 한국어 업데이트마다 지워버리는 꼴이 된다.
-            "summary_ko": summary_ko,
-            "created_at": now_str,
-            "update_log": new_log,
-            **( {"countries": merged_countries} if merged_countries else {} ),
-            **( {"summary_3lines": summary_3lines} if summary_3lines is not None else {} ),
-            **( {"investment_idea": investment_idea} if investment_idea is not None else {} ),
-        },
+        json=patch_fields,
         timeout=15
     )
-    return res.status_code in (200, 204)
+    ok = res.status_code in (200, 204)
+    # 2026-09-24: 최초 발행만 Aiven에 미러링되고 이후 수정(클러스터에 새
+    # 소스가 붙어 본문이 갱신되는 이 경로)은 안 따라가고 있었다 — 발견 즉시 연결.
+    if ok:
+        from db import mirror_article_update
+        mirror_article_update(article_id, patch_fields)
+    return ok
 
 
 def update_article_count(article_id, new_count):
@@ -831,7 +838,11 @@ def update_article_count(article_id, new_count):
         json={"score": new_count},
         timeout=15
     )
-    return res.status_code in (200, 204)
+    ok = res.status_code in (200, 204)
+    if ok:
+        from db import mirror_article_update
+        mirror_article_update(article_id, {"score": new_count})
+    return ok
 
 
 # ── article_keywords (search_followup용 구조화 키워드) ──────────────────
@@ -1949,12 +1960,15 @@ except Exception:
 
 
 def update_article_fields(article_id: int, fields: dict):
-    requests.patch(
+    res = requests.patch(
         f"{_sb_url()}?id=eq.{article_id}",
         headers=_sb_headers(),
         json=fields,
         timeout=15
     )
+    if res.status_code in (200, 204):
+        from db import mirror_article_update
+        mirror_article_update(article_id, fields)
 
 
 _FENCE_RE = re.compile(r"```(?:json)?", re.I)

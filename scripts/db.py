@@ -117,6 +117,37 @@ def _mirror(sql: str, params: tuple = ()):
 
 
 
+# 2026-09-24: 발행 기사(articles, is_published=true)의 "최초 저장"은
+# article_store._mirror_final_article()이 미러링하지만, 그 뒤 벌어지는
+# 수정(클러스터에 새 소스가 붙어 본문이 갱신되는 update_article, 트렌드
+# 기사에 새 전개를 이어붙이는 merge_trend_article 등)은 안 따라가고 있었다
+# (사용자 지적: "지금 정확히 백업하는 게 어떤거야?"). PostgREST PATCH를
+# 부르는 모든 writer 함수가 각자 이 헬퍼로 같은 필드를 Aiven에도 반영한다.
+_AIVEN_ARTICLES_COLUMNS = {
+    "id", "title_en", "title_ko", "summary_en", "summary_ko", "url", "source",
+    "category", "subcategory", "region", "country", "country_flag", "score",
+    "created_at", "sent_telegram", "posted_blog", "full_text", "countries",
+    "is_published", "image_url", "view_count", "first_published_at", "update_log",
+    "byline", "company_scanned", "dedup_reviewed", "is_travel", "summary_3lines",
+    "investment_idea", "source_published_at", "source_data", "image_credit",
+    "continuation_of_id", "summary_3lines_en", "investment_idea_en", "noindex",
+}
+_AIVEN_JSON_COLUMNS = {"update_log", "source_data"}
+
+
+def mirror_article_update(article_id: int, fields: dict) -> None:
+    """발행 기사 수정을 Aiven에도 반영한다. 원자재(raw_candidates)나 미발행
+    기사는 애초에 Aiven에 없으므로 ON CONFLICT 대신 존재하는 행만 건드리는
+    평범한 UPDATE — 없는 id면 0행 영향으로 조용히 무해하게 끝난다."""
+    from psycopg2.extras import Json
+    cols = [c for c in fields if c in _AIVEN_ARTICLES_COLUMNS and c != "id"]
+    if not cols or not article_id:
+        return
+    set_clause = ",".join(f"{c}=%s" for c in cols)
+    values = tuple(Json(fields[c]) if c in _AIVEN_JSON_COLUMNS and fields[c] is not None else fields[c] for c in cols)
+    _mirror(f"UPDATE articles SET {set_clause} WHERE id = %s", values + (article_id,))
+
+
 def is_url_exists(url: str, table: str = "articles") -> bool:
     res = requests.get(
         _url(table),
