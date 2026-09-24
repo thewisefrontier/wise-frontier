@@ -1,0 +1,31 @@
+name: _tmp aiven check
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: PostgreSQL 17 클라이언트 설치
+        run: |
+          sudo install -d /usr/share/postgresql-common/pgdg
+          sudo curl -sSf -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc
+          echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-client-17
+
+      - name: 현황 조회
+        env:
+          PGCONNSTR: ${{ secrets.AIVEN_SERVICE_URI }}
+        run: |
+          psql "$PGCONNSTR" -c "select pg_size_pretty(pg_database_size(current_database())) db_size;"
+          psql "$PGCONNSTR" -c "select is_published, count(*) from articles group by is_published;"
+          psql "$PGCONNSTR" -c "select pg_size_pretty(pg_total_relation_size('articles')) articles_size, pg_size_pretty(pg_total_relation_size('raw_candidates')) raw_candidates_size;"
+          psql "$PGCONNSTR" -c "select min(created_at), max(created_at) from articles where is_published=false;"
+          psql "$PGCONNSTR" -c "select min(created_at), max(created_at) from articles where is_published=true;"
+          psql "$PGCONNSTR" -c "select count(*) from raw_candidates;"
