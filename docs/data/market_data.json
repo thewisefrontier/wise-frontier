@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-24 10:26",
+  "updated_at": "2026-09-24 10:36",
   "indices": [
     {
       "name": "S&P 500",
@@ -68,8 +68,8 @@
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
       "price": 5795.14,
-      "change_pct": -0.33,
-      "up": false
+      "change_pct": 0.0,
+      "up": true
     },
     {
       "name": "USD/NGN",
@@ -166,8 +166,8 @@
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
         "price": 5795.14,
-        "change_pct": -0.33,
-        "up": false
+        "change_pct": 0.0,
+        "up": true
       }
     ],
     "fx": [
