@@ -125,8 +125,8 @@ except Exception:
             "Content-Type": "application/json",
             "Prefer": "return=representation",
         }
-    def _sb_url():
-        return f"{SUPABASE_URL}/rest/v1/articles"
+    def _sb_url(table="articles"):
+        return f"{SUPABASE_URL}/rest/v1/{table}"
 
 
 def send_to_newsfinal_channel(article_id, title, body, is_update=False):
@@ -282,13 +282,16 @@ def get_today_articles(limit=300):
     offset = 0
     batch = 500
     while len(articles) < limit:
+        # 2026-09-24: 원자재가 articles에서 raw_candidates로 옮겨갔다(하루 6만
+        # 건 넘는 원자재가 발행 기사용 무거운 스키마를 쓰던 문제 — 발행
+        # 전환율 약 0.06%). raw_candidates엔 source가 전부 원자재 수집기라
+        # source neq.NewsFinal 조건은 더 이상 필요 없지만, 무해하니 유지.
         res = requests.get(
-            _sb_url(),
+            _sb_url("raw_candidates"),
             headers={**_sb_headers(), "Range": f"{offset}-{offset+batch-1}"},
             params={
                 "select": "id,title_ko,title_en,summary_ko,summary_en,source,category,subcategory,country,region,url,created_at,score,source_published_at",
                 "sent_telegram": "eq.1",
-                "source": "neq.NewsFinal",
                 "created_at": f"gte.{since}",
                 "order": "score.desc,created_at.desc",
             },
@@ -347,7 +350,7 @@ def get_today_articles(limit=300):
         try:
             source_filter = ",".join(f'"{s}"' for s in QUOTA_SOURCE_NAMES)
             quota_res = requests.get(
-                _sb_url(),
+                _sb_url("raw_candidates"),
                 headers=_sb_headers(),
                 params={
                     "select": "id,title_ko,title_en,summary_ko,summary_en,source,category,subcategory,country,region,url,created_at,score,source_published_at",
@@ -2643,11 +2646,10 @@ def search_followup(title: str, country: str, keyword_ko: str = "", keyword_en: 
     if kw:
         try:
             res = requests.get(
-                _sb_url(),
+                _sb_url("raw_candidates"),  # 2026-09-24: 원자재가 raw_candidates로 이전
                 headers=_sb_headers(),
                 params={
                     "select": "title_en,title_ko,summary_en,summary_ko,full_text,source",
-                    "source": "neq.NewsFinal",
                     "created_at": f"gte.{since}",
                     "or": f"(title_ko.ilike.*{kw}*,title_en.ilike.*{kw}*)",
                     "order": "created_at.desc",

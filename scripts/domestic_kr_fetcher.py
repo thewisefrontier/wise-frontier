@@ -41,7 +41,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from db import init_db, is_url_exists, insert_article
+from db import init_db, is_url_exists, insert_raw_candidate
 from text_crawl import crawl_full_text, clean_text, extract_og_image_and_caption, resolve_google_news_url
 
 try:
@@ -344,7 +344,7 @@ def _save_candidate(title: str, link: str, domain: str, src_published: str, tag:
     """제목·링크가 유효하면 크롤링 후 저장. 저장했으면 True."""
     if not title or not link:
         return False
-    if is_url_exists(link):
+    if is_url_exists(link, table="raw_candidates"):
         return False
     if title in seen_titles:
         return False
@@ -388,15 +388,12 @@ def _save_candidate(title: str, link: str, domain: str, src_published: str, tag:
             label = extract_credit_label(caption, domain)
             image_credit = f"{caption}\n제공: {label}" if caption else domain
 
-    article_id = insert_article(
+    article_id = insert_raw_candidate(
         title_en="", title_ko=title,
         summary_en="", summary_ko=full_text[:2000],
         url=link, source=f"DomesticKR:{domain}", category=_infer_category(title, tag),
-        subcategory="", region="korea",
-        country="한국", country_flag="🇰🇷",
-        score=0, full_text=full_text,
-        countries=["한국"],
-        is_published=False,
+        subcategory="", region="korea", country="한국",
+        full_text=full_text,
         image_url=image_url,
         image_credit=image_credit or None,
         source_published_at=src_published or None,

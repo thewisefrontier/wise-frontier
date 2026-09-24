@@ -185,8 +185,8 @@ except Exception:
             "Content-Type": "application/json",
             "Prefer": "return=representation",
         }
-    def _sb_url():
-        return f"{SUPABASE_URL}/rest/v1/articles"
+    def _sb_url(table="articles"):
+        return f"{SUPABASE_URL}/rest/v1/{table}"
 
 
 # gemini_writer.py의 save_article_keywords()와 동일한 목적(2026-09-07 도입) —
@@ -221,9 +221,10 @@ def save_article_keywords(article_id, keyword_ko: str = "", keyword_en: str = ""
 
 
 def get_articles_to_summarize(limit: int) -> list:
+    # 2026-09-24: 원자재가 articles에서 raw_candidates로 옮겨갔다.
     since = (now_kst() - timedelta(hours=24)).strftime("%Y-%m-%d %H:%M")
     res = requests.get(
-        _sb_url(),
+        _sb_url("raw_candidates"),
         headers=_sb_headers(),
         params={
             "select": "id,url,title_en,title_ko,summary_en,summary_ko,source,category,subcategory,region,country,full_text",
@@ -235,7 +236,7 @@ def get_articles_to_summarize(limit: int) -> list:
         timeout=30
     )
     short_res = requests.get(
-        _sb_url(),
+        _sb_url("raw_candidates"),
         headers=_sb_headers(),
         params={
             "select": "id,url,title_en,title_ko,summary_en,summary_ko,source,category,subcategory,region,country,full_text",
@@ -269,7 +270,7 @@ def update_summary(article_id: int, summary_ko: str):
             print(f"  ⛔ [raw JSON 본문] 업데이트 차단: id={article_id}")
             return
     requests.patch(
-        f"{_sb_url()}?id=eq.{article_id}",
+        f"{_sb_url('raw_candidates')}?id=eq.{article_id}",
         headers=_sb_headers(),
         json={"summary_ko": summary_ko},
         timeout=15
@@ -845,7 +846,7 @@ def _fetch_source_details(rows: list) -> list:
         return rows or []
     try:
         res = requests.get(
-            _sb_url(),
+            _sb_url("raw_candidates"),  # 2026-09-24: 원자재가 raw_candidates로 이전
             headers=_sb_headers(),
             params={
                 "select": "id,url,full_text,title_en,summary_en,source_published_at",

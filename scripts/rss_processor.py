@@ -23,7 +23,7 @@ from rss_fetcher import (
 )
 from geo_detect import detect_region, detect_country, detect_countries, GLOBAL_COUNTRIES
 from db import (
-    insert_article, queue_claim_batch, queue_delete, queue_mark_failed, existing_urls,
+    insert_raw_candidate, queue_claim_batch, queue_delete, queue_mark_failed, existing_raw_urls,
 )
 
 MAX_PROCESS_PER_RUN = int(os.getenv("MAX_PROCESS_PER_RUN", "150"))
@@ -136,11 +136,11 @@ def process_row(row: dict) -> bool:
     tag_source_data = {"tags": raw_tags} if raw_tags else None
 
     if soft_noise:
-        insert_article(
+        insert_raw_candidate(
             title_en=title, title_ko=title_ko, summary_en=summary_en, summary_ko=summary_ko,
             url=link, source=name, category=category, subcategory=subcategory,
-            region=region, country=country_name, country_flag=country_flag,
-            score=0, full_text=full_text, countries=country_names, is_published=False,
+            region=region, country=country_name,
+            full_text=full_text,
             source_published_at=src_published, source_data=tag_source_data,
         )
         print(f"[SOFT] [{category}] [{country_name}] {title_ko[:50]}")
@@ -149,11 +149,11 @@ def process_row(row: dict) -> bool:
     # sent_telegram=1은 이 코드베이스에서 "기사 재료로 쓸 수 있는 원자재" 표시다
     # (gemini_writer.get_today_articles 등이 eq.1로 거름 — market_news_fetcher도
     # 발송 없이 세운다). 텔레그램 실제 발송은 main()이 소수만 골라 따로 한다.
-    article_id = insert_article(
+    article_id = insert_raw_candidate(
         title_en=title, title_ko=title_ko, summary_en=summary_en, summary_ko=summary_ko,
         url=link, source=name, category=category, subcategory=subcategory,
-        region=region, country=country_name, country_flag=country_flag,
-        score=0, full_text=full_text, countries=country_names, is_published=False,
+        region=region, country=country_name,
+        full_text=full_text,
         source_published_at=src_published, source_data=tag_source_data, sent_telegram=1,
     )
     if article_id <= 0:
@@ -167,10 +167,11 @@ def main():
     batch = queue_claim_batch(MAX_PROCESS_PER_RUN)
     print(f"[처리] 대기 {len(batch)}건 (최대 {MAX_PROCESS_PER_RUN})")
 
-    # "이미 articles에 있는 링크인지"는 배치 전체를 한 번의 IN 쿼리로 확인한다(수집기가
-    # 이 확인을 안 하고 그냥 쌓기만 하므로 — rss_collector.py 참고). 이미 있으면 번역·
-    # 크롤링·텔레그램 없이 큐에서만 지운다(그 링크는 이전 주기에 이미 정상 발행됐다는 뜻).
-    already = existing_urls([r["link"] for r in batch])
+    # "이미 raw_candidates에 있는 링크인지"는 배치 전체를 한 번의 IN 쿼리로 확인한다
+    # (수집기가 이 확인을 안 하고 그냥 쌓기만 하므로 — rss_collector.py 참고). 이미
+    # 있으면 번역·크롤링·텔레그램 없이 큐에서만 지운다(그 링크는 이전 주기에 이미
+    # 후보로 들어갔다는 뜻 — RSS 피드가 같은 항목을 여러 사이클 계속 다시 보여줌).
+    already = existing_raw_urls([r["link"] for r in batch])
     dup = [r for r in batch if r["link"] in already]
     batch = [r for r in batch if r["link"] not in already]
     for row in dup:

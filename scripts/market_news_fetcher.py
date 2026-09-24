@@ -35,7 +35,7 @@ from rapidfuzz import fuzz
 sys.stdout.reconfigure(encoding='utf-8')
 load_dotenv()
 
-from db import init_db, is_url_exists, insert_article, mark_sent_telegram, now_kst
+from db import init_db, is_url_exists, insert_raw_candidate, now_kst
 
 init_db()
 
@@ -148,7 +148,7 @@ def main():
         if not headline or not url:
             continue
 
-        if is_url_exists(url):
+        if is_url_exists(url, table="raw_candidates"):
             continue
         if is_duplicate(headline, seen_titles):
             print(f"  [SKIP] 유사 기사 중복 — {headline[:50]}")
@@ -162,24 +162,20 @@ def main():
         title_ko = translate_ko(headline, 500) or headline
         summary_ko = translate_ko(summary_en, 4500) if summary_en else ""
 
-        article_id = insert_article(
+        # gemini_writer.py의 클러스터링 후보 조회(get_today_articles)가
+        # sent_telegram=eq.1인 원자재만 뽑아간다 — 삽입 시 바로 세운다
+        # (2026-09-04 실측: 별도 mark 호출이 빠져 42건이 영원히 후보 풀 밖에
+        # 방치됐던 사고 — 2026-09-24 raw_candidates 분리하며 삽입 시점에
+        # 합쳐 그 빠뜨림 자체가 구조적으로 불가능하게 함).
+        article_id = insert_raw_candidate(
             title_en=headline, title_ko=title_ko,
             summary_en=summary_en, summary_ko=summary_ko,
             url=url, source=f"{source_name} (via {SOURCE_TAG})",
             category=CATEGORY, subcategory=SUBCATEGORY, region=REGION,
-            country=COUNTRY, country_flag=COUNTRY_FLAG,
-            score=0, full_text="",
-            countries=[COUNTRY],
-            is_published=False,
-            source_published_at=published_at,
+            country=COUNTRY,
+            source_published_at=published_at, sent_telegram=1,
         )
         if article_id > 0:
-            # gemini_writer.py의 클러스터링 후보 조회(get_today_articles)가
-            # sent_telegram=eq.1인 원자재만 뽑아간다(rss_fetcher.py는 텔레그램
-            # 발송 성공 시 mark_sent_telegram을 호출해 이 플래그를 세움). 이
-            # 호출이 빠져있으면 여기서 넣은 기사는 영원히 후보 풀에 안 잡힌다
-            # (2026-09-04 실측 — 42건 전부 sent_telegram=0으로 방치됨).
-            mark_sent_telegram(article_id)
             inserted += 1
             print(f"  [OK] {title_ko[:50]}")
         else:

@@ -108,9 +108,13 @@ def _sb_url(table="articles"):
 
 
 def get_domestic_candidates(hours: int = CANDIDATE_WINDOW_HOURS, limit: int = 300) -> list:
+    # 2026-09-24: domestic_kr_fetcher.py의 원자재가 articles에서 raw_candidates로
+    # 옮겨갔다(하루 6만 건 넘는 원자재가 발행 기사용 무거운 스키마를 쓰던 문제 —
+    # articles.source like 'DomesticKR:*'는 이제 여기 없다). 이 함수가 만드는
+    # "DomesticKR-Synth" 결과물은 완성품이라 여전히 articles에 그대로 쓴다.
     since = (now_kst() - timedelta(hours=hours)).strftime("%Y-%m-%d %H:%M")
     res = requests.get(
-        _sb_url(),
+        _sb_url("raw_candidates"),
         headers=_sb_headers(),
         params={
             "select": "id,title_ko,summary_ko,full_text,category,country,region,url,image_url,image_credit,created_at",

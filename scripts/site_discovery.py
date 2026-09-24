@@ -37,7 +37,7 @@ load_dotenv()
 
 import newspaper
 
-from db import init_db, is_url_exists, insert_article
+from db import init_db, is_url_exists, insert_raw_candidate
 from geo_detect import detect_region, detect_countries, GLOBAL_COUNTRIES
 from text_crawl import crawl_full_text, clean_text
 
@@ -173,7 +173,7 @@ def run():
 
         for url in candidates:
             scanned += 1
-            if is_url_exists(url):
+            if is_url_exists(url, table="raw_candidates"):
                 continue
 
             try:
@@ -222,15 +222,12 @@ def run():
             except Exception:
                 summary_ko = ""
 
-            article_id = insert_article(
+            article_id = insert_raw_candidate(
                 title_en=title, title_ko=title_ko,
                 summary_en=summary_en, summary_ko=summary_ko,
                 url=url, source=f"SiteDiscovery:{name}", category="글로벌",
-                subcategory="", region=detect_region(name),
-                country=country_name, country_flag=country_flag,
-                score=0, full_text=full_text,
-                countries=country_names,
-                is_published=False,
+                subcategory="", region=detect_region(name), country=country_name,
+                full_text=full_text,
                 source_published_at=src_published,
                 source_data={"tags": normalize_tags([name], limit=10)},
             )

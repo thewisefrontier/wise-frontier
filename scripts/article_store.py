@@ -41,6 +41,48 @@ import requests
 from http_retry import get_session
 requests = get_session()
 
+# 2026-09-24: Aiven 스탠바이 이중 쓰기 — 발행 기사(NewsFinal 최종 기사)는 전부
+# 이 함수를 거치는데, 정작 Aiven 미러 코드는 db.py의 insert_article()에만
+# 붙어 있었다. 그런데 db.insert_article()을 실제로 is_published=True로 부르는
+# 곳은 코드 전체에 단 한 곳도 없었다(확인함) — 발행 기사는 전부 이 함수를
+# 쓴다. 즉 병합된 지 하루가 지나도록 Aiven엔 발행 기사가 단 한 건도
+# 미러링되지 않고 있었다. db.py의 락+timeout이 걸린 미러 함수를 그대로
+# 재사용한다(중복 구현 대신 — 이 모듈이 "환경변수는 독립적으로 읽는다"는
+# 원칙은 그대로 두되, Aiven 미러는 프로세스 전체에 하나만 있어야 하는
+# 공유 자원이라 예외).
+from db import _mirror
+
+# db.insert_article()의 미러 INSERT와 동일한 원칙(같은 id로 넣어야 자식 테이블
+# 미러링 시 id가 어긋나지 않음)이지만, 여긴 payload가 writer마다 달라 컬럼이
+# 고정이 아니다 — PostgREST가 돌려준 실제 저장 행(모든 컬럼에 기본값까지
+# 적용된 것)을 그대로 쓰되, Aiven 스키마(migrations/aiven_init.sql)에 실제
+# 존재하는 컬럼만 화이트리스트로 걸러 삽입한다(모르는 컬럼을 그대로 SQL
+# 식별자로 쓰면 인젝션 위험 — payload는 내부 생성값이라 위험은 낮지만
+# 방어적으로 간다).
+_AIVEN_ARTICLES_COLUMNS = {
+    "id", "title_en", "title_ko", "summary_en", "summary_ko", "url", "source",
+    "category", "subcategory", "region", "country", "country_flag", "score",
+    "created_at", "sent_telegram", "posted_blog", "full_text", "countries",
+    "is_published", "image_url", "view_count", "first_published_at", "update_log",
+    "byline", "company_scanned", "dedup_reviewed", "is_travel", "summary_3lines",
+    "investment_idea", "source_published_at", "source_data", "image_credit",
+    "continuation_of_id", "summary_3lines_en", "investment_idea_en", "noindex",
+}
+_AIVEN_JSON_COLUMNS = {"update_log", "source_data"}
+
+
+def _mirror_final_article(row: dict) -> None:
+    from psycopg2.extras import Json
+    cols = [c for c in row if c in _AIVEN_ARTICLES_COLUMNS]
+    if "id" not in cols:
+        return
+    values = tuple(Json(row[c]) if c in _AIVEN_JSON_COLUMNS and row[c] is not None else row[c] for c in cols)
+    placeholders = ",".join(["%s"] * len(cols))
+    _mirror(
+        f"INSERT INTO articles ({','.join(cols)}) VALUES ({placeholders}) ON CONFLICT (id) DO NOTHING",
+        values,
+    )
+
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 
@@ -228,6 +270,8 @@ def insert_final_article(payload: dict) -> int:
             new_id = data[0].get("id", -1) if data else -1
             if new_id > 0:
                 _supersede_older_trends(payload, new_id)
+                if data[0].get("is_published"):
+                    _mirror_final_article(data[0])
             return new_id
         print(f"  ⚠️ 기사 저장 실패: {res.status_code} — {res.text[:300]}")
     except Exception as e:

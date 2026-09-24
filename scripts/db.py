@@ -117,9 +117,9 @@ def _mirror(sql: str, params: tuple = ()):
 
 
 
-def is_url_exists(url: str) -> bool:
+def is_url_exists(url: str, table: str = "articles") -> bool:
     res = requests.get(
-        _url(),
+        _url(table),
         headers=_headers(),
         params={"select": "id", "url": f"eq.{url}", "limit": "1"},
         timeout=10
@@ -146,6 +146,68 @@ def existing_urls(urls: list, chunk: int = 50) -> set:
         if res.status_code in (200, 206):
             found.update(r["url"] for r in res.json())
     return found
+
+
+def _raw_url():
+    return _url("raw_candidates")
+
+
+def existing_raw_urls(urls: list, chunk: int = 50) -> set:
+    """existing_urls()와 동일하되 raw_candidates 대상 — 원자재 링크가 이미
+    후보 풀에 있는지 확인할 때 쓴다(2026-09-24 원자재 전용 테이블 분리)."""
+    found = set()
+    for i in range(0, len(urls), chunk):
+        part = urls[i:i + chunk]
+        quoted = ",".join(f'"{u}"' for u in part)
+        res = requests.get(
+            _raw_url(), headers=_headers(),
+            params={"select": "url", "url": f"in.({quoted})"}, timeout=10,
+        )
+        if res.status_code in (200, 206):
+            found.update(r["url"] for r in res.json())
+    return found
+
+
+def insert_raw_candidate(
+    title_en, title_ko, summary_en, summary_ko, url, source, category, subcategory,
+    region, country, score=0, full_text="", source_published_at=None,
+    source_data=None, image_url=None, image_credit=None, sent_telegram=0,
+) -> int:
+    """클러스터링 후보(원자재) 전용 삽입 — 2026-09-24 신설.
+
+    예전엔 db.insert_article()(발행 기사와 같은 30여 컬럼짜리 articles 스키마)에
+    is_published=False로 넣었다. 실제로는 이 함수를 부르는 7개 수집기 전부가
+    is_published=True를 쓴 적이 한 번도 없어(확인함) db.insert_article()은
+    사실상 전량 원자재 전용 함수였다 — 그런데도 발행 기사용 무거운 스키마의
+    행당 오버헤드(byline·investment_idea·update_log 등 미사용 컬럼)를 하루
+    6만 건 넘게 그대로 지고 있었다(발행 전환율 약 0.06% — 실측). raw_candidates는
+    클러스터링에 실제 쓰는 컬럼만 남긴 좁은 테이블이다. Aiven에는 미러링하지
+    않는다 — 이 볼륨을 그대로 미러링하면 Aiven 무료 1GB도 며칠 안에 찬다."""
+    payload = {
+        "title_en": title_en or "", "title_ko": title_ko,
+        "summary_en": summary_en, "summary_ko": summary_ko,
+        "url": url, "source": source, "category": category, "subcategory": subcategory,
+        "region": region, "country": country, "score": score,
+        "full_text": full_text or None,
+        "created_at": now_kst().strftime("%Y-%m-%d %H:%M"),
+        "sent_telegram": sent_telegram,
+    }
+    if source_published_at:
+        payload["source_published_at"] = source_published_at
+    if source_data:
+        payload["source_data"] = source_data
+    if image_url:
+        payload["image_url"] = image_url
+    if image_credit:
+        payload["image_credit"] = image_credit
+    headers = {**_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}
+    res = requests.post(_raw_url() + "?select=id", headers=headers, json=payload, timeout=15)
+    if res.status_code in (200, 201):
+        data = res.json()
+        return data[0].get("id", -1) if data else -1
+    elif res.status_code == 409:
+        return -1  # 중복
+    return -1
 
 
 def insert_article(
@@ -458,17 +520,18 @@ def hydrate_full_text(rows: list, check_db: bool = True, workers: int = 8) -> in
     2026-09-23부터 RSS 처리기는 본문을 저장하지 않는다 — 하루 2만 건 넘는 원자재
     본문이 무료 DB(500MB)를 넘기고 건당 크롤링이 처리량의 병목이었다. 실제로
     기사화되는 소수 행만 여기서 DB 저장분 → 없으면 크롤링 순으로 채우고, 크롤링
-    결과는 다시 저장해 다음 사이클이 재사용한다(96시간 뒤 cleanup_stale_raw가 비움).
-    크롤링 실패는 ""로 저장해 같은 링크를 매 사이클 다시 긁지 않는다. 채운 건수 반환."""
-    todo = [r for r in rows if isinstance(r, dict) and r.get("id") and r.get("full_text") is None
-            and (r.get("source") or "") != "NewsFinal"]
+    결과는 다시 저장해 다음 사이클이 재사용한다(보존 기간 뒤 cleanup_stale_raw가
+    비움). 크롤링 실패는 ""로 저장해 같은 링크를 매 사이클 다시 긁지 않는다.
+    2026-09-24: 대상 테이블이 raw_candidates로 바뀌었다(원자재 전용 분리) —
+    Aiven 미러는 하지 않는다(원자재는 애초에 미러링 대상이 아님). 채운 건수 반환."""
+    todo = [r for r in rows if isinstance(r, dict) and r.get("id") and r.get("full_text") is None]
     if not todo:
         return 0
 
     if check_db:
         ids = ",".join(str(r["id"]) for r in todo)
         try:
-            res = requests.get(_url(), headers=_headers(), timeout=15,
+            res = requests.get(_raw_url(), headers=_headers(), timeout=15,
                                params={"select": "id,full_text", "id": f"in.({ids})", "full_text": "not.is.null"})
             stored = {x["id"]: x["full_text"] for x in res.json()} if res.status_code in (200, 206) else {}
         except Exception as e:
@@ -500,8 +563,7 @@ def hydrate_full_text(rows: list, check_db: bool = True, workers: int = 8) -> in
         r["full_text"] = text
         filled += bool(text)
         try:
-            requests.patch(f"{_url()}?id=eq.{r['id']}", headers=_headers(), json={"full_text": text}, timeout=15)
-            _mirror("UPDATE articles SET full_text = %s WHERE id = %s", (text, r["id"]))
+            requests.patch(f"{_raw_url()}?id=eq.{r['id']}", headers=_headers(), json={"full_text": text}, timeout=15)
         except Exception:
             pass
     print(f"  [본문 보강] {len(todo)}건 크롤링 → {filled}건 확보")

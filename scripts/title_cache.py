@@ -34,10 +34,12 @@ def _fmt(dt):
 
 
 def _fetch_since(since: str) -> list:
+    # 2026-09-24: 원자재가 articles에서 raw_candidates로 옮겨갔다 — 여긴 전량이
+    # 원자재 수집기라 source neq.NewsFinal 조건은 더 이상 필요 없지만 무해하니 유지.
     rows, offset = [], 0
     while True:
-        res = requests.get(_url(), headers={**_headers(), "Range": f"{offset}-{offset + 999}"}, timeout=30,
-                           params={"select": FIELDS, "source": "neq.NewsFinal", "created_at": f"gte.{since}",
+        res = requests.get(_url("raw_candidates"), headers={**_headers(), "Range": f"{offset}-{offset + 999}"}, timeout=30,
+                           params={"select": FIELDS, "created_at": f"gte.{since}",
                                    "order": "created_at.asc,id.asc"})
         if res.status_code not in (200, 206):
             raise RuntimeError(f"원자재 조회 실패 {res.status_code}: {res.text[:200]}")

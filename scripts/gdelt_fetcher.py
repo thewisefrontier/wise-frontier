@@ -32,7 +32,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from db import init_db, is_url_exists, insert_article, now_kst
+from db import init_db, is_url_exists, insert_raw_candidate, now_kst
 from geo_detect import detect_region, detect_countries, detect_country, GLOBAL_COUNTRIES
 from text_crawl import crawl_full_text, clean_text
 
@@ -234,7 +234,7 @@ def run():
             if age is not None and age > MAX_AGE_DAYS:
                 continue
 
-            if is_url_exists(link):
+            if is_url_exists(link, table="raw_candidates"):
                 continue
             if _is_duplicate_title(title, seen_titles):
                 continue
@@ -277,15 +277,12 @@ def run():
                 except Exception:
                     summary_ko = ""
 
-            article_id = insert_article(
+            article_id = insert_raw_candidate(
                 title_en=title, title_ko=title_ko,
                 summary_en=summary_en, summary_ko=summary_ko,
                 url=link, source=f"GDELT:{source_name}", category=category,
-                subcategory="", region=region,
-                country=country_name, country_flag=country_flag,
-                score=0, full_text=full_text,
-                countries=country_names,
-                is_published=False,
+                subcategory="", region=region, country=country_name,
+                full_text=full_text,
                 source_published_at=src_published or None,
                 source_data={"tags": normalize_tags([query], limit=10)},
             )

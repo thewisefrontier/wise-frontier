@@ -277,3 +277,34 @@ CREATE TABLE user_roles (
     name        text,
     created_at  timestamptz DEFAULT now()
 );
+
+-- =========================================================
+-- raw_candidates (2026-09-24 Supabase에 신설 — 원자재/클러스터링 후보 전용)
+-- Aiven에는 스키마만 맞춰 둔다. 데이터는 미러링하지 않는다(하루 6만 건 넘는
+-- 원자재를 그대로 미러링하면 Aiven 무료 1GB도 며칠 안에 찬다 — db.py의
+-- insert_raw_candidate()는 애초에 Aiven 미러 호출을 하지 않음).
+-- =========================================================
+CREATE TABLE raw_candidates (
+    id                  BIGSERIAL PRIMARY KEY,
+    url                 text NOT NULL UNIQUE,
+    title_en            text,
+    title_ko            text,
+    summary_en          text,
+    summary_ko          text,
+    full_text           text,
+    source              text NOT NULL,
+    category            text,
+    subcategory         text,
+    region              text,
+    country             text,
+    score               integer DEFAULT 0,
+    created_at          text NOT NULL,
+    sent_telegram       integer DEFAULT 0,
+    source_published_at text,
+    source_data         jsonb,
+    image_url           text,
+    image_credit        text
+);
+CREATE INDEX raw_candidates_created_idx ON raw_candidates (created_at);
+CREATE INDEX raw_candidates_source_idx ON raw_candidates (source);
+CREATE INDEX raw_candidates_sent_telegram_idx ON raw_candidates (sent_telegram, created_at);
