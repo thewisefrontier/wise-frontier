@@ -1,18 +1,18 @@
 name: NewsFinal - Export On Edit
 
-# 어드민(docs/admin.html)에서 기사를 저장·발행·삭제하면 export-trigger-worker.js가
-# 이 워크플로우를 workflow_dispatch로 즉시 호출한다. 목적은 단 하나 —
-# docs/data/articles.json(목록 페이지가 읽는 정적 스냅샷)이 본문 페이지
-# (article.html, Supabase 라이브 조회)보다 뒤처지는 시간을 없애는 것.
+# ?�드�?docs/admin.html)?�서 기사�??�?�·발?�·삭?�하�?export-trigger-worker.js가
+# ???�크?�로?��? workflow_dispatch�?즉시 ?�출?�다. 목적?� ???�나 ??
+# docs/data/articles.json(목록 ?�이지가 ?�는 ?�적 ?�냅????본문 ?�이지
+# (article.html, Supabase ?�이�?조회)보다 ?�처지???�간???�애??�?
 #
-# 기존 run.yml(전체 파이프라인, ~30분)과 달리 export_articles.py 한 줄만
-# 돈다 — Supabase 조회 + JSON 저장 + git 커밋뿐이라 보통 1분 안에 끝난다.
-# 사용자 지적(2026-09-10): "본문페이지하고 미리보기 페이지를 따로 만드는
-# 거지?... 서버 자원도 적게 먹고 본문 변경시에도 빠르게 적용될 듯".
+# 기존 run.yml(?�체 ?�이?�라?? ~30�?�??�리 export_articles.py ??줄만
+# ?�다 ??Supabase 조회 + JSON ?�??+ git 커밋뿐이??보통 1�??�에 ?�난??
+# ?�용??지??2026-09-10): "본문?�이지?�고 미리보기 ?�이지�??�로 만드??
+# 거�??... ?�버 ?�원???�게 먹고 본문 변경시?�도 빠르�??�용????.
 #
-# concurrency 그룹을 run.yml과 분리한다 — 무거운 전체 파이프라인이 도는
-# 동안에도 이 가벼운 갱신은 기다리지 않고 바로 실행돼야 "빠르게 적용"의
-# 의미가 있다.
+# concurrency 그룹??run.yml�?분리?�다 ??무거???�체 ?�이?�라?�이 ?�는
+# ?�안?�도 ??가벼운 갱신?� 기다리�? ?�고 바로 ?�행?�야 "빠르�??�용"??
+# ?��?가 ?�다.
 on:
   workflow_dispatch:
 
@@ -29,26 +29,27 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      - name: 코드 체크아웃
+      - name: 코드 체크?�웃
         uses: actions/checkout@v5
         with:
           ref: main
 
-      - name: Python 설정
+      - name: Python ?�정
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
-      - name: 패키지 설치 (requests만 필요 — 전체 requirements.txt 안 씀)
+      - name: ?�키지 ?�치 (requests�??�요 ???�체 requirements.txt ???�)
         run: pip install requests
 
-      - name: 웹사이트 데이터 내보내기
+      - name: ?�사?�트 ?�이???�보?�기
         run: python scripts/export_articles.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
 
-      - name: 변경사항 커밋 및 푸시
+      - name: 변경사??커밋 �??�시
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"

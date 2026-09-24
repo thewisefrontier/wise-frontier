@@ -1,8 +1,8 @@
 name: NewsFinal - Lottery Results Daily
 
-# GitHub 자체 schedule: 트리거가 신뢰할 수 없어(2026-08-29 21:00 KST 예약분이
-# 통째로 스킵되고, 다음날 분도 지연되어 실제로는 2026-08-31 00:51 KST에야 실행됨)
-# cron-job.org 외부 트리거로 대체(다른 5개 워크플로우와 동일한 조치).
+# GitHub ?�체 schedule: ?�리거�? ?�뢰?????�어(2026-08-29 21:00 KST ?�약분이
+# ?�째�??�킵?�고, ?�음??분도 지?�되???�제로는 2026-08-31 00:51 KST?�야 ?�행??
+# cron-job.org ?��? ?�리거로 ?��??�른 5�??�크?�로?��? ?�일??조치).
 on:
   workflow_dispatch:
 
@@ -18,35 +18,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 코드 체크아웃
+      - name: 코드 체크?�웃
         uses: actions/checkout@v5
 
-      - name: Python 설정
+      - name: Python ?�정
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
-      - name: 패키지 설치
+      - name: ?�키지 ?�치
         run: pip install -r requirements.txt
 
-      - name: Playwright 브라우저 설치 (로또 추첨결과 캡처용)
+      - name: Playwright 브라?��? ?�치 (로또 추첨결과 캡처??
         run: python -m playwright install --with-deps chromium
 
-      - name: 복권 당첨정보 기사 생성
+      - name: 복권 ?�첨?�보 기사 ?�성
         run: python scripts/lotto_writer.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
           IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
           UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
 
-      - name: 웹사이트 데이터 내보내기
+      - name: ?�사?�트 ?�이???�보?�기
         run: python scripts/export_articles.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
 
-      - name: 변경사항 커밋 및 푸시
+      - name: 변경사??커밋 �??�시
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"

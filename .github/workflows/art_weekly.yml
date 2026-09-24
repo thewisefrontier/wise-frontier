@@ -1,9 +1,8 @@
 name: NewsFinal - Weekly Classic Art Feature
 
-# 매주 고전 명화 한 점을 소개하는 "주말 읽을거리" 기사(2026-09-08 신설,
-# 사용자 요청 — "매주 고전 미술 작품 하나를 소개하는 기사가 있으면 좋을 것
-# 같은데" → "주말에 읽을거리로"). 다른 writer들과 동일하게 GitHub 자체
-# schedule: 대신 cron-job.org의 workflow_dispatch로 실행한다.
+# 매주 고전 명화 ???�을 ?�개?�는 "주말 ?�을거리" 기사(2026-09-08 ?�설,
+# ?�용???�청 ??"매주 고전 미술 ?�품 ?�나�??�개?�는 기사가 ?�으�?좋을 �?# 같�??? ??"주말???�을거리�?). ?�른 writer?�과 ?�일?�게 GitHub ?�체
+# schedule: ?�??cron-job.org??workflow_dispatch�??�행?�다.
 on:
   workflow_dispatch:
 
@@ -19,18 +18,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 코드 체크아웃
+      - name: 코드 체크?�웃
         uses: actions/checkout@v5
 
-      - name: Python 설정
+      - name: Python ?�정
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
-      - name: 패키지 설치
+      - name: ?�키지 ?�치
         run: pip install -r requirements.txt
 
-      - name: 이번 주 고전 명화 기사 생성
+      - name: ?�번 �?고전 명화 기사 ?�성
         run: python scripts/art_weekly_writer.py
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -40,16 +39,18 @@ jobs:
           GEMINI_API_KEY_5: ${{ secrets.GEMINI_API_KEY_5 }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
           IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
           UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
 
-      - name: 웹사이트 데이터 내보내기
+      - name: ?�사?�트 ?�이???�보?�기
         run: python scripts/export_articles.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
 
-      - name: 변경사항 커밋 및 푸시
+      - name: 변경사??커밋 �??�시
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"

@@ -1,12 +1,11 @@
-name: NewsFinal - RSS 소스 발굴 (주간)
+name: NewsFinal - RSS ?�스 발굴 (주간)
 
 on:
   workflow_dispatch:
-  # 주간 저빈도 작업이라 schedule 트리거 사용 — run.yml(30분 간격 고빈도
-  # 파이프라인)에서 겪은 다중시간 미발화 사고와 리스크 성격이 다르다.
-  # 한 주 정도 안 돌아도 다음 주에 자연 복구되고, 지연에 민감하지 않다.
+  # 주간 ?�빈도 ?�업?�라 schedule ?�리�??�용 ??run.yml(30�?간격 고빈??  # ?�이?�라???�서 겪�? ?�중?�간 미발???�고?� 리스???�격???�르??
+  # ??�??�도 ???�아???�음 주에 ?�연 복구?�고, 지?�에 민감?��? ?�다.
   schedule:
-    - cron: '0 3 * * 1'  # 매주 월요일 03:00 UTC(한국시간 정오)
+    - cron: '0 3 * * 1'  # 매주 ?�요??03:00 UTC(?�국?�간 ?�오)
 
 permissions:
   contents: read
@@ -23,9 +22,10 @@ jobs:
 
       - run: pip install -r requirements.txt
 
-      - name: RSS 소스 발굴·검증·검수대기 등록
+      - name: RSS ?�스 발굴·검증·�??��?�??�록
         timeout-minutes: 20
         run: python scripts/rss_source_discovery.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}

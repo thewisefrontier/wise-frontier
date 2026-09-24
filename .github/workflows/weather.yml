@@ -1,11 +1,11 @@
 name: NewsFinal - Daily Weather
 
 on:
-  # 2026-08-27: run.yml과 동일한 이유로 GitHub 자체 schedule 트리거 제거,
-  # 외부 크론(cron-job.org, wise-frontier-trigger 잡)의 workflow_dispatch로
-  # 전환. 스크립트 자체가 국가별 현지 아침 시간을 판단해 발행 여부를
-  # 결정하므로, 호출 주기는 이전 스케줄(매시 20·50분)과 비슷하게 30분
-  # 간격으로 맞추면 된다.
+  # 2026-08-27: run.yml�??�일???�유�?GitHub ?�체 schedule ?�리�??�거,
+  # ?��? ?�론(cron-job.org, wise-frontier-trigger ????workflow_dispatch�?
+  # ?�환. ?�크립트 ?�체가 �??�??��? ?�침 ?�간???�단??발행 ?��?�?
+  # 결정?��?�? ?�출 주기???�전 ?��?�?매시 20·50�?�?비슷?�게 30�?
+  # 간격?�로 맞추�??�다.
   workflow_dispatch:
 
 permissions:
@@ -20,22 +20,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 코드 체크아웃
+      - name: 코드 체크?�웃
         uses: actions/checkout@v5
 
-      - name: Python 설정
+      - name: Python ?�정
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
-      - name: 패키지 설치
+      - name: ?�키지 ?�치
         run: pip install -r requirements.txt
 
-      - name: 날씨 리포트 생성 (국가별 현지 아침 시간에만 발행, 한국은 기상청 단기예보 우선)
+      - name: ?�씨 리포???�성 (�??�??��? ?�침 ?�간?�만 발행, ?�국?� 기상�??�기?�보 ?�선)
         run: python scripts/weather_report.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
           IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
           UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
@@ -47,13 +48,14 @@ jobs:
           GEMINI_API_KEY_4: ${{ secrets.GEMINI_API_KEY_4 }}
           GEMINI_API_KEY_5: ${{ secrets.GEMINI_API_KEY_5 }}
 
-      - name: 웹사이트 데이터 내보내기
+      - name: ?�사?�트 ?�이???�보?�기
         run: python scripts/export_articles.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
 
-      - name: 변경사항 커밋 및 푸시
+      - name: 변경사??커밋 �??�시
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"

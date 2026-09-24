@@ -1,11 +1,11 @@
 name: One-Off Maintenance Task
 
-# 수동 실행 전용
+# ?�동 ?�행 ?�용
 on:
   workflow_dispatch:
     inputs:
       script:
-        description: '실행할 스크립트 파일명 (scripts/ 폴더 기준, 예: one_off/backfill_companies.py)'
+        description: '?�행???�크립트 ?�일�?(scripts/ ?�더 기�?, ?? one_off/backfill_companies.py)'
         required: true
         default: 'one_off/backfill_companies.py'
 
@@ -17,27 +17,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 코드 체크아웃
+      - name: 코드 체크?�웃
         uses: actions/checkout@v5
 
-      - name: Python 설정
+      - name: Python ?�정
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
-      - name: 패키지 설치
+      - name: ?�키지 ?�치
         run: pip install -r requirements.txt
 
-      - name: 스크립트 실행
-        # 2026-09-03 보안 점검: 워크플로 입력값을 run: 셸에 직접 치환하면
-        # script 입력에 셸 메타문자를 넣어 임의 명령 실행이 가능했다(GitHub
-        # 공식 문서가 경고하는 스크립트 인젝션 안티패턴 — 이 job은 모든
-        # 시크릿을 env로 갖고 있어 위험이 컸다). env로 받아 파일명 패턴을
-        # 검증한 뒤에만 실행한다.
+      - name: ?�크립트 ?�행
+        # 2026-09-03 보안 ?��?: ?�크?�로 ?�력값을 run: ?�에 직접 치환?�면
+        # script ?�력????메�?문자�??�어 ?�의 명령 ?�행??가?�했??GitHub
+        # 공식 문서가 경고?�는 ?�크립트 ?�젝???�티?�턴 ????job?� 모든
+        # ?�크릿을 env�?갖고 ?�어 ?�험??컸다). env�?받아 ?�일�??�턴??
+        # 검증한 ?�에�??�행?�다.
         run: |
-          echo "실행: scripts/${SCRIPT}"
+          echo "?�행: scripts/${SCRIPT}"
           if [[ ! "$SCRIPT" =~ ^[A-Za-z0-9_./-]+\.py$ ]]; then
-            echo "::error::허용되지 않는 파일명 형식: $SCRIPT"
+            echo "::error::?�용?��? ?�는 ?�일�??�식: $SCRIPT"
             exit 1
           fi
           python "scripts/${SCRIPT}"
@@ -52,6 +52,7 @@ jobs:
           GEMINI_API_KEY_5: ${{ secrets.GEMINI_API_KEY_5 }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
           KMA_API_KEY: ${{ secrets.KMA_API_KEY }}
           KMA_BRIEFING_KEY: ${{ secrets.KMA_BRIEFING_KEY }}

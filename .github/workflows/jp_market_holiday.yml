@@ -1,16 +1,16 @@
 name: NewsFinal - JP Market Holiday Notice
 
-# 일본 증시(도쿄증권거래소/JPX) 휴장일 안내 기사. us_market_holiday.yml과
-# 동일한 패턴(사용자 요청 2026-09-08: "휴장도 미국 증시 말고 주요국
-# 증시의 경우는 써주는게 좋을 것 같은데") — 결정론적 템플릿이라
-# GEMINI_API_KEY 불필요.
+# ?�본 증시(?�쿄증권거래??JPX) ?�장???�내 기사. us_market_holiday.yml�?
+# ?�일???�턴(?�용???�청 2026-09-08: "?�장??미국 증시 말고 주요�?
+# 증시??경우???�주?�게 좋을 �?같�???) ??결정론적 ?�플릿이??
+# GEMINI_API_KEY 불필??
 #
-# ⚠️ JP_HOLIDAYS_BY_YEAR(market_calendar.py)는 JPX 공식 사이트가 자동
-# 조회 도구에서 막혀 복수의 독립 집계 사이트 교차검증으로만 확보했다 —
-# 미국 캘린더보다 신뢰도가 낮으니 매년 초 가능하면 재확인할 것.
+# ?�️ JP_HOLIDAYS_BY_YEAR(market_calendar.py)??JPX 공식 ?�이?��? ?�동
+# 조회 ?�구?�서 막�? 복수???�립 집계 ?�이??교차검증으로만 ?�보?�다 ??
+# 미국 캘린?�보???�뢰?��? ??��??매년 �?가?�하�??�확?�할 �?
 #
-# 도쿄 09:00 JST(=00:00 KST, 한국과 시차 없음) 전후 1회면 충분 —
-# already_published()가 같은 날짜 중복 발행을 막는다.
+# ?�쿄 09:00 JST(=00:00 KST, ?�국�??�차 ?�음) ?�후 1?�면 충분 ??
+# already_published()가 같�? ?�짜 중복 발행??막는??
 on:
   workflow_dispatch:
 
@@ -26,33 +26,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 코드 체크아웃
+      - name: 코드 체크?�웃
         uses: actions/checkout@v5
 
-      - name: Python 설정
+      - name: Python ?�정
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
-      - name: 패키지 설치
+      - name: ?�키지 ?�치
         run: pip install -r requirements.txt
 
-      - name: 일본 증시 휴장 안내 기사 생성
+      - name: ?�본 증시 ?�장 ?�내 기사 ?�성
         run: python scripts/jp_market_holiday_writer.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
           IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
           UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
 
-      - name: 웹사이트 데이터 내보내기
+      - name: ?�사?�트 ?�이???�보?�기
         run: python scripts/export_articles.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
 
-      - name: 변경사항 커밋 및 푸시
+      - name: 변경사??커밋 �??�시
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"

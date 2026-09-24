@@ -1,10 +1,10 @@
 name: NewsFinal - Backfill Value-Add
 
 on:
-  # 2026-08-03: 백필 100% 완료(4,275/4,275)로 cron 비활성화.
-  # 재개가 필요하면 아래 2줄의 주석을 해제할 것.
+  # 2026-08-03: 백필 100% ?�료(4,275/4,275)�?cron 비활?�화.
+  # ?�개가 ?�요?�면 ?�래 2줄의 주석???�제??�?
   # schedule:
-  #   - cron: '10,40 * * * *'   # 매시 10분·40분 (run.yml 47분, weather.yml 20,50분과 겹치지 않게 오프셋)
+  #   - cron: '10,40 * * * *'   # 매시 10분�?0�?(run.yml 47�? weather.yml 20,50분과 겹치지 ?�게 ?�프??
   workflow_dispatch:
 
 concurrency:
@@ -16,18 +16,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 코드 체크아웃
+      - name: 코드 체크?�웃
         uses: actions/checkout@v5
 
-      - name: Python 설정
+      - name: Python ?�정
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
-      - name: 패키지 설치
+      - name: ?�키지 ?�치
         run: pip install -r requirements.txt
 
-      - name: 3줄요약/투자아이디어 백필
+      - name: 3줄요???�자?�이?�어 백필
         run: python scripts/backfill_value_add.py
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -37,3 +37,4 @@ jobs:
           GEMINI_API_KEY_5: ${{ secrets.GEMINI_API_KEY_5 }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}

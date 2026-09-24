@@ -1,17 +1,17 @@
 name: NewsFinal - Global Markets Daily
 
-# 2026-09-03: stock_news_writer.py(개별 종목 기사)도 같은 게이트
-# (market_is_closed/get_target_market_date)를 쓰므로, 별도 크론잡을 새로
-# 등록하는 대신 이 워크플로우에 스텝으로 합쳤다 — 크론잡이 늘어날수록
-# "cron-job.org 계정 죽으면 파이프라인 전체 멈춤" 리스크도 같이 늘어나서
-# (이 저장소에서 이미 겪은 문제) 게이트가 같은 작업은 한 크론잡에 묶는다.
+# 2026-09-03: stock_news_writer.py(개별 종목 기사)??같�? 게이??
+# (market_is_closed/get_target_market_date)�??��?�? 별도 ?�론?�을 ?�로
+# ?�록?�는 ?�?????�크?�로?�에 ?�텝?�로 ?�쳤?????�론?�이 ?�어?�수�?
+# "cron-job.org 계정 죽으�??�이?�라???�체 멈춤" 리스?�도 같이 ?�어?�서
+# (???�?�소?�서 ?��? 겪�? 문제) 게이?��? 같�? ?�업?� ???�론?�에 묶는??
 
 on:
-  # 2026-08-28: 이 워크플로우가 08:15 KST 예정에서 7시간 넘게 늦은 15:56에야
-  # 처음 실행된 것을 확인(run.yml/opinet_price.yml과 같은 GitHub schedule
-  # 트리거 무응답 사고, 같은 날 저장소 전반에 걸쳐 발생). schedule 제거,
-  # 외부 크론(cron-job.org)의 workflow_dispatch로 전환. 스크립트 자체가
-  # already_published()로 게이트하므로 자주 호출해도 안전.
+  # 2026-08-28: ???�크?�로?��? 08:15 KST ?�정?�서 7?�간 ?�게 ??? 15:56?�야
+  # 처음 ?�행??것을 ?�인(run.yml/opinet_price.yml�?같�? GitHub schedule
+  # ?�리�?무응???�고, 같�? ???�?�소 ?�반??걸쳐 발생). schedule ?�거,
+  # ?��? ?�론(cron-job.org)??workflow_dispatch�??�환. ?�크립트 ?�체가
+  # already_published()�?게이?�하므�??�주 ?�출?�도 ?�전.
   workflow_dispatch:
 
 permissions:
@@ -26,22 +26,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 코드 체크아웃
+      - name: 코드 체크?�웃
         uses: actions/checkout@v5
 
-      - name: Python 설정
+      - name: Python ?�정
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
-      - name: 패키지 설치
+      - name: ?�키지 ?�치
         run: pip install -r requirements.txt
 
-      - name: 글로벌 마켓 동향 기사 생성
+      - name: 글로벌 마켓 ?�향 기사 ?�성
         run: python scripts/frontier_markets_writer.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
           GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
@@ -52,12 +53,13 @@ jobs:
           IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
           UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
 
-      - name: 개별 종목 동향 기사 생성
+      - name: 개별 종목 ?�향 기사 ?�성
         continue-on-error: true
         run: python scripts/stock_news_writer.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
           GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
@@ -68,23 +70,25 @@ jobs:
           IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
           UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
 
-      - name: 일본 증시 마감 기사 생성
+      - name: ?�본 증시 마감 기사 ?�성
         continue-on-error: true
         run: python scripts/jp_market_writer.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
           ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
           IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
           UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
 
-      - name: 가상자산 동향 기사 생성
+      - name: 가?�자???�향 기사 ?�성
         continue-on-error: true
         run: python scripts/crypto_news_writer.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
           GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
@@ -95,13 +99,14 @@ jobs:
           UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
           MONEYFINAL_FEED_KEY: ${{ secrets.MONEYFINAL_FEED_KEY }}
 
-      - name: 웹사이트 데이터 내보내기
+      - name: ?�사?�트 ?�이???�보?�기
         run: python scripts/export_articles.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
 
-      - name: 변경사항 커밋 및 푸시
+      - name: 변경사??커밋 �??�시
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"

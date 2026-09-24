@@ -1,11 +1,11 @@
 name: NewsFinal - Economic Indicators Update
 
 on:
-  # GitHub 자체 schedule: 트리거는 이 저장소에서 반복적으로 무응답/지연
-  # 사고를 낸 전례가 있어 다른 워크플로와 동일하게 외부 크론(cron-job.org)의
-  # workflow_dispatch로 대체한다(2026-09-03 점검 — 이 워크플로만 옛날
-  # schedule: 그대로 남아있었음). 원래 주기: 매년 4월 1일·10월 1일 KST 10:00
-  # (IMF WEO 봄/가을 발표 직후).
+  # GitHub ?�체 schedule: ?�리거는 ???�?�소?�서 반복?�으�?무응??지??
+  # ?�고�????��?가 ?�어 ?�른 ?�크?�로?� ?�일?�게 ?��? ?�론(cron-job.org)??
+  # workflow_dispatch�??�체한??2026-09-03 ?��? ?????�크?�로�??�날
+  # schedule: 그�?�??�아?�었??. ?�래 주기: 매년 4??1?��?0??1??KST 10:00
+  # (IMF WEO �?가??발표 직후).
   workflow_dispatch:
 
 permissions:
@@ -16,21 +16,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 코드 체크아웃
+      - name: 코드 체크?�웃
         uses: actions/checkout@v5
 
-      - name: Python 설정
+      - name: Python ?�정
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
-      - name: 패키지 설치
+      - name: ?�키지 ?�치
         run: pip install requests python-dotenv
 
-      - name: IMF 경제지표 수집
+      - name: IMF 경제지???�집
         run: python scripts/fetch_econ_indicators.py
 
-      - name: 변경사항 커밋 및 푸시
+      - name: 변경사??커밋 �??�시
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
