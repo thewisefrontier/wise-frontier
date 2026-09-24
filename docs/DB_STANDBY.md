@@ -72,7 +72,19 @@ curl -sS "https://api.aiven.io/v1/project/thewisefrontier-1ad5/service/newsfinal
 
 또는 Aiven 콘솔 → `newsfinal-standby` 서비스 → Overview → Connection information.
 
-## 로컬에서 적용할 때 (아직 실행 안 함)
+## 적용 완료 (2026-09-24)
+
+Aiven 콘솔의 PG Studio(웹 SQL 에디터, 터미널/psql 설치 불필요)로 적용함.
+PG Studio가 한 번에 최대 10개 쿼리로 제한돼 있어 `migrations/aiven_init.sql`을
+4개 묶음(각 10/10/10/4개 문장)으로 나눠 순서대로 실행함.
+
+- `information_schema.tables`로 확인 결과 `public` 스키마에 테이블 17개 전부 생성됨
+- `settings` 테이블에 INSERT → SELECT → DELETE 스모크 테스트 통과
+
+즉 `newsfinal-standby` 서비스는 스키마까지 준비된 상태로 스탠바이 대기 중.
+아직 실제 데이터(268MB) 이전은 하지 않음 — 필요 시점에 별도로 진행.
+
+### psql로 적용하는 경우 (참고, 터미널 있으면 더 간단함)
 
 ```bash
 psql "$SERVICE_URI" -f migrations/aiven_init.sql
