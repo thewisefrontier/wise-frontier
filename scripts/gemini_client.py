@@ -192,13 +192,17 @@ def _claim_key_shared(model: str, idx: int, min_interval: float) -> float:
 
 def _quota_info(res) -> str:
     """429 본문에서 실제로 걸린 한도(quotaId=값). 요청 수(RPM)인지 토큰 수(TPM)인지
-    구분용 — 키(프로젝트)별로 간격을 두는데도 5키가 연달아 429를 받는 원인 추적(2026-09-25)."""
+    구분용 — 키(프로젝트)별로 간격을 두는데도 5키가 연달아 429를 받는 원인 추적(2026-09-25).
+    violations가 없으면(구조화된 한도 정보가 아닌 일반 RESOURCE_EXHAUSTED 등) 원문
+    메시지를 대신 남긴다 — 실운영에서 빈 문자열만 나와 원인 구분이 안 됐음."""
     try:
-        return ", ".join(f"{v.get('quotaId', '?')}={v.get('quotaValue', '?')}"
-                         for d in res.json().get("error", {}).get("details", [])
+        body = res.json()
+        info = ", ".join(f"{v.get('quotaId', '?')}={v.get('quotaValue', '?')}"
+                         for d in body.get("error", {}).get("details", [])
                          for v in d.get("violations", []))
+        return info or (body.get("error", {}).get("message", "") or "")[:150]
     except Exception:
-        return ""
+        return (getattr(res, "text", "") or "")[:150]
 
 
 def _is_per_day_quota(res) -> bool:
