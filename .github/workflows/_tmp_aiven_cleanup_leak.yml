@@ -23,27 +23,13 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq postgresql-client-17
 
-      - name: 배치 삭제
+      # 배치 삭제(99,687건)는 완료됨(run 35979690045). 일반 VACUUM은 디스크를
+      # 반환하지 않아 articles 테이블이 여전히 359MB로 잡혀 VACUUM FULL로
+      # 실제 회수만 남았다(7,471건까지 줄었으니 락 시간은 짧다).
+      - name: VACUUM FULL + 최종 확인
         env:
           PGCONNSTR: ${{ secrets.AIVEN_SERVICE_URI }}
         run: |
-          before=$(psql "$PGCONNSTR" -t -A -c "SELECT count(*) FROM articles WHERE is_published = false;")
-          echo "삭제 대상: $before 건"
-          total=0
-          while true; do
-            n=$(psql "$PGCONNSTR" -t -A -v ON_ERROR_STOP=1 -c \
-              "WITH d AS (DELETE FROM articles WHERE id IN (SELECT id FROM articles WHERE is_published = false LIMIT 500) RETURNING 1) SELECT count(*) FROM d;")
-            total=$((total + n))
-            echo "  … 누적 삭제 ${total}건"
-            if [ "$n" -eq 0 ]; then break; fi
-          done
-          echo "총 삭제: ${total}건"
-
-      - name: VACUUM + 최종 확인
-        if: always()
-        env:
-          PGCONNSTR: ${{ secrets.AIVEN_SERVICE_URI }}
-        run: |
-          psql "$PGCONNSTR" -v ON_ERROR_STOP=1 -c "VACUUM (VERBOSE) articles;"
+          psql "$PGCONNSTR" -v ON_ERROR_STOP=1 -c "VACUUM (FULL, VERBOSE) articles;"
           psql "$PGCONNSTR" -c "SELECT is_published, count(*) FROM articles GROUP BY is_published;"
           psql "$PGCONNSTR" -c "SELECT pg_size_pretty(pg_total_relation_size('articles')) articles_size, pg_size_pretty(pg_database_size(current_database())) db_size;"
