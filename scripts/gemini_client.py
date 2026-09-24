@@ -190,18 +190,6 @@ def _claim_key_shared(model: str, idx: int, min_interval: float) -> float:
     return 0.0
 
 
-def _quota_value(res) -> str:
-    """429 본문의 실제 한도 값(quotaValue, 예: RPM "15"). 없으면 빈 문자열."""
-    try:
-        for detail in res.json().get("error", {}).get("details", []):
-            for v in detail.get("violations", []):
-                if v.get("quotaValue"):
-                    return str(v["quotaValue"])
-    except Exception:
-        pass
-    return ""
-
-
 def _is_per_day_quota(res) -> bool:
     """429 응답 본문에서 실제로 걸린 한도가 일일(PerDay)인지 확인한다.
     파싱 실패·정보 없음은 보수적으로 False(=분당 한도로 간주, 쿨다운 후 재시도)
@@ -232,12 +220,6 @@ class GeminiClient:
         # 모델별 키의 마지막 호출 시각 — 가장 오래 쉰 키부터 골라 쓰는 페이싱과
         # 분당 한도 예방에 함께 쓰인다(아래 call()의 정렬 기준).
         self._last_call_at = defaultdict(dict)
-        # 2026-09-25: 요율 한도는 API 키가 아니라 GCP 프로젝트 단위이고(공식 문서
-        # "Rate limits are applied per project, not per API key"), 5키가 전부 같은
-        # 프로젝트다. 키마다 간격을 두던 페이싱은 실제로 한도의 5배 속도로 쏘고
-        # 있었다(heavy 실행마다 429 10~27회, 5키가 연달아 전부 429). 간격은 모델
-        # 기준으로 둔다 — 키 로테이션은 한도를 늘리지 못한다.
-        self._model_last_at = {}
 
     def _is_available(self, model: str, idx: int) -> bool:
         v = self._exhausted_keys[model].get(idx)
@@ -295,13 +277,16 @@ class GeminiClient:
             ordered = sorted(available, key=lambda i: last_at.get(i, 0))
 
             for idx in ordered:
-                # 모델 단위 분당 한도 예방 페이싱(한도는 프로젝트 공통, 위 __init__ 참고).
-                wait = _min_interval(model) - (time.time() - self._model_last_at.get(model, 0))
+                # 이 키·모델 조합의 분당 한도 예방 페이싱 — 마지막 호출 후
+                # 최소 간격이 안 지났으면 나머지 시간만큼 대기 후 호출한다.
+                elapsed = time.time() - last_at.get(idx, 0)
+                wait = _min_interval(model) - elapsed
                 if wait > 0:
                     time.sleep(wait)
-                # 다른 프로세스(collectors/breaking/heavy)와도 모델 단위로 공유 —
-                # key_index 0 슬롯 하나를 모든 키가 같이 쓴다.
-                _wait_for_shared_slot(model, 0, _min_interval(model))
+                # 같은 키를 동시에 쓰는 다른 프로세스(job)가 없는지도 확인 —
+                # 이 프로세스 메모리만 보는 위 계산으론 collectors/breaking/heavy가
+                # 겹칠 때 합산 호출량이 한도를 넘는 걸 못 막는다.
+                _wait_for_shared_slot(model, idx, _min_interval(model))
 
                 api_key = self.api_keys[idx]
                 url = (
@@ -309,7 +294,7 @@ class GeminiClient:
                     f"{model}:generateContent?key={api_key}"
                 )
                 try:
-                    last_at[idx] = self._model_last_at[model] = time.time()
+                    last_at[idx] = time.time()
                     res = requests.post(url, json=payload, timeout=timeout)
                     if res.status_code == 200:
                         body = res.json()
@@ -334,17 +319,14 @@ class GeminiClient:
                         return text if text else None
                     elif res.status_code == 429:
                         _log_usage(model, idx + 1, "429")
-                        per_day = _is_per_day_quota(res)
-                        limit = _quota_value(res)
-                        # 한도가 프로젝트 공통이라 다른 키로 바꿔봐야 같은 429 — 모델 전체를 쉬게 하고 다음 모델로.
-                        until = True if per_day else time.time() + KEY_COOLDOWN_SECONDS
-                        for i in range(n):
-                            exhausted[i] = until
-                        print(f"  [429] {model} {'일일' if per_day else '분당'} 한도(프로젝트 공통"
-                              f"{', 한도값 ' + limit if limit else ''}) → "
-                              f"{'이번 실행 동안' if per_day else f'{KEY_COOLDOWN_SECONDS}초'} 모델 제외, 다음 모델로")
+                        if _is_per_day_quota(res):
+                            print(f"  [429] {model} 키 {idx+1} 일일 한도 소진 → 이번 실행 동안 제외")
+                            exhausted[idx] = True
+                        else:
+                            print(f"  [429] {model} 키 {idx+1} 분당 한도 → {KEY_COOLDOWN_SECONDS}초 후 재시도 대상, 다음 키로")
+                            exhausted[idx] = time.time() + KEY_COOLDOWN_SECONDS
                         time.sleep(RETRY_DELAY)
-                        break
+                        continue
                     elif res.status_code == 503:
                         print(f"  [503] {model} 키 {idx+1} 과부하 → 다음 키")
                         _log_usage(model, idx + 1, "503")
@@ -392,10 +374,11 @@ class GeminiClient:
         ordered = sorted(available, key=lambda i: last_at.get(i, 0))
 
         for idx in ordered:
-            wait = _EMBED_MIN_INTERVAL - (time.time() - self._model_last_at.get(model, 0))
+            elapsed = time.time() - last_at.get(idx, 0)
+            wait = _EMBED_MIN_INTERVAL - elapsed
             if wait > 0:
                 time.sleep(wait)
-            _wait_for_shared_slot(model, 0, _EMBED_MIN_INTERVAL)
+            _wait_for_shared_slot(model, idx, _EMBED_MIN_INTERVAL)
 
             api_key = self.api_keys[idx]
             url = (
@@ -403,7 +386,7 @@ class GeminiClient:
                 f"{model}:embedContent?key={api_key}"
             )
             try:
-                last_at[idx] = self._model_last_at[model] = time.time()
+                last_at[idx] = time.time()
                 res = requests.post(
                     url,
                     json={"content": {"parts": [{"text": text[:8000]}]}},
@@ -415,11 +398,11 @@ class GeminiClient:
                     return values or None
                 elif res.status_code == 429:
                     _log_usage(model, idx + 1, "429")
-                    until = True if _is_per_day_quota(res) else time.time() + KEY_COOLDOWN_SECONDS
-                    for i in range(n):  # 프로젝트 공통 한도 — 모든 키 같이 쉼
-                        exhausted[i] = until
-                    print(f"  [429] embed 한도(프로젝트 공통{', 한도값 ' + _quota_value(res) if _quota_value(res) else ''})")
-                    return None
+                    if _is_per_day_quota(res):
+                        exhausted[idx] = True
+                    else:
+                        exhausted[idx] = time.time() + KEY_COOLDOWN_SECONDS
+                    continue
                 else:
                     print(f"[ERROR] embed {res.status_code}: {res.text[:200]}")
                     _log_usage(model, idx + 1, "other")
