@@ -3036,6 +3036,18 @@ BBC·CNN 라이브 업데이트처럼, 이 항목 하나만 읽어도 무슨 일
 
     print(f"[라이브 업데이트] {updated}건 완료")
 
+def _kr_source_data(info):
+    """kr_coverage 보정 결과 중 검증용으로 남길 값만(국내 기사 제목 목록은 뺀다)."""
+    if not info:
+        return {}
+    if info.get("kr_trend"):
+        t = info["kr_trend"]
+        return {"kr_trend": {"keyword": t["keyword"], "traffic": t["traffic"]}}
+    if info.get("kr_coverage_30d") is not None:
+        return {"kr_coverage_30d": info["kr_coverage_30d"]}
+    return {}
+
+
 def run(clusters_override=None, max_clusters=None, skip_extras=False):
     """clusters_override/max_clusters는 run_breaking() 전용 진입점 — 클러스터링
     단계를 건너뛰고 이미 골라둔 클러스터만, 정규 MAX_CLUSTERS_PER_RUN 대신 작은
@@ -3049,7 +3061,7 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
         print("[SKIP] GEMINI_API_KEY 없음")
         return
 
-    kr_counts = {}
+    kr_info = {}
     if clusters_override is not None:
         all_articles = []  # today_own_articles 조회에만 쓰이므로 아래서 따로 로드
         clusters = clusters_override
@@ -3069,7 +3081,7 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
         clusters = cluster_articles(all_articles)
         print(f"  → {len(all_articles)}건 중 {len(clusters)}개 클러스터 발견\n")
         from kr_coverage import rerank as _kr_rerank
-        clusters, kr_counts = _kr_rerank(
+        clusters, kr_info = _kr_rerank(
             clusters, cluster_importance, _cluster_hits_severity_high, make_cluster_key,
             # 부가 기능이라 과부하 때 키 10개×30초를 다 기다리지 않게 한 모델·짧은 타임아웃만
             lambda p: _gemini_client.call(p, max_tokens=800, start_tier=4, temperature=0.2,
@@ -3217,6 +3229,10 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
             else:
                 print(f"  → 신규 이슈 기사 생성")
                 prompt = build_issue_prompt(cluster)
+            _trend = (kr_info.get(cluster_key) or {}).get("kr_trend")
+            if _trend:
+                from kr_coverage import demand_prompt_suffix
+                prompt += demand_prompt_suffix(_trend)
             has_full = any(a.get("full_text") for a in cluster)
             content = call_gemini_article(prompt, max_tokens=4000 if has_full else 1500)
 
@@ -3310,7 +3326,7 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
                     image_credit  = image_credit,
                     is_travel     = gen_travel,
                     source_data   = ({**({"tags": _normalize_tags(cluster_tags)} if cluster_tags else {}),
-                                      **({"kr_coverage_30d": kr_counts[cluster_key]} if kr_counts.get(cluster_key) is not None else {})}
+                                      **_kr_source_data(kr_info.get(cluster_key))}
                                      or None),
                     continuation_of_id = continuing["id"] if (continuing and published) else None,
                 )
