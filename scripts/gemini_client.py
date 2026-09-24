@@ -190,6 +190,17 @@ def _claim_key_shared(model: str, idx: int, min_interval: float) -> float:
     return 0.0
 
 
+def _quota_info(res) -> str:
+    """429 본문에서 실제로 걸린 한도(quotaId=값). 요청 수(RPM)인지 토큰 수(TPM)인지
+    구분용 — 키(프로젝트)별로 간격을 두는데도 5키가 연달아 429를 받는 원인 추적(2026-09-25)."""
+    try:
+        return ", ".join(f"{v.get('quotaId', '?')}={v.get('quotaValue', '?')}"
+                         for d in res.json().get("error", {}).get("details", [])
+                         for v in d.get("violations", []))
+    except Exception:
+        return ""
+
+
 def _is_per_day_quota(res) -> bool:
     """429 응답 본문에서 실제로 걸린 한도가 일일(PerDay)인지 확인한다.
     파싱 실패·정보 없음은 보수적으로 False(=분당 한도로 간주, 쿨다운 후 재시도)
@@ -323,7 +334,7 @@ class GeminiClient:
                             print(f"  [429] {model} 키 {idx+1} 일일 한도 소진 → 이번 실행 동안 제외")
                             exhausted[idx] = True
                         else:
-                            print(f"  [429] {model} 키 {idx+1} 분당 한도 → {KEY_COOLDOWN_SECONDS}초 후 재시도 대상, 다음 키로")
+                            print(f"  [429] {model} 키 {idx+1} 분당 한도({_quota_info(res)}) → {KEY_COOLDOWN_SECONDS}초 후 재시도 대상, 다음 키로")
                             exhausted[idx] = time.time() + KEY_COOLDOWN_SECONDS
                         time.sleep(RETRY_DELAY)
                         continue
