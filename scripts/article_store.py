@@ -50,7 +50,7 @@ requests = get_session()
 # 재사용한다(중복 구현 대신 — 이 모듈이 "환경변수는 독립적으로 읽는다"는
 # 원칙은 그대로 두되, Aiven 미러는 프로세스 전체에 하나만 있어야 하는
 # 공유 자원이라 예외).
-from db import _mirror
+from db import _mirror, _AIVEN_ARTICLES_COLUMNS, _AIVEN_JSON_COLUMNS
 
 # db.insert_article()의 미러 INSERT와 동일한 원칙(같은 id로 넣어야 자식 테이블
 # 미러링 시 id가 어긋나지 않음)이지만, 여긴 payload가 writer마다 달라 컬럼이
@@ -58,17 +58,8 @@ from db import _mirror
 # 적용된 것)을 그대로 쓰되, Aiven 스키마(migrations/aiven_init.sql)에 실제
 # 존재하는 컬럼만 화이트리스트로 걸러 삽입한다(모르는 컬럼을 그대로 SQL
 # 식별자로 쓰면 인젝션 위험 — payload는 내부 생성값이라 위험은 낮지만
-# 방어적으로 간다).
-_AIVEN_ARTICLES_COLUMNS = {
-    "id", "title_en", "title_ko", "summary_en", "summary_ko", "url", "source",
-    "category", "subcategory", "region", "country", "country_flag", "score",
-    "created_at", "sent_telegram", "posted_blog", "full_text", "countries",
-    "is_published", "image_url", "view_count", "first_published_at", "update_log",
-    "byline", "company_scanned", "dedup_reviewed", "is_travel", "summary_3lines",
-    "investment_idea", "source_published_at", "source_data", "image_credit",
-    "continuation_of_id", "summary_3lines_en", "investment_idea_en", "noindex",
-}
-_AIVEN_JSON_COLUMNS = {"update_log", "source_data"}
+# 방어적으로 간다). 화이트리스트는 db.py와 공유(2026-09-24, mirror_article_update
+# 추가하며 중복 정의로 드리프트 날 뻔한 걸 발견해 여기로 통일).
 
 
 def _mirror_final_article(row: dict) -> None:
