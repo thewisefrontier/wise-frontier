@@ -71,8 +71,13 @@ TELEGRAM_MIN_INTERVAL = 1.05  # 공식 제한(초당 1메시지)+여유
 
 # RSS 발행일 필터 — 이 일수를 초과한 기사는 수집하지 않음
 MAX_AGE_DAYS = float(os.getenv("MAX_ARTICLE_AGE_DAYS", "3"))
-# 소스당 1회 수집 상한 (발행일 필터 통과분 기준)
-MAX_ENTRIES_PER_SOURCE = int(os.getenv("MAX_ENTRIES_PER_SOURCE", "5"))
+# 소스당 1회 수집 상한 (발행일 필터 통과분 기준). 2026-09-24: 5→2로 축소
+# (사용자 지시 — "필요 없는 걸 버리는 식으로 해서 DB를 아끼자"). 30분 주기로
+# 도는데 소스 1건당 평균 새 글이 약 1개/사이클이라(실측: 1,197소스 × 1개 ×
+# 48사이클/일 ≈ 하루 유입 6만 건과 일치), 2면 평소엔 다 잡고 순간적으로
+# 몰리는 버스트만 일부 놓친다 — 그 정도는 다음 사이클에서 다른 소스가
+# 같은 사건을 또 보도해 클러스터링으로 잡힐 가능성이 높다.
+MAX_ENTRIES_PER_SOURCE = int(os.getenv("MAX_ENTRIES_PER_SOURCE", "2"))
 
 # =========================
 # EMOJI MAP

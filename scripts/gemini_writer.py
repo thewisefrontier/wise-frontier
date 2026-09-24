@@ -1262,6 +1262,23 @@ def _cluster_hits_severity_high(members) -> bool:
     return _cluster_hits_severity(members, _SEVERITY_HIGH)
 
 
+def log_source_contribution(cluster, article_id):
+    """클러스터가 실제 발행/업데이트로 이어지면 구성원 소스를
+    source_contribution_log에 남긴다(2026-09-24) — 하루 6만 건 넘는 원자재
+    유입에 비해 발행 전환율이 극히 낮아(약 0.06%) "필요 없는 소스"를 추측
+    아닌 실측으로 솎아내기 위함. 실패해도 발행 자체를 막지 않는다."""
+    try:
+        rows = [{"source": a.get("source"), "article_id": article_id}
+                for a in cluster if a.get("source") and not a.get("__needs_review__")]
+        if not rows:
+            return
+        requests.post(
+            _sb_url("source_contribution_log"), headers=_sb_headers(), json=rows, timeout=10,
+        )
+    except Exception:
+        pass
+
+
 def _prepare_cluster_material(cluster):
     """기사화 직전에만 원문 본문을 채우고(db.hydrate_full_text), 본문 첫머리로
     칼럼/오피니언을 다시 거른다 — 클러스터링 단계는 본문 없이 제목만으로 걸렀다."""
@@ -3097,6 +3114,7 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
                 update_article(existing["id"], new_title, gen_body or _strip_leaked_labels(content), note=note, countries=gen_countries if gen_countries else None, country=gen_country or "", summary_3lines=gen_summary3 or None, investment_idea=gen_investment or None)
                 update_article_count(existing["id"], prev_count + 1)
                 save_article_keywords(existing["id"], gen_keyword_ko, gen_keyword_en)
+                log_source_contribution(cluster, existing["id"])
                 if gen_country or gen_category or gen_travel:
                     update_fields = {}
                     if gen_country:
@@ -3290,6 +3308,7 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
                     if published:
                         today_own_articles.append({"id": article_id, "title_ko": full_title})
                         generated += 1
+                        log_source_contribution(cluster, article_id)
                         send_to_newsfinal_channel(article_id, full_title, gen_body or _strip_leaked_labels(content), is_update=False)
                         detect_and_register_companies(full_title, gen_body or _strip_leaked_labels(content), final_country)
                 else:
