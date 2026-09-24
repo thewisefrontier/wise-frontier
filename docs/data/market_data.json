@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-24 14:49",
+  "updated_at": "2026-09-24 15:14",
   "indices": [
     {
       "name": "S&P 500",
@@ -67,8 +67,8 @@
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 5753.7,
-      "change_pct": -0.72,
+      "price": 5750.05,
+      "change_pct": -0.78,
       "up": false
     },
     {
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.37,
-      "change_pct": 1.29,
+      "price": 16.36,
+      "change_pct": 1.23,
       "up": true
     }
   ],
@@ -165,8 +165,8 @@
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 5753.7,
-        "change_pct": -0.72,
+        "price": 5750.05,
+        "change_pct": -0.78,
         "up": false
       }
     ],
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.37,
-        "change_pct": 1.29,
+        "price": 16.36,
+        "change_pct": 1.23,
         "up": true
       }
     ]
