@@ -1,5 +1,71 @@
 [
   {
+    "id": 291622,
+    "title_en": "[국내유가] 휘발유 리터당 1856원…전국 평균 소폭 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1856원…전국 평균 소폭 하락",
+    "summary_ko": "한국석유공사 오피넷이 25일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1856원으로 집계됐다.\n\n이날 오피넷에 따르면 경유는 리터당 1841.30원, LPG(부탄)는 리터당 1089.12원으로 각각 전일 대비 하락세를 기록했다. 휘발유는 리터당 1856.07원으로 전일 대비 0.07원 내렸으며, 경유와 LPG도 각각 0.13원, 0.32원 하락했다. 오피넷의 가격은 전일 판매가격을 집계해 공개하는 방식으로 산출된다.\n\n이번 유가 하락은 최근 국제유가 흐름과 정유사 공급가 변동 등이 복합적으로 작용한 결과로 분",
+    "url": "internal://opinet_price_2026-09-25",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-09-25 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_09_25_pid4267357.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-25T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-25 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-09-25",
+      "prices": {
+        "B027": {
+          "diff": -0.07,
+          "name": "휘발유",
+          "price": 1856.07
+        },
+        "B034": {
+          "diff": 0.54,
+          "name": "고급휘발유",
+          "price": 2331.02
+        },
+        "C004": {
+          "diff": -0.25,
+          "name": "실내등유",
+          "price": 1574.04
+        },
+        "D047": {
+          "diff": -0.13,
+          "name": "경유",
+          "price": 1841.3
+        },
+        "K015": {
+          "diff": -0.32,
+          "name": "LPG(부탄)",
+          "price": 1089.12
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 291621,
     "title_en": "[데일리 다이제스트] 지정학적 갈등 격화 속 글로벌 안보·보건 리스크와 경제 지표 변동",
     "title_ko": "[데일리 다이제스트] 지정학적 갈등 격화 속 글로벌 안보·보건 리스크와 경제 지표 변동",
