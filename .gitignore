@@ -17,3 +17,6 @@ __pycache__/
 # OS 파일
 .DS_Store
 Thumbs.db
+
+# Claude Code 개인 설정(권한 규칙 등) - 사람마다 다를 수 있어 커밋 안 함
+.claude/settings.local.json

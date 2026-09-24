@@ -7,6 +7,8 @@ IPv6 문제 없이 HTTP로 동작
 import os
 import time
 import requests
+import psycopg2
+from psycopg2.extras import Json
 from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
 
@@ -47,6 +49,53 @@ def _url(table="articles"):
 def init_db():
     """하위 호환용 — Supabase 전환 완료로 실제 동작 없음"""
     pass
+
+
+# ── Aiven 이중 쓰기(미러) — 2026-09-24 ──────────────────────────────
+# Supabase egress 초과 대응으로 준비해둔 Aiven 스탠바이(docs/DB_STANDBY.md)에
+# articles 신규/변경분을 실시간으로 함께 적재한다. Supabase가 여전히 원본
+# (source of truth)이고, 이건 어디까지나 best-effort 미러 — AIVEN_SERVICE_URI가
+# 없거나 Aiven 쪽이 일시적으로 안 받아줘도(무료 플랜 자원 제약, 2026-09-24
+# 대량 이전 때 실측) 메인 Supabase 흐름은 절대 막지 않는다. rss_raw_queue처럼
+# 계속 삭제되는 임시 작업열은 대상에서 뺐다 — Aiven 쪽 id가 Supabase와
+# 달라질 수 있어 나중에 삭제/실패 표시를 id로 미러링하면 엉뚱한 행을
+# 건드릴 위험이 있다(link로 다시 조회해야 안전한데, 지금은 범위 밖).
+AIVEN_SERVICE_URI = os.getenv("AIVEN_SERVICE_URI", "")
+_aiven_conn = None
+
+
+def _aiven_conn_get():
+    global _aiven_conn
+    if not AIVEN_SERVICE_URI:
+        return None
+    try:
+        if _aiven_conn is None or _aiven_conn.closed:
+            _aiven_conn = psycopg2.connect(AIVEN_SERVICE_URI, connect_timeout=5)
+            _aiven_conn.autocommit = True
+        return _aiven_conn
+    except Exception as e:
+        print(f"  [WARN] Aiven 미러 연결 실패: {e}")
+        _aiven_conn = None
+        return None
+
+
+def _mirror(sql: str, params: tuple = ()):
+    """Aiven에 best-effort로 반영. 실패해도 예외를 밖으로 던지지 않는다 —
+    호출부(Supabase 기준 메인 흐름)는 이 함수가 무슨 일을 하는지 몰라도 된다."""
+    conn = _aiven_conn_get()
+    if conn is None:
+        return
+    global _aiven_conn
+    try:
+        with conn.cursor() as cur:
+            cur.execute(sql, params)
+    except Exception as e:
+        print(f"  [WARN] Aiven 미러 실패: {e}")
+        try:
+            conn.close()
+        except Exception:
+            pass
+        _aiven_conn = None
 
 
 
@@ -126,7 +175,32 @@ def insert_article(
     if res.status_code in (200, 201):
         data = res.json()
         if data:
-            return data[0].get("id", -1)
+            aid = data[0].get("id", -1)
+            if aid != -1:
+                # Aiven 쪽도 같은 id를 명시적으로 써서 넣는다 — 나중에 article_id로
+                # 참조하는 자식 테이블(article_keywords 등)을 미러링할 때도 두 DB의
+                # id가 일치해야 하기 때문(Aiven 자체 시퀀스에 맡기면 값이 어긋난다).
+                _mirror(
+                    """INSERT INTO articles
+                       (id, title_en, title_ko, summary_en, summary_ko, url, source, category,
+                        subcategory, region, country, country_flag, score, full_text, countries,
+                        is_published, created_at, sent_telegram, posted_blog,
+                        source_published_at, source_data, image_url, image_credit)
+                       VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                       ON CONFLICT (id) DO NOTHING""",
+                    (
+                        aid, payload["title_en"], payload.get("title_ko"), payload.get("summary_en"),
+                        payload.get("summary_ko"), payload["url"], payload.get("source"), payload.get("category"),
+                        payload.get("subcategory"), payload.get("region"), payload.get("country"),
+                        payload.get("country_flag"), payload.get("score"), payload.get("full_text"),
+                        payload.get("countries"), payload.get("is_published"), payload.get("created_at"),
+                        payload.get("sent_telegram"), payload.get("posted_blog"),
+                        payload.get("source_published_at"),
+                        Json(payload["source_data"]) if payload.get("source_data") else None,
+                        payload.get("image_url"), payload.get("image_credit"),
+                    ),
+                )
+            return aid
     elif res.status_code == 409:
         return -1  # 중복
     return -1
@@ -139,7 +213,10 @@ def mark_sent_telegram(article_id: int):
         json={"sent_telegram": 1},
         timeout=10
     )
-    return res.status_code in (200, 204)
+    ok = res.status_code in (200, 204)
+    if ok:
+        _mirror("UPDATE articles SET sent_telegram = 1 WHERE id = %s", (article_id,))
+    return ok
 
 
 def mark_posted_blog(article_id: int):
@@ -149,7 +226,10 @@ def mark_posted_blog(article_id: int):
         json={"posted_blog": 1},
         timeout=10
     )
-    return res.status_code in (200, 204)
+    ok = res.status_code in (200, 204)
+    if ok:
+        _mirror("UPDATE articles SET posted_blog = 1 WHERE id = %s", (article_id,))
+    return ok
 
 
 def get_top_articles(date: str = None, limit: int = 10, region: str = None) -> list:
@@ -396,6 +476,7 @@ def hydrate_full_text(rows: list, check_db: bool = True, workers: int = 8) -> in
         filled += bool(text)
         try:
             requests.patch(f"{_url()}?id=eq.{r['id']}", headers=_headers(), json={"full_text": text}, timeout=15)
+            _mirror("UPDATE articles SET full_text = %s WHERE id = %s", (text, r["id"]))
         except Exception:
             pass
     print(f"  [본문 보강] {len(todo)}건 크롤링 → {filled}건 확보")
