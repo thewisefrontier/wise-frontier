@@ -194,7 +194,14 @@ def insert_article(
         data = res.json()
         if data:
             aid = data[0].get("id", -1)
-            if aid != -1:
+            # ⚠️ 2026-09-24: 처음엔 발행 여부와 무관하게 매 호출 미러링했다. 그런데
+            # 이 함수(db.insert_article)는 원자재 수집기(rss_processor.py 등)가
+            # is_published=False로 하루 6만 건 넘게 부르는 함수다(실측 — "저장은
+            # 전량, 발송은 선별" 구조 전환 이후) — 그대로 두면 Aiven 무료 1GB를
+            # 며칠 안에 채운다. Aiven은 "발행된 사이트 콘텐츠"의 재해복구용
+            # 스탠바이가 목적이라(docs/DB_STANDBY.md) 원자재는 애초에 대상이
+            # 아니다. 발행된 것만 미러링한다.
+            if aid != -1 and payload.get("is_published"):
                 # Aiven 쪽도 같은 id를 명시적으로 써서 넣는다 — 나중에 article_id로
                 # 참조하는 자식 테이블(article_keywords 등)을 미러링할 때도 두 DB의
                 # id가 일치해야 하기 때문(Aiven 자체 시퀀스에 맡기면 값이 어긋난다).
