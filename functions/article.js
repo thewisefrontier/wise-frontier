@@ -231,8 +231,14 @@ export async function onRequestGet(context) {
   // 확장자 없는 경로로 정규화(리디렉션)하지만 최종적으로 원본 셸을 반환한다.
   const shell = await env.ASSETS.fetch(new URL('/article.html', url.origin));
 
-  // id 없으면 셸 그대로 반환(클라가 "기사를 찾을 수 없습니다" 처리)
-  if (!id) return shell;
+  // id 없음/숫자 아님 → 확정 404. 셸을 200으로 주면 소프트 404, 그대로 DB에
+  // 넘기면 Supabase 400 → 503(일시 오류)으로 잘못 신고돼 크롤러가 계속 재시도한다.
+  if (!/^\d+$/.test(id || '')) {
+    return new Response(shell.body, {
+      status: 404,
+      headers: { 'content-type': 'text/html; charset=utf-8' },
+    });
+  }
 
   try {
     // Supabase 서버 조회 (is_published=true 1건)
