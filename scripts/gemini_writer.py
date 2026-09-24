@@ -3049,6 +3049,7 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
         print("[SKIP] GEMINI_API_KEY 없음")
         return
 
+    kr_counts = {}
     if clusters_override is not None:
         all_articles = []  # today_own_articles 조회에만 쓰이므로 아래서 따로 로드
         clusters = clusters_override
@@ -3067,6 +3068,12 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
 
         clusters = cluster_articles(all_articles)
         print(f"  → {len(all_articles)}건 중 {len(clusters)}개 클러스터 발견\n")
+        from kr_coverage import rerank as _kr_rerank
+        clusters, kr_counts = _kr_rerank(
+            clusters, cluster_importance, _cluster_hits_severity_high, make_cluster_key,
+            # 부가 기능이라 과부하 때 키 10개×30초를 다 기다리지 않게 한 모델·짧은 타임아웃만
+            lambda p: _gemini_client.call(p, max_tokens=800, start_tier=4, temperature=0.2,
+                                          timeout=(5, 15), max_stages=1))
 
     today_own_articles = get_today_own_articles()
 
@@ -3302,7 +3309,9 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
                     image_url     = image_url,
                     image_credit  = image_credit,
                     is_travel     = gen_travel,
-                    source_data   = {"tags": _normalize_tags(cluster_tags)} if cluster_tags else None,
+                    source_data   = ({**({"tags": _normalize_tags(cluster_tags)} if cluster_tags else {}),
+                                      **({"kr_coverage_30d": kr_counts[cluster_key]} if kr_counts.get(cluster_key) is not None else {})}
+                                     or None),
                     continuation_of_id = continuing["id"] if (continuing and published) else None,
                 )
                 if article_id > 0:
