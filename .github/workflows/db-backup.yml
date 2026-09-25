@@ -55,22 +55,27 @@ jobs:
     if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-latest
     steps:
-      - name: PostgreSQL 17 클라이언트 설치
+      # 2026-09-25 실사고: Aiven 서버가 PG 18.6인데 Ubuntu 러너에 기본 깔린
+      # pg_dump가 v16이라(postgresql-client-17을 apt로 더 설치해도 PATH의
+      # bare `pg_dump`가 여전히 기존 v16을 가리킴) "server version mismatch"로
+      # 실패했다. -17 대신 -18을 설치하고, PATH 꼬임을 아예 피하려고 버전
+      # 붙은 절대경로로 직접 부른다(아래 pg_dump/pg_restore 동일).
+      - name: PostgreSQL 18 클라이언트 설치
         run: |
           sudo install -d /usr/share/postgresql-common/pgdg
           sudo curl -sSf -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc
           echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
           sudo apt-get update -qq
-          sudo apt-get install -y -qq postgresql-client-17
+          sudo apt-get install -y -qq postgresql-client-18
 
-      # 2026-09-25: 소스를 Supabase→Aiven으로 전환(Supabase 이그레스 전혀 안 씀,
-      # Aiven엔 발행 기사(articles)만 있어 덤프가 훨씬 작음). raw_candidates는
-      # 스키마만 있고 데이터를 미러링하지 않으므로(원자재는 백업 대상 아님)
-      # 덤프에 빈 테이블로만 잡혀도 무해하다.
+      # 소스를 Supabase→Aiven으로 전환(Supabase 이그레스 전혀 안 씀, Aiven엔
+      # 발행 기사(articles)만 있어 덤프가 훨씬 작음). raw_candidates는 스키마만
+      # 있고 데이터를 미러링하지 않으므로(원자재는 백업 대상 아님) 덤프에
+      # 빈 테이블로만 잡혀도 무해하다.
       - name: DB 덤프 (Aiven)
         env:
           PGCONNSTR: ${{ secrets.AIVEN_SERVICE_URI }}
-        run: pg_dump "$PGCONNSTR" --no-owner --no-privileges -F c -f backup.dump
+        run: /usr/lib/postgresql/18/bin/pg_dump "$PGCONNSTR" --no-owner --no-privileges -F c -f backup.dump
 
       - name: 암호화 (AES-256)
         run: |
@@ -154,7 +159,7 @@ jobs:
           BACKUP_PASSWORD: ${{ secrets.BACKUP_PASSWORD }}
         run: |
           openssl enc -d -aes-256-cbc -pbkdf2 -in newsfinal-*.dump.enc -out verify.dump -pass env:BACKUP_PASSWORD
-          /usr/lib/postgresql/17/bin/pg_restore -l verify.dump > toc.txt
+          /usr/lib/postgresql/18/bin/pg_restore -l verify.dump > toc.txt
           echo "TOC 항목 수: $(wc -l < toc.txt)"
           grep -Eq "TABLE DATA public articles( |$)" toc.txt || { echo "::error::articles 테이블 데이터가 덤프에 없음"; exit 1; }
           rm -f verify.dump toc.txt
