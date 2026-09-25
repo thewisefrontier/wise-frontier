@@ -125,6 +125,26 @@ def _min_interval(model: str) -> float:
     return MIN_KEY_INTERVAL_SECONDS.get(model, _LITE_MIN_INTERVAL)
 
 
+# 2026-09-25 실사고: 429 로그에 실제 메시지를 남기게 한 뒤 보니(quota_info 폴백),
+# heavy 실행마다 3.5-flash-lite·3.1-flash-lite 두 모델 × 5키 = 10개 조합이
+# "동시에 전부" 429가 났다. 그날 사용량(gemini_usage_daily)은 키당 500건
+# 한도에 한참 못 미쳤는데도(3.5-lite 키1: 성공 288건) 그랬다 — 진짜 RPM/RPD
+# 초과라면 서로 독립된 모델인 3.1-lite는 최소 몇 개 키는 살아있어야 하는데
+# 항상 같이 막혔다. 두 lite 모델이 키(=Google 프로젝트) 하나당 한도를
+# **공유**한다고 봐야 이 패턴이 설명된다 — 그래서 페이싱·소진 상태를 모델별이
+# 아니라 "lite 풀" 단위로 묶는다(프리미엄 모델은 각자 그대로 독립 취급 —
+# 공유 여부를 실측으로 확인한 적 없어 건드리지 않음).
+_LITE_QUOTA_POOL = "lite-pool"
+_QUOTA_POOL = {
+    "gemini-3.5-flash-lite": _LITE_QUOTA_POOL,
+    "gemini-3.1-flash-lite": _LITE_QUOTA_POOL,
+}
+
+
+def _quota_pool(model: str) -> str:
+    return _QUOTA_POOL.get(model, model)
+
+
 _SHARED_WAIT_CAP = 20  # 이 이상은 기다리지 않고 그냥 진행 — 다른 키/모델로
                        # 넘어가는 게 나을 수도 있는 상황을 여기서 무한정 막지 않는다.
 
@@ -237,7 +257,7 @@ class GeminiClient:
         self._last_call_at = defaultdict(dict)
 
     def _is_available(self, model: str, idx: int) -> bool:
-        v = self._exhausted_keys[model].get(idx)
+        v = self._exhausted_keys[_quota_pool(model)].get(idx)
         if v is None:
             return True
         if v is True:
@@ -269,7 +289,7 @@ class GeminiClient:
             payload["tools"] = [{"google_search": {}}]
 
         n = len(self.api_keys)
-        model_stages = [(m, self._exhausted_keys[m]) for m in self.models[start_tier:]]
+        model_stages = [(m, self._exhausted_keys[_quota_pool(m)]) for m in self.models[start_tier:]]
         # 검색 그라운딩(use_search)은 구글 쪽에서 그라운딩 전용 쿼터가 아니라
         # 훨씬 작은 generate_content_free_tier_requests(키당 하루 20건 수준)로
         # 잘못 집계되는 사례가 보고돼 있다(2026-08-22 실사고, frontier_markets_writer.py
@@ -288,11 +308,13 @@ class GeminiClient:
 
             # 마지막 호출로부터 가장 오래 쉰 키부터 시도한다 — 아래 페이싱
             # 대기 시간을 최소화하면서 자연히 5키에 고르게 분산시킨다.
-            last_at = self._last_call_at[model]
+            # lite 두 모델은 같은 풀을 봐서, 방금 3.5-lite로 쓴 키는 3.1-lite
+            # 차례에도 "방금 씀"으로 잡혀 간격이 그대로 적용된다.
+            last_at = self._last_call_at[_quota_pool(model)]
             ordered = sorted(available, key=lambda i: last_at.get(i, 0))
 
             for idx in ordered:
-                # 이 키·모델 조합의 분당 한도 예방 페이싱 — 마지막 호출 후
+                # 이 키(·lite는 풀 단위) 분당 한도 예방 페이싱 — 마지막 호출 후
                 # 최소 간격이 안 지났으면 나머지 시간만큼 대기 후 호출한다.
                 elapsed = time.time() - last_at.get(idx, 0)
                 wait = _min_interval(model) - elapsed
@@ -301,7 +323,7 @@ class GeminiClient:
                 # 같은 키를 동시에 쓰는 다른 프로세스(job)가 없는지도 확인 —
                 # 이 프로세스 메모리만 보는 위 계산으론 collectors/breaking/heavy가
                 # 겹칠 때 합산 호출량이 한도를 넘는 걸 못 막는다.
-                _wait_for_shared_slot(model, idx, _min_interval(model))
+                _wait_for_shared_slot(_quota_pool(model), idx, _min_interval(model))
 
                 api_key = self.api_keys[idx]
                 url = (
