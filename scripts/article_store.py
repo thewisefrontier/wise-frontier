@@ -107,11 +107,17 @@ def _tag_crypto(payload: dict) -> None:
 
 
 def sb_headers() -> dict:
+    # 2026-09-25: 26개 스크립트가 이 함수를 공유하는데 기본값이
+    # return=representation이라, 응답 본문을 안 쓰는 PATCH/POST도 매번
+    # 전체 행(때로 full_text 포함)을 돌려받고 있었다(db.py는 9/23에 이미
+    # return=minimal로 고쳤는데 이쪽은 빠져 있었음). 본문이 실제로 필요한
+    # 소수 호출부(예: gemini_writer.find_duplicate_title RPC,
+    # park_multi_topic_articles insert)는 호출부에서 명시적으로 덮어쓴다.
     return {
         "apikey": SUPABASE_SERVICE_KEY,
         "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
         "Content-Type": "application/json",
-        "Prefer": "return=representation",
+        "Prefer": "return=minimal",
     }
 
 
