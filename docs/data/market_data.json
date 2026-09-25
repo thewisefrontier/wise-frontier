@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-25 12:37",
+  "updated_at": "2026-09-25 13:55",
   "indices": [
     {
       "name": "S&P 500",
@@ -18,7 +18,7 @@
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 51350.0,
+      "price": 51349.98,
       "change_pct": -0.31,
       "up": false
     },
@@ -53,22 +53,22 @@
     {
       "name": "SET (태국)",
       "symbol": "^SET.BK",
-      "price": 1610.41,
-      "change_pct": 0.49,
+      "price": 1611.23,
+      "change_pct": 0.54,
       "up": true
     },
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 6289.38,
-      "change_pct": -0.15,
+      "price": 6263.73,
+      "change_pct": -0.55,
       "up": false
     },
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 5758.81,
-      "change_pct": 0.5,
+      "price": 5764.76,
+      "change_pct": 0.61,
       "up": true
     },
     {
@@ -112,7 +112,7 @@
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 51350.0,
+        "price": 51349.98,
         "change_pct": -0.31,
         "up": false
       }
@@ -151,22 +151,22 @@
       {
         "name": "SET (태국)",
         "symbol": "^SET.BK",
-        "price": 1610.41,
-        "change_pct": 0.49,
+        "price": 1611.23,
+        "change_pct": 0.54,
         "up": true
       },
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 6289.38,
-        "change_pct": -0.15,
+        "price": 6263.73,
+        "change_pct": -0.55,
         "up": false
       },
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 5758.81,
-        "change_pct": 0.5,
+        "price": 5764.76,
+        "change_pct": 0.61,
         "up": true
       }
     ],
@@ -198,9 +198,9 @@
     "ANTM": {
       "name": "Aneka Tambang Tbk",
       "symbol": "ANTM.JK",
-      "price": 3290.0,
-      "change_pct": 0.61,
-      "up": true
+      "price": 3260.0,
+      "change_pct": -0.31,
+      "up": false
     },
     "ACB": {
       "name": "Asia Commercial Joint Stock Bank",
