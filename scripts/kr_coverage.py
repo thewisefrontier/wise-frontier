@@ -182,16 +182,22 @@ def measure(cluster, query, count=count_kr_coverage):
 
 def rerank(clusters, importance, is_severe, cluster_key, call_llm,
            count=count_kr_coverage, fetch_trends=fetch_kr_trending, top_n=TOP_N,
-           bonus_eligible=lambda c: True):
+           bonus_eligible=lambda c: True, daily_cap_near=lambda: False):
     """상위 top_n 후보 + 한국 검색 수요와 맞는 클러스터를 보정 점수로 재정렬.
     - 검색 수요 매칭: +30, 희소성 감점 없음(국내 보도가 많아도 수요가 더 크다).
     - 나머지: 희소성 가감점. 중대성 높은 사안은 감점하지 않는다(국내 언론이 다룰 만큼
       크다는 게 배제 사유가 아니라는 기존 방침). 가산점은 bonus_eligible(프론티어 국가)만 —
       첫 실운영(9/24)에서 국가 제한 없이 주니 "미국 배우 샘 워싱턴" 같은 선진국 연예
       기사가 +15를 받았다. 근거였던 7월 상위 노출은 프론티어 국가의 틈새 주제였다.
+    - daily_cap_near(): True면 Gemini lite 일일 한도가 임박했다는 뜻 — 이 부가 호출
+      자체를 건너뛰고 본 기능(기사 작성)에 한도를 양보한다(2026-09-25, 키 1·2가
+      합산 80~97%까지 찬 상태에서 heavy 실행 발행이 0건 났던 사고 대응).
     반환: (재정렬된 clusters, {cluster_key: {"kr_coverage_30d": n} 또는 {"kr_trend": {...}}}).
     실패하면 원래 순서."""
     try:
+        if daily_cap_near():
+            print("  [국내보도] Gemini lite 일일 한도 임박 — 부가 호출 건너뛰고 기존 순서 유지")
+            return clusters, {}
         normal = [c for c in clusters if not any(a.get("__needs_review__") for a in c)]
         if not normal:
             return clusters, {}
