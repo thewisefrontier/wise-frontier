@@ -1,5 +1,59 @@
 [
   {
+    "id": 292285,
+    "title_en": "[국제유가] WTI 배럴당 92달러…중동 공급 차질 지속",
+    "title_ko": "[국제유가] WTI 배럴당 92달러…중동 공급 차질 지속",
+    "summary_ko": "국제유가가 25일(현지시간) 하락했다. 시장 집계에 따르면 WTI 원유 선물은 뉴욕상업거래소(NYMEX)에서 배럴당 92.45달러에 거래를 마쳤으며, 전일 종가(95.78달러) 대비 3.48%(3.33달러) 내렸다.\n\n브렌트유는 배럴당 97.48달러로 마감해, 전일 종가(100.34달러) 대비 2.85%(2.86달러) 하락했다.\n\n이번 유가 하락은 중동 지역의 공급 차질 가능성과 오만 인근 화물선 피격 사건 등이 복합적으로 작용한 결과인 것으로 분석된다. 중동 지정학적 리스크가 지속되면서 브렌트유와 미국산 원유 가격의 종이 가격과 ",
+    "url": "internal://oil_price_2026-09-25",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국제유가",
+    "region": "글로벌",
+    "country": "국제",
+    "country_flag": "🛢️",
+    "score": 1,
+    "created_at": "2026-09-26 06:06",
+    "countries": [
+      "미국",
+      "사우디아라비아",
+      "러시아"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/oil_2026_09_25_pid5914337.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-26T06:06:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-26 06:06",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "wti": {
+        "pct": -3.476717477552723,
+        "prev": 95.78,
+        "price": 92.45,
+        "change": -3.3299999999999983
+      },
+      "date": "2026-09-25",
+      "brent": {
+        "pct": -2.8503089495714566,
+        "prev": 100.34,
+        "price": 97.48,
+        "change": -2.8599999999999994
+      },
+      "source": "Yahoo Finance"
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 292224,
     "title_en": "한국, 서울·부산·주말 맑고 선선…남부지방 곳곳 비",
     "title_ko": "한국, 서울·부산·주말 맑고 선선…남부지방 곳곳 비",
@@ -1351,127 +1405,6 @@
       "source": "Yahoo Finance"
     },
     "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 291626,
-    "title_en": "국제형사재판소, 중앙아프리카공화국 반군 전 간부 반인도범죄 유죄 선고",
-    "title_ko": "국제형사재판소, 중앙아프리카공화국 반군 전 간부 반인도범죄 유죄 선고",
-    "summary_ko": "[업데이트]\n■ 9월 25일 19:26 — 러시아 민간군사기업 와그너 잔류 세력이 중앙아프리카공화국 북서부 우방기강 일대를 거점으로 강력한 진통제인 트라마돌 밀수와 금광 채굴을 연계해 자금을 확보하고 있는 사실이 25일(현지시간) 보도됐다. 인도에서 출발해 콩고민주공화국을 거쳐 유입된 트라마돌은 바가와 보다 등의 금광 채굴 현장과 방기 시내로 재분배되고 있으며, 국제범죄초국가적 조직화 방지 글로벌 이니셔티브(GI-TOC) 보고서에 따르면 와그너는 연간 1억8000만달러 규모의 불법 금 수출 수익을 올리고 트라마돌 밀수는 그 부수적 ",
-    "url": "internal://trend_중앙아프리카_2026092505",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "trend_중앙아프리카",
-    "region": "global",
-    "country": "중앙아프리카공화국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-25 05:58",
-    "countries": [
-      "중앙아프리카공화국",
-      "러시아",
-      "차드"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_central_african_republic_conflict.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-25T05:58:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-25 05:58",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-09-25 19:26",
-        "note": "와그너 잔류 세력, 마약 밀수·금광 채굴로 자금 확보"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "사진: Keitsist (CC BY-SA 3.0, Wikimedia Commons)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 291625,
-    "title_en": "아이티 과도정부, 로저 스톤 로비 계약으로 거센 역풍 직면",
-    "title_ko": "아이티 과도정부, 로저 스톤 로비 계약으로 거센 역풍 직면",
-    "summary_ko": "24일(현지시간) 아이티 과도정부가 도널드 트럼프 미국 대통령의 측근인 로저 스톤 측과 거액의 로비 계약을 체결한 사실이 알려지면서 미국과 현지 정계의 거센 반발에 직면했다. 알릭스 디디에 필스-에메 총리 정부는 지난 2일 스톤의 플로리다 기반 로비 회사인 드레이크 벤처스와 매달 6만5000달러, 연간 78만달러에 달하는 계약을 체결했다. 시민단체 헤이티언 아메리칸 파운데이션 대모크러시는 정부가 선거 예산안을 압박 속에 거부하면서도 미국 정치 브로커에게 막대한 공적 자금을 쏟아붓고 있다고 비판했다.\n\n이와 관련해 반발 목소리를 높인",
-    "url": "internal://trend_아이티_2026092505",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "trend_아이티",
-    "region": "caribbean",
-    "country": "아이티",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-25 05:56",
-    "countries": [
-      "아이티",
-      "미국",
-      "콜롬비아"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_haiti_gang_violence.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-25T05:56:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-25 05:56",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: Wikimedia Commons",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 291624,
-    "title_en": "수단 군부, 북코르도판 주에서 신속지원군 격퇴 공세 개시",
-    "title_ko": "수단 군부, 북코르도판 주에서 신속지원군 격퇴 공세 개시",
-    "summary_ko": "수단군(SAF)이 북코르도판 주에서 신속지원군(RSF)의 남은 거점을 격퇴하기 위해 공세를 시작했다고 지난 26일(현지시간) 현지 매체가 보도했다. 군부는 소다리와 서바라 지역으로 진격해 주도 엘오베이드 서부 지역을 타격했다. 이번 군사 작전은 군부가 바라와 자브라트알셰이크를 장악한 지 약 두 달 만에 이루어졌다.\n\n엘오베이드에서는 신속지원군의 드론 공격으로 민간인 2명이 사망하고 20명이 부상을 입었다. 2023년 4월 발발한 내전은 수단군과 신속지원군 간의 권력 투쟁으로 장기화되면서 교착 상태에 빠졌고, 국토는 사실상 양분된 상",
-    "url": "internal://trend_수단 분쟁_2026092505",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "trend_수단 분쟁",
-    "region": "africa",
-    "country": "수단",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-25 05:55",
-    "countries": [
-      "수단",
-      "미국",
-      "영국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_sudan_conflict.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-25T05:55:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-25 05:55",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: Wikimedia Commons",
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
