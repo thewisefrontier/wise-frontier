@@ -1,5 +1,71 @@
 [
   {
+    "id": 292223,
+    "title_en": "[국내유가] 휘발유 리터당 1856원…정유사 공급가 영향 지속",
+    "title_ko": "[국내유가] 휘발유 리터당 1856원…정유사 공급가 영향 지속",
+    "summary_ko": "한국석유공사 오피넷이 26일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1856.19원으로 집계됐다.\n\n이날 오피넷에 따르면 경유 평균 판매가격은 리터당 1841.53원으로 전일 대비 0.15원 상승했고, LPG(부탄)는 리터당 1089.26원으로 전일 대비 보합세를 나타냈다. 휘발유 역시 전일 대비 0.17원 오르며 소폭의 상승세를 보였다.\n\n최근 유가 변동은 국제유가 흐름과 정유사 공급가 조정 등의 요인이 복합적으로 작용한 결과로 풀이된다. 주유소협회 등 관련 업계에서는 기름값 변동의 1차적인 원인으로 정유",
+    "url": "internal://opinet_price_2026-09-26",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-09-26 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_09_26_pid7908694.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-26T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-26 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-09-26",
+      "prices": {
+        "B027": {
+          "diff": 0.17,
+          "name": "휘발유",
+          "price": 1856.19
+        },
+        "B034": {
+          "diff": 0.45,
+          "name": "고급휘발유",
+          "price": 2331.98
+        },
+        "C004": {
+          "diff": 0.05,
+          "name": "실내등유",
+          "price": 1574.09
+        },
+        "D047": {
+          "diff": 0.15,
+          "name": "경유",
+          "price": 1841.53
+        },
+        "K015": {
+          "diff": 0.0,
+          "name": "LPG(부탄)",
+          "price": 1089.26
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 292222,
     "title_en": "[데일리 다이제스트] 지정학적 분쟁과 공중보건 위기 동시 확산",
     "title_ko": "[데일리 다이제스트] 지정학적 분쟁과 공중보건 위기 동시 확산",
@@ -1471,36 +1537,6 @@
         }
       }
     },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 291621,
-    "title_en": "[데일리 다이제스트] 지정학적 갈등 격화 속 글로벌 안보·보건 리스크와 경제 지표 변동",
-    "title_ko": "[데일리 다이제스트] 지정학적 갈등 격화 속 글로벌 안보·보건 리스크와 경제 지표 변동",
-    "summary_ko": "[글로벌 안보 및 외교적 긴장 고조]\n- 24일(현지시간) 미얀마 국민통합정부(NUG)는 군정이 강제징집법을 시행한 이후 27차례의 징병을 통해 남성 13만 5080명을 강제로 입도시켰다고 24일 발표했다.\n- 24일 마수드 페제시키안 이란 대통령은 유엔 총회 연설에서 미국의 압박에 굴복하지 않겠다는 입장을 재확인했고, 미국 상원은 도널드 트럼프 대통령의 이란 군사작전 권한 제한 결의안을 49대 50으로 부결시켰다.\n- 24일 칠레 정부가 미국의 주도로 추진되는 '미주 방패(Escudo de las Américas)' 구상에 공식 ",
-    "url": "internal://digest_20260925",
-    "source": "NewsFinal",
-    "category": "다이제스트",
-    "subcategory": "digest_20260925",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 42,
-    "created_at": "2026-09-25 05:02",
-    "countries": null,
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/digest_20260925.jpg",
-    "view_count": 1,
-    "first_published_at": null,
-    "update_log": [],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
     "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
