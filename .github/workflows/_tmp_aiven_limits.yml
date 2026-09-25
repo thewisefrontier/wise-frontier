@@ -14,14 +14,14 @@ jobs:
         name: psql 18 설치
       - env:
           PGCONNSTR: ${{ secrets.AIVEN_SERVICE_URI }}
-        name: 한도 관련 정보 조회
+        name: 잔재 테이블 확인
         run: |
-          echo "== 버전/설정"
-          /usr/lib/postgresql/18/bin/psql "$PGCONNSTR" -c "select version();"
-          /usr/lib/postgresql/18/bin/psql "$PGCONNSTR" -c "show max_connections;"
-          /usr/lib/postgresql/18/bin/psql "$PGCONNSTR" -c "select count(*) active_connections from pg_stat_activity;"
-          echo "== DB/테이블 크기"
-          /usr/lib/postgresql/18/bin/psql "$PGCONNSTR" -c "select pg_size_pretty(pg_database_size(current_database())) db_size;"
-          /usr/lib/postgresql/18/bin/psql "$PGCONNSTR" -c "select relname, pg_size_pretty(pg_total_relation_size(oid)) sz from pg_class where relkind='r' and relnamespace='public'::regnamespace order by pg_total_relation_size(oid) desc;"
-          echo "== 디스크(가능하면)"
-          /usr/lib/postgresql/18/bin/psql "$PGCONNSTR" -c "select * from pg_stat_wal;" 2>&1 | head -5
+          P=/usr/lib/postgresql/18/bin/psql
+          echo "== view_snapshots"
+          $P "$PGCONNSTR" -c "select count(*) n, min(created_at)::text oldest, max(created_at)::text newest from view_snapshots;" 2>&1
+          $P "$PGCONNSTR" -c "\d view_snapshots" 2>&1 | head -20
+          echo "== rss_raw_queue"
+          $P "$PGCONNSTR" -c "select count(*) n from rss_raw_queue;" 2>&1
+          $P "$PGCONNSTR" -c "\d rss_raw_queue" 2>&1 | head -20
+          echo "== 현재 접속 목록"
+          $P "$PGCONNSTR" -c "select pid, usename, application_name, state, query_start, left(query,60) q from pg_stat_activity where pid <> pg_backend_pid() order by query_start;" 2>&1
