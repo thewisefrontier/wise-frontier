@@ -83,3 +83,11 @@ out, info = kc.rerank([US, ML], lambda c: imp3[id(c)], lambda c: False, key, q3,
                       count=lambda q: 0, fetch_trends=NO_TRENDS, bonus_eligible=lambda c: c[0]["country"] != "미국")
 assert out[0] is ML, [c[0] for c in out]  # 말라위 10+15=25 > 미국 20+0
 print("ok2")
+
+# 일일 한도 임박 시 부가 호출 자체를 건너뛴다(2026-09-25)
+called = []
+llm_guard = lambda p: called.append(p) or "should not be used"
+out, info = kc.rerank([A], lambda c: 1, lambda c: False, key, llm_guard,
+                      fetch_trends=NO_TRENDS, daily_cap_near=lambda: True)
+assert out == [A] and info == {} and called == [], (out, info, called)
+print("ok3")

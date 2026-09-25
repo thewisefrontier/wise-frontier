@@ -73,6 +73,45 @@ def _log_usage(model: str, key_index: int, outcome: str,
         pass  # 집계 실패는 무시 — 본 기능(Gemini 호출)에 영향 없어야 한다
 
 
+# 2026-09-25: lite 두 모델이 키당 RPD(500, 사용자 공식 확인)를 공유한다는
+# 정황(→ 429 프로세스간 페이싱 메모리) — heavy 실행마다 두 모델 x 5키가
+# 동시에 막히는 패턴이 키별 합산 사용량 400~486/500(80~97%)과 겹쳤다.
+# 본 기능(기사 작성)이 한도를 다 쓰기 전에, 있으면 좋지만 없어도 되는
+# 부가 LLM 호출(예: kr_coverage.py의 검색어 생성)은 키 하나라도 80%를
+# 넘으면 건너뛰게 한다. 조회 자체가 실패하면 막지 않는다(부가 기능이
+# 본 기능을 절대 막지 않는다는 이 프로젝트 방침과 동일선상).
+RPD_LITE = 500
+DAILY_CAP_WARN_RATIO = 0.8
+_LITE_MODELS_FOR_CAP = ("gemini-3.5-flash-lite", "gemini-3.1-flash-lite")
+
+
+def lite_daily_usage_near_cap(api_keys: list, warn_ratio: float = DAILY_CAP_WARN_RATIO) -> bool:
+    """오늘(태평양 기준) lite 풀 사용량이 키 중 하나라도 warn_ratio를 넘으면 True."""
+    if not _USAGE_SUPABASE_URL or not _USAGE_SUPABASE_KEY or not api_keys:
+        return False
+    try:
+        today = datetime.now(timezone.utc).astimezone(_PACIFIC).date().isoformat()
+        res = requests.get(
+            f"{_USAGE_SUPABASE_URL}/rest/v1/gemini_usage_daily",
+            headers={"apikey": _USAGE_SUPABASE_KEY, "Authorization": f"Bearer {_USAGE_SUPABASE_KEY}"},
+            params={
+                "select": "key_index,success_calls,error_429",
+                "date": f"eq.{today}",
+                "model": f"in.({','.join(_LITE_MODELS_FOR_CAP)})",
+            },
+            timeout=5,
+        )
+        if res.status_code not in (200, 206):
+            return False
+        totals = {}
+        for row in res.json():
+            k = row.get("key_index")
+            totals[k] = totals.get(k, 0) + (row.get("success_calls") or 0) + (row.get("error_429") or 0)
+        return any(v / RPD_LITE >= warn_ratio for v in totals.values())
+    except Exception:
+        return False
+
+
 DEFAULT_GEMINI_MODELS = [
     "gemini-3.8-flash",
     "gemini-3.7-flash",

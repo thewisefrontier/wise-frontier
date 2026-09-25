@@ -3081,12 +3081,14 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
         clusters = cluster_articles(all_articles)
         print(f"  → {len(all_articles)}건 중 {len(clusters)}개 클러스터 발견\n")
         from kr_coverage import rerank as _kr_rerank
+        from gemini_client import lite_daily_usage_near_cap
         clusters, kr_info = _kr_rerank(
             clusters, cluster_importance, _cluster_hits_severity_high, make_cluster_key,
             # 부가 기능이라 과부하 때 키 10개×30초를 다 기다리지 않게 한 모델·짧은 타임아웃만
             lambda p: _gemini_client.call(p, max_tokens=800, start_tier=4, temperature=0.2,
                                           timeout=(5, 15), max_stages=1),
-            bonus_eligible=lambda c: (c[0].get("country") or "") not in ADVANCED_ECONOMIES | {""})
+            bonus_eligible=lambda c: (c[0].get("country") or "") not in ADVANCED_ECONOMIES | {""},
+            daily_cap_near=lambda: lite_daily_usage_near_cap(GEMINI_API_KEYS))
 
     today_own_articles = get_today_own_articles()
 
