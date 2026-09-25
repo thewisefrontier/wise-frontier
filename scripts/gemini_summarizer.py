@@ -183,7 +183,7 @@ except Exception:
             "apikey": SUPABASE_SERVICE_KEY,
             "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
             "Content-Type": "application/json",
-            "Prefer": "return=representation",
+            "Prefer": "return=minimal",
         }
     def _sb_url(table="articles"):
         return f"{SUPABASE_URL}/rest/v1/{table}"

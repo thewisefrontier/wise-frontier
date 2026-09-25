@@ -123,7 +123,7 @@ except Exception:
             "apikey": SUPABASE_SERVICE_KEY,
             "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
             "Content-Type": "application/json",
-            "Prefer": "return=representation",
+            "Prefer": "return=minimal",
         }
     def _sb_url(table="articles"):
         return f"{SUPABASE_URL}/rest/v1/{table}"
@@ -528,7 +528,7 @@ def find_similar_article(title: str, own_articles: list, threshold: int = 70,
     try:
         res = requests.post(
             f"{SUPABASE_URL}/rest/v1/rpc/find_duplicate_title",
-            headers=_sb_headers(),
+            headers={**_sb_headers(), "Prefer": "return=representation"},
             json={"p_title": title, "p_hours": 72, "p_threshold": 0.4},
             timeout=10,
         )
@@ -2536,7 +2536,7 @@ def park_multi_topic_articles(articles: list) -> int:
             try:
                 res = requests.post(
                     f"{SUPABASE_URL}/rest/v1/articles",
-                    headers=_sb_headers(),
+                    headers={**_sb_headers(), "Prefer": "return=representation"},
                     json=payload,
                     timeout=15
                 )
