@@ -166,6 +166,10 @@ jobs:
         # DomesticKR-Synth 중 article_translations에 언어 4개가 아직 안 채워진
         # 것만 골라 번역하는 멱등적 배치 — 원본(국내기사 집필)은 바로 위에서
         # 매 실행 돌고 있어 재료가 항상 쌓여 있다.
+        # 2026-09-26 일시 중단(사용자 지시 — "외국어 기사는 일단 발행 중단해둬,
+        # 다음주에 보고 좀 수정하자"): 품질 재검토 전까지 새 번역 생성을 멈춘다.
+        # 이미 만들어진 article_translations는 그대로 두고, 재개는 이 if를 지울 것.
+        if: false
         timeout-minutes: 10
         continue-on-error: true
         run: python scripts/multilang_translate.py
