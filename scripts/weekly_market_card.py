@@ -119,15 +119,30 @@ def weekly_change(symbol: str, week_end: date, limit_pct: float):
     rows, meta = fetch_daily(symbol)
     if not rows:
         return None
-    week_start = week_end - timedelta(days=4)
-    prev_end = week_end - timedelta(days=7)
-    this_week = [x for x in rows if week_start <= x[0] <= week_end]
-    prev_week = [x for x in rows if prev_end - timedelta(days=4) <= x[0] <= prev_end]
-    if not this_week or not prev_week:
-        print(f"  [제외] {symbol}: 해당 주 거래일 데이터 없음(휴장/데이터 누락)")
-        return None
-    end_date, end = this_week[-1]
-    prev_date, prev = prev_week[-1]
+    if symbol in CRYPTO:
+        # 2026-09-26 실사고(사용자 지적 — "비트코인은 5일이 아니라 7일 기준으로
+        # 봐야 하는거 아닐까"): 비트코인은 24시간 거래되는데 주식과 똑같이
+        # 월~금 창으로 자르면 야후가 주는 토·일 종가가 통째로 버려진다. 기사는
+        # 토요일 오전(금요일 장 마감 확정 후)에 나가므로, "이번 주"는 그 시점의
+        # 실제 최신 종가(토요일 새벽 것까지 포함)를, "지난주"는 거기서 정확히
+        # 7일 전 종가를 쓴다 — 주말 변동을 반영하면서도 날짜 간격은 그대로 7일.
+        end_date, end = rows[-1]
+        target_prev = end_date - timedelta(days=7)
+        prev_candidates = [x for x in rows if x[0] <= target_prev]
+        if not prev_candidates:
+            print(f"  [제외] {symbol}: 7일 전 비교 데이터 없음")
+            return None
+        prev_date, prev = prev_candidates[-1]
+    else:
+        week_start = week_end - timedelta(days=4)
+        prev_end = week_end - timedelta(days=7)
+        this_week = [x for x in rows if week_start <= x[0] <= week_end]
+        prev_week = [x for x in rows if prev_end - timedelta(days=4) <= x[0] <= prev_end]
+        if not this_week or not prev_week:
+            print(f"  [제외] {symbol}: 해당 주 거래일 데이터 없음(휴장/데이터 누락)")
+            return None
+        end_date, end = this_week[-1]
+        prev_date, prev = prev_week[-1]
     if end <= 0 or prev <= 0:
         print(f"  [제외] {symbol}: 비정상 종가")
         return None
