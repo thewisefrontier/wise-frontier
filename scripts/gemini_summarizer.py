@@ -2333,10 +2333,15 @@ JSON 배열로만 응답하세요 (마크다운 없이):
             # 2026-09-03 실사고(id=124782, 트럼프 관련 기사에 이미지 전혀 없음):
             # run_trend_tracker()만 fetch_article_image()를 부르고 있었고, 이
             # 실시간 트렌드 경로는 애초에 image_url을 payload에 넣지도 않아서
-            # 전부 이미지 없이 발행되고 있었다. entity 없이 호출하면 제목·본문
-            # 기반 Pixabay 키워드 추출로 폴백한다(article_image.py 참조).
+            # 전부 이미지 없이 발행되고 있었다.
+            # 2026-09-26 실사고(id=292289, 엠폭스 기사에 "COVID-19" 알약 사진):
+            # entity를 ""로 넘겨 위키미디어 검색을 아예 건너뛰고 있었다 — topic이
+            # 이미 있는데 안 썼다. Pixabay 폴백은 제목·본문 기반 LLM 키워드가
+            # "medicine/pills"처럼 일반화돼 질병명 기사와 무관한 스톡사진을
+            # 곧잘 집어온다. topic을 entity로 넘기면 위키미디어를 먼저 시도해
+            # (예: "mpox" → NIAID 바이러스 사진) 매치 실패 시에만 그대로 폴백한다.
             from article_image import fetch_article_image
-            image_url, image_credit = fetch_article_image(title, body, "", call_gemini)
+            image_url, image_credit = fetch_article_image(title, body, topic, call_gemini)
 
         payload = {
             "title_en": title_en or title, "title_ko": title,
@@ -2677,8 +2682,11 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
         if not _mt_bad:
             # 2026-09-03 실사고(id=124782) — run_realtime_trend_tracker()와 동일한
             # 원인(image_url을 payload에 아예 안 넣던 버그)이 이 경로에도 있었다.
+            # 2026-09-26 실사고(id=292289) — 위와 동일하게 topic을 entity로
+            # 넘겨 위키미디어를 먼저 시도한다(자세한 이유는 위 run_realtime_
+            # trend_tracker() 쪽 주석 참고).
             from article_image import fetch_article_image
-            image_url, image_credit = fetch_article_image(title, body, "", call_gemini)
+            image_url, image_credit = fetch_article_image(title, body, topic, call_gemini)
 
         payload = {
             "title_en": title_en or title, "title_ko": title,
