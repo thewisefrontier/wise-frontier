@@ -74,9 +74,17 @@ _WIKI_CATEGORY_AVOID_WORDS = (
     "cartoon", "caricature", "satire", "engraving", "etching", "lithograph",
     "woodcut", "painting", "drawing", "personification", " in art", "artworks",
 )
+# art_weekly_writer.py처럼 명화 자체를 소개하는 기사는 "painting"이 배제
+# 사유가 아니라 목적 그 자체다 — 이 목록을 그대로 쓰면 진짜 작품 사진은
+# 전부 걸러지고 "painting" 분류가 안 붙은 디테일 클로즈업 사진만 통과한다
+# (2026-09-26 실사고: 모네 "수련" 기사에 붓터치 클로즈업만 나옴, 확인해보니
+# Commons 상위 결과 "Water-Lily Pond and Weeping Willow.JPG" 등 진품 사진은
+# 전부 걸러지고 "Detail of..." 클로즈업만 남았음). 풍자·의인화만 걸러도
+# 충분하다(둘 다 이 기능이 다루는 명화가 아님).
+_WIKI_CATEGORY_AVOID_WORDS_ARTWORK = ("cartoon", "caricature", "satire", "personification")
 
 
-def fetch_wikimedia_image(query: str):
+def fetch_wikimedia_image(query: str, allow_artwork: bool = False):
     """위키미디어 커먼즈에서 CC/PD 라이선스 이미지를 검색한다.
 
     영화 포스터·앨범 커버 등 저작권이 있는 홍보물은 커먼즈 정책상 애초에
@@ -84,12 +92,16 @@ def fetch_wikimedia_image(query: str):
     허용되는 fair use이지 재배포 가능한 자유 라이선스가 아니다) — 인물
     사진·공식 행사 사진·랜드마크 등에서 주로 성과가 난다.
 
+    allow_artwork: True면 art_weekly_writer.py처럼 명화 자체가 목적인
+    호출부 — "painting"/"drawing"/판화 계열이 배제 사유가 아니다.
+
     반환: (image_url, image_credit). CC-BY 계열처럼 저작자 표기 의무가
     있는 라이선스만 image_credit을 채우고, 퍼블릭도메인 등 표기 의무가
     없으면 빈 문자열.
     """
     if not query:
         return None, None
+    category_avoid_words = _WIKI_CATEGORY_AVOID_WORDS_ARTWORK if allow_artwork else _WIKI_CATEGORY_AVOID_WORDS
     try:
         res = requests.get(
             "https://commons.wikimedia.org/w/api.php",
@@ -139,6 +151,10 @@ def fetch_wikimedia_image(query: str):
                 continue
             if any(w in title_norm for w in _WIKI_TITLE_AVOID_WORDS):
                 continue
+            # allow_artwork여도 "Detail of ..." 클로즈업 사진은 배제 — 붓터치만
+            # 나오고 작품 전체 구도(연꽃·물 등)가 안 보인다(위 실사고).
+            if allow_artwork and ("detail of" in title_norm or "(detail)" in title_norm):
+                continue
             if anchor and anchor not in title_lower:
                 continue
             if (info.get("width") or 0) < 300 or (info.get("height") or 0) < 200:
@@ -153,7 +169,7 @@ def fetch_wikimedia_image(query: str):
             # — 통계 도표(위 title 필터)와 함께 "사진이 아닌 것" 전반을
             # 배제하는 목적.
             categories_lower = (meta.get("Categories", {}).get("value") or "").lower()
-            if any(w in categories_lower for w in _WIKI_CATEGORY_AVOID_WORDS):
+            if any(w in categories_lower for w in category_avoid_words):
                 continue
             license_key = (meta.get("License", {}).get("value") or "").lower()
             restrictions = (meta.get("Restrictions", {}).get("value") or "").strip()

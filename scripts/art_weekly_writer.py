@@ -101,7 +101,7 @@ except Exception:
 try:
     from article_image import fetch_wikimedia_image
 except Exception:
-    def fetch_wikimedia_image(query: str):
+    def fetch_wikimedia_image(query: str, allow_artwork: bool = False):
         return None, None
 
 
@@ -194,7 +194,7 @@ def fetch_artwork_image(artwork: dict) -> tuple[str, str]:
     """작품 실물 이미지만 쓴다 — 못 찾으면 빈 문자열(호출부가 발행을 건너뜀).
     일반 기사처럼 Pixabay 스톡사진으로 대체하지 않는다(작품 소개 기사에
     엉뚱한 사진이 붙으면 안 됨 — 2026-09-08 파올라 페를롭 사고와 같은 문제)."""
-    wiki_url, wiki_credit = fetch_wikimedia_image(artwork["wiki_query"])
+    wiki_url, wiki_credit = fetch_wikimedia_image(artwork["wiki_query"], allow_artwork=True)
     if not wiki_url:
         return "", ""
     try:
