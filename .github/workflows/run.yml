@@ -394,6 +394,12 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
+          # 2026-09-26 실사고: 이 스텝만 아래 3개가 빠져 있어 fetch_seeded_pixabay_image()가
+          # PIXABAY_API_KEY 없음 가드에 걸려 매번 조용히 빈 image_url을 반환했다(사용자 지적
+          # "주간 시세에는 왜 사진이 안들어갔지?").
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
+          UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
 
       - name: 주간 정리 초안 — 일요일 20시(KST) 이후 주 1회, 어드민 검토 후 발행 (2026-09-22 신설)
         if: steps.guard.outputs.skip != 'true'
