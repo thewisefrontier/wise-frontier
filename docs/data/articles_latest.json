@@ -118,45 +118,6 @@
     "noindex": false
   },
   {
-    "id": 292554,
-    "title_en": "미얀마 군사정권, 13만여 명 강제 징집 속 매그웨이 지역 대규모 병력 이동",
-    "title_ko": "미얀마 군사정권, 13만여 명 강제 징집 속 매그웨이 지역 대규모 병력 이동",
-    "summary_ko": "민 아웅 흘라잉 미얀마 군정 최고사령관은 지난 22일 미국 시사주간지 타임(Time)과의 단독 인터뷰 보도 이후 정보팀을 통해 해당 매체와 싱가포르 거주 에디터 찰리 캠벨을 강력히 규탄하는 성명을 24일 발표했다. 군정 측은 매체가 당초 제안했던 평화와 안정 노력 대신 독자적 해석과 편집 접근 방식을 사용해 언론 윤리를 위반하고 근거 없는 논평을 실었다고 비판했다.\n\n인터뷰에서 민 아웅 흘라잉 사령관은 81세의 수감 중인 아웅산 수치 국가고문을 자택에 머물게 하며 관용을 베풀고 있다고 주장했으나, 그녀의 아들 킴 아리스는 22일 런",
-    "url": "internal://trend_미얀마_2026092617",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "trend_미얀마",
-    "region": "southeast_asia",
-    "country": "미얀마",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-26 17:25",
-    "countries": [
-      "미얀마",
-      "미국",
-      "중국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_myanmar_civil_war.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-26T17:25:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-26 17:25",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "사진: Yuet Man Lee (CC BY-SA 4.0, Wikimedia Commons)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
     "id": 292553,
     "title_en": "수단 군부 쿠데타 이후 내전 격화 속 Kordofan 전선 공방과 부족 재편",
     "title_ko": "수단 군부 쿠데타 이후 내전 격화 속 Kordofan 전선 공방과 부족 재편",
@@ -334,7 +295,7 @@
     "id": 292431,
     "title_en": "트럼프, 호르무즈 해협 재개방 7일 제안 거부…추가 폭격 시사",
     "title_ko": "트럼프, 호르무즈 해협 재개방 7일 제안 거부…추가 폭격 시사",
-    "summary_ko": "미국과 이란 간의 긴장이 고조되는 가운데, 도널드 트럼프 미국 대통령이 이란 측이 제안한 7일간의 휴전 및 호르무즈 해협 재개방 제안을 26일(현지시간) 거부했다.\n\n앞서 아바스 아라그치(Abbas Araghchi) 이란 외무장관은 카타르를 통해 미국에 구체적인 7일 계획을 전달했다고 밝혔다. 이 제안에는 레바논을 포함한 중동 전역의 모든 적대 행위를 7일간 중단하고, 최소 120억 달러 규모로 추정되는 이란의 동결 자산을 해제하며, 이란산 석유에 대한 제안 해제와 미 해군의 이란 해상 봉쇄 종료가 포함됐다. 이란 혁명수비대 호세인",
+    "summary_ko": "{\n  \"title\": \"트럼프, 이란의 호르무즈 해협 재개방 제안 거부…추가 폭격 시사\",\n  \"country\": \"미국\",\n  \"countries\": [\n    \"미국\",\n    \"이란\",\n    \"사우디아라비아\"\n  ],\n  \"category\": \"정치·외교\",\n  \"is_travel\": false,\n  \"body\": \"미국과 이란 간의 긴장이 고조되는 가운데 도널드 트럼프 미국 대통령이 이란 측이 제안한 7일간의 휴전 및 호르무즈 해협 재개방 제안을 26일(현지시간) 거부했다.\\n\\n앞서 아바스 아라그치 이란 외무장관은 유엔",
     "url": "internal://cluster_20260926_ab88bdc3",
     "source": "NewsFinal",
     "category": "정치·외교",
@@ -356,6 +317,10 @@
       {
         "timestamp": "2026-09-26 11:34",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-09-26 17:43",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
