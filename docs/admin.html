@@ -512,7 +512,7 @@
       const isOwn = a.source === 'NewsFinal';
       const isUnpublished = isOwn && !a.is_published;
       const title = a.title_ko || a.title_en || '(제목없음)';
-      const date = (a.created_at || '').slice(0, 10);
+      const date = (a.created_at || '').slice(0, 16);
       const rowStyle = isUnpublished ? 'style="opacity:0.6;"' : '';
       const unpublishedBadge = isUnpublished ? '<span style="font-size:9px;padding:1px 5px;border:1px solid var(--muted);color:var(--muted);margin-left:4px;">미발행</span>' : '';
       return `
