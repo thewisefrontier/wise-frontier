@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-"""lite_daily_usage_near_cap() 회귀 테스트(2026-09-25). 실행: python scripts/test_gemini_daily_cap_guard.py"""
+"""lite_daily_usage_near_cap() 회귀 테스트(2026-09-26 갱신 — 모델별 독립 확인 후
+합산 검사를 (모델,키)별 개별 검사로 수정). 실행: python scripts/test_gemini_daily_cap_guard.py"""
 import os
 import sys
 
@@ -18,18 +19,25 @@ class R:
 
 KEYS = ["k1", "k2", "k3", "k4", "k5"]
 
-# 키 하나(1번)라도 합산 80% 넘으면 True
+# 3.5-lite 키1이 80% 넘으면 True(3.1-lite는 여유 있어도 무관)
 gc.requests.get = lambda *a, **k: R(200, [
-    {"key_index": 1, "success_calls": 380, "error_429": 20},  # 3.5-lite: 400
-    {"key_index": 1, "success_calls": 5, "error_429": 0},       # 3.1-lite 합쳐 405/500=81%
-    {"key_index": 2, "success_calls": 100, "error_429": 0},
+    {"model": "gemini-3.5-flash-lite", "key_index": 1, "success_calls": 400, "error_429": 5},  # 405/500=81%
+    {"model": "gemini-3.1-flash-lite", "key_index": 1, "success_calls": 20, "error_429": 0},
 ])
 assert gc.lite_daily_usage_near_cap(KEYS) is True
 
-# 전부 여유 있으면 False
+# 3.5-lite가 소진돼도(495/500) 3.1-lite는 15건뿐이면 "합산" 아니라 "개별" 검사이므로
+# 3.5 쪽 하나만으로도 여전히 True(80% 조건은 모델 하나만 넘어도 걸림 — 부가호출은 보수적으로)
 gc.requests.get = lambda *a, **k: R(200, [
-    {"key_index": 1, "success_calls": 100, "error_429": 0},
-    {"key_index": 2, "success_calls": 200, "error_429": 10},
+    {"model": "gemini-3.5-flash-lite", "key_index": 1, "success_calls": 495, "error_429": 0},
+    {"model": "gemini-3.1-flash-lite", "key_index": 1, "success_calls": 15, "error_429": 0},
+])
+assert gc.lite_daily_usage_near_cap(KEYS) is True
+
+# 둘 다 여유 있으면 False
+gc.requests.get = lambda *a, **k: R(200, [
+    {"model": "gemini-3.5-flash-lite", "key_index": 1, "success_calls": 100, "error_429": 0},
+    {"model": "gemini-3.1-flash-lite", "key_index": 1, "success_calls": 20, "error_429": 0},
 ])
 assert gc.lite_daily_usage_near_cap(KEYS) is False
 

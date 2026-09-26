@@ -73,12 +73,12 @@ def _log_usage(model: str, key_index: int, outcome: str,
         pass  # 집계 실패는 무시 — 본 기능(Gemini 호출)에 영향 없어야 한다
 
 
-# 2026-09-25: lite 두 모델이 키당 RPD(500, 사용자 공식 확인)를 공유한다는
-# 정황(→ 429 프로세스간 페이싱 메모리) — heavy 실행마다 두 모델 x 5키가
-# 동시에 막히는 패턴이 키별 합산 사용량 400~486/500(80~97%)과 겹쳤다.
-# 본 기능(기사 작성)이 한도를 다 쓰기 전에, 있으면 좋지만 없어도 되는
-# 부가 LLM 호출(예: kr_coverage.py의 검색어 생성)은 키 하나라도 80%를
-# 넘으면 건너뛰게 한다. 조회 자체가 실패하면 막지 않는다(부가 기능이
+# 2026-09-25 도입 당시엔 lite 두 모델이 RPD를 공유한다고 봤으나(그래서 합산
+# 검사였음), 09-26 실측으로 뒤집혔다 — 3.5-flash-lite는 5키 전부 495~509건
+# (500 근처)인데 3.1-flash-lite는 15~27건뿐이라 독립 한도임이 확인됨(위
+# _quota_pool 주석 참고). 그래서 이제 (모델,키) 조합별로 따로 본다 — 부가
+# LLM 호출(예: kr_coverage.py의 검색어 생성)은 실제로 그 호출이 쓸 모델·키가
+# 80%를 넘겼을 때만 건너뛴다. 조회 자체가 실패하면 막지 않는다(부가 기능이
 # 본 기능을 절대 막지 않는다는 이 프로젝트 방침과 동일선상).
 RPD_LITE = 500
 DAILY_CAP_WARN_RATIO = 0.8
@@ -86,7 +86,7 @@ _LITE_MODELS_FOR_CAP = ("gemini-3.5-flash-lite", "gemini-3.1-flash-lite")
 
 
 def lite_daily_usage_near_cap(api_keys: list, warn_ratio: float = DAILY_CAP_WARN_RATIO) -> bool:
-    """오늘(태평양 기준) lite 풀 사용량이 키 중 하나라도 warn_ratio를 넘으면 True."""
+    """오늘(태평양 기준) (모델,키) 조합 중 하나라도 warn_ratio를 넘으면 True."""
     if not _USAGE_SUPABASE_URL or not _USAGE_SUPABASE_KEY or not api_keys:
         return False
     try:
@@ -95,7 +95,7 @@ def lite_daily_usage_near_cap(api_keys: list, warn_ratio: float = DAILY_CAP_WARN
             f"{_USAGE_SUPABASE_URL}/rest/v1/gemini_usage_daily",
             headers={"apikey": _USAGE_SUPABASE_KEY, "Authorization": f"Bearer {_USAGE_SUPABASE_KEY}"},
             params={
-                "select": "key_index,success_calls,error_429",
+                "select": "model,key_index,success_calls,error_429",
                 "date": f"eq.{today}",
                 "model": f"in.({','.join(_LITE_MODELS_FOR_CAP)})",
             },
@@ -103,11 +103,11 @@ def lite_daily_usage_near_cap(api_keys: list, warn_ratio: float = DAILY_CAP_WARN
         )
         if res.status_code not in (200, 206):
             return False
-        totals = {}
         for row in res.json():
-            k = row.get("key_index")
-            totals[k] = totals.get(k, 0) + (row.get("success_calls") or 0) + (row.get("error_429") or 0)
-        return any(v / RPD_LITE >= warn_ratio for v in totals.values())
+            used = (row.get("success_calls") or 0) + (row.get("error_429") or 0)
+            if used / RPD_LITE >= warn_ratio:
+                return True
+        return False
     except Exception:
         return False
 
@@ -164,24 +164,19 @@ def _min_interval(model: str) -> float:
     return MIN_KEY_INTERVAL_SECONDS.get(model, _LITE_MIN_INTERVAL)
 
 
-# 2026-09-25 실사고: 429 로그에 실제 메시지를 남기게 한 뒤 보니(quota_info 폴백),
-# heavy 실행마다 3.5-flash-lite·3.1-flash-lite 두 모델 × 5키 = 10개 조합이
-# "동시에 전부" 429가 났다. 그날 사용량(gemini_usage_daily)은 키당 500건
-# 한도에 한참 못 미쳤는데도(3.5-lite 키1: 성공 288건) 그랬다 — 진짜 RPM/RPD
-# 초과라면 서로 독립된 모델인 3.1-lite는 최소 몇 개 키는 살아있어야 하는데
-# 항상 같이 막혔다. 두 lite 모델이 키(=Google 프로젝트) 하나당 한도를
-# **공유**한다고 봐야 이 패턴이 설명된다 — 그래서 페이싱·소진 상태를 모델별이
-# 아니라 "lite 풀" 단위로 묶는다(프리미엄 모델은 각자 그대로 독립 취급 —
-# 공유 여부를 실측으로 확인한 적 없어 건드리지 않음).
-_LITE_QUOTA_POOL = "lite-pool"
-_QUOTA_POOL = {
-    "gemini-3.5-flash-lite": _LITE_QUOTA_POOL,
-    "gemini-3.1-flash-lite": _LITE_QUOTA_POOL,
-}
-
-
+# 2026-09-25 실사고 후 도입, 2026-09-26 되돌림: heavy 실행마다 3.5-flash-lite·
+# 3.1-flash-lite가 "동시에 전부" 429나 보여 두 모델이 키당 한도를 공유한다고
+# 보고 페이싱·소진 상태를 "lite 풀" 단위로 묶었었다. 다음 날 실측(09-25 전체
+# 태평양 일자 집계)으로 뒤집힘 — 3.5-flash-lite는 5키 전부 495~509건으로
+# 정확히 500 근처에서 막혔는데, 3.1-flash-lite는 키당 15~27건만 쓰고 429도
+# 거의 없었다(공유라면 3.1도 비슷하게 500 근처여야 함). 즉 **두 모델은 독립된
+# 일일 한도**이고, "동시에 막힘"은 3.5가 소진된 순간 트래픭이 갑자기 3.1로
+# 몰리며 생긴 일시적 분당 한도였다. 풀 공유 취급 탓에 3.5 소진 시 3.1도
+# "소진"으로 간주해 아예 시도조차 안 하게 됐고, 그 결과 3.1에 남은 여유
+# (키당 470여 건)를 못 써서 발행이 더 줄었다("기사가 너무 안나오는데" 재제보).
+# 모델별 독립 취급으로 되돌린다.
 def _quota_pool(model: str) -> str:
-    return _QUOTA_POOL.get(model, model)
+    return model
 
 
 _SHARED_WAIT_CAP = 20  # 이 이상은 기다리지 않고 그냥 진행 — 다른 키/모델로
