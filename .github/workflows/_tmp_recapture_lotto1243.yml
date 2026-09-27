@@ -1,0 +1,73 @@
+name: TMP - Recapture Lotto645 1243 Image
+
+on:
+  workflow_dispatch:
+
+jobs:
+  recapture:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v5
+
+      - name: Python 설정
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: 패키지 설치
+        run: pip install -r requirements.txt
+
+      - name: Playwright 브라우저 설치
+        run: python -m playwright install --with-deps chromium
+
+      - name: 로또645 1243회 이미지 강제 재캡처
+        run: |
+          python - <<'PYEOF'
+          import sys
+          sys.path.insert(0, "scripts")
+          import lotto_writer as w
+          import requests
+
+          d = w.fetch_lotto645(1243)
+          if not d:
+              print("데이터 조회 실패"); sys.exit(1)
+          nums = [d[f"tm{i}WnNo"] for i in range(1, 7)]
+          bonus = d["bnsWnNo"]
+          image_url = w.get_lotto645_image_url(1243, nums, bonus)
+          print("new image_url:", image_url)
+          if not image_url:
+              print("이미지 생성 실패"); sys.exit(1)
+          res = requests.patch(
+              f"{w._sb_articles_url()}?url=eq.internal://lotto645_1243",
+              headers=w._sb_headers(), json={"image_url": image_url}, timeout=15,
+          )
+          print("patch status:", res.status_code, res.text[:300])
+          PYEOF
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
+          UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
+
+      - name: 웹사이트 데이터 내보내기
+        run: python scripts/export_articles.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
+
+      - name: 변경사항 커밋 및 푸시
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add -A
+          git diff --staged --quiet || git commit -m "Recapture lotto645 1243 image (nowrap fix)"
+          for i in 1 2 3 4 5; do
+            git pull origin main -X ours --no-rebase
+            git push && break
+            echo "push failed (attempt $i) - retrying"
+            sleep $((RANDOM % 8 + 3))
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
