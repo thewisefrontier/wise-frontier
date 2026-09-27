@@ -11,9 +11,11 @@ import weekly_crypto_writer as w  # noqa: E402
 
 # 2026-09-27 실사고: bare_name을 "코인"으로 줬다가 Gemini가 프롬프트 지시대로 이미
 # "[주간 코인시황]"을 붙여 왔는데 dedup 매칭이 안 돼 접두어가 중복됐다.
-assert w.enforce_title_prefix("[주간 코인시황] 비트코인 4%대 상승") == "[주간 코인시황] 비트코인 4%대 상승"
-assert w.enforce_title_prefix("비트코인 4%대 상승") == "[주간 코인시황] 비트코인 4%대 상승"
-assert w.enforce_title_prefix("[주간 코인시황]비트코인 4%대 상승") == "[주간 코인시황] 비트코인 4%대 상승"
+# (같은 날 이후 "코인" → "가상자산"으로 용어 통일 — crypto_news_writer.py의
+# "[가상자산 동향]"과 맞춤, 사용자 지적: "통일해".)
+assert w.enforce_title_prefix("[주간 가상자산 시황] 비트코인 4%대 상승") == "[주간 가상자산 시황] 비트코인 4%대 상승"
+assert w.enforce_title_prefix("비트코인 4%대 상승") == "[주간 가상자산 시황] 비트코인 4%대 상승"
+assert w.enforce_title_prefix("[주간 가상자산 시황]비트코인 4%대 상승") == "[주간 가상자산 시황] 비트코인 4%대 상승"
 
 btc = {"end": 84461.0, "prev": 81143.0, "pct": 4.09, "end_date": date(2026, 9, 27), "prev_date": date(2026, 9, 20)}
 eth = {"end": 2699.0, "prev": 2643.0, "pct": 2.12, "end_date": date(2026, 9, 27), "prev_date": date(2026, 9, 20)}

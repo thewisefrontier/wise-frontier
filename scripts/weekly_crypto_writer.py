@@ -129,7 +129,11 @@ except Exception:
 _gemini_client = GeminiClient(GEMINI_API_KEYS, GEMINI_MODELS)
 
 KST = timezone(timedelta(hours=9))
-TITLE_PREFIX = "[주간 코인시황]"
+# 2026-09-27 사용자 지적("일일 가상자산 시황이 있는데 주간 시황은 왜 주간
+# 코인시황으로 쓴거야? 통일해") — 일일 트렌드 기사(crypto_news_writer.py)는
+# TITLE_PREFIX="[가상자산 동향]"/subcategory="가상자산동향"으로 "가상자산"
+# 용어를 쓰는데, 이 파일만 "코인"을 써서 용어가 갈려 있었다. "가상자산"으로 통일.
+TITLE_PREFIX = "[주간 가상자산 시황]"
 # 2026-09-27 사용자 지시("있다가 아니라 있습니다") — 투자 유의 문구는 이
 # 프로젝트의 일반 "-다"체 규칙과 달리 "-습니다"로 고정. Gemini에게 맡기면
 # 본문 스타일 검사(has_polite_ending/to_plain_style)가 통째로 "-다"체로
@@ -165,7 +169,7 @@ def enforce_title_prefix(title: str) -> str:
     # (style_guard.enforce_title_prefix가 "[bare_name]"을 통째로 매칭) — TITLE_PREFIX와
     # 짝을 맞출 것. 2026-09-27 실사고: bare_name을 "코인"으로 줬다가 Gemini가 프롬프트
     # 지시대로 이미 "[주간 코인시황]"을 붙여 왔는데 매칭이 안 돼 접두어가 중복됐다.
-    return _sg_enforce_title_prefix(title, TITLE_PREFIX, "주간 코인시황", particles=("이", "은"))
+    return _sg_enforce_title_prefix(title, TITLE_PREFIX, "주간 가상자산 시황", particles=("이", "은"))
 
 
 def already_published(week_end: date) -> bool:
@@ -275,10 +279,10 @@ def insert_article(title_ko: str, summary_ko: str, week_end: date, btc: dict, et
     payload = {
         "title_en": title_ko, "title_ko": title_ko, "summary_en": "", "summary_ko": summary_ko,
         "url": f"internal://weekly_crypto_{week_end.isoformat()}",
-        "source": "NewsFinal", "category": "경제", "subcategory": "주간코인시황",
+        "source": "NewsFinal", "category": "경제", "subcategory": "주간가상자산시황",
         "region": "글로벌", "country": "", "country_flag": "", "image_url": image_url, "countries": [],
         "score": 1, "created_at": now_str, "first_published_at": now_str,
-        "update_log": [{"timestamp": now_str, "note": "주간 코인시황 자동 기사"}],
+        "update_log": [{"timestamp": now_str, "note": "주간 가상자산 시황 자동 기사"}],
         "source_data": {
             "week_end": week_end.isoformat(),
             "btc": {**btc, "end_date": btc["end_date"].isoformat(), "prev_date": btc["prev_date"].isoformat()},
@@ -300,7 +304,7 @@ def main():
 
     week_end = now.date()
     if not dry and already_published(week_end):
-        print(f"  → {week_end} 주간 코인시황 이미 발행됨 → 스킵")
+        print(f"  → {week_end} 주간 가상자산 시황 이미 발행됨 → 스킵")
         return
 
     from weekly_market_card import weekly_change
