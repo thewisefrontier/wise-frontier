@@ -10,17 +10,33 @@ scripts/art_weekly_writer.py
 
 - 결정론적 일간 선택: 날짜(toordinal)로 ARTWORKS를 순환 선택(같은 날 여러 번
   실행돼도 already_published()가 막고, 목록을 다 돌면 처음부터 다시 순환).
-  ⚠️ ARTWORKS가 24개뿐이라 일 1회면 24일마다 전체 목록이 반복된다 — 주 1회일
-  땐 약 5.5개월에 한 번 반복이었던 것과 비교하면 훨씬 빨리 재등장한다. 목록을
-  늘리지 않는 한 이 반복 주기가 사실상의 한계다.
+- ARTWORKS = 손수 큐레이션한 59개(파일 안에 하드코딩) + scripts/data/
+  art_weekly_met_artworks.json(메트로폴리탄 미술관 Open Access, 약 350개,
+  scripts/harvest_met_artworks.py로 수집)를 모듈 로드 시 이어붙인 것.
+  2026-09-27 사용자 지적("59개면 너무 적다, 적어도 1년은 해야, 미술 관련
+  DB나 깃허브 없어?")로 확장 — Met의 Collection API가 isPublicDomain
+  플래그와 작가 사망년도를 공식 제공해 저작권 검증이 훨씬 쉽고, 이미지도
+  Met가 "이 작품=이 이미지"를 확정해서 주는 URL을 그대로 쓰므로(direct_image_url)
+  손수 짠 목록에서 반복됐던 "위키미디어 검색어는 맞았는데 엉뚱한 사진"류
+  위험이 없다. 총 400개 이상 → 일 1회 기준 1년 넘게 안 겹침. 목록이 짧아지면
+  scripts/harvest_met_artworks.py를 다시 돌리거나(부서 추가) 손수 항목을
+  보탤 것.
 - 이미지는 반드시 그 작품 실물이어야 하므로(일반 스톡사진으로 대체하면
-  2026-09-08 파올라 페를롭 사고와 같은 문제) Wikimedia Commons에서 작품명으로
-  직접 찾고, 못 찾으면 그 날은 발행을 건너뛴다 — 일반 기사처럼 Pixabay
-  일반 스톡사진으로 대체하지 않는다(article_image.fetch_article_image()를
-  안 쓰는 이유).
-- 저작권: ARTWORKS에는 작가 사후 70년이 지나 퍼블릭도메인이 확실한 작품만
-  올린다(뭉크 1944년 작고 → 2014년부터 PD, 클림트 1918년 작고 → 1988년부터
-  PD 등 확인 후 포함). 이 목록에 새 작품을 추가할 때도 이 기준을 지킬 것.
+  2026-09-08 파올라 페를롭 사고와 같은 문제) direct_image_url(Met 수집분)이
+  있으면 그걸, 없으면 Wikimedia Commons에서 작품명으로 검색해 찾는다 — 못
+  찾으면 그 날은 발행을 건너뛴다(일반 기사처럼 Pixabay 스톡사진으로 대체 안 함,
+  article_image.fetch_article_image()를 안 쓰는 이유).
+- 근거자료: Met 수집분은 미술관이 확정한 소장품 기록(museum_grounding —
+  작가 생몰년·문화권·시대·재질·소장 경위)을 항상 존재하는 1차 근거로 쓰고,
+  위키백과는 있으면 보충한다. 손수 큐레이션한 59개는 위키백과 근거자료만
+  쓴다(build_daily_artwork 근처 주석 참고) — Met 수집분 중 위키백과 문서가
+  아예 없는 비주류 작가(예: 조선 화가 이정)가 흔해, 위키백과에만 기대면
+  그런 날마다 근거자료 부족으로 스킵될 뻔한 걸 실측으로 확인해 추가함.
+- 저작권: 손수 큐레이션한 59개는 작가 사후 70년이 지나 퍼블릭도메인이
+  확실한 작품만 올린다(뭉크 1944년 작고 → 2014년부터 PD 등 확인 후 포함).
+  Met 수집분은 harvest_met_artworks.py가 isPublicDomain + 사후 70년(또는
+  작가 불명 시 작품 제작연도 1900년 이전)을 자동 검증. 이 목록에 새 작품을
+  추가할 때도 이 기준을 지킬 것.
 
 실행: python scripts/art_weekly_writer.py
 권장: 일 1회 실행 — already_published()가 같은 날 중복 발행을 막음.
@@ -30,6 +46,7 @@ scripts/art_weekly_writer.py
 저절로 늘어나지 않는다.
 """
 
+import json
 import os
 import re
 import requests
@@ -235,6 +252,19 @@ ARTWORKS = [
     {"title_ko": "조춘도", "title_en": "Early Spring", "artist_ko": "곽희", "artist_en": "Guo Xi", "year_label": "1072년", "country": "중국", "country_flag": "🇨🇳", "region": "asia", "wiki_query": "Early Spring Guo Xi painting"},
 ]
 
+# 2026-09-27 사용자 요청("적어도 1년은 해야하는데 미술 관련 DB나 깃허브 없어?")
+# — 메트로폴리탄 미술관 Open Access(github.com/metmuseum/openaccess, CC0)의
+# 공식 Collection API(collectionapi.metmuseum.org)에서 대표작(isHighlight)+
+# 퍼블릭도메인(isPublicDomain)만, 작가 사후 70년 경과까지 자동 검증해 350건을
+# 수집(scripts/harvest_met_artworks.py 실행 결과 → 이 JSON). 이미지도 Met가
+# 공식으로 "이 작품=이 이미지"를 확정해서 주는 URL(direct_image_url)을 그대로
+# 쓰므로, 손수 짠 목록에서 반복됐던 "검색은 맞았는데 엉뚱한 사진" 위험이 없다.
+try:
+    with open(os.path.join(os.path.dirname(__file__), "data", "art_weekly_met_artworks.json"), encoding="utf-8") as _f:
+        ARTWORKS.extend(json.load(_f))
+except Exception as e:
+    print(f"  ⚠️ art_weekly_met_artworks.json 로드 실패(기본 {len(ARTWORKS)}개만 사용): {e}")
+
 
 def get_daily_artwork(today=None) -> tuple[dict, "date"]:
     """날짜(toordinal)로 결정론적 순환 선택. 반환: (artwork, date)."""
@@ -257,7 +287,24 @@ def already_published(pub_date) -> bool:
 def fetch_artwork_image(artwork: dict) -> tuple[str, str]:
     """작품 실물 이미지만 쓴다 — 못 찾으면 빈 문자열(호출부가 발행을 건너뜀).
     일반 기사처럼 Pixabay 스톡사진으로 대체하지 않는다(작품 소개 기사에
-    엉뚱한 사진이 붙으면 안 됨 — 2026-09-08 파올라 페를롭 사고와 같은 문제)."""
+    엉뚱한 사진이 붙으면 안 됨 — 2026-09-08 파올라 페를롭 사고와 같은 문제).
+
+    2026-09-27 추가 — direct_image_url이 있으면(메트로폴리탄 미술관 Open Access
+    수집분, art_weekly_met_artworks.json) 위키미디어 검색을 아예 건너뛰고 그
+    URL을 바로 쓴다. Met가 공식 API로 이미 "이 작품 = 이 이미지"를 확정해서
+    주므로, 손수 짠 59개 항목에서 반복 발견된 "검색어는 맞았는데 엉뚱한 사진이
+    잡히는" 부류의 위험(모작·디테일 크롭·다른 동명작 등)이 원천적으로 없다."""
+    direct_url = artwork.get("direct_image_url")
+    if direct_url:
+        try:
+            from image_store import store_image
+            stored_url = store_image(direct_url, key_hint=f"art_weekly_met_{artwork.get('met_object_id', artwork['title_en'])}")
+        except Exception as e:
+            print(f"  ⚠️ 이미지 R2 저장 실패, 원본 URL 사용: {e}")
+            stored_url = direct_url
+        dept = artwork.get("met_department", "")
+        return (stored_url or direct_url), f"이미지 출처: The Metropolitan Museum of Art (CC0 퍼블릭 도메인{f', {dept}' if dept else ''})"
+
     wiki_url, wiki_credit = fetch_wikimedia_image(artwork["wiki_query"], allow_artwork=True)
     if not wiki_url:
         return "", ""
@@ -487,13 +534,23 @@ def main():
     artwork_wiki = fetch_wikipedia_grounding(
         f"{artwork['artist_ko']} {artwork['title_ko']}", artwork["wiki_query"])
     artist_wiki = fetch_wikipedia_grounding(artwork["artist_ko"], f"{artwork['artist_en']} painter")
-    if not artwork_wiki and not artist_wiki:
-        print(f"  [SKIP] '{artwork['title_ko']}'/'{artwork['artist_ko']}' 위키백과 근거자료를 "
+    # 2026-09-27 추가 — 메트로폴리탄 미술관 Open Access 수집분(art_weekly_met_artworks.json)은
+    # 위키백과 문서가 아예 없는 무명/비주류 작가가 많다(예: 조선 화가 이정) —
+    # 위키백과에만 기대면 이런 항목마다 근거자료 부족으로 매일 스킵될 위험이
+    # 있어, 미술관이 직접 확정한 소장품 기록(museum_grounding)을 항상 존재하는
+    # 1차 근거로 우선 반영하고, 위키백과는 있으면 보충용으로 덧붙인다.
+    museum_grounding = artwork.get("museum_grounding", "")
+    if not museum_grounding and not artwork_wiki and not artist_wiki:
+        print(f"  [SKIP] '{artwork['title_ko']}'/'{artwork['artist_ko']}' 근거자료를 "
               f"찾지 못함 — 근거 없이 발행하지 않고 오늘은 건너뜀")
         return
-    grounding = f"[작품: {artwork['title_ko']}]\n{artwork_wiki or '(자료 없음)'}\n\n" \
-                f"[작가: {artwork['artist_ko']}]\n{artist_wiki or '(자료 없음)'}"
-    print(f"  → 위키백과 근거자료 확보(작품 {len(artwork_wiki)}자, 작가 {len(artist_wiki)}자)")
+    grounding_parts = []
+    if museum_grounding:
+        grounding_parts.append(f"[박물관 공식 소장품 기록]\n{museum_grounding}")
+    grounding_parts.append(f"[작품: {artwork['title_ko']}]\n{artwork_wiki or '(자료 없음)'}")
+    grounding_parts.append(f"[작가: {artwork['artist_ko']}]\n{artist_wiki or '(자료 없음)'}")
+    grounding = "\n\n".join(grounding_parts)
+    print(f"  → 근거자료 확보(박물관기록 {len(museum_grounding)}자, 작품 위키 {len(artwork_wiki)}자, 작가 위키 {len(artist_wiki)}자)")
 
     prompt = build_article_prompt(artwork, grounding)
     content = call_gemini_article(prompt)
