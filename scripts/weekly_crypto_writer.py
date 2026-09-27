@@ -186,9 +186,13 @@ def already_published(week_end: date) -> bool:
 # 표시 규칙([[feedback_korean_won_man_unit_format]])을 달러 가격에도 동일
 # 적용(만 미만은 콤마, 그 이상은 억/만 그룹핑).
 def _fmt_usd(n) -> str:
+    # 2026-09-27 사용자 지적("숫자에 콤마 넣지 말라니까") — 1만 미만도 콤마 없이.
+    # (lotto_writer.format_count()의 "1만 미만은 콤마" 관례는 당첨자 수 등
+    # 인원수 표기에 한정된 것이라 가격에는 안 맞았음 — 도메인이 다르면
+    # 같은 임계값을 그대로 재사용하지 말 것.)
     n = int(round(n))
     if n < 10_000:
-        return f"{n:,}달러"
+        return f"{n}달러"
     return to_won_style_amount(n) + "달러"
 
 

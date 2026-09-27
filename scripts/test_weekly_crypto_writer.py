@@ -25,7 +25,9 @@ w.fetch_headlines = lambda *a, **k: ["Bitcoin ETF Inflows Reach $2.4 Billion Thi
 prompt = w.build_article_prompt(btc, eth)
 assert "8만4461달러" in prompt and "8만1143달러" in prompt and "+4.09%" in prompt
 assert "84,461" not in prompt
-assert "2,699달러" in prompt and "+2.12%" in prompt
+# 2026-09-27 사용자 지적("숫자에 콤마 넣지 말라니까") — 1만 미만도 콤마 없이.
+assert "2699달러" in prompt and "+2.12%" in prompt
+assert "2,699" not in prompt
 assert "Bitcoin ETF Inflows" in prompt
 assert "헤드라인에 없는 규제·정책" in prompt  # 날조 방지 지시 포함 확인
 
