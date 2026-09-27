@@ -1,5 +1,71 @@
 [
   {
+    "id": 293427,
+    "title_en": "[국내유가] 휘발유 리터당 1858원…전국 유가 일제히 상승",
+    "title_ko": "[국내유가] 휘발유 리터당 1858원…전국 유가 일제히 상승",
+    "summary_ko": "한국석유공사 오피넷이 28일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1858원으로 집계됐다.\n\n이날 오피넷에 따르면 경유는 리터당 1843.29원으로 전일 대비 2.01원 올랐고, LPG(부탄)는 리터당 1095.24원으로 전일 대비 6.01원 상승했다. 휘발유 역시 전일보다 2.15원 오른 1858.20원을 기록하며 모든 주요 유종이 오름세를 나타냈다.\n\n이번 유가 상승은 국제시세 변동에 따른 정유사 공급가격 조정과 관련이 있는 것으로 알려졌다. 정유사의 도매가격 변동과 이에 따른 공급가 인상 움직임이 주",
+    "url": "internal://opinet_price_2026-09-28",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-09-28 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_09_28_pid996617.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-28T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-28 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-09-28",
+      "prices": {
+        "B027": {
+          "diff": 2.15,
+          "name": "휘발유",
+          "price": 1858.2
+        },
+        "B034": {
+          "diff": 0.55,
+          "name": "고급휘발유",
+          "price": 2333.39
+        },
+        "C004": {
+          "diff": -0.11,
+          "name": "실내등유",
+          "price": 1573.73
+        },
+        "D047": {
+          "diff": 2.01,
+          "name": "경유",
+          "price": 1843.29
+        },
+        "K015": {
+          "diff": 6.01,
+          "name": "LPG(부탄)",
+          "price": 1095.24
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 293426,
     "title_en": "[데일리 다이제스트] 국제 지정학적 갈등과 아프리카·중동 안보 위기 심화",
     "title_ko": "[데일리 다이제스트] 국제 지정학적 갈등과 아프리카·중동 안보 위기 심화",
@@ -1573,36 +1639,6 @@
         }
       }
     },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 292804,
-    "title_en": "[데일리 다이제스트] 중동발 지정학적 긴장과 아프리카·남미의 안보·보건 불안 심화",
-    "title_ko": "[데일리 다이제스트] 중동발 지정학적 긴장과 아프리카·남미의 안보·보건 불안 심화",
-    "summary_ko": "[중동발 지정학적 긴장과 주요국 외교·안보 충돌]\n- 미국 도널드 트럼프 행정부가 25일(현지시간) 우크라이나 군사원조 예산 4억 달러 집행을 법적으로 확정했으나, 패트리어트 방공 시스템용 요격 미사일은 지원 패키지에서 제외됐다.\n- 미국이 이란의 호르무즈 해협 재개방 제안을 거부하고 추가 폭격을 시사한 가운데, 25일 뉴욕 유엔 본부에서 열린 제79차 유엔 총회에서 벤자민 네타냐후 이스라엘 총리가 연단에 오르자 팔레스타인 대표단 주도 하에 77개국 대표단이 집단 퇴장했다.\n- 압델 파타 알 부르한 수단 과도주권위원회 위원장이 미국",
-    "url": "internal://digest_20260927",
-    "source": "NewsFinal",
-    "category": "다이제스트",
-    "subcategory": "digest_20260927",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 34,
-    "created_at": "2026-09-27 05:02",
-    "countries": null,
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/digest_20260927.jpg",
-    "view_count": 0,
-    "first_published_at": null,
-    "update_log": [],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
     "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
