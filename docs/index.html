@@ -648,6 +648,16 @@
       renderArticles(filtered);
       return;
     }
+    // 2026-09-27 사용자 지시("1글자 검색어도 최소 2글자부터 검색하게 막아") —
+    // 트라이그램 인덱스는 3자 미만 패턴에서 선택도를 못 만들어 DB가 사실상
+    // 풀스캔을 하게 된다([[newsfinal_search_query_load]] 실측 참고). 1글자
+    // 입력 중엔 로컬 필터 결과만 보여주고 DB는 아예 호출하지 않는다.
+    if (currentQuery.length < 2) {
+      clearTimeout(searchDebounce);
+      info.textContent = `${filtered.length}건 (2자 이상 입력 시 전체 검색)`;
+      renderArticles(filtered);
+      return;
+    }
     info.textContent = `${filtered.length}건 (검색 중...)`;
     // 2026-09-27 사용자 지적: 로컬에 이미 로드된 최신 기사 목록(allArticles)만
     // 먼저 필터링해서 즉시 렌더링하다 보니, 검색어가 그 목록엔 없지만 실제
@@ -668,8 +678,12 @@
     const SUPABASE_URL = 'https://fotdngseksqaghvtcvqh.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_rT3kSEAAdM0DJlDW5fEWww_M37h6dDW';
     try {
+      // 2026-09-27 사용자 지적("검색이 DB에 부담 가지 않나") — select=*는 이 카드
+      // 렌더링에 안 쓰는 컬럼(source_data, full_text 등)까지 매 검색마다 최대
+      // 50행 통째로 내려받아 이그레스만 낭비했다([[newsfinal_supabase_egress_quota_incident]]
+      // 참고, 5GB 한도 초과 전례 있음). 실제로 카드에 쓰는 컬럼만 좁힘.
       const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/articles?select=*&source=eq.NewsFinal&is_published=eq.true&or=(title_ko.ilike.*${encodeURIComponent(query)}*,summary_ko.ilike.*${encodeURIComponent(query)}*)&order=created_at.desc&limit=50`,
+        `${SUPABASE_URL}/rest/v1/articles?select=id,title_ko,title_en,summary_ko,category,subcategory,region,country,source,url,image_url,created_at&source=eq.NewsFinal&is_published=eq.true&or=(title_ko.ilike.*${encodeURIComponent(query)}*,summary_ko.ilike.*${encodeURIComponent(query)}*)&order=created_at.desc&limit=50`,
         { headers: { 'apikey': SUPABASE_ANON_KEY } }
       );
       if (!res.ok) { renderArticles(getFiltered()); return; }
