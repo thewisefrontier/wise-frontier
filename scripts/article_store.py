@@ -36,6 +36,20 @@ import re
 import time
 import requests
 
+# 2026-09-27 사용자 지적("공통적으로 나타나는 문제들을 발행 전에 통일해서
+# 고칠 수 있는 방법은 없나") — ensure_paragraphs()는 이미 "너무 뭉친 문단"과
+# "너무 잘게 쪼개진 문단" 둘 다 교정하는 범용 안전장치인데, 그동안 LLM
+# writer들만 각자 개별 호출했고 이 함수(모든 최종 기사가 거치는 유일한
+# 삽입 지점)엔 안 걸려 있었다. lotto_writer.py처럼 Gemini를 안 쓰는
+# 스크립트(파워볼 상금 문단이 한 덩어리로 뭉쳐 나간 실사고)도 결국 여기를
+# 거치므로, 여기 한 곳에 걸어두면 앞으로 새 writer가 깜빡 빠뜨려도 발행
+# 전에 자동으로 걸러진다.
+try:
+    from style_guard import ensure_paragraphs
+except Exception:
+    def ensure_paragraphs(text, target=3, max_sentences_per_para=3):
+        return text
+
 # 2026-09-22: 이 모듈을 공유하는 writer들이 전부 같은 위험에 노출돼 있어
 # (gemini_writer.py의 같은 유형 실사고 참고 — http_retry.py) 재시도 세션으로 교체.
 from http_retry import get_session
@@ -257,6 +271,8 @@ def insert_final_article(payload: dict) -> int:
     무시하고 넘어간다(resolution=ignore-duplicates — 대부분의 writer
     스크립트가 url을 유니크 키로 써서 재실행 시 중복 삽입을 막는 용도).
     """
+    if payload.get("summary_ko"):
+        payload["summary_ko"] = ensure_paragraphs(payload["summary_ko"])
     _tag_crypto(payload)
     _gate_thin_trend(payload)
     headers = {**sb_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}

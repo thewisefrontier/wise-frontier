@@ -17,10 +17,13 @@ assert w.enforce_title_prefix("[주간 코인시황]비트코인 4%대 상승") 
 
 btc = {"end": 84461.0, "prev": 81143.0, "pct": 4.09, "end_date": date(2026, 9, 27), "prev_date": date(2026, 9, 20)}
 eth = {"end": 2699.0, "prev": 2643.0, "pct": 2.12, "end_date": date(2026, 9, 27), "prev_date": date(2026, 9, 20)}
+# 2026-09-27: 서구식 콤마("84,461달러") 대신 원화 규칙과 동일한 억/만
+# 그룹핑("8만4461달러")으로 나가는지 확인(사용자 지적 — "비트코인도 고쳐").
 w.fetch_headlines = lambda *a, **k: ["Bitcoin ETF Inflows Reach $2.4 Billion This Week - 24/7 Wall St."]
 prompt = w.build_article_prompt(btc, eth)
-assert "84,461" in prompt and "81,143" in prompt and "+4.09%" in prompt
-assert "2,699" in prompt and "+2.12%" in prompt
+assert "8만4461달러" in prompt and "8만1143달러" in prompt and "+4.09%" in prompt
+assert "84,461" not in prompt
+assert "2,699달러" in prompt and "+2.12%" in prompt
 assert "Bitcoin ETF Inflows" in prompt
 assert "헤드라인에 없는 규제·정책" in prompt  # 날조 방지 지시 포함 확인
 
