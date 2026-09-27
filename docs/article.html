@@ -606,7 +606,15 @@ function cleanBody(text) {
             </div>`).join('')}
         </div>` : ''}
 
-      ${a.image_url ? `<img class="article-hero" src="${window.esc(a.image_url)}" alt="${titleHtml}" loading="lazy" style="width:100%;max-height:420px;object-fit:cover;border-radius:8px;margin:16px 0 8px;display:block;">`+ (window.imageCreditLabel(a.image_url, a.image_credit) ? `<div style="font-size:12px;color:#888;margin:0 0 12px;text-align:right;">${window.esc(window.imageCreditLabel(a.image_url, a.image_credit))}</div>` : '') : ''}
+      ${a.image_url ? `<img class="article-hero" src="${window.esc(a.image_url)}" alt="${titleHtml}" loading="lazy" style="${
+        /* 2026-09-27 사용자 지적("얼굴이 잘렸잖아") — "고전명화이야기"(art_weekly_writer.py)는
+           세로로 긴 인물화·족자 원본이 많은데, 다른 기사와 같은 object-fit:cover +
+           max-height:420px를 쓰면 중앙만 잘려 보여 초상화 얼굴 부분이 통째로 잘려나갔다.
+           작품 감상이 핵심인 이 코너만 전체 원본이 다 보이도록 contain으로 전환. */
+        a.subcategory === '고전명화이야기'
+          ? 'width:100%;max-height:600px;object-fit:contain;background:#111;border-radius:8px;margin:16px 0 8px;display:block;'
+          : 'width:100%;max-height:420px;object-fit:cover;border-radius:8px;margin:16px 0 8px;display:block;'
+      }">`+ (window.imageCreditLabel(a.image_url, a.image_credit) ? `<div style="font-size:12px;color:#888;margin:0 0 12px;text-align:right;">${window.esc(window.imageCreditLabel(a.image_url, a.image_credit))}</div>` : '') : ''}
 
       <div class="article-body">
         ${bodyHtml}
