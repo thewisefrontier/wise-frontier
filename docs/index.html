@@ -649,7 +649,16 @@
       return;
     }
     info.textContent = `${filtered.length}건 (검색 중...)`;
-    renderArticles(filtered);
+    // 2026-09-27 사용자 지적: 로컬에 이미 로드된 최신 기사 목록(allArticles)만
+    // 먼저 필터링해서 즉시 렌더링하다 보니, 검색어가 그 목록엔 없지만 실제
+    // DB(searchSupabase, 400ms 뒤 실행)엔 있는 기사일 때 "해당 기사가
+    // 없습니다"가 먼저 떴다가 잠시 후 결과로 바뀌는 깜빡임이 있었다. 로컬
+    // 결과가 없을 땐 "없다"고 단정하지 말고 검색 중 상태를 보여준다.
+    if (filtered.length) {
+      renderArticles(filtered);
+    } else {
+      document.getElementById('articles-container').innerHTML = '<div class="empty">기사를 찾고 있습니다...</div>';
+    }
     clearTimeout(searchDebounce);
     searchDebounce = setTimeout(() => searchSupabase(currentQuery), 400);
   }
@@ -663,7 +672,7 @@
         `${SUPABASE_URL}/rest/v1/articles?select=*&source=eq.NewsFinal&is_published=eq.true&or=(title_ko.ilike.*${encodeURIComponent(query)}*,summary_ko.ilike.*${encodeURIComponent(query)}*)&order=created_at.desc&limit=50`,
         { headers: { 'apikey': SUPABASE_ANON_KEY } }
       );
-      if (!res.ok) return;
+      if (!res.ok) { renderArticles(getFiltered()); return; }
       const results = await res.json();
       if (query !== currentQuery) return;
       const existingIds = new Set(allArticles.map(a => a.id));
@@ -671,7 +680,10 @@
       const combined = [...getFiltered(), ...searchExtraResults];
       document.getElementById('search-info').textContent = `${combined.length}건`;
       renderArticles(combined);
-    } catch(e) {}
+    } catch(e) {
+      // 검색 실패 시에도 "검색 중" 상태로 멈춰 있지 않도록 로컬 결과로 확정 표시
+      if (query === currentQuery) renderArticles(getFiltered());
+    }
   }
 
   function clearSearch() {
