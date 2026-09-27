@@ -71,7 +71,8 @@ except Exception:
 try:
     from style_guard import (parse_article_output, ensure_paragraphs,
                               enforce_title_prefix as _sg_enforce_title_prefix,
-                              has_column_style, has_polite_ending, to_plain_style)
+                              has_column_style, has_polite_ending, to_plain_style,
+                              to_won_style_amount)
 except Exception:
     def ensure_paragraphs(text, target=3, max_sentences_per_para=4):
         return text
@@ -88,6 +89,18 @@ except Exception:
         return False
     def to_plain_style(text):
         return text
+    def to_won_style_amount(n):
+        n = int(round(n))
+        eok, rest = divmod(n, 100_000_000)
+        man, rem = divmod(rest, 10_000)
+        parts = []
+        if eok:
+            parts.append(f"{eok}억")
+        if man:
+            parts.append(f"{man}만")
+        if rem or not parts:
+            parts.append(f"{rem}")
+        return "".join(parts)
 
 try:
     from fabrication_guard import verify_no_fabricated_names as _fg_verify_no_fabricated_names
@@ -158,12 +171,29 @@ def already_published(week_end: date) -> bool:
     return res.status_code in (200, 206) and bool(res.json())
 
 
-def build_article_prompt(btc: dict, eth: dict) -> str:
+# 2026-09-27 사용자 지적("비트코인도 고쳐") — lotto_writer.py에서 발견된 것과
+# 같은 문제: 서구식 3자리 콤마("84,461달러")로 나가고 있었다. 원화 억/만
+# 표시 규칙([[feedback_korean_won_man_unit_format]])을 달러 가격에도 동일
+# 적용(만 미만은 콤마, 그 이상은 억/만 그룹핑).
+def _fmt_usd(n) -> str:
+    n = int(round(n))
+    if n < 10_000:
+        return f"{n:,}달러"
+    return to_won_style_amount(n) + "달러"
+
+
+def build_article_prompt(btc: dict, eth: dict, now: datetime | None = None) -> str:
+    # 2026-09-27 사용자 지적: "시세가 계속 바뀌니까" — weekly_change()의
+    # "최신 종가"는 주식과 달리 코인은 24시간 거래라 진짜 마감가가 아니라
+    # 스크립트 실행 시점의 값이다. 날짜만 적으면 그 시각 이후 가격이 달라져도
+    # 독자가 알 길이 없어, 실행 시각(시)까지 명시한다.
+    now = now or now_kst()
+
     def line(name, d):
         arrow = "상승" if d["pct"] > 0 else ("하락" if d["pct"] < 0 else "보합")
-        return (f"- {name}: {d['end_date'].month}월 {d['end_date'].day}일 기준 "
-                f"{d['end']:,.0f}달러 (7일 전 {d['prev_date'].month}월 {d['prev_date'].day}일 "
-                f"{d['prev']:,.0f}달러 대비 {d['pct']:+.2f}% {arrow})")
+        return (f"- {name}: {d['end_date'].month}월 {d['end_date'].day}일 {now.hour}시(한국시간) 기준 "
+                f"{_fmt_usd(d['end'])} (7일 전 {d['prev_date'].month}월 {d['prev_date'].day}일 "
+                f"{_fmt_usd(d['prev'])} 대비 {d['pct']:+.2f}% {arrow})")
 
     headlines = fetch_headlines("bitcoin cryptocurrency market this week", limit=8)
     if headlines:

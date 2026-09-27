@@ -81,23 +81,30 @@ except Exception:
         return f"{SUPABASE_URL}/rest/v1/articles"
 
 
-def _to_man_units(value) -> str:
-    """숫자를 한국식 억/만 단위로 그룹핑. 억/만 단위 자체가 자릿수 구분 역할을
-    하므로 그룹 내부에는 콤마(,)를 쓰지 않는다(예: '1,478만'이 아니라 '1478만').
-    예: 1197258718 -> '11억 9725만 8718'"""
-    value = int(round(value))
-    if value == 0:
-        return "0"
-    eok, rem = divmod(value, 100_000_000)
-    man, won = divmod(rem, 10_000)
-    parts = []
-    if eok:
-        parts.append(f"{eok}억")
-    if man:
-        parts.append(f"{man}만")
-    if won:
-        parts.append(f"{won}")
-    return " ".join(parts)
+# 2026-09-27 실사고: 이 파일이 자체 구현한 억/만 그룹핑에 그룹 사이 공백을
+# 넣고 있었다("11억 9725만 8718원") — style_guard.to_won_style_amount()가
+# 이미 구현한 공식 규칙([[feedback_korean_won_man_unit_format]], 공백 없이
+# "11억9725만8718원")과 어긋난 드리프트였다(달러 금액 쪽 주석은 "원화 규칙과
+# 동일 적용"이라 적어놓고도 정작 공백을 넣어 주석과 코드마저 서로 어긋나
+# 있었음). 중복 구현 대신 공용 함수를 그대로 재사용해 드리프트를 원천 차단.
+try:
+    from style_guard import to_won_style_amount as _to_man_units
+except Exception:
+    def _to_man_units(value) -> str:
+        """숫자를 한국식 억/만 단위로 그룹핑. 억/만 단위 자체가 자릿수 구분
+        역할을 하므로 그룹 내부에는 콤마(,)나 공백을 쓰지 않는다(예: '1478만').
+        예: 1197258718 -> '11억9725만8718'"""
+        value = int(round(value))
+        eok, rem = divmod(value, 100_000_000)
+        man, won = divmod(rem, 10_000)
+        parts = []
+        if eok:
+            parts.append(f"{eok}억")
+        if man:
+            parts.append(f"{man}만")
+        if won or not parts:
+            parts.append(f"{won}")
+        return "".join(parts)
 
 
 def format_amount(value) -> str:
@@ -244,6 +251,16 @@ def _capture_dhlottery_result_image(result_url: str, round_no: int) -> bytes | N
                                "(KHTML, like Gecko) Chrome/120.0 Safari/537.36",
                 )
                 page.goto(result_url, timeout=20000, wait_until="networkidle")
+                # 2026-09-27 사용자 지적("당첨번호"가 "당첨번\n호"로 줄바꿈돼
+                # 캡처됨): 라벨(.main-txt/.bonus-txt)이 white-space: normal이라
+                # 컨테이너 폭이나 폰트 로딩 타이밍에 따라 한글이 음절 사이에서
+                # 줄바꿈될 수 있다(스페이스가 없어 CSS가 아무 글자 사이에서나
+                # 끊을 수 있음). 캡처 직전에 nowrap을 강제해 원천 차단.
+                page.add_style_tag(content=".result-txtBox, .result-txtBox * { white-space: nowrap !important; }")
+                try:
+                    page.evaluate("document.fonts.ready")
+                except Exception:
+                    pass
                 el = page.locator(".swiper-slide-active .result-infoWrap")
                 el.wait_for(state="visible", timeout=10000)
                 if f"{round_no}회" not in el.inner_text():
@@ -919,10 +936,12 @@ _PB_TIER_LABELS = {
 
 
 def _usd_amount_to_kr(text: str) -> str:
-    """'$1,000,000' -> '100만 달러', '$50,000' -> '5만 달러', '$100' -> '100달러'.
+    """'$1,000,000' -> '100만달러', '$50,000' -> '5만달러', '$100' -> '100달러'.
     2026-09-03 사용자 지적: "$1,000,000 이러면 가시성이 떨어지잖아. 100만달러라고
     적어야지" — 원화 억/만 표시 규칙(feedback_korean_won_man_unit_format)을
-    달러 등수별 상금에도 동일 적용."""
+    달러 등수별 상금에도 동일 적용. 2026-09-27: 원래 코드가 그룹 사이에
+    공백을 넣고 있어(예: "100만 달러") 정작 그 규칙(공백 없음)과 어긋나
+    있었다 — _to_man_units()로 통일해 드리프트 제거."""
     import re as _re
     m = _re.search(r"[\d,]+", text or "")
     if not m:
@@ -930,26 +949,12 @@ def _usd_amount_to_kr(text: str) -> str:
     n = int(m.group(0).replace(",", ""))
     if n < 10_000:
         return f"{n:,}달러"
-    eok, rem = divmod(n, 100_000_000)
-    man, _rem2 = divmod(rem, 10_000)
-    parts = []
-    if eok:
-        parts.append(f"{eok}억")
-    if man:
-        parts.append(f"{man}만")
-    return " ".join(parts) + " 달러"
+    return _to_man_units(n) + "달러"
 
 
 def _usd_million_to_kr(million: float) -> str:
-    """119.0 -> '1억 1900만 달러' (억/만 단위는 format_amount와 동일한 방식)."""
-    total_man = round(million * 100)
-    eok, man = divmod(total_man, 10_000)
-    parts = []
-    if eok:
-        parts.append(f"{eok}억")
-    if man or not parts:
-        parts.append(f"{man}만")
-    return " ".join(parts) + " 달러"
+    """119.0 -> '1억1900만달러' (억/만 단위는 format_amount와 동일한 방식, 공백 없음)."""
+    return _to_man_units(million * 1_000_000) + "달러"
 
 
 def fetch_powerball_prize_data(draw_date_str: str) -> dict | None:
@@ -1005,8 +1010,14 @@ def fetch_powerball_prize_data(draw_date_str: str) -> dict | None:
 
 
 def _pb_prize_sentences(prize: dict) -> str:
-    """스크레이핑 결과(dict)를 기사 문단으로 조립. 파싱 중 무엇이든 안 맞으면
-    빈 문자열을 돌려줘 기존 당첨번호만 있는 기사로 안전하게 후퇴한다."""
+    """스크레이핑 결과(dict)를 기사 문단들로 조립(문단마다 \\n\\n으로 구분).
+    파싱 중 무엇이든 안 맞으면 빈 문자열을 돌려줘 기존 당첨번호만 있는
+    기사로 안전하게 후퇴한다.
+
+    2026-09-27 실사고: 잭팟·2등·기타등수 문장을 전부 `" ".join()`으로
+    한 덩어리 문단에 욱여넣고 있었다(사용자 지적: "문단 처리가 제대로
+    안됐다") — 논리적으로 다른 정보 단위(잭팟/1등 당첨여부/2등/기타등수)를
+    문단으로 분리."""
     try:
         import re as _re
         tiers = {t[0]: t[1] for t in prize["tiers"] if t[0]}
@@ -1022,33 +1033,41 @@ def _pb_prize_sentences(prize: dict) -> str:
         jackpot_line = groups[0] if len(groups) > 0 else ""
         match5_line = groups[2] if len(groups) > 2 else ""
 
+        paragraphs = []
+
+        # 문단 1: 잭팟 금액 + 연금/현금가치 설명
         # 2026-09-03 사용자 지적: "잭팟이 1억5000만달러인데 현금가치 6520만달러?
         # 이해를 못하겠는데" — 파워볼 잭팟은 29년 연금 분할 지급 기준 총액이고,
         # 일시불(현금가치)은 그 미래 지급액을 현재가치로 할인한 금액이라 항상
         # 더 작다(금리에 따라 대략 잭팟의 45~65% 수준). 숫자만 나열하면 오해하기
         # 쉬워 한 줄로 설명을 덧붙인다.
-        sentences = [
-            f"이번 추첨의 추정 잭팟은 {jackpot_kr}(현금가치 {cash_kr})였다.",
+        paragraphs.append(
+            f"이번 추첨의 추정 잭팟은 {jackpot_kr}(현금가치 {cash_kr})였다. "
             "잭팟 금액은 29년에 걸쳐 나눠 받는 연금 지급 기준 총액이고, "
-            "현금가치는 당첨자가 한 번에 일시불로 받을 경우 받는 금액이라 잭팟보다 작다.",
-        ]
+            "현금가치는 당첨자가 한 번에 일시불로 받을 경우 받는 금액이라 잭팟보다 작다."
+        )
 
+        # 문단 2: 1등(잭팟) 당첨 여부·지역
         if "none" in jackpot_line.lower():
-            sentences.append("이번 추첨에서 1등(잭팟) 당첨자는 나오지 않았다.")
+            paragraphs.append("이번 추첨에서 1등(잭팟) 당첨자는 나오지 않았다.")
         else:
             states = jackpot_line.split("None")[-1].replace("Powerball JACKPOT WINNERS", "").strip()
-            sentences.append("이번 추첨에서 1등(잭팟) 당첨자가 나왔다.")
+            p2 = "이번 추첨에서 1등(잭팟) 당첨자가 나왔다."
             if states:
-                sentences.append(f"당첨 지역은 {states}다.")
+                p2 += f" 당첨 지역은 {states}다."
+            paragraphs.append(p2)
 
+        # 문단 3: 2등
         m5 = tiers.get("m5")
         if m5 and len(m5) >= 3:
             m5_count = format_count(int(m5[1].replace(",", "")))
             states = match5_line.split("Winners")[-1].strip()
-            sentences.append(f"2등(5개 번호 일치)은 {m5_count}명으로 각자 {_usd_amount_to_kr(m5[2])}를 받는다.")
+            p3 = f"2등(5개 번호 일치)은 {m5_count}명으로 각자 {_usd_amount_to_kr(m5[2])}를 받는다."
             if states and "none" not in states.lower():
-                sentences.append(f"2등 당첨 지역은 {states}다.")
+                p3 += f" 2등 당첨 지역은 {states}다."
+            paragraphs.append(p3)
 
+        # 문단 4: 기타 등수
         etc_labels = ["m4-pb", "m4", "m3-pb", "m3", "m2-pb", "m1-pb", "m0-pb"]
         etc_parts = []
         for key in etc_labels:
@@ -1058,9 +1077,9 @@ def _pb_prize_sentences(prize: dict) -> str:
             count = format_count(int(row[1].replace(",", "")))
             etc_parts.append(f"{_PB_TIER_LABELS[key]} {count}명({_usd_amount_to_kr(row[2])})")
         if etc_parts:
-            sentences.append("이 밖에 " + ", ".join(etc_parts) + "이 당첨됐다.")
+            paragraphs.append("이 밖에 " + ", ".join(etc_parts) + "이 당첨됐다.")
 
-        return " ".join(sentences)
+        return "\n\n".join(paragraphs)
     except Exception as e:
         print(f"  [WARN] 파워볼 상금 정보 파싱 실패: {e}")
         return ""
