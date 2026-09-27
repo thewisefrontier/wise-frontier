@@ -611,7 +611,8 @@ function cleanBody(text) {
            세로로 긴 인물화·족자 원본이 많은데, 다른 기사와 같은 object-fit:cover +
            max-height:420px를 쓰면 중앙만 잘려 보여 초상화 얼굴 부분이 통째로 잘려나갔다.
            작품 감상이 핵심인 이 코너만 전체 원본이 다 보이도록 contain으로 전환. */
-        a.subcategory === '고전명화이야기'
+        /* 2026-09-27: 문학작품이야기도 작가 초상(세로 인물 사진)·초판본 표지라 같은 이유로 contain. */
+        ['고전명화이야기', '문학작품이야기'].includes(a.subcategory)
           ? 'width:100%;max-height:600px;object-fit:contain;background:#111;border-radius:8px;margin:16px 0 8px;display:block;'
           : 'width:100%;max-height:420px;object-fit:cover;border-radius:8px;margin:16px 0 8px;display:block;'
       }">`+ (window.imageCreditLabel(a.image_url, a.image_credit) ? `<div style="font-size:12px;color:#888;margin:0 0 12px;text-align:right;">${window.esc(window.imageCreditLabel(a.image_url, a.image_credit))}</div>` : '') : ''}

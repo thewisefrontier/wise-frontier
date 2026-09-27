@@ -1,4 +1,8 @@
-name: NewsFinal - Daily Classic Art Feature
+name: NewsFinal - Daily Culture Features (Art & Literature)
+
+# 2026-09-27: 문학작품 이야기(literature_writer.py)도 같은 일일 트리거에 얹었다 —
+# cron-job.org 잡을 새로 만들지 않기 위해. ⚠️ 파일명(art_weekly.yml)은 cron-job.org
+# 호출 URL에 박혀 있으니 바꾸지 말 것.
 
 # 고전 명화 한 점을 소개하는 "읽을거리" 기사(2026-09-08 신설, 2026-09-27
 # 주 1회 → 일 1회로 전환, 사용자 요청). already_published()가 날짜 단위로
@@ -36,6 +40,8 @@ jobs:
 
       - name: 오늘의 고전 명화 기사 생성
         run: python scripts/art_weekly_writer.py
+        # 한쪽이 실패해도 다른 쪽 기사와 내보내기는 돌도록.
+        continue-on-error: true
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
@@ -47,6 +53,24 @@ jobs:
           AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
           IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
           UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
+
+      - name: 오늘의 문학작품 이야기 기사 생성
+        run: python scripts/literature_writer.py
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
+          GEMINI_API_KEY_4: ${{ secrets.GEMINI_API_KEY_4 }}
+          GEMINI_API_KEY_5: ${{ secrets.GEMINI_API_KEY_5 }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
+          IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
+          UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+          KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
 
       - name: 웹사이트 데이터 내보내기
         run: python scripts/export_articles.py
