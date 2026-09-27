@@ -115,11 +115,12 @@ def format_amount(value) -> str:
 
 
 def format_count(value) -> str:
-    """인원수 등을 한국식 단위로 변환. 1만 미만은 콤마 구분(예: '3,081'),
-    1만 이상은 억/만 단위로 그룹핑(예: 152825 -> '15만 2825')."""
+    """인원수 등을 한국식 단위로 변환. 1만 미만도 콤마 없이 그대로(예: '3081'),
+    1만 이상은 억/만 단위로 그룹핑(예: 152825 -> '15만2825').
+    2026-09-27 사용자 지적("인원수 표기도 콤마 빼") — [[newsfinal_no_comma_numbers]]."""
     value = int(value)
     if value < 10_000:
-        return f"{value:,}"
+        return f"{value}"
     return _to_man_units(value)
 
 

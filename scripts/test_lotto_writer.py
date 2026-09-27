@@ -42,4 +42,9 @@ assert w._usd_million_to_kr(119.0) == "1억1900만달러"
 for s in (w.format_amount(1197258718), w._usd_amount_to_kr("$1,000,000"), w._usd_million_to_kr(119.0)):
     assert " " not in s, f"공백이 남아있음: {s!r}"
 
+# 2026-09-27 사용자 지적("인원수 표기도 콤마 빼") — 1만 미만도 콤마 없이.
+assert w.format_count(3081) == "3081"
+assert w.format_count(152825) == "15만2825"
+assert "," not in w.format_count(3081)
+
 print("ok")
