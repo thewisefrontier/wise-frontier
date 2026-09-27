@@ -418,7 +418,7 @@ jobs:
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
 
-      - name: 주간 코인시황 — 일요일 20시(KST) 이후 주 1회, 서사형(가격+실제 헤드라인 근거) (2026-09-27 신설)
+      - name: 주간 코인시황 — 일요일 12시(KST) 이후 주 1회, 서사형(가격+실제 헤드라인 근거) (2026-09-27 신설)
         # 비트코인은 24시간 거래돼 주식과 달리 일요일 자정까지 봐야 한 주가 진짜
         # 끝난다(→ weekly_market_card.py는 토요일 발행이라 이 주까지 못 담음).
         # "종합시황" 요청이라 숫자만이 아니라 그 주 실제 보도까지 담는 서사형으로
