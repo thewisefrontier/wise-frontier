@@ -104,6 +104,12 @@ except Exception:
     def fetch_wikimedia_image(query: str, allow_artwork: bool = False):
         return None, None
 
+try:
+    from fabrication_guard import verify_no_fabricated_names as _fg_verify_no_fabricated_names
+except Exception:
+    def _fg_verify_no_fabricated_names(source_prompt, body, call_gemini_fn):
+        return ""
+
 
 GEMINI_MODELS = [
     "gemini-3.8-flash",
@@ -207,7 +213,82 @@ def fetch_artwork_image(artwork: dict) -> tuple[str, str]:
     return (stored_url or wiki_url), credit
 
 
-def build_article_prompt(artwork: dict) -> str:
+# 2026-09-27 사용자 지적("미술, 미술가, 미술사 관련은 팩트체크가 중요한데") —
+# 이 writer는 그동안 유가·코인 기사(oil_price_writer.py 등)와 달리 근거자료
+# (grounding) 없이 순전히 Gemini 자기 지식만으로 생애·소장처 등을 썼다. 모네처럼
+# 학습데이터가 풍부한 화가는 실사고 없었지만(클로드 모네 기사 실측 팩트체크
+# 완료, 오류 없음), 안견·정선·신윤복·장택단처럼 학습데이터가 희박한 인물은
+# 위험이 훨씬 크다. 위키백과에서 실제 근거 텍스트를 가져와 프롬프트에 주입하고
+# fabrication_guard로 그 근거 밖 날조를 검사하도록 강화.
+_WIKI_UA = {"User-Agent": "NewsFinal-ArtWeekly/1.0 (+https://newsfinal.co.kr)"}
+
+try:
+    from rapidfuzz import fuzz as _wiki_fuzz
+except Exception:
+    _wiki_fuzz = None
+
+# 2026-09-27 dry-run 실사고: "신윤복"(artist_en="Shin Yun-bok")으로 영어 위키
+# 검색 시 실제 인물 문서("Sin Yunbok", 매큔-라이샤워 표기라 철자가 다름) 대신
+# 완전히 무관한 문서("Painter of the Wind", 신윤복을 소재로 한 2008년 드라마)가
+# 최상위로 잡혔다 — 검색 결과를 검증 없이 그대로 믿으면 안 된다는 걸 실측으로
+# 확인. fabrication_guard.py가 이미 쓰는 rapidfuzz로 검색어-제목 유사도가 너무
+# 낮으면(엉뚱한 문서로 판단) 아예 매치 없음으로 처리한다.
+_WIKI_TITLE_MATCH_THRESHOLD = 55
+
+
+def _wiki_search_title(query: str, lang: str) -> str | None:
+    try:
+        res = requests.get(
+            f"https://{lang}.wikipedia.org/w/api.php",
+            params={"action": "query", "list": "search", "srsearch": query, "format": "json", "srlimit": 1},
+            headers=_WIKI_UA, timeout=10,
+        )
+        if res.status_code != 200:
+            return None
+        results = res.json().get("query", {}).get("search", [])
+        if not results:
+            return None
+        title = results[0]["title"]
+        if _wiki_fuzz is not None:
+            score = max(_wiki_fuzz.token_sort_ratio(query, title), _wiki_fuzz.partial_ratio(query, title))
+            if score < _WIKI_TITLE_MATCH_THRESHOLD:
+                print(f"  ⚠️ 위키 검색 결과 관련성 낮음(무시): '{query}' → '{title}' (유사도 {score:.0f})")
+                return None
+        return title
+    except Exception:
+        return None
+
+
+def _wiki_summary(title: str, lang: str) -> str:
+    try:
+        import urllib.parse
+        res = requests.get(
+            f"https://{lang}.wikipedia.org/api/rest_v1/page/summary/{urllib.parse.quote(title)}",
+            headers=_WIKI_UA, timeout=10,
+        )
+        if res.status_code != 200:
+            return ""
+        return (res.json().get("extract") or "").strip()
+    except Exception:
+        return ""
+
+
+def fetch_wikipedia_grounding(query_ko: str, query_en: str) -> str:
+    """한국어 위키백과를 우선 시도하고, 내용이 빈약하면(200자 미만) 영어
+    위키백과로 보충한다. 서양 화가는 대개 한국어판도 충실하지만, 한국 고전
+    화가(안견·정선 등)는 영어판이 아예 없는 경우가 많아 언어 우선순위가
+    중요하다 — 반대로 하면 정보량이 줄어든다."""
+    title_ko = _wiki_search_title(query_ko, "ko")
+    text = _wiki_summary(title_ko, "ko") if title_ko else ""
+    if len(text) < 200:
+        title_en = _wiki_search_title(query_en, "en")
+        text_en = _wiki_summary(title_en, "en") if title_en else ""
+        if len(text_en) > len(text):
+            text = text_en
+    return text
+
+
+def build_article_prompt(artwork: dict, grounding: str) -> str:
     return f"""당신은 프론티어 미디어 NewsFinal의 문화·예술 담당 에디터입니다.
 매주 주말 "고전 명화 이야기" 코너에서 소개할 작품은 아래와 같습니다.
 
@@ -216,19 +297,29 @@ def build_article_prompt(artwork: dict) -> str:
 제작 시기: {artwork['year_label']}
 관련 국가: {artwork['country']}
 
+[근거 자료 — 위키백과에서 가져온 실제 문서 발췌]
+{grounding}
+
 이 작품과 작가를 소개하는 한국어 기사를 작성하세요. 반드시 아래 두 가지를 모두 다루세요.
 - 작품 이야기: 제작 배경, 소재·기법·구도의 특징, 왜 유명해졌는지, 오늘날 어디에 소장돼 있는지.
 - 작가 이야기: 생애와 활동 시기, 예술적 경향, 이 작품이 작가의 생애·작품 세계에서 갖는 의미.
-확인된 역사적 사실만 다루고 불확실한 내용은 지어내지 마세요. 학계에 여러 해석이 있는 부분은
-"~라는 해석도 있다"처럼 하나로 단정하지 말고 여지를 두어 서술하세요.
+
+⚠️ 반드시 위 [근거 자료]에 실제로 나오는 사실만 재구성해서 쓰세요. 생몰년·소장처·구체적
+일화·다른 인물과의 관계 등 [근거 자료]에 없는 세부사항은 지어내지 마세요. 근거 자료가
+특정 항목(예: 소장처)을 다루지 않으면 그 항목은 그냥 언급하지 말고 넘어가세요. 학계에
+여러 해석이 있는 부분은 "~라는 해석도 있다"처럼 하나로 단정하지 말고 여지를 두어 서술하세요.
+단, "근거 자료에 따르면", "제시된 기록에 근거해" 같이 근거자료의 존재 자체를 본문에서
+언급하지 마세요 — 원래 알고 있던 사실을 소개하듯 자연스럽게 서술하세요.
 
 [문체 규칙]
 - 본문은 3~4개 문단 이상으로 충분히 작성하세요(각 문단은 빈 줄로 구분).
 - 모든 문장을 "-다"로 종결하세요("-습니다"/"-입니다" 같은 정중체 금지). 단, 인용구 자체는 예외.
 - 마크다운 문법, 헤더, 홍보 문구 금지.
 - "~를 보여줍니다", "~라는 평가다" 같은 논평·칼럼 문체 대신 사실 서술형으로 쓰세요.
-- 인명·지명 등 고유명사는 한글 음차로 표기하고 첫 등장 시 괄호로 원어를 병기하세요
-  (예: 레오나르도 다빈치(Leonardo da Vinci)).
+- 외국어권 인명·지명은 한글 음차로 표기하고 첫 등장 시 1회만 괄호로 원어를 병기하세요
+  (예: 레오나르도 다빈치(Leonardo da Vinci)). 이미 한글 이름인 한국 인물·지명(예: 신윤복,
+  안견)은 원어 병기가 필요 없습니다. 어느 경우든 같은 이름을 다시 언급할 땐 괄호 병기를
+  반복하지 말고 이름만 쓰세요.
 
 출력 형식:
 TITLE: (기사 제목 — 예: "레오나르도 다빈치의 모나리자, 500년을 사로잡은 미소")
@@ -329,11 +420,37 @@ def main():
         return
     print(f"  → 이미지 확보: {image_url[:70]}")
 
-    prompt = build_article_prompt(artwork)
+    # "수련"처럼 작품명만으로 검색하면 동명이인/동명 식물 등 전혀 다른 문서가
+    # 잡힐 수 있어(실측: "수련" 단독 검색 → 모네 그림이 아니라 수련(식물) 문서가
+    # 매칭됨) 작가명을 붙여 검색 쿼리를 명확히 한다.
+    artwork_wiki = fetch_wikipedia_grounding(
+        f"{artwork['artist_ko']} {artwork['title_ko']}", artwork["wiki_query"])
+    artist_wiki = fetch_wikipedia_grounding(artwork["artist_ko"], artwork["artist_en"])
+    if not artwork_wiki and not artist_wiki:
+        print(f"  [SKIP] '{artwork['title_ko']}'/'{artwork['artist_ko']}' 위키백과 근거자료를 "
+              f"찾지 못함 — 근거 없이 발행하지 않고 이번 주는 건너뜀")
+        return
+    grounding = f"[작품: {artwork['title_ko']}]\n{artwork_wiki or '(자료 없음)'}\n\n" \
+                f"[작가: {artwork['artist_ko']}]\n{artist_wiki or '(자료 없음)'}"
+    print(f"  → 위키백과 근거자료 확보(작품 {len(artwork_wiki)}자, 작가 {len(artist_wiki)}자)")
+
+    prompt = build_article_prompt(artwork, grounding)
     content = call_gemini_article(prompt)
     if not content:
         print("  [ERROR] 기사 생성 실패")
         return
+
+    # 2026-09-27 추가 — 근거자료 대비 날조 검사(oil_price_writer.py 등과 동일 패턴).
+    fabricated = _fg_verify_no_fabricated_names(grounding, content, call_gemini)
+    if fabricated:
+        print(f"  ⚠️ 근거자료에 없는 내용 감지({fabricated}) → 재생성")
+        retried = call_gemini(
+            prompt + f"\n\n[재작성 지시] 다음을 근거자료에 없는 내용으로 잘못 지어냈습니다: {fabricated}. "
+                     "[근거 자료]에 실제로 나온 내용만 쓰고, 확인할 수 없으면 언급하지 마세요.",
+            max_tokens=2500,
+        )
+        if retried:
+            content = retried
 
     title, body = parse_article_output(content)
     if not title or not body:
