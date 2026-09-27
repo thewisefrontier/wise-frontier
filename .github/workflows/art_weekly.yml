@@ -1,9 +1,13 @@
-name: NewsFinal - Weekly Classic Art Feature
+name: NewsFinal - Daily Classic Art Feature
 
-# 매주 고전 명화 한 점을 소개하는 "주말 읽을거리" 기사(2026-09-08 신설,
-# 사용자 요청 — "매주 고전 미술 작품 하나를 소개하는 기사가 있으면 좋을 것
-# 같은데" → "주말에 읽을거리로"). 다른 writer들과 동일하게 GitHub 자체
-# schedule: 대신 cron-job.org의 workflow_dispatch로 실행한다.
+# 고전 명화 한 점을 소개하는 "읽을거리" 기사(2026-09-08 신설, 2026-09-27
+# 주 1회 → 일 1회로 전환, 사용자 요청). already_published()가 날짜 단위로
+# 게이트하므로 이 워크플로우가 여러 번 실행돼도 안전하다. 다른 writer들과
+# 동일하게 GitHub 자체 schedule: 대신 cron-job.org의 workflow_dispatch로
+# 실행한다.
+# ⚠️ 일 1회로 실제로 발행되려면 이 워크플로우를 부르는 cron-job.org 잡의
+# 실행 주기도 주 1회에서 일 1회로 바꿔야 한다(이 파일 변경만으론 실행
+# 빈도가 자동으로 늘지 않음).
 on:
   workflow_dispatch:
 
@@ -30,7 +34,7 @@ jobs:
       - name: 패키지 설치
         run: pip install -r requirements.txt
 
-      - name: 이번 주 고전 명화 기사 생성
+      - name: 오늘의 고전 명화 기사 생성
         run: python scripts/art_weekly_writer.py
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -56,7 +60,7 @@ jobs:
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add -A
-          git diff --staged --quiet || git commit -m "Update weekly art feature"
+          git diff --staged --quiet || git commit -m "Update daily art feature"
           for i in 1 2 3 4 5; do
             git pull origin main -X ours --no-rebase
             git push && break

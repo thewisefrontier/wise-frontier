@@ -1,17 +1,21 @@
 """
 scripts/art_weekly_writer.py
 --------------------------------
-매주 고전 명화 한 점을 소개하는 "주말 읽을거리" 기사 자동 생성.
+고전 명화 한 점을 소개하는 "읽을거리" 기사 자동 생성.
 
 사용자 요청(2026-09-08): "매주 고전 미술 작품 하나를 소개하는 기사가 있으면
 좋을 것 같은데" → "서양 고전미술 위주로 하되, 한국, 중국, 일본 고전 미술도
 섞는 걸로" → "주말에 읽을거리로" → "작품에 대한 이야기, 작가에 대한 이야기".
+2026-09-27 사용자 요청으로 주 1회 → 일 1회로 주기 변경.
 
-- 결정론적 주간 선택: ISO 연도·주차로 ARTWORKS를 순환 선택(같은 주에 여러 번
+- 결정론적 일간 선택: 날짜(toordinal)로 ARTWORKS를 순환 선택(같은 날 여러 번
   실행돼도 already_published()가 막고, 목록을 다 돌면 처음부터 다시 순환).
+  ⚠️ ARTWORKS가 24개뿐이라 일 1회면 24일마다 전체 목록이 반복된다 — 주 1회일
+  땐 약 5.5개월에 한 번 반복이었던 것과 비교하면 훨씬 빨리 재등장한다. 목록을
+  늘리지 않는 한 이 반복 주기가 사실상의 한계다.
 - 이미지는 반드시 그 작품 실물이어야 하므로(일반 스톡사진으로 대체하면
   2026-09-08 파올라 페를롭 사고와 같은 문제) Wikimedia Commons에서 작품명으로
-  직접 찾고, 못 찾으면 그 주는 발행을 건너뛴다 — 일반 기사처럼 Pixabay
+  직접 찾고, 못 찾으면 그 날은 발행을 건너뛴다 — 일반 기사처럼 Pixabay
   일반 스톡사진으로 대체하지 않는다(article_image.fetch_article_image()를
   안 쓰는 이유).
 - 저작권: ARTWORKS에는 작가 사후 70년이 지나 퍼블릭도메인이 확실한 작품만
@@ -19,7 +23,11 @@ scripts/art_weekly_writer.py
   PD 등 확인 후 포함). 이 목록에 새 작품을 추가할 때도 이 기준을 지킬 것.
 
 실행: python scripts/art_weekly_writer.py
-권장: 주 1회(토요일 오전) 실행 — already_published()가 같은 주 중복 발행을 막음.
+권장: 일 1회 실행 — already_published()가 같은 날 중복 발행을 막음.
+⚠️ 이 스크립트 자체는 매일 실행돼도 안전(날짜 게이트가 막아줌)하지만,
+실제로 매일 발행되려면 이 워크플로우를 트리거하는 외부 cron(cron-job.org)
+주기도 주 1회에서 일 1회로 바꿔야 한다 — 코드만 바꾼다고 실행 빈도가
+저절로 늘어나지 않는다.
 """
 
 import os
@@ -174,19 +182,69 @@ ARTWORKS = [
     {"title_ko": "그랑드자트 섬의 일요일 오후", "title_en": "A Sunday Afternoon on the Island of La Grande Jatte", "artist_ko": "조르주 쇠라", "artist_en": "Georges Seurat", "year_label": "1886년", "country": "프랑스", "country_flag": "🇫🇷", "region": "europe", "wiki_query": "A Sunday Afternoon on the Island of La Grande Jatte Seurat"},
     {"title_ko": "아메리칸 고딕", "title_en": "American Gothic", "artist_ko": "그랜트 우드", "artist_en": "Grant Wood", "year_label": "1930년", "country": "미국", "country_flag": "🇺🇸", "region": "global", "wiki_query": "American Gothic Grant Wood"},
     {"title_ko": "우유 따르는 여인", "title_en": "The Milkmaid", "artist_ko": "요하네스 페르메이르", "artist_en": "Johannes Vermeer", "year_label": "1658년경", "country": "네덜란드", "country_flag": "🇳🇱", "region": "europe", "wiki_query": "The Milkmaid Vermeer painting"},
+
+    # 2026-09-27 사용자 요청("작품이 얼마나 많은데 목록에 올린 것만 쓰냐")으로
+    # 20건 추가 — 각각 (1)위키미디어 커먼즈 실물 이미지 존재, (2)작가 사후
+    # 70년 경과(2026년 기준 1956년 이전 사망)를 스크립트로 자동 검증 후 통과한
+    # 것만 실었다. 검증 통과했어도 2건(메두사호의 뗏목·오필리아)은 최초 검색어가
+    # 각각 "무명 화가의 모작"·"두개골 디테일 클로즈업"을 반환해 눈으로 직접
+    # 열어봐야만 걸러졌다 — 자동검증(존재 여부)과 육안 확인(그 이미지가 맞는지)은
+    # 별개라는 걸 재확인. wiki_query를 원본이 맞는 이미지로 바로잡음.
+    {"title_ko": "아르놀피니 부부의 초상", "title_en": "The Arnolfini Portrait", "artist_ko": "얀 반 에이크", "artist_en": "Jan van Eyck", "year_label": "1434년", "country": "벨기에", "country_flag": "🇧🇪", "region": "europe", "wiki_query": "Arnolfini Portrait van Eyck"},
+    {"title_ko": "마라의 죽음", "title_en": "The Death of Marat", "artist_ko": "자크루이 다비드", "artist_en": "Jacques-Louis David", "year_label": "1793년", "country": "프랑스", "country_flag": "🇫🇷", "region": "europe", "wiki_query": "The Death of Marat David painting"},
+    {"title_ko": "민중을 이끄는 자유의 여신", "title_en": "Liberty Leading the People", "artist_ko": "외젠 들라크루아", "artist_en": "Eugène Delacroix", "year_label": "1830년", "country": "프랑스", "country_flag": "🇫🇷", "region": "europe", "wiki_query": "Liberty Leading the People Delacroix"},
+    {"title_ko": "메두사호의 뗏목", "title_en": "The Raft of the Medusa", "artist_ko": "테오도르 제리코", "artist_en": "Théodore Géricault", "year_label": "1819년", "country": "프랑스", "country_flag": "🇫🇷", "region": "europe", "wiki_query": "Radeau de la Meduse Gericault 1819"},
+    {"title_ko": "오르낭의 장례식", "title_en": "A Burial at Ornans", "artist_ko": "귀스타브 쿠르베", "artist_en": "Gustave Courbet", "year_label": "1850년", "country": "프랑스", "country_flag": "🇫🇷", "region": "europe", "wiki_query": "A Burial at Ornans Courbet"},
+    {"title_ko": "올랭피아", "title_en": "Olympia", "artist_ko": "에두아르 마네", "artist_en": "Édouard Manet", "year_label": "1863년", "country": "프랑스", "country_flag": "🇫🇷", "region": "europe", "wiki_query": "Olympia Manet painting"},
+    {"title_ko": "풀밭 위의 점심 식사", "title_en": "Le Déjeuner sur l'herbe", "artist_ko": "에두아르 마네", "artist_en": "Édouard Manet", "year_label": "1863년", "country": "프랑스", "country_flag": "🇫🇷", "region": "europe", "wiki_query": "Le dejeuner sur l'herbe Manet"},
+    {"title_ko": "인상, 해돋이", "title_en": "Impression, Sunrise", "artist_ko": "클로드 모네", "artist_en": "Claude Monet", "year_label": "1872년", "country": "프랑스", "country_flag": "🇫🇷", "region": "europe", "wiki_query": "Impression Sunrise Monet painting"},
+    {"title_ko": "물랭 드 라 갈레트의 무도회", "title_en": "Bal du moulin de la Galette", "artist_ko": "피에르오귀스트 르누아르", "artist_en": "Pierre-Auguste Renoir", "year_label": "1876년", "country": "프랑스", "country_flag": "🇫🇷", "region": "europe", "wiki_query": "Bal du moulin de la Galette Renoir"},
+    {"title_ko": "카드놀이 하는 사람들", "title_en": "The Card Players", "artist_ko": "폴 세잔", "artist_en": "Paul Cézanne", "year_label": "1895년경", "country": "프랑스", "country_flag": "🇫🇷", "region": "europe", "wiki_query": "The Card Players Cezanne painting"},
+    {"title_ko": "물랭 루주에서의 춤", "title_en": "At the Moulin Rouge", "artist_ko": "앙리 드 툴루즈로트레크", "artist_en": "Henri de Toulouse-Lautrec", "year_label": "1892년경", "country": "프랑스", "country_flag": "🇫🇷", "region": "europe", "wiki_query": "At the Moulin Rouge Toulouse-Lautrec"},
+    {"title_ko": "오필리아", "title_en": "Ophelia", "artist_ko": "존 에버렛 밀레이", "artist_en": "John Everett Millais", "year_label": "1852년경", "country": "영국", "country_flag": "🇬🇧", "region": "europe", "wiki_query": "Ophelia Millais 1851 1852 Google Art Project"},
+    {"title_ko": "만종", "title_en": "The Angelus", "artist_ko": "장 프랑수아 밀레", "artist_en": "Jean-François Millet", "year_label": "1859년경", "country": "프랑스", "country_flag": "🇫🇷", "region": "europe", "wiki_query": "The Angelus Millet painting"},
+    {"title_ko": "비너스의 화장(로크비 비너스)", "title_en": "Venus at her Mirror (Rokeby Venus)", "artist_ko": "디에고 벨라스케스", "artist_en": "Diego Velázquez", "year_label": "1651년경", "country": "스페인", "country_flag": "🇪🇸", "region": "europe", "wiki_query": "Rokeby Venus Velazquez"},
+    {"title_ko": "프리마베라(봄)", "title_en": "Primavera", "artist_ko": "산드로 보티첼리", "artist_en": "Sandro Botticelli", "year_label": "1480년경", "country": "이탈리아", "country_flag": "🇮🇹", "region": "europe", "wiki_query": "La Primavera Botticelli 1480 Uffizi"},
+    {"title_ko": "신오하시 다리와 아타케의 소나기", "title_en": "Sudden Shower over Shin-Ōhashi Bridge and Atake", "artist_ko": "우타가와 히로시게", "artist_en": "Utagawa Hiroshige", "year_label": "1857년", "country": "일본", "country_flag": "🇯🇵", "region": "asia", "wiki_query": "Sudden Shower over Shin Ohashi Hiroshige"},
+    {"title_ko": "초충도", "title_en": "Chochungdo (Plants and Insects)", "artist_ko": "신사임당", "artist_en": "Shin Saimdang", "year_label": "16세기", "country": "한국", "country_flag": "🇰🇷", "region": "asia", "wiki_query": "신사임당 초충도"},
+    {"title_ko": "금강전도", "title_en": "Complete View of Mt. Geumgang", "artist_ko": "정선", "artist_en": "Jeong Seon", "year_label": "1734년", "country": "한국", "country_flag": "🇰🇷", "region": "asia", "wiki_query": "정선 금강전도"},
+    {"title_ko": "부춘산거도", "title_en": "Dwelling in the Fuchun Mountains", "artist_ko": "황공망", "artist_en": "Huang Gongwang", "year_label": "1350년경", "country": "중국", "country_flag": "🇨🇳", "region": "asia", "wiki_query": "Dwelling in the Fuchun Mountains"},
+    {"title_ko": "한희재야연도", "title_en": "Night Revels of Han Xizai", "artist_ko": "고굉중", "artist_en": "Gu Hongzhong", "year_label": "10세기", "country": "중국", "country_flag": "🇨🇳", "region": "asia", "wiki_query": "Night Revels of Han Xizai"},
+
+    # 2026-09-27 2차 확장분. 이번에도 자동검증 통과 후 육안으로 재확인하다가
+    # "바벨탑"은 원작이 아니라 독일 오버하우젠 가스탱크 전시장의 대형 복제
+    # 설치물 사진이 잡혀서 쿼리를 다시 잡았고, "죽음과 소녀"는 동명의 전혀 다른
+    # 1520년작 그림(작가 Schwarz)이 먼저 잡혀 에곤 실레 이름을 명시해 바로잡음.
+    # 장승업 "계산무진도"·이인문 "강산무진도"는 특정 작품명으로는 위키미디어에
+    # 이미지가 없어(다른 작품의 디테일 크롭만 잡힘) 이번 배치에서 제외 — 나중에
+    # 정확한 이미지가 확인되면 추가.
+    {"title_ko": "최후의 만찬", "title_en": "The Last Supper", "artist_ko": "레오나르도 다빈치", "artist_en": "Leonardo da Vinci", "year_label": "1495년경", "country": "이탈리아", "country_flag": "🇮🇹", "region": "europe", "wiki_query": "The Last Supper Leonardo da Vinci Milan"},
+    {"title_ko": "이카루스의 추락이 있는 풍경", "title_en": "Landscape with the Fall of Icarus", "artist_ko": "대(大) 피터르 브뤼헐", "artist_en": "Pieter Bruegel the Elder", "year_label": "1560년경", "country": "벨기에", "country_flag": "🇧🇪", "region": "europe", "wiki_query": "Landscape with the Fall of Icarus Bruegel"},
+    {"title_ko": "바벨탑", "title_en": "The Tower of Babel", "artist_ko": "대(大) 피터르 브뤼헐", "artist_en": "Pieter Bruegel the Elder", "year_label": "1563년", "country": "벨기에", "country_flag": "🇧🇪", "region": "europe", "wiki_query": "Tower of Babel Bruegel Kunsthistorisches Museum"},
+    {"title_ko": "성 삼위일체", "title_en": "Holy Trinity", "artist_ko": "마사초", "artist_en": "Masaccio", "year_label": "1427년경", "country": "이탈리아", "country_flag": "🇮🇹", "region": "europe", "wiki_query": "Masaccio Holy Trinity fresco Santa Maria Novella"},
+    {"title_ko": "우르비노의 비너스", "title_en": "Venus of Urbino", "artist_ko": "티치아노 베첼리오", "artist_en": "Titian", "year_label": "1538년", "country": "이탈리아", "country_flag": "🇮🇹", "region": "europe", "wiki_query": "Venus of Urbino Titian Uffizi"},
+    {"title_ko": "시스티나의 성모", "title_en": "Sistine Madonna", "artist_ko": "라파엘로 산치오", "artist_en": "Raphael", "year_label": "1512년경", "country": "이탈리아", "country_flag": "🇮🇹", "region": "europe", "wiki_query": "Sistine Madonna Raphael Dresden"},
+    {"title_ko": "홀로페르네스의 목을 베는 유디트", "title_en": "Judith Beheading Holofernes", "artist_ko": "아르테미시아 젠틸레스키", "artist_en": "Artemisia Gentileschi", "year_label": "1620년경", "country": "이탈리아", "country_flag": "🇮🇹", "region": "europe", "wiki_query": "Judith Beheading Holofernes Gentileschi Uffizi"},
+    {"title_ko": "성 마태오의 소명", "title_en": "The Calling of Saint Matthew", "artist_ko": "카라바조", "artist_en": "Caravaggio", "year_label": "1600년", "country": "이탈리아", "country_flag": "🇮🇹", "region": "europe", "wiki_query": "The Calling of Saint Matthew Caravaggio"},
+    {"title_ko": "1808년 5월 3일", "title_en": "The Third of May 1808", "artist_ko": "프란시스코 고야", "artist_en": "Francisco Goya", "year_label": "1814년", "country": "스페인", "country_flag": "🇪🇸", "region": "europe", "wiki_query": "Tres de Mayo Goya Prado"},
+    {"title_ko": "그랑드 오달리스크", "title_en": "La Grande Odalisque", "artist_ko": "장오귀스트도미니크 앵그르", "artist_en": "Jean-Auguste-Dominique Ingres", "year_label": "1814년", "country": "프랑스", "country_flag": "🇫🇷", "region": "europe", "wiki_query": "La Grande Odalisque Ingres Louvre"},
+    {"title_ko": "전함 테메레르", "title_en": "The Fighting Temeraire", "artist_ko": "윌리엄 터너", "artist_en": "J. M. W. Turner", "year_label": "1839년", "country": "영국", "country_flag": "🇬🇧", "region": "europe", "wiki_query": "The Fighting Temeraire Turner National Gallery"},
+    {"title_ko": "건초 마차", "title_en": "The Hay Wain", "artist_ko": "존 컨스터블", "artist_en": "John Constable", "year_label": "1821년", "country": "영국", "country_flag": "🇬🇧", "region": "europe", "wiki_query": "The Hay Wain Constable National Gallery"},
+    {"title_ko": "죽음과 소녀", "title_en": "Death and the Maiden", "artist_ko": "에곤 실레", "artist_en": "Egon Schiele", "year_label": "1915년", "country": "오스트리아", "country_flag": "🇦🇹", "region": "europe", "wiki_query": "Egon Schiele Death and the Maiden 1915"},
+    {"title_ko": "개풍쾌청(붉은 후지산)", "title_en": "Fine Wind, Clear Morning (Red Fuji)", "artist_ko": "가쓰시카 호쿠사이", "artist_en": "Katsushika Hokusai", "year_label": "1831년경", "country": "일본", "country_flag": "🇯🇵", "region": "asia", "wiki_query": "Fine Wind Clear Morning Red Fuji Hokusai"},
+    {"title_ko": "조춘도", "title_en": "Early Spring", "artist_ko": "곽희", "artist_en": "Guo Xi", "year_label": "1072년", "country": "중국", "country_flag": "🇨🇳", "region": "asia", "wiki_query": "Early Spring Guo Xi painting"},
 ]
 
 
-def get_weekly_artwork(today=None) -> tuple[dict, int, int]:
-    """ISO 연도·주차로 결정론적 순환 선택. 반환: (artwork, iso_year, iso_week)."""
+def get_daily_artwork(today=None) -> tuple[dict, "date"]:
+    """날짜(toordinal)로 결정론적 순환 선택. 반환: (artwork, date)."""
     today = today or now_kst().date()
-    iso_year, iso_week, _ = today.isocalendar()
-    idx = (iso_year * 100 + iso_week) % len(ARTWORKS)
-    return ARTWORKS[idx], iso_year, iso_week
+    idx = today.toordinal() % len(ARTWORKS)
+    return ARTWORKS[idx], today
 
 
-def already_published(iso_year: int, iso_week: int) -> bool:
-    internal_url = f"internal://art_weekly_{iso_year}W{iso_week:02d}"
+def already_published(pub_date) -> bool:
+    internal_url = f"internal://art_weekly_{pub_date.isoformat()}"
     res = requests.get(
         _sb_url(),
         headers=_sb_headers(),
@@ -347,7 +405,7 @@ def call_gemini_article(prompt: str, max_tokens: int = 2500, style_retries: int 
     return content
 
 
-def insert_article(artwork: dict, title_ko: str, body_ko: str, iso_year: int, iso_week: int,
+def insert_article(artwork: dict, title_ko: str, body_ko: str, pub_date,
                     image_url: str = "", image_credit: str = "") -> int:
     if detect_script_leak(title_ko, body_ko):
         print(f"  ⚠️ [문자 혼입 감지] 저장 차단: {title_ko[:60]}")
@@ -365,7 +423,7 @@ def insert_article(artwork: dict, title_ko: str, body_ko: str, iso_year: int, is
             return -1
 
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
-    internal_url = f"internal://art_weekly_{iso_year}W{iso_week:02d}"
+    internal_url = f"internal://art_weekly_{pub_date.isoformat()}"
 
     # 2026-09-09 제거(사용자 지시 — 다국어 채널이 이 번역을 재사용하지 않음).
     # title_en은 artwork["title_en"](큐레이션된 원 작품명)로 계속 폴백됨.
@@ -406,29 +464,32 @@ def main():
         print("  [SKIP] SUPABASE 환경변수 없음")
         return
 
-    artwork, iso_year, iso_week = get_weekly_artwork()
-    print(f"  → 이번 주({iso_year}년 {iso_week}주차) 작품: {artwork['title_ko']} ({artwork['artist_ko']})")
+    artwork, pub_date = get_daily_artwork()
+    print(f"  → 오늘({pub_date.isoformat()}) 작품: {artwork['title_ko']} ({artwork['artist_ko']})")
 
-    if already_published(iso_year, iso_week):
-        print(f"  → {iso_year}W{iso_week:02d} 고전 명화 이야기 이미 존재 → 스킵")
+    if already_published(pub_date):
+        print(f"  → {pub_date.isoformat()} 고전 명화 이야기 이미 존재 → 스킵")
         return
 
     image_url, image_credit = fetch_artwork_image(artwork)
     if not image_url:
         print(f"  [SKIP] '{artwork['title_ko']}' 실물 이미지를 Wikimedia Commons에서 찾지 못함 — "
-              f"이번 주는 건너뜀(엉뚱한 대체 이미지를 쓰지 않음)")
+              f"오늘은 건너뜀(엉뚱한 대체 이미지를 쓰지 않음)")
         return
     print(f"  → 이미지 확보: {image_url[:70]}")
 
     # "수련"처럼 작품명만으로 검색하면 동명이인/동명 식물 등 전혀 다른 문서가
     # 잡힐 수 있어(실측: "수련" 단독 검색 → 모네 그림이 아니라 수련(식물) 문서가
-    # 매칭됨) 작가명을 붙여 검색 쿼리를 명확히 한다.
+    # 매칭됨) 작가명을 붙여 검색 쿼리를 명확히 한다. 작가 쪽도 "Shin Yun-bok" 같은
+    # 이름만으로 검색하면 무관한 문서(동명 드라마 등)가 잡힐 수 있어 " painter"를
+    # 붙여 인물 문서 쪽으로 검색 우선순위를 살짝 기울인다(그래도 최종 방어는
+    # _wiki_search_title의 유사도 가드).
     artwork_wiki = fetch_wikipedia_grounding(
         f"{artwork['artist_ko']} {artwork['title_ko']}", artwork["wiki_query"])
-    artist_wiki = fetch_wikipedia_grounding(artwork["artist_ko"], artwork["artist_en"])
+    artist_wiki = fetch_wikipedia_grounding(artwork["artist_ko"], f"{artwork['artist_en']} painter")
     if not artwork_wiki and not artist_wiki:
         print(f"  [SKIP] '{artwork['title_ko']}'/'{artwork['artist_ko']}' 위키백과 근거자료를 "
-              f"찾지 못함 — 근거 없이 발행하지 않고 이번 주는 건너뜀")
+              f"찾지 못함 — 근거 없이 발행하지 않고 오늘은 건너뜀")
         return
     grounding = f"[작품: {artwork['title_ko']}]\n{artwork_wiki or '(자료 없음)'}\n\n" \
                 f"[작가: {artwork['artist_ko']}]\n{artist_wiki or '(자료 없음)'}"
@@ -461,7 +522,7 @@ def main():
         print(f"  ⚠️ 본문이 너무 짧음({len(body)}자) — 스킵")
         return
 
-    article_id = insert_article(artwork, title, body, iso_year, iso_week, image_url, image_credit)
+    article_id = insert_article(artwork, title, body, pub_date, image_url, image_credit)
     if article_id > 0:
         print(f"  ✓ 기사 삽입 완료 (articles.id={article_id}): {title}")
     else:
