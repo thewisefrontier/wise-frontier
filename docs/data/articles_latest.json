@@ -1,5 +1,44 @@
 [
   {
+    "id": 292947,
+    "title_en": "중앙아시아, 완연한 봄 날씨…곳곳에 비",
+    "title_ko": "중앙아시아, 완연한 봄 날씨…곳곳에 비",
+    "summary_ko": "27일(현지시간) 중앙아시아 주요국의 다음주 월요일부터 금요일까지의 날씨 예보에 따르면, 해당 지역 전체의 기온은 최저 4°C에서 최고 26°C의 분포를 기록할 것으로 예보됐다. 이번 예보 기간 동안 최저기온은 4°C를 기록하고 최고기온은 26°C까지 오르는 등 쌀쌀한 기온과 따뜻한 기온이 공존하는 날씨가 이어질 전망이다.\n\n국가별 주간 날씨를 살펴보면 카자흐스탄은 주간 최고기온 18°C, 최저기온 4°C를 나타내며 비교선 선선한 기온 분포를 보일 것으로 예상된다. 우즈베키스탄은 주간 최고기온 26°C, 최저기온 12°C를 기록하며",
+    "url": "internal://weather_group_중앙아시아_weekly20260927",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_중앙아시아_weekly20260927",
+    "region": "central_asia",
+    "country": "중앙아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-27 09:10",
+    "countries": [
+      "카자흐스탄",
+      "우즈베키스탄",
+      "키르기스스탄"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_kazakhstan_20260927.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-27T09:10:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-27 09:10",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 292911,
     "title_en": "남아시아, 최고 36도 무더위…곳곳 비",
     "title_ko": "남아시아, 최고 36도 무더위…곳곳 비",
@@ -1522,42 +1561,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 292378,
-    "title_en": "Water Lilies",
-    "title_ko": "클로드 모네의 수련, 빛과 물의 거장 생애 말기의 대작",
-    "summary_ko": "클로드 모네(Claude Monet)는 19세기 후반에서 20세기 전반에 걸쳐 활동하며 자연의 순간적인 인상을 포착하려 했던 인상주의(Impressionism) 미술의 대표적인 화가다. 그는 프랑스 파리에서 태어나 야외에서 빛의 변화에 따라 달라지는 풍경을 그리며 색채의 변화를 탐구했다. 생애 후반기에 모네는 프랑스 지베르니(Giverny)에 정원을 가꾸며 이곳의 연못과 수련을 집중적으로 그리기 시작했다.\n\n1906년경에 제작된 수련(Water Lilies)은 이 시기 모네가 완성한 연작의 일부다. 이 작품의 주요 소재는 지베르니 ",
-    "url": "internal://art_weekly_2026W39",
-    "source": "NewsFinal",
-    "category": "문화·예술",
-    "subcategory": "고전명화이야기",
-    "region": "europe",
-    "country": "프랑스",
-    "country_flag": "🇫🇷",
-    "score": 1,
-    "created_at": "2026-09-26 09:01",
-    "countries": [
-      "프랑스"
-    ],
-    "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/10/Claude_Monet%2C_Water-Lily_Pond_and_Weeping_Willow.JPG/960px-Claude_Monet%2C_Water-Lily_Pond_and_Weeping_Willow.JPG",
-    "view_count": 4,
-    "first_published_at": "2026-09-26T09:01:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-26 09:01",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "사진: 클로드 모네 〈수련 연못과 능수버들〉(1916-1919년경) — 지베르니 자택 연못의 수련과 능수버들을 그린 연작 중 한 점. 이미지 출처: Wikimedia Commons(퍼블릭 도메인)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   }
 ]
