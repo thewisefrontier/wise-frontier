@@ -418,6 +418,28 @@ jobs:
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
 
+      - name: 주간 코인시황 — 일요일 20시(KST) 이후 주 1회, 서사형(가격+실제 헤드라인 근거) (2026-09-27 신설)
+        # 비트코인은 24시간 거래돼 주식과 달리 일요일 자정까지 봐야 한 주가 진짜
+        # 끝난다(→ weekly_market_card.py는 토요일 발행이라 이 주까지 못 담음).
+        # "종합시황" 요청이라 숫자만이 아니라 그 주 실제 보도까지 담는 서사형으로
+        # 별도 신설(사용자 결정 — 형태 선택 시 서사형 지목).
+        if: steps.guard.outputs.skip != 'true'
+        timeout-minutes: 5
+        continue-on-error: true
+        run: python scripts/weekly_crypto_writer.py
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
+          GEMINI_API_KEY_4: ${{ secrets.GEMINI_API_KEY_4 }}
+          GEMINI_API_KEY_5: ${{ secrets.GEMINI_API_KEY_5 }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
+          UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
+
       - name: 웹사이트 데이터 내보내기
         if: steps.guard.outputs.skip != 'true'
         run: python scripts/export_articles.py
