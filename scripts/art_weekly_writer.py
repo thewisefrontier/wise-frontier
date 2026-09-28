@@ -260,10 +260,10 @@ ARTWORKS = [
 # 공식으로 "이 작품=이 이미지"를 확정해서 주는 URL(direct_image_url)을 그대로
 # 쓰므로, 손수 짠 목록에서 반복됐던 "검색은 맞았는데 엉뚱한 사진" 위험이 없다.
 try:
-    with open(os.path.join(os.path.dirname(__file__), "data", "art_weekly_met_artworks.json"), encoding="utf-8") as _f:
+    with open(os.path.join(os.path.dirname(__file__), "data", "art_weekly_global_artworks.json"), encoding="utf-8") as _f:
         ARTWORKS.extend(json.load(_f))
 except Exception as e:
-    print(f"  ⚠️ art_weekly_met_artworks.json 로드 실패(기본 {len(ARTWORKS)}개만 사용): {e}")
+    print(f"  ⚠️ art_weekly_global_artworks.json 로드 실패(기본 {len(ARTWORKS)}개만 사용): {e}")
 
 
 def is_unknown_artist(a: dict) -> bool:
@@ -302,6 +302,18 @@ def already_published(pub_date) -> bool:
     return res.status_code in (200, 206) and len(res.json()) > 0
 
 
+def _met_image_url(object_id) -> str:
+    """메트 API에서 작품 1건의 이미지 주소(퍼블릭도메인일 때만). 차단·실패면 빈 문자열."""
+    try:
+        r = requests.get(f"https://collectionapi.metmuseum.org/public/collection/v1/objects/{object_id}",
+                         timeout=20, headers={"User-Agent": "NewsFinalBot/1.0"})
+        if r.status_code == 200 and r.json().get("isPublicDomain"):
+            return r.json().get("primaryImage") or ""
+    except Exception:
+        pass
+    return ""
+
+
 def fetch_artwork_image(artwork: dict) -> tuple[str, str]:
     """작품 실물 이미지만 쓴다 — 못 찾으면 빈 문자열(호출부가 발행을 건너뜀).
     일반 기사처럼 Pixabay 스톡사진으로 대체하지 않는다(작품 소개 기사에
@@ -313,15 +325,19 @@ def fetch_artwork_image(artwork: dict) -> tuple[str, str]:
     주므로, 손수 짠 59개 항목에서 반복 발견된 "검색어는 맞았는데 엉뚱한 사진이
     잡히는" 부류의 위험(모작·디테일 크롭·다른 동명작 등)이 원천적으로 없다."""
     direct_url = artwork.get("direct_image_url")
+    if not direct_url and artwork.get("met_object_id"):
+        direct_url = _met_image_url(artwork["met_object_id"])  # 목록(CSV)엔 이미지 주소가 없어 발행 때 1건만 조회
     if direct_url:
+        key = artwork.get("met_object_id") or artwork.get("wikidata") or re.sub(r"\W+", "", artwork["title_en"])[:40]
         try:
             from image_store import store_image
-            stored_url = store_image(direct_url, key_hint=f"art_weekly_met_{artwork.get('met_object_id', artwork['title_en'])}")
+            stored_url = store_image(direct_url, key_hint=f"art_weekly_{key}")
         except Exception as e:
             print(f"  ⚠️ 이미지 R2 저장 실패, 원본 URL 사용: {e}")
             stored_url = direct_url
         dept = artwork.get("met_department", "")
-        return (stored_url or direct_url), f"이미지 출처: The Metropolitan Museum of Art (CC0 퍼블릭 도메인{f', {dept}' if dept else ''})"
+        credit = artwork.get("image_credit") or f"이미지 출처: The Metropolitan Museum of Art (CC0 퍼블릭 도메인{f', {dept}' if dept else ''})"
+        return (stored_url or direct_url), credit
 
     wiki_url, wiki_credit = fetch_wikimedia_image(artwork["wiki_query"], allow_artwork=True)
     if not wiki_url:
