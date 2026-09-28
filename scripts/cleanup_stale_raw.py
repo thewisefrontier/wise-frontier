@@ -53,9 +53,9 @@ def _headers():
     }
 
 
-def _batched(filters: dict, apply) -> int:
+def _batched(filters: dict, apply, table: str = "raw_candidates") -> int:
     """filters에 맞는 행 id를 BATCH개씩 조회해 apply(id목록)를 반복. 처리 건수 반환."""
-    url = f"{SUPABASE_URL}/rest/v1/raw_candidates"
+    url = f"{SUPABASE_URL}/rest/v1/{table}"
     done, last = 0, 0
     while True:
         # id>last로 이어서 조회한다 — 매번 앞에서부터 다시 찾으면 방금 지운(아직
@@ -75,6 +75,25 @@ def _batched(filters: dict, apply) -> int:
             print(f"    … {done}건")
 
 
+def preview_unpublished_articles():
+    """articles 테이블의 오래된 '미발행' 행 집계(2026-09-28 신설 — 사용자 지적: 5월 30일 것까지 미발행이 남아 있다).
+    이 정리 작업은 raw_candidates만 지워 왔고 종합기사 테이블의 보류·검수대기·트렌드 초안엔 삭제 규칙 자체가 없었다
+    (실측: 미발행 4,609건 중 14일 이전 2,654건). 사용자 지시: 미발행은 3일치만 두고 나머지는 삭제.
+    ⚠️ 이 함수는 집계만 한다(삭제 없음). 영구 삭제 단계는 자동 실행 검사가 대량 삭제로 차단해 넣지 않았다 —
+    삭제 방식은 사용자가 정한다(README 아님, 이 주석과 대화 기록 참고).
+    대상 조건: is_published=false AND source != DomesticKR-Synth(다국어 내부검증용) AND created_at < now-KEEP_DAYS.
+    발행 기사(is_published=true)는 어떤 경우에도 대상이 아니다."""
+    days = int(os.getenv("UNPUBLISHED_KEEP_DAYS", "3"))
+    cutoff = (now_kst() - timedelta(days=days)).strftime("%Y-%m-%d %H:%M")
+    r = requests.get(f"{SUPABASE_URL}/rest/v1/articles", timeout=60,
+                     headers={**_headers(), "Prefer": "count=exact", "Range": "0-0"},
+                     params={"select": "id", "is_published": "eq.false", "source": "neq.DomesticKR-Synth",
+                             "created_at": f"lt.{cutoff}"})
+    r.raise_for_status()
+    print(f"  → 미발행 기사(articles) {days}일 초과({cutoff} 이전): "
+          f"{r.headers.get('content-range', '*/?').split('/')[-1]}건 (집계만 — 삭제하지 않음)")
+
+
 def main():
     print(f"\n[cleanup_stale_raw] 시작: {now_kst().strftime('%Y-%m-%d %H:%M')} KST")
 
@@ -89,6 +108,8 @@ def main():
         lambda url, ids: requests.delete(url, headers=_headers(), params={"id": ids}, timeout=60),
     )
     print(f"  ✓ 삭제 {deleted}건")
+
+    preview_unpublished_articles()
 
     print(f"[cleanup_stale_raw] 완료: {now_kst().strftime('%Y-%m-%d %H:%M')} KST")
 
