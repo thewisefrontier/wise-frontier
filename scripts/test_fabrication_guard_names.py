@@ -45,3 +45,18 @@ except AssertionError:
     raise
 except Exception as e:
     print("실제 NVIDIA 시험 건너뜀:", e)
+
+# 2차 검수(second_review): PASS/FAIL/불분명/실패/미설정 — 통과가 아니면 발행하지 않는다(fail-closed). 2026-09-28
+g.call_nvidia = lambda p, max_tokens=0: "PASS"
+assert g.second_review("t", "본문", "자료") == (True, "2차 검수 통과")
+g.call_nvidia = lambda p, max_tokens=0: "FAIL: 자료에 없는 수치"
+ok, why = g.second_review("t", "본문", "자료"); assert not ok and "자료에 없는 수치" in why
+g.call_nvidia = lambda p, max_tokens=0: "글쎄요"
+assert g.second_review("t", "본문", "자료")[0] is False
+g.call_nvidia = boom
+assert g.second_review("t", "본문", "자료")[0] is False
+g.call_nvidia = None
+assert g.second_review("t", "본문", "자료")[0] is False
+g.call_nvidia = lambda p, max_tokens=0: "PASS"
+assert g.second_review("t", "본문", "")[0] is False          # 근거 자료가 없으면 검수 불가 → 보류
+print("second_review 단위 테스트 ok")

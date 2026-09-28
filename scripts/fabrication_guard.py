@@ -102,6 +102,37 @@ def unsupported_claims(body: str, facts: str) -> str:
     return "" if not resp or resp.upper().startswith("OK") else resp[:600]
 
 
+def second_review(title: str, body: str, facts: str) -> tuple:
+    """발행 직전 2차 검수(2026-09-28 사용자 지시: 해설·주간 정리 기사는 "한번 더 검수하는 프로세스를 두고 바로 발행").
+    글을 쓴 모델(Gemini)과 계열이 다른 NVIDIA가 독립적으로 [자료]만 보고 심사한다. 반환: (통과 여부, 사유).
+    NVIDIA 미설정·실패·불분명한 응답이면 (False, 사유) — 발행하지 않고 기존처럼 검토 대기로 남긴다(fail-closed)."""
+    if not call_nvidia:
+        return False, "2차 검수 불가(NVIDIA 미설정)"
+    if not (facts or "").strip() or not (body or "").strip():
+        return False, "2차 검수 불가(근거 자료 없음)"
+    prompt = ("당신은 뉴스 기사의 최종 검수자입니다. 아래 [자료]에 근거해 [기사]가 그대로 발행돼도 되는지 심사하세요. "
+              "다음 중 하나라도 해당하면 불합격입니다.\n"
+              "1) [자료]에 없는 사실·수치·날짜·인물·기관·인용이 들어 있다.\n"
+              "2) 제목이 본문 또는 [자료]의 내용과 다르거나 과장돼 있다.\n"
+              "3) 근거 없는 전망·추측을 사실처럼 단정했다.\n"
+              "4) 서로 무관한 사건이 한 기사에 섞여 있다.\n"
+              "5) 특정인·집단에 대한 비방·선동·홍보성 표현이 있다.\n"
+              "6) 자료·검수 과정을 언급하는 메타 문구(예: '제공된 자료에 따르면', '초안')가 본문에 있다.\n"
+              "7) [자료] 안에 '검증 필요'로 표시된 외부 배경 지식 블록에만 근거한 구체적 수치·날짜·인명·기관명이 있다"
+              "(일반적인 배경 설명은 허용, 확인되지 않은 구체적 사실은 불합격).\n"
+              "합격이면 정확히 PASS 한 단어만, 불합격이면 'FAIL: 이유 한 줄'만 출력하세요.\n\n"
+              f"[자료]\n{facts[:8000]}\n\n[제목]\n{title}\n\n[기사]\n{body[:5000]}")
+    try:
+        resp = (call_nvidia(prompt, max_tokens=300) or "").strip()
+    except Exception as e:
+        return False, f"2차 검수 실패({str(e)[:40]})"
+    if resp.upper().startswith("PASS"):
+        return True, "2차 검수 통과"
+    if resp.upper().startswith("FAIL"):
+        return False, "2차 검수 불합격: " + resp[5:].strip(": ")[:200]
+    return False, "2차 검수 응답 불분명"
+
+
 def names_without_source_support(names: list, source_text: str) -> list:
     """위키에서 못 찾은 이름 중 원문 자료에도 근거가 없는 것만 돌려준다(NVIDIA, 계열이 다른 모델).
     음차·번역·약칭·괄호 병기(예: 구글(Google), 유엔 안전보장이사회 = UN Security Council)는 같은 대상이면 근거 있음으로 본다.

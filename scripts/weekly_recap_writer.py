@@ -177,17 +177,22 @@ def main():
         return
     image = next((a["image_url"] for _, arts in topics[:1] for a in reversed(arts) if a.get("image_url")), "")
     now_str = now.strftime("%Y-%m-%d %H:%M")
+    # 2026-09-28 사용자 지시: 주간 정리도 2차 검수를 통과하면 바로 발행(불합격·검수 불가면 예전처럼 검토 대기).
+    from fabrication_guard import second_review
+    publish, why = second_review(title, body, facts)
+    print(f"  → {why}")
     art_id = insert_final_article({
         "title_en": title, "title_ko": title, "summary_en": "", "summary_ko": body, "url": url,
         "source": "NewsFinal", "category": "종합", "subcategory": SUBCATEGORY,
         "region": "global", "country": "", "country_flag": "", "image_url": image, "countries": [],
         "score": 1, "created_at": now_str, "first_published_at": now_str,
-        "update_log": [{"timestamp": now_str, "note": f"주간 정리 자동 초안(검토 대기, {mon}~{sun})"}],
+        "update_log": [{"timestamp": now_str, "note": (f"주간 정리 자동 발행({why}, {mon}~{sun})" if publish
+                                                       else f"주간 정리 자동 초안(검토 대기 — {why}, {mon}~{sun})")}],
         "source_data": {"week_start": mon.isoformat(), "week_end": sun.isoformat(),
                         "topics": [n for n, _ in topics], "article_ids": article_ids, "background": facts},  # background = 어드민 검토 화면에 배경 정보로 표시
-        "sent_telegram": 0, "is_published": False,
+        "sent_telegram": 0, "is_published": bool(publish),
     })
-    print(f"  ✅ 초안 저장 id={art_id}" if art_id and art_id > 0 else "  ❌ 저장 실패")
+    print((f"  ✅ {'발행' if publish else '초안 저장'} id={art_id}") if art_id and art_id > 0 else "  ❌ 저장 실패")
 
 
 if __name__ == "__main__":

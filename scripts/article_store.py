@@ -273,6 +273,11 @@ def insert_final_article(payload: dict) -> int:
     """
     if payload.get("summary_ko"):
         payload["summary_ko"] = ensure_paragraphs(payload["summary_ko"])
+    # 2026-09-28: created_at이 비면 최신순 정렬에서 맨 앞으로 올라온다(8/26 수동 게시 id=101583 사고) — DB에도 같은 보호
+    # (트리거+기본값+NOT NULL, 마이그레이션 guard_articles_created_at)가 있지만 코드에서도 먼저 채운다.
+    if not str(payload.get("created_at") or "").strip():
+        from datetime import datetime, timedelta, timezone
+        payload["created_at"] = datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M")
     _tag_crypto(payload)
     _gate_thin_trend(payload)
     headers = {**sb_headers(), "Prefer": "resolution=ignore-duplicates,return=representation"}

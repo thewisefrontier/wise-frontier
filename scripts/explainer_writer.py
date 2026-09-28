@@ -338,6 +338,12 @@ def main():
         if not result:
             continue
         title, body, background = result
+        # 2026-09-28 사용자 지시: 해설 기사는 2차 검수를 통과하면 바로 발행(불합격·검수 불가면 예전처럼 검토 대기).
+        from fabrication_guard import second_review
+        # 근거는 원 기사 + 배경 자료 전체(write_explainer 내부 facts와 같은 범위) — 배경만 넘기면 원 기사에만 있는 사실이 근거 없음으로 오판된다.
+        publish, why = second_review(title, body, f"{base.get('title_ko') or ''}\n{base.get('summary_ko') or ''}\n{background}")
+        print(f"  → {why}")
+        now_s = now_kst().strftime("%Y-%m-%d %H:%M")
         art_id = insert_final_article({
             "title_en": title, "title_ko": title, "summary_en": "", "summary_ko": body,
             "url": f"internal://explainer_{base['id']}", "source": "NewsFinal",
@@ -347,10 +353,12 @@ def main():
             "image_url": base.get("image_url") or "", "image_credit": base.get("image_credit") or "",
             "score": 1,
             "created_at": now_kst().strftime("%Y-%m-%d %H:%M"),
-            "update_log": [{"timestamp": now_kst().strftime("%Y-%m-%d %H:%M"),
-                            "note": f"해설 자동 초안(검토 대기, 원 기사 id={base['id']})"}],
+            "update_log": [{"timestamp": now_s,
+                            "note": (f"해설 자동 발행({why}, 원 기사 id={base['id']})" if publish
+                                     else f"해설 자동 초안(검토 대기 — {why}, 원 기사 id={base['id']})")}],
             "source_data": {"explainer_of": base["id"], "background": background},
-            "sent_telegram": 0, "is_published": False,
+            "sent_telegram": 0, "is_published": bool(publish),
+            **({"first_published_at": now_s} if publish else {}),
         })
         print(f"  ✅ 초안 저장 id={art_id}" if art_id > 0 else "  ❌ 저장 실패")
         if art_id > 0:
