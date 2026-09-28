@@ -368,6 +368,22 @@ def to_won_style_amount(n) -> str:
     return "".join(parts)
 
 
+# 3자리 콤마 숫자("12,500" "3,000,000.5") — 앞뒤가 숫자·콤마·소수점이면 목록("1,2,3")이나
+# 다른 수의 일부라 건드리지 않는다.
+_COMMA_NUM_RE = re.compile(r"(?<![\d.,])(\d{1,3}(?:,\d{3})+)(\.\d+)?(?![\d,])")
+
+
+def strip_number_commas(text: str) -> str:
+    """본문 숫자의 3자리 콤마를 없애고 1만 이상은 억/만 그룹핑("12,500명"→"1만2500명",
+    "2,691달러"→"2691달러"). 2026-09-28 — 뉴스파이널 기사 숫자 규칙
+    ([[newsfinal_no_comma_numbers]])을 프롬프트가 아니라 코드로 강제(스포츠 이적료·관중 수
+    등 원문 콤마 숫자를 Gemini가 그대로 베끼는 경로 차단)."""
+    if not text:
+        return text
+    return _COMMA_NUM_RE.sub(
+        lambda m: to_won_style_amount(int(m.group(1).replace(",", ""))) + (m.group(2) or ""), text)
+
+
 def parse_article_output(text: str) -> tuple[str, str]:
     """"TITLE: ...\\nBODY: ..." 형식의 Gemini 응답을 (title, body)로 분리."""
     title, body = "", ""

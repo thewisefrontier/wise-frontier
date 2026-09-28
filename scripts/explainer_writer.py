@@ -37,11 +37,6 @@ from gemini_summarizer import fetch_background_context
 from style_guard import ensure_paragraphs, has_polite_ending
 from article_store import insert_final_article, sb_headers, sb_url
 
-try:
-    from nvidia_client import call_nvidia
-except Exception:
-    call_nvidia = None
-
 LABEL = "[이슈 파이널]"        # 제목 말머리 — 사용자 결정(2026-09-22)
 SUBCATEGORY = "이슈파이널"    # 서브카테고리(칩·어드민 필터). "_" 금지 — 있으면 내부 키로 보고 칩이 숨겨진다
 DAILY_CAP = 1               # 하루(KST) 신규 초안 수
@@ -97,22 +92,9 @@ def unsupported_numbers(body: str, facts: str) -> list:
     return sorted(f"{v:,.0f}" if v == int(v) else f"{v:g}" for v in bad)
 
 
-def unsupported_claims(body: str, facts: str) -> str:
-    """계열이 다른 모델(NVIDIA)에게 "자료에서 뒷받침되지 않는 문장"만 골라내게 한다.
-    수치 대조·고유명사 검사가 못 잡는 서술형 날조(예: 자료에 없는 정책 배경 한 줄)용.
-    문제 없으면 "", 있으면 해당 문장들. NVIDIA 미설정·실패 시 "" (초안이 사람 검토를 거치므로 fail-open)."""
-    if not call_nvidia:
-        return ""
-    prompt = ("아래 [자료]와 [기사]를 비교하세요. [기사]의 문장 중 [자료]에 근거가 없거나 [자료]와 다른 "
-              "사실 주장(수치·인물·기관·발언·원인)이 담긴 문장만 그대로 나열하세요. 해석·분석·전망 문장은 "
-              "그 근거가 [자료]에 있으면 제외하고, 근거 없이 결론만 단정하면 나열하세요. 표현을 바꿨을 뿐 "
-              "자료에서 뒷받침되면 제외하세요. 문제가 없으면 정확히 OK 한 단어만 출력하세요.\n\n"
-              f"[자료]\n{facts[:6000]}\n\n[기사]\n{body[:4000]}")
-    try:
-        resp = (call_nvidia(prompt, max_tokens=500) or "").strip()
-    except Exception:
-        return ""
-    return "" if not resp or resp.upper().startswith("OK") else resp[:600]
+# 2026-09-28 fabrication_guard.py로 이동(gemini_writer도 쓰는데 순환 import가 생겨서).
+# literature_writer·weekly_recap_writer가 여기서 import하므로 이름은 그대로 노출한다.
+from fabrication_guard import unsupported_claims  # noqa: E402,F401
 
 
 def off_topic(title: str, body: str) -> str:
