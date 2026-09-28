@@ -56,7 +56,6 @@ ARTISTS = [
     ("Jan Ernst Abraham Volschenk", "얀 에른스트 아브라함 폴셴크", "남아프리카공화국", "🇿🇦", "africa"),
     ("Hugo Naudé", "휘호 나우데", "남아프리카공화국", "🇿🇦", "africa"),
     ("Frans Oerder", "프란스 우르더", "남아프리카공화국", "🇿🇦", "africa"),
-    ("Mahmoud Said", "마흐무드 사이드", "이집트", "🇪🇬", "africa"),
     # 중남미
     ("José María Velasco", "호세 마리아 벨라스코", "멕시코", "🇲🇽", "global"),
     ("Pedro Américo", "페드루 아메리쿠", "브라질", "🇧🇷", "global"),
@@ -73,6 +72,59 @@ ARTISTS = [
     # 오세아니아
     ("Tommy McRae", "토미 맥래", "오스트레일리아", "🇦🇺", "global"),
     ("Gottfried Lindauer", "고트프리트 린다워", "뉴질랜드", "🇳🇿", "global"),
+    # 네덜란드(라익스뮤지엄 소장 거장)
+    ("Johannes Vermeer", "요하네스 페르메이르", "네덜란드", "🇳🇱", "europe"),
+    ("Rembrandt", "렘브란트", "네덜란드", "🇳🇱", "europe"),
+    ("Frans Hals", "프란스 할스", "네덜란드", "🇳🇱", "europe"),
+    ("Jan Steen", "얀 스테인", "네덜란드", "🇳🇱", "europe"),
+    ("Jacob van Ruisdael", "야코프 판 라위스달", "네덜란드", "🇳🇱", "europe"),
+    ("Meindert Hobbema", "메인데르트 호베마", "네덜란드", "🇳🇱", "europe"),
+    ("Aelbert Cuyp", "알베르트 카위프", "네덜란드", "🇳🇱", "europe"),
+    ("Pieter de Hooch", "피터르 더 호흐", "네덜란드", "🇳🇱", "europe"),
+    ("Gerard ter Borch", "헤라르트 테르 보르흐", "네덜란드", "🇳🇱", "europe"),
+    ("Willem Kalf", "빌럼 칼프", "네덜란드", "🇳🇱", "europe"),
+    ("Judith Leyster", "유디트 레이스터르", "네덜란드", "🇳🇱", "europe"),
+    ("Carel Fabritius", "카렐 파브리티위스", "네덜란드", "🇳🇱", "europe"),
+    ("Hendrick Avercamp", "헨드릭 아베르캄프", "네덜란드", "🇳🇱", "europe"),
+    ("Vincent van Gogh", "빈센트 반 고흐", "네덜란드", "🇳🇱", "europe"),
+    ("Piet Mondrian", "피터르 몬드리안", "네덜란드", "🇳🇱", "europe"),
+    ("Jan Toorop", "얀 토롭", "네덜란드", "🇳🇱", "europe"),
+    ("Johan Barthold Jongkind", "요한 바르톨트 용킨트", "네덜란드", "🇳🇱", "europe"),
+    ("Hendrik Willem Mesdag", "헨드릭 빌럼 메스다흐", "네덜란드", "🇳🇱", "europe"),
+    ("Jozef Israëls", "요제프 이스라엘스", "네덜란드", "🇳🇱", "europe"),
+    ("George Hendrik Breitner", "조지 헨드릭 브라이트너", "네덜란드", "🇳🇱", "europe"),
+    # 덴마크(SMK·스카겐 화가)
+    ("Vilhelm Hammershøi", "빌헬름 함메르쇠이", "덴마크", "🇩🇰", "europe"),
+    ("Peder Severin Krøyer", "P. S. 크뢰위에르", "덴마크", "🇩🇰", "europe"),
+    ("Anna Ancher", "안나 앙케르", "덴마크", "🇩🇰", "europe"),
+    ("Michael Ancher", "미카엘 앙케르", "덴마크", "🇩🇰", "europe"),
+    ("Laurits Tuxen", "라우리츠 툭센", "덴마크", "🇩🇰", "europe"),
+    ("Christoffer Wilhelm Eckersberg", "C. W. 에케르스베르", "덴마크", "🇩🇰", "europe"),
+    ("Nicolai Abildgaard", "니콜라이 아빌드고르", "덴마크", "🇩🇰", "europe"),
+    # 스웨덴(국립미술관 소장 작가)
+    ("Carl Larsson", "칼 라르손", "스웨덴", "🇸🇪", "europe"),
+    ("Anders Zorn", "안데르스 소른", "스웨덴", "🇸🇪", "europe"),
+    ("Hilma af Klint", "힐마 아프 클린트", "스웨덴", "🇸🇪", "europe"),
+    ("Bruno Liljefors", "브루노 릴리에포르스", "스웨덴", "🇸🇪", "europe"),
+    ("Ernst Josephson", "에른스트 요세프손", "스웨덴", "🇸🇪", "europe"),
+    ("Alexander Roslin", "알렉산데르 로슬린", "스웨덴", "🇸🇪", "europe"),
+    # 노르웨이
+    ("Edvard Munch", "에드바르 뭉크", "노르웨이", "🇳🇴", "europe"),
+    ("Christian Krohg", "크리스티안 크로그", "노르웨이", "🇳🇴", "europe"),
+    ("Johan Christian Dahl", "요한 크리스티안 달", "노르웨이", "🇳🇴", "europe"),
+    ("Theodor Kittelsen", "테오도르 키텔센", "노르웨이", "🇳🇴", "europe"),
+    ("Harald Sohlberg", "하랄 솔베르그", "노르웨이", "🇳🇴", "europe"),
+    ("Hans Gude", "한스 구데", "노르웨이", "🇳🇴", "europe"),
+    ("Erik Werenskiold", "에리크 베렌시올", "노르웨이", "🇳🇴", "europe"),
+    ("Nikolai Astrup", "니콜라이 아스트루프", "노르웨이", "🇳🇴", "europe"),
+    # 핀란드(아테네움 소장 작가)
+    ("Akseli Gallen-Kallela", "악셀리 갈렌칼레라", "핀란드", "🇫🇮", "europe"),
+    ("Albert Edelfelt", "알베르트 에델펠트", "핀란드", "🇫🇮", "europe"),
+    ("Helene Schjerfbeck", "헬레네 셰르프벡", "핀란드", "🇫🇮", "europe"),
+    ("Eero Järnefelt", "에에로 예르네펠트", "핀란드", "🇫🇮", "europe"),
+    ("Hugo Simberg", "후고 심베리", "핀란드", "🇫🇮", "europe"),
+    # 아이슬란드
+    ("Þórarinn B. Þorláksson", "토라린 토를락손", "아이슬란드", "🇮🇸", "europe"),
 ]
 
 
