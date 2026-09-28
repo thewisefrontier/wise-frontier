@@ -85,6 +85,7 @@ jobs:
         continue-on-error: true
         run: python scripts/disclosure_collector.py
         env:
+          DART_API_KEY: ${{ secrets.DART_API_KEY }}   # 한국 DART용(머니파이널과 같은 키) — 저장소 시크릿에 등록 필요, 없으면 한국만 건너뜀
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
