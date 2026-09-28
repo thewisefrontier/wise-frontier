@@ -33,4 +33,10 @@ prompt = w.build_article_prompt(artwork, grounding)
 assert "[근거 자료" in prompt
 assert "지어내지 마세요" in prompt
 
+# 작자 미상 공예품은 일일 후보에서 제외(2026-09-28 터코이즈 볼 사고).
+from datetime import date as _d
+assert w.is_unknown_artist({"artist_ko": "작자 미상", "artist_en": "Unknown"})
+assert not w.is_unknown_artist({"artist_ko": "클로드 모네", "artist_en": "Claude Monet"})
+assert all(not w.is_unknown_artist(w.get_daily_artwork(_d(2026, 1, 1).replace(month=1 + i % 12, day=1 + i % 28))[0]) for i in range(60))
+
 print("ok")
