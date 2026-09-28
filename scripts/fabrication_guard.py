@@ -138,7 +138,17 @@ def second_review(title: str, body: str, facts: str) -> tuple:
 def names_without_source_support(names: list, source_text: str) -> list:
     """위키에서 못 찾은 이름 중 원문 자료에도 근거가 없는 것만 돌려준다(NVIDIA, 계열이 다른 모델).
     음차·번역·약칭·괄호 병기(예: 구글(Google), 유엔 안전보장이사회 = UN Security Council)는 같은 대상이면 근거 있음으로 본다.
-    NVIDIA 미설정·실패·엉뚱한 응답이면 입력을 그대로 돌려준다(예전처럼 보수적으로 보류)."""
+    NVIDIA 미설정·실패·엉뚱한 응답이면 입력을 그대로 돌려준다(예전처럼 보수적으로 보류).
+    걸린 이름이 있으면 한 번 더 물어 두 번 다 걸린 것만 남긴다(2026-09-29 사용자 결정): 같은 원문·이름에 [] / [칼리드…]로
+    결과가 흔들렸다(정식 전체 이름 확장). 두 번째가 실패·엉뚱한 응답이면 첫 결과를 그대로 쓴다(fail-closed)."""
+    first = _names_without_source_support_once(names, source_text)
+    if not first or not call_nvidia or not (source_text or "").strip():
+        return first
+    second = _names_without_source_support_once(first, source_text)
+    return [n for n in first if n in second]
+
+
+def _names_without_source_support_once(names: list, source_text: str) -> list:
     if not names or not call_nvidia or not (source_text or "").strip():
         return names
     prompt = ("아래 [자료]는 기사 작성에 쓰인 원문(주로 외국어)이고, [이름 목록]은 그걸 바탕으로 쓴 한국어 기사에 나온 "

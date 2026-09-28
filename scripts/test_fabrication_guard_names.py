@@ -25,6 +25,17 @@ assert g.names_without_source_support(names, src) == names          # 실패 →
 g.call_nvidia = None
 assert g.names_without_source_support(names, src) == names          # 미설정 → 그대로
 assert g.names_without_source_support([], src) == []
+# 두 번 다 걸린 이름만 남긴다(2026-09-29) / 두 번째 실패면 첫 결과 유지
+seq = iter(["제미나이 프라임, 구글(Google)", "제미나이 프라임"])
+g.call_nvidia = lambda p, max_tokens=0: next(seq)
+assert g.names_without_source_support(names, src) == ["제미나이 프라임"]
+seq = iter(["제미나이 프라임", "없음"])
+g.call_nvidia = lambda p, max_tokens=0: next(seq)
+assert g.names_without_source_support(names, src) == []
+seq = iter(["제미나이 프라임"])
+g.call_nvidia = lambda p, max_tokens=0: next(seq)                    # 두 번째 호출 예외(StopIteration)
+assert g.names_without_source_support(names, src) == ["제미나이 프라임"]
+g.call_nvidia = None
 print("단위 테스트 ok")
 
 # 2) 실제 NVIDIA(키 있을 때): 진짜 이름은 통과, 지어낸 이름만 남는지
