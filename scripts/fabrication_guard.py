@@ -158,7 +158,7 @@ def names_without_source_support(names: list, source_text: str) -> list:
     return flagged if flagged else names
 
 
-def verify_no_fabricated_names(source_prompt: str, body: str, call_gemini_fn, wiki: bool = True) -> str:
+def verify_no_fabricated_names(source_prompt: str, body: str, call_gemini_fn, wiki: bool = True, facts: str = "") -> str:
     """생성된 본문에 원문 자료에 없는 고유명사(작품명·인명·지명·기관명)가 새로 등장했는지 확인.
     두 신호를 같이 쓴다: ① 원본 자료 대조(Gemini 판단, 기존 방식) ② 위키피디아 독립 조회
     (판단이 아닌 단순 추출 + 결정론적 HTTP 조회 — Gemini가 오판해도 이 신호는 별개로 남는다.
@@ -169,7 +169,9 @@ def verify_no_fabricated_names(source_prompt: str, body: str, call_gemini_fn, wi
     이름 목록 반환.
     wiki=False면 ② 위키 조회(추출용 lite 호출 1회 포함)를 건너뛴다 — 무명 선수·구단처럼 위키에
     없는 게 정상인 분야용(2026-09-28 실측: 스포츠 미발행 43건 중 약 30건이 [위키 미확인] 오탐).
-    그런 호출부는 unsupported_claims()로 원문 대조를 대신 건다."""
+    그런 호출부는 unsupported_claims()로 원문 대조를 대신 건다.
+    facts: 원문만 모은 텍스트(있으면 위키 미확인 이름의 원문 대조에 source_prompt 대신 쓴다). 프롬프트는 원문 뒤에
+    작성 규칙(1만3천자)이 붙고 [:6000]으로 잘려, 원문이 긴 클러스터는 뒤쪽 기사가 대조에서 빠졌다(2026-09-29)."""
     if not body:
         return ""
     check_prompt = f"""아래는 기사 작성에 쓰인 원본 자료와, 그걸 바탕으로 생성된 한국어 기사 본문입니다.
@@ -210,7 +212,7 @@ def verify_no_fabricated_names(source_prompt: str, body: str, call_gemini_fn, wi
     # (구글·아마존·월마트·유엔 안전보장이사회·브라질 연방최고재판소…) — 한글 음차·괄호 병기 이름은 위키 검색이 못 찾는다.
     # 위키에 없는 이름만 원문 근거가 있는지 계열이 다른 모델(NVIDIA)에게 한 번 더 확인시킨다.
     if unconfirmed:
-        unconfirmed = names_without_source_support(unconfirmed, source_prompt)
+        unconfirmed = names_without_source_support(unconfirmed, facts or source_prompt)
     if unconfirmed:
         note = "[위키 미확인] " + ", ".join(unconfirmed)
         suspect = (suspect + "\n" + note) if suspect else note
