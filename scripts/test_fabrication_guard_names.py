@@ -60,3 +60,19 @@ assert g.second_review("t", "본문", "자료")[0] is False
 g.call_nvidia = lambda p, max_tokens=0: "PASS"
 assert g.second_review("t", "본문", "")[0] is False          # 근거 자료가 없으면 검수 불가 → 보류
 print("second_review 단위 테스트 ok")
+
+
+def test_drop_flagged_sentences():
+    import fabrication_guard as g
+    body = ("네팔 북부에서 폭우로 25명이 숨졌다. 부상자는 트리부반 대학교 부속 병원으로 옮겨졌다. 당국은 수색을 이어가고 있다.\n"
+            + "당국은 도로 복구에 나섰다. " * 30)
+    assert g.flagged_names("[위키 미확인] 트리부반 대학교 부속 병원, 히말라야 홀리데이스") == ["트리부반 대학교 부속 병원", "히말라야 홀리데이스"]
+    assert g.flagged_names("[이름] 고란 베시치(Goran Vesić) → 없음 (원본에 없음)") == ["고란 베시치(Goran Vesić)"]
+    out = g.drop_flagged_sentences(body, "네팔 폭우 참사", "[위키 미확인] 트리부반 대학교 부속 병원", min_len=100)
+    assert out and "트리부반" not in out and "25명이 숨졌다." in out and "수색을 이어가고 있다." in out
+    assert g.drop_flagged_sentences(body, "트리부반 대학교 부속 병원 참사", "[위키 미확인] 트리부반 대학교 부속 병원", min_len=100) is None
+    assert g.drop_flagged_sentences(body, "t", "[위키 미확인] 트리부반 대학교 부속 병원", min_len=5000) is None
+    assert g.drop_flagged_sentences(body, "t", "없는이름 그냥 텍스트", min_len=100) is None
+
+test_drop_flagged_sentences()
+print("drop_flagged_sentences 단위 테스트 ok")
