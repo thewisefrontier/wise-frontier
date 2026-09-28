@@ -134,9 +134,16 @@ function buildWrapperHtml(a, related) {
   });
   const processedBody = htmlBlocks.join('');
 
-  const bodyHtml = processedBody
+  let bodyHtml = processedBody
     .replace(/!\[([^\]]*)\]\((https?:\/\/[^)\s]+)\)/g, '<img src="$2" alt="$1" loading="lazy" style="max-width:100%;border-radius:6px;margin:8px 0;display:block;">')
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  // 2026-09-28 사용자 지시: 모든 기사 본문 앞에 [뉴스파이널] 표기, 단 미리보기(목록 카드·검색·og/meta 설명)에는
+  // 보이지 않아야 함 → DB 본문(summary_ko)은 건드리지 않고 기사 페이지를 그릴 때만 첫 문단 앞에 붙인다.
+  // ⚠️ article.html(renderArticle)과 functions/article.js(buildWrapperHtml) 두 곳이 같은 규칙이어야 한다.
+  if (true) {
+    const tag = '<span class="dateline">[뉴스파이널]</span>';
+    bodyHtml = bodyHtml.startsWith('<p>') ? bodyHtml.replace('<p>', '<p>' + tag + ' ') : '<p>' + tag + '</p>' + bodyHtml;
+  }
 
   const isTrend = a.source === 'NewsFinal'
     && ['trend_', 'realtrend_', 'extrend_'].some((p) => (a.subcategory || '').startsWith(p));
