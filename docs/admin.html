@@ -1748,21 +1748,23 @@
       days.push(d);
     }
 
-    const counts = days.map(d => byDate[d]?.total || 0);
+    // 2026-09-28 사용자 지적("97개라는데 실제 발행은 20~30개"): 막대·일평균이 미발행(파킹·검토대기·클러스터 원본)까지 센
+    // 생성 건수였다 → 화면의 기본 기준을 "발행 건수"로 바꾸고, 생성(미발행 포함)은 보조 값으로 따로 보여준다.
+    const counts = days.map(d => byDate[d]?.published || 0);
     const maxCount = Math.max(...counts, 1);
-    const totalArticles = counts.reduce((s, c) => s + c, 0);
-    const totalPublished = days.reduce((s, d) => s + (byDate[d]?.published || 0), 0);
-    const avgPerDay = (totalArticles / 30).toFixed(1);
-    const last7 = days.slice(-7).reduce((s, d) => s + (byDate[d]?.total || 0), 0);
+    const totalArticles = days.reduce((s, d) => s + (byDate[d]?.total || 0), 0);   // 생성(미발행 포함)
+    const totalPublished = counts.reduce((s, c) => s + c, 0);                       // 발행
+    const avgPerDay = (totalPublished / 30).toFixed(1);
+    const last7 = days.slice(-7).reduce((s, d) => s + (byDate[d]?.published || 0), 0);
     const avg7 = (last7 / 7).toFixed(1);
 
     const barsHtml = days.map((d, i) => {
-      const c = byDate[d]?.total || 0;
-      const p = byDate[d]?.published || 0;
+      const t = byDate[d]?.total || 0;
+      const c = byDate[d]?.published || 0;
       const heightPct = Math.round((c / maxCount) * 100);
       const label = d.slice(5).replace('-', '/');
       return `
-        <div style="display:flex;flex-direction:column;align-items:center;flex:1;min-width:0;" title="${d}: 생성 ${c}건 (발행 ${p}건)">
+        <div style="display:flex;flex-direction:column;align-items:center;flex:1;min-width:0;" title="${d}: 발행 ${c}건 (생성 ${t}건 중, 미발행 ${t - c}건)">
           <div style="font-size:9px;color:var(--muted);margin-bottom:2px;">${c > 0 ? c : ''}</div>
           <div style="width:100%;max-width:18px;height:120px;display:flex;align-items:flex-end;">
             <div style="width:100%;background:var(--accent);border-radius:2px 2px 0 0;height:${heightPct}%;min-height:${c > 0 ? '2px' : '0'};"></div>
@@ -1820,12 +1822,9 @@
           <div style="font-size:11px;color:var(--muted);margin-top:2px;">발행 ${(publishedAllTime ?? 0).toLocaleString()}건</div>
         </div>
         <div style="flex:1;min-width:140px;background:var(--bg2);border:1px solid var(--border);padding:12px 16px;">
-          <div style="font-size:11px;color:var(--muted);">30일 생성</div>
-          <div style="font-size:20px;font-weight:700;color:var(--accent);">${totalArticles.toLocaleString()}건</div>
-        </div>
-        <div style="flex:1;min-width:140px;background:var(--bg2);border:1px solid var(--border);padding:12px 16px;">
-          <div style="font-size:11px;color:var(--muted);">발행됨</div>
-          <div style="font-size:20px;font-weight:700;">${totalPublished.toLocaleString()}건</div>
+          <div style="font-size:11px;color:var(--muted);">30일 발행</div>
+          <div style="font-size:20px;font-weight:700;color:var(--accent);">${totalPublished.toLocaleString()}건</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;">생성 ${totalArticles.toLocaleString()}건(미발행 포함)</div>
         </div>
         <div style="flex:1;min-width:140px;background:var(--bg2);border:1px solid var(--border);padding:12px 16px;">
           <div style="font-size:11px;color:var(--muted);">일평균 (30일)</div>
