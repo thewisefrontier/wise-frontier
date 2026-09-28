@@ -276,11 +276,13 @@ def fetch_image(w: dict, store: bool = True) -> tuple[str, str]:
     """표지(한국어판 → 원서) → 커먼즈(초판본·작가 사진) → Pixabay."""
     kr = w.get("korean_edition") or {}
     candidates = []
+    # 2026-09-28 사용자 지시: 표지 설명은 "1938 타이완 여행기 표지"처럼 간단히.
+    label = f"{verified_title_ko(w) or w.get('original_title') or w.get('title_en') or ''} 표지".strip()
     if kr.get("cover"):
-        candidates.append((kr["cover"], f"표지 이미지: {kr.get('publisher') or '출판사'} (카카오 책 검색)"))
+        candidates.append((kr["cover"], label))
     ol = openlibrary_cover(w)
     if ol:
-        candidates.append((ol, "표지 이미지: Open Library"))
+        candidates.append((ol, label))
     for cover, credit in candidates:
         if not store:
             return cover, credit

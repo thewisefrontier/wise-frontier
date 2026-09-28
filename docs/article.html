@@ -612,7 +612,11 @@ function cleanBody(text) {
            max-height:420px를 쓰면 중앙만 잘려 보여 초상화 얼굴 부분이 통째로 잘려나갔다.
            작품 감상이 핵심인 이 코너만 전체 원본이 다 보이도록 contain으로 전환. */
         /* 2026-09-27: 문학작품이야기도 작가 초상(세로 인물 사진)·초판본 표지라 같은 이유로 contain. */
-        ['고전명화이야기', '문학작품이야기'].includes(a.subcategory)
+        /* 2026-09-28 사용자 지적: 책 표지(세로)를 contain+검은 배경에 넣으니 양옆이 까맣게 남아 보기 싫음 →
+           문학은 배경 없이 표지를 자연 비율로 가운데 배치(가로로 자르면 제목이 잘려 크롭은 안 함). */
+        a.subcategory === '문학작품이야기'
+          ? 'width:auto;max-width:100%;max-height:560px;border-radius:8px;margin:16px auto 8px;display:block;'
+          : a.subcategory === '고전명화이야기'
           ? 'width:100%;max-height:600px;object-fit:contain;background:#111;border-radius:8px;margin:16px 0 8px;display:block;'
           : 'width:100%;max-height:420px;object-fit:cover;border-radius:8px;margin:16px 0 8px;display:block;'
       }">`+ (window.imageCreditLabel(a.image_url, a.image_credit) ? `<div style="font-size:12px;color:#888;margin:0 0 12px;text-align:right;">${window.esc(window.imageCreditLabel(a.image_url, a.image_credit))}</div>` : '') : ''}
