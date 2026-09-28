@@ -464,6 +464,14 @@ def _bulk_upsert_sources(rows: list, headers: dict) -> int:
     return updated
 
 
+def is_protected_source(s: dict) -> bool:
+    """자동 비활성화(연속 실패) 대상에서 제외할 소스. 구글뉴스 검색·주제 피드는 사용자가 '주요 소스'로 지정
+    (2026-09-28 "구글 RSS는 주요한 소스니까 잘리지 않도록") — 구글이 일시적으로 요청을 막아도(429/503) 20회
+    연속 실패로 꺼지면 다시 켤 때까지 수집이 끊긴다. 실패 횟수는 계속 기록하되 끄지는 않는다."""
+    name = (s.get("name") or "").lower()
+    return "구글뉴스" in name or "google news" in name or "news.google.com" in (s.get("url") or "")
+
+
 def update_source_health(outcomes: dict, fail_threshold: int) -> dict:
     """outcomes: {source_id: 'ok'|'fail'|'too_old'}. 배치 UPSERT로 반영하고
     연속 실패가 fail_threshold를 넘긴 소스는 is_active=false로 자동 비활성화한다.
@@ -506,7 +514,7 @@ def update_source_health(outcomes: dict, fail_threshold: int) -> dict:
         if o != "fail":
             continue
         new_fails = (by_id.get(sid, {}).get("consecutive_fails") or 0) + 1
-        if new_fails >= fail_threshold:
+        if new_fails >= fail_threshold and not is_protected_source(by_id.get(sid, {})):
             deact_rows.append({"id": sid, **base(sid), "last_checked_at": now_iso, "consecutive_fails": new_fails,
                                 "is_active": False, "deactivated_reason": f"{new_fails}회 연속 실패(자동)"})
             deactivated.append(sid)

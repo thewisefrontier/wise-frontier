@@ -1293,6 +1293,25 @@ def _prepare_cluster_material(cluster):
     return kept
 
 
+def _publisher(a: dict) -> str:
+    """'독립 매체' 판정용 발행처. 구글뉴스 같은 집계 피드는 피드 하나에 여러 언론사 기사가 섞여 있으므로
+    피드 이름이 아니라 실제 언론사(제목 끝 " - 매체명", 없으면 해석된 URL의 도메인)로 센다.
+    2026-09-28 사용자 지시("구글 RSS는 주요한 소스니까 잘리지 않도록"): 종전엔 구글 피드에서 온 서로 다른 언론사
+    N곳의 기사가 모두 '피드 1곳'으로 세져 중요도 점수가 실제보다 낮게 계산됐다."""
+    src = (a.get("source") or "").strip()
+    if "구글뉴스" not in src and "google news" not in src.lower():
+        return src
+    title = (a.get("title_en") or a.get("title_ko") or "").strip()
+    if " - " in title:
+        pub = title.rsplit(" - ", 1)[1].strip().lower()
+        if 2 <= len(pub) <= 40:
+            return "gn:" + pub
+    m = re.match(r"https?://(?:www\.)?([^/]+)", a.get("url") or "")
+    if m and "news.google.com" not in m.group(1):
+        return "gn:" + m.group(1).lower()
+    return src
+
+
 def cluster_importance(cluster) -> float:
     """클러스터 처리 우선순위 점수. 높을수록 먼저 기사화한다."""
     members = [a for a in cluster if not a.get("__needs_review__")]
@@ -1302,7 +1321,7 @@ def cluster_importance(cluster) -> float:
     # 1) 독립 소스 수 — 같은 매체가 여러 건 쓴 것보다 서로 다른 매체가 동시에
     #    다룬 사안이 실제로 더 중요하다. 종전의 len(cluster)는 한 매체가 3건
     #    쓴 것과 3개 매체가 1건씩 쓴 것을 똑같이 취급했다.
-    distinct_sources = len({(a.get("source") or "").strip() for a in members})
+    distinct_sources = len({_publisher(a) for a in members})
     score = distinct_sources * 10.0
 
     # 2) 실질 내용 보유율 — 제목만 있는 클러스터는 어차피 검증에서 걸려 미발행되므로
