@@ -39,4 +39,9 @@ assert w.is_unknown_artist({"artist_ko": "작자 미상", "artist_en": "Unknown"
 assert not w.is_unknown_artist({"artist_ko": "클로드 모네", "artist_en": "Claude Monet"})
 assert all(not w.is_unknown_artist(w.get_daily_artwork(_d(2026, 1, 1).replace(month=1 + i % 12, day=1 + i % 28))[0]) for i in range(60))
 
+assert w.is_not_painting({"museum_grounding": "분류: Ceramics-Pottery 소장 경위: x"})
+assert w.is_not_painting({"museum_grounding": "재질/기법: 종이 분류: Codices"})
+assert not w.is_not_painting({"museum_grounding": "분류: Paintings"}) and not w.is_not_painting({})
+assert all(not w.is_not_painting(w.get_daily_artwork(_d(2026, 1 + i % 12, 1 + i % 28))[0]) for i in range(80))
+
 print("ok")

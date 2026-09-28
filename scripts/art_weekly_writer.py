@@ -271,6 +271,13 @@ def is_unknown_artist(a: dict) -> bool:
     return any(t in name for t in ("미상", "unknown", "anonymous", "작자", "attributed to", "workshop of", "follower of"))
 
 
+def is_not_painting(a: dict) -> bool:
+    """Met 수집분은 museum_grounding에 '분류: X'가 들어 있다 — 회화(Paintings)가 아니면 제외
+    (2026-09-28 사용자 지시 "그림만 다루자": 도자기 그릇·필사본이 뽑힌 사고)."""
+    m = re.search(r"분류: ([^ ]+)", a.get("museum_grounding", ""))
+    return bool(m) and m.group(1) != "Paintings"
+
+
 def get_daily_artwork(today=None) -> tuple[dict, "date"]:
     """날짜(toordinal)로 결정론적 순환 선택. 반환: (artwork, date)."""
     today = today or now_kst().date()
@@ -279,7 +286,7 @@ def get_daily_artwork(today=None) -> tuple[dict, "date"]:
     # 기사가 나왔다(터코이즈 볼 위드 류트 플레이어…). 작가가 특정된 작품만 쓰도록 다음 후보로 넘긴다.
     for k in range(len(ARTWORKS)):
         a = ARTWORKS[(idx + k) % len(ARTWORKS)]
-        if not is_unknown_artist(a):
+        if not is_unknown_artist(a) and not is_not_painting(a):
             return a, today
     return ARTWORKS[idx], today
 
