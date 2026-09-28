@@ -1,24 +1,24 @@
 {
-  "updated_at": "2026-09-28 23:46",
+  "updated_at": "2026-09-28 23:51",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7676.72,
+      "price": 7676.36,
       "change_pct": -0.36,
       "up": false
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 26749.44,
+      "price": 26747.49,
       "change_pct": -0.71,
       "up": false
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 51511.63,
+      "price": 51506.87,
       "change_pct": 0.31,
       "up": true
     },
@@ -39,8 +39,8 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 109684.79,
-      "change_pct": -1.03,
+      "price": 109660.14,
+      "change_pct": -1.05,
       "up": false
     },
     {
@@ -89,8 +89,8 @@
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
       "price": 16.43,
-      "change_pct": 0.01,
-      "up": true
+      "change_pct": -0.02,
+      "up": false
     }
   ],
   "groups": {
@@ -98,21 +98,21 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7676.72,
+        "price": 7676.36,
         "change_pct": -0.36,
         "up": false
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 26749.44,
+        "price": 26747.49,
         "change_pct": -0.71,
         "up": false
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 51511.63,
+        "price": 51506.87,
         "change_pct": 0.31,
         "up": true
       }
@@ -137,8 +137,8 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 109684.79,
-        "change_pct": -1.03,
+        "price": 109660.14,
+        "change_pct": -1.05,
         "up": false
       },
       {
@@ -189,8 +189,8 @@
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
         "price": 16.43,
-        "change_pct": 0.01,
-        "up": true
+        "change_pct": -0.02,
+        "up": false
       }
     ]
   },
