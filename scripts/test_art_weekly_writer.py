@@ -45,3 +45,10 @@ assert not w.is_not_painting({"museum_grounding": "분류: Paintings"}) and not 
 assert all(not w.is_not_painting(w.get_daily_artwork(_d(2026, 1 + i % 12, 1 + i % 28))[0]) for i in range(80))
 
 print("ok")
+
+# 같은 작가를 이미 소개했으면 프롬프트가 작가 소개를 줄이라고 지시한다(2026-09-28).
+_aw = {"title_ko": "수련", "title_en": "Water Lilies", "artist_ko": "클로드 모네", "artist_en": "Claude Monet",
+       "year_label": "1906", "country": "프랑스"}
+assert "이미 소개한 적이 있습니다" in w.build_article_prompt(_aw, "근거", ["인상, 해돋이"])
+assert "이미 소개한 적이 있습니다" not in w.build_article_prompt(_aw, "근거")
+print("ok")

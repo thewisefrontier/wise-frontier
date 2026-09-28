@@ -251,6 +251,27 @@ def commons_paintings(name_en, n=PER_ARTIST):
     return out
 
 
+MIN_ARTIST_GAP = 150  # 같은 작가의 다음 기사까지 최소 일수 — 위키백과 같은 문서에서 나오는 작가 소개 문단 반복 방지
+
+
+def spread_artists(order, gap=MIN_ARTIST_GAP):
+    """순서를 최대한 유지하되 같은 작가가 gap 안에 다시 나오지 않도록 미룬다(지연 큐 방식)."""
+    out, last, waiting = [], {}, []
+    def ok(a):
+        return len(out) - last.get(a["artist_en"], -10**9) >= gap
+    for a in order:
+        # 먼저 대기 중이던 것 중 이제 가능한 것을 내보낸다
+        for w in list(waiting):
+            if ok(w):
+                waiting.remove(w); last[w["artist_en"]] = len(out); out.append(w)
+        if ok(a):
+            last[a["artist_en"]] = len(out); out.append(a)
+        else:
+            waiting.append(a)
+    out += waiting  # 남은 것은 뒤에 붙임(간격 확보 불가한 소수)
+    return out
+
+
 def bucket(a):
     return "W" if a["region"] == "europe" else ("A" if a["region"] == "asia" else "X")
 
@@ -307,6 +328,7 @@ def main():
         for k in "WAWXWAWX":
             if pools[k]:
                 order.append(pools[k].pop())
+    order = spread_artists(order)
     print(f"최종 {len(order)}건 — " + ", ".join(f"{k}:{sum(1 for a in order if bucket(a) == k)}" for k in "WAX"), file=sys.stderr)
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(order, f, ensure_ascii=False, indent=1)
