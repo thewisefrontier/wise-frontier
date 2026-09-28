@@ -24,6 +24,8 @@ wikipedia_confirms()는 순수 HTTP 조회라 주입이 필요 없다.
     suspect = verify_no_fabricated_names(source_prompt, body, call_gemini)
 """
 
+import re
+
 import requests
 
 try:
@@ -214,3 +216,49 @@ def verify_no_fabricated_names(source_prompt: str, body: str, call_gemini_fn, wi
         suspect = (suspect + "\n" + note) if suspect else note
 
     return suspect
+
+
+_TAG_NAME_RE = re.compile(r"\[(?:이름|수식어)\]\s*(.+?)\s*→")
+_KO_SENT_SPLIT = re.compile(r"(?<=다\.)\s+|(?<=다\.[\"'”’])\s+")
+
+
+def flagged_names(suspect: str) -> list:
+    """verify_no_fabricated_names 결과에서 문제 이름/표현만 뽑는다. 못 뽑으면 빈 리스트."""
+    out = []
+    for line in (suspect or "").split("\n"):
+        line = line.strip()
+        if line.startswith("[위키 미확인]"):
+            out += [n.strip() for n in line[len("[위키 미확인]"):].split(",") if n.strip()]
+        else:
+            out += [m.strip(" '\"") for m in _TAG_NAME_RE.findall(line)]
+    return [n for n in out if 1 < len(n) <= 40]
+
+
+def drop_flagged_sentences(body: str, title: str, suspect: str, min_len: int = 700, max_drop: int = 3):
+    """근거 없는 이름이 든 문장만 지운 본문을 돌려준다(전체 보류 대신 발행하기 위한 보정).
+    이름이 제목에 있거나, 이름을 못 뽑았거나, 지울 문장이 max_drop 초과·본문의 25% 초과·min_len 미달이면 None(=기존대로 보류)."""
+    names = flagged_names(suspect)
+    if not names or not body:
+        return None
+    keys = []
+    for n in names:
+        keys.append(n)
+        head = n.split("(")[0].strip()
+        if len(head) > 1 and head != n:
+            keys.append(head)
+    if any(k in (title or "") for k in keys):
+        return None
+    kept, dropped = [], 0
+    for para in body.split("\n"):
+        if not para.strip():
+            kept.append(para)
+            continue
+        parts = _KO_SENT_SPLIT.split(para)
+        good = [x for x in parts if not any(k in x for k in keys)]
+        dropped += len(parts) - len(good)
+        if good:
+            kept.append(" ".join(good))
+    new = "\n".join(kept).strip()
+    if dropped == 0 or dropped > max_drop or len(new) < min_len or len(new) < len(body) * 0.75:
+        return None
+    return new

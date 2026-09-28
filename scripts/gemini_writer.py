@@ -1917,12 +1917,22 @@ except Exception:
 # 이식(이 파일의 버전이 가장 발전된 형태라 기준이 됐다). import 실패해도
 # 죽지 않도록 최소 폴백을 둔다.
 try:
-    from fabrication_guard import verify_no_fabricated_names as _fg_verify_no_fabricated_names, unsupported_claims
+    from fabrication_guard import verify_no_fabricated_names as _fg_verify_no_fabricated_names, unsupported_claims, drop_flagged_sentences, flagged_names
 except Exception:
+    def drop_flagged_sentences(body, title, suspect, min_len=700, max_drop=3):
+        return None
+    def flagged_names(suspect):
+        return []
     def _fg_verify_no_fabricated_names(source_prompt, body, call_gemini_fn, wiki=True):
         return ""
     def unsupported_claims(body, facts):
         return ""
+
+
+def _scrub_extras(suspect, *texts):
+    """문장을 지운 기사의 3줄요약·투자아이디어에 같은 이름이 남아 있으면 그 항목을 비운다."""
+    keys = [n.split("(")[0].strip() for n in flagged_names(suspect)]
+    return tuple("" if t and any(k and k in t for k in keys) else t for t in texts)
 
 
 def verify_no_fabricated_names(source_prompt: str, body: str) -> str:
@@ -3481,7 +3491,13 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
                     _body = gen_body or _strip_leaked_labels(content)
                     _fab = (sports_fact_check(prompt, _body, _cluster_facts(cluster)) if is_sports
                             else verify_no_fabricated_names(prompt, _body))
-                    if _fab:
+                    # 근거 없는 이름이 든 문장만 지우고 발행(전체 보류가 하루 40건 넘게 나오던 최대 원인, 2026-09-28)
+                    _fixed = None if is_sports else drop_flagged_sentences(_body, full_title, _fab) if _fab else None
+                    if _fab and _fixed:
+                        print(f"  ✂️ 근거 없는 이름 문장 삭제 후 발행: {_fab[:80]}")
+                        gen_body = _fixed
+                        gen_summary3, gen_investment = _scrub_extras(_fab, gen_summary3, gen_investment)
+                    elif _fab:
                         print(f"  ⚠️ [원문에 없는 고유명사/수식어/사실 잔존: {_fab}] → 미발행으로 저장")
                         published = False
                         _dg_reason = f"{'근거 불일치 의심(스포츠)' if is_sports else '고유명사 날조 의심'} — {_fab}"
@@ -3820,8 +3836,14 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
             # detect_foreign_leftover처럼 호출부에서 한 번 더 확인해 실제로
             # 미발행 처리한다.
             if published:
-                _fab = verify_no_fabricated_names(prompt, gen_body or _strip_leaked_labels(content))
-                if _fab:
+                _body_s = gen_body or _strip_leaked_labels(content)
+                _fab = verify_no_fabricated_names(prompt, _body_s)
+                _fixed = drop_flagged_sentences(_body_s, full_title, _fab) if _fab else None
+                if _fab and _fixed:
+                    print(f"  ✂️ 근거 없는 이름 문장 삭제 후 발행: {_fab[:80]}")
+                    gen_body = _fixed
+                    gen_summary3, gen_investment = _scrub_extras(_fab, gen_summary3, gen_investment)
+                elif _fab:
                     print(f"  ⚠️ [원문에 없는 고유명사/수식어 잔존: {_fab}] → 미발행으로 저장")
                     published = False
                     _dg_reason = f"고유명사 날조 의심 — {_fab}"
