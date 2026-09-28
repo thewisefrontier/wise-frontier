@@ -69,6 +69,41 @@ def _resolve(token: str) -> str:
     return ""
 
 
+# ── 스포츠 판별(2026-09-28) ──────────────────────────────────────────
+# gemini_writer 클러스터 단계의 하루 상한·희소성 정렬용. 원제(title_en — 실제론 원어 제목)는
+# 단어경계로, 구글 번역 제목(title_ko)은 스포츠 외 의미가 거의 없는 말만 본다.
+# 실측 샘플(9/28 24시간 수집분)에서 뺀 오탐: nba(나이지리아 변호사협회), caf(중남미개발은행),
+# copa(코파항공), marathon/마라톤(마라톤 협상), grand prix/그랑프리(칸 영화제), striker(단식 투쟁자),
+# 경기(경기 침체)·감독(금융감독)·선수·대표팀(협상 대표팀)·사이클(경기 사이클)·육상(육상 풍력).
+_SPORTS_EN = re.compile(r"\b(?:" + "|".join(re.escape(w) for w in (
+    "football", "soccer", "fútbol", "futebol", "cricket", "basketball", "rugby", "tennis", "golf",
+    "athletics", "olympic", "olympics", "paralympics", "asian games", "world cup", "cup final",
+    "premier league", "champions league", "nations league", "la liga", "serie a", "bundesliga", "ligue 1",
+    "fifa", "uefa", "afcon", "concacaf", "conmebol", "nfl", "mlb", "nhl", "ipl", "t20", "odi",
+    "formula 1", "formula one", "f1", "motogp", "boxing", "ufc", "midfielder", "goalkeeper", "hat-trick",
+    "wicket", "volleyball", "handball", "hockey", "baseball", "cycling", "sumo",
+    "semi-final", "semifinal", "quarter-final", "quarterfinal", "grand slam", "gold medal", "matchday",
+    "super eagles", "bafana bafana", "black stars", "all blacks", "springboks", "wallabies",
+)) + r")s?\b", re.IGNORECASE)
+_SPORTS_KO = re.compile("|".join(re.escape(w) for w in (
+    "축구", "크리켓", "럭비", "테니스", "골프", "농구", "야구", "배구", "핸드볼", "하키",
+    "올림픽", "패럴림픽", "월드컵", "아시안게임", "네이션스리그", "챔피언스리그", "프리미어리그",
+    "네이션스컵", "복싱", "해트트릭", "골키퍼", "미드필더", "결승골", "득점", "구단", "무승부",
+    "승부차기", "준결승", "결승전", "8강", "16강", "금메달", "국가대표", "경기장",
+)))
+
+
+def is_sports_title(title_en: str = "", title_ko: str = "") -> bool:
+    return bool(_SPORTS_EN.search(title_en or "") or _SPORTS_KO.search(title_ko or ""))
+
+
+def is_sports_cluster(cluster) -> bool:
+    """구성원(검토필요 표시 제외) 절반 이상이 스포츠 제목이면 스포츠 클러스터."""
+    members = [a for a in cluster if not a.get("__needs_review__")]
+    hits = sum(1 for a in members if is_sports_title(a.get("title_en"), a.get("title_ko")))
+    return hits > 0 and hits * 2 >= len(members)
+
+
 def normalize_category(raw, default: str = "글로벌") -> str:
     """Gemini 출력 카테고리를 정규 카테고리로 강제한다.
 

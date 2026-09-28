@@ -182,7 +182,7 @@ def measure(cluster, query, count=count_kr_coverage):
 
 def rerank(clusters, importance, is_severe, cluster_key, call_llm,
            count=count_kr_coverage, fetch_trends=fetch_kr_trending, top_n=TOP_N,
-           bonus_eligible=lambda c: True, daily_cap_near=lambda: False):
+           bonus_eligible=lambda c: True, daily_cap_near=lambda: False, also_measure=lambda c: False):
     """상위 top_n 후보 + 한국 검색 수요와 맞는 클러스터를 보정 점수로 재정렬.
     - 검색 수요 매칭: +30, 희소성 감점 없음(국내 보도가 많아도 수요가 더 크다).
     - 나머지: 희소성 가감점. 중대성 높은 사안은 감점하지 않는다(국내 언론이 다룰 만큼
@@ -192,6 +192,8 @@ def rerank(clusters, importance, is_severe, cluster_key, call_llm,
     - daily_cap_near(): True면 Gemini lite 일일 한도가 임박했다는 뜻 — 이 부가 호출
       자체를 건너뛰고 본 기능(기사 작성)에 한도를 양보한다(2026-09-25, 키 1·2가
       합산 80~97%까지 찬 상태에서 heavy 실행 발행이 0건 났던 사고 대응).
+    - also_measure(c): top_n 밖이어도 측정할 클러스터(스포츠 — 희소성 순으로 하루 상한을 채우려고,
+      2026-09-28). 검색어는 어차피 한 번의 호출로 묶어 받으므로 호출 수는 늘지 않는다.
     반환: (재정렬된 clusters, {cluster_key: {"kr_coverage_30d": n} 또는 {"kr_trend": {...}}}).
     실패하면 원래 순서."""
     try:
@@ -210,7 +212,7 @@ def rerank(clusters, importance, is_severe, cluster_key, call_llm,
             print(f"  [검색수요] 해외 관련 급상승 {len(trends)}건: " + ", ".join(t["keyword"] for t in trends))
         demand = {id(c): t for c in normal for t in [match_trend(c, trends)] if t}
 
-        cands = normal[:top_n] + [c for c in normal[top_n:] if id(c) in demand]
+        cands = normal[:top_n] + [c for c in normal[top_n:] if id(c) in demand or also_measure(c)]
         scores, info = {}, {}
         for c in cands:
             t = demand.get(id(c))

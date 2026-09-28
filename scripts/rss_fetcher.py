@@ -673,18 +673,16 @@ def get_source_country(source_name: str):
     return None, None
 
 NOISE_KEYWORDS = [
-    # 스포츠 — 종목명·대회명처럼 스포츠 외 의미가 거의 없는 것만 하드 차단.
-    # ⚠️ 일반명사와 겹치는 8개("match" "league" "coach" "player" "transfer"
-    #    "goal" "squad" "champion")는 OBSERVE_KEYWORDS로 이관됨(2026-07-29).
-    #    단어경계로도 해결이 안 되는 '의미 충돌'이라 관찰 후 판단한다.
-    "football", "soccer", "cricket", "basketball", "rugby", "tennis",
-    "golf", "athletics", "olympics", "tournament", "fixture",
-    "premier league", "champions league", "world cup", "cup final",
+    # 스포츠 하드 차단(football·cricket·world cup 등 15개 + sumo, 2026-07-29~) 해제(2026-09-28,
+    # 스포츠 카테고리 신설 — 사용자 결정: 하루 5건 상한 + 국내 보도 희소성 순). 실측(9/28, 24시간
+    # 1만7141건): 차단분은 69건(0.4%)뿐이었고 비슷한 양의 스포츠가 이미 이 목록을 우회해
+    # 들어오고 있었다. 물량 통제는 수집이 아니라 gemini_writer의 클러스터 단계(생성 전 상한)가
+    # 맡고, 스포츠 판별은 category_guard.is_sports_cluster.
     # ※ 연예/문화 키워드는 OBSERVE_KEYWORDS(관찰용 소프트 노이즈)로 이관됨
     # 기타 노이즈
     # "travel", "tourism" 제거(2026-07-29): 여행 정보 기능(is_travel/travel_guides)과
     # 정면 충돌. 실제로 여행 기사 36건 중 영문 제목에 travel/tourism이 든 건 0건이었다.
-    "e-edition", "edition", "sumo",
+    "e-edition", "edition",
     "horoscope", "obituary", "recipe", "weather forecast",
     "eurovision", "beauty pageant", "miss world", "miss universe",
     "lottery", "powerball", "lotto", "flag day", "national anthem",
@@ -778,7 +776,9 @@ OBSERVE_KEYWORDS = [
     #   squad    → 암살조(death squad) 등 분쟁 보도
     #   match / coach → mismatch, 상용차 coach 등
     # 관찰 후 스포츠 전용 표현만 NOISE로 되돌릴 것.
-    "match", "league", "coach", "player", "transfer", "goal", "squad", "champion",
+    # → 2026-09-28 8개 전부 해제(스포츠 카테고리 신설). 실측(24시간 수집분): 이 8개에 걸린
+    #   130건 중 약 120건이 스포츠, 나머지는 S-400 이전·북한 포로 이송·아이티 경찰 양성 "목표"
+    #   같은 일반 뉴스였다 — 스포츠를 받기로 한 이상 양쪽 다 막을 이유가 없다.
 ]
 
 
