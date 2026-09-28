@@ -544,17 +544,19 @@ def timeliness_hooks(w: dict) -> list:
     for n in w.get("notes") or []:
         m = re.search(r"\((\d{4})\)", n)
         if m and int(m.group(1)) >= y - 1:
-            hooks.append(f"{'올해' if int(m.group(1)) == y else '지난해'} {n}")
+            # 2026-09-28 사용자 지시: "올해 …(2026) 수상작" 대신 "2026년 … 수상작" — 상대 표현 없이 연도로.
+            mm = re.match(r"^(.*?)\s*\((\d{4})\)\s*(.*)$", n)
+            hooks.append(f"{mm.group(2)}년 {mm.group(1)} {mm.group(3)}".strip() if mm else n)
     # 3) 출간 연도·기념 연도
     py = w.get("pub_year")
     if py == y:
-        hooks.append("올해 출간된 신작")
+        hooks.append(f"{y}년 출간된 신작")
     elif py and (y - py) in _ANNIV_PUB:
-        hooks.append(f"올해 출간 {y - py}주년")
+        hooks.append(f"{y}년 출간 {y - py}주년")
     for key, what in (("author_birth", "탄생"), ("author_death", "서거")):
         v = w.get(key)
         if v and (y - v) in _ANNIV_PERSON:
-            hooks.append(f"올해 작가 {what} {y - v}주년")
+            hooks.append(f"{y}년 작가 {what} {y - v}주년")
     return list(dict.fromkeys(hooks))
 
 
@@ -597,7 +599,7 @@ def build_prompt(w: dict, grounding: str, hooks: list | None = None) -> str:
     if hooks:
         hook_rule = ("- ⚠️ 첫 문단은 위 [시의성 포인트]로 시작해 독자가 \"왜 지금 이 작품인가\"를 바로 알게 하세요. "
                      "기사 제목에도 반영하세요(예: \"11월 영화 개봉 앞둔 수잔 콜린스의 ○○\"). 날짜·수상 연도는 "
-                     "[시의성 포인트]에 적힌 그대로 쓰세요.")
+                     "[시의성 포인트]에 적힌 그대로 쓰세요. \"올해\"·\"지난해\" 같은 상대 표현 대신 연도(\"2026년\")로 쓰세요.")
     else:
         hook_rule = ("- 첫 문단에서 이 작품이 지금도 읽히는 이유(수상·화제성·후대 영향 등, 근거에 있는 것만)를 "
                      "먼저 밝히세요. 날짜가 확정되지 않은 이벤트(개봉·출간 예정 등)를 지어내지 마세요.")
