@@ -1923,7 +1923,7 @@ except Exception:
         return None
     def flagged_names(suspect):
         return []
-    def _fg_verify_no_fabricated_names(source_prompt, body, call_gemini_fn, wiki=True):
+    def _fg_verify_no_fabricated_names(source_prompt, body, call_gemini_fn, wiki=True, facts=""):
         return ""
     def unsupported_claims(body, facts):
         return ""
@@ -1935,8 +1935,15 @@ def _scrub_extras(suspect, *texts):
     return tuple("" if t and any(k and k in t for k in keys) else t for t in texts)
 
 
-def verify_no_fabricated_names(source_prompt: str, body: str) -> str:
-    return _fg_verify_no_fabricated_names(source_prompt, body, call_gemini)
+def verify_no_fabricated_names(source_prompt: str, body: str, facts: str = "") -> str:
+    return _fg_verify_no_fabricated_names(source_prompt, body, call_gemini, facts=facts)
+
+
+def _src_ids(cluster) -> list:
+    """기사를 쓴 수집 원본(raw_candidates) id. source_data.src_ids로 저장해 재검수가 키워드 검색 없이 원문을 바로 찾게 한다
+    (2026-09-29: 아랍어 원문 기사를 로마자 키워드로 못 찾아 재검수 불가 → 사람이 웹 검색). 파킹 토픽은 articles 행이라 뺀다."""
+    return [a["id"] for a in cluster
+            if a.get("id") and not a.get("__needs_review__") and a.get("subcategory") != "parked_topic"]
 
 
 _ARTICLE_FENCE_RE = re.compile(r"```(?:json)?", re.I)
@@ -3490,7 +3497,7 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
                 if published:
                     _body = gen_body or _strip_leaked_labels(content)
                     _fab = (sports_fact_check(prompt, _body, _cluster_facts(cluster)) if is_sports
-                            else verify_no_fabricated_names(prompt, _body))
+                            else verify_no_fabricated_names(prompt, _body, _cluster_facts(cluster)))
                     # 근거 없는 이름이 든 문장만 지우고 발행(전체 보류가 하루 40건 넘게 나오던 최대 원인, 2026-09-28)
                     _fixed = None if is_sports else drop_flagged_sentences(_body, full_title, _fab) if _fab else None
                     if _fab and _fixed:
@@ -3531,7 +3538,8 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
                     image_credit  = image_credit,
                     is_travel     = gen_travel,
                     source_data   = ({**({"tags": _normalize_tags(cluster_tags)} if cluster_tags else {}),
-                                      **_kr_source_data(kr_info.get(cluster_key))}
+                                      **_kr_source_data(kr_info.get(cluster_key)),
+                                      **({"src_ids": _src_ids(cluster)} if _src_ids(cluster) else {})}
                                      or None),
                     continuation_of_id = continuing["id"] if (continuing and published) else None,
                 )
@@ -3837,7 +3845,7 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
             # 미발행 처리한다.
             if published:
                 _body_s = gen_body or _strip_leaked_labels(content)
-                _fab = verify_no_fabricated_names(prompt, _body_s)
+                _fab = verify_no_fabricated_names(prompt, _body_s, _cluster_facts([a]))
                 _fixed = drop_flagged_sentences(_body_s, full_title, _fab) if _fab else None
                 if _fab and _fixed:
                     print(f"  ✂️ 근거 없는 이름 문장 삭제 후 발행: {_fab[:80]}")
@@ -3883,7 +3891,8 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
                 image_url=image_url,
                 image_credit=image_credit,
                 is_travel=gen_travel,
-                source_data={"tags": _normalize_tags(solo_tags)} if solo_tags else None,
+                source_data=({**({"tags": _normalize_tags(solo_tags)} if solo_tags else {}),
+                              **({"src_ids": _src_ids([a])} if _src_ids([a]) else {})} or None),
             )
             if article_id > 0:
                 status = "✅ 단독 저장" if published else "📋 단독 미발행"
