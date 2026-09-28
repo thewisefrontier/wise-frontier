@@ -1817,9 +1817,9 @@
       <div style="font-size:13px;font-weight:700;margin-bottom:16px;">발행 통계 (최근 30일 · 자체기사)</div>
       <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
         <div style="flex:1;min-width:140px;background:var(--bg2);border:1px solid var(--border);padding:12px 16px;">
-          <div style="font-size:11px;color:var(--muted);">자체기사 누적</div>
-          <div style="font-size:20px;font-weight:700;color:var(--accent);">${(totalAllTime ?? 0).toLocaleString()}건</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px;">발행 ${(publishedAllTime ?? 0).toLocaleString()}건</div>
+          <div style="font-size:11px;color:var(--muted);">자체기사 발행 누적</div>
+          <div style="font-size:20px;font-weight:700;color:var(--accent);">${(publishedAllTime ?? 0).toLocaleString()}건</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;">생성 ${(totalAllTime ?? 0).toLocaleString()}건(미발행 포함)</div>
         </div>
         <div style="flex:1;min-width:140px;background:var(--bg2);border:1px solid var(--border);padding:12px 16px;">
           <div style="font-size:11px;color:var(--muted);">30일 발행</div>

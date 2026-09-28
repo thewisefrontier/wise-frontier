@@ -1,0 +1,47 @@
+# -*- coding: utf-8 -*-
+"""위키 미확인 이름을 원문 근거로 재확인하는 names_without_source_support 회귀 테스트(2026-09-28).
+실행: python scripts/test_fabrication_guard_names.py   (실제 NVIDIA 시험은 NVIDIA_API_KEY가 있을 때만)"""
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(__file__))
+import fabrication_guard as g  # noqa: E402
+
+names = ["구글(Google)", "유엔 안전보장이사회", "제미나이 프라임"]
+src = "Google and Amazon announced ... The UN Security Council met on Monday ... Flipkart said ..."
+
+# 1) 가짜 NVIDIA: 지어낸 이름만 지목 / 없음 / 엉뚱한 응답 / 예외
+g.call_nvidia = lambda p, max_tokens=0: "제미나이 프라임"
+assert g.names_without_source_support(names, src) == ["제미나이 프라임"]
+g.call_nvidia = lambda p, max_tokens=0: "없음"
+assert g.names_without_source_support(names, src) == []
+g.call_nvidia = lambda p, max_tokens=0: "없음 (모든 이름이 원문에 근거가 있음)"
+assert g.names_without_source_support(names, src) == []
+g.call_nvidia = lambda p, max_tokens=0: "잘 모르겠습니다"
+assert g.names_without_source_support(names, src) == names          # 엉뚱한 응답 → 보수적으로 그대로
+def boom(*a, **k): raise RuntimeError("x")
+g.call_nvidia = boom
+assert g.names_without_source_support(names, src) == names          # 실패 → 그대로
+g.call_nvidia = None
+assert g.names_without_source_support(names, src) == names          # 미설정 → 그대로
+assert g.names_without_source_support([], src) == []
+print("단위 테스트 ok")
+
+# 2) 실제 NVIDIA(키 있을 때): 진짜 이름은 통과, 지어낸 이름만 남는지
+try:
+    from dotenv import load_dotenv
+    load_dotenv(os.path.join(os.path.dirname(__file__), "..", ".env"))
+    import importlib
+    import nvidia_client
+    importlib.reload(nvidia_client)
+    g.call_nvidia = nvidia_client.call_nvidia
+    if os.environ.get("NVIDIA_API_KEY"):
+        out = g.names_without_source_support(names, src)
+        print("실제 NVIDIA 결과(기대: ['제미나이 프라임']):", out)
+        assert "구글(Google)" not in out and "유엔 안전보장이사회" not in out, out
+        assert "제미나이 프라임" in out, out
+        print("실제 NVIDIA ok")
+except AssertionError:
+    raise
+except Exception as e:
+    print("실제 NVIDIA 시험 건너뜀:", e)

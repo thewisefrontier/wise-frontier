@@ -102,6 +102,29 @@ def unsupported_claims(body: str, facts: str) -> str:
     return "" if not resp or resp.upper().startswith("OK") else resp[:600]
 
 
+def names_without_source_support(names: list, source_text: str) -> list:
+    """위키에서 못 찾은 이름 중 원문 자료에도 근거가 없는 것만 돌려준다(NVIDIA, 계열이 다른 모델).
+    음차·번역·약칭·괄호 병기(예: 구글(Google), 유엔 안전보장이사회 = UN Security Council)는 같은 대상이면 근거 있음으로 본다.
+    NVIDIA 미설정·실패·엉뚱한 응답이면 입력을 그대로 돌려준다(예전처럼 보수적으로 보류)."""
+    if not names or not call_nvidia or not (source_text or "").strip():
+        return names
+    prompt = ("아래 [자료]는 기사 작성에 쓰인 원문(주로 외국어)이고, [이름 목록]은 그걸 바탕으로 쓴 한국어 기사에 나온 "
+              "고유명사입니다(한글 음차·번역·약칭·괄호 병기 포함). 각 이름이 [자료]에 나오는 대상(같은 인물·기관·기업·매체·작품을 "
+              "가리키는 다른 언어 표기 포함)으로 확인되면 제외하고, [자료]에 전혀 근거가 없는 이름만 목록에 적힌 그대로 쉼표로 "
+              "나열하세요. 모두 근거가 있으면 정확히 '없음'만 답하세요.\n\n"
+              f"[이름 목록]\n{', '.join(names)}\n\n[자료]\n{source_text[:6000]}")
+    try:
+        resp = (call_nvidia(prompt, max_tokens=300) or "").strip()
+    except Exception:
+        return names
+    if not resp:
+        return names
+    if resp.startswith("없음") or ("없음" in resp and len(resp) <= 12):
+        return []
+    flagged = [n for n in names if n in resp]  # 목록에 있던 이름만 인정(엉뚱한 출력 방어)
+    return flagged if flagged else names
+
+
 def verify_no_fabricated_names(source_prompt: str, body: str, call_gemini_fn, wiki: bool = True) -> str:
     """생성된 본문에 원문 자료에 없는 고유명사(작품명·인명·지명·기관명)가 새로 등장했는지 확인.
     두 신호를 같이 쓴다: ① 원본 자료 대조(Gemini 판단, 기존 방식) ② 위키피디아 독립 조회
@@ -150,6 +173,11 @@ def verify_no_fabricated_names(source_prompt: str, body: str, call_gemini_fn, wi
     if not wiki:
         return suspect
     unconfirmed = [n for n in extract_candidate_names(body, call_gemini_fn) if not wikipedia_confirms(n)]
+    # 2026-09-28: 위키 미확인 = 곧바로 보류였는데 최근 3일 보류 종합기사 157건·이름 565개를 보니 대부분이 실존 기관·기업
+    # (구글·아마존·월마트·유엔 안전보장이사회·브라질 연방최고재판소…) — 한글 음차·괄호 병기 이름은 위키 검색이 못 찾는다.
+    # 위키에 없는 이름만 원문 근거가 있는지 계열이 다른 모델(NVIDIA)에게 한 번 더 확인시킨다.
+    if unconfirmed:
+        unconfirmed = names_without_source_support(unconfirmed, source_prompt)
     if unconfirmed:
         note = "[위키 미확인] " + ", ".join(unconfirmed)
         suspect = (suspect + "\n" + note) if suspect else note
