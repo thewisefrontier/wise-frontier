@@ -68,4 +68,8 @@ assert w._wd_date("+2026-00-00T00:00:00Z") is None
 ph = w.build_prompt({**base, "title_ko": None}, "근거", ["이 작품을 원작으로 한 영화 「X」은(는) 2026년 11월 20일 개봉(공개)할 예정이다(아직 개봉 전)"])
 assert "왜 지금 이 작품인가" in ph and "2026년 11월 20일" in ph
 
+# 최근 수상 시의성 문구는 "올해 …(2026)"이 아니라 "2026년 … 수상작"(사용자 지시 2026-09-28).
+h = w.timeliness_hooks({**base, "notes": ["인터내셔널 부커상(2026) 수상작"], "pub_year": 2020})
+assert any(x == "2026년 인터내셔널 부커상 수상작" for x in h) and not any("올해" in x for x in h), h
+
 print("ok")
