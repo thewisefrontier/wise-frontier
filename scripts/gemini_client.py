@@ -46,31 +46,67 @@ _USAGE_SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 _PACIFIC = ZoneInfo("America/Los_Angeles")
 
 
-def _log_usage(model: str, key_index: int, outcome: str,
-               prompt_tokens: int = 0, completion_tokens: int = 0, total_tokens: int = 0) -> None:
+# 호출마다 HTTP 쓰기를 하던 것을 프로세스 안에서 모아 한 번에 보낸다(RPC increment_gemini_usage_batch).
+# 이벤트 _FLUSH_EVERY건 또는 _FLUSH_SECONDS초마다, 프로세스 종료 시 flush. 강제 종료되면 마지막 몇 건은 유실(집계는 근사치).
+import atexit
+import threading
+
+_FLUSH_EVERY = 15
+_FLUSH_SECONDS = 20
+_usage_buf: dict = {}
+_usage_events = 0
+_usage_first_ts = 0.0
+_usage_lock = threading.Lock()
+
+
+def _flush_usage() -> None:
+    global _usage_events, _usage_first_ts
     if not _USAGE_SUPABASE_URL or not _USAGE_SUPABASE_KEY:
         return
+    with _usage_lock:
+        if not _usage_buf:
+            return
+        rows = [{"date": d, "model": m, "key_index": k, **c} for (d, m, k), c in _usage_buf.items()]
+        _usage_buf.clear()
+        _usage_events = 0
+        _usage_first_ts = 0.0
     try:
         requests.post(
-            f"{_USAGE_SUPABASE_URL}/rest/v1/rpc/increment_gemini_usage",
+            f"{_USAGE_SUPABASE_URL}/rest/v1/rpc/increment_gemini_usage_batch",
             headers={
                 "apikey": _USAGE_SUPABASE_KEY,
                 "Authorization": f"Bearer {_USAGE_SUPABASE_KEY}",
                 "Content-Type": "application/json",
             },
-            json={
-                "p_date": datetime.now(timezone.utc).astimezone(_PACIFIC).date().isoformat(),
-                "p_model": model,
-                "p_key_index": key_index,
-                "p_outcome": outcome,
-                "p_prompt_tokens": prompt_tokens,
-                "p_completion_tokens": completion_tokens,
-                "p_total_tokens": total_tokens,
-            },
-            timeout=5,
+            json={"p_rows": rows},
+            timeout=10,
         )
     except Exception:
         pass  # 집계 실패는 무시 — 본 기능(Gemini 호출)에 영향 없어야 한다
+
+
+atexit.register(_flush_usage)
+
+
+def _log_usage(model: str, key_index: int, outcome: str,
+               prompt_tokens: int = 0, completion_tokens: int = 0, total_tokens: int = 0) -> None:
+    global _usage_events, _usage_first_ts
+    if not _USAGE_SUPABASE_URL or not _USAGE_SUPABASE_KEY:
+        return
+    day = datetime.now(timezone.utc).astimezone(_PACIFIC).date().isoformat()
+    field = {"success": "success", "429": "e429", "503": "e503"}.get(outcome, "other")
+    with _usage_lock:
+        c = _usage_buf.setdefault((day, model, key_index), defaultdict(int))
+        c[field] += 1
+        c["prompt"] += prompt_tokens
+        c["completion"] += completion_tokens
+        c["total"] += total_tokens
+        _usage_events += 1
+        if not _usage_first_ts:
+            _usage_first_ts = time.time()
+        due = _usage_events >= _FLUSH_EVERY or time.time() - _usage_first_ts >= _FLUSH_SECONDS
+    if due:
+        _flush_usage()
 
 
 # 2026-09-25 도입 당시엔 lite 두 모델이 RPD를 공유한다고 봤으나(그래서 합산
@@ -89,6 +125,7 @@ def lite_daily_usage_near_cap(api_keys: list, warn_ratio: float = DAILY_CAP_WARN
     """오늘(태평양 기준) (모델,키) 조합 중 하나라도 warn_ratio를 넘으면 True."""
     if not _USAGE_SUPABASE_URL or not _USAGE_SUPABASE_KEY or not api_keys:
         return False
+    _flush_usage()
     try:
         today = datetime.now(timezone.utc).astimezone(_PACIFIC).date().isoformat()
         res = requests.get(
