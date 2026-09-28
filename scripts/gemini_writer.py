@@ -1287,6 +1287,13 @@ _SEVERITY_HIGH = (
     "계엄", "침공", "전쟁", "비상사태", "대피", "테러", "학살", "실종",
     "killed", "death toll", "casualt", "earthquake", "coup", "invasion",
     "state of emergency", "evacuat", "massacre", "explosion", "collapse",
+    "총격", "총기 난사", "난사", "mass shooting", "gunman", "gunmen", "opened fire", "shot dead",
+)
+# 선진국 4중복 게이트 면제용 — 대형 사고·범죄만(일반 "killed/사망"은 미국 로컬 사건이 쏟아져 제외)
+_MASS_CASUALTY = (
+    "총격", "총기 난사", "난사", "참사", "테러", "폭발", "붕괴", "지진", "학살",
+    "mass shooting", "gunman", "gunmen", "opened fire", "shot dead", "death toll",
+    "massacre", "explosion", "collapse", "earthquake", "terror",
 )
 _SEVERITY_MID = (
     "제재", "디폴트", "탄핵", "파업", "휴전", "정전협정", "규제", "리콜", "금리 인상",
@@ -3335,7 +3342,8 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
             # 이 4중복 게이트까지 얹으면 진짜 속보(터진 직후 1~2곳만 보도)가
             # 막혀 경로 자체의 목적(빠른 발행)과 충돌한다 — 속보는 면제.
             if (clusters_override is None and country in ADVANCED_ECONOMIES
-                    and cur_count < CLUSTER_MIN_SIZE_ADVANCED and not _has_official_source(cluster)):
+                    and cur_count < CLUSTER_MIN_SIZE_ADVANCED and not _has_official_source(cluster)
+                    and not _cluster_hits_severity(cluster, _MASS_CASUALTY)):
                 print(f"  [SKIP] 선진국({country}) 저중복 이슈 ({cur_count}건 < {CLUSTER_MIN_SIZE_ADVANCED}건) — 프론티어마켓 편집방향상 제외\n")
                 continue
 
