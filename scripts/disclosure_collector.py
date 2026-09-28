@@ -79,7 +79,7 @@ US_TIERS = [
 ]
 
 
-# ── 한국 DART(OpenDART list API, 키는 머니파이널과 같은 DART_API_KEY): 보고서명 기준. 코스피·코스닥 상장사만.
+# ── 한국 DART: 머니파이널 alerts.json(이미 수집된 공시)의 보고서명 기준.
 KR_TIERS = [
     (1, re.compile(r"상장폐지결정|상장폐지사유|감사의견.*(거절|부적정)|횡령|배임|회생절차개시|파산신청|부도발생|영업정지|불성실공시법인지정|관리종목지정")),
     (2, re.compile(r"합병결정|분할결정|주식교환|공개매수|최대주주.*변경|경영권|주식양수도")),
@@ -273,47 +273,41 @@ def _edgar_main_text(index_url: str) -> str:
 
 
 def kr_candidates() -> list:
-    key = os.environ.get("DART_API_KEY", "")
-    if not key:
-        print("  [한국] DART_API_KEY 없음 — 건너뜀")
-        return []
-    day = now_kst().strftime("%Y%m%d")
-    rows = []
-    for page in range(1, 8):
-        r = requests.get("https://opendart.fss.or.kr/api/list.json", timeout=30, params={
-            "crtfc_key": key, "bgn_de": day, "end_de": day, "page_no": page, "page_count": 100})
-        j = r.json()
-        if j.get("status") not in ("000", "013"):
-            print(f"  ⚠️ [한국] DART 응답 {j.get('status')} {str(j.get('message'))[:40]}")
-            break
-        part = j.get("list") or []
-        rows += part
-        if len(part) < 100:
-            break
+    """머니파이널이 이미 수집·공개한 DART 공시(alerts.json)를 받아 쓴다 — DART 키 불필요."""
+    j = requests.get("https://raw.githubusercontent.com/thewisefrontier/moneyfinal/main/data/alerts.json", timeout=30).json()
+    rows = j.get("alerts") or []
+    since = (now_kst() - dt.timedelta(days=3)).strftime("%Y-%m-%d")
     out = []
     for x in rows:
-        name = x.get("report_nm") or ""
-        if x.get("corp_cls") not in ("Y", "K") or KR_NOISE.search(name):
+        name = x.get("alert_type") or ""
+        m = re.search(r"rcpNo=(\d+)", x.get("dart_url") or "")
+        if not m or (x.get("disclosure_date") or "")[:10] < since or KR_NOISE.search(name):
             continue
         tier = next((k for k, rx in KR_TIERS if rx.search(name)), None)
         if tier is None:
             continue
-        out.append({"tier": tier, "name": f"{x.get('corp_name')}({x.get('stock_code')})", "title": name.strip(), "country": "한국",
-                    "link": f"https://dart.fss.or.kr/dsaf001/main.do?rcpNo={x.get('rcept_no')}",
-                    "get_text": (lambda n=x.get("rcept_no"), k=key: _dart_text(n, k)),
-                    "pub": None, "sort": (0 if x.get("corp_cls") == "Y" else 1, -int(x.get("rcept_no") or 0))})
-    print(f"  [한국] DART 오늘 공시 {len(rows)}건 → 규칙 통과 {len(out)}건")
+        rcp = m.group(1)
+        out.append({"tier": tier, "name": f"{x.get('company_name')}({x.get('stock_code')})", "title": name.strip(), "country": "한국",
+                    "link": f"https://dart.fss.or.kr/dsaf001/main.do?rcpNo={rcp}",
+                    "get_text": (lambda n=rcp: _dart_text(n)), "pub": None, "sort": (0, -int(rcp))})
+    print(f"  [한국] 머니파이널 공시 {len(rows)}건 → 규칙 통과 {len(out)}건")
     return out
 
 
-def _dart_text(rcept_no: str, key: str) -> str:
-    """OpenDART 원문(document.xml, ZIP 안의 XML)에서 텍스트를 뽑는다."""
+def _dart_text(rcept_no: str) -> str:
+    """DART 공시 뷰어 본문(키 불필요): main.do의 viewDoc 인자로 viewer.do 호출."""
     try:
-        import zipfile
-        r = requests.get("https://opendart.fss.or.kr/api/document.xml", params={"crtfc_key": key, "rcept_no": rcept_no}, timeout=40)
-        z = zipfile.ZipFile(io.BytesIO(r.content))
-        raw = z.read(z.namelist()[0]).decode("utf-8", "ignore")
-        t = htmllib.unescape(re.sub(r"(?s)<[^>]+>", " ", raw))
+        ua = {"User-Agent": "Mozilla/5.0 (compatible; NewsFinalBot/1.0)"}
+        m = requests.get(f"https://dart.fss.or.kr/dsaf001/main.do?rcpNo={rcept_no}", headers=ua, timeout=30)
+        q = r"\s*['\"]([^'\"]*)['\"]\s*"
+        v = re.search(r"viewDoc\(" + ",".join([q] * 6), m.text)
+        if not v:
+            return ""
+        _, dcm, ele, off, ln, dtd = v.groups()
+        r = requests.get("https://dart.fss.or.kr/report/viewer.do", headers=ua, timeout=30, params={
+            "rcpNo": rcept_no, "dcmNo": dcm, "eleId": ele, "offset": off, "length": ln, "dtd": dtd})
+        r.encoding = "utf-8"
+        t = htmllib.unescape(re.sub(r"(?is)<(script|style)[^>]*>.*?</>|<[^>]+>", " ", r.text))
         return re.sub(r"\s+", " ", t).strip()[:6000]
     except Exception as e:
         print(f"    ⚠️ DART 원문 실패: {str(e)[:60]}")
