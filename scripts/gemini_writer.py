@@ -243,6 +243,7 @@ OFFICIAL_SOURCE_NAMES = {
     "Sweden - Riksbank", "US - CFTC", "Hong Kong - HKEX News", "Hong Kong - SFC Press Releases",
     "US - ICE Press Releases", "US - SEC Litigation Releases", "Philippines - PSE", "Nigeria - NGX Group",
     "Kenya - Central Bank of Kenya", "Brazil - Banco Central do Brasil",
+    "China - 巨潮资讯 중요공시", "Taiwan - TWSE 중요공시",   # scripts/disclosure_collector.py가 직접 저장(RSS 아님)
 }
 
 
@@ -258,6 +259,7 @@ OFFICIAL_SOLO_SOURCE_NAMES = {
     "Sweden - Riksbank", "US - CFTC", "Hong Kong - HKEX News", "Hong Kong - SFC Press Releases",
     "US - ICE Press Releases", "US - SEC Litigation Releases", "Philippines - PSE", "Nigeria - NGX Group",
     "Kenya - Central Bank of Kenya", "Brazil - Banco Central do Brasil",
+    "China - 巨潮资讯 중요공시", "Taiwan - TWSE 중요공시",
 }
 OFFICIAL_SOLO_PER_RUN = 5     # 한 실행에서 단독 발행할 공식 소스 항목 상한
 OFFICIAL_SOLO_MIN_TEXT = 300  # 공식 발표는 짧은 경우가 많아 일반 단독 기준(1000자)보다 낮춘다. 그래도 700자 하한은 생성 후 별도 검사

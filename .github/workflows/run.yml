@@ -79,6 +79,16 @@ jobs:
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
 
+      - name: 거래소 중요 공시 수집 (중국·대만, 등급 규칙 통과분만 — 하루 상한 12+6건)
+        # 2026-09-28: 공시 전량이 아니라 중요도 규칙을 통과한 것만 raw_candidates에 저장(DB 부하 방지, 사용자 지시).
+        timeout-minutes: 6
+        continue-on-error: true
+        run: python scripts/disclosure_collector.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
+
       - name: RSS 큐 처리 및 발송
         timeout-minutes: 20
         continue-on-error: true
