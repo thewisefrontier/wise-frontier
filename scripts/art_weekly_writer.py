@@ -266,10 +266,21 @@ except Exception as e:
     print(f"  ⚠️ art_weekly_met_artworks.json 로드 실패(기본 {len(ARTWORKS)}개만 사용): {e}")
 
 
+def is_unknown_artist(a: dict) -> bool:
+    name = f"{a.get('artist_ko', '')} {a.get('artist_en', '')}".lower()
+    return any(t in name for t in ("미상", "unknown", "anonymous", "작자", "attributed to", "workshop of", "follower of"))
+
+
 def get_daily_artwork(today=None) -> tuple[dict, "date"]:
     """날짜(toordinal)로 결정론적 순환 선택. 반환: (artwork, date)."""
     today = today or now_kst().date()
     idx = today.toordinal() % len(ARTWORKS)
+    # 2026-09-28: 작자 미상 공예품(그릇·필사본 등)은 근거가 미술관 기록 몇 줄뿐이라 빈약한
+    # 기사가 나왔다(터코이즈 볼 위드 류트 플레이어…). 작가가 특정된 작품만 쓰도록 다음 후보로 넘긴다.
+    for k in range(len(ARTWORKS)):
+        a = ARTWORKS[(idx + k) % len(ARTWORKS)]
+        if not is_unknown_artist(a):
+            return a, today
     return ARTWORKS[idx], today
 
 
