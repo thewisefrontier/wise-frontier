@@ -44,7 +44,8 @@ except Exception:
 # 저장 시점 문자셋 혼입 하드 블록. import 실패해도 본 기능이 죽지 않도록 폴백을 둔다.
 try:
     from script_leak import detect_script_leak
-except Exception:
+except Exception as e:
+    print(f"  ⛔⛔⛔ [안전장치 비활성화] script_leak import 실패({e})")
     def detect_script_leak(title, body):
         return []
 

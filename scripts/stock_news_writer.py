@@ -34,7 +34,8 @@ load_dotenv()
 
 try:
     from script_leak import detect_script_leak
-except Exception:
+except Exception as e:
+    print(f"  ⛔⛔⛔ [안전장치 비활성화] script_leak import 실패({e})")
     def detect_script_leak(title, body):
         return []
 

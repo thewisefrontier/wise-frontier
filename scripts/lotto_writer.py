@@ -44,7 +44,8 @@ SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 # 일은 거의 없지만, 다른 writer 스크립트와 동일한 안전장치를 유지한다.
 try:
     from script_leak import detect_script_leak
-except Exception:
+except Exception as e:
+    print(f"  ⛔⛔⛔ [안전장치 비활성화] script_leak import 실패({e})")
     def detect_script_leak(title, body):
         return []
 
