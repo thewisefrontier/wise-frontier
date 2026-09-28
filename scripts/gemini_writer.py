@@ -2080,8 +2080,9 @@ def parse_json_response(text: str):
         if country in _NULLISH or country == "글로벌":
             country = ""
         category = str(data.get("category") or data.get("분야") or "").strip()
-        if category in _NULLISH:
-            category = ""
+        # 2026-09-28: 텍스트 라벨 경로(아래 2129행)는 normalize_category를 거치는데 JSON 경로는 안 거쳐,
+        # Gemini가 JSON으로 "글ローバル"(가타카나 혼입)을 주면 그대로 DB에 저장됐다(admin 발행통계에서 발견).
+        category = "" if category in _NULLISH else normalize_category(category)
         raw_countries = data.get("countries")
         if raw_countries is None:
             raw_countries = data.get("관련국가")
