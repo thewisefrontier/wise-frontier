@@ -52,3 +52,20 @@ gc.requests.get = lambda *a, **k: R(200, [])
 assert gc.lite_daily_usage_near_cap(KEYS) is False
 
 print("ok")
+
+
+# 사용량 집계 배치: 호출마다 POST 하지 않고 모아서 보낸다(2026-09-28)
+posts = []
+gc.requests.post = lambda url, **k: posts.append((url, k["json"])) or R(200, [])
+gc._usage_buf.clear(); gc._usage_events = 0; gc._usage_first_ts = 0.0
+for i in range(14):
+    gc._log_usage("m", 1, "success", 10, 5, 15)
+assert posts == []                                     # 15건 미만이고 20초 안 지남 → 아직 안 보냄
+gc._log_usage("m", 1, "429")                           # 15번째 → flush
+assert len(posts) == 1 and posts[0][0].endswith("increment_gemini_usage_batch")
+row = posts[0][1]["p_rows"][0]
+assert (row["model"], row["key_index"], row["success"], row["e429"], row["total"]) == ("m", 1, 14, 1, 210), row
+gc._log_usage("m", 2, "503"); gc._flush_usage()        # 종료 시 flush 대상도 같은 경로
+assert len(posts) == 2 and posts[1][1]["p_rows"][0]["e503"] == 1
+gc._flush_usage(); assert len(posts) == 2              # 빈 버퍼는 안 보냄
+print("usage batch ok")
