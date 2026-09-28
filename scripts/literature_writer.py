@@ -69,7 +69,9 @@ from explainer_writer import unsupported_claims
 KST = timezone(timedelta(hours=9))
 UA = {"User-Agent": "NewsFinal-LitWriter/1.0 (+https://newsfinal.co.kr)"}
 DATA_PATH = os.path.join(os.path.dirname(__file__), "data", "literature_works.json")
-SUBCATEGORY = "문학작품이야기"
+# 2026-09-28 사용자 지시: "책도 심플하게 [오늘의 책]으로 묶어" + "기사 제목 앞에 적어둬"
+SUBCATEGORY = "오늘의책"
+TITLE_PREFIX = "[오늘의 책]"
 URL_PREFIX = "internal://literature_"
 MIN_BODY_LEN = 600
 MIN_GROUNDING_LEN = 300
@@ -774,7 +776,8 @@ def insert_article(w: dict, title: str, body: str, image_url: str, image_credit:
     now_str = now_kst().strftime("%Y-%m-%d %H:%M")
     work_name = verified_title_ko(w) or w.get("title_en") or w["qid"]
     return insert_final_article({
-        "title_en": w.get("title_en") or work_name, "title_ko": title,
+        "title_en": w.get("title_en") or work_name,
+        "title_ko": title if title.startswith(TITLE_PREFIX) else f"{TITLE_PREFIX} {title}",
         "summary_en": "", "summary_ko": body,
         "url": f"{URL_PREFIX}{w['qid']}",
         "source": "NewsFinal", "category": "문화·예술", "subcategory": SUBCATEGORY,

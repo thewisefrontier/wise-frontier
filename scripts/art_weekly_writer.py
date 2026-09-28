@@ -266,6 +266,11 @@ except Exception as e:
     print(f"  ⚠️ art_weekly_global_artworks.json 로드 실패(기본 {len(ARTWORKS)}개만 사용): {e}")
 
 
+# 2026-09-28 사용자 지시: "미술은 [오늘의 그림]으로 묶고, 미술 카테고리 따로 만들자" + "기사 제목 앞에 적어둬"
+TITLE_PREFIX = "[오늘의 그림]"
+SUBCATEGORY = "오늘의그림"
+
+
 def is_unknown_artist(a: dict) -> bool:
     name = f"{a.get('artist_ko', '')} {a.get('artist_en', '')}".lower()
     return any(t in name for t in ("미상", "unknown", "anonymous", "작자", "attributed to", "workshop of", "follower of"))
@@ -518,13 +523,13 @@ def insert_article(artwork: dict, title_ko: str, body_ko: str, pub_date,
 
     payload = {
         "title_en": title_en or artwork["title_en"],
-        "title_ko": title_ko,
+        "title_ko": title_ko if title_ko.startswith(TITLE_PREFIX) else f"{TITLE_PREFIX} {title_ko}",
         "summary_en": summary_en,
         "summary_ko": body_ko,
         "url": internal_url,
         "source": "NewsFinal",
-        "category": "문화·예술",
-        "subcategory": "고전명화이야기",
+        "category": "미술",
+        "subcategory": SUBCATEGORY,
         "region": artwork["region"],
         "country": artwork["country"],
         "country_flag": artwork["country_flag"],
