@@ -432,10 +432,35 @@ def fetch_wikipedia_grounding(query_ko: str, query_en: str) -> str:
     return text
 
 
-def build_article_prompt(artwork: dict, grounding: str) -> str:
+def find_prior_titles(artwork: dict) -> list:
+    """같은 작가를 이미 소개한 기사 제목(최대 3). 본문엔 작가 원어명이 첫 등장 때 괄호로 병기되므로 그걸로 찾는다.
+    DB 부하: 하루 1회·id/title만 select·limit 3(summary_ko는 trigram 인덱스 대상)."""
+    name = (artwork.get("artist_en") or "").strip()
+    if len(name) < 5 or name.lower().startswith("unknown"):
+        return []
+    try:
+        r = requests.get(_sb_url(), headers=_sb_headers(), timeout=15, params={
+            "select": "title_ko", "subcategory": "in.(오늘의그림,고전명화이야기)", "is_published": "eq.true",
+            "summary_ko": f"ilike.*{name}*", "order": "created_at.desc", "limit": "3"})
+        return [re.sub(r"^\[오늘의 그림\]\s*", "", x["title_ko"]) for x in r.json()] if r.status_code in (200, 206) else []
+    except Exception:
+        return []
+
+
+def build_article_prompt(artwork: dict, grounding: str, prior_titles: list | None = None) -> str:
+    # 2026-09-28: 같은 작가의 작품을 여러 번 다루면 "작가 이야기" 문단이 위키백과 같은 문서에서 나와 거의 그대로 반복된다
+    # (검색 노출에도 불리) → 이미 소개한 작가는 작가 소개를 줄이고 이 작품 자체에 분량을 쓰게 한다.
+    prior_rule = ""
+    if prior_titles:
+        listed = " / ".join(f"「{t}」" for t in prior_titles[:3])
+        prior_rule = (f"⚠️ 이 작가는 이미 소개한 적이 있습니다({listed}). 작가 이야기는 이 작품과 직접 연결되는 "
+                      "1~2문장으로 줄이고(생애 전반을 다시 요약하지 마세요), 분량은 이 작품의 소재·구도·기법·제작 배경에 쓰세요. "
+                      "이전 기사와 같은 문장이나 같은 소개를 반복하지 마세요. 단, 작가 소개를 줄여도 전체 분량은 줄이지 마세요"
+                      "(공백 포함 900자 이상, 5개 문단 이상) — 줄인 만큼 소재·등장 요소 묘사, 구도·색채·기법, 제작 배경과 시대 상황, "
+                      "의뢰·소장 경위, 전시·평가 등 [근거 자료]에 있는 작품 관련 내용을 더 자세히 풀어 쓰세요(없는 내용은 지어내지 말 것).")
     return f"""당신은 프론티어 미디어 NewsFinal의 문화·예술 담당 에디터입니다.
 매주 주말 "고전 명화 이야기" 코너에서 소개할 작품은 아래와 같습니다.
-
+{prior_rule}
 작품명: {artwork['title_ko']} ({artwork['title_en']})
 작가: {artwork['artist_ko']} ({artwork['artist_en']})
 제작 시기: {artwork['year_label']}
@@ -456,7 +481,7 @@ def build_article_prompt(artwork: dict, grounding: str) -> str:
 언급하지 마세요 — 원래 알고 있던 사실을 소개하듯 자연스럽게 서술하세요.
 
 [문체 규칙]
-- 본문은 3~4개 문단 이상으로 충분히 작성하세요(각 문단은 빈 줄로 구분).
+- 본문은 4~6개 문단, 공백 포함 900자 이상으로 충분히 작성하세요(각 문단은 빈 줄로 구분). 근거 자료가 허락하는 한 자세히 쓰되 없는 내용을 채우지는 마세요.
 - 모든 문장을 "-다"로 종결하세요("-습니다"/"-입니다" 같은 정중체 금지). 단, 인용구 자체는 예외.
 - 마크다운 문법, 헤더, 홍보 문구 금지.
 - "~를 보여줍니다", "~라는 평가다" 같은 논평·칼럼 문체 대신 사실 서술형으로 쓰세요.
@@ -597,7 +622,10 @@ def main():
     grounding = "\n\n".join(grounding_parts)
     print(f"  → 근거자료 확보(박물관기록 {len(museum_grounding)}자, 작품 위키 {len(artwork_wiki)}자, 작가 위키 {len(artist_wiki)}자)")
 
-    prompt = build_article_prompt(artwork, grounding)
+    prior = find_prior_titles(artwork)
+    if prior:
+        print(f"  → 같은 작가 기존 기사 {len(prior)}건 — 작가 소개 축약 지시")
+    prompt = build_article_prompt(artwork, grounding, prior)
     content = call_gemini_article(prompt)
     if not content:
         print("  [ERROR] 기사 생성 실패")
@@ -620,6 +648,19 @@ def main():
         print(f"  [ERROR] TITLE/BODY 파싱 실패\n{content[:300]}")
         return
     body = ensure_paragraphs(body)
+    # 2026-09-28 사용자 지적: 작가 소개를 줄여도 분량은 충분해야 한다 → 700자 미만이면 1회 늘려 쓰게 한다.
+    if len(body) < 700:
+        print(f"  ⚠️ 본문이 짧음({len(body)}자) → 분량 보강 재생성")
+        more = call_gemini(
+            prompt + f"\n\n[재작성 지시] 방금 쓴 본문은 {len(body)}자로 짧습니다. [근거 자료]의 작품 묘사·기법·제작 배경·시대 상황·"
+                     "의뢰와 소장 경위·평가 내용을 더 자세히 풀어 공백 포함 900자 이상, 5개 문단 이상으로 다시 쓰세요. "
+                     "[근거 자료]에 없는 내용은 절대 추가하지 마세요.",
+            max_tokens=3000,
+        )
+        if more:
+            t2, b2 = parse_article_output(more)
+            if t2 and b2 and len(ensure_paragraphs(b2)) > len(body):
+                title, body = t2, ensure_paragraphs(b2)
     if len(body) < 400:
         print(f"  ⚠️ 본문이 너무 짧음({len(body)}자) — 스킵")
         return
