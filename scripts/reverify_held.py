@@ -8,6 +8,7 @@
   기사 속 원어 병기 이름 + NVIDIA가 뽑은 원어 키워드로 원본의 제목·요약·본문을 검색해(기사 생성 96시간 전부터) 숫자·이름이 겹치는
   원문을 근거로 삼는다. ① 위키 미확인 이름이 그 원문에 근거가 있는지 ② 기사 전체에 원문 근거 없는 문장이 없는지(둘 다 NVIDIA).
   둘 다 통과한 것만 후보. 원문을 못 찾으면 보류 유지(fail-closed).
+  2026-09-29~: 생성 때 저장한 원본 id(source_data.src_ids)가 있으면 키워드 검색 없이 그 원문을 쓴다(비라틴 원문도 찾음).
 
 실행: python scripts/reverify_held.py                     # 검증만(발행 안 함) → %TEMP%/reverify_result.json, reverify_result_ids.json
       python scripts/reverify_held.py --apply ids.json    # 저장된 통과 id만 발행(이미지 검색 + Aiven 미러, 텔레그램 발송은 안 함)
@@ -33,7 +34,7 @@ OTHER_REASONS = ("번역 누락", "복수 토픽", "중복", "날짜환각", "�
 
 def held_articles(date):
     r = requests.get(URL + "/rest/v1/articles", headers={**H, "Range": "0-499"}, timeout=60, params={
-        "select": "id,title_ko,summary_ko,country,category,update_log,created_at", "source": "eq.NewsFinal",
+        "select": "id,title_ko,summary_ko,country,category,update_log,created_at,source_data", "source": "eq.NewsFinal",
         "is_published": "eq.false", "subcategory": "like.cluster_*", "created_at": "gte." + date, "order": "created_at.asc"})
     r.raise_for_status()
     out = []
@@ -82,7 +83,23 @@ def raw_sources(article):
     return rows
 
 
+def stored_sources(article):
+    """기사 생성 때 저장한 원본 id(source_data.src_ids, 2026-09-29~)로 원문을 바로 읽는다. 없거나 보존기간(96시간)이 지나 지워졌으면 []."""
+    ids = ((article.get("source_data") or {}).get("src_ids") or [])[:12]
+    if not ids:
+        return []
+    r = requests.get(URL + "/rest/v1/raw_candidates", headers=H, timeout=60, params={
+        "select": "id,title_en,summary_en,full_text,source", "id": "in.(" + ",".join(str(int(i)) for i in ids) + ")"})
+    return r.json() if r.status_code in (200, 206) else []
+
+
 def find_facts(article):
+    rows = stored_sources(article)
+    if rows:
+        per = max(500, 6000 // len(rows))
+        facts = "\n\n".join(f"[{r['source']}] {r.get('title_en') or ''}\n{(r.get('full_text') or r.get('summary_en') or '')[:per]}"
+                            for r in rows)
+        return facts[:6000], ["src_ids"]
     body = article["summary_ko"] or ""
     nums = {n.replace(",", "") for n in re.findall(r"\d[\d,.]*\d|\d", body) if len(n.replace(",", "")) >= 2}
     latin = {m.strip().lower() for m in re.findall(r"\(([A-Za-z][^)]{2,40})\)", body)}
