@@ -48,12 +48,19 @@ except Exception:
     def detect_script_leak(title, body):
         return []
 
-# 저장 시점 raw JSON 본문 차단. import 실패해도 본 기능이 죽지 않도록 폴백을 둔다.
+# 저장 시점 raw JSON 본문 차단. import 실패해도 본 기능(기사 생성)은 죽지 않게 폴백을 두되,
+# 안전장치 자체가 꺼졌다는 사실은 반드시 로그에 남긴다 — 2026-09-29 실사고(id=293932):
+# 이 import가 (원인 미확인으로) 조용히 폴백되면서 raw JSON 본문이 그대로 발행됐는데,
+# 폴백이 아무 로그도 안 남겨 사용자가 직접 발견할 때까지 아무도 몰랐다.
 try:
     from json_body_guard import unwrap_json_body as _unwrap_json_body
-except Exception:
+except Exception as _e:
+    print(f"  ⛔⛔⛔ [안전장치 비활성화] json_body_guard import 실패({_e}) — 최소 폴백 검사로 대체")
     def _unwrap_json_body(text, _depth=0):
-        return None
+        # 전체 모듈은 못 쓰지만, 안전장치가 "무음으로 통과"가 되면 안 되므로
+        # 뻔한 raw JSON 본문(맨 앞이 '{'이고 body/본문 키가 있음)만이라도 fail-closed로 막는다.
+        s = str(text or "").strip()
+        return "" if s.startswith("{") and ('"body"' in s[:800] or '"본문"' in s[:800]) else None
 
 # articles 테이블 삽입 공용 로직(2026-09-02, 10여개 스크립트에 복붙돼 있던
 # 헤더구성+POST 블록을 article_store.py로 공용화). import 실패해도 죽지

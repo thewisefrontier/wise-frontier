@@ -66,9 +66,11 @@ except Exception:
 # gemini_writer.py의 _unwrap_json_body() 같은 가드가 전혀 없어 그대로 저장됐다.
 try:
     from json_body_guard import unwrap_json_body
-except Exception:
+except Exception as _e:
+    print(f"  ⛔⛔⛔ [안전장치 비활성화] json_body_guard import 실패({_e}) — 최소 폴백 검사로 대체")
     def unwrap_json_body(text, _depth=0):
-        return None
+        s = str(text or "").strip()
+        return "" if s.startswith("{") and ('"body"' in s[:800] or '"본문"' in s[:800]) else None
 
 # articles 테이블 삽입 공용 로직(2026-09-02, 이 파일 안에만 같은 헤더구성+
 # POST 블록이 3벌 있던 걸 article_store.py로 공용화). import 실패해도 죽지
