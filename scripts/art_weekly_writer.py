@@ -266,6 +266,11 @@ except Exception as e:
     print(f"  ⚠️ art_weekly_global_artworks.json 로드 실패(기본 {len(ARTWORKS)}개만 사용): {e}")
 
 
+# 2026-09-28 사용자 지시: "미술은 [오늘의 그림]으로 묶고, 미술 카테고리 따로 만들자" + "기사 제목 앞에 적어둬"
+TITLE_PREFIX = "[오늘의 그림]"
+SUBCATEGORY = "오늘의그림"
+
+
 def is_unknown_artist(a: dict) -> bool:
     name = f"{a.get('artist_ko', '')} {a.get('artist_en', '')}".lower()
     return any(t in name for t in ("미상", "unknown", "anonymous", "작자", "attributed to", "workshop of", "follower of"))
@@ -462,6 +467,9 @@ def build_article_prompt(artwork: dict, grounding: str) -> str:
 - ⚠️ 작품명을 반드시 밝히세요: 기사 제목과 본문 첫 문단에 위 '작품명'을 한국어로 옮겨 넣고, 본문 첫 등장 때
   원제를 괄호로 병기하세요(2026-09-28 프레더릭 처치 기사가 작품명 없이 작가 소개만 하고 끝난 사고).
   한국어 제목이 정착되지 않은 작품은 원제를 그대로 쓰되 지어낸 번역 제목처럼 꾸미지 마세요.
+- ⚠️ 근거자료에 이름이 나오는 인물(의뢰인·소장자·기증자·스승 등)을 언급할 땐 반드시 이름을 쓰세요.
+  "한 은행가", "어느 인물"처럼 이름을 빼고 뭉뚱그리지 마세요 — 이름 없이 신분만 적으면 독자가 누구인지 알 수 없습니다
+  (2026-09-28 클리블랜드 기사에서 의뢰인 힌먼 B. 헐버트의 이름이 빠진 사고). 이름을 쓰기 어려울 만큼 근거가 없다면 그 문장을 넣지 마세요.
 
 출력 형식:
 TITLE: (기사 제목 — 예: "레오나르도 다빈치의 모나리자, 500년을 사로잡은 미소")
@@ -515,13 +523,13 @@ def insert_article(artwork: dict, title_ko: str, body_ko: str, pub_date,
 
     payload = {
         "title_en": title_en or artwork["title_en"],
-        "title_ko": title_ko,
+        "title_ko": title_ko if title_ko.startswith(TITLE_PREFIX) else f"{TITLE_PREFIX} {title_ko}",
         "summary_en": summary_en,
         "summary_ko": body_ko,
         "url": internal_url,
         "source": "NewsFinal",
-        "category": "문화·예술",
-        "subcategory": "고전명화이야기",
+        "category": "미술",
+        "subcategory": SUBCATEGORY,
         "region": artwork["region"],
         "country": artwork["country"],
         "country_flag": artwork["country_flag"],

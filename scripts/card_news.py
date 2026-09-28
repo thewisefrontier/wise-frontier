@@ -107,7 +107,7 @@ def guess_artist_en(article: dict) -> str:
     """기사에 artist_en이 없으면 제목의 한글 작가명으로 art_weekly_writer.ARTWORKS에서 찾는다."""
     if article.get("artist_en"):
         return article["artist_en"]
-    if article.get("subcategory") != "고전명화이야기":
+    if article.get("subcategory") not in ("오늘의그림", "고전명화이야기"):
         return ""
     os.environ.setdefault("SUPABASE_URL", "http://fake")
     os.environ.setdefault("SUPABASE_SERVICE_KEY", "fake")
