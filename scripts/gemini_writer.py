@@ -236,11 +236,69 @@ OFFICIAL_SOURCE_NAMES = {
     "EU Commission", "UK Gov News", "ASEAN", "WHO",
     "Samsung Newsroom", "SK Hynix Newsroom", "Amazon News", "Google Blog",
     "Meta Newsroom",
+    # 2026-09-28 추가(사용자 지시: "믿을 수 있는 소스는 그냥 기사로 내는 거 알지? 거래소 공지, 공시 같은 거") —
+    # 중앙은행·거래소·감독기관 발표. rss_sources.name과 정확히 일치해야 한다.
+    "Japan - Bank of Japan", "Global - BIS Press Releases", "Global - BIS Speeches",
+    "India - Reserve Bank of India", "Canada - Bank of Canada", "Switzerland - Swiss National Bank",
+    "Sweden - Riksbank", "US - CFTC", "Hong Kong - HKEX News", "Hong Kong - SFC Press Releases",
+    "US - ICE Press Releases", "US - SEC Litigation Releases", "Philippines - PSE", "Nigeria - NGX Group",
+    "Kenya - Central Bank of Kenya", "Brazil - Banco Central do Brasil",
 }
 
 
 def _has_official_source(cluster) -> bool:
     return any((a.get("source") or "") in OFFICIAL_SOURCE_NAMES for a in cluster)
+
+
+# 단독 발행 예외는 금융 공식 소스(중앙은행·거래소·감독기관 발표·공지)로 한정한다. 기업 뉴스룸(홍보성)·UN 브리핑(복수 주제)은
+# 종전대로 클러스터로만, 연준·ECB·영란은행은 econ_writer가 따로 다뤄 중복되므로 제외(2026-09-28 실측 선별에서 확인).
+OFFICIAL_SOLO_SOURCE_NAMES = {
+    "Japan - Bank of Japan", "Global - BIS Press Releases", "Global - BIS Speeches",
+    "India - Reserve Bank of India", "Canada - Bank of Canada", "Switzerland - Swiss National Bank",
+    "Sweden - Riksbank", "US - CFTC", "Hong Kong - HKEX News", "Hong Kong - SFC Press Releases",
+    "US - ICE Press Releases", "US - SEC Litigation Releases", "Philippines - PSE", "Nigeria - NGX Group",
+    "Kenya - Central Bank of Kenya", "Brazil - Banco Central do Brasil",
+}
+OFFICIAL_SOLO_PER_RUN = 5     # 한 실행에서 단독 발행할 공식 소스 항목 상한
+OFFICIAL_SOLO_MIN_TEXT = 300  # 공식 발표는 짧은 경우가 많아 일반 단독 기준(1000자)보다 낮춘다. 그래도 700자 하한은 생성 후 별도 검사
+
+
+# 공식 소스여도 매일 반복되는 정형 통계·경매 결과·기술 공지는 기사 가치가 없다(일일 시세표를 막은 것과 같은 이유).
+_OFFICIAL_ROUTINE_RE = re.compile(
+    r"money market operations|reference rate|auction result|result of .*auction|treasury bills?|weekly statistical|"
+    r"forex reserves|ways and means|e-mail alert|trading halt|trade halt|test broadcast|"
+    r"pauta de julgamentos|reverse stock split and|short interest report",
+    re.IGNORECASE,
+)
+
+
+def select_official_solo(articles, limit: int = OFFICIAL_SOLO_PER_RUN, hydrate=None) -> list:
+    """공식 소스(OFFICIAL_SOURCE_NAMES) 항목만 단독 기사화 후보로 고른다. 일반 언론 단독은 2026-09-09부터 계속 막혀 있다.
+    발표 자체가 원천 사실이라 다른 매체의 교차 보도를 기다리지 않는다(사용자 지시 2026-09-28).
+    본문이 짧아 소스만으로 700자를 못 채우면 생성 후 분량 검사(MIN_BODY_LEN_HARD_FLOOR)에서 미발행 처리된다."""
+    picked = []
+    for a in articles:
+        if (a.get("source") or "") not in OFFICIAL_SOLO_SOURCE_NAMES:
+            continue
+        title = a.get("title_en") or a.get("title_ko") or ""
+        if is_multi_topic_title(title) or _OFFICIAL_ROUTINE_RE.search(title):
+            continue
+        picked.append(a)
+        if len(picked) >= limit * 6:  # 본문 보강 후 걸러질 몫까지 여유를 둔다
+            break
+    if not picked:
+        return []
+    if hydrate is None:
+        from db import hydrate_full_text as hydrate
+    hydrate(picked)
+    out = []
+    for a in picked:
+        text = a.get("full_text") or a.get("summary_en") or a.get("summary_ko") or ""
+        if len(text) >= OFFICIAL_SOLO_MIN_TEXT and not is_multi_topic_body(text):
+            out.append(a)
+        if len(out) >= limit:
+            break
+    return out
 
 
 # 2026-09-07 도입(사용자 지적: "미술쪽 기사는 좀 올라왔나?" → 소스는 추가했는데
@@ -3551,7 +3609,12 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
     # 막고 있었음, id=149227 실사고로 재확인). 강제 차단으로 격상 — 위
     # solo_candidates/쿼터 선별 로직은 그대로 두되(추후 참고용) 실제 생성은
     # 하지 않는다.
-    solo_selected = []
+    # 2026-09-28 예외(사용자 지시: "믿을 수 있는 소스는 그냥 기사로 내는 거 알지? 거래소 공지, 공시 같은 거"):
+    # 공식 소스(중앙은행·거래소·감독기관·정부·국제기구)는 발표 자체가 원천 사실이라 단독 발행을 허용한다.
+    # 일반 언론 단독은 위 결정대로 계속 금지.
+    solo_selected = select_official_solo(all_articles)
+    if solo_selected:
+        print(f"  [공식 소스 단독] {len(solo_selected)}건 후보: {[a.get('source') for a in solo_selected]}")
 
     solo_generated = 0
     for a in solo_selected:
@@ -3561,6 +3624,9 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
         title = a.get("title_ko") or a.get("title_en") or ""
         url = f"solo_{a.get('id')}"
         cluster_key = f"solo_{now_kst().strftime('%Y%m%d')}_{hashlib.md5(title.encode()).hexdigest()[:8]}"
+        if (a.get("source") or "") in OFFICIAL_SOLO_SOURCE_NAMES:
+            # 공식 발표는 날짜 없는 키 — 수집 원본이 4일간 남아 있어 날짜가 들어간 키면 다음 날 같은 공지를 또 쓴다.
+            cluster_key = f"solo_off_{hashlib.md5(title.encode()).hexdigest()[:12]}"
 
         existing = get_existing_cluster(cluster_key)
         if existing:
