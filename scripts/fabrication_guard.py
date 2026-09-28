@@ -31,6 +31,11 @@ try:
 except Exception:
     fuzz = None
 
+try:
+    from nvidia_client import call_nvidia
+except Exception:
+    call_nvidia = None
+
 
 def wikipedia_confirms(name: str, threshold: int = 70) -> bool:
     """이름과 충분히 비슷한 위키 문서 제목이 하나라도 있으면 True (결정론적 조회)."""
@@ -77,7 +82,27 @@ def extract_candidate_names(body: str, call_gemini_fn) -> list:
     return [n.strip() for n in result.split(",") if n.strip() and len(n.strip()) >= 2][:15]
 
 
-def verify_no_fabricated_names(source_prompt: str, body: str, call_gemini_fn) -> str:
+def unsupported_claims(body: str, facts: str) -> str:
+    """계열이 다른 모델(NVIDIA)에게 "자료에서 뒷받침되지 않는 문장"만 골라내게 한다.
+    수치 대조·고유명사 검사가 못 잡는 서술형 날조(예: 자료에 없는 정책 배경 한 줄)용.
+    문제 없으면 "", 있으면 해당 문장들. NVIDIA 미설정·실패 시 "" (fail-open).
+    2026-09-28 explainer_writer.py에서 이리로 이동 — gemini_writer(스포츠 기사 검증)도
+    쓰는데 explainer_writer가 gemini_writer를 import해 순환이 생긴다."""
+    if not call_nvidia:
+        return ""
+    prompt = ("아래 [자료]와 [기사]를 비교하세요. [기사]의 문장 중 [자료]에 근거가 없거나 [자료]와 다른 "
+              "사실 주장(수치·인물·기관·발언·원인)이 담긴 문장만 그대로 나열하세요. 해석·분석·전망 문장은 "
+              "그 근거가 [자료]에 있으면 제외하고, 근거 없이 결론만 단정하면 나열하세요. 표현을 바꿨을 뿐 "
+              "자료에서 뒷받침되면 제외하세요. 문제가 없으면 정확히 OK 한 단어만 출력하세요.\n\n"
+              f"[자료]\n{facts[:6000]}\n\n[기사]\n{body[:4000]}")
+    try:
+        resp = (call_nvidia(prompt, max_tokens=500) or "").strip()
+    except Exception:
+        return ""
+    return "" if not resp or resp.upper().startswith("OK") else resp[:600]
+
+
+def verify_no_fabricated_names(source_prompt: str, body: str, call_gemini_fn, wiki: bool = True) -> str:
     """생성된 본문에 원문 자료에 없는 고유명사(작품명·인명·지명·기관명)가 새로 등장했는지 확인.
     두 신호를 같이 쓴다: ① 원본 자료 대조(Gemini 판단, 기존 방식) ② 위키피디아 독립 조회
     (판단이 아닌 단순 추출 + 결정론적 HTTP 조회 — Gemini가 오판해도 이 신호는 별개로 남는다.
@@ -85,7 +110,10 @@ def verify_no_fabricated_names(source_prompt: str, body: str, call_gemini_fn) ->
     실사고(2026-08-16, id=79327): 영화 "Brand New Day"를 "유니온 오브 어 뉴 데이"로
     완전히 잘못 옮김 — 작품 제목은 인명·지명과 달리 음차 규칙이 커버하지 않던 영역이라
     Gemini가 자기 사전지식으로 그럴듯한 제목을 지어냈다. 문제 없으면 빈 문자열, 의심되면
-    이름 목록 반환."""
+    이름 목록 반환.
+    wiki=False면 ② 위키 조회(추출용 lite 호출 1회 포함)를 건너뛴다 — 무명 선수·구단처럼 위키에
+    없는 게 정상인 분야용(2026-09-28 실측: 스포츠 미발행 43건 중 약 30건이 [위키 미확인] 오탐).
+    그런 호출부는 unsupported_claims()로 원문 대조를 대신 건다."""
     if not body:
         return ""
     check_prompt = f"""아래는 기사 작성에 쓰인 원본 자료와, 그걸 바탕으로 생성된 한국어 기사 본문입니다.
@@ -119,6 +147,8 @@ def verify_no_fabricated_names(source_prompt: str, body: str, call_gemini_fn) ->
         if result and not ("없음" in result and len(result) <= 12):
             suspect = result
 
+    if not wiki:
+        return suspect
     unconfirmed = [n for n in extract_candidate_names(body, call_gemini_fn) if not wikipedia_confirms(n)]
     if unconfirmed:
         note = "[위키 미확인] " + ", ".join(unconfirmed)

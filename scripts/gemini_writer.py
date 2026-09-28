@@ -34,10 +34,12 @@ except Exception:
 
 # 카테고리 정규화 공통 모듈. import 실패해도 본 기능이 죽지 않도록 폴백을 둔다.
 try:
-    from category_guard import normalize_category
+    from category_guard import normalize_category, is_sports_cluster
 except Exception:
     def normalize_category(raw, default="글로벌"):
         return "" if raw is None else str(raw).strip()
+    def is_sports_cluster(cluster):
+        return False
 
 # 저장 시점 문자셋 혼입 하드 블록. import 실패해도 본 기능이 죽지 않도록 폴백을 둔다.
 try:
@@ -1382,7 +1384,7 @@ JSON_OUTPUT_SPEC = r"""[출력 형식]
   "title": "핵심을 담은 제목",
   "country": "기사의 핵심 주체가 되는 국가 1개. 어느 나라 기업/정부/기관이 주체인가 기준. 글로벌 기업·국제기구가 주체면 빈 문자열",
   "countries": ["기사에서 직접 당사국으로 등장하는 국가들만. 본문에 단순 언급·비교 대상으로만 나오는 나라는 제외. 최대 3개. 없으면 빈 배열"],
-  "category": "경제 | 금융 | 자원·에너지 | 산업·기업 | 정치·외교 | 사회 | IT·과학 | 문화·예술 | 글로벌 중 하나",
+  "category": "경제 | 금융 | 자원·에너지 | 산업·기업 | 정치·외교 | 사회 | IT·과학 | 문화·예술 | 스포츠 | 글로벌 중 하나",
   "is_travel": false,
   "body": "기사 본문",
   "keyword_ko": "이 기사만의 핵심 주제어 1개(한글). 나중에 이 기사의 후속 소식을 검색할 때 쓰인다",
@@ -1402,6 +1404,7 @@ JSON_OUTPUT_SPEC = r"""[출력 형식]
 - 사회: 인프라, 교육, 보건, 노동, 인구
 - IT·과학: 기술, 통신, 연구개발, 우주산업
 - 문화·예술: 미술, 문학, 음악, 영화, 공연, 문화유산, 문화산업
+- 스포츠: 경기 결과, 대회, 선수·감독, 이적 (경기장 건설 예산·구단 재정처럼 경제·사회가 핵심이면 해당 분야)
 - 글로벌: 특정 국가에 국한되지 않는 세계적 이슈 (단, 위 카테고리로 분류 가능하면 해당 카테고리 우선)
 
 [is_travel 판단 기준]
@@ -1794,10 +1797,12 @@ def call_gemini(prompt, max_tokens=1000, retry=2, start_tier=4):
 # 최소 폴백을 둔다(감지 함수는 False, to_plain_style은 원문 그대로 반환).
 try:
     from style_guard import has_column_style, has_polite_ending, to_plain_style, \
-        _pub_day_label, verify_single_topic as _sg_verify_single_topic
+        _pub_day_label, verify_single_topic as _sg_verify_single_topic, strip_number_commas
     _HAS_STYLE_GUARD = True
 except Exception:
     _HAS_STYLE_GUARD = False
+    def strip_number_commas(text: str) -> str:
+        return text
     def has_column_style(text: str) -> bool:
         return False
     def has_polite_ending(text: str) -> bool:
@@ -1823,9 +1828,11 @@ except Exception:
 # 이식(이 파일의 버전이 가장 발전된 형태라 기준이 됐다). import 실패해도
 # 죽지 않도록 최소 폴백을 둔다.
 try:
-    from fabrication_guard import verify_no_fabricated_names as _fg_verify_no_fabricated_names
+    from fabrication_guard import verify_no_fabricated_names as _fg_verify_no_fabricated_names, unsupported_claims
 except Exception:
-    def _fg_verify_no_fabricated_names(source_prompt, body, call_gemini_fn):
+    def _fg_verify_no_fabricated_names(source_prompt, body, call_gemini_fn, wiki=True):
+        return ""
+    def unsupported_claims(body, facts):
         return ""
 
 
@@ -2249,6 +2256,7 @@ def _plainify_parsed(parsed):
         body = to_plain_style(body)
         summary3 = to_plain_style(summary3)
         investment = to_plain_style(investment)
+    title, body, summary3, investment = (strip_number_commas(t) for t in (title, body, summary3, investment))
     return title, body, country, category, countries, is_travel, summary3, investment, keyword_ko, keyword_en
 
 
@@ -3049,6 +3057,65 @@ def _kr_source_data(info):
     return {}
 
 
+# ── 스포츠(2026-09-28 신설) ─────────────────────────────────────────
+# 사용자 결정: 하루 5건 상한, 지역 하드 필터 없이 국내 보도 희소성 순. 상한은 발행 수가 아니라
+# "생성 시도" 수다 — Gemini 키 1·2가 일일 한도 96~97%라, 검증에서 미발행될 기사에도 호출을
+# 쓰지 않게 한다(실측: 9/23~27 스포츠 클러스터 약 35건 생성 중 대부분 미발행).
+SPORTS_DAILY_CAP = 5
+SPORTS_PROMPT_SUFFIX = (
+    "\n\n[스포츠 기사 규칙] 스코어·기록·순위·선수 이름·이적료는 원문에 나온 그대로만 쓰세요. "
+    "원문에 없는 경기 결과·통산 기록·순위·과거 전적을 사전지식으로 보태지 마세요. 분야는 스포츠입니다."
+)
+
+
+def count_today_sports() -> int:
+    """오늘(KST) 저장된 스포츠 기사 수(발행·미발행 모두). 상한만 알면 되므로 id만, 상한 건수까지만 받는다."""
+    try:
+        res = requests.get(_sb_url(), headers=_sb_headers(), params={
+            "select": "id", "source": "eq.NewsFinal", "category": "eq.스포츠",
+            "created_at": f"like.{now_kst().strftime('%Y-%m-%d')}%", "limit": str(SPORTS_DAILY_CAP),
+        }, timeout=15)
+        if res.status_code in (200, 206):
+            return len(res.json())
+    except Exception as e:
+        print(f"  ⚠️ 오늘 스포츠 수 조회 실패: {e}")
+    return SPORTS_DAILY_CAP  # 모르면 이번 실행은 스포츠를 쓰지 않는다(호출 한도 보호 쪽으로 실패)
+
+
+def order_sports_by_scarcity(clusters, kr_info):
+    """스포츠 클러스터끼리만 국내 보도 희소성 순으로 자리를 바꾼다(비스포츠 순서·위치는 그대로).
+    한국 급상승 검색어와 맞은 것(kr_trend)이 맨 앞, 측정 못 한 것은 '흔함' 경계값(15건)으로 본다."""
+    def rank(c):
+        info = kr_info.get(make_cluster_key(c)) or {}
+        if info.get("kr_trend"):
+            return -1
+        n = info.get("kr_coverage_30d")
+        return 15 if n is None else n
+    idx = [i for i, c in enumerate(clusters) if is_sports_cluster(c)]
+    out = list(clusters)
+    for i, c in zip(idx, sorted((clusters[i] for i in idx), key=rank)):
+        out[i] = c
+    return out
+
+
+def sports_fact_check(prompt: str, body: str, facts: str) -> str:
+    """스포츠 기사 검증: Gemini [이름]/[수식어] 판단 + NVIDIA 원문 대조. 위키 조회는 뺀다 — 무명
+    선수·구단이 위키에 없는 게 정상이라 거의 항상 오탐이었다(실측: 스포츠 미발행 43건 중 약 30건).
+    스코어·선수 이름·이적료처럼 틀리기 쉬운 수치·이름은 NVIDIA가 원문(facts)과 대조한다."""
+    fab = _fg_verify_no_fabricated_names(prompt, body, call_gemini, wiki=False)
+    return "\n".join(x for x in (fab, unsupported_claims(body, facts)) if x)
+
+
+def _cluster_facts(cluster, limit: int = 6000) -> str:
+    """NVIDIA 대조용 원문 묶음 — 프롬프트엔 작성 규칙(1만자+)이 섞여 있어 원문만 따로 모은다."""
+    members = [a for a in cluster if not a.get("__needs_review__")]
+    per = max(500, limit // max(1, len(members)))
+    return "\n\n".join(
+        f"{a.get('title_en') or a.get('title_ko') or ''}\n"
+        f"{(a.get('full_text') or a.get('summary_en') or a.get('summary_ko') or '')[:per]}"
+        for a in members)[:limit]
+
+
 def run(clusters_override=None, max_clusters=None, skip_extras=False):
     """clusters_override/max_clusters는 run_breaking() 전용 진입점 — 클러스터링
     단계를 건너뛰고 이미 골라둔 클러스터만, 정규 MAX_CLUSTERS_PER_RUN 대신 작은
@@ -3081,15 +3148,27 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
 
         clusters = cluster_articles(all_articles)
         print(f"  → {len(all_articles)}건 중 {len(clusters)}개 클러스터 발견\n")
+
+    # 스포츠 하루 상한 — 스포츠 클러스터가 있을 때만 DB를 한 번 본다.
+    sports = [c for c in clusters if is_sports_cluster(c)]
+    sports_left = max(0, SPORTS_DAILY_CAP - count_today_sports()) if sports else 0
+    if sports:
+        print(f"  [스포츠] 클러스터 {len(sports)}개 / 오늘 남은 생성 {sports_left}건(상한 {SPORTS_DAILY_CAP})")
+
+    if clusters_override is None:
         from kr_coverage import rerank as _kr_rerank
         from gemini_client import lite_daily_usage_near_cap
+        # 상한이 남았으면 top_n 밖 스포츠도 희소성을 잰다(최대 10개 — 구글뉴스 조회 수 제한).
+        measure_ids = {id(c) for c in sports[:10]} if sports_left else set()
         clusters, kr_info = _kr_rerank(
             clusters, cluster_importance, _cluster_hits_severity_high, make_cluster_key,
             # 부가 기능이라 과부하 때 키 10개×30초를 다 기다리지 않게 한 모델·짧은 타임아웃만
             lambda p: _gemini_client.call(p, max_tokens=800, start_tier=4, temperature=0.2,
                                           timeout=(5, 15), max_stages=1),
             bonus_eligible=lambda c: (c[0].get("country") or "") not in ADVANCED_ECONOMIES | {""},
-            daily_cap_near=lambda: lite_daily_usage_near_cap(GEMINI_API_KEYS))
+            daily_cap_near=lambda: lite_daily_usage_near_cap(GEMINI_API_KEYS),
+            also_measure=lambda c: id(c) in measure_ids)
+        clusters = order_sports_by_scarcity(clusters, kr_info)
 
     today_own_articles = get_today_own_articles()
 
@@ -3162,6 +3241,13 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
                 print(f"  [SKIP] 기사 부족 ({cur_count}건)\n")
                 continue
 
+            # 본문 보강(_prepare_cluster_material)·Gemini 호출 전에 거른다 — processed를 안 올려
+            # 이번 실행 슬롯은 다른 분야 클러스터가 쓴다.
+            is_sports = is_sports_cluster(cluster)
+            if is_sports and sports_left <= 0:
+                print(f"  [SKIP] 스포츠 오늘 상한({SPORTS_DAILY_CAP}건) 도달\n")
+                continue
+
             # 속보 경로(run_breaking, clusters_override로 진입)는 이미
             # _cluster_hits_severity_high+3시간 신선도로 따로 걸러져 있어,
             # 이 4중복 게이트까지 얹으면 진짜 속보(터진 직후 1~2곳만 보도)가
@@ -3175,6 +3261,8 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
             if len(cluster) < CLUSTER_MIN_SIZE:
                 print(f"  [SKIP] 칼럼 제외 후 기사 부족 ({len(cluster)}건)\n")
                 continue
+            if is_sports:
+                sports_left -= 1  # 여기부터는 병합이든 신규든 Gemini 호출이 난다
 
             probe_title = titles[0][:80] if titles else ""
             similar_existing, sim_score = find_similar_article(probe_title, today_own_articles) if probe_title else (None, 0)
@@ -3185,6 +3273,8 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
                 existing_summary = existing_full.get("summary_ko") if existing_full else None
 
                 prompt = build_issue_prompt(cluster, existing_summary) if existing_summary else build_issue_prompt(cluster)
+                if is_sports:
+                    prompt += SPORTS_PROMPT_SUFFIX
                 has_full = any(a.get("full_text") for a in cluster)
                 content = call_gemini_article(prompt, max_tokens=4000 if has_full else 1500)
 
@@ -3237,6 +3327,8 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
             if _trend:
                 from kr_coverage import demand_prompt_suffix
                 prompt += demand_prompt_suffix(_trend)
+            if is_sports:
+                prompt += SPORTS_PROMPT_SUFFIX
             has_full = any(a.get("full_text") for a in cluster)
             content = call_gemini_article(prompt, max_tokens=4000 if has_full else 1500)
 
@@ -3246,7 +3338,8 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
                 full_title = gen_title if gen_title else titles[0][:50]
 
                 final_country = normalize_country(gen_country or country)
-                final_category = gen_category or category or "종합"
+                # 스포츠는 고정 — 하루 상한을 category=스포츠 건수로 세기 때문(이전엔 글로벌·사회·문화·예술로 흩어졌다)
+                final_category = "스포츠" if is_sports else (gen_category or category or "종합")
                 final_region = country_to_region(final_country) if final_country else (cluster[0].get("region") or "global")
                 if final_category == "글로벌" and not final_country:
                     final_region = "global"
@@ -3295,11 +3388,13 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
                 # 고유명사 날조 감지 시 실제로 미발행 처리(detect_foreign_leftover
                 # 패턴과 동일).
                 if published:
-                    _fab = verify_no_fabricated_names(prompt, gen_body or _strip_leaked_labels(content))
+                    _body = gen_body or _strip_leaked_labels(content)
+                    _fab = (sports_fact_check(prompt, _body, _cluster_facts(cluster)) if is_sports
+                            else verify_no_fabricated_names(prompt, _body))
                     if _fab:
-                        print(f"  ⚠️ [원문에 없는 고유명사/수식어 잔존: {_fab}] → 미발행으로 저장")
+                        print(f"  ⚠️ [원문에 없는 고유명사/수식어/사실 잔존: {_fab}] → 미발행으로 저장")
                         published = False
-                        _dg_reason = f"고유명사 날조 의심 — {_fab}"
+                        _dg_reason = f"{'근거 불일치 의심(스포츠)' if is_sports else '고유명사 날조 의심'} — {_fab}"
 
                 # 2026-09-08 실사고(id=145092) 대응 — solo 경로와 동일하게
                 # 분량 미달은 실제로 미발행 처리한다(소스 빈약 → 의미 없는
