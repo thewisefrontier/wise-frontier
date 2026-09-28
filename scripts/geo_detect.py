@@ -299,6 +299,11 @@ def detect_country(text: str, source: str = ""):
         return None
 
     result = find_in_text(text)
+    # "Georgia"는 미국 주일 수 있다 — 미국 매체이거나 미국 지명·기관 단서가 있으면 미국으로
+    if result and result[1] == "조지아" and (
+            re.match(r"\s*(united states|us)\b", source or "", re.I)
+            or re.search(r"\b(atlanta|savannah|macon|augusta|county|sheriff|ga\.|georgia (bureau|state|tech|bulldogs|power|national guard)|american?|u\.s\.)\b", text, re.I)):
+        return ("🇺🇸", "미국")
     if result:
         return result
 
