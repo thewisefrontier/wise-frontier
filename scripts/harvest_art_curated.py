@@ -125,6 +125,32 @@ ARTISTS = [
     ("Hugo Simberg", "후고 심베리", "핀란드", "🇫🇮", "europe"),
     # 아이슬란드
     ("Þórarinn B. Þorláksson", "토라린 토를락손", "아이슬란드", "🇮🇸", "europe"),
+    # 영국(예일 영국미술센터 소장 거장)·미국(필라델피아·게티 소장 거장)
+    ("J. M. W. Turner", "J. M. W. 터너", "영국", "🇬🇧", "europe"),
+    ("John Constable", "존 컨스터블", "영국", "🇬🇧", "europe"),
+    ("William Hogarth", "윌리엄 호가스", "영국", "🇬🇧", "europe"),
+    ("Thomas Gainsborough", "토머스 게인즈버러", "영국", "🇬🇧", "europe"),
+    ("Joshua Reynolds", "조슈아 레이놀즈", "영국", "🇬🇧", "europe"),
+    ("William Blake", "윌리엄 블레이크", "영국", "🇬🇧", "europe"),
+    ("George Stubbs", "조지 스텁스", "영국", "🇬🇧", "europe"),
+    ("Edwin Landseer", "에드윈 랜시어", "영국", "🇬🇧", "europe"),
+    ("John Everett Millais", "존 에버릿 밀레이", "영국", "🇬🇧", "europe"),
+    ("Dante Gabriel Rossetti", "단테 가브리엘 로세티", "영국", "🇬🇧", "europe"),
+    ("Edward Burne-Jones", "에드워드 번존스", "영국", "🇬🇧", "europe"),
+    ("John William Waterhouse", "존 윌리엄 워터하우스", "영국", "🇬🇧", "europe"),
+    ("Joseph Wright of Derby", "조지프 라이트", "영국", "🇬🇧", "europe"),
+    ("Thomas Lawrence", "토머스 로런스", "영국", "🇬🇧", "europe"),
+    ("James McNeill Whistler", "제임스 맥닐 휘슬러", "미국", "🇺🇸", "europe"),
+    ("John Singer Sargent", "존 싱어 사전트", "미국", "🇺🇸", "europe"),
+    ("Thomas Eakins", "토머스 에이킨스", "미국", "🇺🇸", "europe"),
+    ("Winslow Homer", "윈즐로 호머", "미국", "🇺🇸", "europe"),
+    ("Mary Cassatt", "메리 커샛", "미국", "🇺🇸", "europe"),
+    ("Thomas Cole", "토머스 콜", "미국", "🇺🇸", "europe"),
+    ("Grant Wood", "그랜트 우드", "미국", "🇺🇸", "europe"),
+    ("Edward Hopper", "에드워드 호퍼", "미국", "🇺🇸", "europe"),
+    ("Georgia O'Keeffe", "조지아 오키프", "미국", "🇺🇸", "europe"),
+    ("Jacob Lawrence", "제이콥 로런스", "미국", "🇺🇸", "europe"),
+    ("Henry Ossawa Tanner", "헨리 오서와 태너", "미국", "🇺🇸", "europe"),
 ]
 
 
@@ -137,6 +163,53 @@ def _hits(cat):
     return requests.get(API, headers=UA, timeout=40, params={
         "action": "query", "list": "search", "srnamespace": 6, "srlimit": 40, "format": "json",
         "srsearch": f'deepcategory:"{cat}" filetype:bitmap'}).json()["query"]["search"]
+
+# 사용자 지시(2026-09-28): "저작권 상관없다, 언론은 써도 된다" → 사후 70년 안 지난 근현대 작가도 포함.
+# 이미지는 영어 위키백과 작품 문서의 대표 이미지(harvest_art_extra.wiki_paintings). 'Category:Paintings by 이름'이 있는 작가만 잡힌다.
+MODERN = [
+    # 아프리카
+    ("Mahmoud Said", "마흐무드 사이드", "이집트", "🇪🇬", "africa"),
+    ("Ben Enwonwu", "벤 엔워누", "나이지리아", "🇳🇬", "africa"),
+    ("Gerard Sekoto", "헤라르트 세코토", "남아프리카공화국", "🇿🇦", "africa"),
+    ("Irma Stern", "이르마 스턴", "남아프리카공화국", "🇿🇦", "africa"),
+    ("J. H. Pierneef", "J. H. 피르네프", "남아프리카공화국", "🇿🇦", "africa"),
+    ("Skunder Boghossian", "스쿤데르 보고시안", "에티오피아", "🇪🇹", "africa"),
+    ("Afewerk Tekle", "아페워르크 테클레", "에티오피아", "🇪🇹", "africa"),
+    ("Ibrahim El-Salahi", "이브라힘 엘살라히", "수단", "🇸🇩", "africa"),
+    ("Chéri Samba", "셰리 삼바", "콩고민주공화국", "🇨🇩", "africa"),
+    ("Tshibumba Kanda-Matulu", "치붐바 칸다마툴루", "콩고민주공화국", "🇨🇩", "africa"),
+    ("Twins Seven-Seven", "트윈스 세븐세븐", "나이지리아", "🇳🇬", "africa"),
+    ("Aina Onabolu", "아이나 오나볼루", "나이지리아", "🇳🇬", "africa"),
+    ("Mohamed Melehi", "모하메드 멜레히", "모로코", "🇲🇦", "africa"),
+    # 동남아시아
+    ("Affandi", "아판디", "인도네시아", "🇮🇩", "asia"),
+    ("Fernando Amorsolo", "페르난도 아모르솔로", "필리핀", "🇵🇭", "asia"),
+    ("Nguyễn Phan Chánh", "응우옌 판 짜인", "베트남", "🇻🇳", "asia"),
+    ("Tô Ngọc Vân", "또 응옥 번", "베트남", "🇻🇳", "asia"),
+    # 중남미
+    ("Frida Kahlo", "프리다 칼로", "멕시코", "🇲🇽", "global"),
+    ("Diego Rivera", "디에고 리베라", "멕시코", "🇲🇽", "global"),
+    ("David Alfaro Siqueiros", "다비드 알파로 시케이로스", "멕시코", "🇲🇽", "global"),
+    ("Rufino Tamayo", "루피노 타마요", "멕시코", "🇲🇽", "global"),
+    ("Wifredo Lam", "위프레도 람", "쿠바", "🇨🇺", "global"),
+    ("Fernando Botero", "페르난도 보테로", "콜롬비아", "🇨🇴", "global"),
+    ("Tarsila do Amaral", "타르실라 두 아마라우", "브라질", "🇧🇷", "global"),
+    ("Candido Portinari", "칸지두 포르티나리", "브라질", "🇧🇷", "global"),
+    ("Oswaldo Guayasamín", "오스왈도 과야사민", "에콰도르", "🇪🇨", "global"),
+    ("Roberto Matta", "로베르토 마타", "칠레", "🇨🇱", "global"),
+    ("Xul Solar", "슐 솔라르", "아르헨티나", "🇦🇷", "global"),
+    # 중동·남아시아·동아시아 근현대
+    ("Zao Wou-Ki", "자오우키", "중국", "🇨🇳", "asia"),
+    ("Xu Beihong", "쉬베이훙", "중국", "🇨🇳", "asia"),
+    ("Qi Baishi", "치바이스", "중국", "🇨🇳", "asia"),
+    ("M. F. Husain", "M. F. 후세인", "인도", "🇮🇳", "asia"),
+    ("Jamini Roy", "자미니 로이", "인도", "🇮🇳", "asia"),
+    ("Yayoi Kusama", "쿠사마 야요이", "일본", "🇯🇵", "asia"),
+    ("Kim Whanki", "김환기", "한국", "🇰🇷", "asia"),
+    ("Lee Jung-seob", "이중섭", "한국", "🇰🇷", "asia"),
+    ("Park Soo-keun", "박수근", "한국", "🇰🇷", "asia"),
+    ("Dia al-Azzawi", "디아 알아자위", "이라크", "🇮🇶", "global"),
+]
 
 
 def commons_paintings(name_en, n=PER_ARTIST):
@@ -184,7 +257,9 @@ def bucket(a):
 
 def main():
     names = {x[0] for x in ARTISTS}
-    base = [a for a in json.load(open(OUT, encoding="utf-8")) if a["artist_en"] not in names]  # 재실행해도 중복 없이
+    names |= {x[0] for x in MODERN}
+    base = [a for a in json.load(open(OUT, encoding="utf-8"))
+            if a["artist_en"] not in names and "Walters" not in a["image_credit"]]  # 재실행해도 중복 없이
     have = {re.sub(r"[^a-z0-9]", "", a["title_en"].lower()) for a in base}
     seen_artist, added = set(), []
     for en, ko, country, flag, region in ARTISTS:
@@ -206,7 +281,20 @@ def main():
                 "museum_grounding": f"작가: {en}({country} 화가, 사후 70년 경과). 분류: Paintings 출처: 위키미디어 커먼즈 분류 'Paintings by {en}'.",
             })
         print(f"  {en}: {len(got)}점", file=sys.stderr)
-    print(f"덧붙일 작품 {len(added)}건(작가 {len(seen_artist)}명)", file=sys.stderr)
+    # 위키백과 작품 문서(근현대 작가) + 월터스 — harvest_art_extra
+    sys.path.insert(0, os.path.dirname(__file__))
+    import harvest_art_extra as ex
+    from harvest_art_global import geo_of_en
+    extra = ex.modern_records(MODERN)
+    if "--walters" in sys.argv:
+        i = sys.argv.index("--walters")
+        extra += ex.from_walters(sys.argv[i + 1], sys.argv[i + 2], sys.argv[i + 3], geo_of_en)
+    for a in extra:
+        k = re.sub(r"[^a-z0-9]", "", a["title_en"].lower())
+        if k not in have:
+            have.add(k)
+            added.append(a)
+    print(f"덧붙일 작품 {len(added)}건(작가 {len(seen_artist)}명 + 위키·월터스)", file=sys.stderr)
     if not added:
         sys.exit("추가할 작품이 없음 — 저장하지 않음")
     items = base + added
