@@ -2570,33 +2570,9 @@ def verify_single_topic(title: str, body: str) -> bool:
 
 
 def detect_foreign_leftover(body: str) -> str:
-    """한국어 기사 본문에 번역 안 된 외국어(스페인어·프랑스어·독일어·포르투갈어
-    등 라틴 문자 언어) 단어가 남아있는지 LLM으로 판별한다.
-
-    script_leak.py는 비라틴 문자(키릴·아랍·한자 등)만 잡는다. 라틴 문자로
-    쓰인 외국어는 스크립트로 구분이 안 돼서 그 가드를 그대로 통과한다
-    (2026-09-01 실사고, id=118435: 과테말라 매체의 스페인어 원문을 옮기다가
-    "trayectoria"(경력)를 그대로 남기고, 심지어 무관한 독일어 "Jahrzehnte"
-    (decades)까지 섞여 나옴 — 사용자 제보로 발견). 발견하면 발견된 단어
-    문자열을, 없으면 빈 문자열을 반환한다."""
-    if not body:
-        return ""
-    prompt = f"""아래는 한국어로 작성됐어야 할 뉴스 기사입니다. 번역되지 않고 원문 언어(스페인어·프랑스어·독일어·포르투갈어·이탈리아어 등) 그대로 남아있는 단어나 구절이 있는지 확인하세요.
-
-⚠️ 다음은 오류가 아닙니다: 영어 인명·기업명·지명 등 고유명사(한글 음차와 함께 괄호 병기된 원어 포함), 비자 종류·통화코드·모델명 등 관용적으로 로마자를 유지하는 표현, 작품 제목의 원어 병기.
-⚠️ 오류인 것: 그 외 일반 명사·형용사·부사 등이 한국어로 번역되지 않고 스페인어·독일어·프랑스어 등 외국어 단어 그대로 남아있는 경우.
-
-본문:
-{body[:2500]}
-
-번역 안 된 외국어 단어가 있으면 그 단어들만 쉼표로 나열하세요. 없으면 "없음"이라고만 답하세요."""
-    result = call_gemini(prompt, max_tokens=60, start_tier=4)
-    if not result:
-        return ""
-    result = result.strip()
-    if not result or result[:10].replace(" ", "").startswith("없음"):
-        return ""
-    return result[:200]
+    """미번역 외국어 검사 — 트렌드 경로와 공용인 fabrication_guard.detect_foreign_leftover에 위임(2026-09-29)."""
+    from fabrication_guard import detect_foreign_leftover as _fg_dfl
+    return _fg_dfl(body, call_gemini)
 
 
 def park_multi_topic_articles(articles: list) -> int:
