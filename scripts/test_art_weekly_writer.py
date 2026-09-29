@@ -52,3 +52,10 @@ _aw = {"title_ko": "수련", "title_en": "Water Lilies", "artist_ko": "클로드
 assert "이미 소개한 적이 있습니다" in w.build_article_prompt(_aw, "근거", ["인상, 해돋이"])
 assert "이미 소개한 적이 있습니다" not in w.build_article_prompt(_aw, "근거")
 print("ok")
+
+
+# iter_daily_candidates()가 get_daily_artwork()와 같은 첫 후보를 내놓는지(2026-09-30 리팩터링 회귀)
+for i in range(30):
+    d = _d(2026, 1 + i % 12, 1 + i % 28)
+    assert next(w.iter_daily_candidates(d))["title_en"] == w.get_daily_artwork(d)[0]["title_en"]
+print("iter_daily_candidates 회귀 테스트 ok")

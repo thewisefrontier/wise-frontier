@@ -284,17 +284,24 @@ def is_not_painting(a: dict) -> bool:
     return bool(m) and m.group(1) != "Paintings"
 
 
-def get_daily_artwork(today=None) -> tuple[dict, "date"]:
-    """날짜(toordinal)로 결정론적 순환 선택. 반환: (artwork, date)."""
+def iter_daily_candidates(today=None):
+    """날짜(toordinal) 기준 결정론적 순환 순서로 후보를 하나씩 내놓는다(작가 미상·비회화 제외).
+    같은 날 재실행하면 항상 같은 순서 — get_daily_artwork()는 이 중 첫 번째만 쓰고,
+    main()은 이미지를 못 찾는 후보를 건너뛰며 순서대로 다음 후보를 시도하는 데 쓴다
+    (2026-09-30 사용자 지시: "위키에 없으면 다른 작품으로 대체" — 이미지 문제로 하루를
+    통째로 스킵하지 않는다)."""
     today = today or now_kst().date()
     idx = today.toordinal() % len(ARTWORKS)
-    # 2026-09-28: 작자 미상 공예품(그릇·필사본 등)은 근거가 미술관 기록 몇 줄뿐이라 빈약한
-    # 기사가 나왔다(터코이즈 볼 위드 류트 플레이어…). 작가가 특정된 작품만 쓰도록 다음 후보로 넘긴다.
     for k in range(len(ARTWORKS)):
         a = ARTWORKS[(idx + k) % len(ARTWORKS)]
         if not is_unknown_artist(a) and not is_not_painting(a):
-            return a, today
-    return ARTWORKS[idx], today
+            yield a
+
+
+def get_daily_artwork(today=None) -> tuple[dict, "date"]:
+    """날짜(toordinal)로 결정론적 순환 선택. 반환: (artwork, date)."""
+    today = today or now_kst().date()
+    return next(iter_daily_candidates(today), ARTWORKS[today.toordinal() % len(ARTWORKS)]), today
 
 
 def already_published(pub_date) -> bool:
@@ -333,26 +340,25 @@ def fetch_artwork_image(artwork: dict) -> tuple[str, str]:
     direct_url = artwork.get("direct_image_url")
     if not direct_url and artwork.get("met_object_id"):
         direct_url = _met_image_url(artwork["met_object_id"])  # 목록(CSV)엔 이미지 주소가 없어 발행 때 1건만 조회
+    # 2026-09-30 실사고(id=294716): AIC(artic.edu) IIIF 이미지는 Cloudflare JS 챌린지로
+    # 보호된다 — artic.edu를 직접 방문하는 사람은 통과하지만, 다른 도메인(우리 기사)에
+    # <img>로 핫링크된 요청은 페이지 전체 로드가 아니라 JS를 실행할 수 없어 통과 쿠키를
+    # 못 받고 항상 막힌다(매번 시도해봐야 결과가 정해져 있음 — 사용자 지적으로
+    # 아예 시도하지 않고 위키미디어 검색으로 바로 감).
+    if direct_url and "artic.edu" in direct_url:
+        print("  ⚠️ AIC(artic.edu) 직링크는 핫링크가 항상 막혀(Cloudflare) 시도하지 않음 — 위키미디어에서 대체 이미지 검색")
+        direct_url = ""
     if direct_url:
         key = artwork.get("met_object_id") or artwork.get("wikidata") or re.sub(r"\W+", "", artwork["title_en"])[:40]
         try:
             from image_store import store_image
             stored_url = store_image(direct_url, key_hint=f"art_weekly_{key}")
         except Exception as e:
-            print(f"  ⚠️ 이미지 R2 저장 실패: {e}")
-            stored_url = ""
-        # 2026-09-30 실사고(id=294716): AIC(artic.edu) IIIF 이미지 서버는 Cloudflare가
-        # 서버·브라우저 요청을 가리지 않고 전면 차단해(실제로 브라우저로 열어도
-        # "Sorry, you have been blocked") store_image()가 실패하면 원본 URL도 독자
-        # 누구에게나 죽은 링크다 — 다른 소스(Met 등)처럼 "원본 URL로 폴백"하면 안 되고,
-        # 아래 위키미디어 검색 경로로 넘어가 같은 작품의 다른 소장본 사진을 찾는다.
-        blocked = (not stored_url or stored_url == direct_url) and "artic.edu" in direct_url
-        if not blocked:
-            stored_url = stored_url or direct_url
-            dept = artwork.get("met_department", "")
-            credit = artwork.get("image_credit") or f"이미지 출처: The Metropolitan Museum of Art (CC0 퍼블릭 도메인{f', {dept}' if dept else ''})"
-            return stored_url, credit
-        print("  ⚠️ AIC(artic.edu) 이미지 서버 차단(Cloudflare) — 위키미디어에서 대체 이미지 검색")
+            print(f"  ⚠️ 이미지 R2 저장 실패, 원본 URL 사용: {e}")
+            stored_url = direct_url
+        dept = artwork.get("met_department", "")
+        credit = artwork.get("image_credit") or f"이미지 출처: The Metropolitan Museum of Art (CC0 퍼블릭 도메인{f', {dept}' if dept else ''})"
+        return (stored_url or direct_url), credit
 
     wiki_url, wiki_credit = fetch_wikimedia_image(artwork["wiki_query"], allow_artwork=True)
     if not wiki_url:
@@ -616,17 +622,29 @@ def main():
         print("  [SKIP] SUPABASE 환경변수 없음")
         return
 
-    artwork, pub_date = get_daily_artwork()
-    print(f"  → 오늘({pub_date.isoformat()}) 작품: {artwork['title_ko']} ({artwork['artist_ko']})")
-
+    pub_date = now_kst().date()
     if already_published(pub_date):
         print(f"  → {pub_date.isoformat()} 고전 명화 이야기 이미 존재 → 스킵")
         return
 
-    image_url, image_credit = fetch_artwork_image(artwork)
-    if not image_url:
-        print(f"  [SKIP] '{artwork['title_ko']}' 실물 이미지를 Wikimedia Commons에서 찾지 못함 — "
-              f"오늘은 건너뜀(엉뚱한 대체 이미지를 쓰지 않음)")
+    # 2026-09-30 사용자 지시: 이미지를 못 찾는다고 하루를 통째로 건너뛰지 말고, 같은 날짜의
+    # 순환 순서(iter_daily_candidates)를 따라 다음 후보 작품으로 넘어간다. 무한정 뒤지진
+    # 않도록 상한을 둔다.
+    artwork, image_url, image_credit = None, "", ""
+    MAX_IMAGE_ATTEMPTS = 15
+    for i, cand in enumerate(iter_daily_candidates(pub_date)):
+        if i >= MAX_IMAGE_ATTEMPTS:
+            break
+        print(f"  → 오늘({pub_date.isoformat()}) 후보 {i+1}: {cand['title_ko']} ({cand['artist_ko']})")
+        image_url, image_credit = fetch_artwork_image(cand)
+        if image_url:
+            artwork = cand
+            break
+        print(f"  ⚠️ '{cand['title_ko']}' 실물 이미지를 찾지 못함 — 다음 후보로 대체")
+
+    if not artwork:
+        print(f"  [SKIP] 후보 {MAX_IMAGE_ATTEMPTS}건 모두 이미지를 찾지 못함 — 오늘은 건너뜀"
+              f"(엉뚱한 대체 이미지를 쓰지 않음)")
         return
     print(f"  → 이미지 확보: {image_url[:70]}")
 
