@@ -433,6 +433,24 @@ def fetch_wikipedia_grounding(query_ko: str, query_en: str) -> str:
     return text
 
 
+_WIKI_CACHE_PATH = os.path.join(os.path.dirname(__file__), "data", "art_wiki_cache.json")
+_wiki_cache_data = None
+
+
+def cached_wiki(key: str, fetch) -> str:
+    """scripts/cache_art_wiki.py가 미리 받아둔 위키백과 근거자료(깃에 커밋)를 먼저 쓰고,
+    캐시에 키가 없을 때(새로 추가된 작품 등)만 라이브 조회한다. 값이 ""이면 '이미 찾아봤는데 없음'."""
+    global _wiki_cache_data
+    if _wiki_cache_data is None:
+        try:
+            _wiki_cache_data = json.load(open(_WIKI_CACHE_PATH, encoding="utf-8"))
+        except Exception:
+            _wiki_cache_data = {}
+    if key in _wiki_cache_data:
+        return _wiki_cache_data[key]
+    return fetch()
+
+
 def find_prior_titles(artwork: dict) -> list:
     """같은 작가를 이미 소개한 기사 제목(최대 3). 본문엔 작가 원어명이 첫 등장 때 괄호로 병기되므로 그걸로 찾는다.
     DB 부하: 하루 1회·id/title만 select·limit 3(summary_ko는 trigram 인덱스 대상)."""
@@ -608,9 +626,10 @@ def main():
     # 이름만으로 검색하면 무관한 문서(동명 드라마 등)가 잡힐 수 있어 " painter"를
     # 붙여 인물 문서 쪽으로 검색 우선순위를 살짝 기울인다(그래도 최종 방어는
     # _wiki_search_title의 유사도 가드).
-    artwork_wiki = fetch_wikipedia_grounding(
-        f"{artwork['artist_ko']} {artwork['title_ko']}", artwork["wiki_query"])
-    artist_wiki = fetch_wikipedia_grounding(artwork["artist_ko"], f"{artwork['artist_en']} painter")
+    artwork_wiki = cached_wiki(f"work:{artwork['title_en']}|{artwork['artist_en']}", lambda: fetch_wikipedia_grounding(
+        f"{artwork['artist_ko']} {artwork['title_ko']}", artwork["wiki_query"]))
+    artist_wiki = cached_wiki(f"artist:{artwork['artist_en']}", lambda: fetch_wikipedia_grounding(
+        artwork["artist_ko"], f"{artwork['artist_en']} painter"))
     # 2026-09-27 추가 — 메트로폴리탄 미술관 Open Access 수집분(art_weekly_met_artworks.json)은
     # 위키백과 문서가 아예 없는 무명/비주류 작가가 많다(예: 조선 화가 이정) —
     # 위키백과에만 기대면 이런 항목마다 근거자료 부족으로 매일 스킵될 위험이

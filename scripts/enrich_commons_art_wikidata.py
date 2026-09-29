@@ -58,6 +58,71 @@ def _wd_entity(qid: str) -> dict:
     return r.json()["entities"][qid]
 
 
+_NOISE_SEG = re.compile(r"google art project|museum|gallery|collection|agency|nasjonalmuseet|rijks|statens", re.I)
+_ACCESSION_SEG = re.compile(r"^[A-Za-z]{0,4}[ .\-]?[IVX0-9][\w./\-]*$")
+
+
+def _clean_title(title: str, artist: str) -> str:
+    """Commons 파일명 유래 제목("작가 - 작품명 - 소장번호 - 미술관")에서 작품명 부분만 남긴다."""
+    segs = [x.strip() for x in re.split(r"\s+-\s+", title or "") if x.strip()]
+    a = (artist or "").lower()
+    keep = [x for x in segs if not _ACCESSION_SEG.match(x) and not _NOISE_SEG.search(x)
+            and not (a and (x.lower() in a or a in x.lower()))]
+    best = max(keep, key=len) if keep else (title or "")
+    return re.sub(r"^\d{4}\s+", "", best).strip()[:100]
+
+
+_PAINTING_QIDS = {"Q3305213", "Q191163"}  # painting, panel painting
+
+
+def _wd_search_candidates(query: str) -> list:
+    r = requests.get("https://www.wikidata.org/w/api.php", headers=UA, timeout=20, params={
+        "action": "wbsearchentities", "search": query, "language": "en", "type": "item", "limit": 5, "format": "json"})
+    r.raise_for_status()
+    return [x["id"] for x in r.json().get("search", [])]
+
+
+def _find_qid_by_search(title_en: str, artist_en: str) -> str | None:
+    """Commons 파일에 위키데이터 링크가 안 붙어있을 때의 대안 경로 — 제목+작가로 검색해
+    후보 중 실제로 이 작가가 제작자(P170)로 걸린 회화만 채택한다(오귀속 방지 — 아무 항목이나
+    붙이면 크기·소장처 같은 사실이 틀린 채로 기사에 들어가는 게 아예 없는 것보다 나쁘다)."""
+    if not title_en or not artist_en:
+        return None
+    for qid in _wd_search_candidates(_clean_title(title_en, artist_en))[:4]:
+        try:
+            ent = _wd_entity(qid)
+        except Exception:
+            continue
+        time.sleep(REQUEST_DELAY)
+        p31 = {c.get("mainsnak", {}).get("datavalue", {}).get("value", {}).get("id")
+               for c in ent.get("claims", {}).get("P31", [])}
+        if not (p31 & _PAINTING_QIDS):
+            continue
+        creator = ent.get("claims", {}).get("P170")
+        if not creator:
+            continue
+        creator_qid = creator[0].get("mainsnak", {}).get("datavalue", {}).get("value", {}).get("id")
+        if not creator_qid:
+            continue
+        creator_label = _labels_batch([creator_qid]).get(creator_qid, "").lower()
+        if _same_artist(artist_en.lower(), creator_label):
+            return qid
+    return None
+
+
+def _same_artist(a: str, b: str) -> bool:
+    """이름 전체 포함이거나, 성이 같고 이름(또는 이니셜)도 하나 이상 겹칠 때만 같은 작가로 본다
+    (성만 같은 다른 화가 — 프란스 할스/디르크 할스 — 오귀속 방지)."""
+    if not a or not b:
+        return False
+    if a in b or b in a:
+        return True
+    ta, tb = a.replace(".", " ").split(), b.replace(".", " ").split()
+    if not ta or not tb or ta[-1] != tb[-1]:
+        return False
+    return any(x[0] == y[0] for x in ta[:-1] for y in tb[:-1]) if len(ta) > 1 and len(tb) > 1 else True
+
+
 def _labels_batch(qids: list) -> dict:
     """참조된 항목 QID들의 영문 라벨을 한 번에 조회(단위·재질·장르 등 사람이 읽을 이름 필요)."""
     out = {}
@@ -125,6 +190,7 @@ def build_facts(entity: dict) -> str:
 def enrich(dry_run: bool = False, limit: int | None = None):
     data = json.load(open(DATA_PATH, encoding="utf-8"))
     targets = [a for a in data if "commons.wikimedia.org" in (a.get("direct_image_url") or "")
+               and "[위키데이터 보강]" not in (a.get("museum_grounding") or "")
                and len(a.get("museum_grounding") or "") < THIN_GROUNDING_MAX]
     print(f"대상(Commons 큐레이션 + 근거자료 {THIN_GROUNDING_MAX}자 미만): {len(targets)}건")
     if limit:
@@ -140,6 +206,10 @@ def enrich(dry_run: bool = False, limit: int | None = None):
             meta = _extmetadata(title)
             time.sleep(REQUEST_DELAY)
             qid = _find_qid(meta)
+            via = "커먼즈"
+            if not qid:
+                qid = _find_qid_by_search(a.get("title_en", ""), a.get("artist_en", ""))
+                via = "검색"
             if not qid:
                 skipped += 1
                 continue
@@ -156,7 +226,7 @@ def enrich(dry_run: bool = False, limit: int | None = None):
 
         a["museum_grounding"] = (a.get("museum_grounding") or "") + f" [위키데이터 보강] {facts}"
         done += 1
-        print(f"  ✓ [{i+1}/{len(targets)}] {a.get('title_ko','')[:40]} → {facts[:90]}")
+        print(f"  ✓ [{i+1}/{len(targets)}] ({via}) {a.get('title_ko','')[:40]} → {facts[:90]}")
 
     print(f"\n완료: 보강 {done}건, 근거 못 찾음 {skipped}건, 실패 {failed}건")
     if not dry_run and done:
