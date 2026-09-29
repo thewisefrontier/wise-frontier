@@ -1,5 +1,97 @@
 [
   {
+    "id": 294734,
+    "title_en": "[국제유가] WTI 배럴당 89달러…중동 공급 차질 우려",
+    "title_ko": "[국제유가] WTI 배럴당 89달러…중동 공급 차질 우려",
+    "summary_ko": "국제유가가 29일(현지시간) 하락했다. WTI 원유 선물은 시장 집계에 따르면 뉴욕상업거래소(NYMEX)에서 배럴당 88.97달러에 거래를 마쳤으며, 전일 종가(94.61달러) 대비 5.96%(5.64달러) 내렸다.\n\n브렌트유는 배럴당 95.70달러를 기록했으며, 전일 종가(106.60달러) 대비 10.23%(10.90달러) 하락했다.\n\n이번 가격 하락은 오만 인근 해상 화물선 피격 사건 등 지정학적 사건이 이어지는 가운데 시장 변동성이 확대된 데 따른 것이다. 중동 지역의 공급 차질 가능성이 지속해서 제기되는 한편, 실물 정제유 ",
+    "url": "internal://oil_price_2026-09-29",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국제유가",
+    "region": "글로벌",
+    "country": "국제",
+    "country_flag": "🛢️",
+    "score": 1,
+    "created_at": "2026-09-30 06:07",
+    "countries": [
+      "미국",
+      "사우디아라비아",
+      "러시아"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/oil_2026_09_29_pid1685981.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-30T06:07:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-30 06:07",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "wti": {
+        "pct": -5.9613148715780575,
+        "prev": 94.61,
+        "price": 88.97,
+        "change": -5.640000000000001
+      },
+      "date": "2026-09-29",
+      "brent": {
+        "pct": -10.225140712945583,
+        "prev": 106.6,
+        "price": 95.7,
+        "change": -10.899999999999991
+      },
+      "source": "Yahoo Finance"
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 294730,
+    "title_en": "일본 정부, 시리아 대상 제재 명단에서 16개 단체 삭제",
+    "title_ko": "일본 정부, 시리아 대상 제재 명단에서 16개 단체 삭제",
+    "summary_ko": "일본 정부가 시리아와 관련된 제재 대상 명단에서 16개 단체를 삭제하는 조치를 29일(현지시간) 단행했다. 이번 결정은 일본 외무성이 기존에 유지해 온 대시리아 제재 리스트를 검토하고 현행화하는 과정에서 결정됐다.\n\n일본은 그동안 시리아 내 무력 충돌과 인권 문제에 대응하기 위해 시리아 정부 관련 기관 및 단체들을 대상으로 자산 동결 등 강도 높은 제재를 시행해 왔다. 이번에 명단에서 제외된 16개 단체는 일본 정부의 정기적인 제재 대상 검토 절차를 거쳐 제재 유지 필요성이 사라진 것으로 판단됐다.\n\n외무성은 이번 조치를 통해 제재",
+    "url": "internal://realtrend_Japan_Sanctions_Relief_for_Syria_2026093005",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "realtrend_Japan_Sanctions_Reli",
+    "region": "east_asia",
+    "country": "일본",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-30 05:59",
+    "countries": [
+      "일본",
+      "시리아"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_204771.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-30T05:59:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-30 05:59",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 294724,
     "title_en": "서울, 늦은 오후 비 소식…전국 완연한 가을 날씨",
     "title_ko": "서울, 늦은 오후 비 소식…전국 완연한 가을 날씨",
@@ -730,7 +822,7 @@
     "id": 294289,
     "title_en": "예멘 후티 반군과 소말리아 알샤바브의 군사 밀착, 홍해 안보에 심각한 위협 부상",
     "title_ko": "예멘 후티 반군과 소말리아 알샤바브의 군사 밀착, 홍해 안보에 심각한 위협 부상",
-    "summary_ko": "29일(현지시간) 파이낸셜타임스는 예멘의 후티 반군과 소말리아의 알샤바브가 무기 밀수와 기술 지원을 매개로 밀착하며 홍해와 아덴만의 안보를 위협하고 있다고 보도했다. 미국 아프리카사령부 대변인은 이들의 협력이 지역 안보를 위협하는 고조 단계의 위험이라고 경고했다. 유엔 예멘 전문가 패널에 따르면 후티 반군은 알샤바브에 무기를 판매하고 드론과 급조폭발물 사용법을 비롯한 전술 훈련을 제공했다.\n\n소말리아 전문가 맷 브라이덴은 알샤바브를 비롯한 소말리아 무장세력 소속 대원 최대 1500명이 예멘에서 후티 반군의 훈련을 받았다고 밝혔다.\n",
+    "summary_ko": "[업데이트]\n■ 9월 30일 05:54 — 지난해 12월 이스라엘이 소말릴란드를 독립국으로 공식 승인한 외교적 변화에 반발하는 반미 및 반이스라엘 기조 속에서 양측의 결합이 더욱 강화되었다. 알샤바브는 후티 측에 이란산 S358 지대공미사일 등 첨단 무기를 요구했다. 북부 해안의 소말리아 해적들이 혼란을 틈타 터어키 무기 수송선을 나포하는 등 최근 10년 사이 가장 활발한 공격을 감행하고 있다.\n────────\n\n29일(현지시간) 파이낸셜타임스는 예멘의 후티 반군과 소말리아의 알샤바브가 무기 밀수와 기술 지원을 매개로 밀착하며 홍해",
     "url": "internal://trend_소말리아_2026092916",
     "source": "NewsFinal",
     "category": "정치·외교",
@@ -753,6 +845,10 @@
       {
         "timestamp": "2026-09-29 16:53",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-09-30 05:54",
+        "note": "알샤바브가 후티에 첨단 무기 요구함"
       }
     ],
     "byline": "뉴스파이널 편집국",
