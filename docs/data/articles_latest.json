@@ -1,5 +1,680 @@
 [
   {
+    "id": 294724,
+    "title_en": "서울, 늦은 오후 비 소식…전국 완연한 가을 날씨",
+    "title_ko": "서울, 늦은 오후 비 소식…전국 완연한 가을 날씨",
+    "summary_ko": "30일 한국의 날씨는 전국이 대체로 맑다가 오후부터 차차 흐려져 중부지방을 중심으로 비가 내릴 전망이다. 기상청에 따르면 오늘 전국 최저기온은 16°C에서 20°C, 최고기온은 25°C에서 27°C의 분포를 보이겠으며, 별도의 기상 특보가 발효되지 않은 가운데 전국의 최대풍속은 40km/h 미만으로 유지될 것으로 예보되었다. 서울은 오전과 오후 모두 맑은 날씨를 보이겠으나 오후부터 강수확률이 60%로 높아지며, 최저 17°C, 최고 26°C의 기온을 기록할 예정이다.\n\n서울의 최대풍속은 16km/h로 예상되며, 다른 주요 지역의 경",
+    "url": "internal://weather_한국_today20260930",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_한국_today20260930",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-30 05:23",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20260930.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-30T05:23:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-30 05:23",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 294723,
+    "title_en": "[국내유가] 휘발유 리터당 1858원…정유사 공급가 논쟁 속 소폭 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1858원…정유사 공급가 논쟁 속 소폭 하락",
+    "summary_ko": "한국석유공사 오피넷이 30일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1858원으로 집계됐다. 이는 전일 대비 0.04원 내린 수치다.\n\n이날 오피넷에 따르면 경유는 리터당 1843.36원으로 전일보다 0.50원 하락했고, LPG 부탄은 리터당 1098.30원으로 전일 대비 0.11원 내렸다. 모든 주요 유종이 전일 대비 하락세를 기록했다.\n\n이번 유가 하락은 국제유가 흐름과 함께 정유사 공급가격 조정 문제를 둘러싼 논쟁이 이어지는 가운데 나타났다. 주유소협회 측은 기름값 급등의 1차 원인이 정유사에 있다고 ",
+    "url": "internal://opinet_price_2026-09-30",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-09-30 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_09_30_pid4557.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-30T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-30 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-09-30",
+      "prices": {
+        "B027": {
+          "diff": -0.04,
+          "name": "휘발유",
+          "price": 1858.14
+        },
+        "B034": {
+          "diff": 0.71,
+          "name": "고급휘발유",
+          "price": 2338.38
+        },
+        "C004": {
+          "diff": -0.07,
+          "name": "실내등유",
+          "price": 1573.47
+        },
+        "D047": {
+          "diff": -0.5,
+          "name": "경유",
+          "price": 1843.36
+        },
+        "K015": {
+          "diff": -0.11,
+          "name": "LPG(부탄)",
+          "price": 1098.3
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 294714,
+    "title_en": "지구 미세 진동 일으키는 달과 태양의 인력…'조석 공명' 현상 규명",
+    "title_ko": "지구에 가해지는 달과 태양의 중력…느린 지진 유발 원리 규명",
+    "summary_ko": "지구에 가해지는 달과 태양의 중력 당김이 완만한 지진인 느린 지진을 유발하는 원리가 컴퓨터 모델링을 통해 밝혀졌다. 지구의 단층선은 태양과 달의 인력으로 인해 미세한 응력 변화를 겪으며, 이 현상은 에너지를 서서히 방출하는 완만한 지진으로 이어진다. 파리 PSL 대학교(PSL University)의 이슈오 저우(Yishuo Zhou)가 이끄는 연구진은 천체들이 정확히 어떤 방식으로 이를 유발하는지 규명하기 위해 가상 단층 모델을 구축했다고 저널 오브 지오피지컬 리서치: 솔리드 어스(Journal of Geophysical Resea",
+    "url": "internal://cluster_20260930_c7fc0d84",
+    "source": "NewsFinal",
+    "category": "IT·과학",
+    "subcategory": "cluster_20260930_c7fc0d84",
+    "region": "global",
+    "country": "프랑스",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-30 05:10",
+    "countries": [
+      "프랑스"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_slow_earthquakes.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-30T04:42:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-30 04:42",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-09-30 05:10",
+        "note": "내용 업데이트"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "src_ids": [
+        136528
+      ]
+    },
+    "image_credit": "사진: SlowEQ (CC BY-SA 4.0, Wikimedia Commons)",
+    "continuation_of_id": null,
+    "summary_3lines_en": "",
+    "investment_idea_en": "",
+    "noindex": true
+  },
+  {
+    "id": 294717,
+    "title_en": "Arirang",
+    "title_ko": "[오늘의 책] 일제강점기 민중의 저항과 수난사를 진혼하다, 조정래 대하소설 『아리랑』",
+    "summary_ko": "조정래의 대하소설 『아리랑』은 1990년대 여러 매체 조사에서 대학생과 각 분야 전문가들이 선정한 좋은 책과 대학 도서관 대출 상위권에 오르며 뜨거운 사회적 반향을 일으킨 작품이다. 구한말부터 일제강점기를 거쳐 광복에 이르기까지 우리 민족이 겪은 수난과 치열한 저항을 사실적으로 담아내어 오늘날까지 한국 대하소설의 대표작으로 꼽힌다. 일제의 수탈과 그에 맞선 민중의 생명력을 생생하게 기록하여 민족적 자긍심을 일깨우는 고전으로 평가받고 있다.\n\n1943년 전라남도 순천의 사찰 선암사에서 태어난 조정래 작가는 승려이자 시인인 아버지의 영",
+    "url": "internal://literature_Q12605186",
+    "source": "NewsFinal",
+    "category": "책",
+    "subcategory": "오늘의책",
+    "region": "asia",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-09-30 05:04",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/literature_q12605186.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-30T05:04:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-30 05:04",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "enwiki": null,
+      "kowiki": "아리랑 (소설)",
+      "source": "curated",
+      "wikidata": "Q12605186"
+    },
+    "image_credit": "이미지 출처: Wikimedia Commons · Ccmontgom · CC BY-SA 3.0",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
+    "id": 294715,
+    "title_en": "[데일리 다이제스트] 글로벌 통화정책 긴축 우려 속 중동·아프리카 지정학적 긴장 고조",
+    "title_ko": "[데일리 다이제스트] 글로벌 통화정책 긴축 우려 속 중동·아프리카 지정학적 긴장 고조",
+    "summary_ko": "[미 연준의 금리 인하 속도 조절론 대두에 따른 글로벌 금융시장 약세]\n- 28일(현지시간) 뉴욕증시에서 나스닥종합지수는 전일 대비 0.92% 하락한 26820.38에 거래를 마쳤으며, S&P500 지수와 다우존스 지수도 각각 0.77%, 0.67% 동반 하락했다. (29일 발행)\n- 29일 비트코인 가격은 미국 연방준비제도의 금리 인하 속도가 예상보다 완만할 것이라는 거시경제 전망 확산으로 전일 대비 1.71% 하락한 8만3228.08달러를 기록했다. (29일 발행)\n- 알파벳(구글) 주가는 미국 법무부의 검색 엔진 시장 반독점 ",
+    "url": "internal://digest_20260930",
+    "source": "NewsFinal",
+    "category": "다이제스트",
+    "subcategory": "digest_20260930_crypto",
+    "region": "global",
+    "country": "",
+    "country_flag": "",
+    "score": 41,
+    "created_at": "2026-09-30 05:01",
+    "countries": null,
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/digest_20260930.jpg",
+    "view_count": 0,
+    "first_published_at": null,
+    "update_log": [],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 294716,
+    "title_en": "The Coast of Labrador",
+    "title_ko": "[오늘의 그림] 윌리엄 브래드퍼드의 래브라도 해안, 북극의 얼어붙은 풍경을 담다",
+    "summary_ko": "미국의 낭만주의 화가이자 사진가, 탐험가였던 윌리엄 브래드퍼드(William Bradford)가 1866년에 제작한 래브라도 해안(The Coast of Labrador)을 소개한다. 브래드퍼드는 1823년 미국 매사추세츠주 페어헤븐에서 태어났다. 초기에는 뉴베드포드 항구의 수많은 배를 그리는 작업에 집중했으며, 1858년에는 앨버트 비어슈타트(Albert Bierstadt)가 개최한 역사적인 뉴베드포드 미술전에 뉴베드포드 항구의 일몰을 출품했다.\n\n브래드퍼드는 경력의 대부분을 북극의 풍경을 그리는 데 바쳤다. 그는 1861년부터 ",
+    "url": "internal://art_weekly_2026-09-30",
+    "source": "NewsFinal",
+    "category": "미술",
+    "subcategory": "오늘의그림",
+    "region": "europe",
+    "country": "",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-30 05:01",
+    "countries": [
+      ""
+    ],
+    "is_published": true,
+    "image_url": "https://www.artic.edu/iiif/2/4c5abec2-d94f-9afa-b689-de4dc93791f2/full/1686,/0/default.jpg",
+    "view_count": 1,
+    "first_published_at": "2026-09-30T05:01:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-30 05:01",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-09-30 05:23",
+        "note": "내용 업데이트"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "이미지 출처: The Art Institute of Chicago (CC0 퍼블릭 도메인)",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
+    "id": 294663,
+    "title_en": "오세아니아, 수도별 큰 기온차 속 뉴질랜드 비",
+    "title_ko": "오세아니아, 수도별 큰 기온차 속 뉴질랜드 비",
+    "summary_ko": "30일(현지시간) 오세아니아 주요국 수도의 기온은 최저 6°C에서 최고 22°C의 분포를 나타냈다. 지역별로는 호주 캔버라가 최고 22°C, 최저 6°C를 기록하며 가장 더운 곳으로 집계된 반면, 뉴질랜드 웰링턴은 최고 15°C, 최저 10°C를 기록해 가장 선선한 곳으로 나타났다. 호주 캔버라는 뉴질랜드 웰링턴보다 최고기온이 7°C 더 높았다.\n\n오세아니아 주요국 중 뉴질랜드에서는 비 소식이 이어졌다. 뉴질랜드 웰링턴은 이슬비가 내리는 날씨를 보였으며, 강수확률은 84%에 강수량은 1.0mm를 기록했다. 반면 호주 캔버라는 흐린 ",
+    "url": "internal://weather_group_오세아니아_today20260930",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_오세아니아_today20260930",
+    "region": "oceania",
+    "country": "오세아니아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-30 04:22",
+    "countries": [
+      "호주",
+      "뉴질랜드"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_australia_20260930.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-30T04:22:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-30 04:22",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 294595,
+    "title_en": "사헬 국가들, 유엔 총회서 서방 개입 규탄 및 안보리 개혁 촉구",
+    "title_ko": "사헬 국가들, 유엔 총회서 서방 개입 규탄 및 안보리 개혁 촉구",
+    "summary_ko": "부르키나파소를 비롯한 말리와 니제르 등 사헬 국가들은 지난 28일 미국 뉴욕에서 열린 제81차 유엔 총회에 참석해 서방 진영의 이중잣대와 테러 집단 지원 중단을 강력히 촉구했다. 사헬 연합은 테러리즘이 단순한 고립된 무장단체의 소산이 아니라 외세의 구조적 지원 속에서 이루어지고 있다고 지적하며, 국제사회의 편파적 인권 공세를 거부하고 주권 수호 의지를 분명히 밝혔다.\n\n이에 앞서 사헬 3개국 외무장관들은 총회 기간 중 미국 뉴욕에서 현지 교민들을 만나 테러 격퇴를 위한 연합군의 성과를 공유하고 자립적 경제 건설 노력을 강조했다. 이",
+    "url": "internal://trend_사헬 쿠데타_2026093002",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "trend_사헬 쿠데타",
+    "region": "africa",
+    "country": "부르키나파소",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-30 02:55",
+    "countries": [
+      "부르키나파소",
+      "말리",
+      "니제르"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_sahel_coup.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-30T02:55:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-30 02:55",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "사진: Lukt64 (CC BY-SA 4.0, Wikimedia Commons)",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 294534,
+    "title_en": "[이슈 파이널] 평화유지군 철수 앞둔 소말리아, 안보 공백 메울 자구책 마련 고심",
+    "title_ko": "[이슈 파이널] 평화유지군 철수 앞둔 소말리아, 안보 공백 메울 자구책 마련 고심",
+    "summary_ko": "소말리아 국가정보안보국(NISA)이 국제 사회 우방들과 함께 지난 25일(현지시간) 중부 샤벨레 지역의 부르 사루르 마을에서 기습 작전을 감행해 알샤바브 조직원 12명을 사살했다. 이번 작전은 알샤바브가 은거지로 활용하던 거점을 파괴하고 군사 장비를 무력화하기 위해 치밀하게 기획되었다. 소말리아 정부가 이처럼 군사적 고삐를 죄는 배경에는 아프리카연합(AU) 평화유지군 철수를 앞두고 고조되는 안보 공백 우려가 자리 잡고 있다.\n\n실제로 소말리아는 다국적 평화유지군이 물러난 이후 심각한 안보 위기에 직면할 가능성이 크다. 국제위기그룹(",
+    "url": "internal://explainer_293276",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "이슈파이널",
+    "region": "africa",
+    "country": "소말리아",
+    "country_flag": null,
+    "score": 1,
+    "created_at": "2026-09-30 00:16",
+    "countries": [
+      "소말리아",
+      "우간다",
+      "케냐",
+      "에티오피아",
+      "튀르키예",
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_al_shabaab_somalia.jpg",
+    "view_count": 1,
+    "first_published_at": "2026-09-30T00:16:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-30 00:16",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "background": "[관련 기사 — 뉴스파이널 기발행, 그 이후 상황이 바뀌었을 수 있음]\n- (2026-09-26 발행) 소말리아 정보기관, 알샤바브 근거지 타격... 아프리카연합군 철수 앞두고 안보 공백 우려 고조\n소말리아 국가정보안보국(NISA)은 지난 25일(현지시간) 국제 파트너들의 지원 속에 중부 샤벨레데헤주의 부르사루르 마을에서 알샤바브를 겨냥한 표적 작전을 단행했다.\n\n이번 작전으로 알샤바브 조직원 12명이 사망했으며, 무장 세력이 은거지로 사용하던 시설과 군사 장비가 파괴됐다. 정보당국은 도주한 잔류 세 력의 뒤를 쫓는 한편, 해당 지역에서 무장 세력의 이동을 차단하기 위한 추가 소탕 작전을 이어가고 있다.\n\n이런 가운데 국제위기그룹(ICG)은 아프리카연합(AU) 평화유지군의 철수와 유엔 소말리아지원사무소(UNSOS)의 물류 지원 축소가 맞물리면서 소말리아가 심각한 안보 도전에 직면했다고 경고했다.\n\n하부 샤벨레주의 코리오레이와 히르샤벨레주의 잘라라그시 등은 외국 군 주둔이 종료될 경우 반군에 넘어갈 위험이 큰 지역으로 지목됐다. 특히 알샤바브가 주요 교통로를 중심으로 세력을 결집하고 있어, 국지적인 영토 상실이 무장 세력에 새로운 자금원과 기동력을 제공할 수 있다는 분석이다.\n\n미국은 이달 초 UNSOS에 대한 지원을 12개월 연장해 철수 시점을 2027년 1월로 유예했다. 이에 따라 아프리카연합 지원안정화미션(AUSSOM)은 당장의 급등을 피했으나, 유엔의 식량·연료·수송 등 물류 지원이 끊기면 현재의 49개 거점 유지가 어려워질 수 있다는 지적이다.\n\n소말리아 정부는 약 1만4000명의 병력을 확보하고 있으나, 외국 군대에 비\n\n- (2026-09-29 발행) 예멘 후티 반군과 소말리아 알샤바브의 군사 밀착, 홍해 안보에 심각한 위협 부상\n29일(현지시간) 파이낸셜타임스는 예멘의 후티 반군과 소말리아의 알샤바브가 무기 밀수와 기술 지원을 매개로 밀착하며 홍해와 아덴만의 안보를 위협하고 있다고 보도했다. 미국 아프리카사령부 대변인은 이들의 협력이 지역 안보를 위협하는 고조 단계의 위험이라고 경고했다. 유엔 예멘 전문가 패널에 따르면 후티 반군은 알샤바브에 무기를 판매하고 드론과 급조폭발물 사용법을 비롯한 전술 훈련을 제공했다.\n\n소말리아 전문가 맷 브라이덴은 알샤바브를 비롯한 소말리아 무장세력 소속 대원 최대 1500명이 예멘에서 후티 반군의 훈련을 받았다고 밝혔다.\n\n이와 관련해 유엔 보고서는 후티 반군 연계 밀수 경로를 통해 폭발물과 드론이 소말리아로 유입되었으며 400명에 가까운 소말리아인이 예멘 내 후티 통제 지역으로 이동해 군사 훈련을 받았다고 기록했다. 알샤바브는 이란산 지대공미사일 도입을 시도했으며 후티 특사들은 소말리아 남부의 알샤바브 근거지인 칠립을 빈번하게 방문해 선박 감시용 레이더 설치 등을 논의했다.\n\n이러한 무장세력 간 연대가 강화되는 동안 소말리아 내에서는 정부군과 반군 간의 교전이 이어졌다. 28일 사우스웨스트주 정부는 수도 바이도바에서 알샤바브의 차량폭탄 및 드론 공격을 격퇴하는 과정에서 외국인 전투원을 포함한 알샤바브 대원 70명 이상을 사살했다고 발표했다. 사우스웨스트주 당국은 이번 공격을 주도한 알샤바브 지휘관들의 명단을 공개하며 치안이\n\n- (2026-09-02 발행) 소말리아 정보국, 공습 및 군인 학대 수사 속 알샤바브 동향 촉각\n1일(현지시간) 소말리아 국가정보보안국은 로어샤벨레 지역에서 알샤바브 차량을 타격하는 공습을 감행했다고 밝혔다. 이번 공격으로 불특정 다수의 무장세력이 사망하거나 부상을 입었으나 구체적인 사상자 수는 공개되지 않았다.\n\n같은 날 소말리아 군사령부는 소말리아 국군(SNA) 대원들이 알샤바브 작전 중 구금된 남성을 학대하고 군인을 질식시키는 모습이 담긴 영상이 온라인에 유포됨에 따라 예비 조사에 착수했다고 성명을 통해 발표했다. 군 당국은 해당 영상이 소말리아 행동강령과 무력분쟁법을 명백히 위반한다고 밝혔다.\n\n이와 함께 압디아지즈 하산 모하메드 라프타가린 전 남서부 주 대통령은 28일 바이도아에서 주정부가 알샤바브와 연계되어 있다는 혐의를 강력히 부인했다.\n\n한편 이스라엘 매체 왈라 뉴스는 1일 이스라엘을 위협하는 테러 동맹의 일환으로 예멘 후티 반군과 알샤바브가 연합세력을 이루고 있다고 보도했다. 이에 앞서 아프리카 리포트는 31일 알샤바브가 후티 반군의 드론을 원하고 있으며, 이는 홍해의 해상 요충지들에 부담을 가중시키고 있다고 전했다.\n\n[외부 배경 지식 — 모델 지식·검색 기반, 검증 필요]\n소말리아 국가정보보안국(NISA)은 중부 샤벨레주에서 이슬람 무장단체 알샤바브 소탕 작전을 전개했다. 알샤바브는 2000년대 중반부터 소말리아 정부 전복을 목표로 테러와 게릴라전을 지속해온 알카에다 연계 조직이다. 중부 샤벨레는 수도 모가디슈와 인접한 전략적 요충지로 알샤바브의 주요 거점이자 세수원이 되어왔다. 소말리아 정부는 아프리카연합 평화유지군(ATMIS) 지원과 미국 등의 대테러 협력 하에 알샤바브 격퇴 작전을 지속 중이다.",
+      "explainer_of": 293276
+    },
+    "image_credit": "이미지 출처: Wikimedia Commons",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
+    "id": 294493,
+    "title_en": "[뉴욕증시 개장] 3대 지수 혼조세 출발…연준 통화정책 경계감 지속",
+    "title_ko": "[뉴욕증시 개장] 3대 지수 혼조세 출발…연준 통화정책 경계감 지속",
+    "summary_ko": "◆ 뉴욕증시\n\n29일(현지시간) 뉴욕증시가 3대 지수 혼조세로 거래를 시작했다. 09시 46분 기준 S&P500 지수는 7683.58로 전일 대비 보합세를 나타냈다. 나스닥 종합지수는 26813.43으로 0.03% 하락했고, 다우존스 산업평균지수는 51435.90으로 0.09% 내렸다.\n\n시장 참가자들은 연방준비제도(Fed)의 향후 금리 경로를 가늠하기 위해 경제 지표 발표를 기다리고 있다. 최근 발표된 고용 및 물가 데이터가 시장의 예상치를 상회하면서 조기 금리 인하에 대한 기대감이 다소 후퇴했다.\n\n주요 기술주를 중심으로 차익 ",
+    "url": "internal://ny_market_open_2026-09-29",
+    "source": "NewsFinal",
+    "category": "금융",
+    "subcategory": "뉴욕증시개장",
+    "region": "global",
+    "country": "미국",
+    "country_flag": "🇺🇸",
+    "score": 1,
+    "created_at": "2026-09-29 22:47",
+    "countries": [
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/00/Bowling_Green_td_%282018-12-13%29_06_-_26_Broadway%2C_Charging_Bull.jpg/960px-Bowling_Green_td_%282018-12-13%29_06_-_26_Broadway%2C_Charging_Bull.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "view_count": 0,
+    "first_published_at": "2026-09-29T22:47:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-29 22:47",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "사진: Tdorante10 (CC BY-SA 4.0, Wikimedia Commons)",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
+    "id": 294449,
+    "title_en": "애스턴 마틴 F1, 알론소·스트롤 2027년 시즌까지 동행… 최경험 듀오로 반등 노린다",
+    "title_ko": "애스턴 마틴 F1, 알론소·스트롤 2027년 시즌까지 동행… 최경험 듀오로 반등 노린다",
+    "summary_ko": "포뮬러 원(F1)의 애스턴 마틴 팀이 페르난도 알론소와 랜스 스트롤의 계약을 연장하며 다가오는 2027년 시즌까지 드라이버 라인업을 유지한다고 29일(현지시간) 밝혔다. 이번 계약으로 알론소는 2027년에 통산 24번째 F1 월드 챔피언십 시즌을 소화하게 된다.\n\n애스턴 마틴 팀은 성명을 통해 F1에서 가장 경험이 풍부한 이 두 드라이버가 2026년 시즌의 작업과 그 이후의 발전을 이어가는 데 있어 값진 지식과 기술적 통찰력을 제공할 것이라고 강조했다. 또한 두 선수의 잔류는 팀에 대한 강한 동기와 신뢰를 보여주는 대목이라고 평가했",
+    "url": "internal://cluster_20260929_a055be1b",
+    "source": "NewsFinal",
+    "category": "스포츠",
+    "subcategory": "cluster_20260929_a055be1b",
+    "region": "global",
+    "country": "영국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-29 22:07",
+    "countries": [
+      "영국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_aston_martin_f1.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-29T22:07:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-29 22:07",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "src_ids": [
+        128929,
+        129082
+      ],
+      "kr_coverage_30d": 1
+    },
+    "image_credit": "사진: Aos.1905 (CC BY-SA 4.0, Wikimedia Commons)",
+    "continuation_of_id": null,
+    "summary_3lines_en": "",
+    "investment_idea_en": "",
+    "noindex": false
+  },
+  {
+    "id": 294447,
+    "title_en": "잠비아-UAE, 2조원대 포괄적 동반자 협약 체결… 아부다비서 경제 외교 강화",
+    "title_ko": "잠비아-UAE, 2조원대 포괄적 동반자 협약 체결… 아부다비서 경제 외교 강화",
+    "summary_ko": "하카인데 히치레마(Hakainde Hichilema) 잠비아 대통령이 아랍에미리트(UAE)를 방문해 21억 4000만 달러 규모의 투자를 이끌어냈다. 잠비아와 아랍에미리트는 29일(현지시간) 아부다비에서 열린 비즈니스 포럼을 계기로 다양한 경제 부문에 걸쳐 이 같은 규모의 포괄적 동반자 협약과 양해각서를 체결했다.\n\n이번 방문은 히치레마 대통령이 재선 성공 이후 가진 첫 해외 일정이다.\n\n히치레마 대통령은 포럼 연설을 통해 잠비아 경제 규모를 두 배로 키우는 성장 아젠다를 추진 중이라고 밝혔다. 특히 천연자원을 활용해 경제를 발전시",
+    "url": "internal://cluster_20260929_6ba8b98f",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "cluster_20260929_6ba8b98f",
+    "region": "africa",
+    "country": "잠비아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-29 22:06",
+    "countries": [
+      "잠비아",
+      "아랍에미리트"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_hakainde_hichilema.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-29T22:06:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-29 22:06",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "src_ids": [
+        129043,
+        129018
+      ],
+      "kr_coverage_30d": 2
+    },
+    "image_credit": "이미지 출처: Wikimedia Commons",
+    "continuation_of_id": null,
+    "summary_3lines_en": "",
+    "investment_idea_en": "",
+    "noindex": true
+  },
+  {
+    "id": 294446,
+    "title_en": "영국 노동당 정부, 연금 '트리플 락' 폐지 검토에 노조 반발",
+    "title_ko": "영국 노동당 정부, 연금 '트리플 락' 폐지 검토에 노조 반발",
+    "summary_ko": "앤디 번햄 영국 총리가 29일(현지시간) 연금 지급액을 매년 자동으로 인상해주는 '트리플 락(Triple Lock)' 제도의 폐지 가능성을 시사했다. 번햄 총리는 이날 리버풀에서 열린 노동당 전당대회 연설을 앞두고, 사회복지 시스템 구축을 위한 재원 마련 차원에서 기존 연금 제도를 전면 재검토하겠다는 입장을 밝혔다.\n\n영국 정부는 이번 개편을 통해 향후 16년간 이어진 연금 보장 정책에 변화를 주려 하고 있다. 번햄 총리는 이를 위해 유권자들과 솔직한 대화를 나누겠다고 언급했으나, 노동조합을 비롯한 각계에서는 즉각적인 반발이 터져 ",
+    "url": "internal://realtrend_Triple_Lock_2026092921",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "realtrend_Triple_Lock",
+    "region": "europe",
+    "country": "영국",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-29 21:58",
+    "countries": [
+      "영국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_triple_lock.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-29T21:58:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-29 21:58",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "tags": [
+        "business",
+        "money",
+        "uk politics",
+        "άντι μπέρναμ",
+        "αλλαγές",
+        "βρετανία",
+        "διεθνη",
+        "ειδησεις",
+        "ροη ειδησεων",
+        "συντάξεις"
+      ]
+    },
+    "image_credit": "사진: JockeyColours (CC BY-SA 4.0, Wikimedia Commons)",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 294385,
+    "title_en": "이스라엘, 라말라 주재 네덜란드 외교관 외교적 지위 박탈…양국 외교 갈등 고조",
+    "title_ko": "이스라엘, 라말라 주재 네덜란드 외교관 외교적 지위 박탈…양국 외교 갈등 고조",
+    "summary_ko": "이스라엘 정부가 27일(현지시간) 팔레스타인 자치정부 소재지인 라말라에서 활동하는 네덜란드 외교관들의 외교적 지위를 공식적으로 박탈했다. 이번 조치는 이스라엘 당국이 네덜란드 외교 사절단의 활동 범위를 제한하고, 그동안 인정해 온 외교적 특권을 무효화하겠다는 의지를 드러낸 것으로 풀이된다.\n\n네덜란드 정부는 이스라엘의 결정에 즉각 반발하며 대응에 나섰다. 네덜란드 외교부는 자국 주재 이스라엘 대사를 초치해 이번 조치가 국제 외교 관례에 어긋나는 부당한 처사임을 강조하고 강력한 유감을 표명했다. 네덜란드 측은 이스라엘의 이번 결정이 ",
+    "url": "internal://realtrend_Dutch_Diplomats_Ramallah_2026092920",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "realtrend_Dutch_Diplomats_Rama",
+    "region": "middle_east",
+    "country": "이스라엘",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-29 20:26",
+    "countries": [
+      "이스라엘",
+      "네덜란드",
+      "팔레스타인"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_2181980.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-29T20:26:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-29 20:26",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 294347,
+    "title_en": "호르무즈 해협 긴장 고조로 글로벌 에너지 및 공급망 불안정 심화",
+    "title_ko": "호르무즈 해협 긴장 고조로 글로벌 에너지 및 공급망 불안정 심화",
+    "summary_ko": "미국과 아랍에미리트, 카타르 등 주요 국가와 기관들이 호르무즈 해협을 둘러싼 군사적 긴장 고조로 원유 및 액화천연가스 공급망 불안정이 심화하자 비상 대응 조치에 돌입했다. 아랍에미리트 국영 석유 회사인 아부다비국영석유회사(Adnoc)는 푸자이라 항구를 통해 해협을 우회하는 송유관 가동률을 최대치로 끌어올리는 방안을 검토 중이다.\n\n카타르에너지(QatarEnergy) 역시 액화천연가스 운반선의 해협 통항 지연에 대비해 아시아와 유럽 고객사들을 상대로 물류 일정을 재조정하기 시작했다.\n\n사우디아라비아 국영 석유회사 아람코(Aramco)",
+    "url": "internal://extrend_strait_of_hormuz_2026092918",
+    "source": "NewsFinal",
+    "category": "자원·에너지",
+    "subcategory": "extrend_strait_of_hormuz",
+    "region": "middle_east",
+    "country": "이란",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-09-29 18:37",
+    "countries": [
+      "이란",
+      "미국",
+      "사우디아라비아",
+      "아랍에미리트",
+      "카타르"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_strait_of_hormuz.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-29T18:37:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-29 18:37",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "이미지 출처: Wikimedia Commons",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 294339,
+    "title_en": "오타와, 흐린 날씨 속 완연한 가을 기온",
+    "title_ko": "오타와, 흐린 날씨 속 완연한 가을 기온",
+    "summary_ko": "29일(현지시간) 북미 주요국 수도 지역은 최저기온 12°C에서 최고기온 19°C 사이의 기온 분포를 보였다. 이 날 북미 주요국 수도 가운데 캐나다의 오타와가 최고기온 19°C, 최저기온 12°C로 가장 더운 곳이자 가장 선선한 곳으로 기록됐다. 오타와는 하루 동안 전체적으로 흐린 날씨를 보였으며, 강수확률은 1%, 강수량은 0.0mm로 집계되어 비는 내리지 않았다.\n\n오타와 지역의 자외선지수는 4.6을 나타냈다. 한편 오타와는 내일 최고기온이 20°C까지 오를 것으로 예상되어 오늘보다 기온이 더 높아질 전망이다. 다음은 국가별·",
+    "url": "internal://weather_group_북미_today20260929",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_북미_today20260929",
+    "region": "north_america",
+    "country": "북미",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-29 18:11",
+    "countries": [
+      "미국",
+      "캐나다"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_united_states_20260929.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-29T18:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-29 18:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 294328,
     "title_en": "중남미, 브라질리아 34도 불볕더위…곳곳 뇌우·이슬비",
     "title_ko": "중남미, 브라질리아 34도 불볕더위…곳곳 뇌우·이슬비",
@@ -86,7 +761,7 @@
     "id": 294288,
     "title_en": "인공지능 단백질 데이터베이스 확장과 바이러스 생태학의 과제",
     "title_ko": "인공지능 단백질 데이터베이스 확장과 바이러스 생태학의 과제",
-    "summary_ko": "유럽 단백질 구조 데이터베이스가 인류를 위협하는 다양한 바이러스 단백질을 대규모로 품으며 전 세계 감염병 대응 체계에 변화가 일어났다. 유럽레퍼런스 연구 기관들에 속한 연구진은 엠폭스와 kızamık(크자믝·국문 표기: kızamık는 튀르키예어로 홍역을 의미하므로 문맥상 홍역) 등을 포함한 주요 바이러스들의 단백질 구조를 대거 등재했다. 이번 조치는 RNA 바이러스들이 복제 과정에서 형성하는 복잡한 구조를 인공지능이 학습하도록 설계되어 범유행 감염병에 신속히 대처하기 위한 목적에서 진행됐다.\n\n과거 인공지능 모델들은 단일 인간 및",
+    "summary_ko": "유럽 단백질 구조 데이터베이스가 인류를 위협하는 다양한 바이러스 단백질을 대규모로 품으며 전 세계 감염병 대응 체계에 변화가 일어났다. 유럽레퍼런스 연구 기관들에 속한 연구진은 엠폭스와 홍역 등을 포함한 주요 바이러스들의 단백질 구조를 대거 등재했다. 이번 조치는 RNA 바이러스들이 복제 과정에서 형성하는 복잡한 구조를 인공지능이 학습하도록 설계되어 범유행 감염병에 신속히 대처하기 위한 목적에서 진행됐다.\n\n과거 인공지능 모델들은 단일 인간 및 세균 단백질 분석에 집중해 왔으나 이번 확장으로 23개 바이러스 가족에 속하는 수많은 단",
     "url": "internal://trend_mpox_2026092916",
     "source": "NewsFinal",
     "category": "사회",
@@ -103,12 +778,16 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_1554745.jpg",
-    "view_count": 0,
+    "view_count": 1,
     "first_published_at": "2026-09-29T16:51:00",
     "update_log": [
       {
         "timestamp": "2026-09-29 16:51",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-09-29 17:24",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -375,7 +1054,7 @@
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
-    "noindex": false
+    "noindex": true
   },
   {
     "id": 294158,
@@ -603,7 +1282,7 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_world_labs.jpg",
-    "view_count": 0,
+    "view_count": 1,
     "first_published_at": "2026-09-29T09:03:00",
     "update_log": [
       {
@@ -792,7 +1471,7 @@
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
-    "noindex": false
+    "noindex": true
   },
   {
     "id": 294026,
@@ -1359,661 +2038,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 293950,
-    "title_en": "[국내유가] 휘발유 리터당 1858원…전 유종 소폭 하락세",
-    "title_ko": "[국내유가] 휘발유 리터당 1858원…전 유종 소폭 하락세",
-    "summary_ko": "한국석유공사 오피넷이 29일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1858.10원으로 집계됐다. 이는 전일 대비 0.12원 하락한 수치다.\n\n경유와 LPG 가격도 동반 하락했다. 경유는 리터당 1843.15원으로 전일 대비 0.66원 내렸으며, LPG(부탄)는 리터당 1098.22원으로 전일 대비 0.06원 하락했다. 오피넷에 따르면 이번 가격은 전일 판매된 물량을 집계한 결과다.\n\n최근 국내 유가는 국제 유가 흐름과 정유사 공급가 조정 등의 영향을 받아 변동성을 보이고 있다. 정유사 공급 가격을 둘러싼 ",
-    "url": "internal://opinet_price_2026-09-29",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국내유가",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "🇰🇷",
-    "score": 1,
-    "created_at": "2026-09-29 05:12",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_09_29_pid10409792.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-29T05:12:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-29 05:12",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "date": "2026-09-29",
-      "prices": {
-        "B027": {
-          "diff": -0.12,
-          "name": "휘발유",
-          "price": 1858.1
-        },
-        "B034": {
-          "diff": 0.42,
-          "name": "고급휘발유",
-          "price": 2335.54
-        },
-        "C004": {
-          "diff": 0.07,
-          "name": "실내등유",
-          "price": 1573.55
-        },
-        "D047": {
-          "diff": -0.66,
-          "name": "경유",
-          "price": 1843.15
-        },
-        "K015": {
-          "diff": -0.06,
-          "name": "LPG(부탄)",
-          "price": 1098.22
-        }
-      }
-    },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 293951,
-    "title_en": "튀니지와 보츠와나, 외교 협력 강화 위한 양자 회담 추진",
-    "title_ko": "튀니지와 보츠와나, 외교 협력 강화 위한 양자 회담 추진",
-    "summary_ko": "튀니지와 보츠와나 정부는 26일(현지시간) 양국 간 외교 관계를 격상하고 경제 협력을 구체화하기 위한 고위급 실무 회담을 진행했다. 양측은 이번 회담에서 농업 기술 교류와 디지털 전환을 위한 정보통신기술(ICT) 협력 의제를 핵심 안건으로 다뤘다.\n\n튀니지 외교부는 보츠와나와의 협력이 아프리카 내 남남 협력의 일환임을 강조하며, 양국 기업 간의 교류를 촉진하기 위한 비자 간소화 및 투자 보호 협정 체결을 검토하기로 했다. 보츠와나 측 역시 자국이 추진 중인 경제 다각화 정책에 튀니지의 제조업 노하우를 접목하는 방안에 관심을 표명했다",
-    "url": "internal://extrend_tunisia_vs_botswana_2026092905",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "extrend_tunisia_vs_botswana",
-    "region": "africa",
-    "country": "튀니지",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-29 05:12",
-    "countries": [
-      "튀니지",
-      "보츠와나"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_tunisia_vs_botswana.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-29T05:12:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-29 05:12",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "사진: TUBS (CC BY-SA 3.0, Wikimedia Commons)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 293949,
-    "title_en": "짐바브웨와 DR 콩고, 아프리카 네이션스컵 예선 앞두고 외교적 긴장 고조",
-    "title_ko": "짐바브웨와 DR 콩고, 아프리카 네이션스컵 예선 앞두고 외교적 긴장 고조",
-    "summary_ko": "짐바브웨와 DR 콩고(콩고민주공화국)가 2025 아프리카 네이션스컵 예선전을 앞두고 선수단 비자 및 입국 절차를 둘러싼 외교적 갈등을 빚고 있다. 25일(현지시간) 짐바브웨 축구협회는 DR 콩고 측의 비자 발급 지연으로 인해 선수단 이동에 차질이 발생했다고 공식 발표했다.\n\n이번 사태는 양국 간 스포츠 외교가 경색되면서 지역적 긴장감으로 확산하는 양상이다. DR 콩고 당국은 짐바브웨 선수단에 대한 입국 승인 절차를 강화했으며, 이에 짐바브웨 정부는 자국 선수단에 대한 부당한 처우라며 강하게 반발했다.\n\n양국은 과거에도 스포츠 행사를",
-    "url": "internal://extrend_zimbabwe_vs_dr_congo_2026092905",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "extrend_zimbabwe_vs_dr_congo",
-    "region": "africa",
-    "country": "짐바브웨",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-29 05:11",
-    "countries": [
-      "짐바브웨",
-      "DR 콩고"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_1867992.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-29T05:11:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-29 05:11",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 293946,
-    "title_en": "Sunrise on the Reaping",
-    "title_ko": "[오늘의 책] 11월 영화 개봉 앞둔 수잔 콜린스의 『헝거 게임: 50번째 추첨의 날』",
-    "summary_ko": "2026년 11월 20일 동명 영화 개봉을 앞둔 수잔 콜린스(Suzanne Collins)의 소설 『헝거 게임: 50번째 추첨의 날』이 주목받고 있다. 이 작품은 2026년 7월 31일 국내에서도 정식 출간되어 독자들을 만나고 있다.\n\n이번 작품은 헝거 게임 3부작의 프리퀄로서, 첫 번째 소설의 사건이 일어나기 24년 전을 배경으로 한다. 이야기는 헤이미치 애버내시(Haymitch Abernathy)가 경쟁자로 참여했던 50번째 헝거 게임, 즉 제2차 쿼터 퀠(Second Quarter Quell)을 중심으로 전개된다.\n\n작가는 스",
-    "url": "internal://literature_Q126390804",
-    "source": "NewsFinal",
-    "category": "책",
-    "subcategory": "오늘의책",
-    "region": "global",
-    "country": "미국",
-    "country_flag": "🇺🇸",
-    "score": 1,
-    "created_at": "2026-09-29 05:07",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/literature_cover_q126390804.jpg",
-    "view_count": 1,
-    "first_published_at": "2026-09-29T05:07:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-29 05:07",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "enwiki": "Sunrise on the Reaping",
-      "kowiki": null,
-      "source": "recent",
-      "wikidata": "Q126390804"
-    },
-    "image_credit": "헝거 게임: 50번째 추첨의 날 표지",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
-  },
-  {
-    "id": 293945,
-    "title_en": "[데일리 다이제스트] 지정학적 분쟁 격화와 전 세계적 기상 이변의 확산",
-    "title_ko": "[데일리 다이제스트] 지정학적 분쟁 격화와 전 세계적 기상 이변의 확산",
-    "summary_ko": "[중동 및 아프리카 지역의 안보 불안과 보건 위기]\n- 27일(현지시간) 아랍에미리트 국가재난위기관리청(NCEMA)은 우간다의 에볼라 유행 종료에 따른 모니터링 기간이 성공적으로 마무리됨에 따라 우간다 국민에 대한 입국 규제를 해제했다. - 28일 수단 준군사조직 신속지원군(RSF)의 드론이 엘 제지라주 우마릴라 연료기지를 타격하여 대규모 화재가 발생했다. - 28일 콩고민주공화국 보건 당국은 에볼라 확진자가 8067명, 사망자가 3901명으로 집계됐다고 발표했으며, 25일에는 북동부 부니아 지역에서 엠폭스 확진 환자가 발생해 격리",
-    "url": "internal://digest_20260929",
-    "source": "NewsFinal",
-    "category": "다이제스트",
-    "subcategory": "digest_20260929",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 40,
-    "created_at": "2026-09-29 05:03",
-    "countries": null,
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/digest_20260929.jpg",
-    "view_count": 0,
-    "first_published_at": null,
-    "update_log": [],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 293944,
-    "title_en": "[오늘의 그림] 악셀리 갈렌칼레라의 안 아프리카 레스팅",
-    "title_ko": "[오늘의 그림] 악셀리 갈렌칼레라의 안 아프리카 레스팅",
-    "summary_ko": "주말 고전 명화 이야기에서 소개할 작품은 핀란드 국립 미술관(Finnish National Gallery) 소장 기록에 있는 악셀리 갈렌칼레라(Akseli Gallen-Kallela)의 안 아프리카 레스팅(An African Resting)이다. 이 작품은 위키미디어 커먼즈의 악셀리 갈렌칼레라 회화 분류에 포함되어 있다.\n\n작가를 살펴보면, 악셀리 갈렌칼레라는 20세기 전후 핀란드 낭만적 민족주의를 이끈 선도적인 핀란드 화가이다. 그는 뚜렷한 핀란드 국가 미술의 개척자로 평가받으며, 그의 작품 활동은 핀란드 국가 정체성의 매우 중요",
-    "url": "internal://art_weekly_2026-09-29",
-    "source": "NewsFinal",
-    "category": "미술",
-    "subcategory": "오늘의그림",
-    "region": "europe",
-    "country": "핀란드",
-    "country_flag": "🇫🇮",
-    "score": 1,
-    "created_at": "2026-09-29 05:03",
-    "countries": [
-      "핀란드"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/art_weekly_anafricanrestingaiii2173finnishnationalg.jpg",
-    "view_count": 1,
-    "first_published_at": "2026-09-29T05:03:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-29 05:03",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-09-29 08:24",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: Wikimedia Commons (퍼블릭 도메인)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
-  },
-  {
-    "id": 293939,
-    "title_en": "오세아니아, 쾌청한 날씨 속 캔버라 18도",
-    "title_ko": "오세아니아, 쾌청한 날씨 속 캔버라 18도",
-    "summary_ko": "29일(현지시간) 오세아니아 주요국 수도의 기온은 최저 3°C에서 최고 18°C의 분포를 보이고 있다. 호주 캔버라는 최고기온 18°C, 최저기온 3°C를 기록하며 오세아니아 주요국 수도 중 가장 더운 곳으로 나타났다. 캔버라의 날씨는 흐림을 보이고 있으며, 강수확률은 0%, 강수량은 0.0mm다.\n\n캔버라의 자외선지수는 7.1이며, 내일 최고기온은 오늘보다 4°C 높은 22°C에 이를 것으로 전망된다. 뉴질랜드 웰링턴은 최고기온 15°C, 최저기온 9°C로 캔버라보다 기온이 낮아 가장 선선한 곳으로 집계됐다. 웰링턴의 날씨는 맑음",
-    "url": "internal://weather_group_오세아니아_today20260929",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_오세아니아_today20260929",
-    "region": "oceania",
-    "country": "오세아니아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-29 04:23",
-    "countries": [
-      "호주",
-      "뉴질랜드"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_australia_20260929.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-29T04:23:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-29 04:23",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 293931,
-    "title_en": "엠폭스 바이러스의 동물 매개체와 생태계 추적 연구 가속화",
-    "title_ko": "엠폭스 바이러스의 동물 매개체와 생태계 추적 연구 가속화",
-    "summary_ko": "인간을 위협하는 엠폭스 바이러스는 다람쥐를 포함한 설치류 등 동물에서 비롯된 것으로 확인되면서 과거 '원숭이두창'에서 명칭이 변경되었다. 바이러스는 스스로 증식할 수 없어 동물이나 식물, 균류 등 세포 생물체의 숙주 세포를 필요로 하며 이 과정에서 인수공통전염병 형태로 인간에게 전파된다.\n\n과학계는 동물 숙주에서 인간으로의 전파 경로를 추적하는 것이 향후 확산을 막는 핵심이라고 강조했다. 말레이시아의 니파 바이러스 확산 당시 과일박쥐가 숙주로 밝혀지면서 과수원과 돼지우리를 분리하는 간단한 조치로 추가 감염을 막았던 선례가 대표적이다",
-    "url": "internal://trend_mpox_2026092903",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "trend_mpox",
-    "region": "africa",
-    "country": "콩고민주공화국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-29 03:24",
-    "countries": [
-      "콩고민주공화국",
-      "미국",
-      "영국",
-      "독일",
-      "말레이시아"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_6761846.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-29T03:24:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-29 03:24",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 293892,
-    "title_en": "[이슈 파이널] 미얀마 군부, 저항군 거점 정밀 타격과 초토화 작전 병행",
-    "title_ko": "[이슈 파이널] 미얀마 군부, 저항군 거점 정밀 타격과 초토화 작전 병행",
-    "summary_ko": "미얀마 군부가 국민통합정부(NUG) 산하 특별사단사령부와 저항군 거점을 겨냥한 공습을 강화하고 있다. 지난 24일(현지시간) 바고 지역과 몬주 경계 인근에서 발생한 공습으로 미얀마 공군에서 귀순한 네 윈 아웅을 포함한 6명이 사망하고 4명이 부상을 입었다. 군부는 이번 공격이 지역 주민과 저항군 내부 정보원의 제보를 바탕으로 한 정밀 타격이라고 주장했다.\n\n반면 국민통합정부 대변인 네 폰 랏은 이를 저항 세력의 분열을 노린 심리전이라고 반박하며, 군부의 주장이 선전 목적임을 강조했다.\n\n군부의 공세가 정밀 타격과 초토화 작전이라는 ",
-    "url": "internal://explainer_293158",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "이슈파이널",
-    "region": "southeast_asia",
-    "country": "미얀마",
-    "country_flag": null,
-    "score": 1,
-    "created_at": "2026-09-29 00:14",
-    "countries": [
-      "미얀마"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_myanmar_civil_war.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-29T00:14:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-29 00:14",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "background": "[관련 기사 — 뉴스파이널 기발행, 그 이후 상황이 바뀌었을 수 있음]\n- (2026-09-18 발행) 미얀마 군부, 마그웨 지역 마을에 소형 비행기 공습 감행해 어린이 포함 6명 사망\n미얀마 군정이 소수민족 거주지와 저항군 통제 지역을 향해 무차별 공세를 이어가는 가운데 말레이시아가 로힝야 난민 송환을 고리로 군정 지도자 초청을 추진하는 외교적 움직임이 겹치고 있다. 안와르 이브라힘(Anwar Ibrahim) 말레이시아 총리는 로힝야 난민을 본국으로 송환한다면 미얀마 군사정권과 친구가 되어 교역할 수 있다는 입장을 표명했다. 이 같은 외교 접촉 시도와 별개로 현지에서는 군정의 공습으로 인한 민간인 사상자가 급증하고 있다.\n\n지난 14일(현지시간) 마궤 지역 민돈 타운십의 즈운캬 마을에 군정 세력의 파라모터 폭격이 가감돼 17세 미만 어린이 4명을 포함해 주민 6명이 숨졌다. 현지 저항군 단체인 타이et 지구 인민방위군 제4대대에 따르면 당시 마을 사찰 앞 주택가에 폭탄 8발이 투하됐으며 70대 노인도 사망자에 포함됐다. 주민들은 숲으로 피신하느라 17일까지 시신을 매장하지 못했으며, 군정은 장례식 도중에도 인근 지역에 중포 사격을 가했다.\n\n타마르 개발연구소는 마궤 지역 12개 타운십에서 8월 한 달 동안 전투기, 드론, 파라모터를 동원한 공습이 약 200회 발생해 주택 800여 채가 파괴됐다고 집계했다. 유엔 미얀마 독립진상조사기구 역시 군정이 소형 항공기와 파라모터 사용을 늘리면서 민간인이 공격을 감지하고 대피하기 더욱 어려워졌다고 지적했다. 한편 친주 지역에서는 미얀마 군정 전쟁포로 수십 명이 저항군 구금 시\n\n- (2026-09-28 발행) 콩고민주공화국 동부, AFC/M23 반군 점령지 내 대학 폐쇄 및 민간인 학살 논란\n콩고민주공화국 동부 지역에서 반군 연합인 AFC/M23이 점령지 내 대학 80곳의 운영을 26일(현지시간)부로 금지했다. 반군은 총 113개 대학 중 8곳만을 운영 가능한 상태로 분류하고, 나머지 기관은 비효율성을 이유로 폐쇄 조치했다. 이번 결정은 콩고민주공화국 정부가 앞서 반군 측이 임명한 대학 관리 위원회 소속 교수와 행정직원 48명의 급여 지급을 중단하고 해임 절차를 밟은 것에 대한 보복성 조치로 풀이된다.\n\n반군은 점령지인 남키부주 발룽구 지역에서 민간인을 상대로 잔혹 행위를 일삼고 있다는 국제사회의 고발에 직면했다. 현지 시민사회는 21일부터 24일까지 이어진 반군의 고문과 살해 사건을 유엔 인권최고대표사무소(BCNUDH)와 국제적십자위원회(ICRC)에 보고했다. 특히 찰스 카기기 대령이 이끄는 부대가 민간인을 상대로 금품을 갈취하고 즉결 처형을 자행하고 있다는 증언이 잇따르고 있다.\n\n이런 가운데 르완다 정부는 콩고군(FARDC)이 실뱅 에켄게 소장을 대변인직에 복귀시 킨 것을 두고 강한 우려를 표명했다. 에켄게 소장은 지난해 12월 27일 국영 방송에서 투치족 여성을 겨냥한 혐오 발언을 해 해임된 바 있다.\n\n르완다 외무부는 27일 성명을 통해 이번 복귀가 콩고 정부 차원의 조직적인 인종 차별과 혐오 정치를 방증하는 것이라고 비판했다.\n\n한편 콩고군 내부에서는 25일 퀑고주에서 발생한 항공기 추락 사고로 군 사법부 고위\n\n- (2026-09-26 발행) 미얀마 군사정권, 징집령으로 13만여 명 강제 동원 속 바고·마그웨이 등지서 공세 지속\n미얀마 군사정권이 22일 미국 시사주간지 타임(Time)의 인터뷰 보도를 강하게 비난하며 양측 간 외교적 공방이 벌어졌다. 나이피다우 정보팀은 싱가포르 주재 편집자 찰리 캠벨이 독창적인 질의응답 형식을 무시하고 독자적인 해석과 외부 논평을 엮어 언론 윤리를 위반했다고 주장했다.\n\n앞서 타임은 민아웅흘라인 최고사령관과의 인터뷰에서 그가 아웅산수치 국가고문을 구금이 아닌 가택에서 편안하게 대우하고 있다고 주장하며 미국 측에 2021년 이후 부과된 경제 제재 해제를 촉구했다고 보도했다. 또한 그는 친환경 프로젝트나 중국과의 관계에서 완전히 의존하지는 않는다는 입장을 밝혔다.\n\n이런 가운데 미얀마 민주진영인 국민통합정부 (NUG)는 지난 26일 발표를 통해 2024년 2월 징집법 시행 이후 27차례에 걸쳐 총 13만5080명의 남성이 군대에 강제 징집되었다고 밝혔다. 군정은 병력 손실을 메우기 위해 강제 징집을 지속하고 있으나, 저항군과의 교전에서 지속적인 타격을 입고 있다.\n\n실제로 25일 미얀마 군정이 NUG 지역 지휘부를 공습해 저항군인 인민방위군(PDF) 대원 5명과 시민불복종운동(CDM)에 동참한 전직 공군 상사 등 6명이 사망했다. 같은 날 바고 지역 양곤-만달레이 고속도로 인근 마을에서도 군정의 공격으로 7명이 숨지고 주민 1000여 명이 피난길에 올랐다.\n\n군정은 저항군의 자금줄을 차단하기 위해 마 그웨 지역 전역에서 유정과 \n\n- (2026-09-18 발행) 미얀마 군부, 공중·포격 공세 강화 속 시트웨 기지화… 민간인 피해 확산\n말레이시아가 로힝야 난민 송환을 조건으로 미얀마 군부 지도자를 초청해 관계 개선을 모색하는 가운데 미얀마 전역에서 군부의 공세와 이에 맞서는 저항 세력의 충돌이 격화하고 있다.\n\n미얀마 군부는 라카인주 주도인 시트웨를 거점으로 삼아 아라칸군(AA) 통제 지역 내 민간인을 겨냥한 공격을 강화하고 있다. 현지 주민들에 따르면 군부는 시트웨를 기지로 활용해 공세를 펼치고 있으며, 이 과정에서 어선 두 척이 파괴됐다.\n\n이와 관련해 말레이시아의 안와르 이브라힘 총리는 군부가 로힝야 난민들을 다시 받아들일 경우 자국이 군부와 친구가 되고 교류할 수 있다고 밝혔다.\n\n앞서 16일(현지시간) 마그웨 지역 민돈 타운십의 중캬 마을에서는 군부의 파라모터 폭격으로 아동 4명을 포함해 6명이 사망하고 5명이 부상했다. 타예트 지구 인민방위군 제4대대 측은 당시 마을에 전투나 저항 세력의 주둔이 없었으며, 군부 당국은 피해 주민들의 장례식 중에도 인근에 중포를 발사했다고 전했다.\n\n이번 공격은 군부가 라카인 요마 산맥을 통해 라카인주로 진출하기 위해 민돈 타운십 일대에서 공세를 강화하는 과정에서 벌어졌다. 마그웨 지역의 인권 감시 단체인 타마르 개발 연구소는 군부가 지난달 12개 타운십에서 전투기와 드론, 파라모터 등을 동원해 약 200회의 공중 공격을 감행했다고 집계했다.\n\n이러한 가운데 친주에 있는 저항 세력 통제 구역에서는 군부 포로 수십 명이 탈옥\n\n[외부 배경 지식 — 모델 지식·검색 기반, 검증 필요]\n군부는 국민통합정부(NUG)와 인민방위군(PDF) 등 저항 세력 거점에 전투기와 헬기를 동원한 공습을 지속해왔다. 군부는 저항 세력 내부 정보원의 제보로 정밀 타격을 가했다고 주장하나, NUG는 심리전이라며 반박하고 있다. 유엔과 국제인권단체는 군부의 무차별 공격이 전쟁범죄에 해당할 수 있다고 경고해왔다.",
-      "explainer_of": 293158
-    },
-    "image_credit": "사진: Yuet Man Lee (CC BY-SA 4.0, Wikimedia Commons)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
-  },
-  {
-    "id": 293890,
-    "title_en": "사헬 국가 연합, 유엔과 관계 개선 모색하며 아프리카 네이션스컵 유치 의지 재확인",
-    "title_ko": "사헬 국가 연합, 유엔과 관계 개선 모색하며 아프리카 네이션스컵 유치 의지 재확인",
-    "summary_ko": "유엔 고위 관계자들이 부르키나파소, 말리, 니제르를 방문해 현지 안보 및 인도적 상황을 직접 점검할 예정이다. 이번 방문은 26일(현지시간) 미국 뉴욕에서 열린 제81차 유엔 총회 기간 중 아미나 모하메드 유엔 사무부총장과 카라모코 장 마리 트라오레 부르키나파소 외교장관의 회담을 통해 결정됐다. AES 측은 국제기구의 보고서와 현장의 실상 사이에 간극이 존재한다고 지적하며, 이번 현장 조사를 통해 실질적인 파트너십을 조정하겠다는 입장을 밝혔다.\n\n이브라힘 트라오레 부르키나파소 대통령 겸 AES 의장은 28일 3개국이 공동으로 203",
-    "url": "internal://trend_사헬 쿠데타_2026092823",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "trend_사헬 쿠데타",
-    "region": "africa",
-    "country": "말리",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-28 23:16",
-    "countries": [
-      "말리",
-      "부르키나파소",
-      "니제르",
-      "가나"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_sahel_coup.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-28T23:16:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-28 23:16",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "사진: Lukt64 (CC BY-SA 4.0, Wikimedia Commons)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 293887,
-    "title_en": "[뉴욕증시 개장] 3대 지수 일제히 하락 출발…인플레이션 경계감 확산",
-    "title_ko": "[뉴욕증시 개장] 3대 지수 일제히 하락 출발…인플레이션 경계감 확산",
-    "summary_ko": "◆ 뉴욕증시\n\n28일(현지시간) 뉴욕증시가 하락세로 출발했다. 09시 31분 기준 S&P500 지수는 전일 대비 0.46% 내린 7707.62를 기록했다. 나스닥 종합지수는 0.47% 하락한 26941.57에, 다우존스 산업평균지수는 0.69% 떨어진 51469.29에 각각 거래되고 있다.\n\n최근 발표된 경제 지표가 인플레이션 압력이 여전히 높다는 점을 시사하면서 투자 심리가 위축됐다. 연방준비제도의 금리 인하 경로가 예상보다 더딜 것이라는 우려가 시장 전반에 퍼졌다.\n\n주요 기술주를 중심으로 차익 실현 매물이 출회하며 지수 하락을",
-    "url": "internal://ny_market_open_2026-09-28",
-    "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "뉴욕증시개장",
-    "region": "global",
-    "country": "미국",
-    "country_flag": "🇺🇸",
-    "score": 1,
-    "created_at": "2026-09-28 22:33",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/ff/Federal_Hall_August_2017_01.jpg/960px-Federal_Hall_August_2017_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-    "view_count": 0,
-    "first_published_at": "2026-09-28T22:33:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-28 22:33",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "사진: Arild Vågen (CC BY-SA 4.0, Wikimedia Commons)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
-  },
-  {
-    "id": 293883,
-    "title_en": "나이지리아 수용시설·남수단 난민촌서 콜레라 확산 비상",
-    "title_ko": "나이지리아 수용시설·남수단 난민촌서 콜레라 확산 비상",
-    "summary_ko": "나이지리아와 남수단, 네팔 등 각국에서 콜레라 확산이 이어지며 방역 당국이 비상 대응에 나섰다. 나이지리아 교도소 교정 당국은 26일 쿠르마와 중경비 교도소에서 발생한 콜레라 확산세가 진압됐다고 밝혔다. 실베스터 은디디 은와쿠체 교정청장은\n\n질병 관리 부서와 협력해 추가 사망자를 막기 위한 방역 조치를 강화했다. 앞서 이번 집단 감염으로 교도소 내부와 감염병 병원에서 각각 환자가 숨지는 인명 피해가 발생했다. 국제인권단체 아네스티 인터내셔널은 해당 시설의 과밀 수용과 비위생적 환경을 지적하며 긴급 조치를 촉구했다.\n\n남수단 유니티주",
-    "url": "internal://trend_콜레라_2026092820",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "trend_콜레라",
-    "region": "africa",
-    "country": "나이지리아",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-28 20:55",
-    "countries": [
-      "나이지리아",
-      "남수단",
-      "네팔"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_4289185.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-28T20:55:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-28 20:55",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 293882,
-    "title_en": "콩고민주공화국 에볼라 확진 8000명 초과… 백신 임상시험 확대",
-    "title_ko": "콩고민주공화국 에볼라 확진 8000명 초과… 백신 임상시험 확대",
-    "summary_ko": "[업데이트]\n■ 9월 29일 12:21 — 캐나다 정부는 28일(현지시간) 콩고민주공화국, 남수단, 우간다발 입국자에 대한 여행 및 이민 제한 조치를 60일간 연장한다고 발표했다. 이번 조치로 해당 국가 방문 외국인의 입국은 금지되며 자국민은 21일간 의무 격리된다. 세계보건기구는 이번 유행의 치명률이 48.4%에 달하며 역사상 가장 빠르게 확산하고 있다고 경고했으며, 기존 북키부주와 이투리주 외에 하우우엘레 주와 초포 주에서도 감염 확산 및 재확산 조짐이 확인됐다.\n\n현지에서는 방역 활동을 향한 지역 사회의 불신이 폭력 사태로 이",
-    "url": "internal://trend_에볼라_2026092820",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "trend_에볼라",
-    "region": "africa",
-    "country": "콩고민주공화국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-28 20:55",
-    "countries": [
-      "콩고민주공화국",
-      "르완다",
-      "스위스",
-      "오스트리아",
-      "아일랜드"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_6165772.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-28T20:55:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-28 20:55",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-09-29 12:21",
-        "note": "콩고민주공화국 방역 불신으로 고위 관계자 사망했다."
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 293842,
-    "title_en": "바니제이 엔터테인먼트, 올쓰리미디어 합병 후 최대 규모로 밉콤 2026 참가",
-    "title_ko": "바니제이 엔터테인먼트, 올쓰리미디어 합병 후 최대 규모로 밉콤 2026 참가",
-    "summary_ko": "28일(현지시간) 프랑스 칸에서 개막하는 밉콤 2026에서 바니제이 엔터테인먼트는 합병한 올쓰리미디어를 처음으로 공동 편입해 전 세계 기업 중 최대 규모의 전시 부스를 선보인다. 팔레 데 페스티발 계단 앞의 메인 스탠드는 바니제이 하우스로 명명되었으며, 트레이터스, 서바이버, 피어 팩터, 더 서클 등 주요 포맷 프랜차이즈가 하나의 지붕 아래로 결합된 거대한 라인업이 공개된다.\n\n이번 행사에서 바니제이는 BBC 원의 법정 스릴러 신작 레퓨테이션과 영국 고위험 스릴러 마야를 비롯한 다양한 프리미엄 스크립트 타이틀과 차세대 포맷을 선보인",
-    "url": "internal://cluster_20260928_6a698e35",
-    "source": "NewsFinal",
-    "category": "문화·예술",
-    "subcategory": "cluster_20260928_6a698e35",
-    "region": "global",
-    "country": "프랑스",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-28 19:41",
-    "countries": [
-      "프랑스",
-      "영국",
-      "스웨덴",
-      "덴마크"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_banijay_entertainment.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-28T19:41:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-28 19:41",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "kr_coverage_30d": 0
-    },
-    "image_credit": "이미지 출처: Wikimedia Commons",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": true
-  },
-  {
-    "id": 293794,
-    "title_en": "북미, 흐린 날씨 속 완연한 가을 기온",
-    "title_ko": "북미, 흐린 날씨 속 완연한 가을 기온",
-    "summary_ko": "28일(현지시간) 북미 주요국 수도는 최저기온 13°C에서 최고기온 22°C 사이의 분포를 보이며 대체로 선선한 날씨를 기록했다. 미국 워싱턴DC는 최고기온 22°C, 최저기온 15°C로 흐린 날씨를 보이며 북미 수도 중 가장 더운 곳으로 기록된 반면, 캐나다 오타와는 최고기온 16°C, 최저기온 13°C로 흐린 날씨 속에서 가장 선선한 곳으로 나타났다. 워싱턴DC는 오타와보다 최고기온이 6°C 더 높았다.\n\n두 수도 모두 강수량은 기록되지 않았으며, 워싱턴DC의 자외선지수는 3.6, 오타와의 자외선지수는 1.8을 나타냈다. 내일 ",
-    "url": "internal://weather_group_북미_today20260928",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_북미_today20260928",
-    "region": "north_america",
-    "country": "북미",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-28 18:08",
-    "countries": [
-      "미국",
-      "캐나다"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_united_states_20260928.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-28T18:08:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-28 18:08",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 293788,
-    "title_en": "아이티 총리, UN 총회서 치안 강화와 투자의 필요성 역설",
-    "title_ko": "아이티 총리, UN 총회서 치안 강화와 투자의 필요성 역설",
-    "summary_ko": "알릭스 디디에 필스에메 아이티 총리가 지난 25일(현지시간) 제81차 유엔총회 일반토론 연설에서 국제사회를 향해 인도주의적 지원을 넘어선 대규모 투자를 촉구했다. 필스에메 총리는 국가의 장기적 발전을 위해 자조 능력을 키워야 한다고 강조하며 치안과 경제 회복을 위한 국제사회의 동반자적 역할을 요구했다.\n\n정부는 국가 안보 강화를 위해 추진 중인 경찰 4000명 양성 계획의 절반 이상인 2000명 이상의 경찰관을 배출했다고 밝혔다.\n\n이어 1500명 이상의 신병이 군사 훈련을 마쳤으며 향후 3년 동안 1만5000명의 군인을 추가로 양",
-    "url": "internal://trend_아이티_2026092817",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "trend_아이티",
-    "region": "caribbean",
-    "country": "아이티",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-28 17:54",
-    "countries": [
-      "아이티",
-      "미국",
-      "트리니다드 토바고",
-      "코스타리카"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_haiti_gang_violence.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-28T17:54:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-28 17:54",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: Wikimedia Commons",
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
