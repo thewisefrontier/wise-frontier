@@ -95,6 +95,10 @@ _PAREN_RE = re.compile(r"\([^)]{0,20}\)")
 # 이 목록에 없는 한자는 1글자든 여러 글자든 그대로 오류로 본다 — 하드 블록
 # 자체는 보수적으로 유지하고, 실제로 쓰이는 관용 표기만 예외로 뺀다
 # (2026-08-31, 사용자 지시: "한자 감지기 차단은 그대로 두고 ... 예외를 두자").
+# AI가 번역 판단 과정을 괄호 주석으로 본문에 흘린 것(2026-09-29, id=294288: "kızamık(크자믝·국문 표기: kızamık는
+# 튀르키예어로 홍역을 의미하므로 문맥상 홍역)"). 기사 문장이 아니라 편집 메모이므로 저장 차단 대상.
+_META_NOTE_RE = re.compile(
+    r"\([^)]{0,160}?(?:국문 표기|문맥상|번역하면|원문에는|원문 표기|음차하면|[가-힣]{2,6}어로\s*[^)]{0,30}(?:의미|뜻)[^)]{0,10})[^)]{0,80}\)")
 _CJK_COUNTRY_ABBR_RE = re.compile("[美中日英佛獨伊濠印北韓露加]")
 _CJK_PROBE = re.compile("[一-鿿]")
 _CJK_CTX = re.compile(".{0,14}[一-鿿]+.{0,14}")
@@ -106,6 +110,10 @@ def detect_script_leak(title: str, body: str):
     for field, is_title in ((title or "", True), (body or "", False)):
         if not field:
             continue
+        for m in _META_NOTE_RE.finditer(field):
+            snippet = m.group(0).replace("\n", " ").strip()[:80]
+            if all(snippet != h[1] for h in hits):
+                hits.append(("편집메모", snippet))
         for name, probe, ctx_re in _SCRIPT_LEAK_RE:
             if not probe.search(field):
                 continue
