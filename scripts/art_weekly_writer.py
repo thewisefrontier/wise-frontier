@@ -339,11 +339,20 @@ def fetch_artwork_image(artwork: dict) -> tuple[str, str]:
             from image_store import store_image
             stored_url = store_image(direct_url, key_hint=f"art_weekly_{key}")
         except Exception as e:
-            print(f"  ⚠️ 이미지 R2 저장 실패, 원본 URL 사용: {e}")
-            stored_url = direct_url
-        dept = artwork.get("met_department", "")
-        credit = artwork.get("image_credit") or f"이미지 출처: The Metropolitan Museum of Art (CC0 퍼블릭 도메인{f', {dept}' if dept else ''})"
-        return (stored_url or direct_url), credit
+            print(f"  ⚠️ 이미지 R2 저장 실패: {e}")
+            stored_url = ""
+        # 2026-09-30 실사고(id=294716): AIC(artic.edu) IIIF 이미지 서버는 Cloudflare가
+        # 서버·브라우저 요청을 가리지 않고 전면 차단해(실제로 브라우저로 열어도
+        # "Sorry, you have been blocked") store_image()가 실패하면 원본 URL도 독자
+        # 누구에게나 죽은 링크다 — 다른 소스(Met 등)처럼 "원본 URL로 폴백"하면 안 되고,
+        # 아래 위키미디어 검색 경로로 넘어가 같은 작품의 다른 소장본 사진을 찾는다.
+        blocked = (not stored_url or stored_url == direct_url) and "artic.edu" in direct_url
+        if not blocked:
+            stored_url = stored_url or direct_url
+            dept = artwork.get("met_department", "")
+            credit = artwork.get("image_credit") or f"이미지 출처: The Metropolitan Museum of Art (CC0 퍼블릭 도메인{f', {dept}' if dept else ''})"
+            return stored_url, credit
+        print("  ⚠️ AIC(artic.edu) 이미지 서버 차단(Cloudflare) — 위키미디어에서 대체 이미지 검색")
 
     wiki_url, wiki_credit = fetch_wikimedia_image(artwork["wiki_query"], allow_artwork=True)
     if not wiki_url:
@@ -478,7 +487,8 @@ def build_article_prompt(artwork: dict, grounding: str, prior_titles: list | Non
                       "제작 배경과 시대 상황, 의뢰·소장 경위, 전시·평가 등 [근거 자료]에 있는 작품 관련 내용을 채워 쓰되, "
                       "[근거 자료]가 그만큼을 뒷받침하지 못하면 억지로 채우지 말고 짧게 쓰세요(없는 내용은 지어내지 말 것).")
     return f"""당신은 프론티어 미디어 NewsFinal의 문화·예술 담당 에디터입니다.
-매주 주말 "고전 명화 이야기" 코너에서 소개할 작품은 아래와 같습니다.
+"[오늘의 그림]" 코너(매일 발행)에서 오늘 소개할 작품은 아래와 같습니다.
+⚠️ "이번 주말", "주말에 소개할" 같은 특정 요일·주기를 가리키는 표현은 본문에 쓰지 마세요(매일 발행되는 코너입니다).
 {prior_rule}
 작품명: {artwork['title_ko']} ({artwork['title_en']})
 작가: {artwork['artist_ko']} ({artwork['artist_en']})
