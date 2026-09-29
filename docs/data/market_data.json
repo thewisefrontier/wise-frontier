@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-29 16:37",
+  "updated_at": "2026-09-29 17:01",
   "indices": [
     {
       "name": "S&P 500",
@@ -18,7 +18,7 @@
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 51481.5,
+      "price": 51481.51,
       "change_pct": 0.26,
       "up": true
     },
@@ -39,29 +39,29 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 109466.35,
-      "change_pct": 0.33,
+      "price": 109515.56,
+      "change_pct": 0.38,
       "up": true
     },
     {
       "name": "EGX30 (이집트)",
       "symbol": "^CASE30",
-      "price": 52740.4,
-      "change_pct": 0.52,
+      "price": 52708.2,
+      "change_pct": 0.46,
       "up": true
     },
     {
       "name": "SET (태국)",
       "symbol": "^SET.BK",
-      "price": 1598.23,
-      "change_pct": -0.26,
+      "price": 1597.53,
+      "change_pct": -0.3,
       "up": false
     },
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 6114.43,
-      "change_pct": -0.54,
+      "price": 6110.76,
+      "change_pct": -0.6,
       "up": false
     },
     {
@@ -89,7 +89,7 @@
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
       "price": 16.43,
-      "change_pct": 0.54,
+      "change_pct": 0.57,
       "up": true
     }
   ],
@@ -112,7 +112,7 @@
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 51481.5,
+        "price": 51481.51,
         "change_pct": 0.26,
         "up": true
       }
@@ -137,29 +137,29 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 109466.35,
-        "change_pct": 0.33,
+        "price": 109515.56,
+        "change_pct": 0.38,
         "up": true
       },
       {
         "name": "EGX30 (이집트)",
         "symbol": "^CASE30",
-        "price": 52740.4,
-        "change_pct": 0.52,
+        "price": 52708.2,
+        "change_pct": 0.46,
         "up": true
       },
       {
         "name": "SET (태국)",
         "symbol": "^SET.BK",
-        "price": 1598.23,
-        "change_pct": -0.26,
+        "price": 1597.53,
+        "change_pct": -0.3,
         "up": false
       },
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 6114.43,
-        "change_pct": -0.54,
+        "price": 6110.76,
+        "change_pct": -0.6,
         "up": false
       },
       {
@@ -189,7 +189,7 @@
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
         "price": 16.43,
-        "change_pct": 0.54,
+        "change_pct": 0.57,
         "up": true
       }
     ]
@@ -205,8 +205,8 @@
     "ACB": {
       "name": "Asia Commercial Joint Stock Bank",
       "symbol": "ACB.VN",
-      "price": 21100.0,
-      "change_pct": -1.4,
+      "price": 21050.0,
+      "change_pct": -1.64,
       "up": false
     }
   }
