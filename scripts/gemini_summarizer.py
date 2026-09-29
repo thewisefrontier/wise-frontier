@@ -628,6 +628,14 @@ except Exception:
 
 
 
+from trend_gate import run_trend_gates
+
+
+def _guard_note(reason: str) -> str:
+    """미발행 사유 문구: 날짜 환각 외 게이트(번역 누락·고유명사 날조)는 사유를 그대로 쓴다."""
+    return reason if reason.startswith(("번역 누락", "고유명사 날조")) else f"날짜 환각 의심 미발행 — {reason}"
+
+
 def call_gemini_article(prompt, max_tokens=2000, style_retries=1):
     content = call_gemini(prompt, max_tokens=max_tokens)
     attempt = 0
@@ -1695,6 +1703,12 @@ def run_trend_tracker():
             )
             if _dg_bad:
                 print(f"  [{group_name}] ⛔ 날짜 환각 의심 → 미발행: {_dg_reason}")
+        if not (_mt_bad or _dg_bad):
+            body, (summary_3lines, investment_idea), _gate = run_trend_gates(
+                title, body, top, call_gemini, extras=(summary_3lines, investment_idea))
+            if _gate:
+                _dg_bad, _dg_reason = True, _gate
+                print(f"  [{group_name}] ⛔ {_gate[:80]} → 미발행")
 
         # 동일 사건 루트 있으면 신규 생성 대신 append 병합(리빙 아티클)
         root = find_similar_trend(title, country=country, days=14, body=body)
@@ -1716,7 +1730,7 @@ def run_trend_tracker():
             published=not (_mt_bad or _dg_bad),
             image_url=image_url, image_credit=image_credit,
             guard_note=(MULTI_TOPIC_NOTE if _mt_bad
-                        else (f"날짜 환각 의심 미발행 — {_dg_reason}" if _dg_bad else "")),
+                        else (_guard_note(_dg_reason) if _dg_bad else "")),
         )
 
         if article_id > 0:
@@ -2316,6 +2330,12 @@ JSON 배열로만 응답하세요 (마크다운 없이):
             )
             if _dg_bad:
                 print(f"  [{topic}] ⛔ 날짜 환각 의심 → 미발행: {_dg_reason}")
+        if not (_mt_bad or _dg_bad):
+            body, (summary_3lines, investment_idea), _gate = run_trend_gates(
+                title, body, related, call_gemini, extras=(summary_3lines, investment_idea))
+            if _gate:
+                _dg_bad, _dg_reason = True, _gate
+                print(f"  [{topic}] ⛔ {_gate[:80]} → 미발행")
 
         # 유사 기존 트렌드 기사 있으면 병합
         if similar and not (_mt_bad or _dg_bad):
@@ -2365,7 +2385,7 @@ JSON 배열로만 응답하세요 (마크다운 없이):
             "first_published_at": now_str,
             "update_log": [{"timestamp": now_str,
                             "note": (MULTI_TOPIC_NOTE if _mt_bad
-                                     else (f"날짜 환각 의심 미발행 — {_dg_reason}" if _dg_bad
+                                     else (_guard_note(_dg_reason) if _dg_bad
                                            else f"실시간 트렌드 감지 ({topic}, {urgency})"))}],
             "sent_telegram": 0,
             "is_published": not (_mt_bad or _dg_bad),
@@ -2667,11 +2687,21 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
         if _mt_bad:
             print(f"  [{topic}] ⛔ 복수 토픽 혼입 → 미발행: {title[:50]}")
 
+        # 일반 기사 검증 이식(2026-09-29): 이 경로는 소스가 신호 제목뿐이라 원문 대조(이름 날조 검사)는 못 하고
+        # 미번역 외국어·숫자 콤마만 건다.
+        _dg_bad, _dg_reason = (False, "")
+        if not _mt_bad:
+            body, (summary_3lines, investment_idea), _gate = run_trend_gates(
+                title, body, [], call_gemini, extras=(summary_3lines, investment_idea), check_names=False)
+            if _gate:
+                _dg_bad, _dg_reason = True, _gate
+                print(f"  [{topic}] ⛔ {_gate[:80]} → 미발행")
+
         now_str = now_kst().strftime("%Y-%m-%d %H:%M")
 
         # 유사 기존 트렌드 기사 있으면 병합 — 신규 payload 조립(번역 포함) 전에
         # 먼저 판단해, 병합될 기사에 쓸데없이 번역 Gemini 호출을 낭비하지 않는다.
-        if ext_similar and not _mt_bad:
+        if ext_similar and not (_mt_bad or _dg_bad):
             note = f"외부 트렌드 추가 정보 ({topic})"
             ok = merge_trend_article(ext_similar, title, body, note)
             if ok:
@@ -2682,7 +2712,7 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
 
         title_en, summary_en = "", ""
         image_url, image_credit = "", ""
-        if not _mt_bad:
+        if not (_mt_bad or _dg_bad):
             # 2026-09-03 실사고(id=124782) — run_realtime_trend_tracker()와 동일한
             # 원인(image_url을 payload에 아예 안 넣던 버그)이 이 경로에도 있었다.
             # 2026-09-26 실사고(id=292289) — 위와 동일하게 topic을 entity로
@@ -2709,9 +2739,10 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
             "first_published_at": now_str,
             "update_log": [{"timestamp": now_str,
                             "note": (MULTI_TOPIC_NOTE if _mt_bad
-                                     else "외부 트렌드 감지 (Google Trends+Reddit+GDELT)")}],
+                                     else (_guard_note(_dg_reason) if _dg_bad
+                                           else "외부 트렌드 감지 (Google Trends+Reddit+GDELT)"))}],
             "sent_telegram": 0,
-            "is_published": not _mt_bad,
+            "is_published": not (_mt_bad or _dg_bad),
             "posted_blog": 0,
             "summary_3lines": summary_3lines,
             "investment_idea": investment_idea,

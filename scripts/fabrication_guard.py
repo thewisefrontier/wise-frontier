@@ -274,3 +274,32 @@ def drop_flagged_sentences(body: str, title: str, suspect: str, min_len: int = 7
     if dropped == 0 or dropped > max_drop or len(new) < min_len or len(new) < len(body) * 0.75:
         return None
     return new
+
+
+def detect_foreign_leftover(body: str, call_gemini_fn) -> str:
+    """한국어 기사 본문에 번역 안 된 외국어(스페인어·프랑스어·독일어·튀르키예어 등 라틴 문자 언어)가 남아있는지
+    LLM으로 판별한다(gemini_writer.py에서 이식해 트렌드 기사 경로와 공용, 2026-09-29). 있으면 그 단어 문자열, 없으면 ""."""
+    if not body:
+        return ""
+    prompt = f"""아래는 한국어로 작성됐어야 할 뉴스 기사입니다. 번역되지 않고 원문 언어(스페인어·프랑스어·독일어·포르투갈어·이탈리아어·튀르키예어 등) 그대로 남아있는 단어나 구절이 있는지 확인하세요.
+
+⚠️ 다음은 오류가 아닙니다: 영어 인명·기업명·지명 등 고유명사(한글 음차와 함께 괄호 병기된 원어 포함), 비자 종류·통화코드·모델명 등 관용적으로 로마자를 유지하는 표현, 작품 제목의 원어 병기.
+⚠️ 오류인 것: 그 외 일반 명사·형용사·부사 등이 한국어로 번역되지 않고 스페인어·독일어·프랑스어·튀르키예어 등 외국어 단어 그대로 남아있는 경우.
+
+본문:
+{body[:2500]}
+
+번역 안 된 외국어 단어가 있으면 그 단어들만 쉼표로 나열하세요. 없으면 "없음"이라고만 답하세요."""
+    result = call_gemini_fn(prompt, max_tokens=60, start_tier=4)
+    if not result:
+        return ""
+    result = result.strip()
+    if not result or result[:10].replace(" ", "").startswith("없음"):
+        return ""
+    return result[:200]
+
+
+def scrub_extras(suspect: str, *texts):
+    """문장을 지운 기사의 3줄요약·투자아이디어에 같은 이름이 남아 있으면 그 항목을 비운다."""
+    keys = [n.split("(")[0].strip() for n in flagged_names(suspect)]
+    return tuple("" if t and any(k and k in t for k in keys) else t for t in texts)
