@@ -13,6 +13,14 @@ requests = get_session()
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 OUTPUT_FILE = "docs/data/articles.json"
+# 2026-09-30 실사고(Supabase 이그레스 한도 재초과 경고, 10/19 제한 예고): 이 함수가
+# select=* 로 발행 기사 7일치(약 280건, 820KB)를 워크플로가 돌 때마다(하루 ~24회)
+# 새 기사 유무와 무관하게 통째로 다시 받아왔다 — 한 달로 치면 이것만으로 500MB↑
+# (5GB 한도의 10%↑)가 순수 재전송 낭비였다. id+update_log만(=요약본문 등 굵은
+# 컬럼 제외, 행당 대략 10분의 1 크기)으로 먼저 가볍게 조회해 지난 내보내기 이후
+# 실제 변경(신규/발행상태·본문 수정)이 있었는지 확인하고, 없으면 무거운 전체
+# 조회를 아예 건너뛴다.
+WATERMARK_FILE = "docs/data/.export_watermark.json"
 # index.html 초기 로딩용 소형 스냅샷(2026-09-04, 사용자 지적 — "첫 화면 20개만
 # 보고 나가는 사람도 나머지 380개어치를 다 받는 구조라면 느려질 수 밖에 없네").
 # articles.json(7일치, live.html 트렌드·article.html 관련기사가 의존)은
@@ -118,6 +126,39 @@ def sanitize_update_log(log):
     return out
 
 
+def _fetch_all(select, base_params, timeout=30):
+    """페이지네이션(1000건 배치) 조회 공용 헬퍼. 실패 시 None."""
+    rows, offset, batch = [], 0, 1000
+    while True:
+        res = requests.get(
+            f"{SUPABASE_URL}/rest/v1/articles",
+            headers={**_headers(), "Range": f"{offset}-{offset+batch-1}"},
+            params={**base_params, "select": select},
+            timeout=timeout,
+        )
+        if res.status_code not in (200, 206):
+            return None
+        data = res.json()
+        if not data:
+            break
+        rows.extend(data)
+        if len(data) < batch:
+            break
+        offset += batch
+    return rows
+
+
+def _watermark_of(rows):
+    max_id = max((r.get("id") or 0) for r in rows) if rows else 0
+    last_ts = ""
+    for r in rows:
+        log = r.get("update_log") or []
+        if log and isinstance(log, list):
+            ts = str(log[-1].get("timestamp") or "")
+            last_ts = max(last_ts, ts)
+    return {"count": len(rows), "max_id": max_id, "last_log_ts": last_ts}
+
+
 def export_articles(limit=9999):
     os.makedirs("docs/data", exist_ok=True)
 
@@ -126,37 +167,32 @@ def export_articles(limit=9999):
         _export_from_sqlite(limit)
         return
 
-    all_articles = []
-    offset = 0
-    batch = 1000
+    base_params = {
+        "is_published": "eq.true",
+        "source": "eq.NewsFinal",
+        "created_at": f"gte.{(datetime.now(timezone.utc).astimezone(timezone(timedelta(hours=9))) - timedelta(days=7)).strftime('%Y-%m-%d')}",
+        "order": "created_at.desc",
+    }
 
-    while True:
-        res = requests.get(
-            f"{SUPABASE_URL}/rest/v1/articles",
-            headers={**_headers(), "Range": f"{offset}-{offset+batch-1}"},
-            params={
-                "select": "*",
-                "is_published": "eq.true",
-                "source": "eq.NewsFinal",
-                "created_at": f"gte.{(datetime.now(timezone.utc).astimezone(timezone(timedelta(hours=9))) - timedelta(days=7)).strftime('%Y-%m-%d')}",
-                "order": "created_at.desc",
-            },
-            timeout=30
-        )
-        if res.status_code not in (200, 206):
-            print(f"[EXPORT] 오류: {res.status_code} — {res.text[:300]}")
-            print("[EXPORT] SQLite 폴백 시도...")
-            _export_from_sqlite(limit)
-            return
+    light_rows = _fetch_all("id,update_log", {**base_params, "order": "id.asc"})
+    if light_rows is not None and os.path.exists(OUTPUT_FILE):
+        watermark = _watermark_of(light_rows)
+        prev = {}
+        try:
+            with open(WATERMARK_FILE, encoding="utf-8") as f:
+                prev = json.load(f)
+        except Exception:
+            pass
+        if watermark == prev:
+            print(f"[EXPORT] 변경 없음({watermark['count']}건, 이그레스 절약) — 전체 재조회 생략")
+            with open(OUTPUT_FILE, encoding="utf-8") as f:
+                return json.load(f)[:limit]
 
-        data = res.json()
-        if not data:
-            break
-
-        all_articles.extend(data)
-        if len(data) < batch:
-            break
-        offset += batch
+    all_articles = _fetch_all("*", base_params)
+    if all_articles is None:
+        print("[EXPORT] 조회 오류 — SQLite 폴백 시도...")
+        _export_from_sqlite(limit)
+        return
 
     # 최신순 정렬
     all_articles.sort(key=lambda a: a.get("created_at", ""), reverse=True)
@@ -182,6 +218,10 @@ def export_articles(limit=9999):
 
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         json.dump(final[:limit], f, ensure_ascii=False, indent=2)
+
+    if light_rows is not None:
+        with open(WATERMARK_FILE, "w", encoding="utf-8") as f:
+            json.dump(_watermark_of(light_rows), f)
 
     print(f"[EXPORT] {len(final)}개 기사 → {OUTPUT_FILE}")
 
