@@ -22,6 +22,12 @@ env:
   # 있었는지조차 구분이 안 됐다(2026-09-22, 원인 조사 중 발견). 언버퍼드로
   # 강제해 타임아웃/행 진단이 실시간으로 가능하게 한다.
   PYTHONUNBUFFERED: "1"
+  # 2026-09-30: config_store.py(prompts·rss_sources를 D1 우선으로 읽음)가 모든 스텝에서
+  # 쓸 수 있게 워크플로 레벨에 둔다(스텝마다 반복 안 함). 시크릿 미등록 상태면 빈 문자열이라
+  # config_store._d1_ready()가 False → 자동으로 Supabase 폴백(무해).
+  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+  CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+  NEWSFINAL_CONFIG_D1_ID: ${{ secrets.NEWSFINAL_CONFIG_D1_ID }}
 
 # ⚠️ 2026-09-22 아키텍처 변경: 단일 job + 단일 concurrency였던 걸 job 2개로
 # 쪼갰다(collectors / heavy, 아래 jobs: 참고). 그 결과 워크플로우 레벨
@@ -59,6 +65,18 @@ jobs:
 
       - name: 패키지 설치
         run: pip install -r requirements.txt
+
+      - name: 설정 테이블(prompts·rss_sources) D1 동기화
+        # 2026-09-30: 이 두 테이블은 Cloudflare D1로 읽기 경로를 옮겨 Supabase
+        # 이그레스를 줄인다(config_store.py). Supabase가 원본이고(admin.html
+        # CRUD 등) 이 스텝이 매 사이클 D1을 최신화한다. Cloudflare 시크릿이
+        # 아직 등록 안 됐으면 조용히 스킵(무해) — 등록 전까지는 read-path도
+        # Supabase만 쓰므로 동기화가 없어도 문제없다.
+        continue-on-error: true
+        run: python scripts/sync_config_to_d1.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
 
       - name: RSS 수집 (큐 적재 전용)
         # 2026-09-22 검증 당시(rss_split_test.yml)엔 3분 내 끝났지만, 실제

@@ -61,19 +61,9 @@ _NON_ARTICLE_PATH_RE = re.compile(
 
 
 def _load_rss_sources() -> list:
-    """rss_sources 테이블에서 활성 소스 name/url을 읽는다(rss_fetcher.py의
-    load_rss()와 동일한 REST 호출을 독립적으로 재구현 — 그 파일은 import
-    시점에 전체 파이프라인이 실행돼 직접 재사용할 수 없다)."""
-    supabase_url = os.getenv("SUPABASE_URL", "").rstrip("/")
-    supabase_key = os.getenv("SUPABASE_SERVICE_KEY", "")
-    res = requests.get(
-        f"{supabase_url}/rest/v1/rss_sources",
-        headers={"apikey": supabase_key, "Authorization": f"Bearer {supabase_key}"},
-        params={"select": "name,url", "is_active": "eq.true", "limit": "1000"},
-        timeout=15,
-    )
-    res.raise_for_status()
-    return res.json() or []
+    """활성 RSS 소스 name/url 로드 — config_store로 위임(D1 우선, Supabase 폴백, 2026-09-30)."""
+    from config_store import load_rss_sources
+    return load_rss_sources("name,url")
 
 
 # 뉴스 매체 자체가 아니라 검색/집계 게이트웨이인 도메인 — newspaper.build()로

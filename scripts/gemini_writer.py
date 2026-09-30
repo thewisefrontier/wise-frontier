@@ -195,29 +195,9 @@ _gemini_client = GeminiClient(GEMINI_API_KEYS, GEMINI_MODELS)
 _prompt_cache = {}
 
 def load_prompt(name: str, fallback: str = "") -> str:
-    """Supabase에서 활성 프롬프트 로드 (캐시 사용)"""
-    global _prompt_cache
-    if name in _prompt_cache:
-        return _prompt_cache[name]
-    try:
-        res = requests.get(
-            f"{SUPABASE_URL}/rest/v1/prompts",
-            headers={
-                "apikey": SUPABASE_SERVICE_KEY,
-                "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
-            },
-            params={"name": f"eq.{name}", "is_active": "eq.true", "order": "version.desc", "limit": "1"},
-            timeout=10
-        )
-        if res.status_code in (200, 206):
-            data = res.json()
-            if data:
-                _prompt_cache[name] = data[0]["content"]
-                return _prompt_cache[name]
-    except Exception as e:
-        print(f"[WARN] 프롬프트 로드 실패 ({name}): {e}")
-    _prompt_cache[name] = fallback
-    return fallback
+    """프롬프트 로드 — config_store로 위임(D1 우선, Supabase 폴백, 2026-09-30)."""
+    from config_store import load_prompt as _load_prompt
+    return _load_prompt(name, fallback)
 
 # 클러스터링 설정
 SIMILARITY_HIGH         = 65

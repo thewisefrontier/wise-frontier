@@ -141,34 +141,11 @@ if state["last_reset"] != today:
 # =========================
 
 def load_rss():
-    """Supabase rss_sources 테이블에서 소스 로드 (파일 노출 방지)
-
-    ⚠️ 2026-09-22: 소스를 430→1200+개로 확충하면서 이전의 고정 limit=1000이
-    조용히 상한에 걸릴 뻔했다(PostgREST 기본 max-rows 설정에 따라 1000을
-    넘겨도 요청 자체는 성공하고 앞쪽 1000개만 돌아와, 장애 없이 나머지가
-    누락된다 — 발견하기 어려운 유형). limit 숫자를 계속 올려 맞추는 대신
-    페이지네이션으로 상한 자체를 없앤다(앞으로 소스가 더 늘어도 안전)."""
-    supabase_url = os.getenv("SUPABASE_URL", "").rstrip("/")
-    supabase_key = os.getenv("SUPABASE_SERVICE_KEY", "")
-    headers = {"apikey": supabase_key, "Authorization": f"Bearer {supabase_key}"}
-    sources, offset, page = [], 0, 1000
-    while True:
-        res = requests.get(
-            f"{supabase_url}/rest/v1/rss_sources",
-            headers=headers,
-            params={"select": "name,category,subcategory,url", "is_active": "eq.true",
-                    "order": "id.asc", "limit": str(page), "offset": str(offset)},
-            timeout=15,
-        )
-        res.raise_for_status()
-        batch = res.json()
-        sources.extend(batch)
-        if len(batch) < page:
-            break
-        offset += page
+    """RSS 소스 로드 — config_store로 위임(D1 우선, Supabase 폴백, 2026-09-30)."""
+    from config_store import load_rss_sources
+    sources = load_rss_sources("name,category,subcategory,url")
     if not sources:
         raise RuntimeError("rss_sources 테이블이 비어 있습니다. 마이그레이션 SQL을 먼저 실행하세요.")
-    print(f"✅ RSS 소스 {len(sources)}개 로드 (Supabase)")
     return sources
 
 # =========================
