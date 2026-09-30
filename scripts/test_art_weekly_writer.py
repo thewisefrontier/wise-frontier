@@ -59,3 +59,14 @@ for i in range(30):
     d = _d(2026, 1 + i % 12, 1 + i % 28)
     assert next(w.iter_daily_candidates(d))["title_en"] == w.get_daily_artwork(d)[0]["title_en"]
 print("iter_daily_candidates 회귀 테스트 ok")
+
+
+# done 집합에 있는 작품은 순환에서 건너뛴다(2026-09-30 사용자 지시: "반복은 안 돼")
+d0 = _d(2026, 6, 15)
+first = w.get_daily_artwork(d0)[0]
+skipped = w.get_daily_artwork(d0, done={first["title_en"]})[0]
+assert skipped["title_en"] != first["title_en"]
+# 목록 전체가 done이면(전부 발행 완료 상태) 더 내놓을 후보가 없다 — 조용히 예전 작품을 재사용하면 안 됨
+all_titles = {a["title_en"] for a in w.ARTWORKS}
+assert list(w.iter_daily_candidates(d0, done=all_titles)) == []
+print("done 집합 순환 제외 테스트 ok")
