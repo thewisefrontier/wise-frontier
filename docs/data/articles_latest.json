@@ -1,5 +1,44 @@
 [
   {
+    "id": 294854,
+    "title_en": "중앙아시아, 쾌청한 가을 날씨 속 지역별 기온 차 뚜렷",
+    "title_ko": "중앙아시아, 쾌청한 가을 날씨 속 지역별 기온 차 뚜렷",
+    "summary_ko": "30일(현지시간) 중앙아시아 주요국 수도권의 기온은 최저 8도에서 최고 25도 사이의 분포를 보인다. 전반적으로 맑은 하늘이 이어지는 가운데 지역별로 기온 차이가 나타나고 있다. 카자흐스탄 아스타나는 최저 8도, 최고 19도를 기록하며 중앙아시아 주요 수도 중 가장 선선한 기온을 보였다.\n\n반면 키르기스스탄 비슈케크는 최고 25도까지 오르며 가장 더운 날씨를 기록했다. 비슈케크는 아스타나보다 최고 기온이 6도 더 높게 나타나며 지역 간 기온 격차를 드러냈다. 비슈케크에서는 0.2mm의 약한 이슬비가 내리며 강수확률은 6%를 기록했다",
+    "url": "internal://weather_group_중앙아시아_today20260930",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_중앙아시아_today20260930",
+    "region": "central_asia",
+    "country": "중앙아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-09-30 09:10",
+    "countries": [
+      "카자흐스탄",
+      "우즈베키스탄",
+      "키르기스스탄"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_kazakhstan_20260930.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-09-30T09:10:00",
+    "update_log": [
+      {
+        "timestamp": "2026-09-30 09:10",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 294851,
     "title_en": "남아시아, 35도 폭염과 곳곳 비 소식…극단적 기상 양상",
     "title_ko": "남아시아, 35도 폭염과 곳곳 비 소식…극단적 기상 양상",
@@ -1958,49 +1997,6 @@
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 294046,
-    "title_en": "AMD, AI 연구소 월드랩스 82억 달러에 인수…페이페이 리 수석과학자로 합류",
-    "title_ko": "AMD, AI 연구소 월드랩스 82억 달러에 인수…페이페이 리 수석과학자로 합류",
-    "summary_ko": "이번 인수는 AMD 역사상 두 번째로 큰 규모의 기업 인수 사례다.\n\n월드랩스는 2024년 설립 이후 물리적 세계를 이해하는 딥러닝 모델 개발을 주도해 왔다. 특히 3차원 환경을 시뮬레이션하는 월드 모델(world models) 분야에서 독보적인 기술력을 보유한 것으로 평가받는다. 거래는 올해 말까지 마무리될 예정이며, 인수 절차가 완료되기 전까지 월드랩스는 AMD의 기존 반도체 사업부와 분리되어 운영된다.\n\n페이페이 리는 인수 이후 AMD의 수석과학자(chief scientist) 겸 부사장(EVP)으로 합류해 리사 수(Lisa ",
-    "url": "internal://cluster_20260929_9cfd834f",
-    "source": "NewsFinal",
-    "category": "IT·과학",
-    "subcategory": "cluster_20260929_9cfd834f",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-29 09:03",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_world_labs.jpg",
-    "view_count": 1,
-    "first_published_at": "2026-09-29T09:03:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-29 09:03",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        114340,
-        113504,
-        112728
-      ]
-    },
-    "image_credit": "이미지 출처: Wikimedia Commons",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
     "noindex": true
   }
 ]
