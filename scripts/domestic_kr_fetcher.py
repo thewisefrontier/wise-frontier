@@ -149,33 +149,13 @@ _photo_gate_cache = None
 
 
 def _load_photo_gate() -> dict:
+    """사진 출처 가드 설정 로드 — config_store로 위임(D1 우선, Supabase 폴백, 2026-09-30)."""
     global _photo_gate_cache
     if _photo_gate_cache is not None:
         return _photo_gate_cache
-    try:
-        sb_url = os.getenv("SUPABASE_URL", "").rstrip("/")
-        sb_key = os.getenv("SUPABASE_SERVICE_KEY", "")
-        res = requests.get(
-            f"{sb_url}/rest/v1/prompts",
-            headers={"apikey": sb_key, "Authorization": f"Bearer {sb_key}"},
-            params={"name": "eq.domestic_photo_credit_gate", "is_active": "eq.true",
-                    "order": "version.desc", "limit": "1"},
-            timeout=10,
-        )
-        if res.status_code in (200, 206):
-            data = res.json()
-            if data:
-                import json as _json
-                cfg = _json.loads(data[0]["content"])
-                cfg["blocked_domains"] = set(cfg.get("blocked_domains", []))
-                _photo_gate_cache = cfg
-                return cfg
-    except Exception as e:
-        print(f"[WARN] 사진 출처 가드 설정 로드 실패, 폴백 사용: {e}")
-    fallback = dict(_PHOTO_GATE_FALLBACK)
-    fallback["blocked_domains"] = set(fallback["blocked_domains"])
-    _photo_gate_cache = fallback
-    return fallback
+    from config_store import load_photo_gate
+    _photo_gate_cache = load_photo_gate("domestic_photo_credit_gate", _PHOTO_GATE_FALLBACK)
+    return _photo_gate_cache
 
 
 _TRAILING_CREDIT_RE = re.compile(r'(?:[.!?다요]\s+)([가-힣A-Za-z0-9()·\s]{2,20})\s*$')
