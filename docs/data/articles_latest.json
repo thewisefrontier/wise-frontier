@@ -1,5 +1,71 @@
 [
   {
+    "id": 295405,
+    "title_en": "[국내유가] 휘발유 리터당 1858원…경유 내리고 LPG 올라",
+    "title_ko": "[국내유가] 휘발유 리터당 1858원…경유 내리고 LPG 올라",
+    "summary_ko": "한국석유공사 오피넷이 1일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1858원으로 집계됐다. 이번 공개 자료는 전일 판매가격을 집계해 반영한 것이다.\n\n오피넷에 따르면 휘발유 평균 가격은 리터당 1857.75원으로 전일 대비 0.21원 하락했다. 경유는 리터당 1843.27원을 기록해 전일보다 0.59원 내렸다. 반면 LPG 부탄은 리터당 1110.77원으로 전일 대비 12.29원 상승했다.\n\n최근 유가 흐름은 국제시세와 정유사 공급가격 변동에 영향을 받고 있는 것으로 나타났다. 정유사 공급가격을 둘러싼 논쟁",
+    "url": "internal://opinet_price_2026-10-01",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-10-01 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_10_01_pid6999650.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-01T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-01 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-10-01",
+      "prices": {
+        "B027": {
+          "diff": -0.21,
+          "name": "휘발유",
+          "price": 1857.75
+        },
+        "B034": {
+          "diff": 0.58,
+          "name": "고급휘발유",
+          "price": 2339.77
+        },
+        "C004": {
+          "diff": -0.42,
+          "name": "실내등유",
+          "price": 1573.06
+        },
+        "D047": {
+          "diff": -0.59,
+          "name": "경유",
+          "price": 1843.27
+        },
+        "K015": {
+          "diff": 12.29,
+          "name": "LPG(부탄)",
+          "price": 1110.77
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 295399,
     "title_en": "The Secret of Secrets",
     "title_ko": "[오늘의 책] 댄 브라운의 『비밀 속의 비밀 1』, 의식의 심연을 파고드는 지적 스릴러의 정수",
@@ -1573,51 +1639,6 @@
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 294714,
-    "title_en": "지구 미세 진동 일으키는 달과 태양의 인력…'조석 공명' 현상 규명",
-    "title_ko": "지구에 가해지는 달과 태양의 중력…느린 지진 유발 원리 규명",
-    "summary_ko": "지구에 가해지는 달과 태양의 중력 당김이 완만한 지진인 느린 지진을 유발하는 원리가 컴퓨터 모델링을 통해 밝혀졌다. 지구의 단층선은 태양과 달의 인력으로 인해 미세한 응력 변화를 겪으며, 이 현상은 에너지를 서서히 방출하는 완만한 지진으로 이어진다. 파리 PSL 대학교(PSL University)의 이슈오 저우(Yishuo Zhou)가 이끄는 연구진은 천체들이 정확히 어떤 방식으로 이를 유발하는지 규명하기 위해 가상 단층 모델을 구축했다고 저널 오브 지오피지컬 리서치: 솔리드 어스(Journal of Geophysical Resea",
-    "url": "internal://cluster_20260930_c7fc0d84",
-    "source": "NewsFinal",
-    "category": "IT·과학",
-    "subcategory": "cluster_20260930_c7fc0d84",
-    "region": "global",
-    "country": "프랑스",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-09-30 05:10",
-    "countries": [
-      "프랑스"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_slow_earthquakes.jpg",
-    "view_count": 1,
-    "first_published_at": "2026-09-30T04:42:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-30 04:42",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-09-30 05:10",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        136528
-      ]
-    },
-    "image_credit": "사진: SlowEQ (CC BY-SA 4.0, Wikimedia Commons)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
     "noindex": true
   }
 ]
