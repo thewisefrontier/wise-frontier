@@ -284,24 +284,48 @@ def is_not_painting(a: dict) -> bool:
     return bool(m) and m.group(1) != "Paintings"
 
 
-def iter_daily_candidates(today=None):
-    """날짜(toordinal) 기준 결정론적 순환 순서로 후보를 하나씩 내놓는다(작가 미상·비회화 제외).
-    같은 날 재실행하면 항상 같은 순서 — get_daily_artwork()는 이 중 첫 번째만 쓰고,
-    main()은 이미지를 못 찾는 후보를 건너뛰며 순서대로 다음 후보를 시도하는 데 쓴다
-    (2026-09-30 사용자 지시: "위키에 없으면 다른 작품으로 대체" — 이미지 문제로 하루를
-    통째로 스킵하지 않는다)."""
+def iter_daily_candidates(today=None, done: set | None = None):
+    """날짜(toordinal) 기준 결정론적 순환 순서로 후보를 하나씩 내놓는다(작가 미상·비회화·
+    이미 발행한 작품 제외). 같은 날 재실행하면 항상 같은 순서 — get_daily_artwork()는 이
+    중 첫 번째만 쓰고, main()은 이미지를 못 찾는 후보를 건너뛰며 순서대로 다음 후보를
+    시도하는 데 쓴다(2026-09-30 사용자 지시: "위키에 없으면 다른 작품으로 대체" — 이미지
+    문제로 하루를 통째로 스킵하지 않는다).
+
+    done: 이미 발행한 작품의 title_en 집합(published_artwork_titles()). 2026-09-30 실사고 —
+    목록(~2,270개)을 순수 날짜 나머지 연산으로만 순환시켜 발행 이력을 전혀 안 봐서, 목록을
+    다 쓰면(약 6년 뒤) 처음부터 똑같은 순서로 그대로 반복될 예정이었다(사용자 지적: "다른
+    그림이 그 자리를 채워야지, 반복은 안 돼"). done에 있는 작품은 순환에서 건너뛴다 —
+    목록 크기(2,270)가 남아있는 한 반복이 원천적으로 불가능해진다. 목록 자체가 정말
+    바닥나면(발행 일수가 목록 크기를 넘으면) 더 건너뛸 곳이 없어 빈 이터레이터가 되고,
+    호출부는 "오늘은 건너뜀"으로 처리한다 — 이때는 harvest_art_*.py로 목록을 보충해야 한다."""
     today = today or now_kst().date()
+    done = done or set()
     idx = today.toordinal() % len(ARTWORKS)
     for k in range(len(ARTWORKS)):
         a = ARTWORKS[(idx + k) % len(ARTWORKS)]
-        if not is_unknown_artist(a) and not is_not_painting(a):
+        if not is_unknown_artist(a) and not is_not_painting(a) and a["title_en"] not in done:
             yield a
 
 
-def get_daily_artwork(today=None) -> tuple[dict, "date"]:
+def published_artwork_titles() -> set:
+    """[오늘의 그림]으로 이미 만든(발행 여부 무관) 작품의 title_en 집합 — 재순환 방지용.
+    literature_writer.published_literature()와 같은 패턴. 조회 실패 시 빈 집합을 반환하되,
+    호출부가 이를 "발행 이력 없음"이 아니라 "조회 실패"로 구분해 그날은 건너뛰게 한다
+    (빈 집합을 잘못 믿고 진행하면 발행 이력이 있어도 다시 골라 반복 발행할 위험)."""
+    try:
+        r = requests.get(_sb_url(), headers=_sb_headers(), timeout=15, params={
+            "select": "title_en", "subcategory": f"eq.{SUBCATEGORY}", "limit": "5000"})
+        if r.status_code not in (200, 206):
+            return None
+        return {x["title_en"] for x in r.json() if x.get("title_en")}
+    except Exception:
+        return None
+
+
+def get_daily_artwork(today=None, done: set | None = None) -> tuple[dict, "date"]:
     """날짜(toordinal)로 결정론적 순환 선택. 반환: (artwork, date)."""
     today = today or now_kst().date()
-    return next(iter_daily_candidates(today), ARTWORKS[today.toordinal() % len(ARTWORKS)]), today
+    return next(iter_daily_candidates(today, done), ARTWORKS[today.toordinal() % len(ARTWORKS)]), today
 
 
 def already_published(pub_date) -> bool:
@@ -627,12 +651,20 @@ def main():
         print(f"  → {pub_date.isoformat()} 고전 명화 이야기 이미 존재 → 스킵")
         return
 
+    # 2026-09-30 사용자 지시("다른 그림이 그 자리를 채워야지, 반복은 안 돼"): 이미 발행한
+    # 작품은 순환에서 제외한다. 조회 자체가 실패하면(None) 발행 이력을 모르는 채로 진행하다
+    # 중복 발행할 위험이 있어 오늘은 건너뛴다.
+    done = published_artwork_titles()
+    if done is None:
+        print("  [SKIP] 발행 이력 조회 실패 — 중복 발행 위험 있어 오늘은 건너뜀")
+        return
+
     # 2026-09-30 사용자 지시: 이미지를 못 찾는다고 하루를 통째로 건너뛰지 말고, 같은 날짜의
     # 순환 순서(iter_daily_candidates)를 따라 다음 후보 작품으로 넘어간다. 무한정 뒤지진
     # 않도록 상한을 둔다.
     artwork, image_url, image_credit = None, "", ""
     MAX_IMAGE_ATTEMPTS = 15
-    for i, cand in enumerate(iter_daily_candidates(pub_date)):
+    for i, cand in enumerate(iter_daily_candidates(pub_date, done)):
         if i >= MAX_IMAGE_ATTEMPTS:
             break
         print(f"  → 오늘({pub_date.isoformat()}) 후보 {i+1}: {cand['title_ko']} ({cand['artist_ko']})")
