@@ -48,10 +48,12 @@ except ImportError:
 
 # 날짜 환각 판정 공통 모듈. import 실패해도 본 기능이 죽지 않도록 폴백을 둔다.
 try:
-    from date_guard import check_date_hallucination
+    from date_guard import check_date_hallucination, extract_local_time_marks
 except Exception:
     def check_date_hallucination(body, sources, base_date=None):
         return False, ""
+    def extract_local_time_marks(body):
+        return []
 
 # 저장 시점 문자셋 혼입 하드 블록. import 실패해도 본 기능이 죽지 않도록 폴백을 둔다.
 try:
@@ -2696,6 +2698,18 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
             if _gate:
                 _dg_bad, _dg_reason = True, _gate
                 print(f"  [{topic}] ⛔ {_gate[:80]} → 미발행")
+
+        # 2026-09-30 실사고(id=294859/294908, 사용자 신고): 이 경로의 소스는 Google Trends/
+        # Reddit/GDELT의 짧은 토픽 문자열뿐 — 실제 기사 원문이 전혀 없다. check_date_hallucination()은
+        # 원문(발행일·본문)이 있어야 판정하는데 여기엔 그게 없어 "판정 불가 → 통과"로 항상 무력화된다.
+        # 실제로 Gemini가 "4일(현지시간)" 같은 날짜를 근거 없이 지어냈고, 하필 재실행마다 다른 날짜를
+        # 지어내는 바람에 dedup 판정(same_event_llm)이 "날짜가 다르면 다른 사건"이라는 규칙에 따라
+        # 명백한 중복(id=294908)조차 "다른 사건"으로 오판했다 — 날짜 환각이 날짜 검사와 중복 검사를
+        # 동시에 무력화시킨 셈. 근거가 원천적으로 없는 경로이므로 날짜 검증을 시도하는 대신, 구체적
+        # 날짜 표기 자체를 코드로 금지한다(반복 무시되는 프롬프트 지시보다 코드 강제가 이 프로젝트 방침).
+        if not (_mt_bad or _dg_bad) and extract_local_time_marks(body):
+            _dg_bad, _dg_reason = True, "날짜 근거 없음 — 외부 트렌드 경로는 원문이 없어 구체적 날짜(N일) 표기를 금지"
+            print(f"  [{topic}] ⛔ {_dg_reason} → 미발행")
 
         now_str = now_kst().strftime("%Y-%m-%d %H:%M")
 
