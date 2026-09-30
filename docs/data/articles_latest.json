@@ -1,5 +1,43 @@
 [
   {
+    "id": 295393,
+    "title_en": "오세아니아, 캔버라 23도 완연한 가을…웰링턴 강풍",
+    "title_ko": "오세아니아, 캔버라 23도 완연한 가을…웰링턴 강풍",
+    "summary_ko": "1일(현지시간) 오세아니아 주요국 수도의 기온이 최저 9도에서 최고 23도 분포를 보이는 가운데, 지역별로 뚜렷한 기온 차와 기상 현상이 나타났다. 이번 오세아니아 지역의 전체 기온은 최저 9도에서 최고 23도 사이로 형성되었다. 가장 더운 곳은 23도를 기록한 호주 캔버라이며, 가장 선선한 곳은 최고기온 14도, 최저기온 12도에 머문 뉴질랜드 웰링턴이다.\n\n호주 캔버라는 뉴질랜드 웰링턴보다 최고기온이 9도 높아 상대적으로 포근한 날씨를 보였다. 뉴질랜드 웰링턴은 시속 40km 이상의 강풍이 부는 강풍 지역으로 분류되었으며 날씨는",
+    "url": "internal://weather_group_오세아니아_today20261001",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_오세아니아_today20261001",
+    "region": "oceania",
+    "country": "오세아니아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-01 04:22",
+    "countries": [
+      "호주",
+      "뉴질랜드"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_australia_20261001.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-01T04:22:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-01 04:22",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 295356,
     "title_en": "기니 정부, 응급 의료 체계 개편부터 취약계층 지원까지 전방위 민생 대책 추진",
     "title_ko": "기니 정부, 응급 의료 체계 개편부터 취약계층 지원까지 전방위 민생 대책 추진",
@@ -1623,43 +1661,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": false
-  },
-  {
-    "id": 294663,
-    "title_en": "오세아니아, 수도별 큰 기온차 속 뉴질랜드 비",
-    "title_ko": "오세아니아, 수도별 큰 기온차 속 뉴질랜드 비",
-    "summary_ko": "30일(현지시간) 오세아니아 주요국 수도의 기온은 최저 6°C에서 최고 22°C의 분포를 나타냈다. 지역별로는 호주 캔버라가 최고 22°C, 최저 6°C를 기록하며 가장 더운 곳으로 집계된 반면, 뉴질랜드 웰링턴은 최고 15°C, 최저 10°C를 기록해 가장 선선한 곳으로 나타났다. 호주 캔버라는 뉴질랜드 웰링턴보다 최고기온이 7°C 더 높았다.\n\n오세아니아 주요국 중 뉴질랜드에서는 비 소식이 이어졌다. 뉴질랜드 웰링턴은 이슬비가 내리는 날씨를 보였으며, 강수확률은 84%에 강수량은 1.0mm를 기록했다. 반면 호주 캔버라는 흐린 ",
-    "url": "internal://weather_group_오세아니아_today20260930",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_오세아니아_today20260930",
-    "region": "oceania",
-    "country": "오세아니아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-09-30 04:22",
-    "countries": [
-      "호주",
-      "뉴질랜드"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_australia_20260930.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-09-30T04:22:00",
-    "update_log": [
-      {
-        "timestamp": "2026-09-30 04:22",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
   }
 ]
