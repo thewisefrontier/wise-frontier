@@ -23,6 +23,12 @@ gemini_writer.py의 get_today_articles()는 최근 96시간(4일)치 원자재�
 걸려 실패하는데, 오류를 출력만 하고 exit 0이라 워크플로는 매일 "성공"으로 떴다.
 → 작은 배치로 나눠 지우고, 실패하면 exit 1로 드러나게 한다.
 
+⚠️ 2026-10-01: raw_candidates 삭제가 2026-09-30·10-01 이틀 실패했는데(Supabase 전
+billing cycle egress 초과로 추정 — 로컬에서 같은 자격증명으로 재실행하니 바로
+성공), 코드 버그는 아니었다. 이참에 집계만 하던 미발행(articles) 정리를
+cleanup_stale_unpublished_articles()로 실제 삭제까지 구현(적체 4,117건은 하루
+상한을 둬 약 한 달에 걸쳐 해소 — UNPUBLISHED_DELETE_DAILY_CAP 옆 주석 참고).
+
 실행: python scripts/cleanup_stale_raw.py
 """
 
@@ -43,6 +49,16 @@ SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 RETENTION_HOURS = int(os.getenv("RAW_CANDIDATE_RETENTION_HOURS", "96"))
 BATCH = 300
 
+# 사용자 지시(2026-09-28): 미발행 기사는 3일치만 두고 나머지는 삭제. 적체(2026-10-01
+# 실측 4,117건)를 하루에 다 지우면 위험하니 "천천히", "한달치 기준"으로 나눠 지운다
+# (2026-10-01 사용자 요청). 최근 7일 평균 신규 유입이 하루 약 240건이라, 상한을
+# 400건으로 잡으면 유입을 따라잡으면서도 적체가 약 25일(한 달 안)에 해소된다
+# (4117 / (400-240) ≈ 26일). Supabase 월간 한도(egress 5GB, DB 0.5GB)엔 이 자체가
+# 거의 영향 없다 — id만 조회(SELECT)하고 Prefer: return=minimal로 지워 응답이
+# 가벼워, 하루 상한을 더 낮출 필요는 없다. 상한은 "한 번에 큰 트랜잭션을 만들지
+# 않는다"는 안전 목적이다.
+UNPUBLISHED_DELETE_DAILY_CAP = int(os.getenv("UNPUBLISHED_DELETE_DAILY_CAP", "400"))
+
 
 def _headers():
     return {
@@ -53,16 +69,18 @@ def _headers():
     }
 
 
-def _batched(filters: dict, apply, table: str = "raw_candidates") -> int:
-    """filters에 맞는 행 id를 BATCH개씩 조회해 apply(id목록)를 반복. 처리 건수 반환."""
+def _batched(filters: dict, apply, table: str = "raw_candidates", max_total: int = None) -> int:
+    """filters에 맞는 행 id를 BATCH개씩 조회해 apply(id목록)를 반복. max_total을 주면 그
+    건수에서 멈춘다(적체를 한 번에 다 지우면 안 되는 대상용). 처리 건수 반환."""
     url = f"{SUPABASE_URL}/rest/v1/{table}"
     done, last = 0, 0
-    while True:
+    while max_total is None or done < max_total:
         # id>last로 이어서 조회한다 — 매번 앞에서부터 다시 찾으면 방금 지운(아직
         # vacuum 전) 죽은 행을 반복해서 훑어 점점 느려지다 타임아웃(실측 1.2만 건째).
+        limit = BATCH if max_total is None else min(BATCH, max_total - done)
         res = requests.get(url, headers=_headers(), timeout=60,
                            params={**filters, "id": f"gt.{last}", "select": "id", "order": "id",
-                                   "limit": str(BATCH)})
+                                   "limit": str(limit)})
         res.raise_for_status()
         ids = [r["id"] for r in res.json()]
         if not ids:
@@ -73,25 +91,34 @@ def _batched(filters: dict, apply, table: str = "raw_candidates") -> int:
         done += len(ids)
         if done % 3000 < BATCH:
             print(f"    … {done}건")
+    return done
 
 
-def preview_unpublished_articles():
-    """articles 테이블의 오래된 '미발행' 행 집계(2026-09-28 신설 — 사용자 지적: 5월 30일 것까지 미발행이 남아 있다).
-    이 정리 작업은 raw_candidates만 지워 왔고 종합기사 테이블의 보류·검수대기·트렌드 초안엔 삭제 규칙 자체가 없었다
-    (실측: 미발행 4,609건 중 14일 이전 2,654건). 사용자 지시: 미발행은 3일치만 두고 나머지는 삭제.
-    ⚠️ 이 함수는 집계만 한다(삭제 없음). 영구 삭제 단계는 자동 실행 검사가 대량 삭제로 차단해 넣지 않았다 —
-    삭제 방식은 사용자가 정한다(README 아님, 이 주석과 대화 기록 참고).
+def cleanup_stale_unpublished_articles():
+    """articles 테이블의 오래된 '미발행' 행 삭제(2026-10-01 — 집계만 하던 preview_unpublished_articles를
+    대체). 사용자 지시: 미발행은 3일치만 두고 나머지는 삭제. 적체(2026-10-01 실측 4,117건)는 한 번에
+    지우지 않고 하루 UNPUBLISHED_DELETE_DAILY_CAP건까지만 지운다(사용자 요청: "천천히", "한달치 기준").
     대상 조건: is_published=false AND source != DomesticKR-Synth(다국어 내부검증용) AND created_at < now-KEEP_DAYS.
     발행 기사(is_published=true)는 어떤 경우에도 대상이 아니다."""
     days = int(os.getenv("UNPUBLISHED_KEEP_DAYS", "3"))
     cutoff = (now_kst() - timedelta(days=days)).strftime("%Y-%m-%d %H:%M")
+    filters = {"is_published": "eq.false", "source": "neq.DomesticKR-Synth", "created_at": f"lt.{cutoff}"}
+
+    deleted = _batched(
+        filters,
+        lambda url, ids: requests.delete(url, headers=_headers(), params={"id": ids}, timeout=60),
+        table="articles",
+        max_total=UNPUBLISHED_DELETE_DAILY_CAP,
+    )
+    print(f"  ✓ 미발행 기사(articles) {days}일 초과 삭제 {deleted}건 (하루 상한 {UNPUBLISHED_DELETE_DAILY_CAP}건)")
+
+    # 삭제 후에도 남은 적체 규모를 기록해, 하루 상한이 유입을 못 따라가면 로그로 드러나게 한다.
     r = requests.get(f"{SUPABASE_URL}/rest/v1/articles", timeout=60,
                      headers={**_headers(), "Prefer": "count=exact", "Range": "0-0"},
-                     params={"select": "id", "is_published": "eq.false", "source": "neq.DomesticKR-Synth",
-                             "created_at": f"lt.{cutoff}"})
+                     params={"select": "id", **filters})
     r.raise_for_status()
-    print(f"  → 미발행 기사(articles) {days}일 초과({cutoff} 이전): "
-          f"{r.headers.get('content-range', '*/?').split('/')[-1]}건 (집계만 — 삭제하지 않음)")
+    remaining = r.headers.get('content-range', '*/?').split('/')[-1]
+    print(f"  → 남은 적체(미발행 {days}일 초과): {remaining}건")
 
 
 def main():
@@ -109,7 +136,7 @@ def main():
     )
     print(f"  ✓ 삭제 {deleted}건")
 
-    preview_unpublished_articles()
+    cleanup_stale_unpublished_articles()
 
     print(f"[cleanup_stale_raw] 완료: {now_kst().strftime('%Y-%m-%d %H:%M')} KST")
 
