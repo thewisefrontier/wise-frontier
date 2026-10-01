@@ -1,5 +1,59 @@
 [
   {
+    "id": 296202,
+    "title_en": "[국제유가] WTI 배럴당 93달러…중동 공급 차질 우려",
+    "title_ko": "[국제유가] WTI 배럴당 93달러…중동 공급 차질 우려",
+    "summary_ko": "국제유가가 1일(현지시간) 혼조세를 보였다. 시장 집계에 따르면 서부텍사스산원유(WTI) 선물은 뉴욕상업거래소(NYMEX)에서 배럴당 92.95달러에 거래를 마쳤으며, 전일 종가(92.60달러) 대비 0.38%(0.35달러) 상승했다.\n\n반면 브렌트유는 배럴당 102.31달러로 마감해 전일 종가(105.28달러) 대비 2.82%(2.97달러) 하락했다. WTI와 브렌트유가 서로 다른 방향으로 움직이며 장을 마감했다.\n\n이번 유가 움직임은 중동 지역의 지정학적 위험과 공급망 차질이 지속되는 상황 속에서 나타났다. 외신 보도에 따르면 ",
+    "url": "internal://oil_price_2026-10-01",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국제유가",
+    "region": "글로벌",
+    "country": "국제",
+    "country_flag": "🛢️",
+    "score": 1,
+    "created_at": "2026-10-02 06:07",
+    "countries": [
+      "미국",
+      "사우디아라비아",
+      "러시아"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/oil_2026_10_01_pid7025236.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-02T06:07:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-02 06:07",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "wti": {
+        "pct": 0.37796976241901575,
+        "prev": 92.6,
+        "price": 92.95,
+        "change": 0.3500000000000085
+      },
+      "date": "2026-10-01",
+      "brent": {
+        "pct": -2.8210486322188437,
+        "prev": 105.28,
+        "price": 102.31,
+        "change": -2.969999999999999
+      },
+      "source": "Yahoo Finance"
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 296150,
     "title_en": "한국, 전국·일교차 큰 맑은 날씨…낮 최고 24도",
     "title_ko": "한국, 전국·일교차 큰 맑은 날씨…낮 최고 24도",
@@ -1873,54 +1927,6 @@
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 295412,
-    "title_en": "브라질 연방선거법원, 플라비우 볼소나루 가짜뉴스 삭제 처분 유지…3대 1 결정",
-    "title_ko": "브라질 연방선거법원, 플라비우 볼소나루 가짜뉴스 삭제 처분 유지…3대 1 결정",
-    "summary_ko": "브라질 연방선거법원은 30일(현지시간) 플라비우 볼소나루 상원의원이 브라질의 수호성인인 아파레시다는 성모의 칭호를 박탈하려 한다는 허위 사실을 담은 소셜미디어 게시물을 삭제하도록 한 안드레 멘돈사 대법관 겸 선거법원 주심 대법관의 결정을 3대 1의 찬성으로 유지했다.\n\n이번 표결은 카시오 누네스 마르케스 연방선거법원장과 디아스 토폴리 대법관이 멘돈사 주심의 입장을 지지하면서 다수결이 형성됐다. 반면 리카르도 빌라스 보아스 쿠에바 선거법원 총감은 게시물 삭제 범위의 축소를 주장하며 부분적으로 반대 의견을 냈다.\n\n멘돈사 주심은 앞서 ",
-    "url": "internal://cluster_20261001_a43c7be2",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "cluster_20261001_a43c7be2",
-    "region": "latin_america",
-    "country": "브라질",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-01 06:05",
-    "countries": [
-      "브라질"
-    ],
-    "is_published": true,
-    "image_url": "",
-    "view_count": 0,
-    "first_published_at": "2026-10-01T06:05:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-01 06:05",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-10-01 08:28",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        166611,
-        166902,
-        166613,
-        166812
-      ]
-    },
-    "image_credit": "",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
     "noindex": true
   }
 ]
