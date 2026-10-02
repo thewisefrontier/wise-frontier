@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-02 11:26",
+  "updated_at": "2026-10-02 11:36",
   "indices": [
     {
       "name": "S&P 500",
@@ -25,15 +25,15 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 6983.21,
-      "change_pct": 2.12,
+      "price": 6978.63,
+      "change_pct": 2.06,
       "up": true
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 896.81,
-      "change_pct": 4.78,
+      "price": 895.06,
+      "change_pct": 4.57,
       "up": true
     },
     {
@@ -60,15 +60,15 @@
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 5985.57,
-      "change_pct": -0.4,
+      "price": 5991.88,
+      "change_pct": -0.29,
       "up": false
     },
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 5632.95,
-      "change_pct": 0.06,
+      "price": 5645.77,
+      "change_pct": 0.29,
       "up": true
     },
     {
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.71,
-      "change_pct": 1.76,
+      "price": 16.7,
+      "change_pct": 1.74,
       "up": true
     }
   ],
@@ -121,15 +121,15 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 6983.21,
-        "change_pct": 2.12,
+        "price": 6978.63,
+        "change_pct": 2.06,
         "up": true
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 896.81,
-        "change_pct": 4.78,
+        "price": 895.06,
+        "change_pct": 4.57,
         "up": true
       }
     ],
@@ -158,15 +158,15 @@
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 5985.57,
-        "change_pct": -0.4,
+        "price": 5991.88,
+        "change_pct": -0.29,
         "up": false
       },
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 5632.95,
-        "change_pct": 0.06,
+        "price": 5645.77,
+        "change_pct": 0.29,
         "up": true
       }
     ],
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.71,
-        "change_pct": 1.76,
+        "price": 16.7,
+        "change_pct": 1.74,
         "up": true
       }
     ]
@@ -205,8 +205,8 @@
     "ACB": {
       "name": "Asia Commercial Joint Stock Bank",
       "symbol": "ACB.VN",
-      "price": 21100.0,
-      "change_pct": 0.0,
+      "price": 21150.0,
+      "change_pct": 0.24,
       "up": true
     }
   }
