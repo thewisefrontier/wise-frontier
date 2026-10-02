@@ -1,5 +1,71 @@
 [
   {
+    "id": 296848,
+    "title_en": "[국내유가] 휘발유 리터당 1858원…정유사 공급가 및 국제시세 변동 영향",
+    "title_ko": "[국내유가] 휘발유 리터당 1858원…정유사 공급가 및 국제시세 변동 영향",
+    "summary_ko": "한국석유공사 오피넷이 3일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1858원으로 집계됐다.\n\n이날 오피넷에 따르면 경유 판매가격은 리터당 1843.17원으로 전일 대비 0.61원 하락했다. 반면 LPG 부탄은 리터당 1142.18원으로 전일 대비 0.35원 상승했다. 휘발유 가격 역시 전일 대비 0.16원 내린 리터당 1857.57원을 기록했다.\n\n유가 변동은 최근 정유사 공급가격 조정과 국제 시세 흐름이 복합적으로 작용한 결과로 파악된다. 정유사들의 도매가 움직임과 국제유가 변동성에 따라 유종별 가격 등락",
+    "url": "internal://opinet_price_2026-10-03",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-10-03 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_10_03_pid2157211.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-03T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-03 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-10-03",
+      "prices": {
+        "B027": {
+          "diff": -0.16,
+          "name": "휘발유",
+          "price": 1857.57
+        },
+        "B034": {
+          "diff": 1.8,
+          "name": "고급휘발유",
+          "price": 2345.3
+        },
+        "C004": {
+          "diff": 0.21,
+          "name": "실내등유",
+          "price": 1572.86
+        },
+        "D047": {
+          "diff": -0.61,
+          "name": "경유",
+          "price": 1843.17
+        },
+        "K015": {
+          "diff": 0.35,
+          "name": "LPG(부탄)",
+          "price": 1142.18
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 296846,
     "title_en": "The Everlasting",
     "title_ko": "[오늘의 책] 2026년 휴고상 장편 부문을 수상한 앨릭스 E. 해로의 『The Everlasting』",
@@ -1621,51 +1687,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 296145,
-    "title_en": "The Ten Thousand Doors of January",
-    "title_ko": "[오늘의 책] 2020년 휴고상 장편 부문 최종후보, 앨릭스 E. 해로의 『재뉴어리의 푸른 문』",
-    "summary_ko": "앨릭스 E. 해로(Alix E. Harrow)의 데뷔 장편소설 『재뉴어리의 푸른 문』은 2020년 휴고상 장편 부문 최종후보에 올랐다. 이 작품은 2019년에 처음 발표된 이후 독특한 세계관과 깊이 있는 주제 의식으로 세계적인 주목을 받아왔다. 국내에는 2024년에 번역 출간되어 한국 독자들과 만나고 있다.\n\n소설은 20세기 초 거대한 저택에서 후견인 코넬리우스 로크(Cornelius Locke)의 엄격한 규칙 아래 살아가는 혼혈 소녀 재뉴어리 스캘러(January Scaller)의 이야기로 시작한다. 재뉴어리의 아버지는 로크를 위",
-    "url": "internal://literature_Q93552114",
-    "source": "NewsFinal",
-    "category": "책",
-    "subcategory": "오늘의책",
-    "region": "global",
-    "country": "미국",
-    "country_flag": "🇺🇸",
-    "score": 1,
-    "created_at": "2026-10-02 05:05",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/literature_cover_q93552114.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-02T05:05:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-02 05:05",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-10-02 (스케줄 작업, 사용자 확인)",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "enwiki": "The Ten Thousand Doors of January",
-      "kowiki": null,
-      "source": "prize",
-      "wikidata": "Q93552114"
-    },
-    "image_credit": "재뉴어리의 푸른 문 표지",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   }
 ]
