@@ -1,25 +1,25 @@
 {
-  "updated_at": "2026-10-02 23:11",
+  "updated_at": "2026-10-02 23:16",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7743.82,
-      "change_pct": 1.21,
+      "price": 7741.14,
+      "change_pct": 1.17,
       "up": true
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 27314.96,
+      "price": 27314.26,
       "change_pct": 1.69,
       "up": true
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 51248.57,
-      "change_pct": 0.67,
+      "price": 51192.89,
+      "change_pct": 0.56,
       "up": true
     },
     {
@@ -39,8 +39,8 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 108439.68,
-      "change_pct": 0.63,
+      "price": 108554.09,
+      "change_pct": 0.73,
       "up": true
     },
     {
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.59,
-      "change_pct": 1.01,
+      "price": 16.6,
+      "change_pct": 1.09,
       "up": true
     }
   ],
@@ -98,22 +98,22 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7743.82,
-        "change_pct": 1.21,
+        "price": 7741.14,
+        "change_pct": 1.17,
         "up": true
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 27314.96,
+        "price": 27314.26,
         "change_pct": 1.69,
         "up": true
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 51248.57,
-        "change_pct": 0.67,
+        "price": 51192.89,
+        "change_pct": 0.56,
         "up": true
       }
     ],
@@ -137,8 +137,8 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 108439.68,
-        "change_pct": 0.63,
+        "price": 108554.09,
+        "change_pct": 0.73,
         "up": true
       },
       {
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.59,
-        "change_pct": 1.01,
+        "price": 16.6,
+        "change_pct": 1.09,
         "up": true
       }
     ]
