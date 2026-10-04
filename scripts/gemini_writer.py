@@ -41,6 +41,21 @@ except Exception:
     def is_sports_cluster(cluster):
         return False
 
+# 해외 보도 한국 기업 소식(사건사고 우선) 판정. import 실패해도 본 기능은 안 죽게
+# 폴백(전부 미해당)을 둔다 — 부가 가산점 기능이라 실패해도 발행 자체를 막으면 안 된다.
+try:
+    import korean_company_abroad
+except Exception as _e:
+    print(f"  [경고] korean_company_abroad import 실패({_e}) — 한국기업 해외소식 가산 비활성")
+    class _KcaFallback:
+        def classify(self, cluster):
+            return None
+        def importance_bonus(self, cluster):
+            return 0.0
+        def is_tier1(self, cluster):
+            return False
+    korean_company_abroad = _KcaFallback()
+
 # 저장 시점 문자셋 혼입 하드 블록. import 실패해도 본 기능이 죽지 않도록 폴백을 둔다.
 try:
     from script_leak import detect_script_leak
@@ -1392,6 +1407,10 @@ def cluster_importance(cluster) -> float:
         score += 25.0
     elif _cluster_hits_severity(members, _SEVERITY_MID):
         score += 10.0
+
+    # 3b) 해외 보도 한국 기업 소식 — 사건사고(1순위)>실적·투자(2순위)>신제품·수상(3순위)
+    # (2026-10-04 사용자 지시). kr_coverage 재랭킹이 국내 미보도분을 추가로 가산한다.
+    score += korean_company_abroad.importance_bonus(cluster)
 
     # 4) 신선도 — 최근 12시간 이내 소식에 가산해, 오래된 클러스터가 상위에
     #    눌러앉아 새 속보를 밀어내는 걸 막는다.
@@ -3231,11 +3250,19 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
         # 상한이 남았으면 top_n 밖 스포츠도 희소성을 잰다(최대 10개 — 구글뉴스 조회 수 제한).
         measure_ids = {id(c) for c in sports[:10]} if sports_left else set()
         clusters, kr_info = _kr_rerank(
-            clusters, cluster_importance, _cluster_hits_severity_high, make_cluster_key,
+            clusters, cluster_importance,
+            # 해외 한국기업 사건사고도 대형 참사처럼 "국내 보도가 많아도 감점하지 않는다"
+            # 대상에 포함(2026-10-04) — 게이트 면제와 같은 사유.
+            lambda c: _cluster_hits_severity_high(c) or korean_company_abroad.is_tier1(c),
+            make_cluster_key,
             # 부가 기능이라 과부하 때 키 10개×30초를 다 기다리지 않게 한 모델·짧은 타임아웃만
             lambda p: _gemini_client.call(p, max_tokens=800, start_tier=4, temperature=0.2,
                                           timeout=(5, 15), max_stages=1),
-            bonus_eligible=lambda c: (c[0].get("country") or "") not in ADVANCED_ECONOMIES | {""},
+            # 국내 희소성 가산은 원래 프론티어 국가 전용이지만(선진국 연예 기사 오탐
+            # 방지, 2026-09-25), 해외 한국기업 소식은 발생국이 선진국이어도(미국 공장
+            # 사고 등) 국내 미보도 여부가 그대로 가치 신호라 별도로 허용한다(2026-10-04).
+            bonus_eligible=lambda c: ((c[0].get("country") or "") not in ADVANCED_ECONOMIES | {""}
+                                       or korean_company_abroad.classify(c) is not None),
             daily_cap_near=lambda: lite_daily_usage_near_cap(GEMINI_API_KEYS),
             also_measure=lambda c: id(c) in measure_ids)
         clusters = order_sports_by_scarcity(clusters, kr_info)
@@ -3322,9 +3349,14 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
             # _cluster_hits_severity_high+3시간 신선도로 따로 걸러져 있어,
             # 이 4중복 게이트까지 얹으면 진짜 속보(터진 직후 1~2곳만 보도)가
             # 막혀 경로 자체의 목적(빠른 발행)과 충돌한다 — 속보는 면제.
+            # 해외에서 사건사고에 휘말린 한국 기업 소식도 대형 참사와 같은 이유로
+            # 면제한다 — country가 발생국(선진국이면 걸림)이든 "korean" 오탐으로
+            # '한국'(ADVANCED_ECONOMIES에 포함)으로 잘못 잡혔든 둘 다 이 게이트에
+            # 걸릴 수 있다(2026-10-04, [[newsfinal_korean_company_overseas_incidents]]).
             if (clusters_override is None and country in ADVANCED_ECONOMIES
                     and cur_count < CLUSTER_MIN_SIZE_ADVANCED and not _has_official_source(cluster)
-                    and not _cluster_hits_severity(cluster, _MASS_CASUALTY)):
+                    and not _cluster_hits_severity(cluster, _MASS_CASUALTY)
+                    and not korean_company_abroad.is_tier1(cluster)):
                 print(f"  [SKIP] 선진국({country}) 저중복 이슈 ({cur_count}건 < {CLUSTER_MIN_SIZE_ADVANCED}건) — 프론티어마켓 편집방향상 제외\n")
                 continue
 
@@ -3899,7 +3931,9 @@ def run_breaking():
     breaking = []
     for c in clusters:
         members = [a for a in c if not a.get("__needs_review__")]
-        if not members or not _cluster_hits_severity_high(members):
+        # 해외 한국기업 사건사고도 속보 경로 대상(2026-10-04) — 소송·리콜 등은
+        # _SEVERITY_HIGH(인명피해·국가 급변 키워드)에 안 걸리지만 신속 보도 가치는 같다.
+        if not members or not (_cluster_hits_severity_high(members) or korean_company_abroad.is_tier1(c)):
             continue
         latest = _cluster_latest_dt(members)
         if latest and (now_kst() - latest).total_seconds() / 3600.0 > BREAKING_MAX_AGE_HOURS:
