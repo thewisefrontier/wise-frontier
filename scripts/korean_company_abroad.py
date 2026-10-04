@@ -17,6 +17,8 @@
   의장 취임, 델리 "LG"(부지사) 지시, 미얀마 반군 "KIA"(Kachin Independence Army)
   고지 점령 기사. 정식 계열사명(LG Electronics, SK Hynix 등)으로만 매칭하고,
   "Kia"(기아차)는 대문자 전체(KIA=카친독립군)와 구분하기 위해 대소문자를 구분해서 매칭한다.
+  독립 대기업 추가분(KT/DL/OCI/KCC)도 같은 이유 — 바레 "OCI"가 OIC(이슬람협력기구)
+  성명과 겹치는 걸 실측으로 확인해 "OCI Holdings"로 한정했다.
 - 회사명이 제목 또는 리드 맨 앞(앞 30자 — 영어 기사 리드 문장의 주어 위치)에 나와야
   인정. "Shares of TSMC led gains, with Samsung, SK Hynix also rising" 같은 실측
   사례(2026-10-04)처럼 리드 뒤쪽 나열에 끼어든 경우는 30자를 넘겨 제외된다 — 완벽하진
@@ -85,6 +87,27 @@ _COMPANY_PATTERNS = {
     "메리츠": [(r"meritz", True)],
     "교보생명": [(r"kyobo life", True)],
     "DB손해보험": [(r"\bdb insurance\b", True)],
+    # 그룹 계열사 아닌 독립 대기업(2026-10-04 추가, "100대 기업 범위로 확대" 요청) —
+    # 위 20개 그룹 계열사는 이미 그룹명으로 잡히므로(삼성전기·현대제철 등) 겹치지
+    # 않는 독립 기업만 추린다. raw_candidates 14일치로 약어 충돌을 실측 확인했다:
+    # 바레 "OCI"는 OIC(이슬람협력기구)와 겹쳐 즉시 제외하고 "OCI Holdings"로 한정,
+    # "KT"/"DL"/"KCC"도 같은 이유(흔한 2~3글자)로 정식명만 매칭한다.
+    "KT": [(r"kt corporation", True), (r"\bkt corp\b", True), (r"kt telecom", True)],
+    "신세계": [(r"shinsegae", True), (r"\bemart\b", True)],
+    "아모레퍼시픽": [(r"amorepacific", True)],
+    "넷마블": [(r"netmarble", True)],
+    "크래프톤": [(r"krafton", True)],
+    "하이브": [(r"\bhybe\b", True)],
+    "한미약품": [(r"hanmi pharmaceutical", True), (r"hanmi science", True)],
+    "유한양행": [(r"yuhan corporation", True), (r"\byuhan corp\b", True)],
+    "금호": [(r"kumho", True)],
+    "한국타이어": [(r"hankook tire", True)],
+    "대우": [(r"daewoo e&c", True), (r"daewoo engineering", True), (r"daewoo shipbuilding", True)],
+    "DL이앤씨": [(r"\bdl e&c\b", True), (r"dl engineering", True)],
+    "OCI": [(r"oci holdings", True)],
+    "KCC": [(r"kcc corporation", True), (r"kcc glass", True)],
+    "넥슨": [(r"\bnexon\b", True)],
+    "엔씨소프트": [(r"ncsoft", True), (r"\bnc soft\b", True)],
 }
 
 _COMPANY_RE = {
