@@ -12,7 +12,7 @@ run_trend_gates(...) -> (body, extras, reason)
 """
 from fabrication_guard import (detect_foreign_leftover, verify_no_fabricated_names,
                                drop_flagged_sentences, scrub_extras)
-from style_guard import strip_number_commas
+from style_guard import lead_is_dangling, strip_number_commas
 
 TREND_REPAIR_MIN_LEN = 400  # article_store.TREND_MIN_BODY_LEN과 같은 하한
 
@@ -29,6 +29,8 @@ def source_text(articles) -> str:
 
 def run_trend_gates(title, body, sources, call_llm, extras=(), check_names=True):
     body = strip_number_commas(body)
+    if lead_is_dangling(body):
+        return body, extras, "리드 누락 — 첫 문장이 앞선 문맥을 전제(누가·무엇을 없이 시작)"
     fl = detect_foreign_leftover(body, call_llm)
     if fl:
         return body, extras, f"번역 누락 — 외국어 잔존: {fl}"

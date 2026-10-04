@@ -273,6 +273,12 @@ def drop_flagged_sentences(body: str, title: str, suspect: str, min_len: int = 7
     new = "\n".join(kept).strip()
     if dropped == 0 or dropped > max_drop or len(new) < min_len or len(new) < len(body) * 0.75:
         return None
+    # 리드 문장 자체가 지워져 다음 문장이 "그는/장관은 ~"처럼 앞선 문맥을 전제하는 채로 남으면 보정 실패로
+    # 본다(2026-10-04 실사고 id=297527 — 리드 주어였던 이름이 지워져 본문이 "장관은 이번 사태가…"로 시작).
+    # 이름이 리드의 둘째 문장 이후에만 있었다면(문맥은 살아있음) 정상적으로 통과한다.
+    from style_guard import lead_is_dangling
+    if lead_is_dangling(new):
+        return None
     return new
 
 

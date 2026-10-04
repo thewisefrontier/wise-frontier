@@ -616,7 +616,7 @@ from trend_gate import run_trend_gates
 
 def _guard_note(reason: str) -> str:
     """미발행 사유 문구: 날짜 환각 외 게이트(번역 누락·고유명사 날조)는 사유를 그대로 쓴다."""
-    return reason if reason.startswith(("번역 누락", "고유명사 날조")) else f"날짜 환각 의심 미발행 — {reason}"
+    return reason if reason.startswith(("번역 누락", "고유명사 날조", "리드 누락")) else f"날짜 환각 의심 미발행 — {reason}"
 
 
 def call_gemini_article(prompt, max_tokens=2000, style_retries=1):
