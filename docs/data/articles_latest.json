@@ -1,5 +1,46 @@
 [
   {
+    "id": 298320,
+    "title_en": "남아시아, 35도 폭염과 소나기…곳곳 뇌우",
+    "title_ko": "남아시아, 35도 폭염과 소나기…곳곳 뇌우",
+    "summary_ko": "5일(현지시간) 남아시아 지역의 기온은 최저 16°C에서 최고 35°C 사이의 분포를 보였다. 지역별로 극심한 기온 차를 보인 가운데, 방글라데시 다카가 35°C를 기록하며 가장 더운 곳으로 집계됐다. 반면 네팔 카트만두는 최저 16°C, 최고 23°C에 머물러 가장 선선한 곳으로 나타났다.\n\n카트만두의 최고기온은 다카보다 12°C 낮아 뚜렷한 대비를 이뤘으며, 약한 이슬비와 함께 강수확률 100%, 강수량 3.2mm를 기록했다. 광범위한 지역에서 폭염과 강수 현상이 동시에 나타났다. 인도 콜카타와 첸나이, 방글라데시 다카와 실헷,",
+    "url": "internal://weather_group_남아시아_today20261005",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_남아시아_today20261005",
+    "region": "south_asia",
+    "country": "남아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-05 08:38",
+    "countries": [
+      "인도",
+      "방글라데시",
+      "파키스탄",
+      "스리랑카",
+      "네팔"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_india_20261005.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-05T08:38:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-05 08:38",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 298268,
     "title_en": "동남아시아, 35도 폭염과 뇌우…극한 날씨 강타",
     "title_ko": "동남아시아, 35도 폭염과 뇌우…극한 날씨 강타",
@@ -1360,47 +1401,6 @@
     "update_log": [
       {
         "timestamp": "2026-10-04 09:07",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 297581,
-    "title_en": "남아시아, 최고 35도 더위…곳곳 비 소식",
-    "title_ko": "남아시아, 최고 35도 더위…곳곳 비 소식",
-    "summary_ko": "4일(현지시간) 남아시아 지역의 다음주 날씨 예보에 따르면, 이번 주 기온은 최저 13°C에서 최고 35°C 사이의 분포를 보일 것으로 예보됐다. 전반적으로 완연한 더위가 이어지는 가운데 국가별로 기온 차가 나타나며, 일부 국가에는 비 소식이 예고된 상태다.\n\n국가별 주간 기온 및 강수 현황을 보면, 인도는 주간 최고 35°C, 최저 21°C를 기록하며 지역 전체 최고 기온을 형성할 전망이다. 방글라데시는 최고 34°C, 최저 23°C를 나타내겠고 파키스탄은 최고 32°C, 최저 19°C의 기온 분포를 보이는 동시에 비가 내릴 것으",
-    "url": "internal://weather_group_남아시아_weekly20261004",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_남아시아_weekly20261004",
-    "region": "south_asia",
-    "country": "남아시아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-04 08:37",
-    "countries": [
-      "인도",
-      "방글라데시",
-      "파키스탄",
-      "스리랑카",
-      "네팔"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_india_20261004.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-04T08:37:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-04 08:37",
         "note": "최초 게시"
       }
     ],
