@@ -256,15 +256,18 @@
           <select class="field-select" id="edit-category">
             <option value="">선택</option>
             <option value="경제">경제</option>
-            <option value="금융/증권">금융/증권</option>
-            <option value="자원/에너지">자원/에너지</option>
-            <option value="산업/기업">산업/기업</option>
-            <option value="정치">정치</option>
+            <option value="금융">금융</option>
+            <option value="자원·에너지">자원·에너지</option>
+            <option value="산업·기업">산업·기업</option>
+            <option value="정치·외교">정치·외교</option>
             <option value="사회">사회</option>
             <option value="IT·과학">IT·과학</option>
-            <option value="글로벌경제">글로벌경제</option>
+            <option value="문화·예술">문화·예술</option>
+            <option value="글로벌">글로벌</option>
+            <option value="스포츠">스포츠</option>
+            <option value="날씨">날씨</option>
+            <option value="다이제스트">다이제스트</option>
             <option value="브리핑">브리핑</option>
-            <option value="종합">종합</option>
           </select>
         </div>
         <div>
@@ -298,6 +301,12 @@
         <div>
           <div class="field-label">바이라인</div>
           <input class="field-select" id="edit-byline" type="text" placeholder="뉴스파이널 편집국" />
+        </div>
+        <div>
+          <div class="field-label">발행 상태</div>
+          <label style="display:flex;align-items:center;gap:6px;height:34px;font-size:13px;">
+            <input type="checkbox" id="edit-is-published" style="width:16px;height:16px;" /> 발행됨
+          </label>
         </div>
       </div>
       <div id="url-field">
@@ -492,7 +501,9 @@
           <option value="정치·외교">정치·외교</option>
           <option value="사회">사회</option>
           <option value="IT·과학">IT·과학</option>
+          <option value="문화·예술">문화·예술</option>
           <option value="글로벌">글로벌</option>
+          <option value="스포츠">스포츠</option>
         </select>
         <select id="sort-select" onchange="loadArticles()">
           <option value="created_at">최신순</option>
@@ -584,6 +595,7 @@
     document.getElementById('edit-country').value = data.country || '';
     document.getElementById('edit-source').value = data.source || '';
     document.getElementById('edit-byline').value = data.byline || '뉴스파이널 편집국';
+    document.getElementById('edit-is-published').checked = !!data.is_published;
     document.getElementById('edit-url').value = data.url || '';
     document.getElementById('edit-image-url').value = data.image_url || '';
     if (data.image_url) showImagePreview(data.image_url);
@@ -629,6 +641,7 @@
     document.getElementById('edit-region').value = '';
     document.getElementById('edit-source').value = 'NewsFinal';
     document.getElementById('edit-byline').value = '뉴스파이널 편집국';
+    document.getElementById('edit-is-published').checked = true;
     document.getElementById('edit-image-url').value = '';
     document.getElementById('image-preview').style.display = 'none';
     document.getElementById('url-field').style.display = 'none';
@@ -654,6 +667,7 @@
       byline: document.getElementById('edit-byline').value || '뉴스파이널 편집국',
       url: document.getElementById('edit-url').value,
       image_url: document.getElementById('edit-image-url').value || null,
+      is_published: document.getElementById('edit-is-published').checked,
     };
 
     if (isNew) {

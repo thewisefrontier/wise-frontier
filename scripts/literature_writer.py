@@ -781,7 +781,7 @@ def insert_article(w: dict, title: str, body: str, image_url: str, image_credit:
         "title_ko": title if title.startswith(TITLE_PREFIX) else f"{TITLE_PREFIX} {title}",
         "summary_en": "", "summary_ko": body,
         "url": f"{URL_PREFIX}{w['qid']}",
-        "source": "NewsFinal", "category": "책", "subcategory": SUBCATEGORY,
+        "source": "NewsFinal", "category": "문화·예술", "subcategory": SUBCATEGORY,
         "region": region, "country": country, "country_flag": flag, "countries": [country] if country else [],
         "image_url": image_url, "image_credit": image_credit, "score": 1,
         "created_at": now_str, "first_published_at": now_str,
