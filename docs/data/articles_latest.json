@@ -1,5 +1,51 @@
 [
   {
+    "id": 297723,
+    "title_en": "아프리카, 7도에서 32도 사이 기온 분포…곳곳 비 소식",
+    "title_ko": "아프리카, 7도에서 32도 사이 기온 분포…곳곳 비 소식",
+    "summary_ko": "4일(현지시간) 아프리카 주요국은 최저 7도에서 최고 32도 사이의 기온 분포를 보이며 지역별로 뚜렷한 기온 차를 나타낸다. 이번 주 아프리카 전역의 기온은 최저 7도에서 최고 32도 사이에서 형성되며, 나이지리아와 케냐를 비롯해 남아공, 에티오피아, 가나 등 5개국에서는 비 소식이 예보되어 있다. 가나와 탄자니아는 최고 32도로 가장 높은 기온을 기록하며, 에티오피아는 최저 7도로 가장 낮은 기온을 보인다.\n\n나이지리아는 최고 29도와 최저 21도 사이의 기온을 유지하며 비가 내릴 전망이다. 케냐는 최고 28도와 최저 16도, 남",
+    "url": "internal://weather_group_아프리카_weekly20261004",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_아프리카_weekly20261004",
+    "region": "africa",
+    "country": "아프리카",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-04 13:20",
+    "countries": [
+      "나이지리아",
+      "케냐",
+      "남아공",
+      "이집트",
+      "모로코",
+      "알제리",
+      "에티오피아",
+      "가나",
+      "탄자니아",
+      "앙골라"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_nigeria_20261004.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-04T13:20:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-04 13:20",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 297722,
     "title_en": "[주간 가상자산 시황] 비트코인·이더리움 보합세…시장 변동성 속 관망세 지속",
     "title_ko": "[주간 가상자산 시황] 비트코인·이더리움 보합세…시장 변동성 속 관망세 지속",
@@ -1472,51 +1518,5 @@
     "summary_3lines_en": "",
     "investment_idea_en": "",
     "noindex": false
-  },
-  {
-    "id": 297049,
-    "title_en": "아프리카, 가나 집중호우 예보 속 지역별 기온 차 뚜렷",
-    "title_ko": "아프리카, 가나 집중호우 예보 속 지역별 기온 차 뚜렷",
-    "summary_ko": "3일(현지시간) 아프리카 주요국들의 이번 주말 날씨가 지역별로 큰 편차를 보일 것으로 전망된다. 가나의 경우 토요일 강수 확률이 96%에 달하며 일요일에도 76%의 높은 확률로 비가 이어질 것으로 예상된다. 토요일 가나는 흐린 날씨 속 최고 31도, 최저 23도를 기록하겠고 일요일에는 약한 이슬비가 내리는 가운데 최고 30도, 최저 25도의 기온 분포를 보일 전망이다.\n\n알제리는 이번 주말 내내 최고 33도, 최저 23~24도의 기온을 유지하며 가장 높은 최고 기온을 기록하겠으나 토요일과 일요일 모두 흐린 날씨가 이어질 것으로 보인",
-    "url": "internal://weather_group_아프리카_weekend20261003",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_아프리카_weekend20261003",
-    "region": "africa",
-    "country": "아프리카",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-03 13:24",
-    "countries": [
-      "나이지리아",
-      "케냐",
-      "남아공",
-      "이집트",
-      "모로코",
-      "알제리",
-      "에티오피아",
-      "가나",
-      "탄자니아",
-      "앙골라"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_nigeria_20261003.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-03T13:24:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-03 13:24",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
   }
 ]
