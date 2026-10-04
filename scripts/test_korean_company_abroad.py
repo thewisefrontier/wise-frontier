@@ -118,6 +118,31 @@ def test_bare_abbreviations_not_matched():
     assert kca.classify(ng_lg) is None
 
 
+def test_oci_not_matched_as_organisation_of_islamic_cooperation():
+    """실측 오탐: 바레 'OCI'가 OIC(이슬람협력기구)의 영문 축약 표기와 겹친다."""
+    oic = [
+        art("Prensa Latina", "OCI condemns Houthi attack on power plant in Saudi Arabia",
+            "The Organisation of Islamic Cooperation condemned the attack on a power station."),
+        art("Radio Habana Cuba", "OCI calls for ceasefire after Saudi plant attack",
+            "The OCI issued a statement calling for restraint following the attack."),
+    ]
+    assert kca.classify(oic) is None
+
+
+def test_independent_conglomerate_matched():
+    """그룹 계열사가 아닌 독립 대기업(2026-10-04 추가, "100대 기업" 확대 요청)도 잡혀야 한다."""
+    cluster = [
+        art("Reuters", "Daewoo E&C wins canal renovation contract in Turkmenistan",
+            "Daewoo Engineering & Construction signed a deal to renovate a 250km canal section "
+            "in Turkmenistan."),
+        art("AP", "Daewoo E&C expands Central Asia infrastructure business",
+            "The South Korean builder's Turkmenistan canal project adds to its regional portfolio."),
+    ]
+    info = kca.classify(cluster)
+    assert info is not None and info["company"] == "대우" and info["tier"] == 2
+    assert "투르크메니스탄" in info["foreign_countries"]
+
+
 def test_financial_company_local_branch_matched():
     """금융회사 현지법인·지점(2026-10-04 추가) — 모회사명+지점 표기를 부분일치로 잡아야 한다."""
     cluster = [
