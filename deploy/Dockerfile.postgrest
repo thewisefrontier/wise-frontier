@@ -1,0 +1,5 @@
+# Aiven을 REST(PostgREST)로 노출하는 컨테이너.
+# Render가 주입하는 $PORT에 맞춰 PGRST_SERVER_PORT를 넘겨준다
+# (postgrest/postgrest 이미지는 PORT가 아니라 PGRST_SERVER_PORT를 읽음).
+FROM postgrest/postgrest:latest
+CMD ["sh", "-c", "PGRST_SERVER_PORT=${PORT:-3000} postgrest"]
