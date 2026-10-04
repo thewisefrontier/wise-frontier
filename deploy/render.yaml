@@ -1,0 +1,29 @@
+# Render Blueprint — Aiven 앞에 PostgREST를 띄워 Supabase REST API와
+# 같은 모양(/rest/v1/articles 등)의 엔드포인트를 만든다.
+# 평소엔 Supabase가 원본이라 이 서비스를 쓸 일이 없다 — Render 무료 플랜은
+# 15분 무요청이면 슬립, 다음 요청에 ~1분 걸려 깨어난다(공식 문서 확인,
+# 2026-10-04). 전환 직후 첫 요청은 느릴 수 있다는 뜻, 평소엔 비용 0원.
+#
+# 배포(사용자가 Render 대시보드에서 1회): New + → Blueprint → 이 저장소 선택
+# → render.yaml 인식 → AIVEN_SERVICE_URI, PGRST_JWT_SECRET 값 입력(아래
+# sync:false 두 개) → Apply.
+services:
+  - name: newsfinal-aiven-postgrest
+    type: web
+    runtime: docker
+    plan: free
+    dockerfilePath: ./deploy/Dockerfile.postgrest
+    dockerContext: .
+    healthCheckPath: /
+    envVars:
+      # Aiven 접속문자열 뒤에 ?sslmode=require 필요(Aiven은 SSL 강제).
+      - key: PGRST_DB_URI
+        sync: false
+      - key: PGRST_DB_SCHEMAS
+        value: public
+      # JWT role claim으로만 전환되는 역할 — db-anon-role 자체엔 권한을
+      # 주지 않는다(토큰 없는 요청은 아무 것도 못 보게).
+      - key: PGRST_DB_ANON_ROLE
+        value: postgrest_svc_anon
+      - key: PGRST_JWT_SECRET
+        sync: false

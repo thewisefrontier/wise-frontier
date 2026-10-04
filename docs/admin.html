@@ -529,6 +529,7 @@
             <button class="btn-sm" onclick="openEdit(${a.id})">편집</button>
             ${isOwn ? `<button class="btn-sm" onclick="openHistory(${a.id})">이력</button>` : ''}
             ${isUnpublished ? `<button class="btn-sm" style="border-color:var(--success);color:var(--success);" onclick="publishArticle(${a.id})">발행</button>` : ''}
+            ${isOwn && !isUnpublished ? `<button class="btn-sm" style="border-color:var(--danger);color:var(--danger);" onclick="unpublishArticle(${a.id})">발행취소</button>` : ''}
             ${currentRole === 'admin' ? `<button class="btn-sm btn-sm-danger" onclick="confirmDelete(${a.id})">삭제</button>` : ''}
           </td>
         </tr>
@@ -691,6 +692,15 @@
     const { error } = await sb.from('articles').update({ is_published: true }).eq('id', id);
     if (error) { toast(`오류: ${error.message}`, 'error'); return; }
     toast('발행됐습니다', 'success');
+    triggerExport();
+    loadArticles();
+  }
+
+  async function unpublishArticle(id) {
+    if (!confirm('이 기사의 발행을 취소하시겠습니까? (사이트에서 즉시 내려갑니다)')) return;
+    const { error } = await sb.from('articles').update({ is_published: false }).eq('id', id);
+    if (error) { toast(`오류: ${error.message}`, 'error'); return; }
+    toast('발행이 취소됐습니다', 'success');
     triggerExport();
     loadArticles();
   }

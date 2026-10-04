@@ -99,6 +99,10 @@ _PAREN_RE = re.compile(r"\([^)]{0,20}\)")
 # 튀르키예어로 홍역을 의미하므로 문맥상 홍역)"). 기사 문장이 아니라 편집 메모이므로 저장 차단 대상.
 _META_NOTE_RE = re.compile(
     r"\([^)]{0,160}?(?:국문 표기|문맥상|번역하면|원문에는|원문 표기|음차하면|[가-힣]{2,6}어로\s*[^)]{0,30}(?:의미|뜻)[^)]{0,10})[^)]{0,80}\)")
+# 한글 바로 뒤에 소문자 로마자가 붙은 혼합 표기("에bola", "말acateco", "엘룸elu") — 음차가 중간에
+# 끊긴 번역 미완성(2026-10-04, id=297527 제목 "에bola"). 실측: 2026-08 이후 발행분 3902건 중 적중 16건
+# 전부 실제 오염(오탐 0). 정상 용례("오픈AI", "챗GPT", "iPhone을")는 대문자거나 로마자가 앞이라 안 걸림.
+_MIXED_TOKEN_RE = re.compile(r"[가-힣][a-z]{2,}")
 _CJK_COUNTRY_ABBR_RE = re.compile("[美中日英佛獨伊濠印北韓露加]")
 _CJK_PROBE = re.compile("[一-鿿]")
 _CJK_CTX = re.compile(".{0,14}[一-鿿]+.{0,14}")
@@ -114,6 +118,10 @@ def detect_script_leak(title: str, body: str):
             snippet = m.group(0).replace("\n", " ").strip()[:80]
             if all(snippet != h[1] for h in hits):
                 hits.append(("편집메모", snippet))
+        for m in _MIXED_TOKEN_RE.finditer(field):
+            snippet = field[max(0, m.start() - 8):m.end() + 8].replace("\n", " ").strip()
+            if all(snippet != h[1] for h in hits):
+                hits.append(("표기혼입", snippet))
         for name, probe, ctx_re in _SCRIPT_LEAK_RE:
             if not probe.search(field):
                 continue
