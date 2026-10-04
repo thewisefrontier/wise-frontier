@@ -56,8 +56,8 @@ def test_domestic_only_excluded():
     assert kca.classify(cluster) is None
 
 
-def test_product_review_without_business_keyword_excluded():
-    """사건사고/실적 등 키워드가 전혀 없는 단순 리뷰는 제외."""
+def test_review_without_country_mention_excluded():
+    """해외 발생 여부를 본문에서 확인 못 하면(국가명 언급 자체가 없으면) 제외."""
     cluster = [
         art("Top Gear", "Kia Tucson review: should you buy one?",
             "We review the new Kia Tucson's handling, interior and fuel economy."),
@@ -65,6 +65,21 @@ def test_product_review_without_business_keyword_excluded():
             "Comparing the two SUVs' trims and infotainment."),
     ]
     assert kca.classify(cluster) is None
+
+
+def test_no_keyword_still_matched_at_lowest_tier():
+    """2026-10-04 사용자 지시 "리스트에 들어가는 건 바로 걸리도록" — 구체적인 사건·실적
+    키워드가 전혀 없어도 회사명(주체)+해외 발생만 확인되면 최소 우선순위(3)로 걸려야 한다."""
+    cluster = [
+        art("crypto.news", "KB Kookmin Bank taps BNY for digital wallet payments",
+            "KB Kookmin Bank has partnered with BNY on cross-border digital payments as it becomes "
+            "an early user of BNY's new service in the United States."),
+        art("American Banker", "KB Kookmin Bank expands US digital payments tie-up with BNY",
+            "The South Korean bank's New York operation will use BNY's Pay-to-Wallet service "
+            "in the United States."),
+    ]
+    info = kca.classify(cluster)
+    assert info is not None and info["tier"] == 3 and info["company"] == "KB금융"
 
 
 def test_passing_mention_in_list_excluded():
@@ -101,6 +116,31 @@ def test_bare_abbreviations_not_matched():
                  "The mayor filed an appeal against the local government commission's findings.")]
     assert kca.classify(ph_sk) is None
     assert kca.classify(ng_lg) is None
+
+
+def test_financial_company_local_branch_matched():
+    """금융회사 현지법인·지점(2026-10-04 추가) — 모회사명+지점 표기를 부분일치로 잡아야 한다."""
+    cluster = [
+        art("American Banker", "Shinhan Bank America fined over anti-money laundering lapses",
+            "Regulators fined Shinhan Bank America for compliance failures at its New York branch "
+            "in the United States."),
+        art("Reuters", "Shinhan Bank America settles with US regulator",
+            "Shinhan Bank's US subsidiary agreed to a settlement over compliance failures "
+            "in the United States."),
+    ]
+    info = kca.classify(cluster)
+    assert info is not None and info["tier"] == 1 and info["company"] == "신한금융"
+
+
+def test_db_abbreviation_not_matched_as_db_insurance():
+    """'DB'는 데이터베이스 등 흔한 약어라 'DB Insurance' 정식 복합어로만 매칭해야 한다."""
+    cluster = [
+        art("TechCrunch", "Startup raises funding to modernize legacy DB systems",
+            "The startup's DB migration tool helps enterprises move off legacy database systems."),
+        art("InfoQ", "New DB benchmark shows faster query times",
+            "The DB benchmark compared read/write throughput across several database engines."),
+    ]
+    assert kca.classify(cluster) is None
 
 
 def test_overseas_earnings_is_tier2_lower_bonus_than_incident():
