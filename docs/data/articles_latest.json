@@ -1,5 +1,71 @@
 [
   {
+    "id": 298216,
+    "title_en": "[국내유가] 휘발유 리터당 1858원…국제유가 변동에 소폭 상승",
+    "title_ko": "[국내유가] 휘발유 리터당 1858원…국제유가 변동에 소폭 상승",
+    "summary_ko": "한국석유공사 오피넷이 5일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1858원으로 집계됐다. 전일 판매가격과 비교해 리터당 0.14원 상승한 수치다.\n\n이날 오피넷에 따르면 경유 평균 판매가격은 리터당 1843.16원으로 전일 대비 0.06원 올랐다. LPG(부탄) 평균 판매가격 역시 리터당 1142.98원을 기록해 전일보다 0.12원 상승하며 전 유종이 오름세를 나타냈다.\n\n최근의 유가 변동은 국제유가 흐름과 정유사 공급가에 영향을 받은 결과로 분석된다. 국제유가 127달러 돌파 등 대외 원자재 가격 변동성",
+    "url": "internal://opinet_price_2026-10-05",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-10-05 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_10_05_pid6999638.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-05T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-05 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-10-05",
+      "prices": {
+        "B027": {
+          "diff": 0.14,
+          "name": "휘발유",
+          "price": 1857.65
+        },
+        "B034": {
+          "diff": 0.76,
+          "name": "고급휘발유",
+          "price": 2349.81
+        },
+        "C004": {
+          "diff": -0.04,
+          "name": "실내등유",
+          "price": 1573.28
+        },
+        "D047": {
+          "diff": 0.06,
+          "name": "경유",
+          "price": 1843.16
+        },
+        "K015": {
+          "diff": 0.12,
+          "name": "LPG(부탄)",
+          "price": 1142.98
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 298212,
     "title_en": "The Mystery of the Yellow Room",
     "title_ko": "[오늘의 책] 가스통 르루의 『노란방의 미스터리』, 밀실 추리 소설의 고전으로 남은 지적 도전",
@@ -1500,51 +1566,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 297478,
-    "title_en": "Satantango",
-    "title_ko": "[오늘의 책] 2025년 노벨문학상 수상 크러스너호르커이 라슬로의 시작, 『사탄탱고(블랙 에디션)』",
-    "summary_ko": "2025년 노벨문학상을 수상한 헝가리 작가 크러스너호르커이 라슬로(László Krasznahorkai)를 향한 관심이 뜨거운 가운데 그의 데뷔작인 『사탄탱고(블랙 에디션)』가 다시 조명받고 있다. 2015년 국제 부커상을 받으며 세계적 거장으로 발돋움한 작가의 이 대표작은 국내에서 2018년 조원규의 번역으로 출간되었다.\n\n1954년 헝가리 뉼러(Gyula)에서 태어난 크러스너호르커 이는 대학에서 법학과 문학을 전공한 뒤 1985년에 발표한 첫 소설 『사탄탱고(블랙 에디션)』로 문단의 중심 인물로 떠올랐다. 작가는 이후 『저항의 ",
-    "url": "internal://literature_Q1315145",
-    "source": "NewsFinal",
-    "category": "문화·예술",
-    "subcategory": "오늘의책",
-    "region": "global",
-    "country": "헝가리",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-04 05:03",
-    "countries": [
-      "헝가리"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/literature_cover_q1315145.jpg",
-    "view_count": 1,
-    "first_published_at": "2026-10-04T05:03:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-04 05:03",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-10-04 09:53",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "enwiki": "Satantango (novel)",
-      "kowiki": null,
-      "source": "prize",
-      "wikidata": "Q1315145"
-    },
-    "image_credit": "사탄탱고(블랙 에디션) 표지",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   }
 ]
