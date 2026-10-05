@@ -3,14 +3,24 @@
 --------------------------------
 `prompts`·`rss_sources`는 Supabase가 원본(도구 admin.html의 CRUD, feed_discovery.py,
 rss_source_discovery.py, db.py의 소스 상태 갱신이 전부 Supabase에 씀)이고, D1은
-config_store.py가 읽는 캐시다. 이 스크립트가 주기적으로 Supabase→D1 전량 동기화한다
-(두 테이블 합쳐 1500행 안팎이라 증분 대신 매번 통째로 교체 — 단순함이 이득).
+config_store.py가 읽는 캐시다. 이 스크립트가 30분마다(run.yml collectors job) Supabase→D1
+동기화를 시도한다.
 
 CLOUDFLARE_API_TOKEN/CLOUDFLARE_ACCOUNT_ID/NEWSFINAL_CONFIG_D1_ID 셋 중 하나라도
 없으면 조용히 스킵한다(시크릿 등록 전까지는 read-path도 Supabase만 쓰므로 동기화가
 없어도 무해하다).
 
+2026-10-05: rss_sources가 D1 무료 쓰기 한도(10만행/일)의 87%를 하루에 소진하는
+사고가 났다. 원인은 (a) config_store.load_rss_sources()가 실제로 읽는 건
+name/category/subcategory/url/is_active뿐인데 last_checked_at 등 RSS 수집기가
+매 사이클 갱신하는 헬스 컬럼까지 동기화해 "거의 매번 뭔가 바뀜"이 되어 있었고,
+(b) 바뀐 게 없어도 매번 DELETE+INSERT 전체 재작성이라 쓰기행이 테이블 크기만큼
+고정 소모됐던 것. 헬스 컬럼을 동기화 대상에서 빼고(아래 RSS_COLS), 기존 D1
+내용과 신규 fetch의 서명이 같으면 통째로 스킵하도록 고쳤다 — 이제 실제로
+소스가 추가/수정/비활성화될 때만 쓰기가 발생한다.
+
 실행: python scripts/sync_config_to_d1.py"""
+import hashlib
 import os
 
 from dotenv import load_dotenv
@@ -66,16 +76,42 @@ def _d1_exec(sql: str) -> bool:
     return True
 
 
+def _d1_query(sql: str) -> list:
+    res = requests.post(
+        f"https://api.cloudflare.com/client/v4/accounts/{CF_ACCOUNT}/d1/database/{D1_ID}/query",
+        headers={"Authorization": f"Bearer {CF_TOKEN}", "Content-Type": "application/json"},
+        json={"sql": sql}, timeout=30,
+    )
+    data = res.json()
+    if not data.get("success"):
+        print(f"[sync_config_to_d1] 조회 실패: {data.get('errors')}")
+        return []
+    return data["result"][0]["results"]
+
+
+def _signature(rows: list, cols: list) -> str:
+    # _esc()로 양쪽(Supabase JSON / D1 응답)의 타입 표기 차이(True vs 1 등)를
+    # 똑같은 문자열로 맞춰야 "변경 없음" 비교가 성립한다.
+    body = "\n".join(",".join(_esc(r.get(c)) for c in cols) for r in rows)
+    return hashlib.sha256(body.encode()).hexdigest()
+
+
 PROMPTS_COLS = ["id", "name", "content", "version", "is_active", "created_at"]
-RSS_COLS = ["id", "name", "category", "subcategory", "url", "is_active", "created_at",
-            "consecutive_fails", "total_ok", "total_fail", "last_ok_at", "last_checked_at",
-            "deactivated_reason"]
+# config_store.load_rss_sources()가 실제로 select하는 건 name/category/subcategory/url뿐
+# (+ WHERE is_active=1) — consecutive_fails/total_ok/total_fail/last_ok_at/last_checked_at/
+# deactivated_reason은 D1에서 아무도 안 읽는다. RSS 수집기가 매 사이클 건드리는 컬럼이라
+# 동기화 대상에 넣으면 "거의 매번 바뀜"이 되어 서명 비교가 무력화된다.
+RSS_COLS = ["id", "name", "category", "subcategory", "url", "is_active"]
 
 
 def _sync_table(table: str, cols: list) -> int:
     rows = _fetch_all(table, ",".join(cols))
     if not rows:
         return 0
+    new_sig = _signature(rows, cols)
+    existing = _d1_query(f"SELECT {','.join(cols)} FROM {table} ORDER BY id ASC")
+    if _signature(existing, cols) == new_sig:
+        return 0  # 변경 없음 — 쓰기 스킵
     stmts = [f"DELETE FROM {table};"]
     for r in rows:
         vals = ",".join(_esc(r.get(c)) for c in cols)
