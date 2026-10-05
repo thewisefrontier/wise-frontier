@@ -40,26 +40,44 @@ except Exception:
 
 
 def wikipedia_confirms(name: str, threshold: int = 70) -> bool:
-    """이름과 충분히 비슷한 위키 문서 제목이 하나라도 있으면 True (결정론적 조회)."""
+    """이름과 충분히 비슷한 위키 문서 제목이 하나라도 있으면 True (결정론적 조회).
+
+    "한글 음차(원어)" 괄호 병기 표기(writer_rules 표준 형식)를 통짜로 검색하면 ko/en
+    어느 쪽과도 안 맞아 거의 항상 실패한다(2026-10-05 실측: "시네스트로(Sinestro)"
+    통짜 검색은 ko/en 모두 매치 실패, "Sinestro"만 단독 검색하면 en 위키 정확히 매치 —
+    "필리핀 자금세탁방지위원회(AMLC)"도 동일, "AMLC" 단독만 매치. 괄호 안 원어·괄호
+    제거한 한글만도 각각 따로 검색해 하나라도 맞으면 확인된 것으로 본다."""
     name = (name or "").strip()
     if not name or fuzz is None:
         return False
-    titles = []
-    for lang in ("ko", "en"):
-        try:
-            res = requests.get(
-                f"https://{lang}.wikipedia.org/w/api.php",
-                params={"action": "opensearch", "search": name, "limit": 3, "namespace": 0, "format": "json"},
-                headers={"User-Agent": "NewsFinal-EntityCheck/1.0 (+https://newsfinal.co.kr)"},
-                timeout=10,
-            )
-            if res.status_code == 200:
-                data = res.json()
-                if len(data) >= 2 and isinstance(data[1], list):
-                    titles.extend(data[1])
-        except Exception:
-            continue
-    return any(fuzz.token_sort_ratio(name, t) >= threshold for t in titles)
+    candidates = [name]
+    m = re.search(r"\(([^)]+)\)", name)
+    if m:
+        inner = m.group(1).strip()
+        if inner:
+            candidates.append(inner)
+        outer = re.sub(r"\([^)]*\)", "", name).strip()
+        if outer and outer not in candidates:
+            candidates.append(outer)
+    for cand in candidates:
+        titles = []
+        for lang in ("ko", "en"):
+            try:
+                res = requests.get(
+                    f"https://{lang}.wikipedia.org/w/api.php",
+                    params={"action": "opensearch", "search": cand, "limit": 3, "namespace": 0, "format": "json"},
+                    headers={"User-Agent": "NewsFinal-EntityCheck/1.0 (+https://newsfinal.co.kr)"},
+                    timeout=10,
+                )
+                if res.status_code == 200:
+                    data = res.json()
+                    if len(data) >= 2 and isinstance(data[1], list):
+                        titles.extend(data[1])
+            except Exception:
+                continue
+        if any(fuzz.token_sort_ratio(cand, t) >= threshold for t in titles):
+            return True
+    return False
 
 
 def extract_candidate_names(body: str, call_gemini_fn) -> list:
