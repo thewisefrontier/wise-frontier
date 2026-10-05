@@ -339,7 +339,15 @@ def check_date_hallucination(body, sources, base_date=None):
         gp = _gap_past(base_date, d)
         gf = _gap_future(base_date, d)
 
-        if gp <= GAP_THRESHOLD:                              # 4. 과거 3일 이내 → 정상
+        # 4. 과거 3일 이내 → 정상. 단, 원문에 날짜 근거가 '단 하나도' 없으면
+        # (src_days가 완전히 빈 집합) 이 관용을 적용하지 않는다 — base_date가
+        # KST 고정값이라, 미국·유럽 등 해외발 사건을 한국 아침~오전(현지 기준
+        # 아직 전날)에 생성할 때 Gemini가 KST "오늘" 날짜를 기본값으로 써버린
+        # 경우까지 "0일 갭=정상"으로 통과시켜버린다(2026-10-05 실사고 id=298369,
+        # 소스에 날짜 근거 전무 — "this week"/"this weekend"뿐 — 인데 "5일(현지시간)"
+        # 발행, 생성 시점 미국 현지는 아직 4일). 근거가 하나라도 있으면(발행일·
+        # 월+일 표기·오늘/어제 등) 기존 관용 그대로 유지.
+        if src_days and gp <= GAP_THRESHOLD:
             continue
 
         if gf <= GAP_THRESHOLD:
