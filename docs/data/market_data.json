@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-05 10:36",
+  "updated_at": "2026-10-05 11:15",
   "indices": [
     {
       "name": "S&P 500",
@@ -60,15 +60,15 @@
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 6036.89,
-      "change_pct": 0.46,
+      "price": 6067.28,
+      "change_pct": 0.5,
       "up": true
     },
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 5629.03,
-      "change_pct": 0.0,
+      "price": 5660.76,
+      "change_pct": 0.56,
       "up": true
     },
     {
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.64,
-      "change_pct": -0.35,
+      "price": 16.66,
+      "change_pct": -0.23,
       "up": false
     }
   ],
@@ -158,15 +158,15 @@
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 6036.89,
-        "change_pct": 0.46,
+        "price": 6067.28,
+        "change_pct": 0.5,
         "up": true
       },
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 5629.03,
-        "change_pct": 0.0,
+        "price": 5660.76,
+        "change_pct": 0.56,
         "up": true
       }
     ],
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.64,
-        "change_pct": -0.35,
+        "price": 16.66,
+        "change_pct": -0.23,
         "up": false
       }
     ]
@@ -198,9 +198,9 @@
     "ANTM": {
       "name": "Aneka Tambang Tbk",
       "symbol": "ANTM.JK",
-      "price": 3140.0,
-      "change_pct": 0.64,
-      "up": true
+      "price": 3130.0,
+      "change_pct": -0.32,
+      "up": false
     },
     "ACB": {
       "name": "Asia Commercial Joint Stock Bank",
