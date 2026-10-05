@@ -15,9 +15,14 @@ CLOUDFLARE_API_TOKEN/CLOUDFLARE_ACCOUNT_ID/NEWSFINAL_CONFIG_D1_ID 셋 중 하나
 name/category/subcategory/url/is_active뿐인데 last_checked_at 등 RSS 수집기가
 매 사이클 갱신하는 헬스 컬럼까지 동기화해 "거의 매번 뭔가 바뀜"이 되어 있었고,
 (b) 바뀐 게 없어도 매번 DELETE+INSERT 전체 재작성이라 쓰기행이 테이블 크기만큼
-고정 소모됐던 것. 헬스 컬럼을 동기화 대상에서 빼고(아래 RSS_COLS), 기존 D1
-내용과 신규 fetch의 서명이 같으면 통째로 스킵하도록 고쳤다 — 이제 실제로
-소스가 추가/수정/비활성화될 때만 쓰기가 발생한다.
+고정 소모됐던 것. 헬스 컬럼을 동기화 대상에서 빼고(아래 RSS_COLS), 신규
+fetch의 서명이 바뀌었을 때만 쓰도록 고쳤다 — 이제 실제로 소스가
+추가/수정/비활성화될 때만 쓰기가 발생한다.
+
+서명 저장은 "변경 없음"을 확인하려고 매번 본 테이블(rss_sources 전체)을
+다시 읽으면 이번엔 읽기 쿼터를 불필요하게 태운다(1450행×48회/일, 한도
+500만행 대비는 작지만 공짜로 없앨 수 있는 낭비). 그래서 `sync_meta`라는
+1행짜리 서명 캐시 테이블을 따로 두고, 거기 1행만 읽어 비교한다.
 
 실행: python scripts/sync_config_to_d1.py"""
 import hashlib
@@ -104,19 +109,32 @@ PROMPTS_COLS = ["id", "name", "content", "version", "is_active", "created_at"]
 RSS_COLS = ["id", "name", "category", "subcategory", "url", "is_active"]
 
 
+def _get_meta_sig(table: str) -> str:
+    rows = _d1_query(f"SELECT signature FROM sync_meta WHERE table_name = {_esc(table)}")
+    return rows[0]["signature"] if rows else ""
+
+
+def _set_meta_sig(table: str, sig: str) -> None:
+    _d1_exec(
+        f"INSERT INTO sync_meta (table_name, signature) VALUES ({_esc(table)}, {_esc(sig)}) "
+        "ON CONFLICT(table_name) DO UPDATE SET signature = excluded.signature;"
+    )
+
+
 def _sync_table(table: str, cols: list) -> int:
     rows = _fetch_all(table, ",".join(cols))
     if not rows:
         return 0
     new_sig = _signature(rows, cols)
-    existing = _d1_query(f"SELECT {','.join(cols)} FROM {table} ORDER BY id ASC")
-    if _signature(existing, cols) == new_sig:
-        return 0  # 변경 없음 — 쓰기 스킵
+    if _get_meta_sig(table) == new_sig:
+        return 0  # 변경 없음 — sync_meta 1행만 읽고 본 테이블은 안 건드림
     stmts = [f"DELETE FROM {table};"]
     for r in rows:
         vals = ",".join(_esc(r.get(c)) for c in cols)
         stmts.append(f"INSERT INTO {table} ({','.join(cols)}) VALUES ({vals});")
     ok = _d1_exec(" ".join(stmts))
+    if ok:
+        _set_meta_sig(table, new_sig)
     return len(rows) if ok else 0
 
 
@@ -127,6 +145,7 @@ def main():
     if not (SUPABASE_URL and SUPABASE_SERVICE_KEY):
         print("[sync_config_to_d1] Supabase 환경변수 없음 — 스킵")
         return
+    _d1_exec("CREATE TABLE IF NOT EXISTS sync_meta (table_name TEXT PRIMARY KEY, signature TEXT);")
     n1 = _sync_table("prompts", PROMPTS_COLS)
     n2 = _sync_table("rss_sources", RSS_COLS)
     print(f"[sync_config_to_d1] prompts {n1}건, rss_sources {n2}건 동기화")
