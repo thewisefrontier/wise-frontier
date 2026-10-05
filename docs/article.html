@@ -626,7 +626,7 @@ function cleanBody(text) {
           ? 'width:auto;max-width:100%;max-height:560px;border-radius:8px;margin:16px auto 8px;display:block;'
           : ['오늘의그림', '고전명화이야기'].includes(a.subcategory)
           ? 'width:100%;max-height:600px;object-fit:contain;background:#111;border-radius:8px;margin:16px 0 8px;display:block;'
-          : 'width:100%;max-height:420px;object-fit:cover;border-radius:8px;margin:16px 0 8px;display:block;'
+          : 'width:100%;max-height:420px;object-fit:cover;object-position:top;border-radius:8px;margin:16px 0 8px;display:block;'
       }">`+ (window.imageCreditLabel(a.image_url, a.image_credit) ? `<div style="font-size:12px;color:#888;margin:0 0 12px;text-align:right;">${window.esc(window.imageCreditLabel(a.image_url, a.image_credit))}</div>` : '') : ''}
 
       <div class="article-body">
