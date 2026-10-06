@@ -21,6 +21,13 @@ assert bad_title != "Painter of the Wind", f"관련성 낮은 오매치가 걸�
 good_title = w._wiki_search_title("Claude Monet", "en")
 assert good_title and "Monet" in good_title, f"정상 매치가 걸러짐: {good_title!r}"
 
+# 2026-10-06 실사고: "Antoine-Émile Plassan painter" 검색이 완전히 다른 인물
+# "Émile Zola"(소설가) 문서를 반환했는데 partial_ratio가 "Émile" 한 토큰
+# 겹침만으로 80점을 줘 가드를 통과했다(작가 소개가 졸라의 생애로 뒤바뀐 채
+# 발행됨). token_set_ratio로 교체 후 이 오매치가 걸러지는지 확인.
+zola_title = w._wiki_search_title("Antoine-Émile Plassan painter", "en")
+assert zola_title != "Émile Zola", f"관련성 낮은 오매치가 걸러지지 않음: {zola_title!r}"
+
 # 근거자료 fetch가 실제 내용을 채워오는지(작품명만으론 동명 식물 문서가 잡히던
 # 실사고 — 작가명을 붙여 검색하도록 수정됨).
 grounding = w.fetch_wikipedia_grounding("클로드 모네 수련", "Water Lilies Monet")

@@ -417,6 +417,18 @@ except Exception:
 # 최상위로 잡혔다 — 검색 결과를 검증 없이 그대로 믿으면 안 된다는 걸 실측으로
 # 확인. fabrication_guard.py가 이미 쓰는 rapidfuzz로 검색어-제목 유사도가 너무
 # 낮으면(엉뚱한 문서로 판단) 아예 매치 없음으로 처리한다.
+#
+# 2026-10-06 실사고: "Antoine-Émile Plassan painter" 검색이 완전히 다른 인물인
+# "Émile Zola"(에밀 졸라, 소설가) 문서를 반환했는데도 가드를 통과해 작가 소개가
+# 졸라의 생애(1840년 파리 출생·폴 세잔과 교류 등)로 통째로 뒤바뀐 채 발행됐다.
+# 원인: partial_ratio는 두 문자열 중 "가장 잘 맞는 부분 문자열"만 보고 점수를
+# 매기는데, 두 이름이 "Émile"이라는 흔한 이름 한 토큰만 공유해도 그 한 단어
+# 구간만으로 80점이 나와(임계값 55 통과) 생판 남을 같은 인물로 오판했다.
+# token_set_ratio는 두 문자열을 토큰 집합으로 보고 비교해 이런 부분 일치에
+# 흔들리지 않으며(교체 전: Plassan/Zola 80점 통과, 교체 후 31점 차단 — 실측
+# 확인), artist_en 뒤에 항상 붙이는 " painter"/" 화가" 같은 잡토큰이 섞여도
+# (어느 쪽에만 있는 토큰이라 집합 비교에선 거의 영향 없음) 기존 정상 매치
+# (모네 등)는 그대로 통과한다.
 _WIKI_TITLE_MATCH_THRESHOLD = 55
 
 
@@ -434,7 +446,7 @@ def _wiki_search_title(query: str, lang: str) -> str | None:
             return None
         title = results[0]["title"]
         if _wiki_fuzz is not None:
-            score = max(_wiki_fuzz.token_sort_ratio(query, title), _wiki_fuzz.partial_ratio(query, title))
+            score = _wiki_fuzz.token_set_ratio(query, title)
             if score < _WIKI_TITLE_MATCH_THRESHOLD:
                 print(f"  ⚠️ 위키 검색 결과 관련성 낮음(무시): '{query}' → '{title}' (유사도 {score:.0f})")
                 return None
