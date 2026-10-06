@@ -1,5 +1,322 @@
 [
   {
+    "id": 299615,
+    "title_en": "[종목 동향] AMD 주가 2.80% 상승…신규 AI 가속기 공급 확대",
+    "title_ko": "[종목 동향] AMD 주가 2.80% 상승…신규 AI 가속기 공급 확대",
+    "summary_ko": "◆ 주가 동향\n나스닥에서 AMD 주가는 6일(현지시간) 전일 대비 2.80% 상승한 649.42달러에 거래를 마쳤다. 이번 상승세는 데이터센터용 차세대 AI 가속기인 '인스팅트(Instinct) MI350' 시리즈의 대규모 공급 계약 체결 소식이 전해진 결과다.\n\n주요 클라우드 서비스 제공업체들이 AMD의 최신 칩 도입을 가속화하면서 시장 점유율 확대에 대한 긍정적인 평가가 이어졌다. 월가 투자은행들은 AMD가 엔비디아와의 경쟁에서 기술적 격차를 좁히고 있다는 분석 보고서를 잇달아 발표했다.\n\n또한, 반도체 공급망 안정화와 더불어 ",
+    "url": "internal://stock_news_2026-10-06",
+    "source": "NewsFinal",
+    "category": "금융",
+    "subcategory": "종목동향",
+    "region": "global",
+    "country": "미국",
+    "country_flag": "🇺🇸",
+    "score": 1,
+    "created_at": "2026-10-07 06:29",
+    "countries": [
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/stock_news_2026_10_06_pid5183942.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-07T06:29:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-07 06:29",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
+    "id": 299613,
+    "title_en": "[글로벌 마켓 동향] 뉴욕증시 3대 지수 동반 상승…독일 DAX도 강세",
+    "title_ko": "[글로벌 마켓 동향] 뉴욕증시 3대 지수 동반 상승…독일 DAX도 강세",
+    "summary_ko": "◆ 뉴욕증시\n\n뉴욕증시(NYSE)에서 S&P500 지수는 6일(현지시간) 전일 대비 0.58% 상승한 7818.93에 거래를 마쳤다. 다우존스 산업평균지수와 나스닥 종합지수 역시 각각 0.49%와 0.45% 오르며 3대 지수가 동반 상승세를 기록했다.\n\n이번 상승은 연방준비제도(Fed)의 통화 정책 완화 기조가 유지될 것이라는 시장의 기대감이 반영된 결과다. 최근 발표된 고용 지표가 예상보다 견조하게 나타나면서 경기 침체 우려가 완화된 점이 투자 심리를 개선했다.\n\n기술주 중심의 나스닥은 주요 빅테크 기업들의 실적 개선 전망이 뒷받",
+    "url": "internal://frontier_markets_2026-10-06",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "글로벌마켓동향",
+    "region": "global",
+    "country": "",
+    "country_flag": "🌍",
+    "score": 1,
+    "created_at": "2026-10-07 06:27",
+    "countries": [
+      "독일",
+      "미국",
+      "나이지리아",
+      "튀르키예",
+      "인도네시아",
+      "이스라엘"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/frontier_markets_2026_10_06_pid3479568.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-07T06:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-07 06:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "currencies": [
+        {
+          "pct": 0.303,
+          "name": "나이라",
+          "prev": 1320.090126915446,
+          "price": 1324.09,
+          "change": 3.999873084553883,
+          "volume": 0,
+          "country": "나이지리아",
+          "day_low": 1320.09,
+          "day_high": 1324.09,
+          "exchange": "",
+          "long_name": "USD/NGN",
+          "exchange_name": "CCY",
+          "fifty_two_week_low": 1318.85,
+          "fifty_two_week_high": 1477.7
+        },
+        {
+          "pct": 0.1156,
+          "name": "리라",
+          "prev": 49.11532268697386,
+          "price": 49.1721,
+          "change": 0.05677731302613864,
+          "volume": 0,
+          "country": "튀르키예",
+          "day_low": 48.9875,
+          "day_high": 49.1923,
+          "exchange": "",
+          "long_name": "USD/TRY",
+          "exchange_name": "CCY",
+          "fifty_two_week_low": 41.6791,
+          "fifty_two_week_high": 49.1923
+        },
+        {
+          "pct": 0.0231,
+          "name": "실링",
+          "prev": 129.66004852878984,
+          "price": 129.69,
+          "change": 0.029951471210154068,
+          "volume": 0,
+          "country": "케냐",
+          "day_low": 129.6,
+          "day_high": 129.8,
+          "exchange": "",
+          "long_name": "USD/KES",
+          "exchange_name": "CCY",
+          "fifty_two_week_low": 124.9072,
+          "fifty_two_week_high": 130.0
+        }
+      ],
+      "major_indices": [
+        {
+          "pct": 0.772,
+          "name": "DAX",
+          "prev": 25254.227364744176,
+          "price": 25449.19,
+          "change": 194.96263525582253,
+          "volume": 0,
+          "country": "독일",
+          "day_low": 25354.84,
+          "day_high": 25522.09,
+          "exchange": "프랑크푸르트증권거래소",
+          "long_name": "DAX P",
+          "exchange_name": "XETRA",
+          "fifty_two_week_low": 21863.81,
+          "fifty_two_week_high": 26618.74
+        },
+        {
+          "pct": 0.579,
+          "name": "S&P500",
+          "prev": 7773.919008938248,
+          "price": 7818.93,
+          "change": 45.010991061752065,
+          "volume": 2717394000,
+          "country": "미국",
+          "day_low": 7805.96,
+          "day_high": 7844.52,
+          "exchange": "뉴욕증시",
+          "long_name": "S&P 500",
+          "exchange_name": "SNP",
+          "fifty_two_week_low": 6316.91,
+          "fifty_two_week_high": 7844.52
+        },
+        {
+          "pct": 0.494,
+          "name": "다우존스",
+          "prev": 51268.016000955286,
+          "price": 51521.28,
+          "change": 253.26399904471327,
+          "volume": 404919021,
+          "country": "미국",
+          "day_low": 51422.9,
+          "day_high": 51672.25,
+          "exchange": "뉴욕증시",
+          "long_name": "Dow Jones Industrial Average",
+          "exchange_name": "DJI",
+          "fifty_two_week_low": 45057.28,
+          "fifty_two_week_high": 54744.33
+        },
+        {
+          "pct": 0.482,
+          "name": "유로스톡스50",
+          "prev": 6242.1428713600435,
+          "price": 6272.23,
+          "change": 30.087128639956063,
+          "volume": null,
+          "country": "유로존",
+          "day_low": 6252.63,
+          "day_high": 6310.74,
+          "exchange": "범유럽 지수(특정 거래소 없음)",
+          "long_name": "EURO STOXX 50 I",
+          "exchange_name": "Zurich",
+          "fifty_two_week_low": 5376.81,
+          "fifty_two_week_high": 6577.2
+        },
+        {
+          "pct": 0.446,
+          "name": "나스닥종합",
+          "prev": 27477.242498456886,
+          "price": 27599.791,
+          "change": 122.54850154311498,
+          "volume": 7653517000,
+          "country": "미국",
+          "day_low": 27592.557,
+          "day_high": 27722.748,
+          "exchange": "뉴욕증시",
+          "long_name": "NASDAQ Composite",
+          "exchange_name": "Nasdaq GIDS",
+          "fifty_two_week_low": 20690.25,
+          "fifty_two_week_high": 27722.748
+        },
+        {
+          "pct": 0.395,
+          "name": "CAC40",
+          "prev": 7834.125205438519,
+          "price": 7865.07,
+          "change": 30.944794561481103,
+          "volume": 0,
+          "country": "프랑스",
+          "day_low": 7837.95,
+          "day_high": 7916.71,
+          "exchange": "유로넥스트 파리",
+          "long_name": "CAC 40",
+          "exchange_name": "Paris",
+          "fifty_two_week_low": 7505.27,
+          "fifty_two_week_high": 8755.03
+        }
+      ],
+      "frontier_indices": [
+        {
+          "pct": 1.21,
+          "name": "종합지수",
+          "prev": 6118.888449757928,
+          "price": 6192.927,
+          "change": 74.03855024207132,
+          "volume": null,
+          "country": "인도네시아",
+          "day_low": 6120.236,
+          "day_high": 6216.439,
+          "exchange": "인도네시아증권거래소(IDX)",
+          "long_name": "IDX COMPOSITE",
+          "exchange_name": "Jakarta",
+          "fifty_two_week_low": 5317.908,
+          "fifty_two_week_high": 9174.474
+        },
+        {
+          "pct": -0.873,
+          "name": "TA-125",
+          "prev": 4063.575009835867,
+          "price": 4028.1,
+          "change": -35.47500983586724,
+          "volume": 0,
+          "country": "이스라엘",
+          "day_low": 4028.1,
+          "day_high": 4081.45,
+          "exchange": "텔아비브증권거래소(TASE)",
+          "long_name": "TA-125",
+          "exchange_name": "Tel Aviv",
+          "fifty_two_week_low": 3225.3,
+          "fifty_two_week_high": 4588.51
+        },
+        {
+          "pct": -0.477,
+          "name": "EGX30",
+          "prev": 53553.55043557771,
+          "price": 53298.1,
+          "change": -255.45043557770987,
+          "volume": 226997000,
+          "country": "이집트",
+          "day_low": 53168.0,
+          "day_high": 53708.7,
+          "exchange": "이집트증권거래소(EGX)",
+          "long_name": "EGX 30 Price Return Index",
+          "exchange_name": "EGX",
+          "fifty_two_week_low": 53168.0,
+          "fifty_two_week_high": 53708.7
+        }
+      ]
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
+    "id": 299612,
+    "title_en": "동아시아, 도쿄·울란바토르·흐린 하늘 속 선선한 봄날",
+    "title_ko": "동아시아, 도쿄·울란바토르·흐린 하늘 속 선선한 봄날",
+    "summary_ko": "7일(현지시간) 동아시아 주요국 수도는 전반적으로 최저기온 3도에서 최고기온 25도의 분포를 보이며 쌀쌀함과 온화함이 공존하는 날씨를 기록했다. 몽골 울란바토르는 최저기온 3도, 최고기온 15도를 나타내며 동아시아 주요국 수도 가운데 가장 선선한 곳으로 집계됐다. 반면 일본 도쿄는 최저기온 17도, 최고기온 25도를 기록해 가장 더운 지역으로 나타났으며, 도쿄의 최고기온은 울란바토르의 최고기온보다 10도 높았다.\n\n두 지역 모두 하늘은 흐린 상태를 보였으나, 강수확률은 도쿄 2%, 울란바토르 6%로 낮아 강수량은 기록되지 않았다. ",
+    "url": "internal://weather_group_동아시아_today20261007",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_동아시아_today20261007",
+    "region": "east_asia",
+    "country": "동아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-07 06:25",
+    "countries": [
+      "일본",
+      "중국",
+      "몽골"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_china_20261007.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-07T06:25:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-07 06:25",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 299611,
     "title_en": "[국제유가] WTI 배럴당 90달러…수요 둔화 우려",
     "title_ko": "[국제유가] WTI 배럴당 90달러…수요 둔화 우려",
@@ -1668,164 +1985,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": false
-  },
-  {
-    "id": 298887,
-    "title_en": "동아시아, 도쿄 27도 늦더위…울란바토르는 쌀쌀",
-    "title_ko": "동아시아, 도쿄 27도 늦더위…울란바토르는 쌀쌀",
-    "summary_ko": "6일(현지시간) 동아시아 주요국 수도의 기온이 최저 2°C에서 최고 27°C의 분포를 보이는 가운데, 지역별로 큰 기온 차를 나타내고 있다. 가장 더운 곳은 27°C를 기록한 일본 도쿄이며, 가장 선선한 곳은 18°C에 머문 몽골 울란바토르로 두 지역 간 최고기온은 9°C의 격차를 보였다. 일본 도쿄는 최고기온 27°C, 최저기온 19°C로 흐린 날씨를 보이고 있으며 강수확률은 8%, 강수량은 0.0mm를 기록했다.\n\n도쿄의 자외선지수는 6.0이며, 내일 최고기온은 오늘보다 2°C 낮은 25°C가 될 전망이다. 중국 베이징은 최고기",
-    "url": "internal://weather_group_동아시아_today20261006",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_동아시아_today20261006",
-    "region": "east_asia",
-    "country": "동아시아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-06 06:26",
-    "countries": [
-      "일본",
-      "중국",
-      "몽골"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_china_20261006.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-06T06:26:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-06 06:26",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 298857,
-    "title_en": "[국내유가] 휘발유 리터당 1858원…국제유가 변동 영향",
-    "title_ko": "[국내유가] 휘발유 리터당 1858원…국제유가 변동 영향",
-    "summary_ko": "한국석유공사 오피넷이 6일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1858원으로 집계됐다. 오피넷이 매일 0시에 전일 판매가격을 집계해 공개하는 특성상 실제 판매 가격은 이보다 하루 전일의 수치를 반영한 것이다.\n\n이날 함께 공개된 경유 평균 판매가격은 리터당 1843.08원으로 전일 대비 0.23원 하락했다. 반면 LPG(부탄) 평균 판매가격은 리터당 1142.92원으로 전일 대비 0.01원 상승했다. 휘발유 역시 리터당 1857.58원에서 0.03원 오르며 소폭의 상승세를 나타냈다.\n\n이번 유가 움직임은",
-    "url": "internal://opinet_price_2026-10-06",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국내유가",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "🇰🇷",
-    "score": 1,
-    "created_at": "2026-10-06 06:12",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_10_06_pid10184099.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-06T06:12:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-06 06:12",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "date": "2026-10-06",
-      "prices": {
-        "B027": {
-          "diff": 0.03,
-          "name": "휘발유",
-          "price": 1857.58
-        },
-        "B034": {
-          "diff": 0.87,
-          "name": "고급휘발유",
-          "price": 2351.8
-        },
-        "C004": {
-          "diff": -0.36,
-          "name": "실내등유",
-          "price": 1572.7
-        },
-        "D047": {
-          "diff": -0.23,
-          "name": "경유",
-          "price": 1843.08
-        },
-        "K015": {
-          "diff": 0.01,
-          "name": "LPG(부탄)",
-          "price": 1142.92
-        }
-      }
-    },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 298856,
-    "title_en": "[국제유가] WTI 배럴당 89달러…OPEC+ 산유 정책 유지",
-    "title_ko": "[국제유가] WTI 배럴당 89달러…OPEC+ 산유 정책 유지",
-    "summary_ko": "국제유가가 5일(현지시간) 하락했다. 시장 집계에 따르면 WTI 원유 선물은 뉴욕상업거래소(NYMEX)에서 배럴당 89.30달러에 거래를 마쳤으며, 전일 종가(90.42달러) 대비 1.24%(1.12달러) 하락했다.\n\n브렌트유 역시 하락세를 나타내며 배럴당 100.32달러로 장을 마감했다. 전일 종가(103.53달러) 대비 3.10%(3.21달러) 하락했다.\n\n이번 유가 하락은 OPEC+가 10월 회의에서 11월 산유 정책을 현행대로 유지하기로 합의한 데 따른 영향을 받았다. 아울러 중동 지역의 지정학적 위험과 오만 인근 해상 화물",
-    "url": "internal://oil_price_2026-10-05",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국제유가",
-    "region": "글로벌",
-    "country": "국제",
-    "country_flag": "🛢️",
-    "score": 1,
-    "created_at": "2026-10-06 06:11",
-    "countries": [
-      "미국",
-      "사우디아라비아",
-      "러시아"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/oil_2026_10_05_pid5232047.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-06T06:11:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-06 06:11",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "wti": {
-        "pct": -1.238664012386645,
-        "prev": 90.42,
-        "price": 89.3,
-        "change": -1.1200000000000045
-      },
-      "date": "2026-10-05",
-      "brent": {
-        "pct": -3.100550565053615,
-        "prev": 103.53,
-        "price": 100.32,
-        "change": -3.210000000000008
-      },
-      "source": "Yahoo Finance"
-    },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
   }
 ]
