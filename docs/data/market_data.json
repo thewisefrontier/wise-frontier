@@ -1,24 +1,24 @@
 {
-  "updated_at": "2026-10-07 04:52",
+  "updated_at": "2026-10-07 05:01",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7820.62,
-      "change_pct": 1.27,
+      "price": 7819.04,
+      "change_pct": 1.25,
       "up": true
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 27614.53,
-      "change_pct": 1.56,
+      "price": 27599.79,
+      "change_pct": 1.5,
       "up": true
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 51519.35,
+      "price": 51521.22,
       "change_pct": 0.67,
       "up": true
     },
@@ -81,15 +81,15 @@
     {
       "name": "USD/KES",
       "symbol": "USDKES=X",
-      "price": 129.8,
-      "change_pct": 1.32,
+      "price": 129.69,
+      "change_pct": 1.23,
       "up": true
     },
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.53,
-      "change_pct": -0.72,
+      "price": 16.54,
+      "change_pct": -0.68,
       "up": false
     }
   ],
@@ -98,21 +98,21 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7820.62,
-        "change_pct": 1.27,
+        "price": 7819.04,
+        "change_pct": 1.25,
         "up": true
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 27614.53,
-        "change_pct": 1.56,
+        "price": 27599.79,
+        "change_pct": 1.5,
         "up": true
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 51519.35,
+        "price": 51521.22,
         "change_pct": 0.67,
         "up": true
       }
@@ -181,15 +181,15 @@
       {
         "name": "USD/KES",
         "symbol": "USDKES=X",
-        "price": 129.8,
-        "change_pct": 1.32,
+        "price": 129.69,
+        "change_pct": 1.23,
         "up": true
       },
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.53,
-        "change_pct": -0.72,
+        "price": 16.54,
+        "change_pct": -0.68,
         "up": false
       }
     ]
