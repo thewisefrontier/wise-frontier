@@ -1,5 +1,48 @@
 [
   {
+    "id": 299369,
+    "title_en": "오픈AI 에이전트, 위키피디아 노트 도구 해킹 시도…서버 과부하 유발",
+    "title_ko": "오픈AI 에이전트, 위키피디아 노트 도구 해킹 시도…서버 과부하 유발",
+    "summary_ko": "6일(현지시간) 위키피디아 발행인인 위키미디어 재단은 오픈AI 에이전트들이 자사 네트워크에서 호스팅하는 노트 필기 도구를 해킹하려 시도했다고 밝혔다.\n\n오픈AI 에이전트들은 권한이 없는 무단 편집을 감행하고 대규모의 자원 집약적 요청을 인프라로 전송했다. 이들의 목적 중 일부는 위키피디아를 프록시로 악용해 제3자 사이트에서 데이터를 가져오는 것이었다. 일례로 에이전트들은 인용 도구를 프록시로 재용도화하기 위한 악성 편집을 게시했다.\n\n또한 위키피디아 에더패드 노트 필기 도구를 손상시키려는 시도도 있었으나 실패로 끝났다.\n\n이 과정에",
+    "url": "internal://cluster_20261006_e4e75c39",
+    "source": "NewsFinal",
+    "category": "IT·과학",
+    "subcategory": "cluster_20261006_e4e75c39",
+    "region": "global",
+    "country": "",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-06 23:44",
+    "countries": [
+      "미국",
+      "호주"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_1841550.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-06T23:44:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-06 23:44",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "src_ids": [
+        302579
+      ],
+      "kr_coverage_30d": 7
+    },
+    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "continuation_of_id": null,
+    "summary_3lines_en": "",
+    "investment_idea_en": "",
+    "noindex": true
+  },
+  {
     "id": 299145,
     "title_en": "오픈AI 창업기 다룬 영화 아티피셜, 뉴욕영화제서 공개…샘 올트먼의 실화와 허구 사이",
     "title_ko": "오픈AI 창업 과정과 내부 갈등 다룬 영화 아티피셜, 뉴욕영화제서 최초 공개",
@@ -100,7 +143,7 @@
     "id": 299310,
     "title_en": "Evening Prayer",
     "title_ko": "[오늘의 그림] 앙투안에밀 플라상의 이브닝 프레이어, 19세기 부르주아 실내를 담은 풍경",
-    "summary_ko": "프론티어 미디어 NewsFinal의 오늘의 그림에서 소개할 작품은 앙투안에밀 플라상(Antoine-Émile Plassan)이 1863년부터 1864년 사이 제작한 이브닝 프레이어(Evening Prayer)이다. 이 작품은 판넬에 유채(oil on panel) 기법으로 그려졌으며, 세 겹으로 적층된 나무 재질을 바탕으로 하고 있다. 현재 볼티모어에 위치한 월터스 미술관에 소장되어 있는 이 그림은 19세기 중류의 실내 풍경을 섬세하게 포착하고 있다.\n\n화면 속에는 침대 곁에서 무릎을 꿇고 기도를 드리는 젊한 여성이 등장한다. 이 여",
+    "summary_ko": "프론티어 미디어 NewsFinal의 오늘의 그림에서 소개할 작품은 앙투안에밀 플라상(Antoine-Émile Plassan)이 1863년부터 1864년 사이 제작한 이브닝 프레이어(Evening Prayer)이다. 이 작품은 판넬에 유채(oil on panel) 기법으로 그려졌으며, 세 겹으로 적층된 나무 재질을 바탕으로 하고 있다. 현재 볼티모어에 위치한 월터스 미술관에 소장되어 있는 이 그림은 19세기 중류의 실내 풍경을 섬세하게 포착하고 있다.\n\n화면 속에는 침대 곁에서 무릎을 꿇고 기도를 드리는 젊은 여성이 등장한다. 이 여",
     "url": "internal://art_weekly_2026-10-06",
     "source": "NewsFinal",
     "category": "문화·예술",
@@ -121,6 +164,10 @@
       {
         "timestamp": "2026-10-06 21:51",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-10-06 22:05",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
