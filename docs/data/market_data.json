@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-06 13:57",
+  "updated_at": "2026-10-06 14:47",
   "indices": [
     {
       "name": "S&P 500",
@@ -25,15 +25,15 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 6921.01,
-      "change_pct": -0.72,
+      "price": 6931.75,
+      "change_pct": -0.57,
       "up": false
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 916.09,
-      "change_pct": 2.44,
+      "price": 916.72,
+      "change_pct": 2.51,
       "up": true
     },
     {
@@ -53,22 +53,22 @@
     {
       "name": "SET (태국)",
       "symbol": "^SET.BK",
-      "price": 1582.61,
-      "change_pct": 0.39,
+      "price": 1586.48,
+      "change_pct": 0.64,
       "up": true
     },
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 6197.66,
-      "change_pct": 1.29,
+      "price": 6196.09,
+      "change_pct": 1.26,
       "up": true
     },
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 5689.3,
-      "change_pct": -0.94,
+      "price": 5690.08,
+      "change_pct": -0.93,
       "up": false
     },
     {
@@ -89,7 +89,7 @@
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
       "price": 16.65,
-      "change_pct": -0.05,
+      "change_pct": -0.04,
       "up": false
     }
   ],
@@ -121,15 +121,15 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 6921.01,
-        "change_pct": -0.72,
+        "price": 6931.75,
+        "change_pct": -0.57,
         "up": false
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 916.09,
-        "change_pct": 2.44,
+        "price": 916.72,
+        "change_pct": 2.51,
         "up": true
       }
     ],
@@ -151,22 +151,22 @@
       {
         "name": "SET (태국)",
         "symbol": "^SET.BK",
-        "price": 1582.61,
-        "change_pct": 0.39,
+        "price": 1586.48,
+        "change_pct": 0.64,
         "up": true
       },
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 6197.66,
-        "change_pct": 1.29,
+        "price": 6196.09,
+        "change_pct": 1.26,
         "up": true
       },
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 5689.3,
-        "change_pct": -0.94,
+        "price": 5690.08,
+        "change_pct": -0.93,
         "up": false
       }
     ],
@@ -189,7 +189,7 @@
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
         "price": 16.65,
-        "change_pct": -0.05,
+        "change_pct": -0.04,
         "up": false
       }
     ]
