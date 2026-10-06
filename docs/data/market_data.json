@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-06 11:57",
+  "updated_at": "2026-10-06 12:01",
   "indices": [
     {
       "name": "S&P 500",
@@ -25,15 +25,15 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 6948.04,
-      "change_pct": -0.33,
+      "price": 6950.86,
+      "change_pct": -0.29,
       "up": false
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 914.25,
-      "change_pct": 2.23,
+      "price": 914.88,
+      "change_pct": 2.3,
       "up": true
     },
     {
@@ -60,15 +60,15 @@
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 6151.75,
+      "price": 6151.89,
       "change_pct": 0.54,
       "up": true
     },
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 5716.57,
-      "change_pct": -0.46,
+      "price": 5715.64,
+      "change_pct": -0.48,
       "up": false
     },
     {
@@ -121,15 +121,15 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 6948.04,
-        "change_pct": -0.33,
+        "price": 6950.86,
+        "change_pct": -0.29,
         "up": false
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 914.25,
-        "change_pct": 2.23,
+        "price": 914.88,
+        "change_pct": 2.3,
         "up": true
       }
     ],
@@ -158,15 +158,15 @@
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 6151.75,
+        "price": 6151.89,
         "change_pct": 0.54,
         "up": true
       },
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 5716.57,
-        "change_pct": -0.46,
+        "price": 5715.64,
+        "change_pct": -0.48,
         "up": false
       }
     ],
@@ -198,8 +198,8 @@
     "ANTM": {
       "name": "Aneka Tambang Tbk",
       "symbol": "ANTM.JK",
-      "price": 3200.0,
-      "change_pct": 0.0,
+      "price": 3210.0,
+      "change_pct": 0.31,
       "up": true
     },
     "ACB": {
