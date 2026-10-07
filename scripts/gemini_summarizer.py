@@ -1612,7 +1612,12 @@ def run_trend_tracker():
             continue
 
         # 파싱
-        title, body, country, gen_category, countries = "", content, "", category, []
+        # ⚠️ body 기본값은 반드시 빈 문자열이어야 한다(2026-10-07 실사고 계열,
+        # gemini_writer.py id=299681·299617·299794와 동일한 패턴을 여기서도 발견).
+        # 예전엔 content 전체를 기본값으로 깔아놔서, "본문:" 라벨을 못 찾으면
+        # 제목·국가·3줄요약 등 모든 필드가 뒤섞인 raw 응답이 그대로 body가 되고,
+        # 그게 merge_trend_article()을 거쳐 멀쩡한 기존 기사를 덮어쓸 수 있었다.
+        title, body, country, gen_category, countries = "", "", "", category, []
         for line in content.strip().split("\n"):
             if line.startswith("제목:"):
                 title = line.replace("제목:", "").strip()
@@ -1632,6 +1637,10 @@ def run_trend_tracker():
                 summary_3lines = _extract_section(content, "3줄요약:")
                 investment_idea = _extract_section(content, "투자아이디어:")
                 break
+
+        if not body:
+            print(f"  [{group_name}] ❌ 본문 파싱 실패(라벨 '본문:' 없음) → 스킵")
+            continue
 
         if not title:
             title = f"{group_name} 동향 — {today_str}"
@@ -2229,8 +2238,8 @@ JSON 배열로만 응답하세요 (마크다운 없이):
             time.sleep(CALL_INTERVAL)
             continue
 
-        # 파싱
-        title, body, art_country, art_countries = "", content_text, country, []
+        # 파싱 (body 기본값을 raw content로 두지 않는다 — 위 run_trend_tracker()와 동일 이유)
+        title, body, art_country, art_countries = "", "", country, []
         for line in content_text.strip().split("\n"):
             if line.startswith("제목:"):
                 title = line.replace("제목:", "").strip()
@@ -2248,6 +2257,11 @@ JSON 배열로만 응답하세요 (마크다운 없이):
                 summary_3lines = _extract_section(content_text, "3줄요약:")
                 investment_idea = _extract_section(content_text, "투자아이디어:")
                 break
+
+        if not body:
+            print(f"  [{topic}] ❌ 본문 파싱 실패(라벨 '본문:' 없음) → 스킵")
+            time.sleep(CALL_INTERVAL)
+            continue
 
         if not title:
             title = f"{issue_ko} — {today_str}"
@@ -2608,8 +2622,8 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
             time.sleep(CALL_INTERVAL)
             continue
 
-        # 파싱
-        title, body, art_country, art_countries = "", content_text, country, countries_list
+        # 파싱 (body 기본값을 raw content로 두지 않는다 — 위 다른 트렌드 함수들과 동일 이유)
+        title, body, art_country, art_countries = "", "", country, countries_list
         for line in content_text.strip().split("\n"):
             if line.startswith("제목:"):
                 title = line.replace("제목:", "").strip()
@@ -2627,6 +2641,11 @@ Google Trends, Reddit, GDELT에서 [{issue_ko}] 이슈가 급부상하고 있습
                 summary_3lines = _extract_section(content_text, "3줄요약:")
                 investment_idea = _extract_section(content_text, "투자아이디어:")
                 break
+
+        if not body:
+            print(f"  [{topic}] ❌ 본문 파싱 실패(라벨 '본문:' 없음) → 스킵")
+            time.sleep(CALL_INTERVAL)
+            continue
 
         if not title:
             title = f"{issue_ko} — {today_str}"
