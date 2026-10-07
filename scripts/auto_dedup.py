@@ -73,24 +73,25 @@ def fetch_duplicate_pairs(hours=72, threshold=0.5):
 
 
 def fetch_categories(ids: list) -> dict:
-    """id → (category, subcategory) 매핑. 제외 판정에 쓴다."""
+    """id → (category, subcategory, is_published) 매핑. 제외 판정·미발행 대상 선정에 쓴다."""
     if not ids:
         return {}
     id_list = ",".join(str(i) for i in ids)
     res = requests.get(
         f"{SUPABASE_URL}/rest/v1/articles",
         headers=_headers(),
-        params={"id": f"in.({id_list})", "select": "id,category,subcategory"},
+        params={"id": f"in.({id_list})", "select": "id,category,subcategory,is_published"},
         timeout=20,
     )
     if res.status_code != 200:
         print(f"⚠️ 카테고리 조회 실패: HTTP {res.status_code} — 제외 필터 미적용")
         return {}
-    return {r["id"]: (r.get("category") or "", r.get("subcategory") or "") for r in res.json()}
+    return {r["id"]: (r.get("category") or "", r.get("subcategory") or "", bool(r.get("is_published")))
+            for r in res.json()}
 
 
 def _is_excluded(id_: int, cats: dict) -> bool:
-    category, subcategory = cats.get(id_, ("", ""))
+    category, subcategory, _ = cats.get(id_, ("", "", False))
     return category in EXCLUDE_CATEGORIES or subcategory in EXCLUDE_SUBCATEGORIES
 
 
@@ -207,13 +208,27 @@ def run():
     # ── 50~70%: 미발행만 ──
     later_ids = set()
     later_scores = {}
+    skipped_unpublished_original = 0
     for pair in low_pairs:
         is_a_later = pair["created_at_a"] >= pair["created_at_b"]
         later_id = pair["id_a"] if is_a_later else pair["id_b"]
+        earlier_id = pair["id_b"] if is_a_later else pair["id_a"]
+        # ⚠️ 더 이른 쪽(암묵적으로 "유지"되는 원본)이 이미 발행 상태가 아니면 비교
+        # 대상으로 삼지 않는다(2026-10-07 실사고 — 노벨 물리학상 기사가 첫 시도에서
+        # 다른 사유로 미발행된 뒤, 같은 사건을 다시 쓴 이후 재생성 시도들이 전부
+        # "그 미발행 초안의 중복"으로 판정돼 하루 종일 하나도 발행되지 못함. 미발행
+        # 상태인 "원본"은 애초에 존재하지 않는 것과 같아, 그걸 근거로 새 시도를
+        # 계속 억누르면 그 사건은 영원히 발행될 기회를 못 얻는다).
+        earlier_cat = cats.get(earlier_id) if cats else None
+        if earlier_cat is not None and not earlier_cat[2]:
+            skipped_unpublished_original += 1
+            continue
         later_ids.add(later_id)
         # 같은 기사가 여러 쌍에 걸리면 가장 높은 유사도를 기록한다
         if pair["score"] > later_scores.get(later_id, 0):
             later_scores[later_id] = pair["score"]
+    if skipped_unpublished_original:
+        print(f"원본이 미발행 상태라 {skipped_unpublished_original}쌍은 중복 판정에서 제외")
 
     if later_ids:
         if unpublish_articles(sorted(later_ids), later_scores):
