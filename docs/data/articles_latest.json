@@ -1,5 +1,71 @@
 [
   {
+    "id": 300305,
+    "title_en": "[국내유가] 휘발유 리터당 1857원…정유사 공급가 논쟁 속 소폭 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1857원…정유사 공급가 논쟁 속 소폭 하락",
+    "summary_ko": "한국석유공사 오피넷이 8일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1857원으로 집계됐다. 이는 전일 대비 0.15원 내린 수치다.\n\n이날 함께 집계된 경유는 리터당 1842.75원으로 전일보다 0.50원 하락했다. LPG(부탄)는 리터당 1143.11원을 기록해 전일 대비 0.10원 내렸다.\n\n최근 기름값을 둘러싼 논쟁이 정유사의 공급 가격으로까지 번지고 있다. 주유소협회 측은 기름값 급등의 1차 원인이 정유사에 있다고 지적하고 있으며, 이와 관련해 정유사 공급가격을 조정해야 한다는 목소리와 함께 정유사의",
+    "url": "internal://opinet_price_2026-10-08",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-10-08 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_10_08_pid4267357.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-08T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-08 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-10-08",
+      "prices": {
+        "B027": {
+          "diff": -0.15,
+          "name": "휘발유",
+          "price": 1857.23
+        },
+        "B034": {
+          "diff": 1.35,
+          "name": "고급휘발유",
+          "price": 2362.59
+        },
+        "C004": {
+          "diff": -0.05,
+          "name": "실내등유",
+          "price": 1572.56
+        },
+        "D047": {
+          "diff": -0.5,
+          "name": "경유",
+          "price": 1842.75
+        },
+        "K015": {
+          "diff": -0.1,
+          "name": "LPG(부탄)",
+          "price": 1143.11
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 300301,
     "title_en": "The Tainted Cup",
     "title_ko": "[오늘의 책] 2025년 휴고상 장편 부문 수상작 로버트 잭슨 베넷의 『오염된 잔』",
@@ -1509,51 +1575,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 299600,
-    "title_en": "Heart Lamp: Selected Stories",
-    "title_ko": "[오늘의 책] 2025년 국제 부커상 수상작, 바누 무슈타크의 『Heart Lamp: Selected Stories』",
-    "summary_ko": "인도 남부에서 살아가는 무슬림 여성들의 삶을 다룬 바누 무슈타크(Banu Mushtaq)의 단편소설집 『Heart Lamp: Selected Stories』(국내 번역판 제목 미확인)가 2025년 국제 부커상 수상작으로 선정됐다. 이 작품은 칸나다 어로 쓰인 작품 최초이자 단편소설집 최초로 국제 부커상을 받으며 세계 문학계의 주목을 받았다.\n\n1948년 인도 카르나타카주 하산에서 무슬림 가정으로 태어난 바누 무슈타크는 작가이자 활동가, 그리고 변호사로 활동해 왔다. 어린 시절 카르나다어 선교 학교에 진학한 이후 글쓰기를 시작했으며,",
-    "url": "internal://literature_Q134547019",
-    "source": "NewsFinal",
-    "category": "문화·예술",
-    "subcategory": "오늘의책",
-    "region": "asia",
-    "country": "인도",
-    "country_flag": "🇮🇳",
-    "score": 1,
-    "created_at": "2026-10-07 05:07",
-    "countries": [
-      "인도"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/literature_q134547019.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-07T05:07:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-07 05:07",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-10-07T00:18:29.985Z",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "enwiki": "Heart Lamp: Selected Stories",
-      "kowiki": null,
-      "source": "prize",
-      "wikidata": "Q134547019"
-    },
-    "image_credit": "이미지 출처: Wikimedia Commons · Kannan Shanmugam, Shanmugam Studio, Kollam, Kerala, India · CC BY-SA 4.0",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   }
 ]
