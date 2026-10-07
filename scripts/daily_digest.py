@@ -350,8 +350,12 @@ def format_digest_body(body: str) -> str:
 
 
 def parse_title_and_body(text):
+    # ⚠️ body 기본값은 빈 문자열이어야 한다(2026-10-07, gemini_writer.py/
+    # gemini_summarizer.py에서 찾은 것과 동일한 패턴 — "제목:" 라벨을 못 찾으면
+    # 예전엔 원본 텍스트 전체가 그대로 body가 돼 아래 run()의 "body or content"
+    # 폴백을 거쳐 raw 응답이 그대로 발행될 수 있었다).
     title = ""
-    body = text
+    body = ""
     lines = text.strip().split("\n")
     for i, line in enumerate(lines):
         if line.startswith("제목:"):
@@ -487,24 +491,27 @@ def run():
         return
 
     title, body = parse_title_and_body(content)
+    if not body:
+        print("[ERROR] 본문 파싱 실패(라벨 '제목:' 없음) — 저장하지 않음")
+        return
     if not title:
         title = "[데일리 다이제스트] 주요 동향"
     raw_body = body  # 날짜 환각 검사는 "(현지시간)"이 전부 남은 원문으로(각 날짜가 검사 근거)
 
     # 날짜 환각 판정 — 원기사에 근거 없는 "N일(현지시간)"이면 미발행
     _dg_bad, _dg_reason = check_date_hallucination(
-        raw_body or content, _digest_sources(articles), base_date=now_kst().date()
+        raw_body, _digest_sources(articles), base_date=now_kst().date()
     )
 
     # 표시용 정리: "(현지시간)"은 첫 표기만, 섹션·불릿 구조 정규화(문장 재분할 금지)
     body = format_digest_body(keep_first_local_time(body))
 
-    image_url = fetch_article_image(title, body or content)
+    image_url = fetch_article_image(title, body)
     if _dg_bad:
         print(f"⛔ 날짜 환각 의심 → 미발행: {_dg_reason}")
 
     article_id = save_digest(
-        title, body or content, len(articles), image_url=image_url,
+        title, body, len(articles), image_url=image_url,
         published=not _dg_bad,
         guard_note=(f"날짜 환각 의심 미발행 — {_dg_reason}" if _dg_bad else ""),
     )

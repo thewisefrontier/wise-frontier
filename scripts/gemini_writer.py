@@ -2253,7 +2253,15 @@ def _parse_labeled_response(text: str):
         elif key in ("본문", "내용", "기사본문"):
             body_lines = ([val] if val else []) + lines[i + 1:]
             break
-    body = "\n".join(body_lines).strip() if body_lines is not None else _strip_leaked_labels(raw)
+    # ⚠️ 2026-10-07 진짜 근본 원인 발견(id=299681·299617·299617 재발 전부 여기로 수렴):
+    # "본문" 라벨을 아예 못 찾으면(body_lines is None, 즉 JSON도 라벨 형식도 둘 다 파싱
+    # 실패) _strip_leaked_labels(raw)로 폴백했는데, 그 함수는 "cleaned or raw"라 라벨이
+    # 하나도 안 걸리면(예: 원문이 JSON이라 한글 라벨 패턴과 전혀 안 맞음) 사실상 raw 원문을
+    # 그대로 반환한다 — 호출부(parse_title_and_body)가 "본문 파싱 성공"으로 착각하게
+    # 만드는 지점이 여기였다. 못 찾았으면 빈 문자열을 반환해 호출부의 "본문 없음" 처리로
+    # 넘긴다(gemini_writer.py 병합 경로 3곳·gemini_summarizer.py 3곳·daily_digest.py
+    # 1곳에 이미 적용한 것과 동일 원칙).
+    body = "\n".join(body_lines).strip() if body_lines is not None else ""
     # 레거시 라벨 형식에는 keyword_ko/keyword_en이 없다 — 빈 문자열로 두면
     # 하위 호출부가 "키워드 없음"으로 안전하게 처리한다(검색 생략, 오탐 없음).
     return title, body, country, category, countries, is_travel, "", "", "", ""
