@@ -3384,9 +3384,20 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
                 if content:
                     gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel, gen_summary3, gen_investment, gen_keyword_ko, gen_keyword_en = parse_title_and_body(content)
                     gen_body = _ensure_paragraphs(gen_body)
+                    if not gen_body:
+                        # 파싱 실패(JSON/라벨 둘 다 실패)인데 기존처럼 raw content를 그대로
+                        # summary_ko에 써버리면 멀쩡했던 기존 본문이 미파싱 JSON 원문으로
+                        # 덮어써진다(2026-10-07 실사고 id=299681·299617 — summary_3lines/
+                        # investment_idea는 "or None"이라 안 건드려 이전 값이 남았는데
+                        # summary_ko만 raw JSON으로 교체됨). 파싱 실패 시 병합 자체를
+                        # 포기하고 기존 본문을 그대로 둔다.
+                        print(f"  ❌ 병합 실패(본문 파싱 실패, 기존 기사 유지): {similar_existing.get('title_ko','')[:40]}\n")
+                        time.sleep(CALL_INTERVAL)
+                        processed += 1
+                        continue
                     new_title = gen_title if gen_title else probe_title
-                    note = generate_update_note(existing_summary, gen_body or _strip_leaked_labels(content))
-                    update_article(similar_existing["id"], new_title, gen_body or _strip_leaked_labels(content), note=note, countries=gen_countries if gen_countries else None, country=gen_country or "", summary_3lines=gen_summary3 or None, investment_idea=gen_investment or None)
+                    note = generate_update_note(existing_summary, gen_body)
+                    update_article(similar_existing["id"], new_title, gen_body, note=note, countries=gen_countries if gen_countries else None, country=gen_country or "", summary_3lines=gen_summary3 or None, investment_idea=gen_investment or None)
                     prev_count = existing_full.get("score", 0) if existing_full else 0
                     update_article_count(similar_existing["id"], max(prev_count, cur_count) + 1)
                     save_article_keywords(similar_existing["id"], gen_keyword_ko, gen_keyword_en)
@@ -3406,7 +3417,7 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
                             update_article_fields(similar_existing["id"], update_fields)
                     print(f"  ✅ 병합 완료: {new_title}\n")
                     updated += 1
-                    send_to_newsfinal_channel(similar_existing["id"], new_title, gen_body or _strip_leaked_labels(content), is_update=True)
+                    send_to_newsfinal_channel(similar_existing["id"], new_title, gen_body, is_update=True)
                 else:
                     print(f"  ❌ 병합 실패\n")
                 time.sleep(CALL_INTERVAL)
