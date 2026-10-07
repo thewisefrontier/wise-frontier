@@ -3308,9 +3308,15 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
             if content:
                 gen_title, gen_body, gen_country, gen_category, gen_countries, gen_travel, gen_summary3, gen_investment, gen_keyword_ko, gen_keyword_en = parse_title_and_body(content)
                 gen_body = _ensure_paragraphs(gen_body)
+                if not gen_body:
+                    # 파싱 실패 시 raw content로 기존 멀쩡한 본문을 덮어쓰지 않는다(2026-10-07
+                    # 실사고 id=299617 — 같은 종류의 버그가 이 경로에도 있었음. gemini_writer.py
+                    # 전체에 동일 패턴이 여러 곳 있어 한 곳만 고쳤더니 다른 경로에서 재발했다).
+                    print(f"  ❌ 업데이트 실패(본문 파싱 실패, 기존 기사 유지)\n")
+                    continue
                 new_title = gen_title if gen_title else titles[0][:50]
-                note = generate_update_note(existing["summary_ko"], gen_body or _strip_leaked_labels(content))
-                update_article(existing["id"], new_title, gen_body or _strip_leaked_labels(content), note=note, countries=gen_countries if gen_countries else None, country=gen_country or "", summary_3lines=gen_summary3 or None, investment_idea=gen_investment or None)
+                note = generate_update_note(existing["summary_ko"], gen_body)
+                update_article(existing["id"], new_title, gen_body, note=note, countries=gen_countries if gen_countries else None, country=gen_country or "", summary_3lines=gen_summary3 or None, investment_idea=gen_investment or None)
                 update_article_count(existing["id"], prev_count + 1)
                 save_article_keywords(existing["id"], gen_keyword_ko, gen_keyword_en)
                 log_source_contribution(cluster, existing["id"])
@@ -3717,7 +3723,16 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
                 gen_body = _ensure_paragraphs(gen_body)
                 new_title = gen_title if gen_title else title[:50]
 
-                if is_placeholder_response(new_title, gen_body or _strip_leaked_labels(content)):
+                if not gen_body:
+                    # 파싱 실패 시 raw content로 기존 멀쩡한 본문을 덮어쓰지 않는다
+                    # (2026-10-07 실사고 id=299617 — gemini_writer.py 안에 같은 취약
+                    # 패턴이 여러 병합 경로에 중복돼 있었고, 한 곳만 고쳤더니 이
+                    # "단독 병합" 경로에서 재발했다).
+                    print(f"  ❌ 단독 병합 실패(본문 파싱 실패, 기존 기사 유지): {new_title[:50]}")
+                    time.sleep(CALL_INTERVAL)
+                    continue
+
+                if is_placeholder_response(new_title, gen_body):
                     print(f"  ❌ Gemini 응답이 실제 기사가 아님(원문 부재 등 거부 응답) — 병합 스킵: {new_title[:50]}")
                     time.sleep(CALL_INTERVAL)
                     continue
@@ -3733,14 +3748,14 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
                 # 여기에도 추가한다 — 실패하면 병합을 포기하고(별도 기사로도
                 # 발행하지 않음, 무관한 기사가 이미 하나로 합쳐진 상태라 분리가
                 # 불가능하므로) 이번 실행에서는 건너뛴다.
-                if not verify_single_topic(new_title, gen_body or _strip_leaked_labels(content)):
+                if not verify_single_topic(new_title, gen_body):
                     print(f"  ⛔ [복수 토픽 혼입] 병합 후 재검증 실패 → 병합 취소: {new_title[:50]}")
                     time.sleep(CALL_INTERVAL)
                     continue
 
                 existing_sum = existing_full.get("summary_ko") if existing_full else None
-                note = generate_update_note(existing_sum, gen_body or _strip_leaked_labels(content))
-                update_article(similar_existing["id"], new_title, gen_body or _strip_leaked_labels(content), note=note, countries=gen_countries if gen_countries else None, country=gen_country or "", summary_3lines=gen_summary3 or None, investment_idea=gen_investment or None)
+                note = generate_update_note(existing_sum, gen_body)
+                update_article(similar_existing["id"], new_title, gen_body, note=note, countries=gen_countries if gen_countries else None, country=gen_country or "", summary_3lines=gen_summary3 or None, investment_idea=gen_investment or None)
                 prev_count = existing_full.get("score", 0) if existing_full else 0
                 update_article_count(similar_existing["id"], prev_count + 1)
                 save_article_keywords(similar_existing["id"], gen_keyword_ko, gen_keyword_en)
@@ -3760,7 +3775,7 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
                         update_article_fields(similar_existing["id"], update_fields)
                 print(f"  ✅ 단독 병합 완료: {new_title}\n")
                 updated += 1
-                send_to_newsfinal_channel(similar_existing["id"], new_title, gen_body or _strip_leaked_labels(content), is_update=True)
+                send_to_newsfinal_channel(similar_existing["id"], new_title, gen_body, is_update=True)
             else:
                 print(f"  ❌ 단독 병합 실패\n")
             time.sleep(CALL_INTERVAL)
