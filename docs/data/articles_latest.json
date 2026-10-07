@@ -1,5 +1,46 @@
 [
   {
+    "id": 300306,
+    "title_en": "엠폭스 확산에 캐나다 토론토 백신 접종 촉구 및 앙골라 769명 감염 확인",
+    "title_ko": "엠폭스 확산에 캐나다 토론토 백신 접종 촉구 및 앙골라 769명 감염 확인",
+    "summary_ko": "앙골라와 콩고민주공화국, 상투메프린시페, 캐나다 등 아프리카와 북미 여러 국가에서 엠폭스(Mpox) 확산세가 이어지며 보건 당국이 국경 검역 강화와 백신 접종 독려 등 긴급 대응에 나섰다. 상투메프린시페 보건 당국은 주변국에서 엠폭스 바이 러스 유입 위험이 커짐에 따라 최고 수준의 경계 태세를 발령하고 비상대책위원회를 가동했다.\n\n보건 당국은 공항에서 포르투갈과 앙골라 등지에서 오는 탑승객의 발열 체크를 실시하고 의심 환자를 위한 격리 공간을 마련했다. 국내에 진단 시설이 없어 의심 검체를 인접국 실험실로 보내 검사하는 가운데 인구",
+    "url": "internal://trend_mpox_2026100805",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "trend_mpox",
+    "region": "africa",
+    "country": "앙골라",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-10-08 05:26",
+    "countries": [
+      "앙골라",
+      "캐나다",
+      "콩고민주공화국",
+      "상투메프린시페",
+      "프랑스"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_4932607.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-08T05:26:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-08 05:26",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 300305,
     "title_en": "[국내유가] 휘발유 리터당 1857원…정유사 공급가 논쟁 속 소폭 하락",
     "title_ko": "[국내유가] 휘발유 리터당 1857원…정유사 공급가 논쟁 속 소폭 하락",
@@ -1466,109 +1507,6 @@
         "change": -1.1400000000000006
       },
       "source": "Yahoo Finance"
-    },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 299602,
-    "title_en": "서울, 맑은 날씨 속 쌀쌀한 아침",
-    "title_ko": "서울, 맑은 날씨 속 쌀쌀한 아침",
-    "summary_ko": "7일 한국의 날씨는 전국이 대체로 맑은 가운데 아침 기온이 낮아 쌀쌀하겠으며, 낮과 밤의 기온 차가 크게 벌어질 전망이다. 한국기상청에 따르면 이날 서울은 오전과 오후 모두 맑은 하늘을 보이겠으며, 기온은 최저 12도에서 최고 24도 사이 분포를 기록할 것으로 예보됐다. 서울의 오전 강수확률은 0%, 오후 강수확률은 0%이며, 최대풍속은 초속 6미터 안팎을 나타낸다.\n\n다른 주요 지역 역시 대체로 맑은 날씨가 이어질 것으로 보인다. 부산은 최저 13도, 최고 25도를 기록하겠고 최대풍속은 초속 8미터다. 대구는 최저 11도, 최고 ",
-    "url": "internal://weather_한국_today20261007",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_한국_today20261007",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-07 05:23",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20261007.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-07T05:23:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-07 05:23",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 299601,
-    "title_en": "[국내유가] 휘발유 리터당 1857원…국제유가 변동 속 소폭 하락",
-    "title_ko": "[국내유가] 휘발유 리터당 1857원…국제유가 변동 속 소폭 하락",
-    "summary_ko": "한국석유공사 오피넷이 7일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1857.41원으로 집계됐다. 이는 전일 대비 0.12원 하락한 수치다.\n\n이날 함께 공개된 경유는 리터당 1843.01원으로 전일보다 0.61원 내렸고, LPG 부탄은 리터당 1143.00원으로 전일 대비 0.08원 하락했다. 모든 주요 유종의 가격이 전일 대비 소폭 하락세를 나타냈다.\n\n이번 유가 변동은 최근 국제유가 127달러 돌파를 비롯한 국제시세 흐름과 정유사 도매가 조정 및 공급가 변동, 정부의 유류세 인하 정책 유지 등에 영향을 ",
-    "url": "internal://opinet_price_2026-10-07",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국내유가",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "🇰🇷",
-    "score": 1,
-    "created_at": "2026-10-07 05:11",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_10_07_pid1665164.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-07T05:11:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-07 05:11",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "date": "2026-10-07",
-      "prices": {
-        "B027": {
-          "diff": -0.12,
-          "name": "휘발유",
-          "price": 1857.41
-        },
-        "B034": {
-          "diff": 1.95,
-          "name": "고급휘발유",
-          "price": 2356.15
-        },
-        "C004": {
-          "diff": -0.15,
-          "name": "실내등유",
-          "price": 1572.62
-        },
-        "D047": {
-          "diff": -0.61,
-          "name": "경유",
-          "price": 1843.01
-        },
-        "K015": {
-          "diff": -0.08,
-          "name": "LPG(부탄)",
-          "price": 1143.0
-        }
-      }
     },
     "image_credit": null,
     "continuation_of_id": null,
