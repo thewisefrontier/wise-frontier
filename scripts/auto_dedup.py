@@ -101,7 +101,16 @@ def unpublish_articles(ids: list, scores: dict = None):
     사유를 남기는 이유: 기존에는 is_published만 바꿔 log가 비어 있었고,
     그 탓에 다이제스트 오탐 미발행의 원인을 찾는 데 시간이 걸렸다.
     note 문구는 export의 화이트리스트에 없으므로 공개 JSON에는 실리지 않는다.
-    """
+
+    ⚠️ dedup_reviewed=true도 같이 세운다(2026-10-07, 사용자 지적 — "DB를 전부
+    스캔하는 건가"로 계기). 이걸 안 세우면 이 기사는 72시간 창에 머무는 동안
+    매 실행(시간당)마다 같은 쌍으로 계속 재검출돼 똑같은 "자동 중복정리 미발행"
+    로그가 반복 적립된다(실측: 노벨 물리학상 재시도 기사 1건이 하루 동안 12번
+    반복 적립). find_duplicate_pairs RPC가 이미 dedup_reviewed=true인 기사는
+    양쪽 다 걸러내므로(둘 다 false일 때만 후보), "미발행 처리된 이 기사"만
+    리뷰 완료로 표시하면 같은 사건을 다루는 새 시도가 나중에 "원본"(아직
+    미발행 상태인) 쪽과 다시 비교되는 것도 막지 않는다 — 원본 쪽은 그대로
+    둔다."""
     if not ids:
         return True
     scores = scores or {}
@@ -130,13 +139,30 @@ def unpublish_articles(ids: list, scores: dict = None):
             f"{SUPABASE_URL}/rest/v1/articles",
             headers=_headers(),
             params={"id": f"eq.{aid}"},
-            json={"is_published": False, "update_log": log},
+            json={"is_published": False, "update_log": log, "dedup_reviewed": True},
             timeout=30,
         )
         if res.status_code not in (200, 204):
             print(f"❌ #{aid} 미발행 처리 실패: HTTP {res.status_code} - {res.text[:200]}")
             ok = False
     return ok
+
+
+def mark_dedup_reviewed(ids: list):
+    """merge-articles Edge Function이 미발행 처리한 id_remove에 dedup_reviewed=true를
+    세운다(병합 경로도 unpublish_articles()와 동일한 재검출 방지 필요)."""
+    if not ids:
+        return
+    id_list = ",".join(str(i) for i in ids)
+    res = requests.patch(
+        f"{SUPABASE_URL}/rest/v1/articles",
+        headers=_headers(),
+        params={"id": f"in.({id_list})"},
+        json={"dedup_reviewed": True},
+        timeout=30,
+    )
+    if res.status_code not in (200, 204):
+        print(f"⚠️ dedup_reviewed 일괄 표시 실패: HTTP {res.status_code} - {res.text[:200]}")
 
 
 def merge_pair(id_keep: int, id_remove: int) -> bool:
@@ -204,6 +230,8 @@ def run():
             merged_remove_ids.add(id_remove)
         if i < len(high_pairs) - 1:
             time.sleep(8)  # Gemini 호출 간 여유
+
+    mark_dedup_reviewed(sorted(merged_remove_ids))
 
     # ── 50~70%: 미발행만 ──
     later_ids = set()
