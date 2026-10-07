@@ -1,5 +1,43 @@
 [
   {
+    "id": 300227,
+    "title_en": "오세아니아, 완연한 봄 날씨 속 엇갈린 기온",
+    "title_ko": "오세아니아, 완연한 봄 날씨 속 엇갈린 기온",
+    "summary_ko": "8일(현지시간) 오세아니아 주요국 수도의 기온은 지역 전체 최저기온 4°C에서 최고기온 18°C의 분포를 보였다. 가장 더운 곳은 18°C를 기록한 호주 캔버라였으며, 가장 선선한 곳은 13°C에 그친 뉴질랜드 웰링턴이었다. 호주 캔버라는 최저기온 4°C, 최고기온 18°C로 맑은 날씨를 보였고 강수확률은 0%, 강수량은 0.0mm였다.\n\n이 지역의 자외선지수는 7.7로 나타났으며, 내일 최고기온은 오늘보다 높은 21°C까지 오를 것으로 전망된다. 반면 뉴질랜드 웰링턴은 최고기온 13°C, 최저기온 10°C를 기록하며 호주 캔버라보",
+    "url": "internal://weather_group_오세아니아_today20261008",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_오세아니아_today20261008",
+    "region": "oceania",
+    "country": "오세아니아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-08 03:23",
+    "countries": [
+      "호주",
+      "뉴질랜드"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_australia_20261008.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-08T03:23:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-08 03:23",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 300174,
     "title_en": "세르비아 디아스포라 투표권 논란…학생·시민들, RIK에 이의 신청",
     "title_ko": "세르비아 디아스포라 투표권 논란…학생·시민들, RIK에 이의 신청",
@@ -1566,44 +1604,6 @@
     "continuation_of_id": null,
     "summary_3lines_en": "",
     "investment_idea_en": "",
-    "noindex": true
-  },
-  {
-    "id": 299544,
-    "title_en": "오세아니아, 선선한 바람 부는 맑은 수도 날씨",
-    "title_ko": "오세아니아, 선선한 바람 부는 맑은 수도 날씨",
-    "summary_ko": "7일(현지시간) 오세아니아 주요국 수도의 기온은 최저 4°C에서 최고 17°C 분포를 보인 가운데, 호주 캔버라는 최저 4°C, 최고 17°C를 기록하며 이번 조사 지역 중 가장 더운 곳으로 나타났다. 캔버라는 대체로 맑은 날씨를 보인 가운데 강수확률 2%, 강수량 0.0mm를 기록했으며, 자외선지수는 7.6으로 집계됐다. 반면 뉴질랜드 웰링턴은 최저 12°C, 최고 15°C로 캔버라보다 최고기온이 2°C 낮아 가장 선선한 곳으로 기록됐다.\n\n뉴질랜드 웰링턴은 약한 이슬비가 내려 강수확률 41%, 강수량 0.3mm를 기록했으며, 4",
-    "url": "internal://weather_group_오세아니아_today20261007",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_오세아니아_today20261007",
-    "region": "oceania",
-    "country": "오세아니아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-07 03:22",
-    "countries": [
-      "호주",
-      "뉴질랜드"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_australia_20261007.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-07T03:22:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-07 03:22",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
     "noindex": true
   }
 ]
