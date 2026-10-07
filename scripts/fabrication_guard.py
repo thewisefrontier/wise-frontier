@@ -235,12 +235,20 @@ def verify_no_fabricated_names(source_prompt: str, body: str, call_gemini_fn, wi
 
     if not wiki:
         return suspect
-    unconfirmed = [n for n in extract_candidate_names(body, call_gemini_fn) if not wikipedia_confirms(n)]
-    # 2026-09-28: 위키 미확인 = 곧바로 보류였는데 최근 3일 보류 종합기사 157건·이름 565개를 보니 대부분이 실존 기관·기업
-    # (구글·아마존·월마트·유엔 안전보장이사회·브라질 연방최고재판소…) — 한글 음차·괄호 병기 이름은 위키 검색이 못 찾는다.
-    # 위키에 없는 이름만 원문 근거가 있는지 계열이 다른 모델(NVIDIA)에게 한 번 더 확인시킨다.
-    if unconfirmed:
-        unconfirmed = names_without_source_support(unconfirmed, facts or source_prompt)
+    candidates = extract_candidate_names(body, call_gemini_fn)
+    source_text = (facts or source_prompt or "").strip()
+    # 2026-10-07 재설계(사용자 지적: "애초에 위키를 너무 믿고 있는게 문제") — 예전엔 위키
+    # 미확인 이름만 원문 대조를 거쳐, 위키에 없으면 일단 의심부터 하고 시작하는 구조였다.
+    # 프론티어 마켓 기사는 위키에 없는 실존 인물·기관·상품명이 태반이라(2026-09-28에도 같은
+    # 문제로 한 차례 완화했으나 2026-10-06 실측 여전히 미발행 사유 1위, 52%) 이 전제 자체가
+    # 안 맞았다. 이제 원문이 있으면 위키는 아예 보지 않고 원문 대조(names_without_source_support,
+    # 계열이 다른 모델)만으로 판정한다 — "이 이름이 우리가 실제로 쓴 원문에 있는가"가 "세상에
+    # 유명한 존재인가"보다 훨씬 적절한 질문이다. 위키 조회는 원문 자체가 없을 때만(드묾) 최후
+    # 수단으로 돌아간다.
+    if source_text:
+        unconfirmed = names_without_source_support(candidates, source_text)
+    else:
+        unconfirmed = [n for n in candidates if not wikipedia_confirms(n)]
     if unconfirmed:
         note = "[위키 미확인] " + ", ".join(unconfirmed)
         suspect = (suspect + "\n" + note) if suspect else note
