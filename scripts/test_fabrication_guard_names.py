@@ -9,6 +9,15 @@ import fabrication_guard as g  # noqa: E402
 
 names = ["구글(Google)", "유엔 안전보장이사회", "제미나이 프라임"]
 src = "Google and Amazon announced ... The UN Security Council met on Monday ... Flipkart said ..."
+# "구글(Google)"은 괄호 안 원어("Google")가 src에 그대로 있어 2026-10-07부터 결정론적
+# 1차 필터(_deterministic_source_match)에서 NVIDIA 호출 전에 바로 걸러진다 — 아래 NVIDIA
+# 목(mock) 경로를 거치는 건 "유엔 안전보장이사회"·"제미나이 프라임" 둘뿐이다.
+rest = ["유엔 안전보장이사회", "제미나이 프라임"]
+
+# 0) 결정론적 1차 필터 단독 테스트
+assert g._deterministic_source_match("구글(Google)", src) is True
+assert g._deterministic_source_match("제미나이 프라임", src) is False
+assert g._deterministic_source_match("", src) is False
 
 # 1) 가짜 NVIDIA: 지어낸 이름만 지목 / 없음 / 엉뚱한 응답 / 예외
 g.call_nvidia = lambda p, max_tokens=0: "제미나이 프라임"
@@ -18,12 +27,12 @@ assert g.names_without_source_support(names, src) == []
 g.call_nvidia = lambda p, max_tokens=0: "없음 (모든 이름이 원문에 근거가 있음)"
 assert g.names_without_source_support(names, src) == []
 g.call_nvidia = lambda p, max_tokens=0: "잘 모르겠습니다"
-assert g.names_without_source_support(names, src) == names          # 엉뚱한 응답 → 보수적으로 그대로
+assert g.names_without_source_support(names, src) == rest           # 엉뚱한 응답 → 보수적으로 그대로(결정론적으로 통과된 구글 제외)
 def boom(*a, **k): raise RuntimeError("x")
 g.call_nvidia = boom
-assert g.names_without_source_support(names, src) == names          # 실패 → 그대로
+assert g.names_without_source_support(names, src) == rest           # 실패 → 그대로
 g.call_nvidia = None
-assert g.names_without_source_support(names, src) == names          # 미설정 → 그대로
+assert g.names_without_source_support(names, src) == rest           # 미설정 → 그대로
 assert g.names_without_source_support([], src) == []
 # 두 번 다 걸린 이름만 남긴다(2026-09-29) / 두 번째 실패면 첫 결과 유지
 seq = iter(["제미나이 프라임, 구글(Google)", "제미나이 프라임"])

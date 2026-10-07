@@ -153,13 +153,35 @@ def second_review(title: str, body: str, facts: str) -> tuple:
     return False, "2차 검수 응답 불분명"
 
 
+def _deterministic_source_match(name: str, source_text: str, threshold: int = 85) -> bool:
+    """LLM 판단 없이, 이름(괄호 병기 원어 포함)이 원문에 실제로 등장하는지 결정론적으로 1차 확인.
+    rapidfuzz로 원문 어딘가에 이 표기(주로 영문 원어)가 있는지 부분 매칭한다. 외부 벤치마크
+    (Hallucination_Detection_Benchmark, 2026-10-07 조사)에서 source-grounded 방식이 LLM
+    자체판단보다 recall·오탐률 모두 우수하다고 확인돼, 괄호 안 원어가 원문에 그대로 보이는
+    가장 확실한 경우는 LLM 호출 없이 먼저 걸러낸다 — wikipedia_confirms()와 같은 "판단이 아닌
+    결정론적 신호" 원칙(이 파일 상단 설명)을 원문 대조에도 적용."""
+    if fuzz is None or not name or not (source_text or "").strip():
+        return False
+    m = re.search(r"\(([^)]+)\)", name)
+    probe = m.group(1).strip() if m else name
+    if len(probe) < 3:
+        return False
+    return fuzz.partial_ratio(probe, source_text) >= threshold
+
+
 def names_without_source_support(names: list, source_text: str) -> list:
     """위키에서 못 찾은 이름 중 원문 자료에도 근거가 없는 것만 돌려준다(NVIDIA, 계열이 다른 모델).
     음차·번역·약칭·괄호 병기(예: 구글(Google), 유엔 안전보장이사회 = UN Security Council)는 같은 대상이면 근거 있음으로 본다.
     NVIDIA 미설정·실패·엉뚱한 응답이면 입력을 그대로 돌려준다(예전처럼 보수적으로 보류).
     걸린 이름이 있으면 한 번 더 물어 두 번 다 걸린 것만 남긴다(2026-09-29 사용자 결정): 같은 원문·이름에 [] / [칼리드…]로
     결과가 흔들렸다(정식 전체 이름 확장). 두 번째가 실패·엉뚱한 응답이면 첫 결과를 그대로 쓴다(fail-closed)."""
-    first = _names_without_source_support_once(names, source_text)
+    if not names:
+        return names
+    # 결정론적 1차 필터 — 괄호 안 원어가 원문에 그대로 있으면 LLM 호출 없이 바로 통과시킨다.
+    remaining = [n for n in names if not _deterministic_source_match(n, source_text)]
+    if not remaining:
+        return []
+    first = _names_without_source_support_once(remaining, source_text)
     if not first or not call_nvidia or not (source_text or "").strip():
         return first
     second = _names_without_source_support_once(first, source_text)
@@ -198,8 +220,10 @@ def verify_no_fabricated_names(source_prompt: str, body: str, call_gemini_fn, wi
     wiki=False면 ② 위키 조회(추출용 lite 호출 1회 포함)를 건너뛴다 — 무명 선수·구단처럼 위키에
     없는 게 정상인 분야용(2026-09-28 실측: 스포츠 미발행 43건 중 약 30건이 [위키 미확인] 오탐).
     그런 호출부는 unsupported_claims()로 원문 대조를 대신 건다.
-    facts: 원문만 모은 텍스트(있으면 위키 미확인 이름의 원문 대조에 source_prompt 대신 쓴다). 프롬프트는 원문 뒤에
-    작성 규칙(1만3천자)이 붙고 [:6000]으로 잘려, 원문이 긴 클러스터는 뒤쪽 기사가 대조에서 빠졌다(2026-09-29)."""
+    facts: 원문만 모은 텍스트(있으면 ①② 두 대조 모두에서 source_prompt 대신 쓴다). source_prompt는
+    원문 뒤에 작성 규칙(1만3천자)이 붙어 있어, 그걸 그대로 자르면(예전 [:3000]) 원문 자체가
+    더 긴 클러스터는 뒤쪽 소스 기사가 대조 창에서 통째로 빠진다(2026-09-29·2026-10-07) — facts를
+    쓰면 규칙 텍스트 없이 원문만 [:6000]까지 확보된다."""
     if not body:
         return ""
     check_prompt = f"""아래는 기사 작성에 쓰인 원본 자료와, 그걸 바탕으로 생성된 한국어 기사 본문입니다.
@@ -220,7 +244,7 @@ def verify_no_fabricated_names(source_prompt: str, body: str, call_gemini_fn, wi
 (수식어 삭제 후 표기)" 형식으로 쉼표 구분해 나열하세요. 없으면 "없음"이라고만 답하세요.
 
 [원본 자료]
-{source_prompt[:3000]}
+{(facts or source_prompt)[:6000]}
 
 [생성된 기사 본문]
 {body[:2000]}
