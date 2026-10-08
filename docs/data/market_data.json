@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-08 10:22",
+  "updated_at": "2026-10-08 10:26",
   "indices": [
     {
       "name": "S&P 500",
@@ -25,15 +25,15 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 6738.46,
-      "change_pct": -2.92,
+      "price": 6750.18,
+      "change_pct": -2.75,
       "up": false
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 897.92,
-      "change_pct": -2.39,
+      "price": 898.52,
+      "change_pct": -2.33,
       "up": false
     },
     {
@@ -121,15 +121,15 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 6738.46,
-        "change_pct": -2.92,
+        "price": 6750.18,
+        "change_pct": -2.75,
         "up": false
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 897.92,
-        "change_pct": -2.39,
+        "price": 898.52,
+        "change_pct": -2.33,
         "up": false
       }
     ],
