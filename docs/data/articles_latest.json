@@ -1,5 +1,59 @@
 [
   {
+    "id": 301027,
+    "title_en": "[국제유가] WTI 배럴당 91달러…중동 공급 차질 우려",
+    "title_ko": "[국제유가] WTI 배럴당 91달러…중동 공급 차질 우려",
+    "summary_ko": "국제유가가 8일(현지시간) 상승했다. WTI 원유 선물은 뉴욕상업거래소(NYMEX)에서 배럴당 91.10달러에 거래를 마쳤다. 시장 집계에 따르면 이는 전일 종가(89.43달러) 대비 1.87%인 1.67달러 상승한 수치다.\n\n브렌트유 역시 상승세를 보였다. 브렌트유는 배럴당 103.92달러를 기록했다. 이는 전일 종가(100.32달러) 대비 3.59%인 3.60달러 오른 가격이다.\n\n이번 유가 상승은 중동 지역의 지정학적 불안에 따른 공급 차질 우려가 반영된 결과다. 최근 중동 내 화물선 공격 등 공급망을 위협하는 사건들이 잇따르",
+    "url": "internal://oil_price_2026-10-08",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국제유가",
+    "region": "글로벌",
+    "country": "국제",
+    "country_flag": "🛢️",
+    "score": 1,
+    "created_at": "2026-10-09 06:06",
+    "countries": [
+      "미국",
+      "사우디아라비아",
+      "러시아"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/oil_2026_10_08_pid3108235.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-09T06:06:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-09 06:06",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "wti": {
+        "pct": 1.867382310186724,
+        "prev": 89.43,
+        "price": 91.1,
+        "change": 1.6699999999999875
+      },
+      "date": "2026-10-08",
+      "brent": {
+        "pct": 3.5885167464114924,
+        "prev": 100.32,
+        "price": 103.92,
+        "change": 3.6000000000000085
+      },
+      "source": "Yahoo Finance"
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 301021,
     "title_en": "한국, 전국·낮 최고 26도 완연한 가을…일교차 주의",
     "title_ko": "한국, 전국·낮 최고 26도 완연한 가을…일교차 주의",
@@ -1759,84 +1813,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 300358,
-    "title_en": "서울, 맑은 하늘 속 완연한 가슴 시린 24도",
-    "title_ko": "서울, 맑은 하늘 속 완연한 가슴 시린 24도",
-    "summary_ko": "8일 한국의 날씨는 전국이 대체로 맑은 가운데 강수확률과 강풍 위험 없이 평온한 기상을 보이고 있다. 기상청에 따르면 서울은 오전과 오후 모두 맑은 하늘이 이어지겠으며, 기온은 최저 12°C에서 최고 24°C 사이를 나타낼 것으로 예상된다. 오전과 오후 모두 강수확률은 0%를 기록하며 비 소식은 없고, 최대풍속은 3km/h로 바람도 잔잔하게 불어 야외 활동에 지장이 없는 날씨가 전개된다.\n\n서울을 비롯한 주요 지역 역시 맑은 날씨가 전국적으로 이어지는 양상이다. 부산은 최저 14°C, 최고 26°C를 기록하며 최대풍속 8km/h의 ",
-    "url": "internal://weather_한국_today20261008",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_한국_today20261008",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-08 05:53",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20261008.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-08T05:53:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-08 05:53",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 300306,
-    "title_en": "엠폭스 확산에 캐나다 토론토 백신 접종 촉구 및 앙골라 769명 감염 확인",
-    "title_ko": "엠폭스 확산에 캐나다 토론토 백신 접종 촉구 및 앙골라 769명 감염 확인",
-    "summary_ko": "앙골라와 콩고민주공화국, 상투메프린시페, 캐나다 등 아프리카와 북미 여러 국가에서 엠폭스(Mpox) 확산세가 이어지며 보건 당국이 국경 검역 강화와 백신 접종 독려 등 긴급 대응에 나섰다. 상투메프린시페 보건 당국은 주변국에서 엠폭스 바이 러스 유입 위험이 커짐에 따라 최고 수준의 경계 태세를 발령하고 비상대책위원회를 가동했다.\n\n보건 당국은 공항에서 포르투갈과 앙골라 등지에서 오는 탑승객의 발열 체크를 실시하고 의심 환자를 위한 격리 공간을 마련했다. 국내에 진단 시설이 없어 의심 검체를 인접국 실험실로 보내 검사하는 가운데 인구",
-    "url": "internal://trend_mpox_2026100805",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "trend_mpox",
-    "region": "africa",
-    "country": "앙골라",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-10-08 05:26",
-    "countries": [
-      "앙골라",
-      "캐나다",
-      "콩고민주공화국",
-      "상투메프린시페",
-      "프랑스"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_4932607.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-08T05:26:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-08 05:26",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
