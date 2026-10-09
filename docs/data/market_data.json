@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-09 16:08",
+  "updated_at": "2026-10-09 16:37",
   "indices": [
     {
       "name": "S&P 500",
@@ -18,7 +18,7 @@
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 51231.64,
+      "price": 51231.6,
       "change_pct": -0.56,
       "up": false
     },
@@ -39,9 +39,9 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 107109.29,
-      "change_pct": -0.0,
-      "up": false
+      "price": 108359.11,
+      "change_pct": 1.17,
+      "up": true
     },
     {
       "name": "EGX30 (이집트)",
@@ -53,15 +53,15 @@
     {
       "name": "SET (태국)",
       "symbol": "^SET.BK",
-      "price": 1573.35,
+      "price": 1573.29,
       "change_pct": 0.17,
       "up": true
     },
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 6052.51,
-      "change_pct": 0.35,
+      "price": 6079.22,
+      "change_pct": 0.79,
       "up": true
     },
     {
@@ -112,7 +112,7 @@
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 51231.64,
+        "price": 51231.6,
         "change_pct": -0.56,
         "up": false
       }
@@ -137,9 +137,9 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 107109.29,
-        "change_pct": -0.0,
-        "up": false
+        "price": 108359.11,
+        "change_pct": 1.17,
+        "up": true
       },
       {
         "name": "EGX30 (이집트)",
@@ -151,15 +151,15 @@
       {
         "name": "SET (태국)",
         "symbol": "^SET.BK",
-        "price": 1573.35,
+        "price": 1573.29,
         "change_pct": 0.17,
         "up": true
       },
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 6052.51,
-        "change_pct": 0.35,
+        "price": 6079.22,
+        "change_pct": 0.79,
         "up": true
       },
       {
@@ -198,15 +198,15 @@
     "ANTM": {
       "name": "Aneka Tambang Tbk",
       "symbol": "ANTM.JK",
-      "price": 3160.0,
-      "change_pct": 0.32,
+      "price": 3180.0,
+      "change_pct": 0.95,
       "up": true
     },
     "ACB": {
       "name": "Asia Commercial Joint Stock Bank",
       "symbol": "ACB.VN",
-      "price": 20350.0,
-      "change_pct": -1.45,
+      "price": 20200.0,
+      "change_pct": -2.18,
       "up": false
     }
   }
