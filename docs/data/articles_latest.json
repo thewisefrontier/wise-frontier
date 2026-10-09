@@ -1,5 +1,42 @@
 [
   {
+    "id": 301766,
+    "title_en": "한국, 서울·남부·맑음과 비 오가는 주말 날씨",
+    "title_ko": "한국, 서울·남부·맑음과 비 오가는 주말 날씨",
+    "summary_ko": "10일 이번 주말 한국의 날씨는 지역별로 맑은 날씨와 비 소식이 엇갈리는 가운데, 기상청에 따르면 남부지방과 제주도를 중심으로 가끔 비가 내리는 곳이 있겠고 서울 등 중부지방은 대체로 맑은 하늘이 이어지겠다. 서울의 토요일과 일요일은 오전과 오후 모두 맑은 날씨를 보이겠다. 서울의 기온은 토요일 최저 14°C에서 최고 26°C를 기록하겠고, 일요일 역시 최저 15°C, 최고 26°C의 기온 분포를 나타내며 예년 이맘때와 비슷한 완연한 가을 기온을 보이겠다.\n\n반면 남부지방과 제주도는 주말 동안 강수확률이 60% 이상을 기록하며 비가",
+    "url": "internal://weather_한국_weekend20261010",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_한국_weekend20261010",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-10 05:22",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20261010.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-10T05:22:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-10 05:22",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 301765,
     "title_en": "[국내유가] 휘발유 리터당 1857원…경유는 하락 전환",
     "title_ko": "[국내유가] 휘발유 리터당 1857원…경유는 하락 전환",
@@ -1548,72 +1585,6 @@
     "is_travel": false,
     "source_published_at": null,
     "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 301020,
-    "title_en": "[국내유가] 휘발유 리터당 1857원…정유사 공급가 논쟁 속 소폭 하락",
-    "title_ko": "[국내유가] 휘발유 리터당 1857원…정유사 공급가 논쟁 속 소폭 하락",
-    "summary_ko": "한국석유공사 오피넷이 9일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1857원으로 집계됐다. 전일 대비 0.14원 내린 수치를 기록하며 완만한 하락세를 나타냈다.\n\n오피넷에 따르면 경유 판매가격은 리터당 1842.74원으로 전일보다 0.46원 하락했다. LPG 부탄 역시 리터당 1143.31원으로 전일 대비 0.06원 내렸다. 전 유종이 전날에 이어 소폭 하락 흐름을 유지했다.\n\n이 같은 유가 변동은 국제유가 흐름과 함께 정유사 공급가격을 둘러싼 주유소 업계와 정유사 간의 갈등 등 복합적인 요인이 반영된 결과",
-    "url": "internal://opinet_price_2026-10-09",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국내유가",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "🇰🇷",
-    "score": 1,
-    "created_at": "2026-10-09 05:11",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_10_09_pid2048584.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-09T05:11:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-09 05:11",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "date": "2026-10-09",
-      "prices": {
-        "B027": {
-          "diff": -0.14,
-          "name": "휘발유",
-          "price": 1857.15
-        },
-        "B034": {
-          "diff": 1.99,
-          "name": "고급휘발유",
-          "price": 2368.12
-        },
-        "C004": {
-          "diff": 0.08,
-          "name": "실내등유",
-          "price": 1572.59
-        },
-        "D047": {
-          "diff": -0.46,
-          "name": "경유",
-          "price": 1842.74
-        },
-        "K015": {
-          "diff": -0.06,
-          "name": "LPG(부탄)",
-          "price": 1143.31
-        }
-      }
-    },
     "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
