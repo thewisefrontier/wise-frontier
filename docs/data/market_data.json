@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-09 15:44",
+  "updated_at": "2026-10-09 15:55",
   "indices": [
     {
       "name": "S&P 500",
@@ -67,8 +67,8 @@
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 5760.94,
-      "change_pct": 2.68,
+      "price": 5743.31,
+      "change_pct": 2.37,
       "up": true
     },
     {
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.51,
-      "change_pct": -0.71,
+      "price": 16.52,
+      "change_pct": -0.7,
       "up": false
     }
   ],
@@ -165,8 +165,8 @@
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 5760.94,
-        "change_pct": 2.68,
+        "price": 5743.31,
+        "change_pct": 2.37,
         "up": true
       }
     ],
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.51,
-        "change_pct": -0.71,
+        "price": 16.52,
+        "change_pct": -0.7,
         "up": false
       }
     ]
@@ -205,8 +205,8 @@
     "ACB": {
       "name": "Asia Commercial Joint Stock Bank",
       "symbol": "ACB.VN",
-      "price": 20300.0,
-      "change_pct": -1.69,
+      "price": 20400.0,
+      "change_pct": -1.21,
       "up": false
     }
   }
