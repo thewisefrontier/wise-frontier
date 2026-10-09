@@ -1,5 +1,51 @@
 [
   {
+    "id": 301269,
+    "title_en": "아프리카, 수도별 기온 편차 커…곳곳 뇌우와 폭염 동반",
+    "title_ko": "아프리카, 수도별 기온 편차 커…곳곳 뇌우와 폭염 동반",
+    "summary_ko": "9일(현지시간) 아프리카 주요국 수도의 기온은 최저 9°C에서 최고 31°C 사이의 분포를 보이며 지역별로 큰 편차를 나타냈다. 가나의 아크라는 최고기온 31°C를 기록하며 가장 더운 지역으로 꼽혔고, 에티오피아의 아디스아바바는 최고기온 22°C, 최저기온 9°C를 기록해 가장 선선한 날씨를 보였다. 아디스아바바의 최고기온은 아크라보다 9°C 낮게 나타나 대륙 내 기온 차이가 뚜렷했다.\n\n나이지리아의 카노와 포트하커트 지역에서는 38°C를 넘어서는 폭염이 관측되었으며, 알제리의 콘스탄틴과 안나바, 가나의 쿠마시 지역에서는 뇌우가 발",
+    "url": "internal://weather_group_아프리카_today20261009",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_아프리카_today20261009",
+    "region": "africa",
+    "country": "아프리카",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-09 13:19",
+    "countries": [
+      "나이지리아",
+      "케냐",
+      "남아공",
+      "이집트",
+      "모로코",
+      "알제리",
+      "에티오피아",
+      "가나",
+      "탄자니아",
+      "앙골라"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_nigeria_20261009.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-09T13:19:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-09 13:19",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 301238,
     "title_en": "이탈리아 코르토 콘도렐로 영화제 12월 개최…니콜라스 윈딩 레픈 심사위원장 위촉",
     "title_ko": "이탈리아 코르토 콘도렐로 영화제 12월 개최…니콜라스 윈딩 레픈 심사위원장 위촉",
@@ -1613,42 +1659,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 300592,
-    "title_en": "Mountain Scene",
-    "title_ko": "[오늘의 그림] 카스파르 요한 네포무크 샤우렌의 마운틴 씬, 1852년의 낭만주의 산수",
-    "summary_ko": "카스파르 요한 네포무크 샤우렌(Caspar Johann Nepomuk Scheuren)이 1852년에 제작한 작품 《마운틴 씬》(Mountain Scene)은 종이 위에 펜과 잉크, 워시 기법을 사용해 완성한 회화 작품이다. 현재 볼티모어에 위치한 월터스 미술관에 소장되어 있으며, 작가의 자연에 대한 시선과 낭만주의적 경향을 고스란히 담아내고 있다.\n\n작가 샤우렌은 1810년 독일 아헨에서 태어나 화가였던 아버지 에기디우스 샤우렌에게 초기 교육을 받았다. 이후 1829년부터 1835년까지 뒤셀도르프 미술아카데미(Kunstakadem",
-    "url": "internal://art_weekly_2026-10-08",
-    "source": "NewsFinal",
-    "category": "문화·예술",
-    "subcategory": "오늘의그림",
-    "region": "europe",
-    "country": "독일",
-    "country_flag": "🇩🇪",
-    "score": 1,
-    "created_at": "2026-10-08 13:10",
-    "countries": [
-      "독일"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/art_weekly_mountainscene.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-08T13:10:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-08 13:10",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: The Walters Art Museum (CC0 퍼블릭 도메인)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   }
 ]
