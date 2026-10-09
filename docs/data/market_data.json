@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-09 10:39",
+  "updated_at": "2026-10-09 11:15",
   "indices": [
     {
       "name": "S&P 500",
@@ -60,15 +60,15 @@
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 6031.28,
-      "change_pct": -1.88,
-      "up": false
+      "price": 6038.02,
+      "change_pct": 0.11,
+      "up": true
     },
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 5610.39,
-      "change_pct": 0.0,
+      "price": 5697.16,
+      "change_pct": 1.55,
       "up": true
     },
     {
@@ -158,15 +158,15 @@
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 6031.28,
-        "change_pct": -1.88,
-        "up": false
+        "price": 6038.02,
+        "change_pct": 0.11,
+        "up": true
       },
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 5610.39,
-        "change_pct": 0.0,
+        "price": 5697.16,
+        "change_pct": 1.55,
         "up": true
       }
     ],
@@ -198,15 +198,15 @@
     "ANTM": {
       "name": "Aneka Tambang Tbk",
       "symbol": "ANTM.JK",
-      "price": 3150.0,
-      "change_pct": -2.48,
-      "up": false
+      "price": 3160.0,
+      "change_pct": 0.32,
+      "up": true
     },
     "ACB": {
       "name": "Asia Commercial Joint Stock Bank",
       "symbol": "ACB.VN",
       "price": 20350.0,
-      "change_pct": -1.21,
+      "change_pct": -1.45,
       "up": false
     }
   }
