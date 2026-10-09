@@ -1,5 +1,46 @@
 [
   {
+    "id": 301883,
+    "title_en": "남아시아, 뇌우·이슬비 속 최고 33도 기온",
+    "title_ko": "남아시아, 뇌우·이슬비 속 최고 33도 기온",
+    "summary_ko": "10일(현지시간) 남아시아 주요국의 주말 날씨는 지역별로 최저기온 14°C에서 최고기온 33°C의 분포를 보이는 가운데, 방글라데시와 파키스탄, 스리랑카, 네팔 등지에서 비 소식이 예고되었다. 전체적인 기온 범위는 14°C에서 33°C 사이로 나타났다.\n\n인도 수도의 경우 토요일에 최고 32°C, 최저 22°C를 기록하며 강수 확률 8%의 뇌우가 예보되었고, 일요일에는 최고 29°C, 최저 23°C와 함께 강수 확률 28%의 뇌우가 이어진다. 방글라데시 수도는 토요일 최고 33°C, 최저 24°C에서 강수 확률 93%의 강한 이슬비",
+    "url": "internal://weather_group_남아시아_weekend20261010",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_남아시아_weekend20261010",
+    "region": "south_asia",
+    "country": "남아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-10 08:37",
+    "countries": [
+      "인도",
+      "방글라데시",
+      "파키스탄",
+      "스리랑카",
+      "네팔"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_india_20261010.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-10T08:37:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-10 08:37",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 301877,
     "title_en": "동남아, 34도 무더위 속 곳곳 비·뇌우",
     "title_ko": "동남아, 34도 무더위 속 곳곳 비·뇌우",
@@ -1168,89 +1209,6 @@
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 301126,
-    "title_en": "남아시아, 뇌우·폭염 교차…지역별 기온 차 극심",
-    "title_ko": "남아시아, 뇌우·폭염 교차…지역별 기온 차 극심",
-    "summary_ko": "9일(현지시간) 남아시아 주요국은 최저 14°C에서 최고 32°C 사이의 기온 분포를 보이며 지역별로 극명한 날씨 차이를 나타냈다. 방글라데시 다카가 32°C로 가장 높은 기온을 기록한 반면, 네팔 카트만두는 14°C까지 기온이 떨어져 가장 선선한 날씨를 보였다. 현재 남아시아 전역에서는 뇌우와 소나기 등 불안정한 기상 현상이 이어지고 있다.\n\n인도 뉴델리를 비롯해 방글라데시 실헷, 스리랑카 콜롬보 와 캔디, 네팔 포카라 등지에서는 뇌우가 발생했다. 특히 방글라데시와 스리랑카, 네팔은 비 소식이 이어지며 강수 현상이 두드러졌다.\n\n",
-    "url": "internal://weather_group_남아시아_today20261009",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_남아시아_today20261009",
-    "region": "south_asia",
-    "country": "남아시아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-09 08:34",
-    "countries": [
-      "인도",
-      "방글라데시",
-      "파키스탄",
-      "스리랑카",
-      "네팔"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_india_20261009.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-09T08:34:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-09 08:34",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 301092,
-    "title_en": "칠레 산티아고 산간 지역서 대규모 토사 유출…차량·버스 휩쓸려",
-    "title_ko": "칠레 산티아고 산간 지역서 대규모 토사 유출…차량·버스 휩쓸려",
-    "summary_ko": "8일(현지시간) 칠레 수도 산티아고의 고급 주거지인 라스콘데스(Las Condes) 지역 산 카를로스 데 아포킨도(San Carlos de Apoquindo) 구역에서 대규모 토사 유출 사고가 발생했다.\n\n이번 사고는 전날 오후 5시경 시작된 집중호우와 폭풍으로 인해 인근 계곡이 범람하고 수로가 넘치면서 일어났다. 갑작스럽게 쏟아져 내린 진흙과 물살은 해당 지역의 주요 도로인 헤네랄 블랑셰(General Blanche) 거리를 덮쳤다.\n\n급류의 강한 힘으로 인해 도로변의 나무들이 쓰러졌고, 주차되어 있거나 주행 중이던 다수의 차량이",
-    "url": "internal://cluster_20261009_50b35039",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "cluster_20261009_50b35039",
-    "region": "latin_america",
-    "country": "칠레",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-09 08:08",
-    "countries": [
-      "칠레"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_8341712.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-09T08:08:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-09 08:08",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": true,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        368648,
-        368688
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
     "noindex": true
   }
 ]
