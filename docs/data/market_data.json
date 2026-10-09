@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-09 11:17",
+  "updated_at": "2026-10-09 11:27",
   "indices": [
     {
       "name": "S&P 500",
@@ -60,15 +60,15 @@
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 6019.97,
-      "change_pct": -0.19,
+      "price": 6026.63,
+      "change_pct": -0.08,
       "up": false
     },
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 5696.38,
-      "change_pct": 1.53,
+      "price": 5689.88,
+      "change_pct": 1.42,
       "up": true
     },
     {
@@ -89,7 +89,7 @@
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
       "price": 16.53,
-      "change_pct": -0.59,
+      "change_pct": -0.6,
       "up": false
     }
   ],
@@ -158,15 +158,15 @@
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 6019.97,
-        "change_pct": -0.19,
+        "price": 6026.63,
+        "change_pct": -0.08,
         "up": false
       },
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 5696.38,
-        "change_pct": 1.53,
+        "price": 5689.88,
+        "change_pct": 1.42,
         "up": true
       }
     ],
@@ -189,7 +189,7 @@
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
         "price": 16.53,
-        "change_pct": -0.59,
+        "change_pct": -0.6,
         "up": false
       }
     ]
