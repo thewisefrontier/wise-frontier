@@ -1,5 +1,71 @@
 [
   {
+    "id": 303402,
+    "title_en": "[국내유가] 휘발유 리터당 1857원…전일 대비 0.10원 상승",
+    "title_ko": "[국내유가] 휘발유 리터당 1857원…전일 대비 0.10원 상승",
+    "summary_ko": "한국석유공사 오피넷이 11일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1857원으로 집계됐다. 이번에 공개된 가격은 오피넷 집계 시스템에 따라 산출된 것으로 나타났다.\n\n이날 오피넷에 따르면 휘발유 가격은 리터당 1857.01원으로 전일 대비 0.10원 오르며 상승세를 나타냈다. 반면 경유는 리터당 1842.52원으로 전일 대비 0.07원 내렸고, LPG 부탄은 리터당 1143.47원으로 전일 대비 0.04원 하락했다.\n\n최근 유가 변동은 국제유가 흐름과 정유사 공급가 조정 등의 요인이 복합적으로 작용한 결과",
+    "url": "internal://opinet_price_2026-10-11",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-10-11 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_10_11_pid5581629.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-11T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-11 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-10-11",
+      "prices": {
+        "B027": {
+          "diff": 0.1,
+          "name": "휘발유",
+          "price": 1857.01
+        },
+        "B034": {
+          "diff": 0.37,
+          "name": "고급휘발유",
+          "price": 2373.96
+        },
+        "C004": {
+          "diff": -0.16,
+          "name": "실내등유",
+          "price": 1572.63
+        },
+        "D047": {
+          "diff": -0.07,
+          "name": "경유",
+          "price": 1842.52
+        },
+        "K015": {
+          "diff": -0.04,
+          "name": "LPG(부탄)",
+          "price": 1143.47
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 303400,
     "title_en": "In Ascension",
     "title_ko": "[오늘의 책] 마틴 매킨스의 『In Ascension』, 심해와 우주를 관통하며 되묻는 인간의 기원",
@@ -2581,51 +2647,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 301760,
-    "title_en": "The True Story of Ah Q",
-    "title_ko": "[오늘의 책] 루쉰의 『아큐정전』, 자기기만과 굴종을 통렬하게 해부한 현대 중국 문학의 이정표",
-    "summary_ko": "영국 BBC가 선정한 위대한 이야기 100선에서 43위에 오른 루쉰(Lu Xun)의 중편 소설 『아큐정전』은 세계 각국 언어로 번역되어 오늘날까지 널리 읽히는 현대 문학의 고전이다. 1919년 5·4 운동 이후 구어체인 백화문을 전면적으로 도입해 민중의 현실을 파헤친 이 작품은 굴욕 속에서도 자기기만으로 우월감을 느끼는 '정신승리'라는 보편적 심리를 날카롭게 포착했다.\n\n이 소설은 1921년 12월 4일부터 이듬해 2월 12일까지 베이징(Beijing)의 신문 『신보부간』에 바런(Ba Ren)이라는 필명으로 연재되었으며, 총 9개 ",
-    "url": "internal://literature_Q613121",
-    "source": "NewsFinal",
-    "category": "문화·예술",
-    "subcategory": "오늘의책",
-    "region": "asia",
-    "country": "중국",
-    "country_flag": "🇨🇳",
-    "score": 1,
-    "created_at": "2026-10-10 05:04",
-    "countries": [
-      "중국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/literature_q613121.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-10T05:04:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-10 05:04",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-10-10 11:38",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "enwiki": "The True Story of Ah Q",
-      "kowiki": "아Q정전",
-      "source": "curated",
-      "wikidata": "Q613121"
-    },
-    "image_credit": "이미지 출처: Wikimedia Commons · 維基小霸王 · CC BY-SA 4.0",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   }
 ]

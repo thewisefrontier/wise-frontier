@@ -1,5 +1,71 @@
 [
   {
+    "id": 303402,
+    "title_en": "[국내유가] 휘발유 리터당 1857원…전일 대비 0.10원 상승",
+    "title_ko": "[국내유가] 휘발유 리터당 1857원…전일 대비 0.10원 상승",
+    "summary_ko": "한국석유공사 오피넷이 11일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1857원으로 집계됐다. 이번에 공개된 가격은 오피넷 집계 시스템에 따라 산출된 것으로 나타났다.\n\n이날 오피넷에 따르면 휘발유 가격은 리터당 1857.01원으로 전일 대비 0.10원 오르며 상승세를 나타냈다. 반면 경유는 리터당 1842.52원으로 전일 대비 0.07원 내렸고, LPG 부탄은 리터당 1143.47원으로 전일 대비 0.04원 하락했다.\n\n최근 유가 변동은 국제유가 흐름과 정유사 공급가 조정 등의 요인이 복합적으로 작용한 결과",
+    "url": "internal://opinet_price_2026-10-11",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-10-11 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_10_11_pid5581629.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-11T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-11 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-10-11",
+      "prices": {
+        "B027": {
+          "diff": 0.1,
+          "name": "휘발유",
+          "price": 1857.01
+        },
+        "B034": {
+          "diff": 0.37,
+          "name": "고급휘발유",
+          "price": 2373.96
+        },
+        "C004": {
+          "diff": -0.16,
+          "name": "실내등유",
+          "price": 1572.63
+        },
+        "D047": {
+          "diff": -0.07,
+          "name": "경유",
+          "price": 1842.52
+        },
+        "K015": {
+          "diff": -0.04,
+          "name": "LPG(부탄)",
+          "price": 1143.47
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 303400,
     "title_en": "In Ascension",
     "title_ko": "[오늘의 책] 마틴 매킨스의 『In Ascension』, 심해와 우주를 관통하며 되묻는 인간의 기원",
