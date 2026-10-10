@@ -191,20 +191,29 @@ def names_without_source_support(names: list, source_text: str) -> list:
 def _names_without_source_support_once(names: list, source_text: str) -> list:
     if not names or not call_nvidia or not (source_text or "").strip():
         return names
+    # 2026-10-10 실측: NVIDIA 호스팅 nemotron 모델이 한국어 "생성"(응답 본문)만 요청하면
+    # 깨진 바이트(대체문자 � 또는 EUC-KR류 모지바케)를 반복적으로 반환한다(같은
+    # 입력을 영어로만 답하게 하면 정상 — 입력 독해는 문제없고 한국어 출력 채널만 깨짐,
+    # 3회 재현 확인). 이름을 그대로 쓰게 하거나 "없음"이라는 한국어 토큰을 기대하면
+    # 응답이 항상 깨져 목록 어디에도 안 걸리고 fail-closed로 전부 "근거없음" 처리됐다
+    # (10/10 미발행 사유 1위, 64%). 모델이 숫자(ASCII)만 답하도록 바꿔 이 버그를 피한다.
+    numbered = "\n".join(f"{i+1}. {n}" for i, n in enumerate(names))
     prompt = ("아래 [자료]는 기사 작성에 쓰인 원문(주로 외국어)이고, [이름 목록]은 그걸 바탕으로 쓴 한국어 기사에 나온 "
-              "고유명사입니다(한글 음차·번역·약칭·괄호 병기 포함). 각 이름이 [자료]에 나오는 대상(같은 인물·기관·기업·매체·작품을 "
-              "가리키는 다른 언어 표기 포함)으로 확인되면 제외하고, [자료]에 전혀 근거가 없는 이름만 목록에 적힌 그대로 쉼표로 "
-              "나열하세요. 모두 근거가 있으면 정확히 '없음'만 답하세요.\n\n"
-              f"[이름 목록]\n{', '.join(names)}\n\n[자료]\n{source_text[:6000]}")
+              "고유명사입니다(한글 음차·번역·약칭·괄호 병기 포함). 각 번호의 이름이 [자료]에 나오는 대상(같은 인물·기관·기업·매체·작품을 "
+              "가리키는 다른 언어 표기 포함)으로 확인되는지 판단하세요.\n\n"
+              f"[이름 목록]\n{numbered}\n\n[자료]\n{source_text[:6000]}\n\n"
+              "[자료]에 전혀 근거가 없는 이름의 번호만 쉼표로 구분한 숫자로 답하세요(예: 2,5). "
+              "모두 근거가 있으면 숫자 0만 답하세요. 설명이나 다른 글자는 쓰지 마세요.")
     try:
-        resp = (call_nvidia(prompt, max_tokens=300) or "").strip()
+        resp = (call_nvidia(prompt, max_tokens=60) or "").strip()
     except Exception:
         return names
-    if not resp:
-        return names
-    if resp.startswith("없음") or ("없음" in resp and len(resp) <= 12):
+    nums = re.findall(r"\d+", resp)
+    if not nums:
+        return names  # 숫자 하나도 못 뽑으면(응답 손상 등) 보수적으로 보류
+    if nums == ["0"]:
         return []
-    flagged = [n for n in names if n in resp]  # 목록에 있던 이름만 인정(엉뚱한 출력 방어)
+    flagged = [names[int(k) - 1] for k in nums if k != "0" and 1 <= int(k) <= len(names)]
     return flagged if flagged else names
 
 
