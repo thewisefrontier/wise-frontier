@@ -205,12 +205,23 @@ def _names_without_source_support_once(names: list, source_text: str) -> list:
               "[자료]에 전혀 근거가 없는 이름의 번호만 쉼표로 구분한 숫자로 답하세요(예: 2,5). "
               "모두 근거가 있으면 숫자 0만 답하세요. 설명이나 다른 글자는 쓰지 마세요.")
     try:
-        resp = (call_nvidia(prompt, max_tokens=60) or "").strip()
+        raw_resp = call_nvidia(prompt, max_tokens=60)
     except Exception:
-        return names
+        raw_resp = None
+    # 2026-10-10 2차 실측(위 수정 배포 후에도 "위키 미확인"에 트럼프·푸틴 등 명백한
+    # 실존 인물이 재발): MAX_CLUSTERS_PER_RUN을 7->12로 올리며 NVIDIA 호출량이 같이
+    # 늘어 분당 40건 공유 한도에 부딪혀 call_nvidia()가 실패(429 등)해 None을 반환하는
+    # 경우가 늘었다. None/빈 응답을 "응답은 받았는데 숫자가 없음"과 똑같이 처리해
+    # 보수적으로 전부 보류시키고 있었는데, 이건 "모델이 근거 없다고 답함"이 아니라
+    # "호출 자체가 실패함"이라 이 파일의 다른 모든 호출부·nvidia_client.py 자체 독스트링
+    # 원칙("실패 시 None, 호출부는 대부분 fail-open")과 어긋난다. 호출 실패는 그냥
+    # 통과(빈 리스트)시키고, 호출은 성공했는데 응답이 이상한 경우만 보수적으로 보류한다.
+    if not raw_resp:
+        return []
+    resp = raw_resp.strip()
     nums = re.findall(r"\d+", resp)
     if not nums:
-        return names  # 숫자 하나도 못 뽑으면(응답 손상 등) 보수적으로 보류
+        return names  # 호출은 성공했는데 숫자를 하나도 못 뽑음(응답 손상 등) — 보수적으로 보류
     if nums == ["0"]:
         return []
     flagged = [names[int(k) - 1] for k in nums if k != "0" and 1 <= int(k) <= len(names)]
