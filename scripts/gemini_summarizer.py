@@ -619,13 +619,29 @@ def _guard_note(reason: str) -> str:
     return reason if reason.startswith(("번역 누락", "고유명사 날조", "리드 누락")) else f"날짜 환각 의심 미발행 — {reason}"
 
 
+# 2026-10-10(사용자 지시 — PV 부진 원인 조사): DB 트리거 articles_set_noindex()가
+# trend_/realtrend_/extrend_ 포함 본문 1,000자 미만 기사를 전부 noindex 처리한다
+# (검색 노출 자체가 안 됨). 실측 realtrend_ 중앙값 771자로 가장 심했는데, 이
+# call_gemini_article()엔 문체 재시도만 있고 분량 재시도가 아예 없었다 — 프롬프트에
+# "2,000자가 하한" 지시가 있어도 코드로 강제 안 하면 자주 무시된다는 게 이 프로젝트
+# 반복 확인된 패턴. gemini_writer.py의 동일 이름 함수(별도 구현, 클러스터/단독 경로용)에
+# 적용한 것과 같은 방식으로 분량 재시도를 추가한다.
+MIN_BODY_LEN_INDEX_TARGET = 1000
+
+
 def call_gemini_article(prompt, max_tokens=2000, style_retries=1):
     content = call_gemini(prompt, max_tokens=max_tokens)
     attempt = 0
-    while content and (has_column_style(content) or has_polite_ending(content)) and attempt < style_retries:
+    body_len = len(_extract_section(content, "본문:")) if content else 0
+    too_short = 0 < body_len < MIN_BODY_LEN_INDEX_TARGET
+    while content and (has_column_style(content) or has_polite_ending(content) or too_short) and attempt < style_retries:
         attempt += 1
-        reason = "논평/칼럼체" if has_column_style(content) else "합쇼체(-습니다/-입니다)"
-        print(f"  ⚠️ {reason} 감지 → 재생성 시도 ({attempt}/{style_retries})")
+        reasons = []
+        if has_column_style(content) or has_polite_ending(content):
+            reasons.append("논평/칼럼체" if has_column_style(content) else "합쇼체(-습니다/-입니다)")
+        if too_short:
+            reasons.append(f"분량 부족({body_len}자)")
+        print(f"  ⚠️ {', '.join(reasons)} 감지 → 재생성 시도 ({attempt}/{style_retries})")
         retry_prompt = (
             prompt
             + "\n\n[재작성 지시] 방금 작성한 결과에 논평/칼럼 문체(예: '~를 보여줍니다', "
@@ -633,10 +649,17 @@ def call_gemini_article(prompt, max_tokens=2000, style_retries=1):
               "'-습니다'/'-입니다' 같은 정중체(합쇼체) 종결이 섞여 있었습니다. "
               "감정·의견이 섞인 표현을 모두 배제하고, 모든 문장을 '-다'로 종결하는 "
               "스트레이트 뉴스 문체로만 다시 작성하세요."
+            + (f"\n또한 방금 작성한 본문이 {body_len}자로 짧습니다. 위에서 수집한 관련 기사에 "
+               "아직 반영 안 된 사실관계(배경·경위·수치·인용)가 있으면 압축하지 말고 최대한 "
+               "살려서 다시 쓰세요. 다만 수집된 기사 자체에 정말 더 쓸 내용이 없다면 억지로 "
+               "늘리거나 없는 내용을 지어내지 마세요."
+               if too_short else "")
         )
         retried = call_gemini(retry_prompt, max_tokens=max_tokens)
         if retried:
             content = retried
+            body_len = len(_extract_section(content, "본문:"))
+            too_short = 0 < body_len < MIN_BODY_LEN_INDEX_TARGET
     if content and has_polite_ending(content):
         converted = to_plain_style(content)
         if converted != content:
