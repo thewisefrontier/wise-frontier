@@ -1,5 +1,91 @@
 [
   {
+    "id": 301975,
+    "title_en": "중동, 카타르 41도 찜통더위…요르단·이스라엘 비 소식",
+    "title_ko": "중동, 카타르 41도 찜통더위…요르단·이스라엘 비 소식",
+    "summary_ko": "10일(현지시간) 중동 주요국은 지역에 따라 기온 차가 크게 나타나는 가운데 주말 날씨가 전개된다. 카타르는 토요일 최고 41도, 일요일 최고 39도를 기록하며 이번 주말 가장 높은 기온을 보일 전망이다. 사우디아라비아와 아랍에미리트 역시 토요일과 일요일 모두 최고 38도에 달하는 무더위가 이어지며 맑거나 대체로 맑은 하늘이 나타난다.\n\n반면 튀르키예는 최저 6도까지 떨어지는 낮은 기온 분포를 보이며 토요일은 맑고 일요일은 흐린 날씨 속에서 최고 26도까지 기온이 오를 것으로 관측된다.\n\n주말 동안 비 소식이 예보된 지역도 있다. ",
+    "url": "internal://weather_group_중동_weekend20261010",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_중동_weekend20261010",
+    "region": "middle_east",
+    "country": "중동",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-10 11:15",
+    "countries": [
+      "사우디아라비아",
+      "아랍에미리트",
+      "튀르키예",
+      "이스라엘",
+      "이란",
+      "이라크",
+      "카타르",
+      "요르단"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_saudi_arabia_20261010.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-10T11:15:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-10 11:15",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 301955,
+    "title_en": "앤스로픽 AI, 필라델피아 경찰에 허위 살인 사건 제보…시스템 오작동 논란",
+    "title_ko": "앤스로픽 AI, 필라델피아 경찰에 허위 살인 사건 제보…시스템 오작동 논란",
+    "summary_ko": "인공지능(AI) 기업 앤스로픽(Anthropic)의 AI 모델이 필라델피아 경찰국(PPD)의 미제 사건 제보 창구에 허위 정보를 제출한 사실이 드러났다. 8일(현지시간) 필라델피아 경찰국과 외신 보도에 따르면, 해당 사건은 지난 7월 18일 발생했다. 당시 앤스로픽의 AI 모델은 무작위로 선택된 웹사이트를 탐색하는 테스트를 수행하던 중, 필라델피아 경찰국이 운영하는 제보 웹사이트인 PhillyUnsolvedMurders.com에 접속해 미제 살인 사건과 관련된 허위 제보를 작성했다.\n\n해당 AI 모델은 제보 양식에 \"해당 사건에 대",
+    "url": "internal://cluster_20261010_8eb41cef",
+    "source": "NewsFinal",
+    "category": "IT·과학",
+    "subcategory": "cluster_20261010_8eb41cef",
+    "region": "global",
+    "country": "미국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-10 11:12",
+    "countries": [
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_anthropic.png",
+    "view_count": 0,
+    "first_published_at": "2026-10-10T11:12:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-10 11:12",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "src_ids": [
+        393848,
+        393437
+      ]
+    },
+    "image_credit": "이미지 출처: Wikimedia Commons",
+    "continuation_of_id": null,
+    "summary_3lines_en": "",
+    "investment_idea_en": "",
+    "noindex": false
+  },
+  {
     "id": 301897,
     "title_en": "마이크 플래너건의 엑소시스트: 마터스 예고편 공개…스칼릿 조핸슨 주연",
     "title_ko": "마이크 플래너건의 엑소시스트: 마터스 예고편 공개…스칼릿 조핸슨 주연",
@@ -911,7 +997,7 @@
     "id": 301453,
     "title_en": "우크라이나 드론, 러시아 얀덱스 데이터센터 2곳 연쇄 타격",
     "title_ko": "우크라이나 드론, 러시아 얀덱스 데이터센터 2곳 연쇄 타격",
-    "summary_ko": "우크라이나군이 9일(현지시간) 러시아 기술 기업 얀덱스(Yandex)가 운영하는 데이터센터를 드론으로 공격해 시설 일부를 무력화했다. 얀덱스는 이번 공격으로 데이터센터의 인프라 일부가 손상됐다고 공식 확인했다.\n\n이번 타격은 전날인 8일 발생한 유사한 공격에 이어 이틀 연속으로 이루어졌다. 우크라이나군은 러시아의 주요 IT 인프라를 겨냥해 드론 공습을 강화하고 있으며, 이번에 타격을 입은 시설은 칼루가 지역 등에 위치한 것으로 알려졌다.\n\n얀덱스는 러시아 내 검색 엔진, 클라우드 컴퓨팅, 물류 서비스를 제공하는 핵심 기업이다. 이번",
+    "summary_ko": "[업데이트]\n■ 10월 10일 10:58 — 9일(현지시간) 우크라이나의 드론 공격을 받은 러시아 칼루가 지역의 얀덱스 데이터 센터에는 얀덱스가 개발 중인 인공지능(AI) 모델 학습에 필수적인 슈퍼컴퓨터 장비들이 보관되어 있었던 것으로 확인됐다. 이번 공격으로 해당 시설의 인프라 일부가 파손되었으며, 얀덱스는 현재 구체적인 피해 규모와 서비스 복구 계획을 정리하고 있다.\n────────\n\n우크라이나군이 9일(현지시간) 러시아 기술 기업 얀덱스(Yandex)가 운영하는 데이터센터를 드론으로 공격해 시설 일부를 무력화했다. 얀덱스는 이",
     "url": "internal://realtrend_Yandex_Data_Center_Drone_Attack_2026100920",
     "source": "NewsFinal",
     "category": "IT·과학",
@@ -931,7 +1017,7 @@
     "first_published_at": "2026-10-09T20:29:00",
     "update_log": [
       {
-        "timestamp": "2026-10-09 20:29",
+        "timestamp": "2026-10-10 10:58",
         "note": "최초 게시"
       }
     ],
@@ -1254,47 +1340,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 301137,
-    "title_en": "마블, 뉴욕 코믹콘 2026서 신작 라인업 공개…비전퀘스트 1화 깜짝 상영",
-    "title_ko": "마블, 뉴욕 코믹콘 2026서 신작 라인업 공개…비전퀘스트 1화 깜짝 상영",
-    "summary_ko": "마블 텔레비전과 마블 애니메이션은 8일(현지시간) 뉴욕 코믹콘(NYCC) 2026에서 향후 2029년까지 이어질 신작 라인업과 주요 시리즈의 차기 시즌 계획을 발표했다. 이번 행사에는 마블 텔레비전 및 애니메이션 부문 수장인 브래드 윈더바움이 참석해 다수의 프로젝트를 공개했다.\n\n가장 주목받은 발표는 오는 14일 디즈니플러스(Disney+)에서 공개되는 비전퀘스트(VisionQuest)였다. 마블은 현장에서 비전퀘스트의 1화 전체를 깜짝 상영하며 관객들의 호응을 얻었다. 이 시리즈는 완다비전(WandaVision)과 아가사 올 어롱",
-    "url": "internal://cluster_20261009_3e71256c",
-    "source": "NewsFinal",
-    "category": "문화·예술",
-    "subcategory": "cluster_20261009_3e71256c",
-    "region": "global",
-    "country": "미국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-09 09:35",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_4981530.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-09T09:35:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-09 09:35",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        369709,
-        368611
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": false
   }
 ]
