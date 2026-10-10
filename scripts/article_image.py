@@ -50,6 +50,12 @@ _HTML_TAG_RE = re.compile(r'<[^>]+>')
 # 더 나쁨).
 _WIKI_TITLE_BLOCKLIST = {
     "file:adult cholera patient.jpg",
+    # id=301955(2026-10-10): "Anthropic" 검색 결과가 지배구조 플로차트
+    # 일색이다(진짜 사진이 커먼즈에 거의 없음). 영어 제목은 위 "corporate
+    # structure" 등 단어 필터로 걸러지지만, 같은 그림의 중국어 병음 제목
+    # 사본("gongsi jiagou" = 公司架构 = 회사 구조)은 분류도 비어 있어
+    # 단어 필터를 못 피해간다 — 알려진 구체적 파일이라 직접 차단.
+    "file:anthropic gongsi jiagou.svg",
 }
 _WIKI_TITLE_AVOID_WORDS = (
     "patient", "autopsy", "cadaver", "corpse",
@@ -63,6 +69,15 @@ _WIKI_TITLE_AVOID_WORDS = (
     "chart", "graph", "diagram", "infographic", "statistics", "our world in data",
     "owid", "deaths in", "cases in", "map", "distribution of", "timeline of",
     "trend in", "trends in", "by country", "by year", "per capita",
+    # 2026-10-10 실사고(id=301955 — "앤스로픽 AI..." 기사에 회사 소개 사진 대신
+    # "Anthropic's corporate structure, updated.svg" 지배구조 플로차트가 붙음,
+    # 사용자 재제보 "이 기사 사진 뭐지?"): 위 통계차트 차단은 제목에 "chart/
+    # diagram" 등이 박혀 있을 때만 걸리는데, 기업 지배구조도는 "corporate
+    # structure"처럼 그 단어들이 전혀 없는 제목을 쓴다. 회사명으로 커먼즈를
+    # 검색하면 실제 사진이 거의 없어(비상장 비공개 기업일수록 심함) 이런
+    # 조직도·플로차트가 1순위로 잡히기 쉽다.
+    "corporate structure", "org chart", "organizational chart", "organisational chart",
+    "flowchart", "flow chart", "schematic",
 )
 
 # 2026-09-14 실사고(사용자 재제보 — 위 차트를 걸렀더니 그 자리를 1831년
@@ -169,6 +184,11 @@ def fetch_wikimedia_image(query: str, allow_artwork: bool = False):
             # — 통계 도표(위 title 필터)와 함께 "사진이 아닌 것" 전반을
             # 배제하는 목적.
             categories_lower = (meta.get("Categories", {}).get("value") or "").lower()
+            # 2026-10-10(id=301955 같은 건): 제목엔 안 걸리지만 분류에 "Diagram
+            # images that should use vector graphics"처럼 명시된 경우도 있어,
+            # 제목 차단어(차트·다이어그램 등)를 분류 문자열에도 똑같이 적용한다.
+            if any(w in categories_lower for w in _WIKI_TITLE_AVOID_WORDS):
+                continue
             if any(w in categories_lower for w in category_avoid_words):
                 continue
             license_key = (meta.get("License", {}).get("value") or "").lower()
