@@ -1978,6 +1978,15 @@ _ARTICLE_FENCE_RE = re.compile(r"```(?:json)?", re.I)
 # 따른 것(2,000자는 목표치라 강제하면 소스가 짧은 단신까지 억지로 부풀릴
 # 위험이 있어 제외).
 MIN_BODY_LEN_HARD_FLOOR = 700
+# 2026-10-10(사용자 지시 — PV 부진 원인 조사): DB 트리거 articles_set_noindex()가
+# solo_/cluster_/trend_/realtrend_/extrend_ 기사 중 본문 1,000자 미만을 전부
+# noindex 처리한다(검색 노출 자체가 안 됨). 실측 cluster_ 중앙값 853자·
+# realtrend_ 771자로, 발행은 되지만(700자 넘어서) 색인은 안 되는 "사각지대"에
+# 전체 발행분의 66%가 들어가 있었다. 재시도 판단만 이 기준으로 올리고(원문에
+# 남은 사실관계를 더 살리게 유도), 발행 가부를 가르는 MIN_BODY_LEN_HARD_FLOOR
+# 자체는 그대로 둔다 — 재시도 프롬프트에 이미 "원문에 더 쓸 내용이 없으면
+# 억지로 늘리거나 지어내지 말라"는 안전장치가 있어 단신까지 부풀릴 위험은 없다.
+MIN_BODY_LEN_INDEX_TARGET = 1000
 
 
 def _extract_body_len(content: str) -> int:
@@ -2010,7 +2019,7 @@ def call_gemini_article(prompt, max_tokens=1500, style_retries=1):
     fabricated = verify_no_fabricated_names(prompt, content) if content else ""
     foreign_leftover = detect_foreign_leftover(content) if content else ""
     body_len = _extract_body_len(content) if content else 0
-    too_short = 0 < body_len < MIN_BODY_LEN_HARD_FLOOR
+    too_short = 0 < body_len < MIN_BODY_LEN_INDEX_TARGET
     while content and (has_column_style(content) or has_polite_ending(content) or fabricated or foreign_leftover or too_short) and attempt < style_retries:
         attempt += 1
         reasons = []
@@ -2050,7 +2059,7 @@ def call_gemini_article(prompt, max_tokens=1500, style_retries=1):
             fabricated = verify_no_fabricated_names(prompt, content)
             foreign_leftover = detect_foreign_leftover(content)
             body_len = _extract_body_len(content)
-            too_short = 0 < body_len < MIN_BODY_LEN_HARD_FLOOR
+            too_short = 0 < body_len < MIN_BODY_LEN_INDEX_TARGET
     if content and (has_column_style(content) or has_polite_ending(content)):
         print("  ⚠️ 재생성 후에도 논평체·합쇼체 패턴이 남아있음 (파싱 단계에서 변환)")
     if content and fabricated:
