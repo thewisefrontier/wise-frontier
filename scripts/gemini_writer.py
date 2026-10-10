@@ -15,6 +15,7 @@ import time
 import json
 import hashlib
 import requests
+from functools import lru_cache
 from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
 from rapidfuzz import fuzz
@@ -131,7 +132,11 @@ GEMINI_MODELS = [
     "gemini-3.1-flash-lite",
 ]
 CALL_INTERVAL      = 10
-MAX_CLUSTERS_PER_RUN = 7  # 한 번 실행당 최대 처리 클러스터 수
+MAX_CLUSTERS_PER_RUN = 12  # 한 번 실행당 최대 처리 클러스터 수
+# 2026-10-10: 7 -> 12. 후보 창을 300->3000으로 넓히며 클러스터 발견 수 자체가
+# 늘어난 걸 실제로 처리하는 수도 같이 늘려야 발행량이 는다(안 그러면 그냥
+# 더 중요한 7개를 고르는 효과만 남음). 키 풀 RPD 1000×5=5000, 현재 7개/회×
+# 24회/일≈168건×호출 5회 안팎≈840콜/일 — 12개로 올려도 ~1440콜/일로 여유 큼.
 
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
@@ -1000,8 +1005,14 @@ def extract_keywords(text):
     return {w for w in words if w not in STOPWORDS and len(w) >= 3}
 
 
+@lru_cache(maxsize=50000)
 def title_keywords(text):
-    """제목에서만 키워드 추출 — 고유명사(기관명·인명·지명) 중심"""
+    """제목에서만 키워드 추출 — 고유명사(기관명·인명·지명) 중심.
+    2026-10-10: cluster_articles()가 같은 기사를 여러 쌍에서 반복 비교하며
+    매번 재계산해(O(n²) 호출), 클러스터링 후보 창을 늘리는 데 걸림돌이었다
+    (실측: n=1000, 캐시 전 19s → 캐시 후 10s, 이 함수+get_lead 재계산이
+    비용의 대부분). lru_cache로 텍스트당 1회만 계산 — 반환값(set)을 호출부가
+    제자리 수정하지 않는 걸 확인(교집합 연산 `&`만 사용)."""
     if not text:
         return set()
     # 한글 2자 이상 단어 (고유명사 위주)
@@ -1022,8 +1033,9 @@ def title_keywords(text):
     return result
 
 
+@lru_cache(maxsize=50000)
 def get_lead(text, chars=300):
-    """본문 앞 2문단 추출 (약 300자)"""
+    """본문 앞 2문단 추출 (약 300자). title_keywords와 같은 이유로 캐시."""
     if not text:
         return ""
     # 문단 구분: 줄바꿈 또는 마침표+공백
@@ -3232,7 +3244,14 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
         clusters = clusters_override
     else:
         print("\n[클러스터링] 오늘 기사 분석 중...")
-        all_articles = get_today_articles(limit=300)
+        # 2026-10-10: 300 -> 3000. raw_candidates 유입이 하루 2.6만 건(시간당
+        # 1천~4천)인데 score가 전부 0으로 동률이라 score.desc,created_at.desc
+        # 정렬이 사실상 "최신순"으로만 작동 — 300건 창은 실측 시간당 유입량
+        # 기준 5~15분치뿐이라 나머지가 클러스터링 후보로 보이지도 못하고
+        # 버려지고 있었다(실측 요청: "RSS 소스 추가해놓은 분량을 감안하면
+        # 하루 2~300건씩 나와야"). title_keywords/get_lead 캐시 적용 후
+        # 3000건 쌍비교 실측 ~40초로 시간당 1회 주기에 안전.
+        all_articles = get_today_articles(limit=3000)
 
         opinion_skipped = [
             a for a in all_articles
