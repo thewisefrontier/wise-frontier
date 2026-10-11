@@ -312,19 +312,29 @@ def _already_explained(ids: list) -> set:
 
 
 def _drafts_today() -> int:
+    """오늘 이미 만든 해설 초안 수. 조회 실패 시 DAILY_CAP을 돌려줘 하루 상한을 넘기지 않는
+    쪽(차단)으로 안전하게 기운다 — 상한 로직이라 실패 시 과다 생성보다 스킵이 낫다."""
     today = now_kst().strftime("%Y-%m-%d")
-    res = requests.get(sb_url(), headers=sb_headers(), params={
-        "select": "id", "source": "eq.NewsFinal", "subcategory": f"like.{SUBCATEGORY}*",
-        "created_at": f"like.{today}*"}, timeout=15)
-    return len(res.json()) if res.status_code in (200, 206) else DAILY_CAP
+    try:
+        res = requests.get(sb_url(), headers=sb_headers(), params={
+            "select": "id", "source": "eq.NewsFinal", "subcategory": f"like.{SUBCATEGORY}*",
+            "created_at": f"like.{today}*"}, timeout=15)
+    except requests.RequestException as e:
+        print(f"  ⚠️ 오늘 초안 수 조회 예외: {e} — 상한으로 간주하고 스킵")
+        return DAILY_CAP
+    if res.status_code not in (200, 206):
+        print(f"  ⚠️ 오늘 초안 수 조회 실패 status={res.status_code} body={res.text[:200]!r} — 상한으로 간주하고 스킵")
+        return DAILY_CAP
+    return len(res.json())
 
 
 def main():
     if not os.getenv("SUPABASE_URL") or not os.getenv("SUPABASE_SERVICE_KEY"):
         print("[SKIP] SUPABASE 환경변수 없음")
         return
-    if _drafts_today() >= DAILY_CAP:
-        print(f"[explainer_writer] 오늘 해설 초안 {DAILY_CAP}건 이미 작성 — 스킵")
+    drafts = _drafts_today()
+    if drafts >= DAILY_CAP:
+        print(f"[explainer_writer] 오늘 해설 초안 {drafts}건 이미 작성(상한 {DAILY_CAP}) — 스킵")
         return
 
     cands = _candidates()
