@@ -1,5 +1,44 @@
 [
   {
+    "id": 305569,
+    "title_en": "동아시아, 도쿄 25도 완연한 봄날씨·울란바토르 영하권 맴돌아",
+    "title_ko": "동아시아, 도쿄 25도 완연한 봄날씨·울란바토르 영하권 맴돌아",
+    "summary_ko": "12일(현지시간) 동아시아 주요국 수도의 기온이 최저 -3°C에서 최고 25°C의 넓은 분포를 보이는 가운데, 지역별로 큰 기온 차가 나타났다. 일본 도쿄는 최고기온 25도, 최저기온 16도를 기록하며 이번 조사 대상 지역 중 가장 더운 곳으로 집계됐다. 도쿄는 대체로 맑은 날씨를 보였으며 강수확률은 2%, 강수량은 0.0mm를 기록했고 자외선지수는 5.4로 나타났다.\n\n도쿄의 내일 최고기온은 24도로 오늘과 비슷한 수준을 유지할 전망이다. 반면 몽골 울란바토르는 최고기온이 5도, 최저기온이 -3°C까지 떨어져 동아시아 주요국 수도",
+    "url": "internal://weather_group_동아시아_today20261012",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_동아시아_today20261012",
+    "region": "east_asia",
+    "country": "동아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-12 06:25",
+    "countries": [
+      "일본",
+      "중국",
+      "몽골"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_china_20261012.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-12T06:25:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-12 06:25",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 305434,
     "title_en": "멕시코 강타한 4등급 허리케인 시몬…클라우디아 셰인바움 대통령, 주민 대피 및 외출 자제 촉구",
     "title_ko": "멕시코 강타한 4등급 허리케인 시몬…클라우디아 셰인바움 대통령, 주민 대피 및 외출 자제 촉구",
@@ -2483,45 +2522,6 @@
     "update_log": [
       {
         "timestamp": "2026-10-11 07:33",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 303539,
-    "title_en": "동아시아, -3도 영하권 추위부터 30도 초여름 더위까지",
-    "title_ko": "동아시아, -3도 영하권 추위부터 30도 초여름 더위까지",
-    "summary_ko": "11일(현지시간) 동아시아 주요 지역의 다음주 날씨 예보에 따르면, 전체 최저기온은 영하 3도에서 최고기온은 30도 사이의 넓은 기온 분포를 기록할 것으로 예상된다.\n\n국가별 주간 날씨 요약을 살펴보면, 일본은 주간 최고기온 30도, 최저기온 16도 분포를 보이며 가장 높은 기온대를 형성할 것으로 나타났다. 중국은 주간 최고기온 25도, 최저기온 11도를 기록할 것으로 예보됐다. 몽골은 주간 최고기온 11도, 최저기온 영하 3도를 나타내며 동아시아 주요국 가운데 가장 낮은 기온을 기록할 것으로 집계됐다.\n\n[일본]\n\n- 도쿄(수도)",
-    "url": "internal://weather_group_동아시아_weekly20261011",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_동아시아_weekly20261011",
-    "region": "east_asia",
-    "country": "동아시아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-11 06:23",
-    "countries": [
-      "일본",
-      "중국",
-      "몽골"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_china_20261011.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-11T06:23:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-11 06:23",
         "note": "최초 게시"
       }
     ],
