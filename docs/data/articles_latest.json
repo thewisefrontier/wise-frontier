@@ -1,5 +1,42 @@
 [
   {
+    "id": 305423,
+    "title_en": "서울, 맑은 가운데 전국 비 소식",
+    "title_ko": "서울, 맑은 가운데 전국 비 소식",
+    "summary_ko": "12일 한국의 날씨는 전국이 대체로 구름이 많은 가운데 광주와 제주 등에 비가 내리고 밤부터 전국으로 확대되는 흐름을 보이고 있다. 한국 기상청에 따르면 전국 최저기온은 17°C, 최고기온은 28°C로 예상된다. 서울은 오전과 오후 모두 맑은 날씨를 보이고 있으며, 아침 최저기온 18°C, 낮 최고기온은 27°C를 기록할 전망이다.\n\n서울의 오전과 오후 강수확률은 각각 20%이며 최대풍속은 8km/h로 약한 바람이 분다. 다른 지역의 상세 날씨를 보면 부산은 오전 구름많음, 오후 맑음이며 최저 20°C, 최고 27°C다. 대구는 오",
+    "url": "internal://weather_한국_today20261012",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_한국_today20261012",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-12 05:53",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20261012.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-12T05:53:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-12 05:53",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 305421,
     "title_en": "[국내유가] 휘발유 리터당 1857원…정유사 공급가격 변동 여파",
     "title_ko": "[국내유가] 휘발유 리터당 1857원…정유사 공급가격 변동 여파",
@@ -2586,109 +2623,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: International Crisis Group (CC BY 3.0, Wikimedia Commons)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 303403,
-    "title_en": "서울, 최고 26도 맑은 날씨…화요일 비 소식",
-    "title_ko": "서울, 최고 26도 맑은 날씨…화요일 비 소식",
-    "summary_ko": "11일 기준 다음 주 한국의 날씨는 서울을 중심으로 대체로 맑은 날씨가 이어지는 가운데 주중 한때 비가 내릴 전망이다.\n\n한국 기상청에 따르면 서울의 다음 주 월요일부터 금요일까지의 최고기온은 19°C에서 26°C, 최저기온은 8°C에서 18°C 범위를 나타낸다. 요일별 서울 날씨를 보면 월요일은 최고 26°C·최저 17°C로 맑겠고, 화요일에는 최고 22°C·최저 18°C를 기록하며 맑은 날씨와 함께 비 소식이 예보되어 있다. 수요일은 최고 19°C·최저 10°C, 목요일은 최고 21°C·최저 8°C로 모두 맑은 하늘이 이어지겠으",
-    "url": "internal://weather_한국_weekly20261011",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_한국_weekly20261011",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-11 05:22",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20261011.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-11T05:22:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-11 05:22",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 303402,
-    "title_en": "[국내유가] 휘발유 리터당 1857원…전일 대비 0.10원 상승",
-    "title_ko": "[국내유가] 휘발유 리터당 1857원…전일 대비 0.10원 상승",
-    "summary_ko": "한국석유공사 오피넷이 11일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1857원으로 집계됐다. 이번에 공개된 가격은 오피넷 집계 시스템에 따라 산출된 것으로 나타났다.\n\n이날 오피넷에 따르면 휘발유 가격은 리터당 1857.01원으로 전일 대비 0.10원 오르며 상승세를 나타냈다. 반면 경유는 리터당 1842.52원으로 전일 대비 0.07원 내렸고, LPG 부탄은 리터당 1143.47원으로 전일 대비 0.04원 하락했다.\n\n최근 유가 변동은 국제유가 흐름과 정유사 공급가 조정 등의 요인이 복합적으로 작용한 결과",
-    "url": "internal://opinet_price_2026-10-11",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국내유가",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "🇰🇷",
-    "score": 1,
-    "created_at": "2026-10-11 05:11",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_10_11_pid5581629.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-11T05:11:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-11 05:11",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "date": "2026-10-11",
-      "prices": {
-        "B027": {
-          "diff": 0.1,
-          "name": "휘발유",
-          "price": 1857.01
-        },
-        "B034": {
-          "diff": 0.37,
-          "name": "고급휘발유",
-          "price": 2373.96
-        },
-        "C004": {
-          "diff": -0.16,
-          "name": "실내등유",
-          "price": 1572.63
-        },
-        "D047": {
-          "diff": -0.07,
-          "name": "경유",
-          "price": 1842.52
-        },
-        "K015": {
-          "diff": -0.04,
-          "name": "LPG(부탄)",
-          "price": 1143.47
-        }
-      }
-    },
-    "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
