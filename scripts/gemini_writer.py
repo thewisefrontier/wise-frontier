@@ -666,8 +666,17 @@ def find_similar_article(title: str, own_articles: list, threshold: int = 70,
             # LLM에게 최종 판정을 맡긴다(위 카르그 사례처럼 문장 구조 자체가
             # 달라 sim이 낮게 나오는 동일 사건은 숫자 임계값을 더 낮추는 것
             # 만으로는 다른 오탐을 늘릴 위험이 있음 — find_similar_trend()의
-            # 4차 LLM 판정과 동일한 철학). 근소 기준: 공통키워드 3개 이상.
-            if common_count >= 3 and common_count > best_near_score:
+            # 4차 LLM 판정과 동일한 철학). 근소 기준: 공통키워드 2개 이상
+            # (2026-10-11 실사고, 사용자 제보 — id=303410/303416: 같은 트럼프
+            # 발언을 다룬 두 기사가 서로 다른 매체를 인용해 제목이 "디젤 수입
+            # 합의·새 지도자 선출" vs "정유시설 공격 비판·교체 필요성"으로 갈려
+            # 공통키워드가 "트럼프"·"젤렌스키" 2개뿐이었다 — 3개 기준에 막혀
+            # LLM 판정까지 가지도 못하고 그대로 중복 발행됨. LLM 자체는 같은
+            # 프롬프트로 재현 시 정확히 "같음"으로 판정해 신뢰 가능함을 확인 —
+            # 기준을 낮춰 LLM에게 더 자주 묻게 한다. 이 함수가 다루는 건 "LLM을
+            # 호출할지" 뿐이고 실제 병합 여부는 여전히 LLM이 결정하므로, 흔한
+            # 단어 2개가 우연히 겹치는 오탐 위험은 LLM 판정이 걸러준다).
+            if common_count >= 2 and common_count > best_near_score:
                 best_near_miss, best_near_score = cand, common_count
 
         if best_near_miss and body:
