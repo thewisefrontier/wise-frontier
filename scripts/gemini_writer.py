@@ -3503,10 +3503,12 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
                 # published 기본값. 아래 조건들이 하나도 걸리지 않는 정상 경로에서
                 # 미정의 상태가 되어 UnboundLocalError가 나던 버그를 막는다.
                 published = True
+                _dg_reason = ""
 
                 needs_review = any(a.get("__needs_review__") for a in cluster)
                 if needs_review:
                     published = False
+                    _dg_reason = "편집 보류 — 추가 검수 필요(needs_review)"
                     final_subcategory = "needs_review"
                 else:
                     final_subcategory = cluster_key
@@ -3515,12 +3517,13 @@ def run(clusters_override=None, max_clusters=None, skip_extras=False):
                 for _ca in cluster:
                     cluster_tags |= _article_tags(_ca)
 
-                similar, sim_score = find_similar_article(full_title, today_own_articles, body=gen_body, tags=cluster_tags)
-                if similar:
-                    print(f"  ⚠️ 유사 기사 재발견 (유사도 {sim_score}%) → 미발행으로 저장: {similar.get('title_ko','')[:40]}")
-                    published = False
+                if published:
+                    similar, sim_score = find_similar_article(full_title, today_own_articles, body=gen_body, tags=cluster_tags)
+                    if similar:
+                        print(f"  ⚠️ 유사 기사 재발견 (유사도 {sim_score}%) → 미발행으로 저장: {similar.get('title_ko','')[:40]}")
+                        published = False
+                        _dg_reason = f"유사 기사 재발견 — 유사도 {sim_score}%, 기존: {similar.get('title_ko','')[:40]}"
 
-                _dg_reason = ""
                 if published and not verify_single_topic(full_title, gen_body or _strip_leaked_labels(content)):
                     print(f"  ❌ 검수 실패 (복수 토픽) → 미발행으로 저장: {full_title[:50]}")
                     published = False
