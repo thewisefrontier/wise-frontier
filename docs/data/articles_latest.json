@@ -1,5 +1,51 @@
 [
   {
+    "id": 303884,
+    "title_en": "아프리카, 35도 폭염과 곳곳의 비 소식",
+    "title_ko": "아프리카, 35도 폭염과 곳곳의 비 소식",
+    "summary_ko": "11일(현지시간) 아프리카 주요 지역의 다음주 날씨는 최저 10도에서 최고 35도 사이의 기온 분포를 보일 것으로 예보됐다. 이번 주간 나이지리아와 케냐를 비롯해 에티오피아, 가나, 앙골라 등지에서는 비 소식이 이어질 전망이다. 대륙 전반에 걸쳐 기온 변화가 크게 나타나는 가운데, 지역별로 상이한 기상 상황이 전개될 것으로 분석된다.\n\n나이지리아는 최고 31도와 최저 21도 사이의 기온을 기록하며 비가 내릴 것으로 보인다. 케냐는 최고 31도, 최저 14도를 나타내며 비 소식이 예보됐다. 에티오피아는 최저 10도까지 기온이 떨어지는",
+    "url": "internal://weather_group_아프리카_weekly20261011",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_아프리카_weekly20261011",
+    "region": "africa",
+    "country": "아프리카",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-11 13:16",
+    "countries": [
+      "나이지리아",
+      "케냐",
+      "남아공",
+      "이집트",
+      "모로코",
+      "알제리",
+      "에티오피아",
+      "가나",
+      "탄자니아",
+      "앙골라"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_nigeria_20261011.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-11T13:16:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-11 13:16",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 303878,
     "title_en": "유럽, 최저 3도에서 최고 27도…곳곳 비 소식",
     "title_ko": "유럽, 최저 3도에서 최고 27도…곳곳 비 소식",
@@ -2385,97 +2431,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "사진: Wayamo Foundation (CC BY-SA 2.0, Wikimedia Commons)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 301991,
-    "title_en": "아프리카, 곳곳 뇌우·소나기…가나·케냐 강수 집중",
-    "title_ko": "아프리카, 곳곳 뇌우·소나기…가나·케냐 강수 집중",
-    "summary_ko": "10일(현지시간) 아프리카 주요국은 이번 주말 지역별로 뚜렷한 기상 차이를 보일 전망이다. 나이지리아, 케냐, 남아공, 가나 등지에서는 비 소식이 예보된 가운데, 특히 가나와 케냐는 주말 내내 강한 강수 현상이 나타날 것으로 분석된다. 가나는 토요일과 일요일 모두 최고기온 32도, 최저기온 24~25도 사이를 기록하며 강수 확률 100%의 이슬비와 약한 소나기가 이어지겠다.\n\n케냐 역시 토요일 강한 소나기와 일요일 소나기가 예보되었으며, 강수 확률은 각각 100%와 90%에 달해 야외 활동 시 주의가 요구된다. 나이지리아는 주말 내",
-    "url": "internal://weather_group_아프리카_weekend20261010",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_아프리카_weekend20261010",
-    "region": "africa",
-    "country": "아프리카",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-10 13:13",
-    "countries": [
-      "나이지리아",
-      "케냐",
-      "남아공",
-      "이집트",
-      "모로코",
-      "알제리",
-      "에티오피아",
-      "가나",
-      "탄자니아",
-      "앙골라"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_nigeria_20261010.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-10T13:13:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-10 13:13",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 301986,
-    "title_en": "허리케인 이사야스 플로리다 상륙…대규모 정전 및 피해 발생",
-    "title_ko": "허리케인 이사야스 플로리다 상륙…대규모 정전 및 피해 발생",
-    "summary_ko": "[업데이트]\n■ 10월 10일 14:54 — 10일(현지시간) 허리케인 이사야스가 플로리다주를 강타하며 총 68만 가구 이상에서 전력 공급이 중단되는 대규모 정전 사태가 발생했다. 현재 이사야스는 멕시코만 연안을 따라 이동하며 위력이 강화되고 있으며, 기상 당국은 강풍과 해수면 상승 외에도 토네이도 발생 가능성을 추가로 경고했다. 특히 해안가 저지대에는 생명을 위협하는 수준의 폭풍 해일이 발생할 위험이 있어 주의가 요구된다.\n\n현지 전력 당국이 복구 인력을 투입해 전력망 정상화 작업을 진행 중이나, 악천후가 이어지고 있어 전기 공급",
-    "url": "internal://realtrend_Huracán_Isaías_2026101013",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "realtrend_Huracán_Isaías",
-    "region": "north_america",
-    "country": "미국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-10-10 13:00",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_2102397.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-10T13:00:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-10 13:00",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-10-10 14:54",
-        "note": "허리케인 이사야스로 68만 가구 정전 사태 발생."
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "tags": [
-        "portada"
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
