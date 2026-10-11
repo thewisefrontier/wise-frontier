@@ -598,7 +598,7 @@ def _verify_no_hallucination(text: str, call_fn, allow_current_titles: bool = Fa
 # 공용화(2026-09-02, gemini_writer.py와 완전히 동일한 코드가 각각 복붙돼
 # 있었음). import 실패해도 죽지 않도록 최소 폴백을 둔다.
 try:
-    from style_guard import has_column_style, has_polite_ending, to_plain_style
+    from style_guard import has_column_style, has_polite_ending, to_plain_style, lead_missing_date
     _HAS_STYLE_GUARD = True
 except Exception:
     _HAS_STYLE_GUARD = False
@@ -608,6 +608,8 @@ except Exception:
         return False
     def to_plain_style(text: str) -> str:
         return text
+    def lead_missing_date(text: str) -> bool:
+        return False
 
 
 
@@ -634,13 +636,16 @@ def call_gemini_article(prompt, max_tokens=2000, style_retries=1):
     attempt = 0
     body_len = len(_extract_section(content, "본문:")) if content else 0
     too_short = 0 < body_len < MIN_BODY_LEN_INDEX_TARGET
-    while content and (has_column_style(content) or has_polite_ending(content) or too_short) and attempt < style_retries:
+    no_lead_date = lead_missing_date(_extract_section(content, "본문:")) if content else False
+    while content and (has_column_style(content) or has_polite_ending(content) or too_short or no_lead_date) and attempt < style_retries:
         attempt += 1
         reasons = []
         if has_column_style(content) or has_polite_ending(content):
             reasons.append("논평/칼럼체" if has_column_style(content) else "합쇼체(-습니다/-입니다)")
         if too_short:
             reasons.append(f"분량 부족({body_len}자)")
+        if no_lead_date:
+            reasons.append("리드에 날짜 누락(본문엔 있음)")
         print(f"  ⚠️ {', '.join(reasons)} 감지 → 재생성 시도 ({attempt}/{style_retries})")
         retry_prompt = (
             prompt
@@ -654,12 +659,18 @@ def call_gemini_article(prompt, max_tokens=2000, style_retries=1):
                "살려서 다시 쓰세요. 다만 수집된 기사 자체에 정말 더 쓸 내용이 없다면 억지로 "
                "늘리거나 없는 내용을 지어내지 마세요."
                if too_short else "")
+            + ("\n또한 리드(첫 문단)에 날짜가 빠져 있는데 뒤 문단에는 날짜가 있었습니다. "
+               "육하원칙(누가·언제·어디서·무엇을·어떻게·왜) 중 '언제'가 리드에 꼭 들어가야 "
+               "합니다 — 뒤 문단에 있는 날짜 근거를 리드 문장 안으로 끌어와 'N일(현지시간)' "
+               "형태로 포함시켜 다시 쓰세요."
+               if no_lead_date else "")
         )
         retried = call_gemini(retry_prompt, max_tokens=max_tokens)
         if retried:
             content = retried
             body_len = len(_extract_section(content, "본문:"))
             too_short = 0 < body_len < MIN_BODY_LEN_INDEX_TARGET
+            no_lead_date = lead_missing_date(_extract_section(content, "본문:"))
     if content and has_polite_ending(content):
         converted = to_plain_style(content)
         if converted != content:

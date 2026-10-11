@@ -409,3 +409,27 @@ _LEAD_DANGLING_RE = re.compile(
 def lead_is_dangling(body: str) -> bool:
     """본문 첫 문장이 앞선 문맥(지시어·이름 없는 직함)을 전제하는 형태면 True."""
     return bool(_LEAD_DANGLING_RE.search((body or "").strip()))
+
+
+# 2026-10-11 실사고(id=303545, 사용자 제보 "리드가 이상하다"): 육하원칙 중 "언제"가
+# 리드에 없는데 뒤 문단엔 날짜가 있었다("지난 2일... 3일... 5일 사망했다"는 2문단에
+# 다 있으면서 정작 리드는 날짜 없이 이동경로만 길게 나열). 리드 작성 규칙(TREND_LEAD_
+# STRUCTURE_RULES 등)에 "날짜 근거가 있으면 리드에 넣으라"는 지시가 이미 있었는데도
+# 프롬프트 지시만으론 반복 무시됐다 — source 대조 없이 "본문 안에 날짜가 있는데 리드엔
+# 없다"만으로 판정하므로(외부 sources 인자 불필요) 기존 lead_is_dangling과 같은 방식으로
+# 가볍게 재사용 가능.
+_DATE_MARK_RE = re.compile(
+    r"[0-9]{1,2}일\(현지시간\)"            # "5일(현지시간)"
+    r"|[0-9]{1,2}월\s*[0-9]{1,2}일"        # "7월 23일"
+    r"|(?:지난|오는)\s*[0-9]{1,2}일"       # "지난 2일"/"오는 5일" — (현지시간) 없는 재언급 표기
+)
+
+
+def lead_missing_date(body: str) -> bool:
+    """리드(첫 문단)에 날짜 표기가 없는데 뒤 문단엔 있으면 True — 날짜를 리드로
+    끌어올리지 않고 본문 뒤쪽에만 묻어둔 패턴."""
+    paras = [p for p in (body or "").split("\n\n") if p.strip()]
+    if len(paras) < 2:
+        return False
+    lead, rest = paras[0], "\n\n".join(paras[1:])
+    return not _DATE_MARK_RE.search(lead) and bool(_DATE_MARK_RE.search(rest))

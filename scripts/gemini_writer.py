@@ -666,8 +666,17 @@ def find_similar_article(title: str, own_articles: list, threshold: int = 70,
             # LLM에게 최종 판정을 맡긴다(위 카르그 사례처럼 문장 구조 자체가
             # 달라 sim이 낮게 나오는 동일 사건은 숫자 임계값을 더 낮추는 것
             # 만으로는 다른 오탐을 늘릴 위험이 있음 — find_similar_trend()의
-            # 4차 LLM 판정과 동일한 철학). 근소 기준: 공통키워드 3개 이상.
-            if common_count >= 3 and common_count > best_near_score:
+            # 4차 LLM 판정과 동일한 철학). 근소 기준: 공통키워드 2개 이상
+            # (2026-10-11 실사고, 사용자 제보 — id=303410/303416: 같은 트럼프
+            # 발언을 다룬 두 기사가 서로 다른 매체를 인용해 제목이 "디젤 수입
+            # 합의·새 지도자 선출" vs "정유시설 공격 비판·교체 필요성"으로 갈려
+            # 공통키워드가 "트럼프"·"젤렌스키" 2개뿐이었다 — 3개 기준에 막혀
+            # LLM 판정까지 가지도 못하고 그대로 중복 발행됨. LLM 자체는 같은
+            # 프롬프트로 재현 시 정확히 "같음"으로 판정해 신뢰 가능함을 확인 —
+            # 기준을 낮춰 LLM에게 더 자주 묻게 한다. 이 함수가 다루는 건 "LLM을
+            # 호출할지" 뿐이고 실제 병합 여부는 여전히 LLM이 결정하므로, 흔한
+            # 단어 2개가 우연히 겹치는 오탐 위험은 LLM 판정이 걸러준다).
+            if common_count >= 2 and common_count > best_near_score:
                 best_near_miss, best_near_score = cand, common_count
 
         if best_near_miss and body:
@@ -1905,7 +1914,8 @@ def call_gemini(prompt, max_tokens=1000, retry=2, start_tier=4):
 # 최소 폴백을 둔다(감지 함수는 False, to_plain_style은 원문 그대로 반환).
 try:
     from style_guard import has_column_style, has_polite_ending, to_plain_style, \
-        _pub_day_label, verify_single_topic as _sg_verify_single_topic, strip_number_commas
+        _pub_day_label, verify_single_topic as _sg_verify_single_topic, strip_number_commas, \
+        lead_missing_date
     _HAS_STYLE_GUARD = True
 except Exception:
     _HAS_STYLE_GUARD = False
@@ -1914,6 +1924,8 @@ except Exception:
     def has_column_style(text: str) -> bool:
         return False
     def has_polite_ending(text: str) -> bool:
+        return False
+    def lead_missing_date(text: str) -> bool:
         return False
     def to_plain_style(text: str) -> str:
         return text
@@ -1989,18 +2001,22 @@ MIN_BODY_LEN_HARD_FLOOR = 700
 MIN_BODY_LEN_INDEX_TARGET = 1000
 
 
-def _extract_body_len(content: str) -> int:
-    """JSON_OUTPUT_SPEC 응답에서 body 필드 길이만 추출(분량 재시도 판단용).
-    JSON 파싱 실패 시 전체 텍스트 길이로 대충 추정(임계값 비교용이라 정밀할
-    필요 없음)."""
+def _extract_body_text(content: str) -> str:
+    """JSON_OUTPUT_SPEC 응답에서 body 필드만 추출. 파싱 실패 시 전체 텍스트
+    그대로 반환(길이 추정·리드 검사 등 임계값 비교용이라 정밀할 필요 없음)."""
     if not content:
-        return 0
+        return ""
     try:
         cand = _ARTICLE_FENCE_RE.sub("", content.strip()).strip()
         data = json.loads(cand)
-        return len(data.get("body") or "")
+        return data.get("body") or ""
     except Exception:
-        return len(content)
+        return content
+
+
+def _extract_body_len(content: str) -> int:
+    """JSON_OUTPUT_SPEC 응답에서 body 필드 길이만 추출(분량 재시도 판단용)."""
+    return len(_extract_body_text(content))
 
 
 def call_gemini_article(prompt, max_tokens=1500, style_retries=1):
@@ -2020,7 +2036,8 @@ def call_gemini_article(prompt, max_tokens=1500, style_retries=1):
     foreign_leftover = detect_foreign_leftover(content) if content else ""
     body_len = _extract_body_len(content) if content else 0
     too_short = 0 < body_len < MIN_BODY_LEN_INDEX_TARGET
-    while content and (has_column_style(content) or has_polite_ending(content) or fabricated or foreign_leftover or too_short) and attempt < style_retries:
+    no_lead_date = lead_missing_date(_extract_body_text(content)) if content else False
+    while content and (has_column_style(content) or has_polite_ending(content) or fabricated or foreign_leftover or too_short or no_lead_date) and attempt < style_retries:
         attempt += 1
         reasons = []
         if has_column_style(content) or has_polite_ending(content):
@@ -2031,6 +2048,8 @@ def call_gemini_article(prompt, max_tokens=1500, style_retries=1):
             reasons.append(f"번역 누락 외국어({foreign_leftover})")
         if too_short:
             reasons.append(f"분량 부족({body_len}자)")
+        if no_lead_date:
+            reasons.append("리드에 날짜 누락(본문엔 있음)")
         print(f"  ⚠️ {', '.join(reasons)} 감지 → 재생성 시도 ({attempt}/{style_retries})")
         retry_prompt = (
             prompt
@@ -2052,6 +2071,11 @@ def call_gemini_article(prompt, max_tokens=1500, style_retries=1):
                "최대한 살려서 다시 쓰세요. 다만 원문 자체가 짧은 단신이라 정말 더 쓸 내용이 "
                "없다면 억지로 늘리거나 없는 내용을 지어내지 마세요."
                if too_short else "")
+            + ("\n또한 리드(첫 문단)에 날짜가 빠져 있는데 뒤 문단에는 날짜가 있었습니다. "
+               "육하원칙(누가·언제·어디서·무엇을·어떻게·왜) 중 '언제'가 리드에 꼭 들어가야 "
+               "합니다 — 뒤 문단에 있는 날짜 근거를 리드 문장 안으로 끌어와 'N일(현지시간)' "
+               "형태로 포함시켜 다시 쓰세요."
+               if no_lead_date else "")
         )
         retried = call_gemini(retry_prompt, max_tokens=max_tokens)
         if retried:
@@ -2060,6 +2084,7 @@ def call_gemini_article(prompt, max_tokens=1500, style_retries=1):
             foreign_leftover = detect_foreign_leftover(content)
             body_len = _extract_body_len(content)
             too_short = 0 < body_len < MIN_BODY_LEN_INDEX_TARGET
+            no_lead_date = lead_missing_date(_extract_body_text(content))
     if content and (has_column_style(content) or has_polite_ending(content)):
         print("  ⚠️ 재생성 후에도 논평체·합쇼체 패턴이 남아있음 (파싱 단계에서 변환)")
     if content and fabricated:
@@ -2068,6 +2093,8 @@ def call_gemini_article(prompt, max_tokens=1500, style_retries=1):
         print(f"  ⚠️ 재생성 후에도 번역 누락 외국어 남아있음: {foreign_leftover} (호출부에서 미발행 처리)")
     if content and too_short:
         print(f"  ⚠️ 재생성 후에도 분량 부족({body_len}자) — 원문 자체가 짧은 것으로 판단, 그대로 발행")
+    if content and no_lead_date:
+        print("  ⚠️ 재생성 후에도 리드에 날짜 누락 — 그대로 발행")
     return content
 
 
