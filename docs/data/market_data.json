@@ -1,25 +1,25 @@
 {
-  "updated_at": "2026-10-12 22:36",
+  "updated_at": "2026-10-12 22:41",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7820.27,
+      "price": 7820.24,
       "change_pct": 0.71,
       "up": true
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 27350.7,
-      "change_pct": 0.58,
+      "price": 27369.95,
+      "change_pct": 0.65,
       "up": true
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 51852.89,
-      "change_pct": 1.21,
+      "price": 51763.57,
+      "change_pct": 1.04,
       "up": true
     },
     {
@@ -39,8 +39,8 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 108487.25,
-      "change_pct": -0.03,
+      "price": 108468.15,
+      "change_pct": -0.05,
       "up": false
     },
     {
@@ -89,7 +89,7 @@
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
       "price": 16.53,
-      "change_pct": -0.36,
+      "change_pct": -0.37,
       "up": false
     }
   ],
@@ -98,22 +98,22 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7820.27,
+        "price": 7820.24,
         "change_pct": 0.71,
         "up": true
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 27350.7,
-        "change_pct": 0.58,
+        "price": 27369.95,
+        "change_pct": 0.65,
         "up": true
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 51852.89,
-        "change_pct": 1.21,
+        "price": 51763.57,
+        "change_pct": 1.04,
         "up": true
       }
     ],
@@ -137,8 +137,8 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 108487.25,
-        "change_pct": -0.03,
+        "price": 108468.15,
+        "change_pct": -0.05,
         "up": false
       },
       {
@@ -189,7 +189,7 @@
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
         "price": 16.53,
-        "change_pct": -0.36,
+        "change_pct": -0.37,
         "up": false
       }
     ]
