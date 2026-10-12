@@ -663,72 +663,6 @@
     "noindex": true
   },
   {
-    "id": 305421,
-    "title_en": "[국내유가] 휘발유 리터당 1857원…정유사 공급가격 변동 여파",
-    "title_ko": "[국내유가] 휘발유 리터당 1857원…정유사 공급가격 변동 여파",
-    "summary_ko": "한국석유공사 오피넷이 12일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1857원으로 집계됐다. 전일 대비 0.10원 오르며 소폭의 상승세를 나타냈다.\n\n경유와 LPG 등 다른 주요 유종의 가격도 동반 상승했다. 경유는 리터당 1842.54원으로 전일보다 0.12원 올랐으며, LPG 부탄은 리터당 1143.56원으로 전일 대비 0.04원 상승했다.\n\n이번 유가 상승은 국제시세 흐름과 연동된 정유사 도매가 조정 및 공급가격 변동 등이 복합적으로 작용한 결과인 것으로 분석된다. 앞서 주유소협회 등 업계에서는 국내 ",
-    "url": "internal://opinet_price_2026-10-12",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국내유가",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "🇰🇷",
-    "score": 1,
-    "created_at": "2026-10-12 05:11",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_10_12_pid996617.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-12T05:11:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-12 05:11",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "date": "2026-10-12",
-      "prices": {
-        "B027": {
-          "diff": 0.1,
-          "name": "휘발유",
-          "price": 1856.94
-        },
-        "B034": {
-          "diff": 0.8,
-          "name": "고급휘발유",
-          "price": 2375.23
-        },
-        "C004": {
-          "diff": -0.14,
-          "name": "실내등유",
-          "price": 1572.47
-        },
-        "D047": {
-          "diff": 0.12,
-          "name": "경유",
-          "price": 1842.54
-        },
-        "K015": {
-          "diff": 0.04,
-          "name": "LPG(부탄)",
-          "price": 1143.56
-        }
-      }
-    },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
     "id": 305420,
     "title_en": "Orbital",
     "title_ko": "[오늘의 책] 24시간 동안 지구를 16번 마주하는 우주 전원시, 서맨사 하비의 『궤도』",
@@ -773,41 +707,6 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": false
-  },
-  {
-    "id": 305417,
-    "title_en": "[데일리 다이제스트] 글로벌 지정학적 긴장 고조와 각국 안보·외교 갈등 심화",
-    "title_ko": "[데일리 다이제스트] 글로벌 지정학적 긴장 고조와 각국 안보·외교 갈등 심화",
-    "summary_ko": "[업데이트]\n■ 10월 12일 05:57 — 도널드 트럼프 미국 대통령이 11일(현지시간) 러시아산 디젤의 미국 및 글로벌 시장 유입을 허용하는 합의를 추진하면서 거세지는 역풍에 직면했다. 이번 합의는 러시아와 우크라이나 간의 에너지 휴전 발표를 앞두고 가시화되었으며, 러시아는 글로벌 연료 가격 상승 우려를 해소하기 위해 30만 톤의 디젤을 즉각 방출할 예정이었다. 전 세계적인 에너지 비용 상승세를 억제하기 위한 목적에서 마련되었으나, 우크라이나와의 전쟁이 지속되는 상황에서 러시아산 연료의 시장 진입을 허용하는 결정은 정치적 논란을",
-    "url": "internal://digest_20261012",
-    "source": "NewsFinal",
-    "category": "다이제스트",
-    "subcategory": "digest_20261012",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 56,
-    "created_at": "2026-10-12 05:01",
-    "countries": null,
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/digest_20261012.jpg",
-    "view_count": 0,
-    "first_published_at": null,
-    "update_log": [
-      {
-        "timestamp": "2026-10-12 05:57",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
   },
   {
     "id": 305418,
@@ -3325,72 +3224,6 @@
     "noindex": true
   },
   {
-    "id": 303402,
-    "title_en": "[국내유가] 휘발유 리터당 1857원…전일 대비 0.10원 상승",
-    "title_ko": "[국내유가] 휘발유 리터당 1857원…전일 대비 0.10원 상승",
-    "summary_ko": "한국석유공사 오피넷이 11일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1857원으로 집계됐다. 이번에 공개된 가격은 오피넷 집계 시스템에 따라 산출된 것으로 나타났다.\n\n이날 오피넷에 따르면 휘발유 가격은 리터당 1857.01원으로 전일 대비 0.10원 오르며 상승세를 나타냈다. 반면 경유는 리터당 1842.52원으로 전일 대비 0.07원 내렸고, LPG 부탄은 리터당 1143.47원으로 전일 대비 0.04원 하락했다.\n\n최근 유가 변동은 국제유가 흐름과 정유사 공급가 조정 등의 요인이 복합적으로 작용한 결과",
-    "url": "internal://opinet_price_2026-10-11",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국내유가",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "🇰🇷",
-    "score": 1,
-    "created_at": "2026-10-11 05:11",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_10_11_pid5581629.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-11T05:11:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-11 05:11",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "date": "2026-10-11",
-      "prices": {
-        "B027": {
-          "diff": 0.1,
-          "name": "휘발유",
-          "price": 1857.01
-        },
-        "B034": {
-          "diff": 0.37,
-          "name": "고급휘발유",
-          "price": 2373.96
-        },
-        "C004": {
-          "diff": -0.16,
-          "name": "실내등유",
-          "price": 1572.63
-        },
-        "D047": {
-          "diff": -0.07,
-          "name": "경유",
-          "price": 1842.52
-        },
-        "K015": {
-          "diff": -0.04,
-          "name": "LPG(부탄)",
-          "price": 1143.47
-        }
-      }
-    },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
     "id": 303400,
     "title_en": "In Ascension",
     "title_ko": "[오늘의 책] 마틴 매킨스의 『In Ascension』, 심해와 우주를 관통하며 되묻는 인간의 기원",
@@ -3435,41 +3268,6 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": false
-  },
-  {
-    "id": 303397,
-    "title_en": "[데일리 다이제스트] 글로벌 지정학적 긴장 고조와 안보·보건 위기 확산",
-    "title_ko": "[데일리 다이제스트] 글로벌 지정학적 긴장 고조와 안보·보건 위기 확산",
-    "summary_ko": "[미국과 러시아의 자원 외교 재개와 우크라이나의 반발]\n- 9일(현지시간) 도널드 트럼프 미국 대통령은 블라디미르 푸틴 러시아 대통령과 전화 통화를 갖고 러시아산 디젤 연료를 미국과 글로벌 시장에 공급하기로 합의했다고 발표했습니다 [10월 10일 발행]. - 이번 합의에 따라 러시아는 즉각적으로 30만 톤 이상의 디젤 연료를 공급하고, 11월에 50만 톤, 이후 100만 톤을 추가 공급할 예정이다\n\n[10월 10일 발행]. - 볼로디미르 젤렌스키 우크라이나 대통령은 10일 러시아의 공습으로 우크라이나에서 15명이 사망한 직후 미국의",
-    "url": "internal://digest_20261011",
-    "source": "NewsFinal",
-    "category": "다이제스트",
-    "subcategory": "digest_20261011",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 56,
-    "created_at": "2026-10-11 05:01",
-    "countries": null,
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/digest_20261011.jpg",
-    "view_count": 0,
-    "first_published_at": null,
-    "update_log": [
-      {
-        "timestamp": "2026-10-11 22:03",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
   },
   {
     "id": 303398,
