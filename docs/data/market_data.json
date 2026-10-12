@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-13 08:11",
+  "updated_at": "2026-10-13 08:37",
   "indices": [
     {
       "name": "S&P 500",
@@ -75,15 +75,15 @@
       "name": "USD/NGN",
       "symbol": "USDNGN=X",
       "price": 1322.87,
-      "change_pct": -0.42,
-      "up": false
+      "change_pct": 0.0,
+      "up": true
     },
     {
       "name": "USD/KES",
       "symbol": "USDKES=X",
       "price": 129.65,
-      "change_pct": -0.04,
-      "up": false
+      "change_pct": 0.0,
+      "up": true
     },
     {
       "name": "USD/ZAR",
@@ -175,15 +175,15 @@
         "name": "USD/NGN",
         "symbol": "USDNGN=X",
         "price": 1322.87,
-        "change_pct": -0.42,
-        "up": false
+        "change_pct": 0.0,
+        "up": true
       },
       {
         "name": "USD/KES",
         "symbol": "USDKES=X",
         "price": 129.65,
-        "change_pct": -0.04,
-        "up": false
+        "change_pct": 0.0,
+        "up": true
       },
       {
         "name": "USD/ZAR",
