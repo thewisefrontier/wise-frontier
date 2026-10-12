@@ -60,7 +60,7 @@ except Exception:
 
 from style_guard import has_column_style, has_polite_ending, to_plain_style, parse_article_output, ensure_paragraphs
 from article_store import insert_final_article, sb_headers as _sb_headers, sb_url as _sb_url
-from fabrication_guard import verify_no_fabricated_names as _fg_verify_no_fabricated_names
+from fabrication_guard import verify_no_fabricated_names as _fg_verify_no_fabricated_names, proofread_fix, fixes_note
 from gemini_client import GeminiClient
 # 2026-09-27 dry-run 실사고: 근거엔 "Alabama School of Fine Arts"인데 본문에 "앤더슨 스쿨 오브
 # 파인 아트"라고 썼고, Gemini 날조 검사(같은 계열 모델)는 못 잡았다. 계열이 다른 모델(NVIDIA)의
@@ -438,21 +438,28 @@ def kakao_author_titles(w: dict, limit: int = 12) -> list:
         docs = r.json().get("documents", []) if r.status_code == 200 else []
     except Exception:
         return []
-    titles, seen = [], set()
+    # (제목, 국내 첫 출간일). 날짜 없이 제목만 주면 Gemini가 출간 순서를 지어낸다(2026-10-12 id=305420:
+    # 『형태 없는 불안』(2026-04)에 이어 『궤도』(2025-07)가 나왔다고 거꾸로 씀).
+    first: dict = {}
     for d in docs:
         t = re.sub(r"\s*\(.*?\)\s*", " ", d.get("title") or "").strip()
         t = re.sub(r"\s*[.:]?\s*\d+\s*(:.*)?$", "", t).strip()  # 권 번호 정리: "태백산맥 1: 제1부 …" → "태백산맥"
         key = t.replace(" ", "")
         if (any(author_ko == (a or "").replace(" ", "") for a in d.get("authors", []))
                 and _HANGUL.search(t) and not re.search(r"[A-Za-z]", t)  # 한영 혼합 표기 제외
-                and not _SKIP_EDITION.search(d.get("title") or "") and key not in seen):
-            seen.add(key)
-            titles.append(t)
-    return titles[:limit]
+                and not _SKIP_EDITION.search(d.get("title") or "")):
+            date = (d.get("datetime") or "")[:10]
+            if key not in first:
+                first[key] = [t, date]
+            elif date and (not first[key][1] or date < first[key][1]):
+                first[key][1] = date
+    return [tuple(v) for v in first.values()][:limit]
 
 
 def confirm_title_ko(w: dict) -> None:
-    w["author_korean_titles"] = kakao_author_titles(w)
+    pairs = kakao_author_titles(w)
+    w["author_korean_titles"] = [t for t, _ in pairs]
+    w["author_korean_title_dates"] = {t: d for t, d in pairs if d}
     _confirm_title_ko(w)
 
 
@@ -591,7 +598,10 @@ def info_block(w: dict) -> str:
         who = f", {', '.join(kr['translators'])} 옮김" if kr["translators"] else ""
         kr_line = f"\n국내 출간: {kr['date']} {kr['publisher']}{who} (『{kr['title']}』)"
     kt = w.get("author_korean_titles") or []
-    kt_line = f"\n이 작가의 국내 출간작(정식 한국어판 제목): {', '.join(f'『{t}』' for t in kt)}" if kt else ""
+    kd = w.get("author_korean_title_dates") or {}
+    kt = sorted(kt, key=lambda t: kd.get(t) or "9999")
+    kt_line = ("\n이 작가의 국내 출간작(정식 한국어판 제목, 국내 출간일순): "
+               + ", ".join(f"『{t}』({kd[t][:7]})" if kd.get(t) else f"『{t}』" for t in kt)) if kt else ""
     return (f"[작품 기본 정보 — 확정값]\n작품: {title_line}\n"
             f"저자: {author}{f' ({author_meta})' if author_meta else ''}\n"
             f"발표·출간: {year_line}{kr_line}{f'{chr(10)}수상 이력: {notes}' if notes else ''}{kt_line}")
@@ -764,7 +774,7 @@ def generate(w: dict, grounding: str, ko_source: str) -> tuple[str, str] | None:
     return title.strip().strip('"'), body
 
 
-def insert_article(w: dict, title: str, body: str, image_url: str, image_credit: str) -> int:
+def insert_article(w: dict, title: str, body: str, image_url: str, image_credit: str, fixes: list | None = None) -> int:
     if detect_script_leak(title, body) or is_placeholder_response(title, body):
         print(f"  ⛔ 저장 차단(문자 혼입/거부 응답): {title[:60]}")
         return -1
@@ -785,7 +795,8 @@ def insert_article(w: dict, title: str, body: str, image_url: str, image_credit:
         "region": region, "country": country, "country_flag": flag, "countries": [country] if country else [],
         "image_url": image_url, "image_credit": image_credit, "score": 1,
         "created_at": now_str, "first_published_at": now_str,
-        "update_log": [{"timestamp": now_str, "note": f"문학작품 이야기 — {work_name}"}],
+        "update_log": [{"timestamp": now_str, "note": f"문학작품 이야기 — {work_name}"}]
+                      + ([{"timestamp": now_str, "note": fixes_note(fixes)}] if fixes else []),
         "source_data": {"wikidata": w["qid"], "kowiki": w.get("kowiki"), "enwiki": w.get("enwiki"),
                         "source": w.get("source")},
         "sent_telegram": 0, "is_published": True,
@@ -836,11 +847,14 @@ def main():
             print("  ⚠️ 생성 실패 → 다음 작품")
             continue
         title, body = result
+        title, body, fixes = proofread_fix(title, body, call_gemini)
+        if fixes:
+            print(f"  🔧 발행 전 교열 수정 {len(fixes)}건: {fixes}")
         image_url, credit = fetch_image(w, store=not dry)
         if dry:
             print(f"\n[이미지] {image_url}\n[크레딧] {credit}\n\n=== {title} ===\n{body}\n({len(body)}자)")
             return
-        art_id = insert_article(w, title, body, image_url, credit)
+        art_id = insert_article(w, title, body, image_url, credit, fixes)
         print(f"  {'✓' if art_id > 0 else '✗'} 발행: id={art_id} — {title}")
         return
     print("  [ERROR] 후보 작품 모두 실패")

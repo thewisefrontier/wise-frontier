@@ -153,6 +153,90 @@ def second_review(title: str, body: str, facts: str) -> tuple:
     return False, "2차 검수 응답 불분명"
 
 
+_PROOF_LINE = re.compile(r"^\s*[-*\d.)\s]*(.+?)\s*=>\s*(.*?)\s*(?:\|\s*(.*))?$")
+
+
+def proofread_issues(title: str, body: str) -> list:
+    """발행 직전 교열(2026-10-12 사용자: 매일 팩트체크로 고치던 걸 발행 파이프라인에서 자동으로).
+    2주간 수동 정정 11건 중 7건이 자료 없이 글만 읽어도 잡히는 종류였다 — 오타(완고했다), 엉뚱한 음차·번역
+    (보불전쟁→보푸로스 전쟁, 스페큘러티브 픽션→스펙너티브 피션), 조사(바르바로나), 본문 안 모순(출생년도 두 개).
+    계열이 다른 NVIDIA가 본다. 반환 [(틀린 표현, 고친 표현, 이유)] — 틀린 표현이 본문에 그대로 없으면 버린다
+    (검수기가 지어낸 지적). 미설정·실패 시 [] (fail-open: 기존 검사는 그대로 돈다)."""
+    if not call_nvidia or not (body or "").strip():
+        return []
+    prompt = ("당신은 한국어 신문 교열기자입니다. 아래 기사에서 다음 네 가지 오류만 찾으세요.\n"
+              "1) 오타·문맥에 맞지 않는 단어(예: '증가했다'를 '증거했다'로 씀)\n"
+              "2) 외국 고유명사·용어의 엉터리 음차나 번역(국내 통용 표기와 다른 것. 예: Thirty Years' War → "
+              "'30년 전쟁'이어야 하는데 '서티 이어스 전투'로 씀)\n"
+              "3) 조사 오류(예: '그가 연출을 맡았다'를 '그나 연출을 맡았다'로 씀)\n"
+              "4) 같은 기사 안에서 같은 대상의 이름 표기·숫자·연도가 서로 다르게 쓰인 모순\n"
+              "문장 다듬기·문체 취향·띄어쓰기 사소한 것·사실 여부(외부 지식) 판단은 하지 마세요. 확실한 오류만 쓰세요.\n"
+              "출력: 오류 하나당 한 줄로 `틀린 표현 => 고친 표현 | 이유`. 틀린 표현은 기사에 있는 글자 그대로 "
+              "짧게(2~15자) 복사하세요. 오류가 없으면 정확히 OK 한 단어만 출력하세요.\n\n"
+              f"[제목]\n{title}\n\n[기사]\n{body[:5000]}")
+    try:
+        resp = (call_nvidia(prompt, max_tokens=500) or "").strip()
+    except Exception:
+        return []
+    if not resp or resp.upper().startswith("OK"):
+        return []
+    text = f"{title}\n{body}"
+    out = []
+    for line in resp.splitlines():
+        m = _PROOF_LINE.match(line)
+        if not m:
+            continue
+        wrong, fix = m.group(1).strip("`'\" "), m.group(2).strip("`'\" ")
+        if wrong and wrong != fix and wrong in text:
+            out.append((wrong, fix, (m.group(3) or "").strip()))
+    return out
+
+
+def _safe_fix(wrong: str, fix: str, text: str) -> bool:
+    """검수기 지적 중 그대로 치환해도 되는 것만. 2026-10-12 시험(정상 기사 15건)에서 나온 오탐 유형을 막는다:
+    숫자 중간에서 잘린 구간("2026년"의 "년 10월 8일"→"2025년 10월 8일" — 치환하면 연도가 망가짐),
+    한글 음차를 원어로 되돌리기("아티피셜"→"Artificial" — 음차 규칙 위반), 없던 숫자 주입."""
+    if len(wrong) < 2 or not fix or len(fix) > len(wrong) * 2 + 10:
+        return False
+    i = text.find(wrong)
+    if i > 0 and re.match(r"[0-9A-Za-z가-힣]", text[i - 1]):
+        return False
+    if re.search(r"[A-Za-z]", fix) and not re.search(r"[A-Za-z]", wrong):
+        return False
+    return set(re.findall(r"\d+", fix)) <= set(re.findall(r"\d+", wrong))
+
+
+def proofread_fix(title: str, body: str, call_gemini_fn) -> tuple:
+    """proofread_issues(NVIDIA) 지적 중 기계 필터를 통과하고 Gemini도 오류라고 동의한 것만 국소 치환한다
+    (기사 전체 재생성은 새 오류를 만든다 — 해당 구간만 바꾼다). 반환 (title, body, [(틀린, 고친)]).
+    어느 단계든 실패하면 원문 그대로(fail-open — 발행을 막지 않는다; 사실 검사는 별도 단계가 맡는다)."""
+    text = f"{title}\n{body}"
+    cands = [(w, f, why) for w, f, why in proofread_issues(title, body) if _safe_fix(w, f, text)]
+    if not cands:
+        return title, body, []
+    listing = "\n".join(f"{i + 1}. '{w}' → '{f}' ({why})" for i, (w, f, why) in enumerate(cands))
+    prompt = ("한국어 신문 교열 지적이 맞는지 판정하세요. 각 항목이 명백한 오류(오타·엉터리 음차·조사 오류·본문 내 모순)이고 "
+              "고친 표현이 국내 통용 표기·표준어로 맞으면 Y, 원래 표현도 맞거나(표기 관행 차이·취향) 확실하지 않으면 N입니다.\n"
+              "항목마다 한 줄로 `번호: Y` 또는 `번호: N`만 출력하세요.\n\n"
+              f"[기사]\n{title}\n{body[:5000]}\n\n[지적]\n{listing}")
+    try:
+        resp = call_gemini_fn(prompt, max_tokens=8192, start_tier=0) or ""
+    except Exception:
+        return title, body, []
+    ok = {int(n) for n, yn in re.findall(r"(\d+)\s*[:.)]\s*([YN])", resp) if yn == "Y"}
+    applied = []
+    for i, (w, f, _) in enumerate(cands):
+        if i + 1 in ok and (w in title or w in body):
+            title, body = title.replace(w, f), body.replace(w, f)
+            applied.append((w, f))
+    return title, body, applied
+
+
+def fixes_note(fixes: list) -> str:
+    """update_log용 — 자동 치환 내역을 남겨 사후에 사람이 되짚을 수 있게."""
+    return "발행 전 교열 자동 수정(NVIDIA 지적·Gemini 동의): " + ", ".join(f"{w}→{f}" for w, f in fixes)
+
+
 def _deterministic_source_match(name: str, source_text: str, threshold: int = 85) -> bool:
     """LLM 판단 없이, 이름(괄호 병기 원어 포함)이 원문에 실제로 등장하는지 결정론적으로 1차 확인.
     rapidfuzz로 원문 어딘가에 이 표기(주로 영문 원어)가 있는지 부분 매칭한다. 외부 벤치마크
