@@ -131,9 +131,15 @@ except Exception:
         return None, None
 
 try:
-    from fabrication_guard import verify_no_fabricated_names as _fg_verify_no_fabricated_names
+    from fabrication_guard import verify_no_fabricated_names as _fg_verify_no_fabricated_names, proofread_fix, fixes_note
 except Exception:
     def _fg_verify_no_fabricated_names(source_prompt, body, call_gemini_fn):
+        return ""
+
+    def proofread_fix(title, body, call_gemini_fn):
+        return title, body, []
+
+    def fixes_note(fixes):
         return ""
 
 
@@ -607,7 +613,7 @@ def call_gemini_article(prompt: str, max_tokens: int = 2500, style_retries: int 
 
 
 def insert_article(artwork: dict, title_ko: str, body_ko: str, pub_date,
-                    image_url: str = "", image_credit: str = "") -> int:
+                    image_url: str = "", image_credit: str = "", fixes: list | None = None) -> int:
     if detect_script_leak(title_ko, body_ko):
         print(f"  ⚠️ [문자 혼입 감지] 저장 차단: {title_ko[:60]}")
         return -1
@@ -648,7 +654,8 @@ def insert_article(artwork: dict, title_ko: str, body_ko: str, pub_date,
         "score": 1,
         "created_at": now_str,
         "first_published_at": now_str,
-        "update_log": [{"timestamp": now_str, "note": f"고전 명화 이야기 — {artwork['title_ko']}({artwork['artist_ko']})"}],
+        "update_log": [{"timestamp": now_str, "note": f"고전 명화 이야기 — {artwork['title_ko']}({artwork['artist_ko']})"}]
+                      + ([{"timestamp": now_str, "note": fixes_note(fixes)}] if fixes else []),
         "sent_telegram": 0,
         "is_published": True,
     }
@@ -773,7 +780,10 @@ def main():
         print(f"  ⚠️ 본문이 너무 짧음({len(body)}자) — 스킵")
         return
 
-    article_id = insert_article(artwork, title, body, pub_date, image_url, image_credit)
+    title, body, fixes = proofread_fix(title, body, call_gemini)
+    if fixes:
+        print(f"  🔧 발행 전 교열 수정 {len(fixes)}건: {fixes}")
+    article_id = insert_article(artwork, title, body, pub_date, image_url, image_credit, fixes)
     if article_id > 0:
         print(f"  ✓ 기사 삽입 완료 (articles.id={article_id}): {title}")
     else:
