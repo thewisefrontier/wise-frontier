@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-12 14:48",
+  "updated_at": "2026-10-12 15:14",
   "indices": [
     {
       "name": "S&P 500",
@@ -25,15 +25,15 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 6412.84,
-      "change_pct": -5.75,
+      "price": 6422.4,
+      "change_pct": -5.61,
       "up": false
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 855.43,
-      "change_pct": -4.79,
+      "price": 854.37,
+      "change_pct": -4.9,
       "up": false
     },
     {
@@ -67,8 +67,8 @@
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 5734.65,
-      "change_pct": 0.59,
+      "price": 5737.14,
+      "change_pct": 0.63,
       "up": true
     },
     {
@@ -121,15 +121,15 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 6412.84,
-        "change_pct": -5.75,
+        "price": 6422.4,
+        "change_pct": -5.61,
         "up": false
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 855.43,
-        "change_pct": -4.79,
+        "price": 854.37,
+        "change_pct": -4.9,
         "up": false
       }
     ],
@@ -165,8 +165,8 @@
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 5734.65,
-        "change_pct": 0.59,
+        "price": 5737.14,
+        "change_pct": 0.63,
         "up": true
       }
     ],
