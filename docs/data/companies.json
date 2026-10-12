@@ -2336,6 +2336,38 @@
     "updated_at": "2026-07-22 23:37"
   },
   {
+    "id": "flyadeal",
+    "name": "Flyadeal",
+    "name_ko": "플라이아딜",
+    "country": "사우디아라비아",
+    "country_flag": "🌍",
+    "exchange": "None",
+    "ticker": "",
+    "sector": "항공",
+    "description": "플라이아딜은 2017년에 설립된 사우디아라비아의 저비용 항공사(LCC)입니다. 사우디아항공의 자회사로 출범하여 국내선 및 지역 노선을 중심으로 저렴한 항공 서비스 를 제공하고 있습니다. 사우디 내 급증하는 저가 항공 수요를 충족하며 빠르게 성장하고 있습니다.",
+    "founded_year": 2017,
+    "headquarters": "제다, 사우디아라비아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-10-12 18:04"
+  },
+  {
+    "id": "flynas",
+    "name": "Flynas",
+    "name_ko": "플라이나스",
+    "country": "사우디아라비아",
+    "country_flag": "🌍",
+    "exchange": "None",
+    "ticker": "",
+    "sector": "항공",
+    "description": "플라이나스는 2007년에 설립된 사우디아라비아의 민간 저비용 항공사입니다. 국내선과 중동, 아시아, 유럽을 잇는 다양한 국제선 노선을 운항하고 있습니다. 사우디아라비아 민간 항공 시장에서 중요한 위치를 차지하고 있습니다.",
+    "founded_year": 2007,
+    "headquarters": "리야드, 사우디아라비아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-10-12 18:04"
+  },
+  {
     "id": "qiddiya_investment_company",
     "name": "Qiddiya Investment Company",
     "name_ko": "키디야 투자회사",
@@ -2350,6 +2382,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-25 07:11"
+  },
+  {
+    "id": "saudi_arabian_airlines",
+    "name": "Saudi Arabian Airlines",
+    "name_ko": "사우디아항공",
+    "country": "사우디아라비아",
+    "country_flag": "🌍",
+    "exchange": "None",
+    "ticker": "",
+    "sector": "항공",
+    "description": "사우디아항공은 1945년에 설립된 사우디아라비아의 국영 항공사입니다. 국내선 및 국제선 여객과 화물 운송 서비스를 제공하며 중동 지역의 주요 항공사 중 하나입니다. 사우디아라비아의 항공 교통에서 핵심적인 역할을 담당하고 있습니다.",
+    "founded_year": 1945,
+    "headquarters": "제다, 사우디아라비아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-10-12 18:04"
   },
   {
     "id": "saudi_aramco",
@@ -4112,22 +4160,6 @@
     "updated_at": "2026-07-30 14:14"
   },
   {
-    "id": "lic",
-    "name": "Life Insurance Corporation of India",
-    "name_ko": "인도생명보험공사",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "BSE",
-    "ticker": "LICI",
-    "sector": "보험",
-    "description": "1956년 설립된 인도의 국영 보험사로, 인도 생명보험 시장에서 압도적인 점유율을 차지하고 있는 최대 규모의 보험 기업입니다. 방대한 판매망과 자산 규모를 바탕으로 인도 금융 시장에서 핵심적인 역할을 수행하고 있습니다. 인도 정부가 대주주로 있으며, 인도 증권거래소에 상장된 주요 금융 기업 중 하나입니다.",
-    "founded_year": 1956,
-    "headquarters": "뭄바이, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-04 16:21"
-  },
-  {
     "id": "lic_india",
     "name": "Life Insurance Corporation of India",
     "name_ko": "인도 생명보험공사",
@@ -4142,6 +4174,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-20 15:32"
+  },
+  {
+    "id": "lic",
+    "name": "Life Insurance Corporation of India",
+    "name_ko": "인도생명보험공사",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "BSE",
+    "ticker": "LICI",
+    "sector": "보험",
+    "description": "1956년 설립된 인도의 국영 보험사로, 인도 생명보험 시장에서 압도적인 점유율을 차지하고 있는 최대 규모의 보험 기업입니다. 방대한 판매망과 자산 규모를 바탕으로 인도 금융 시장에서 핵심적인 역할을 수행하고 있습니다. 인도 정부가 대주주로 있으며, 인도 증권거래소에 상장된 주요 금융 기업 중 하나입니다.",
+    "founded_year": 1956,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-04 16:21"
   },
   {
     "id": "lumitime_technologies",
@@ -6256,22 +6304,6 @@
     "updated_at": null
   },
   {
-    "id": "bank_of_the_philippine_islands",
-    "name": "Bank of the Philippine Islands",
-    "name_ko": "필리핀 제도은행",
-    "country": "필리핀",
-    "country_flag": "🇵🇭",
-    "exchange": "PSE",
-    "ticker": "BPI",
-    "sector": "은행",
-    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 개인 및 기업 금융, 자산 관리, 보험 등 종합적인 금융 서비스를 제공한다. 필리핀 금융 시장에서 높은 신뢰도와 탄탄한 시장 지위를 유지하고 있다.",
-    "founded_year": 1851,
-    "headquarters": "마닐라, 필리핀",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-30 02:38"
-  },
-  {
     "id": "bank_of_the_philippines_islands",
     "name": "Bank of the Philippine Islands",
     "name_ko": "필리핀 제도은행",
@@ -6286,6 +6318,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-07 13:12"
+  },
+  {
+    "id": "bank_of_the_philippine_islands",
+    "name": "Bank of the Philippine Islands",
+    "name_ko": "필리핀 제도은행",
+    "country": "필리핀",
+    "country_flag": "🇵🇭",
+    "exchange": "PSE",
+    "ticker": "BPI",
+    "sector": "은행",
+    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 개인 및 기업 금융, 자산 관리, 보험 등 종합적인 금융 서비스를 제공한다. 필리핀 금융 시장에서 높은 신뢰도와 탄탄한 시장 지위를 유지하고 있다.",
+    "founded_year": 1851,
+    "headquarters": "마닐라, 필리핀",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-30 02:38"
   },
   {
     "id": "basel_tiles",
