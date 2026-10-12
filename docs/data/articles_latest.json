@@ -1,5 +1,49 @@
 [
   {
+    "id": 305787,
+    "title_en": "유럽, 마드리드 26도 초여름 날씨…동유럽은 빗줄기",
+    "title_ko": "유럽, 마드리드 26도 초여름 날씨…동유럽은 빗줄기",
+    "summary_ko": "12일(현지시간) 유럽 주요국은 최저 7도에서 최고 26도 사이의 기온 분포를 보이며 지역별로 큰 기온 차를 나타냈다. 스페인 마드리드가 26도로 가장 높은 기온을 기록하며 유럽 내에서 가장 더운 날씨를 보인 반면, 폴란드 바르샤바는 11도로 가장 선선한 기온을 기록했다. 마드리드의 최고 기온은 바르샤바보다 15도 더 높게 나타나며 유럽 대륙 내에서도 남부와 동부 지역 간의 뚜렷한 기온 격차를 드러냈다.\n\n전반적으로 맑거나 흐린 날씨가 이어지는 가운데 러시아와 폴란드, 우크라이나 등 일부 국가에서는 비 소식이 이어지고 있다. 러시아",
+    "url": "internal://weather_group_유럽_today20261012",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_유럽_today20261012",
+    "region": "europe",
+    "country": "유럽",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-12 12:17",
+    "countries": [
+      "영국",
+      "독일",
+      "프랑스",
+      "이탈리아",
+      "스페인",
+      "러시아",
+      "폴란드",
+      "우크라이나"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_germany_20261012.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-12T12:17:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-12 12:17",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 305776,
     "title_en": "중동, 40도 폭염과 소나기 교차…지역별 기온 차 극명",
     "title_ko": "중동, 40도 폭염과 소나기 교차…지역별 기온 차 극명",
@@ -1341,7 +1385,7 @@
     "id": 304747,
     "title_en": "중앙아프리카 공화국서 바그너 그룹의 민간인 약탈 및 경제인 납치 사건 발생",
     "title_ko": "중앙아프리카 공화국서 바그너 그룹의 민간인 약탈 및 경제인 납치 사건 발생",
-    "summary_ko": "중앙아프리카 공화국에서 러시아 민간군사기업인 바그너 그룹 소속 용병들이 현지 주민들을 상대로 무차별 총격과 약탈을 감행하고 주요 경제인을 납치하는 사건이 발생했다고 11일(현지시간) 코보오 뉴스 센트라프리크가 보도했다. 바그너 그룹 용병들은 현지에서 이른바 '검은 러시아인'으로 불리는 보조 병력과 함께 시키케데 지역에 침입해 주민들의 상점과 재산을 강탈했다. 바밍위방고란 주에서는 현지 경제계 주요 인사로 꼽히는 빌리 오페라토르가 은데레 시 입구에서 바그너 그룹 세력에 납치된 뒤 행방이 묘연해진 상태다.\n\n이러한 무장 세력의 지속적인",
+    "summary_ko": "[업데이트]\n■ 10월 12일 12:08 — 콩고민주공화국의 테레즈 카이콰바 바그너 외무장관 측은 7일(현지시간) 프랑스 보비니에서 개최 예정인 '2026 콩고민주공화국 경제 포럼' 주최 측이 장관의 이름과 직함을 무단으로 도용해 행사를 홍보하고 있다고 밝혔다. 장관실은 해당 포럼에 대해 어떠한 공식 후원도 제공한 바 없으며 사전 승인이나 합의도 없었다고 강조하며, 모든 홍보물에서 장관 관련 정보를 즉각 삭제할 것을 요구했다.\n\n이번 조치는 장관의 명예 보호와 정부의 공식 외교 절차 준수를 위한 것이며, 정부는 향후 공식 경로를 통",
     "url": "internal://trend_중앙아프리카_2026101123",
     "source": "NewsFinal",
     "category": "정치·외교",
@@ -1366,6 +1410,10 @@
       {
         "timestamp": "2026-10-11 23:23",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-10-12 12:08",
+        "note": "콩고 외무장관, 경제 포럼의 이름 무단 도용 확인."
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -1860,51 +1908,6 @@
     "noindex": true
   },
   {
-    "id": 304429,
-    "title_en": "아프리카연합(AU) 중재단, 콩고민주공화국 동부 평화회복 위해 고마 방문해 휴전 촉구",
-    "title_ko": "아프리카연합(AU) 중재단, 콩고민주공화국 동부 평화회복 위해 고마 방문해 휴전 촉구",
-    "summary_ko": "[업데이트]\n■ 10월 12일 09:53 — 아프리카연합(AU) 중재단은 8일 킨샤사에서 펠릭스 치세케디 콩고민주공화국 대통령과 회담하여 평화 프로세스 이행 의지를 확인했으며, 7일에는 키갈리에서 폴 카가메 르완다 대통령을 만나 지역 긴장 완화를 논의했다. 콩고민주공화국 정부는 28일 핑가 지역 드론 공격의 배후로 르완다 방위군을 지목하며 강경 대응 기조를 유지하고 있다. 한편, 10일(현지시간)부터 고마와 르완다 기세니를 잇는 국경 검문소에 통행 제한 조치가 시행되었다.\n\n이는 최근 루베로 지역에서 발생한 에볼라 확산에 따른 방역",
-    "url": "internal://trend_DRC 분쟁_2026101119",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "trend_DRC 분쟁",
-    "region": "africa",
-    "country": "콩고민주공화국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-10-11 19:54",
-    "countries": [
-      "콩고민주공화국",
-      "르완다",
-      "에티오피아",
-      "케냐",
-      "보츠와나"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_democratic_republic_of_the_congo_conflict.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-11T19:54:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-11 19:54",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-10-12 09:53",
-        "note": "북키부주 에볼라 확진자 25명 추가 확인되었습니다."
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "사진: Foreign, Commonwealth & Development Office (CC BY 4.0, Wikimedia Commons)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
-  },
-  {
     "id": 304430,
     "title_en": "미얀마 저항 연대, 아세안 복귀 추진 속 군정 수괴 말레이시아 방문 비판",
     "title_ko": "미얀마 저항 연대, 아세안 복귀 추진 속 군정 수괴 말레이시아 방문 비판",
@@ -1950,6 +1953,55 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
+  },
+  {
+    "id": 304429,
+    "title_en": "아프리카연합(AU) 중재단, 콩고민주공화국 동부 평화회복 위해 고마 방문해 휴전 촉구",
+    "title_ko": "아프리카연합(AU) 중재단, 콩고민주공화국 동부 평화회복 위해 고마 방문해 휴전 촉구",
+    "summary_ko": "[업데이트]\n■ 10월 12일 12:04 — 아프리카연합(AU) 중재단은 8일(현지시간) 킨샤사에서 펠릭스 치세케디 콩고민주공화국 대통령과 회담하여 평화 프로세스 이행 의지를 확인했다. 콩고민주공화국 정부는 이번 중재 과정에서 고마의 검증 메커니즘에 장교 3명을 파견하고, 9월부터 12월까지 122명의 민주해방군(FDLR) 대원을 르완다로 송환하는 조치를 단행했다. 그러나 정부는 9월 28일 핑가 지역에서 발생한 드론 공격의 배후로 르완다군을 지목하며 강경한 대응 기조를 유지하고 있다.\n\n한편, 북키부주에서 에볼라가 확산하며 11일",
+    "url": "internal://trend_DRC 분쟁_2026101119",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "trend_DRC 분쟁",
+    "region": "africa",
+    "country": "콩고민주공화국",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-10-11 19:54",
+    "countries": [
+      "콩고민주공화국",
+      "르완다",
+      "에티오피아",
+      "케냐",
+      "보츠와나"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_democratic_republic_of_the_congo_conflict.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-11T19:54:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-11 19:54",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-10-12 09:53",
+        "note": "북키부주 에볼라 확진자 25명 추가 확인되었습니다."
+      },
+      {
+        "timestamp": "2026-10-12 12:04",
+        "note": "에볼라 누적 사망자 1149명으로 늘어."
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "사진: Foreign, Commonwealth & Development Office (CC BY 4.0, Wikimedia Commons)",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
   },
   {
     "id": 304274,
@@ -2645,131 +2697,6 @@
     "update_log": [
       {
         "timestamp": "2026-10-11 13:16",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 303878,
-    "title_en": "유럽, 최저 3도에서 최고 27도…곳곳 비 소식",
-    "title_ko": "유럽, 최저 3도에서 최고 27도…곳곳 비 소식",
-    "summary_ko": "11일(현지시간) 유럽 주요국은 최저 3도에서 최고 27도 사이의 기온 분포를 보일 것으로 예보됐다. 지역별로 기온 차가 크게 나타나는 가운데 영국과 러시아, 폴란드, 우크라이나 등 일부 국가에서는 비 소식이 이어질 전망이다. 이번 주간 유럽 전역은 서유럽과 남유럽을 중심으로 비교적 높은 기온을 보이는 반면, 동유럽과 북유럽 일부 지역은 상대적으로 낮은 기온을 기록할 것으로 분석된다.\n\n남유럽의 스페인은 최고 27도, 최저 12도로 유럽 내에서 가장 높은 기온을 기록할 것으로 보인다. 이탈리아는 최고 25도와 최저 10도, 프랑스는",
-    "url": "internal://weather_group_유럽_weekly20261011",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_유럽_weekly20261011",
-    "region": "europe",
-    "country": "유럽",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-11 12:16",
-    "countries": [
-      "영국",
-      "독일",
-      "프랑스",
-      "이탈리아",
-      "스페인",
-      "러시아",
-      "폴란드",
-      "우크라이나"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_germany_20261011.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-11T12:16:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-11 12:16",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 303877,
-    "title_en": "[복권] 美 파워볼 10월 10일 당첨번호 1, 4, 19, 33, 51+파워볼 15",
-    "title_ko": "[복권] 美 파워볼 10월 10일 당첨번호 1, 4, 19, 33, 51+파워볼 15",
-    "summary_ko": "미국 파워볼이 10월 10일(현지시간) 추첨한 당첨번호를 발표했다. 당첨번호는 1, 4, 19, 33, 51이며 파워볼 번호는 15이다. 이날 파워플레이 배수는 2배였다.\n\n이번 추첨의 추정 잭팟은 4억8500만달러(현금가치 1억9970만달러)였다. 잭팟 금액은 29년에 걸쳐 나눠 받는 연금 지급 기준 총액이고, 현금가치는 당첨자가 한 번에 일시불로 받을 경우 받는 금액이라 잭팟보다 작다.\n\n이번 추첨에서 1등(잭팟) 당첨자는 나오지 않았다.\n\n2등(5개 번호 일치)은 0명으로 각자 100만달러를 받는다.\n\n이 밖에 3등(파워볼 포",
-    "url": "internal://powerball_2026-10-10",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "복권당첨정보",
-    "region": "global",
-    "country": "미국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-11 12:16",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/powerball_2026_10_10.png",
-    "view_count": 0,
-    "first_published_at": "2026-10-11T12:16:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-11 12:16",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "뉴스파이널",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 303870,
-    "title_en": "중동, 41도 폭염 속 튀르키예 비 소식",
-    "title_ko": "중동, 41도 폭염 속 튀르키예 비 소식",
-    "summary_ko": "11일(현지시간) 중동 지역은 최저 8도에서 최고 41도에 이르는 폭넓은 기온 분포를 보인다. 카타르가 최고 41도로 가장 높은 기온을 기록하며, 이라크는 최고 39도, 아랍에미리트 38도, 사우디아라비아 37도로 이어지는 고온 현상이 나타난다. 반면 튀르키예는 최저 8도에서 최고 24도 사이의 기온을 보이며 유일하게 비 소식이 예보되어 있다.\n\n이란은 최고 31도와 최저 12도, 요르단은 최고 28도와 최저 13도, 이스라엘은 최고 27도와 최저 14도의 기온 분포를 각각 나타낸다. 전반적으로 중동 지역은 카타르와 이라크를 중심으",
-    "url": "internal://weather_group_중동_weekly20261011",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_중동_weekly20261011",
-    "region": "middle_east",
-    "country": "중동",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-11 11:15",
-    "countries": [
-      "사우디아라비아",
-      "아랍에미리트",
-      "튀르키예",
-      "이스라엘",
-      "이란",
-      "이라크",
-      "카타르",
-      "요르단"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_saudi_arabia_20261011.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-11T11:15:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-11 11:15",
         "note": "최초 게시"
       }
     ],
