@@ -1,25 +1,25 @@
 {
-  "updated_at": "2026-10-13 23:56",
+  "updated_at": "2026-10-14 00:21",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7797.57,
+      "price": 7797.36,
       "change_pct": -0.18,
       "up": false
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 27188.17,
+      "price": 27188.81,
       "change_pct": -0.65,
       "up": false
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 51816.18,
-      "change_pct": 0.31,
+      "price": 51796.72,
+      "change_pct": 0.27,
       "up": true
     },
     {
@@ -39,7 +39,7 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 109410.25,
+      "price": 109408.15,
       "change_pct": 0.6,
       "up": true
     },
@@ -60,9 +60,9 @@
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 5925.98,
-      "change_pct": -0.17,
-      "up": false
+      "price": 5936.15,
+      "change_pct": 0.0,
+      "up": true
     },
     {
       "name": "PSEi (필리핀)",
@@ -98,22 +98,22 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7797.57,
+        "price": 7797.36,
         "change_pct": -0.18,
         "up": false
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 27188.17,
+        "price": 27188.81,
         "change_pct": -0.65,
         "up": false
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 51816.18,
-        "change_pct": 0.31,
+        "price": 51796.72,
+        "change_pct": 0.27,
         "up": true
       }
     ],
@@ -137,7 +137,7 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 109410.25,
+        "price": 109408.15,
         "change_pct": 0.6,
         "up": true
       },
@@ -158,9 +158,9 @@
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 5925.98,
-        "change_pct": -0.17,
-        "up": false
+        "price": 5936.15,
+        "change_pct": 0.0,
+        "up": true
       },
       {
         "name": "PSEi (필리핀)",
