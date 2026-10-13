@@ -13,7 +13,8 @@ image_store.py — 외부 스톡 이미지의 R2 영구 저장 헬퍼
 
 설계 원칙:
   - 실패해도 절대 예외를 밖으로 던지지 않는다. 실패 시 원본 URL을 그대로 반환해
-    기존 동작으로 안전하게 후퇴한다(회귀 없음).
+    기존 동작으로 안전하게 후퇴한다 — 단 만료되는 임시 URL(Pixabay)은 빈 문자열로
+    후퇴한다(2026-10-13, 임시 URL이 기사에 그대로 저장돼 하루 뒤 깨지던 문제).
   - key_hint를 정규화해 결정적(deterministic) 파일명을 쓴다.
     같은 대상은 같은 키로 덮어써져 R2에 중복 객체가 쌓이지 않는다.
   - Worker의 JSON(base64) 경로를 쓴다. 이 경로만 filename을 클라이언트가 지정할 수 있다.
@@ -86,6 +87,15 @@ def _guess_ext(src_url: str, content_type: str) -> str:
         return ext
     m = re.search(r"\.(jpe?g|png|webp|gif)(?:\?|$)", (src_url or "").lower())
     return (m.group(1).replace("jpeg", "jpg") if m else "jpg")
+
+
+# 시간이 지나면 만료되는 임시 URL — 실패해도 원본으로 후퇴하면 안 된다(store_image 참고).
+_EXPIRING_HINTS = ("pixabay.com/get/",)
+
+
+def _is_expiring(url: str) -> bool:
+    u = (url or "").lower()
+    return any(h in u for h in _EXPIRING_HINTS)
 
 
 def is_permanent(url: str) -> bool:
@@ -193,7 +203,8 @@ def store_image(src_url: str, key_hint: str = "", timeout: int = 30) -> str:
         key_hint: R2 파일명에 쓸 힌트(국가명, 토픽 등). 같은 힌트는 같은 키로 덮어쓴다.
 
     Returns:
-        성공 시 R2 영구 URL. 실패하거나 설정이 없으면 src_url 원본 그대로.
+        성공 시 R2 영구 URL. 실패하거나 설정이 없으면 src_url 원본 그대로 —
+        단 Pixabay 임시 URL처럼 만료되는 원본이면 빈 문자열.
     """
     if not src_url:
         return ""
@@ -202,9 +213,15 @@ def store_image(src_url: str, key_hint: str = "", timeout: int = 30) -> str:
     if is_permanent(src_url):
         return src_url
 
+    # 2026-10-13 실측: 공개 기사 358건 중 7건이 Pixabay 임시 URL(pixabay.com/get/…, ~24시간 만료)
+    # 그대로 저장돼 있었다 — 아래 실패 경로들이 "원본 URL 유지"로 후퇴했기 때문. 만료되는
+    # 소스는 원본을 돌려주면 하루 뒤 깨진 이미지가 되므로 빈 문자열(=이미지 없이 발행)로 후퇴한다.
+    # 위키미디어 원본처럼 만료 없는 URL은 기존대로 원본 유지.
+    fallback = "" if _is_expiring(src_url) else src_url
+
     if not IMAGE_UPLOAD_URL or not UPLOAD_SECRET:
         print("  ⚠️ R2 업로드 미설정(IMAGE_UPLOAD_URL/UPLOAD_SECRET) — 원본 URL 유지")
-        return src_url
+        return fallback
 
     try:
         # 2026-09-07 실사고: 위키미디어는 User-Agent 없는 요청을 403으로
@@ -216,22 +233,22 @@ def store_image(src_url: str, key_hint: str = "", timeout: int = 30) -> str:
         )
         if res.status_code != 200:
             print(f"  ⚠️ 이미지 다운로드 실패 {res.status_code} — 원본 URL 유지")
-            return src_url
+            return fallback
 
         data = res.content
         if not data:
             print("  ⚠️ 이미지 응답이 비어 있음 — 원본 URL 유지")
-            return src_url
+            return fallback
         if len(data) > MAX_IMAGE_BYTES:
             print(f"  ⚠️ 이미지 과대({len(data)}B) — 원본 URL 유지")
-            return src_url
+            return fallback
 
         content_type = res.headers.get("Content-Type", "")
         ext = _guess_ext(src_url, content_type)
         data, ext = _optimize_image(data, ext)
-        url = store_image_bytes(data, ext, key_hint, fallback_url=src_url)
+        url = store_image_bytes(data, ext, key_hint, fallback_url=fallback)
         return url
 
     except Exception as e:
         print(f"  ⚠️ R2 저장 예외: {e} — 원본 URL 유지")
-        return src_url
+        return fallback

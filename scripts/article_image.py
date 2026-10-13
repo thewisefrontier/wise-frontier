@@ -526,7 +526,8 @@ def fetch_article_image(title: str, body: str, entity: str, call_gemini_fn) -> t
                 key_hint = f"article_pixabay_{pick.get('id')}"
                 try:
                     from image_store import store_image
-                    return store_image(raw_url, key_hint=key_hint), disclaimer
+                    stored = store_image(raw_url, key_hint=key_hint)
+                    return stored, (disclaimer if stored else "")
                 except Exception as e:
                     print(f"  ⚠️ R2 저장 실패, 원본 URL 사용: {e}")
                     return raw_url, disclaimer
