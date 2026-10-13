@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-13 11:19",
+  "updated_at": "2026-10-13 11:20",
   "indices": [
     {
       "name": "S&P 500",
@@ -25,15 +25,15 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 5956.52,
-      "change_pct": -10.1,
+      "price": 5971.87,
+      "change_pct": -9.87,
       "up": false
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 808.18,
-      "change_pct": -9.42,
+      "price": 808.92,
+      "change_pct": -9.34,
       "up": false
     },
     {
@@ -60,15 +60,15 @@
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 5884.45,
-      "change_pct": -0.87,
+      "price": 5880.35,
+      "change_pct": -0.94,
       "up": false
     },
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 5693.38,
-      "change_pct": -0.87,
+      "price": 5693.53,
+      "change_pct": -0.86,
       "up": false
     },
     {
@@ -121,15 +121,15 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 5956.52,
-        "change_pct": -10.1,
+        "price": 5971.87,
+        "change_pct": -9.87,
         "up": false
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 808.18,
-        "change_pct": -9.42,
+        "price": 808.92,
+        "change_pct": -9.34,
         "up": false
       }
     ],
@@ -158,15 +158,15 @@
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 5884.45,
-        "change_pct": -0.87,
+        "price": 5880.35,
+        "change_pct": -0.94,
         "up": false
       },
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 5693.38,
-        "change_pct": -0.87,
+        "price": 5693.53,
+        "change_pct": -0.86,
         "up": false
       }
     ],
