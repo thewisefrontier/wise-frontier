@@ -147,3 +147,26 @@ def detect_script_leak(title: str, body: str):
 def has_script_leak(title: str, body: str) -> bool:
     """저장 시점 하드 블록용. 판정 근거 문맥 없이 True/False만 필요할 때."""
     return bool(detect_script_leak(title, body))
+
+
+# ── 비표준 한글 음절(상용 2,350자 밖) — 음역 깨짐 의심 ─────────────────────
+# 2026-10-13 실사고(id=307949): "Tinks Walker"가 "팕스 워커"로 — 한글이긴 해서 문자셋
+# 이탈로 안 잡혔다. 깨진 음역은 상용 2,350자(KS X 1001) 밖 음절로 나오는 경우가 많아,
+# 패턴을 하나씩 등록하지 않고 클래스로 잡는다. 단 "바트퇼츠"(Bad Tölz)처럼 외래어
+# 표기법상 정상인 경우도 있어(공개 기사 358건 중 2건 검출, 1건 정상) 하드 블록이
+# 아니라 check_transliteration의 알림 전용으로만 쓴다. 정상으로 확인된 음절은 아래에 추가.
+_KS_HANGUL = {bytes([h, l]).decode("euc-kr") for h in range(0xB0, 0xC9) for l in range(0xA1, 0xFF)}
+RARE_HANGUL_ALLOW = {"퇼"}  # 바트퇼츠(Bad Tölz) — 독일어 ö
+_HANGUL_SYL = re.compile("[가-힣]")
+
+
+def detect_rare_hangul(title: str, body: str):
+    """상용 2,350자 밖 한글 음절과 그 문맥. [(음절, 문맥), ...]"""
+    hits = []
+    for text in (title or "", body or ""):
+        for m in _HANGUL_SYL.finditer(text):
+            c = m.group(0)
+            if c in _KS_HANGUL or c in RARE_HANGUL_ALLOW or any(h[0] == c for h in hits):
+                continue
+            hits.append((c, text[max(0, m.start() - 10): m.end() + 10].replace("\n", " ")))
+    return hits

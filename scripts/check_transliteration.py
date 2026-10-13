@@ -15,7 +15,7 @@ import re
 import requests
 from datetime import datetime, timedelta, timezone
 
-from script_leak import detect_script_leak
+from script_leak import detect_script_leak, detect_rare_hangul
 
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
@@ -108,8 +108,8 @@ KNOWN_FIXES = [
     (r"혁명수위대", "혁명수비대"),
     # 2026-10-10 전수 조사(사용자 지시 "다른 기사들도 음역 오류 더 있는지 확인해봐"):
     # 전체 발행 기사 8천여 건에서 "한글(영어)" 병기 패턴을 추출해 같은 영문 표기가
-    # 서로 다른 한글 음차로 갈린 사례를 찾음. 아래는 공식 표기(질병관리청·연합뉴스
-    # 등)로 교차 검증된 것만 반영.
+    # 서로 다른 한글 음차로 갈린 사례를 찾음. 아래는 공식 표기(질병관리청 등 공공기관,
+    # 외래어 표기법)로 교차 검증된 것만 반영.
     #
     # 우간다 지명 Bundibugyo(에볼라 변종명) — 질병관리청·언론 공식 표기 "분디부교".
     # DB 전수 확인(34건)에서 정작 정답인 "분디부교"(7건)보다 오표기 "분디부기요"
@@ -118,8 +118,8 @@ KNOWN_FIXES = [
     # 미얀마 소수민족 Kachin(카친독립군/KIA) — 한국 언론 표기 "카친". "카치인"은
     # 어느 매체에서도 확인되지 않는 음절 삽입 오류(DB 3건).
     (r"카치인", "카친"),
-    # 에티오피아 Tigray(인민해방전선/TPLF) — 한국 위키백과·연합뉴스·뉴시스 공식
-    # 표기 "티그라이". "티그레이"는 확인되지 않음(DB 3건, 정답과 동수로 갈려 있었음).
+    # 에티오피아 Tigray(인민해방전선/TPLF) — 한국어 위키백과·국내 표준 표기
+    # "티그라이". "티그레이"는 확인되지 않음(DB 3건, 정답과 동수로 갈려 있었음).
     (r"티그레이", "티그라이"),
     # 콩고 반군 연합 AFC(Alliance Fleuve Congo) — 실측 2026-10-13(팩트체크, id=304429
     # "아프리카의 변혁을 위한 동맹", id=303049 "콩고동맹천군"): 원어(Fleuve=강) 무시한
@@ -135,9 +135,16 @@ KNOWN_FIXES = [
     (r"(?<!월 )(?<!월)\b23일\s*운동\s*\(M23\)", "3월 23일 운동(M23)"),
     (r"민주콩고동맹군\s*\(M23\)", "M23"),
     # 브라질 Bolsonaro 가문 오표기 — 2026-10-13 사용자 지적(id=308369 "플라비우 보스나루"):
-    # 국내 표준(연합뉴스) 표기는 "보우소나루". DB 제목만 봐도 "보스나루" 1건·"볼소나루" 4건으로
-    # 같은 인물이 갈려 있었다. 둘 다 "보우소나루"에 없는 음절 조합이라 오탐 위험 없음.
-    (r"보스나루|볼소나루", "보우소나루"),
+    # 국내 표준 표기(포르투갈어 표기법)는 "보우소나루". DB에서 "보스나루"·"볼소나루"·"볼소나로"로
+    # 같은 인물이 갈려 있었다(교정 19건). 셋 다 "보우소나루"에 없는 음절 조합이라 오탐 위험 없음.
+    (r"보스나루|볼소나루|볼소나로|보루소나루", "보우소나루"),
+    # 같은 날 발견: 룰라(Lula) 대통령을 "루라"로, 성(Da Silva)을 "다 실바/다 시바"로 쓴 기사가 혼재.
+    # 다른 단어 일부("알루라" 등)를 건드리지 않게 앞은 한글이 아닐 때, 뒤는 공백·구두점·조사일 때만.
+    (r"(?<![가-힣])루라(?=$|[\s·,.\-–)]|\s?다\s?시우바|와|의|가|는|를|도|에|대)", "룰라"),
+    (r"룰라\s*다\s*(?:실바|시바|시우바)", "룰라 다시우바"),
+    (r"이나시우\s+Lula\b", "이나시우 룰라"),
+    # 2026-10-13(id=307949): 영국 승마 선수 Tinks Walker → "팕스 워커"(깨진 음절). 비표준 음절 검사 신설 계기.
+    (r"팕스", "팅크스"),
 ]
 
 CHECK_WINDOW_HOURS = 48  # 점검 대상: 최근 N시간 내 발행 기사 (워크플로우 주기보다 여유 있게)
@@ -270,6 +277,7 @@ def run():
 
     fixed = []
     leaked = []
+    rare = []
     for a in articles:
         new_title, new_body, applied = apply_fixes(a.get("title_ko"), a.get("summary_ko"))
         if applied:
@@ -291,6 +299,13 @@ def run():
                                           "note": f"음역 자동 교정: {'; '.join(applied)}"}]
                 unpublish_article(a["id"], log, f"문자셋 이탈 미발행[{scripts}]: {ctx[:120]}")
 
+        # 비표준 음절(상용 2,350자 밖) — 음역 깨짐 의심, 알림만(script_leak.detect_rare_hangul 참고)
+        rare_hits = detect_rare_hangul(new_title, new_body)
+        if rare_hits:
+            ctx = " | ".join(f"[{c}] {s}" for c, s in rare_hits[:3])
+            rare.append({"id": a["id"], "ctx": ctx})
+            print(f"  ⚠️ id={a['id']} 비표준 음절: {ctx}")
+
     if fixed:
         send_telegram_alert(fixed)
         print(f"[음역 점검] 완료 — {len(fixed)}건 교정, 관리자 알림 발송")
@@ -302,6 +317,12 @@ def run():
         print(f"[문자셋 점검] {len(leaked)}건 검출, 관리자 알림 발송")
     else:
         print("[문자셋 점검] 이상 없음")
+
+    if rare:
+        lines = [f"⚠️ 비표준 한글 음절 {len(rare)}건 (음역 깨짐 의심 — 확인 후 KNOWN_FIXES 또는 RARE_HANGUL_ALLOW 등록)"]
+        lines += [f"- id={r['id']} {r['ctx']}" for r in rare[:15]]
+        _send_telegram("\n".join(lines))
+        print(f"[비표준 음절 점검] {len(rare)}건 검출, 관리자 알림 발송")
 
 
 if __name__ == "__main__":
