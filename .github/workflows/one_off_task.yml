@@ -56,3 +56,7 @@ jobs:
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
           KMA_API_KEY: ${{ secrets.KMA_API_KEY }}
           KMA_BRIEFING_KEY: ${{ secrets.KMA_BRIEFING_KEY }}
+          # 이미지 교체류 일회성 작업용(2026-10-13) — store_image()가 R2에 영구 저장하려면 필요
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
+          UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
