@@ -963,23 +963,24 @@ IMAGE_TAG_BLACKLIST = {
     "flag", "map", "person", "people", "portrait", "face", "man", "woman",
     "child", "children", "wedding", "funeral", "police", "crime", "accident",
     "corpse", "death", "blood", "nude", "naked", "sexy",
+    # 2026-10-13: 국가명만으로 넓혀 검색하자 인물·빈곤 사진이 섞여 들어옴(태국 "slum, poverty",
+    # 나이지리아 "market, women") — 날씨 기사의 나라 대표 사진으로 부적절.
+    "women", "men", "girl", "boy", "girls", "boys", "slum", "poverty", "poor", "homeless", "garbage",
 }
 
-IMAGE_TAG_ALLOWLIST = {
-    "city", "skyline", "cityscape", "building", "buildings", "architecture",
-    "landmark", "tower", "downtown", "urban", "street", "landscape",
-    "sky", "sunset", "sunrise", "panorama", "travel", "tourism",
-}
-
-
-def _is_image_suitable(hit: dict, country_en: str) -> bool:
+def _is_image_suitable(hit: dict, country_name: str) -> bool:
+    """2026-10-13 실사고(id=308347): 예전엔 "landmark"/"city" 같은 허용 태그 하나만
+    있으면 통과라, "united states skyline landmark" 검색 결과에 섞인 런던 웨스트민스터
+    궁이 미국 날씨 사진으로 실렸다(검색 30건 중 절반이 런던·파리·시드니). 이제는
+    태그에 그 나라(또는 그 나라 도시·명소) 지명이 있어야 하고, 다른 나라 지명이
+    섞여 있으면 탈락이다(article_image.filter_foreign_place_hits와 같은 사전)."""
+    from article_image import pixabay_tag_countries, _EUROPE_KO
     tags = {t.strip().lower() for t in (hit.get("tags") or "").split(",")}
     if tags & IMAGE_TAG_BLACKLIST:
         return False
-    country_words = set(country_en.lower().split())
-    if tags & IMAGE_TAG_ALLOWLIST or (tags & country_words):
-        return True
-    return False
+    countries = pixabay_tag_countries(hit)
+    allowed = {country_name} | ({"유럽"} if country_name in _EUROPE_KO else set())
+    return country_name in countries and countries <= allowed
 
 
 def fetch_country_image(country_name: str) -> str:
@@ -991,47 +992,58 @@ def fetch_country_image(country_name: str) -> str:
         return ""
 
     country_en = COUNTRY_EN.get(country_name, country_name)
-    query = f"{country_en} skyline landmark"
+
+    # 2026-10-13 실측(나라별 30~50건): "{국가} skyline landmark"는 나이지리아·케냐·
+    # 에티오피아·앙골라에서 그 나라 사진이 0장(대부분 런던·두바이 등 타국 명소)이었고,
+    # 국가명만 검색하면 대부분 수십 장이 나왔다. 기존 검색어를 먼저 쓰고, 그 나라 사진이
+    # MIN_CANDIDATES 미만이면 국가명만(places → 전체 카테고리) 순으로 넓힌다.
+    MIN_CANDIDATES = 3
+    queries = [
+        (f"{country_en} skyline landmark", {"category": "places", "per_page": 30}),
+        (country_en, {"category": "places", "per_page": 50}),
+        (country_en, {"per_page": 50}),
+    ]
 
     try:
-        res = requests.get(
-            "https://pixabay.com/api/",
-            params={
-                "key": PIXABAY_API_KEY,
-                "q": query,
-                "image_type": "photo",
-                "category": "places",
-                "safesearch": "true",
-                "orientation": "horizontal",
-                "min_width": 640,
-                "per_page": 30,
-            },
-            timeout=15,
-        )
         image_url = ""
-        if res.status_code == 200:
-            hits = res.json().get("hits", [])
+        candidates = []
+        for query, extra in queries:
+            res = requests.get(
+                "https://pixabay.com/api/",
+                params={
+                    "key": PIXABAY_API_KEY,
+                    "q": query,
+                    "image_type": "photo",
+                    "safesearch": "true",
+                    "orientation": "horizontal",
+                    "min_width": 640,
+                    **extra,
+                },
+                timeout=15,
+            )
+            if res.status_code != 200:
+                print(f"  ⚠️ Pixabay {res.status_code}: {res.text[:100]}")
+                break
             # 적합한 후보를 모두 모은 뒤 날짜 기반으로 회전 선택한다.
             # (첫 hit 고정 선택 시 매일 같은 사진이 반복되는 문제 방지)
-            candidates = [
-                h.get("webformatURL", "") or h.get("largeImageURL", "")
-                for h in hits
-                if _is_image_suitable(h, country_en) and (h.get("webformatURL") or h.get("largeImageURL"))
-            ]
-            if candidates:
-                today = now_kst()
-                idx = (today.toordinal() + len(country_en)) % len(candidates)
-                raw_url = candidates[idx]
-                # 임시 URL → R2 영구 URL. 실패 시 원본을 그대로 돌려받는다.
-                # 키에 날짜를 포함해야 어제 기사 이미지를 덮어쓰지 않는다.
-                image_url = store_image(
-                    raw_url,
-                    key_hint=f"weather_{country_en}_{today.strftime('%Y%m%d')}",
-                )
-            if not image_url:
-                print(f"  ⚠️ {country_name}: 적합한 이미지 없음 — 이미지 없이 발행")
-        else:
-            print(f"  ⚠️ Pixabay {res.status_code}: {res.text[:100]}")
+            for h in res.json().get("hits", []):
+                url = h.get("webformatURL", "") or h.get("largeImageURL", "")
+                if url and url not in candidates and _is_image_suitable(h, country_name):
+                    candidates.append(url)
+            if len(candidates) >= MIN_CANDIDATES:
+                break
+        if candidates:
+            today = now_kst()
+            idx = (today.toordinal() + len(country_en)) % len(candidates)
+            raw_url = candidates[idx]
+            # 임시 URL → R2 영구 URL. 실패 시 원본을 그대로 돌려받는다.
+            # 키에 날짜를 포함해야 어제 기사 이미지를 덮어쓰지 않는다.
+            image_url = store_image(
+                raw_url,
+                key_hint=f"weather_{country_en}_{today.strftime('%Y%m%d')}",
+            )
+        if not image_url:
+            print(f"  ⚠️ {country_name}: 적합한 이미지 없음 — 이미지 없이 발행")
         _image_cache[country_name] = image_url
         return image_url
     except Exception as e:

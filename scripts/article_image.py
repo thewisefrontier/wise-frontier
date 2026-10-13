@@ -216,7 +216,94 @@ def fetch_wikimedia_image(query: str, allow_artwork: bool = False):
     return None, None
 
 
-def fetch_seeded_pixabay_image(keywords: list, seed: int, key_hint: str) -> str:
+# ── 다른 나라 장소가 찍힌 스톡사진 차단 (2026-10-13 실사고 2건) ──────────────
+# id=308347(북미 날씨): "united states skyline landmark" 검색 30건 중 절반이 런던·
+# 파리·시드니였는데 _is_image_suitable()이 "landmark" 태그만 보고 통과시켜 런던
+# 웨스트민스터 궁이 실렸다. id=308571(미 연준): 일반 키워드 검색 1등이 프랑크푸르트
+# 유럽중앙은행 건물(태그 "ecb, frankfurt, europe")이었다. Pixabay 태그로 "관련성"은
+# 못 믿지만(newsfinal_pixabay_cross_script_dedup), 태그에 지명이 **명시**돼 있으면
+# 그 사진이 그 장소일 가능성은 높다 — 기사와 다른 나라 지명이 붙은 사진은 뺀다.
+# 키는 Pixabay 태그(소문자, 쉼표로 나뉜 구 전체와 일치해야 함), 값은 한국어 국가명
+# (weather_report.COUNTRIES 키·기사 본문 표기와 같은 형태). 새 사례가 나오면 추가.
+_PLACE_TAG_COUNTRY = {
+    # 국가명·별칭
+    "nigeria": "나이지리아", "kenya": "케냐", "south africa": "남아공", "egypt": "이집트",
+    "morocco": "모로코", "algeria": "알제리", "ethiopia": "에티오피아", "ghana": "가나",
+    "tanzania": "탄자니아", "angola": "앙골라", "vietnam": "베트남", "indonesia": "인도네시아",
+    "thailand": "태국", "philippines": "필리핀", "myanmar": "미얀마", "cambodia": "캄보디아",
+    "malaysia": "말레이시아", "singapore": "싱가포르", "saudi arabia": "사우디아라비아",
+    "united arab emirates": "아랍에미리트", "uae": "아랍에미리트", "turkey": "튀르키예",
+    "israel": "이스라엘", "iran": "이란", "iraq": "이라크", "qatar": "카타르", "jordan": "요르단",
+    "india": "인도", "bangladesh": "방글라데시", "pakistan": "파키스탄", "sri lanka": "스리랑카",
+    "nepal": "네팔", "kazakhstan": "카자흐스탄", "uzbekistan": "우즈베키스탄", "kyrgyzstan": "키르기스스탄",
+    "dominican republic": "도미니카공화국",
+    "brazil": "브라질", "mexico": "멕시코", "argentina": "아르헨티나", "chile": "칠레",
+    "colombia": "콜롬비아", "peru": "페루", "cuba": "쿠바",
+    "united states": "미국", "usa": "미국", "america": "미국", "american": "미국", "us": "미국",
+    "canada": "캐나다", "canadian": "캐나다", "japan": "일본", "japanese": "일본",
+    "china": "중국", "chinese": "중국", "mongolia": "몽골", "south korea": "한국", "korea": "한국",
+    "united kingdom": "영국", "uk": "영국", "england": "영국", "britain": "영국", "british": "영국",
+    "scotland": "영국", "germany": "독일", "german": "독일", "france": "프랑스", "french": "프랑스",
+    "italy": "이탈리아", "italian": "이탈리아", "spain": "스페인", "russia": "러시아",
+    "poland": "폴란드", "ukraine": "우크라이나", "australia": "호주", "new zealand": "뉴질랜드",
+    "netherlands": "네덜란드", "holland": "네덜란드", "switzerland": "스위스", "austria": "오스트리아",
+    "czech republic": "체코", "hungary": "헝가리", "greece": "그리스", "portugal": "포르투갈",
+    "europe": "유럽", "european": "유럽", "eu": "유럽", "european union": "유럽",
+    # 스톡사진에 자주 나오는 도시·명소 (2026-10-13 실측 검색결과에서 확인된 것 위주)
+    "london": "영국", "westminster": "영국", "westminster palace": "영국", "palace of westminster": "영국",
+    "big ben": "영국", "tower bridge": "영국", "london eye": "영국", "river thames": "영국", "thames": "영국",
+    "paris": "프랑스", "eiffel tower": "프랑스", "seine": "프랑스",
+    "frankfurt": "독일", "berlin": "독일", "hamburg": "독일", "munich": "독일",
+    "ecb": "유럽", "european central bank": "유럽",
+    "new york": "미국", "new york city": "미국", "nyc": "미국", "manhattan": "미국", "brooklyn": "미국",
+    "empire state building": "미국", "statue of liberty": "미국", "washington": "미국",
+    "chicago": "미국", "los angeles": "미국", "san francisco": "미국", "golden gate bridge": "미국",
+    "toronto": "캐나다", "ottawa": "캐나다", "vancouver": "캐나다", "montreal": "캐나다",
+    "sydney": "호주", "sydney opera house": "호주", "melbourne": "호주",
+    "dubai": "아랍에미리트", "burj khalifa": "아랍에미리트", "abu dhabi": "아랍에미리트",
+    "istanbul": "튀르키예", "budapest": "헝가리", "prague": "체코", "vienna": "오스트리아",
+    "rome": "이탈리아", "venice": "이탈리아", "florence": "이탈리아", "tuscany": "이탈리아", "milan": "이탈리아",
+    "madrid": "스페인", "barcelona": "스페인", "amsterdam": "네덜란드", "moscow": "러시아",
+    "tokyo": "일본", "kyoto": "일본", "osaka": "일본", "beijing": "중국", "shanghai": "중국", "hong kong": "중국",
+    "seoul": "한국", "bangkok": "태국", "hanoi": "베트남", "ho chi minh": "베트남",
+    "rio de janeiro": "브라질", "mumbai": "인도", "delhi": "인도", "cairo": "이집트",
+}
+_EUROPE_KO = {"영국", "독일", "프랑스", "이탈리아", "스페인", "러시아", "폴란드", "우크라이나",
+              "네덜란드", "스위스", "오스트리아", "체코", "헝가리", "그리스", "포르투갈", "유럽"}
+
+
+def pixabay_tag_countries(hit: dict) -> set:
+    """Pixabay 결과 태그에 명시된 지명을 한국어 국가명 집합으로."""
+    tags = {t.strip().lower() for t in (hit.get("tags") or "").split(",")}
+    return {_PLACE_TAG_COUNTRY[t] for t in tags if t in _PLACE_TAG_COUNTRY}
+
+
+def allowed_countries_from_text(text: str) -> set:
+    """기사 본문에 한국어로 등장하는 나라(=이 나라 지명이 붙은 사진은 괜찮다)."""
+    found = {ko for ko in set(_PLACE_TAG_COUNTRY.values()) if ko in (text or "")}
+    if found & _EUROPE_KO:
+        found.add("유럽")
+    return found
+
+
+def countries_named_in_query(query: str) -> set:
+    """검색어에 지명이 들어 있으면("tokyo stock exchange") 그 나라 사진은 정답이다."""
+    q = f" {(query or '').lower()} "
+    return {ko for place, ko in _PLACE_TAG_COUNTRY.items() if f" {place} " in q}
+
+
+def filter_foreign_place_hits(hits: list, allowed: set, label: str = "") -> list:
+    """허용 국가(+검색어에 나온 나라) 밖의 지명이 태그에 박힌 사진을 뺀다. 지명 없는 일반 사진은 통과."""
+    allowed = set(allowed) | countries_named_in_query(label)
+    if allowed & _EUROPE_KO:
+        allowed.add("유럽")
+    kept = [h for h in hits if not (pixabay_tag_countries(h) - allowed)]
+    if len(kept) < len(hits):
+        print(f"  🖼️ 다른 나라 지명 사진 {len(hits) - len(kept)}/{len(hits)}건 제외{f' ({label})' if label else ''}")
+    return kept
+
+
+def fetch_seeded_pixabay_image(keywords: list, seed: int, key_hint: str, allowed_countries: set = frozenset()) -> str:
     """고정 키워드 풀에서 seed로 결정론적으로 하나를 골라 Pixabay에서 검색하고
     R2에 영구 저장한다. 실패 시 빈 문자열.
 
@@ -251,7 +338,7 @@ def fetch_seeded_pixabay_image(keywords: list, seed: int, key_hint: str) -> str:
         if res.status_code != 200:
             print(f"  ⚠️ Pixabay {res.status_code}: {res.text[:100]}")
             return ""
-        hits = res.json().get("hits", [])
+        hits = filter_foreign_place_hits(res.json().get("hits", []), set(allowed_countries), query)
         if not hits:
             print(f"  ⚠️ Pixabay 결과 없음: {query}")
             return ""
@@ -414,7 +501,9 @@ def fetch_article_image(title: str, body: str, entity: str, call_gemini_fn) -> t
             timeout=15
         )
         if res.status_code == 200:
-            hits = res.json().get("hits", [])
+            hits = filter_foreign_place_hits(
+                res.json().get("hits", []), allowed_countries_from_text(f"{title} {body}"), query
+            )
             if hits:
                 pick = pick_safe_pixabay_hit(hits, allow_name=entity)
                 # webformatURL(최대 640px) 사용 — largeImageURL(1280px)은 히어로

@@ -395,7 +395,11 @@ def fetch_article_image(title: str, body: str) -> str:
             timeout=15
         )
         if res.status_code == 200:
-            hits = res.json().get("hits", [])
+            # 다른 나라 지명이 박힌 사진 제외(article_image.filter_foreign_place_hits 참고)
+            from article_image import filter_foreign_place_hits, allowed_countries_from_text
+            hits = filter_foreign_place_hits(
+                res.json().get("hits", []), allowed_countries_from_text(f"{title} {body}"), query
+            )
             if hits:
                 raw_url = hits[0].get("webformatURL", "") or hits[0].get("largeImageURL", "")
                 if raw_url:

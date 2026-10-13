@@ -117,7 +117,8 @@ def fetch_holiday_image(article_date: date) -> str:
     try:
         from article_image import fetch_seeded_pixabay_image
         return fetch_seeded_pixabay_image(
-            _IMAGE_KEYWORDS, article_date.toordinal(), f"jp_market_holiday_{article_date.isoformat()}"
+            _IMAGE_KEYWORDS, article_date.toordinal(), f"jp_market_holiday_{article_date.isoformat()}",
+            allowed_countries={"일본"},  # "nikkei"처럼 지명 없는 검색어로 나온 일본 사진도 허용
         )
     except Exception:
         return ""
