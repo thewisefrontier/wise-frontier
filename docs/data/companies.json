@@ -2368,22 +2368,6 @@
     "updated_at": "2026-08-09 07:08"
   },
   {
-    "id": "stoneco",
-    "name": "StoneCo Ltd.",
-    "name_ko": "스톤코",
-    "country": "브라질",
-    "country_flag": "🌍",
-    "exchange": "NASDAQ",
-    "ticker": "STNE",
-    "sector": "핀테크",
-    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
-    "founded_year": 2012,
-    "headquarters": "상파울루, 브라질",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-29 20:49"
-  },
-  {
     "id": "stone_co",
     "name": "StoneCo Ltd.",
     "name_ko": "스톤",
@@ -2398,6 +2382,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-22 23:37"
+  },
+  {
+    "id": "stoneco",
+    "name": "StoneCo Ltd.",
+    "name_ko": "스톤코",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "NASDAQ",
+    "ticker": "STNE",
+    "sector": "핀테크",
+    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
+    "founded_year": 2012,
+    "headquarters": "상파울루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-29 20:49"
   },
   {
     "id": "xp_inc",
@@ -6064,6 +6064,22 @@
     "updated_at": "2026-08-20 09:32"
   },
   {
+    "id": "circle_gas",
+    "name": "Circle Gas",
+    "name_ko": "서클 개스",
+    "country": "케냐",
+    "country_flag": "🇰🇪",
+    "exchange": "",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "영국에 본사를 두고 케냐 등 프론티어 시장에서 액화석유가스(LPG) 공급 사업을 전개하는 청정 조리 에너지 기업이다. 스마트미터기가 장착된 소형 용기를 통해 가정에 LPG를 보급하고 탄소배출권 판매 수익을 결합한 비즈니스 모델을 운영하고 있다. 최근 정부의 탄소배출권 승인 지연으로 인해 재정적 어려움과 추가 자금 조달 필요성에 직면해 있다.",
+    "founded_year": null,
+    "headquarters": "런던, 영국",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-10-13 18:07"
+  },
+  {
     "id": "east_african_breweries",
     "name": "East African Breweries",
     "name_ko": null,
@@ -6110,6 +6126,38 @@
     "website": null,
     "is_published": true,
     "updated_at": null
+  },
+  {
+    "id": "koko_networks",
+    "name": "Koko Networks",
+    "name_ko": "코코 네트워크",
+    "country": "케냐",
+    "country_flag": "🇰🇪",
+    "exchange": "",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "케냐를 중심으로 아프리카 도시 가정을 위한 청정 조리 연료 및 기술 플랫폼을 제공하는 기업이다. 안전하고 저렴한 바이리에탄올 연료 공급망을 구축하여 환경 오염과 삼림 벌채 문제 해결에 기여하고 있다. 케냐 내에서 서클 개스와 함께 대표적인 청정 조리 및 탄소배출권 연계 사업자로 꼽힌다.",
+    "founded_year": null,
+    "headquarters": "나이로비, 케냐",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-10-13 18:07"
+  },
+  {
+    "id": "m_gas",
+    "name": "M-Gas",
+    "name_ko": "엠가스",
+    "country": "케냐",
+    "country_flag": "🇰🇪",
+    "exchange": "",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "영국 서클 개스의 자회사로 케냐 현지에서 액화석유가스(LPG) 공급 사업을 직접 수행하는 청정 조리 기업이다. 스마트미터기 기술을 활용한 혁신적인 가정용 가스 공급 서비스를 제공하며 현지 시장 입지를 넓혀가고 있다. 모회사의 재정난과 탄소배출권 승인 지연 이슈의 직접적인 영향을 받고 있다.",
+    "founded_year": null,
+    "headquarters": "나이로비, 케냐",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-10-13 18:07"
   },
   {
     "id": "safaricom",
