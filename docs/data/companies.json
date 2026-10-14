@@ -2576,6 +2576,38 @@
     "updated_at": "2026-08-05 13:02"
   },
   {
+    "id": "kosmos_energy",
+    "name": "Kosmos Energy",
+    "name_ko": "코스모스 에너지",
+    "country": "세네갈",
+    "country_flag": "🌍",
+    "exchange": "NYSE",
+    "ticker": "KOS",
+    "sector": "에너지",
+    "description": "코스모스 에너지는 가나, 세네갈 등 아프리카와 대서양 연안을 중심으로 석유 및 가스 탐사·개발을 수행하는 독립계 에너지 기업입니다. 2003년에 설립되어 심해 유전 및 가스전 개발에서 두각을 나타내고 있습니다. 세네갈 해상 그랜드 토르투 아메(GTA) 가스전 프로젝트 등 주요 아프리카 자원 개발 사업에 깊이 관여하고 있습니다.",
+    "founded_year": 2003,
+    "headquarters": "달라스, 미국 (아프리카 주요 프로젝트 운영)",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-10-15 04:10"
+  },
+  {
+    "id": "lansar_automobile",
+    "name": "Lansar Automobile",
+    "name_ko": "란사르 오토모빌",
+    "country": "세네갈",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "자동차",
+    "description": "란사르 오토모빌은 세네갈을 중심으로 활동하는 현지 자동차 관련 기업입니다. 고급 차량 공급 및 관련 공공 계약과 연계되어 현지 언론과 정계에서 자주 언급되는 민간 기업입니다. 세네갈 내 자동차 유통 및 서비스 시장에 참여하고 있습니다.",
+    "founded_year": null,
+    "headquarters": "다카르, 세네갈",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-10-15 04:10"
+  },
+  {
     "id": "nis",
     "name": "Naftna Industrija Srbije",
     "name_ko": "세르비아 석유산업",
@@ -5056,22 +5088,6 @@
     "updated_at": "2026-08-14 23:23"
   },
   {
-    "id": "singareni_collieries",
-    "name": "The Singareni Collieries Company Limited",
-    "name_ko": "싱가레니 콜리어리스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "",
-    "sector": "에너지",
-    "description": "싱가레니 콜리어리스는 인도의 국영 탄광 및 에너지 기업으로, 주로 텔랑가나주에서 석탄 채굴 및 화력 발전 사업을 수행하고 있습니다. 1920년에 설립되었으며, 인도 남부 지역의 전력 공급과 산업 성장에 필수적인 에너지 자원을 안정적으로 공급하는 핵심적인 역할을 담당하고 있습니다. 인도 정부와 텔랑가나주 정부가 공동으로 소유하고 있는 대형 민간 및 공공 성격의 기업입니다.",
-    "founded_year": 1920,
-    "headquarters": "하이드라바드, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-30 17:03"
-  },
-  {
     "id": "singareni_collieries_company",
     "name": "The Singareni Collieries Company Limited",
     "name_ko": "싱가레니 콜리어리스",
@@ -5086,6 +5102,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-08 01:12"
+  },
+  {
+    "id": "singareni_collieries",
+    "name": "The Singareni Collieries Company Limited",
+    "name_ko": "싱가레니 콜리어리스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "싱가레니 콜리어리스는 인도의 국영 탄광 및 에너지 기업으로, 주로 텔랑가나주에서 석탄 채굴 및 화력 발전 사업을 수행하고 있습니다. 1920년에 설립되었으며, 인도 남부 지역의 전력 공급과 산업 성장에 필수적인 에너지 자원을 안정적으로 공급하는 핵심적인 역할을 담당하고 있습니다. 인도 정부와 텔랑가나주 정부가 공동으로 소유하고 있는 대형 민간 및 공공 성격의 기업입니다.",
+    "founded_year": 1920,
+    "headquarters": "하이드라바드, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-30 17:03"
   },
   {
     "id": "tata_power",
@@ -6544,22 +6576,6 @@
     "updated_at": null
   },
   {
-    "id": "bank_of_the_philippines_islands",
-    "name": "Bank of the Philippine Islands",
-    "name_ko": "필리핀 제도은행",
-    "country": "필리핀",
-    "country_flag": "🇵🇭",
-    "exchange": "PSE",
-    "ticker": "BPI",
-    "sector": "은행",
-    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 종합 금융 서비스를 제공하며 필리핀 금융 시장에서 높은 신뢰와 견고한 입지를 다지고 있다. 본 기사에서는 공공 인프라 지출 감소 추정을 발표한 주요 금융기관으로 언급되었다.",
-    "founded_year": 1851,
-    "headquarters": "마카티, 필리핀",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-07 13:12"
-  },
-  {
     "id": "bank_of_the_philippine_islands",
     "name": "Bank of the Philippine Islands",
     "name_ko": "필리핀 제도은행",
@@ -6574,6 +6590,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-30 02:38"
+  },
+  {
+    "id": "bank_of_the_philippines_islands",
+    "name": "Bank of the Philippine Islands",
+    "name_ko": "필리핀 제도은행",
+    "country": "필리핀",
+    "country_flag": "🇵🇭",
+    "exchange": "PSE",
+    "ticker": "BPI",
+    "sector": "은행",
+    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 종합 금융 서비스를 제공하며 필리핀 금융 시장에서 높은 신뢰와 견고한 입지를 다지고 있다. 본 기사에서는 공공 인프라 지출 감소 추정을 발표한 주요 금융기관으로 언급되었다.",
+    "founded_year": 1851,
+    "headquarters": "마카티, 필리핀",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-07 13:12"
   },
   {
     "id": "basel_tiles",
