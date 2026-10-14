@@ -966,6 +966,9 @@ IMAGE_TAG_BLACKLIST = {
     # 2026-10-13: 국가명만으로 넓혀 검색하자 인물·빈곤 사진이 섞여 들어옴(태국 "slum, poverty",
     # 나이지리아 "market, women") — 날씨 기사의 나라 대표 사진으로 부적절.
     "women", "men", "girl", "boy", "girls", "boys", "slum", "poverty", "poor", "homeless", "garbage",
+    # 2026-10-14(id=309186 아동 클로즈업): 인물 태그 표현이 다양해 넓게 막는다.
+    "kid", "kids", "baby", "toddler", "infant", "teen", "teenager", "human", "model",
+    "smile", "smiling", "cute", "expression", "emotion", "funny", "selfie", "tongue",
 }
 
 def _is_image_suitable(hit: dict, country_name: str) -> bool:
@@ -998,10 +1001,15 @@ def fetch_country_image(country_name: str) -> str:
     # 국가명만 검색하면 대부분 수십 장이 나왔다. 기존 검색어를 먼저 쓰고, 그 나라 사진이
     # MIN_CANDIDATES 미만이면 국가명만(places → 전체 카테고리) 순으로 넓힌다.
     MIN_CANDIDATES = 3
+    # 2026-10-14: 마지막 단계를 "전체 카테고리"로 했더니 나이지리아에 아동 얼굴 클로즈업이 실렸다(id=309186) —
+    # 전체 카테고리는 인물 사진을 끌어온다. 카테고리를 장소→건물→자연→여행(관광객 섞임 가능, 맨 뒤)으로
+    # 한정해도 실측상 전 국가가 그 나라 사진을 확보한다(나이지리아: 장소 0·건물 3·자연 8).
     queries = [
         (f"{country_en} skyline landmark", {"category": "places", "per_page": 30}),
         (country_en, {"category": "places", "per_page": 50}),
-        (country_en, {"per_page": 50}),
+        (country_en, {"category": "buildings", "per_page": 50}),
+        (country_en, {"category": "nature", "per_page": 50}),
+        (country_en, {"category": "travel", "per_page": 50}),
     ]
 
     try:
