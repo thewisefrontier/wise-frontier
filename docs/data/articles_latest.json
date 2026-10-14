@@ -1,5 +1,44 @@
 [
   {
+    "id": 311006,
+    "title_en": "아프리카 말라위와 나이지리아 등지에서 콜레라 확산 및 수질 오염 위기 심화",
+    "title_ko": "아프리카 말라위와 나이지리아 등지에서 콜레라 확산 및 수질 오염 위기 심화",
+    "summary_ko": "말라위 데자 지역의 데자 로드블록 주민들은 14일(현지시간) 기준 수년간 이어진 식수 공급 중단으로 인해 심각한 콜레라 감염 위험에 직면했다. 이 지역 주민들은 국경을 넘어 모잠비크의 오염된 얕은 우물에서 물을 길어 생활하고 있으며, 이 과정에서 발생하는 위생 문제로 인해 수인성 질병이 빈번하게 발생하고 있다.\n\n말라위 정부는 2030년까지 안전한 식수 접근성을 보장하는 지속가능발전목표(SDG) 6을 추진하고 있으나, 여전히 570만 명에서 700만 명에 달하는 인구가 식수 확보를 위해 장거리를 이동해야 하는 실정이다. 통계청 자료",
+    "url": "internal://trend_콜레라_2026101507",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "trend_콜레라",
+    "region": "africa",
+    "country": "말라위",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-10-15 07:23",
+    "countries": [
+      "말라위",
+      "나이지리아",
+      "모잠비크"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_6974251.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-15T07:23:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-15 07:23",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
     "id": 310998,
     "title_en": "[가상자산 동향] 비트코인 2.09% 하락…미국 대선 불확실성 및 차익 실현",
     "title_ko": "[가상자산 동향] 비트코인 2.09% 하락…미국 대선 불확실성 및 차익 실현",
@@ -3388,40 +3427,5 @@
     "summary_3lines_en": "",
     "investment_idea_en": "",
     "noindex": true
-  },
-  {
-    "id": 308668,
-    "title_en": "[가상자산 동향] 리플 1.17% 상승…미국 규제 불확실성 완화 기대",
-    "title_ko": "[가상자산 동향] 리플 1.17% 상승…미국 규제 불확실성 완화 기대",
-    "summary_ko": "◆ 가격 동향\n\n14일 06:28(한국시간) 야후 파이낸스에 따르면 리플 가격은 1.37달러를 기록하며 전일 대비 1.17% 상승했다. 최근 리플은 미국 증권거래위원회와의 소송 관련 항소 절차가 진행되는 가운데, 법적 리스크가 점진적으로 해소될 것이라는 시장의 관측이 가격 회복을 견인했다.\n\n최근 리플랩스는 국경 간 결제 네트워크 확장을 위한 파트너십을 연이어 발표하며 실질적인 사용 사례를 확보하고 있다. 이러한 사업적 성과가 규제 당국의 압박 속에서도 투자자들의 매수 심리를 자극했다.\n\n한편 비트코인은 8만3275.66달러(+0.",
-    "url": "internal://crypto_news_2026-10-14",
-    "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "가상자산동향_crypto",
-    "region": "global",
-    "country": "글로벌",
-    "country_flag": "🌐",
-    "score": 1,
-    "created_at": "2026-10-14 06:29",
-    "countries": [],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_10_14_pid7074867.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-14T06:29:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-14 06:29",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   }
 ]
