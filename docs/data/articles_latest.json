@@ -26,20 +26,24 @@
       "앙골라"
     ],
     "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_nigeria_20261014.jpg",
+    "image_url": "",
     "view_count": 0,
     "first_published_at": "2026-10-14T13:20:00",
     "update_log": [
       {
         "timestamp": "2026-10-14 13:20",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-10-14 14:56",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
     "is_travel": false,
     "source_published_at": null,
     "source_data": null,
-    "image_credit": null,
+    "image_credit": "",
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
@@ -2490,7 +2494,7 @@
     "id": 308142,
     "title_en": "수단 동남부 난민캠프 드론 공습으로 최소 41명 사망",
     "title_ko": "수단 동남부 난민캠프 드론 공습으로 최소 41명 사망",
-    "summary_ko": "[업데이트]\n■ 10월 14일 12:54 — 13일(현지시간) 수단 주권위원회 위원장 압델 파타 알부르한은 신속지원군(RSF)과의 어떠한 협상도 거부한다는 입장을 공식적으로 밝혔다. 알부르한 위원장은 정부군이 다르푸르, 코르도판, 블루나일 전역에서 RSF를 완전히 격퇴할 때까지 군사 작전을 지속하겠다는 의지를 표명했다. 한편 국제사회는 RSF의 폭력성이 집단학살의 징후를 보이고 있다고 경고했으며, 지속적인 교전으로 의료 지원 접근성이 차단되면서 현지 주민들이 생존 위기에 내몰린 상태다.\n\n■ 10월 14일 10:54 — 13일(현지",
+    "summary_ko": "[업데이트]\n■ 10월 14일 14:54 — 13일(현지시간) 수단 주권위원회 위원장 압델 파타 알부르한은 신속지원군(RSF)과의 어떠한 협상도 거부하겠다는 입장을 공식적으로 밝혔다. 알부르한 위원장은 정부군이 다르푸르, 코르도판, 블루나일 전역에서 신속지원군을 완전히 격퇴할 때까지 군사 작전을 지속하겠다는 의지를 표명했다. 한편 국제사회는 신속지원군의 폭력성이 집단학살의 징후를 보이고 있다고 경고했으며, 지속적인 교전으로 의료 지원 접근성이 차단되면서 현지 주민들이 생존 위기에 내몰린 상태다.\n\n■ 10월 14일 12:54 — 1",
     "url": "internal://trend_수단 분쟁_2026101317",
     "source": "NewsFinal",
     "category": "정치·외교",
@@ -2525,6 +2529,10 @@
       {
         "timestamp": "2026-10-14 12:54",
         "note": "수단 정부군, RSF와 협상 거부 및 군사 작전 지속 선언."
+      },
+      {
+        "timestamp": "2026-10-14 14:54",
+        "note": "알부르한 위원장, 신속지원군과의 협상 거부 공식화."
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -2849,98 +2857,6 @@
       "kr_coverage_30d": 6
     },
     "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": true
-  },
-  {
-    "id": 307757,
-    "title_en": "IMF, 글로벌 성장률 3.1% 전망…AI 투자 효과 vs 전쟁·부채 리스크",
-    "title_ko": "IMF, 글로벌 성장률 3.1% 전망…AI 투자 효과 vs 전쟁·부채 리스크",
-    "summary_ko": "국제통화기금(IMF)은 13일(현지시간) 태국 방콕에서 열린 연례 회의를 통해 올해 세계 경제 성장률이 3.1%를 기록할 것으로 전망했다. 이는 지난 7월 예측치였던 3.0%에서 소폭 상향 조정된 수치다. IMF는 중동 지역의 전쟁으로 인한 에너지 충격에도 불구하고 인공지능(AI) 인프라에 대한 강력한 투자가 글로벌 경제 성장을 견인하고 있다고 분석했다.\n\n실바나 텐레이로 IMF 수석 이코노미스트는 기자회견에서 세계 경제가 회복력을 보이고 있으나, 하방 리스크가 커지고 있다고 경고했다. 특히 중동 전쟁이 장기화하면서 유가가 배럴당 ",
-    "url": "internal://cluster_20261013_b075b7ea",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "cluster_20261013_b075b7ea",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-13 14:41",
-    "countries": [
-      "미국",
-      "영국",
-      "인도"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_6955781.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-13T14:41:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-13 14:41",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        464264,
-        463642
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": false
-  },
-  {
-    "id": 307754,
-    "title_en": "베트남, 제90차 아세안 과학기술혁신위원회 개최…다낭서 기술 협력 논의",
-    "title_ko": "베트남, 제90차 아세안 과학기술혁신위원회 개최…다낭서 기술 협력 논의",
-    "summary_ko": "베트남 과학기술부는 13일(현지시간)부터 15일까지 다낭시 푸라마 리조트 다낭에서 제90차 아세안 과학기술혁신위원회(COSTI-90) 및 관련 회의를 개최한다. 이번 회의는 2026년부터 2035년까지 이어지는 아세안 과학기술혁신 행동계획(APASTI 2026-2035)의 초기 이행 단계에서 열리는 첫 번째 공식 회의다.\n\n이번 COSTI-90은 기존 9개였던 하위 분과를 5개로 통폐합해 효율성을 높인 이후 처음 열리는 회의다. 13일에는 과학기술혁신 생태계, 첨단기술, 생명공학 및 식품과학, 재료 및 에너지 기술, 지구·해양·우주",
-    "url": "internal://cluster_20261013_21c54f4a",
-    "source": "NewsFinal",
-    "category": "IT·과학",
-    "subcategory": "cluster_20261013_21c54f4a",
-    "region": "southeast_asia",
-    "country": "베트남",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-13 14:38",
-    "countries": [
-      "베트남"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_costi.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-13T14:38:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-13 14:38",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        466139,
-        465602,
-        465168,
-        465171,
-        464742,
-        464332,
-        464015,
-        463654
-      ]
-    },
-    "image_credit": "사진: Costi Ioniță (CC BY-SA 3.0, Wikimedia Commons)",
     "continuation_of_id": null,
     "summary_3lines_en": "",
     "investment_idea_en": "",
