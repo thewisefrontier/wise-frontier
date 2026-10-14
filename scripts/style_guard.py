@@ -90,10 +90,31 @@ def has_polite_ending(text: str) -> bool:
 # 순수 파이썬 백엔드(pecab)로 동작해 GitHub Actions에도 부담 없이 설치된다
 # (실측: 첫 호출만 사전 로딩으로 ~1.8초, 이후 호출은 건당 2ms 수준).
 # 설치 실패 시에도 파이프라인이 죽지 않도록 기존 정규식을 폴백으로 둔다.
+#
+# 2026-10-14 실사고(팩트체크 중 발견): kss가 문장부호 없는 단어 중간에서도
+# 끊는다 — "자마코이스(Eduardo Zamacoïs)"가 "자마코이\n\n스(...)"로, "지난
+# 6일"이 "지 난 6일"로 발행됐다(id 308600·308586). kss 분리 지점 중 앞 조각이
+# 문장부호(.!?…, 뒤따르는 닫는 따옴표·괄호 포함)로 끝나지 않는 것은 거짓
+# 경계로 보고 원문 그대로 다시 이어 붙인다(원문 슬라이스라 공백도 보존).
+_SENT_FINAL_RE = re.compile(r'[.!?…。][\"\'”’)\]]*\s*$')
+
 try:
     import kss as _kss
     def _split_hangul_sentences(text: str) -> list:
-        return [s.strip() for s in _kss.split_sentences(text) if s.strip()]
+        spans, pos = [], 0
+        for s in _kss.split_sentences(text):
+            s = s.strip()
+            if not s:
+                continue
+            i = text.find(s, pos)
+            if i < 0:  # kss가 원문을 변형한 경우 — 안전하게 정규식 분리로
+                return [x.strip() for x in re.split(r"(?<=다\.)\s+", text) if x.strip()]
+            if spans and not _SENT_FINAL_RE.search(text[spans[-1][0]:spans[-1][1]]):
+                spans[-1] = (spans[-1][0], i + len(s))
+            else:
+                spans.append((i, i + len(s)))
+            pos = i + len(s)
+        return [text[a:b].strip() for a, b in spans]
 except Exception:
     def _split_hangul_sentences(text: str) -> list:
         return [s.strip() for s in re.split(r"(?<=다\.)\s+", text) if s.strip()]
