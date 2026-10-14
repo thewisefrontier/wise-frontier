@@ -124,6 +124,8 @@ except Exception:
             return data[0].get("id", -1) if data else -1
         return -1
 
+from work_title import resolve_korean_title, enforce_work_title
+
 try:
     from article_image import fetch_wikimedia_image
 except Exception:
@@ -538,7 +540,7 @@ def build_article_prompt(artwork: dict, grounding: str, prior_titles: list | Non
 "[오늘의 그림]" 코너(매일 발행)에서 오늘 소개할 작품은 아래와 같습니다.
 ⚠️ "이번 주말", "주말에 소개할" 같은 특정 요일·주기를 가리키는 표현은 본문에 쓰지 마세요(매일 발행되는 코너입니다).
 {prior_rule}
-작품명: {artwork['title_ko']} ({artwork['title_en']})
+작품명(한국어 확정): {artwork['title_ko']} / 원제: {artwork['title_en']}
 작가: {artwork['artist_ko']} ({artwork['artist_en']})
 제작 시기: {artwork['year_label']}
 관련 국가: {artwork['country']}
@@ -577,9 +579,10 @@ def build_article_prompt(artwork: dict, grounding: str, prior_titles: list | Non
   (예: 레오나르도 다빈치(Leonardo da Vinci)). 이미 한글 이름인 한국 인물·지명(예: 신윤복,
   안견)은 원어 병기가 필요 없습니다. 어느 경우든 같은 이름을 다시 언급할 땐 괄호 병기를
   반복하지 말고 이름만 쓰세요.
-- ⚠️ 작품명을 반드시 밝히세요: 기사 제목과 본문 첫 문단에 위 '작품명'을 한국어로 옮겨 넣고, 본문 첫 등장 때
-  원제를 괄호로 병기하세요(2026-09-28 프레더릭 처치 기사가 작품명 없이 작가 소개만 하고 끝난 사고).
-  한국어 제목이 정착되지 않은 작품은 원제를 그대로 쓰되 지어낸 번역 제목처럼 꾸미지 마세요.
+- ⚠️ 작품명을 반드시 밝히세요: 기사 제목과 본문 첫 문단에 위 '작품명(한국어 확정)'을 한 글자도 바꾸거나
+  줄이지 말고 그대로 쓰고(본문에선 《》로 감싸기), 본문 첫 등장 때 원제를 괄호로 병기하세요(2026-09-28
+  프레더릭 처치 기사가 작품명 없이 작가 소개만 하고 끝난 사고, 2026-10-14 "부인의 초상"을 "부인 초상"으로
+  바꿔 쓴 사고). 확정 작품명이 영어 원제 그대로면 그대로 쓰고 지어낸 번역 제목처럼 꾸미지 마세요.
   원제에 미술관 소장품 번호(예: "A III 2173", "NK1650")나 소장처 이름이 하이픈으로 붙어 있으면
   그 부분은 제목에서 빼고 작품 설명 부분만 쓰세요 — 소장품 번호를 한글로 소리 내어 옮기지 마세요.
 - ⚠️ 근거자료에 이름이 나오는 인물(의뢰인·소장자·기증자·스승 등)을 언급할 땐 반드시 이름을 쓰세요.
@@ -706,6 +709,11 @@ def main():
         return
     print(f"  → 이미지 확보: {image_url[:70]}")
 
+    # 작품명은 기사 작성 전에 한 번만 확정한다(work_title.py 참고 — 기사마다 즉석 번역하다
+    # "부인의 초상"이 "부인 초상"으로 나간 id=308600 사고). 이후 근거 검색·프롬프트·검사 모두 이 이름을 쓴다.
+    artwork = {**artwork, "title_ko": resolve_korean_title(artwork["title_ko"], artwork["title_en"], call_gemini)}
+    print(f"  → 작품명 확정: 《{artwork['title_ko']}》")
+
     # "수련"처럼 작품명만으로 검색하면 동명이인/동명 식물 등 전혀 다른 문서가
     # 잡힐 수 있어(실측: "수련" 단독 검색 → 모네 그림이 아니라 수련(식물) 문서가
     # 매칭됨) 작가명을 붙여 검색 쿼리를 명확히 한다. 작가 쪽도 "Shin Yun-bok" 같은
@@ -783,6 +791,10 @@ def main():
     title, body, fixes = proofread_fix(title, body, call_gemini)
     if fixes:
         print(f"  🔧 발행 전 교열 수정 {len(fixes)}건: {fixes}")
+    # 교열까지 끝난 최종본에서 확정 작품명이 그대로 들어갔는지 코드로 검사·보정(프롬프트만으론 반복 사고)
+    title, body, title_notes = enforce_work_title(title, body, artwork["title_ko"], "《》", artwork["artist_ko"])
+    for note in title_notes:
+        print(f"  🏷️ {note}")
     article_id = insert_article(artwork, title, body, pub_date, image_url, image_credit, fixes)
     if article_id > 0:
         print(f"  ✓ 기사 삽입 완료 (articles.id={article_id}): {title}")

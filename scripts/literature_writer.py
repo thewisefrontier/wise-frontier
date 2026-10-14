@@ -37,6 +37,8 @@ from urllib.parse import quote
 import requests
 from dotenv import load_dotenv
 
+from work_title import enforce_work_title
+
 load_dotenv()
 
 try:
@@ -850,6 +852,11 @@ def main():
         title, body, fixes = proofread_fix(title, body, call_gemini)
         if fixes:
             print(f"  🔧 발행 전 교열 수정 {len(fixes)}건: {fixes}")
+        # 확인된 한국어 제목이 있으면 본문(『』)·제목에 그대로 들어갔는지 코드로 검사·보정(work_title.py, 2026-10-14)
+        if verified_title_ko(w):
+            title, body, title_notes = enforce_work_title(title, body, verified_title_ko(w), "『』", w.get("author_ko") or "")
+            for note in title_notes:
+                print(f"  🏷️ {note}")
         image_url, credit = fetch_image(w, store=not dry)
         if dry:
             print(f"\n[이미지] {image_url}\n[크레딧] {credit}\n\n=== {title} ===\n{body}\n({len(body)}자)")
