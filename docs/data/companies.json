@@ -1,5 +1,21 @@
 [
   {
+    "id": "club_brugge",
+    "name": "Club Brugge NV",
+    "name_ko": "클럽 브뤼헤",
+    "country": "",
+    "country_flag": "🌍",
+    "exchange": "Euronext",
+    "ticker": "CLUB",
+    "sector": "스포츠 및 엔터테인먼트",
+    "description": "1891년 설립된 벨기에의 프로 축구 클럽으로, 벨기에 프로 리그의 최상위권 구단입니다. 축구 경기 운영 및 관련 마케팅, 미디어 권리 판매를 주요 사업으로 영위합니다. 벨기에 내에서 가장 성공적인 구단 중 하나로 평가받으며 유럽 대항전에도 정기적으로 참여하고 있습니다.",
+    "founded_year": 1891,
+    "headquarters": "브뤼헤, 벨기에",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-10-14 09:12"
+  },
+  {
     "id": "dbs_group_holdings",
     "name": "DBS Group Holdings Ltd",
     "name_ko": "디비에스은행",
@@ -30,6 +46,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-09-30 22:07"
+  },
+  {
+    "id": "galatasaray_sportif",
+    "name": "Galatasaray Sportif Sinai ve Ticari Yatirimlar A.S.",
+    "name_ko": "갈라타사라이 스포츠",
+    "country": "",
+    "country_flag": "🌍",
+    "exchange": "BIST",
+    "ticker": "GSRAY",
+    "sector": "스포츠 및 엔터테인먼트",
+    "description": "1905년 설립된 터키의 명문 스포츠 클럽인 갈라타사라이의 운영 법인입니다. 축구팀 운영을 핵심 사업으로 하며, 미디어, 머천다이징, 스폰서십 등 다양한 수익 모델을 보유하고 있습니다. 터키 이스탄불을 연고로 하며 터키 내에서 가장 많은 팬층을 보유한 상장 기업 중 하나입니다.",
+    "founded_year": 1905,
+    "headquarters": "이스탄불, 터키",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-10-14 09:12"
   },
   {
     "id": "unicredit",
@@ -4992,22 +5024,6 @@
     "updated_at": "2026-08-14 23:23"
   },
   {
-    "id": "singareni_collieries_company",
-    "name": "The Singareni Collieries Company Limited",
-    "name_ko": "싱가레니 콜리어리스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "",
-    "sector": "에너지",
-    "description": "싱가레니 콜리어리스는 1920년에 설립된 인도 텔랑가나주의 국영 석탄 채굴 기업입니다. 주로 인도 남부 지역의 전력 및 산업 수요를 충족하기 위해 석탄을 공급하며, 지역 경제에서 중요한 위치를 차지하고 있습니다. 토목 및 인프라 개발과 관련된 지역 사회 공헌 활동도 함께 수행하고 있습니다.",
-    "founded_year": 1920,
-    "headquarters": "코다구뎀, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-08 01:12"
-  },
-  {
     "id": "singareni_collieries",
     "name": "The Singareni Collieries Company Limited",
     "name_ko": "싱가레니 콜리어리스",
@@ -5022,6 +5038,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-30 17:03"
+  },
+  {
+    "id": "singareni_collieries_company",
+    "name": "The Singareni Collieries Company Limited",
+    "name_ko": "싱가레니 콜리어리스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "싱가레니 콜리어리스는 1920년에 설립된 인도 텔랑가나주의 국영 석탄 채굴 기업입니다. 주로 인도 남부 지역의 전력 및 산업 수요를 충족하기 위해 석탄을 공급하며, 지역 경제에서 중요한 위치를 차지하고 있습니다. 토목 및 인프라 개발과 관련된 지역 사회 공헌 활동도 함께 수행하고 있습니다.",
+    "founded_year": 1920,
+    "headquarters": "코다구뎀, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-08 01:12"
   },
   {
     "id": "tata_power",
