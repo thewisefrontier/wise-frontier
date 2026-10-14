@@ -1,5 +1,71 @@
 [
   {
+    "id": 310811,
+    "title_en": "[국내유가] 휘발유 리터당 1856원…유종별 가격 일제히 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1856원…유종별 가격 일제히 하락",
+    "summary_ko": "한국석유공사 오피넷이 15일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1856.43원으로 집계됐다. 이는 전일 대비 0.07원 하락한 수치다.\n\n경유와 LPG 가격도 동반 하락세를 나타냈다. 경유는 리터당 1842.24원으로 전일보다 0.55원 내렸으며, LPG(부탄)는 리터당 1143.78원으로 전일 대비 0.06원 하락했다.\n\n이번 유가 변동은 국제유가 흐름과 정유사 공급가 조정 등의 영향이 복합적으로 작용한 결과로 풀이된다. 최근 시장에서는 정유사의 도매가 조정과 유류세 인하 확대 여부 등이 가격 결정의",
+    "url": "internal://opinet_price_2026-10-15",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-10-15 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_10_15_pid6999638.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-15T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-15 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-10-15",
+      "prices": {
+        "B027": {
+          "diff": -0.07,
+          "name": "휘발유",
+          "price": 1856.43
+        },
+        "B034": {
+          "diff": 0.97,
+          "name": "고급휘발유",
+          "price": 2385.51
+        },
+        "C004": {
+          "diff": 0.09,
+          "name": "실내등유",
+          "price": 1572.21
+        },
+        "D047": {
+          "diff": -0.55,
+          "name": "경유",
+          "price": 1842.24
+        },
+        "K015": {
+          "diff": -0.06,
+          "name": "LPG(부탄)",
+          "price": 1143.78
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 310807,
     "title_en": "칼의 노래",
     "title_ko": "[오늘의 책] 김훈의 『칼의 노래』, 인간 이순신의 내면을 응시한 역사소설",
@@ -3474,71 +3540,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": false
-  },
-  {
-    "id": 308604,
-    "title_en": "[국내유가] 휘발유 리터당 1856원…전일 대비 소폭 하락",
-    "title_ko": "[국내유가] 휘발유 리터당 1856원…전일 대비 소폭 하락",
-    "summary_ko": "한국석유공사 오피넷이 14일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1856원으로 집계됐다.\n\n이날 오피넷에 따르면 휘발유 평균 가격은 리터당 1856.47원으로 전일 대비 0.03원 하락했다. 경유는 리터당 1842.36원으로 전일보다 0.35원 내렸고, 반면 LPG 부탄은 리터당 1143.77원으로 전일 대비 0.07원 상승했다.\n\n이번 유가 변동은 국제유가 흐름과 정유사 공급가 변동 등이 복합적으로 작용한 결과로 나타났다. 최근 유가 상승세를 둘러싸고 정유사 도매가 조정 및 공급가격에 대한 지적이 제기",
-    "url": "internal://opinet_price_2026-10-14",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국내유가",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "🇰🇷",
-    "score": 1,
-    "created_at": "2026-10-14 05:11",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_10_14_pid8272496.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-14T05:11:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-14 05:11",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "date": "2026-10-14",
-      "prices": {
-        "B027": {
-          "diff": -0.03,
-          "name": "휘발유",
-          "price": 1856.47
-        },
-        "B034": {
-          "diff": 0.49,
-          "name": "고급휘발유",
-          "price": 2381.58
-        },
-        "C004": {
-          "diff": -0.17,
-          "name": "실내등유",
-          "price": 1572.16
-        },
-        "D047": {
-          "diff": -0.35,
-          "name": "경유",
-          "price": 1842.36
-        },
-        "K015": {
-          "diff": 0.07,
-          "name": "LPG(부탄)",
-          "price": 1143.77
-        }
-      }
-    },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
   }
 ]
