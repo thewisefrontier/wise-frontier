@@ -2688,6 +2688,22 @@
     "updated_at": "2026-08-09 04:26"
   },
   {
+    "id": "saba_fk",
+    "name": "Saba FK",
+    "name_ko": "사바 FK",
+    "country": "스페인",
+    "country_flag": "🌍",
+    "exchange": "BSE",
+    "ticker": "SABA",
+    "sector": "스포츠 및 엔터테인먼트",
+    "description": "아제르바이잔 바쿠를 연고로 하는 프로 축구 클럽으로 2017년에 창단되었습니다. 아제르바이잔 프리미어리그에서 활동하며 현지 스포츠 산업의 주요 주체 중 하나입니다. 유럽 대항전 참여를 통해 국제적인 인지도를 쌓고 있는 스포츠 기업입니다.",
+    "founded_year": 2017,
+    "headquarters": "바쿠, 아제르바이잔",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-10-14 11:10"
+  },
+  {
     "id": "ukrnafta",
     "name": "Ukrnafta",
     "name_ko": "우크나프타",
@@ -5024,22 +5040,6 @@
     "updated_at": "2026-08-14 23:23"
   },
   {
-    "id": "singareni_collieries",
-    "name": "The Singareni Collieries Company Limited",
-    "name_ko": "싱가레니 콜리어리스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "",
-    "sector": "에너지",
-    "description": "싱가레니 콜리어리스는 인도의 국영 탄광 및 에너지 기업으로, 주로 텔랑가나주에서 석탄 채굴 및 화력 발전 사업을 수행하고 있습니다. 1920년에 설립되었으며, 인도 남부 지역의 전력 공급과 산업 성장에 필수적인 에너지 자원을 안정적으로 공급하는 핵심적인 역할을 담당하고 있습니다. 인도 정부와 텔랑가나주 정부가 공동으로 소유하고 있는 대형 민간 및 공공 성격의 기업입니다.",
-    "founded_year": 1920,
-    "headquarters": "하이드라바드, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-30 17:03"
-  },
-  {
     "id": "singareni_collieries_company",
     "name": "The Singareni Collieries Company Limited",
     "name_ko": "싱가레니 콜리어리스",
@@ -5054,6 +5054,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-08 01:12"
+  },
+  {
+    "id": "singareni_collieries",
+    "name": "The Singareni Collieries Company Limited",
+    "name_ko": "싱가레니 콜리어리스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "싱가레니 콜리어리스는 인도의 국영 탄광 및 에너지 기업으로, 주로 텔랑가나주에서 석탄 채굴 및 화력 발전 사업을 수행하고 있습니다. 1920년에 설립되었으며, 인도 남부 지역의 전력 공급과 산업 성장에 필수적인 에너지 자원을 안정적으로 공급하는 핵심적인 역할을 담당하고 있습니다. 인도 정부와 텔랑가나주 정부가 공동으로 소유하고 있는 대형 민간 및 공공 성격의 기업입니다.",
+    "founded_year": 1920,
+    "headquarters": "하이드라바드, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-30 17:03"
   },
   {
     "id": "tata_power",
@@ -5968,6 +5984,22 @@
     "updated_at": "2026-08-03 07:01"
   },
   {
+    "id": "metro_de_santiago",
+    "name": "Metro de Santiago",
+    "name_ko": "산티아고 지하철",
+    "country": "칠레",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "운송",
+    "description": "1975년에 설립된 칠레 산티아고의 도시 철도 운영사입니다. 칠레 정부가 소유한 국영 기업으로, 수도권 지역의 핵심 대중교통망을 운영하고 있습니다. 산티아고 시민들의 주요 이동 수단으로서 높은 시장 점유율과 인프라 영향력을 보유하고 있습니다.",
+    "founded_year": 1975,
+    "headquarters": "산티아고, 칠레",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-10-14 11:14"
+  },
+  {
     "id": "red_metropolitana_de_movilidad",
     "name": "Red Metropolitana de Movilidad",
     "name_ko": "레드 메트로폴리타나 데 모빌리다드",
@@ -6496,22 +6528,6 @@
     "updated_at": null
   },
   {
-    "id": "bank_of_the_philippine_islands",
-    "name": "Bank of the Philippine Islands",
-    "name_ko": "필리핀 제도은행",
-    "country": "필리핀",
-    "country_flag": "🇵🇭",
-    "exchange": "PSE",
-    "ticker": "BPI",
-    "sector": "은행",
-    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 개인 및 기업 금융, 자산 관리, 보험 등 종합적인 금융 서비스를 제공한다. 필리핀 금융 시장에서 높은 신뢰도와 탄탄한 시장 지위를 유지하고 있다.",
-    "founded_year": 1851,
-    "headquarters": "마닐라, 필리핀",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-30 02:38"
-  },
-  {
     "id": "bank_of_the_philippines_islands",
     "name": "Bank of the Philippine Islands",
     "name_ko": "필리핀 제도은행",
@@ -6526,6 +6542,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-07 13:12"
+  },
+  {
+    "id": "bank_of_the_philippine_islands",
+    "name": "Bank of the Philippine Islands",
+    "name_ko": "필리핀 제도은행",
+    "country": "필리핀",
+    "country_flag": "🇵🇭",
+    "exchange": "PSE",
+    "ticker": "BPI",
+    "sector": "은행",
+    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 개인 및 기업 금융, 자산 관리, 보험 등 종합적인 금융 서비스를 제공한다. 필리핀 금융 시장에서 높은 신뢰도와 탄탄한 시장 지위를 유지하고 있다.",
+    "founded_year": 1851,
+    "headquarters": "마닐라, 필리핀",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-30 02:38"
   },
   {
     "id": "basel_tiles",
