@@ -172,6 +172,25 @@ jobs:
           AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
           MONEYFINAL_FEED_KEY: ${{ secrets.MONEYFINAL_FEED_KEY }}
 
+      - name: 장중 특징주(미국·영국·독일·프랑스) 생성 (2026-10-15 신설)
+        # 시간당 1회 — 그 나라 거래소가 지금 장중이 아니거나 머니파이널
+        # 뉴스에 새로 언급된 종목이 없으면 스크립트 자체가 즉시 스킵한다.
+        continue-on-error: true
+        run: python scripts/intraday_stock_digest.py
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
+          GEMINI_API_KEY_4: ${{ secrets.GEMINI_API_KEY_4 }}
+          GEMINI_API_KEY_5: ${{ secrets.GEMINI_API_KEY_5 }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
+          IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
+          UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
+
       - name: 이슈 파이널(해설) 초안 작성 — 어드민 검토 후 발행 (2026-09-22 신설)
         # DAILY_CAP=1(explainer_writer.py) — 자주 돌아도 하루 한 번만 실제 생성,
         # 나머지 호출은 "이미 작성 — 스킵"으로 즉시 끝난다.

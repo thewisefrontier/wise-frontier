@@ -338,6 +338,10 @@ def fetch_yahoo_quote(symbol: str) -> dict | None:
                 "change": change, "pct": pct, "_suspect": suspect,
                 # 2026-09-03: stock_news_writer.py(개별 종목 기사)가 필요로 하는
                 # 추가 메타필드 — 지수·통화 호출부는 그냥 안 쓰는 여분 키라 무해하다.
+                # 2026-10-15: currency 추가(intraday_stock_digest.py 유럽 확장) —
+                # 런던 상장 종목은 "GBp"(펜스) 단위로 내려온다(예: AZN.L 12300.0 =
+                # 123.00파운드) — 그대로 "달러"로 찍으면 2자릿수 단위 오류가 난다.
+                "currency": meta.get("currency") or "",
                 "long_name": meta.get("longName") or meta.get("shortName") or "",
                 "fifty_two_week_high": meta.get("fiftyTwoWeekHigh"),
                 "fifty_two_week_low": meta.get("fiftyTwoWeekLow"),

@@ -177,12 +177,21 @@ WATCHLIST_KEYWORDS = {
 
 def _recent_moneyfinal_headlines(hours: int = 48) -> list[str]:
     """market_news_fetcher.py가 받아온 머니파이널(Finnhub) 원문 헤드라인.
-    오늘의 종목 선택 근거로 쓴다 — 실제 시장 뉴스가 언급하는 종목을 우선한다."""
+    오늘의 종목 선택 근거로 쓴다 — 실제 시장 뉴스가 언급하는 종목을 우선한다.
+
+    ⚠️ 2026-10-15 실사고(intraday_stock_digest.py 개발 중 발견): 이 함수가
+    `articles` 테이블을 조회하고 있었는데, market_news_fetcher.py는 실제로
+    `raw_candidates`에 저장한다(insert_raw_candidate) — 클러스터링을 거쳐
+    일부만 "NewsFinal" source로 articles에 승격되므로, articles 테이블의
+    source엔 "MoneyFinal"이 거의 안 남는다. 실측: articles 쪽은 17일간 8건
+    (하루 0.5건)인데 raw_candidates 쪽은 3일간 103건(하루 34건)이었다 —
+    이 함수가 계속 엉뚱한 테이블을 봐서 "관련 뉴스 언급 없음"으로 빠지고
+    날짜 순환 선택 폴백만 타고 있었던 것. raw_candidates로 바로잡는다."""
     from datetime import timedelta
     since = (now_kst() - timedelta(hours=hours)).strftime("%Y-%m-%d %H:%M")
     try:
         res = requests.get(
-            _sb_url(),
+            _sb_url("raw_candidates"),
             headers=_sb_headers(),
             params={
                 "select": "title_en",
@@ -199,6 +208,25 @@ def _recent_moneyfinal_headlines(hours: int = 48) -> list[str]:
         return []
 
 
+def kw_match(headline: str, keywords: list[str]) -> bool:
+    """제목에 키워드가 '단어'로 나오는지 확인(부분 문자열 아님).
+
+    ⚠️ 2026-10-15 실사고: 기존엔 키워드 양옆에 공백을 손으로 넣어
+    (" visa ", " amd " 등) 부분 문자열 매칭으로 단어경계를 흉내냈는데,
+    헤드라인이 그 단어로 '시작'하면(예: "Visa gets approval...", "Meta
+    shares rise...") 문자열 맨 앞이라 앞쪽 공백이 없어 매칭 자체가
+    안 됐다 — intraday_stock_digest.py 개발 중 실제 헤드라인으로 재현
+    확인. \\b 단어경계 정규식으로 바꿔 양쪽 다 잡는다."""
+    h = headline.lower()
+    for kw in keywords:
+        kw = kw.strip()
+        if not kw:
+            continue
+        if re.search(r"\b" + re.escape(kw) + r"\b", h):
+            return True
+    return False
+
+
 def pick_ticker(article_date: date) -> tuple[str, str, str, str, list[str]]:
     """머니파이널 실시간 뉴스에 언급된 종목을 우선 선택하고, 언급이 하나도
     없으면 날짜 기반 순환 선택으로 폴백한다. 4번째 반환값은 선택 사유(기사
@@ -210,7 +238,7 @@ def pick_ticker(article_date: date) -> tuple[str, str, str, str, list[str]]:
         counts, hits_by_ticker = {}, {}
         for ticker, _, _ in WATCHLIST:
             kws = WATCHLIST_KEYWORDS.get(ticker, [])
-            matched = [h for h in headlines if any(kw in h.lower() for kw in kws)]
+            matched = [h for h in headlines if kw_match(h, kws)]
             if matched:
                 counts[ticker] = len(matched)
                 hits_by_ticker[ticker] = matched
@@ -245,8 +273,14 @@ def fetch_stock_data(symbol: str) -> dict | None:
 
 # ── 기사 프롬프트 ────────────────────────────────────────────
 def build_article_prompt(ticker: str, name_ko: str, exchange: str, data: dict,
-                          hook_headlines: list[str] | None = None) -> str:
-    today = get_target_market_date()
+                          hook_headlines: list[str] | None = None,
+                          article_date: date | None = None,
+                          market_label: str = "미국 증시",
+                          currency_label: str = "달러") -> str:
+    """article_date/market_label/currency_label은 intraday_stock_digest.py(유럽
+    등 다른 시장 확장, 2026-10-15)가 넘기는 선택 인자 — 기본값은 이 파일 자체의
+    미국 대형주 EOD 기사 동작을 그대로 보존한다."""
+    today = article_date or get_target_market_date()
     today_str = today.strftime("%Y년 %m월 %d일")
     company = data.get("long_name") or name_ko
 
@@ -260,15 +294,15 @@ def build_article_prompt(ticker: str, name_ko: str, exchange: str, data: dict,
 {joined}
 """
 
-    return f"""당신은 미국 증시 개별 종목 전문 기자입니다. 구글 검색으로 오늘
+    return f"""당신은 {market_label} 개별 종목 전문 기자입니다. 구글 검색으로 오늘
 {name_ko}({ticker}) 주가를 움직인 실제 뉴스(실적, 신제품, 애널리스트 리포트,
 소송, 규제, 거시경제 이슈 등)를 찾아서, 아래 시세 데이터와 결합해 기사를
 작성하세요. 검색 없이 수치만 나열하지 마세요.
 {hook_block}
 오늘({today_str}) 기준 {name_ko}({ticker}, {exchange}) 시세 데이터:
-- 현재가: {data['price']:.2f}달러 (전일比 {data['pct']:+.2f}%)
-- 당일 거래 범위: {data.get('day_low', 0):.2f} ~ {data.get('day_high', 0):.2f}달러
-- 52주 최고/최저: {data.get('fifty_two_week_high', 0):.2f} / {data.get('fifty_two_week_low', 0):.2f}달러
+- 현재가: {data['price']:.2f}{currency_label} (전일比 {data['pct']:+.2f}%)
+- 당일 거래 범위: {data.get('day_low', 0):.2f} ~ {data.get('day_high', 0):.2f}{currency_label}
+- 52주 최고/최저: {data.get('fifty_two_week_high', 0):.2f} / {data.get('fifty_two_week_low', 0):.2f}{currency_label}
 - 거래량: {to_won_style_amount(data.get('volume') or 0)}주
 
 [출력 형식] — 반드시 이 형식 그대로:
