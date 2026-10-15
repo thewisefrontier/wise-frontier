@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-15 12:46",
+  "updated_at": "2026-10-15 13:21",
   "indices": [
     {
       "name": "S&P 500",
@@ -25,15 +25,15 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 5530.14,
-      "change_pct": -8.37,
+      "price": 5527.12,
+      "change_pct": -8.42,
       "up": false
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 757.81,
-      "change_pct": -9.46,
+      "price": 756.36,
+      "change_pct": -9.64,
       "up": false
     },
     {
@@ -53,22 +53,22 @@
     {
       "name": "SET (태국)",
       "symbol": "^SET.BK",
-      "price": 1559.78,
-      "change_pct": -1.02,
+      "price": 1560.57,
+      "change_pct": -0.97,
       "up": false
     },
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 5837.02,
-      "change_pct": -1.78,
+      "price": 5844.86,
+      "change_pct": -1.65,
       "up": false
     },
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 5646.96,
-      "change_pct": 0.53,
+      "price": 5649.48,
+      "change_pct": 0.57,
       "up": true
     },
     {
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.55,
-      "change_pct": 0.39,
+      "price": 16.57,
+      "change_pct": 0.48,
       "up": true
     }
   ],
@@ -121,15 +121,15 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 5530.14,
-        "change_pct": -8.37,
+        "price": 5527.12,
+        "change_pct": -8.42,
         "up": false
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 757.81,
-        "change_pct": -9.46,
+        "price": 756.36,
+        "change_pct": -9.64,
         "up": false
       }
     ],
@@ -151,22 +151,22 @@
       {
         "name": "SET (태국)",
         "symbol": "^SET.BK",
-        "price": 1559.78,
-        "change_pct": -1.02,
+        "price": 1560.57,
+        "change_pct": -0.97,
         "up": false
       },
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 5837.02,
-        "change_pct": -1.78,
+        "price": 5844.86,
+        "change_pct": -1.65,
         "up": false
       },
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 5646.96,
-        "change_pct": 0.53,
+        "price": 5649.48,
+        "change_pct": 0.57,
         "up": true
       }
     ],
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.55,
-        "change_pct": 0.39,
+        "price": 16.57,
+        "change_pct": 0.48,
         "up": true
       }
     ]
@@ -198,16 +198,16 @@
     "ANTM": {
       "name": "Aneka Tambang Tbk",
       "symbol": "ANTM.JK",
-      "price": 2890.0,
-      "change_pct": -5.25,
+      "price": 2940.0,
+      "change_pct": -3.61,
       "up": false
     },
     "ACB": {
       "name": "Asia Commercial Joint Stock Bank",
       "symbol": "ACB.VN",
-      "price": 20400.0,
-      "change_pct": -0.24,
-      "up": false
+      "price": 20500.0,
+      "change_pct": 0.24,
+      "up": true
     }
   }
 }
