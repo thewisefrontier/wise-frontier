@@ -752,6 +752,22 @@
     "updated_at": "2026-08-18 07:15"
   },
   {
+    "id": "capricorn_digital",
+    "name": "Capricorn Digital Limited",
+    "name_ko": "캐프리콘 디지털",
+    "country": "나이지리아",
+    "country_flag": "🇳🇬",
+    "exchange": "",
+    "ticker": "",
+    "sector": "핀테크",
+    "description": "캐프리콘 디지털은 나이지리아를 중심으로 오프라인 대행 금융 서비스 및 핀테크 플랫폼인 벡시(Baxi)를 운영해 온 기업입니다. 2021년 범아프리카 결제 기업인 로나프릭에 인수되었습니다. 나이지리아 내 소상공인과 소비자에게 오프라인 대행 은행 서비스를 제공하는 역할을 담당했습니다.",
+    "founded_year": 2014,
+    "headquarters": "라고스, 나이지리아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-10-16 22:47"
+  },
+  {
     "id": "dangote_cement",
     "name": "Dangote Cement",
     "name_ko": null,
@@ -942,6 +958,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-03 02:01"
+  },
+  {
+    "id": "onafriq",
+    "name": "Onafriq",
+    "name_ko": "로나프릭",
+    "country": "나이지리아",
+    "country_flag": "🇳🇬",
+    "exchange": "",
+    "ticker": "",
+    "sector": "핀테크",
+    "description": "로나프릭은 아프리카 전역에서 모바일 돈 결제 및 국가간 송금 인프라를 제공하는 범아프리카 결제 기업입니다. 2021년 캡리콘 디지털을 인수한 바 있으며, 나이지리아 등 아프리카 시장에서 디지털 금융 네트워크를 확장해왔습니다. 최근 나이지리아의 경제 위기와 경쟁 심화로 인해 오프라인 대행 은행 사업인 벡시(Baxi) 서비스를 철수했습니다.",
+    "founded_year": 2010,
+    "headquarters": "요하네스버그, 남아프리카공화국",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-10-16 22:47"
   },
   {
     "id": "zenith_bank",
@@ -2432,22 +2464,6 @@
     "updated_at": "2026-08-09 07:08"
   },
   {
-    "id": "stone_co",
-    "name": "StoneCo Ltd.",
-    "name_ko": "스톤",
-    "country": "브라질",
-    "country_flag": "🌍",
-    "exchange": "NASDAQ",
-    "ticker": "STNE",
-    "sector": "핀테크",
-    "description": "2012년에 설립된 브라질의 대표적인 핀테크 기업으로, 소상공인을 위한 결제 처리 및 금융 관리 소프트웨어를 제공합니다. 결제 단말기뿐만 아니라 가맹점 관리 시스템과 금융 서비스를 통합하여 중소기업의 디지털 전환을 지원합니다. 브라질 결제 시장에서 혁신적인 기술력과 서비스로 강력한 점유율을 확보하고 있습니다.",
-    "founded_year": 2012,
-    "headquarters": "상파울루, 브라질",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-22 23:37"
-  },
-  {
     "id": "stoneco",
     "name": "StoneCo Ltd.",
     "name_ko": "스톤코",
@@ -2462,6 +2478,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-29 20:49"
+  },
+  {
+    "id": "stone_co",
+    "name": "StoneCo Ltd.",
+    "name_ko": "스톤",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "NASDAQ",
+    "ticker": "STNE",
+    "sector": "핀테크",
+    "description": "2012년에 설립된 브라질의 대표적인 핀테크 기업으로, 소상공인을 위한 결제 처리 및 금융 관리 소프트웨어를 제공합니다. 결제 단말기뿐만 아니라 가맹점 관리 시스템과 금융 서비스를 통합하여 중소기업의 디지털 전환을 지원합니다. 브라질 결제 시장에서 혁신적인 기술력과 서비스로 강력한 점유율을 확보하고 있습니다.",
+    "founded_year": 2012,
+    "headquarters": "상파울루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-22 23:37"
   },
   {
     "id": "xp_inc",
@@ -5056,22 +5088,6 @@
     "updated_at": "2026-08-02 21:12"
   },
   {
-    "id": "tata_consultancy_services",
-    "name": "Tata Consultancy Services Limited",
-    "name_ko": "타타 컨설턴시 서비스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "TCS",
-    "sector": "IT 서비스",
-    "description": "1968년 설립된 글로벌 IT 서비스 및 컨설팅 기업으로 타타 그룹의 핵심 계열사입니다. 전 세계 기업들을 대상으로 소프트웨어 개발, 비즈니스 솔루션, IT 아웃소싱 서비스를 제공합니다. 인도 IT 산업의 선구자이자 세계적인 수준의 기술력을 보유한 기업으로 평가받습니다.",
-    "founded_year": 1968,
-    "headquarters": "뭄바이, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-19 01:21"
-  },
-  {
     "id": "tcs",
     "name": "Tata Consultancy Services Limited",
     "name_ko": "타타 컨설턴시 서비시스",
@@ -5086,6 +5102,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-02 17:22"
+  },
+  {
+    "id": "tata_consultancy_services",
+    "name": "Tata Consultancy Services Limited",
+    "name_ko": "타타 컨설턴시 서비스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "TCS",
+    "sector": "IT 서비스",
+    "description": "1968년 설립된 글로벌 IT 서비스 및 컨설팅 기업으로 타타 그룹의 핵심 계열사입니다. 전 세계 기업들을 대상으로 소프트웨어 개발, 비즈니스 솔루션, IT 아웃소싱 서비스를 제공합니다. 인도 IT 산업의 선구자이자 세계적인 수준의 기술력을 보유한 기업으로 평가받습니다.",
+    "founded_year": 1968,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-19 01:21"
   },
   {
     "id": "tata_motors",
@@ -6624,22 +6656,6 @@
     "updated_at": null
   },
   {
-    "id": "bank_of_the_philippine_islands",
-    "name": "Bank of the Philippine Islands",
-    "name_ko": "필리핀 제도은행",
-    "country": "필리핀",
-    "country_flag": "🇵🇭",
-    "exchange": "PSE",
-    "ticker": "BPI",
-    "sector": "은행",
-    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 개인 및 기업 금융, 자산 관리, 보험 등 종합적인 금융 서비스를 제공한다. 필리핀 금융 시장에서 높은 신뢰도와 탄탄한 시장 지위를 유지하고 있다.",
-    "founded_year": 1851,
-    "headquarters": "마닐라, 필리핀",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-30 02:38"
-  },
-  {
     "id": "bank_of_the_philippines_islands",
     "name": "Bank of the Philippine Islands",
     "name_ko": "필리핀 제도은행",
@@ -6654,6 +6670,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-07 13:12"
+  },
+  {
+    "id": "bank_of_the_philippine_islands",
+    "name": "Bank of the Philippine Islands",
+    "name_ko": "필리핀 제도은행",
+    "country": "필리핀",
+    "country_flag": "🇵🇭",
+    "exchange": "PSE",
+    "ticker": "BPI",
+    "sector": "은행",
+    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 개인 및 기업 금융, 자산 관리, 보험 등 종합적인 금융 서비스를 제공한다. 필리핀 금융 시장에서 높은 신뢰도와 탄탄한 시장 지위를 유지하고 있다.",
+    "founded_year": 1851,
+    "headquarters": "마닐라, 필리핀",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-30 02:38"
   },
   {
     "id": "basel_tiles",
