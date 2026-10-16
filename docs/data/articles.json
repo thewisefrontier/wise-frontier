@@ -1,5 +1,46 @@
 [
   {
+    "id": 312198,
+    "title_en": "남아시아, 스리랑카 빗소식…국가별 주말 날씨",
+    "title_ko": "남아시아, 스리랑카 빗소식…국가별 주말 날씨",
+    "summary_ko": "17일(현지시간) 남아시아 주요국은 지역에 따라 맑은 날씨부터 강수까지 다양한 기상 상황을 보인다. 이번 주말 남아시아 전체의 최저기온은 12°C, 최고기온은 35°C의 분포를 기록할 것으로 예상되는 가운데, 국가별 수도의 주말 예보가 발표되었다.\n\n인도 수도 뉴델리는 토요일과 일요일 모두 맑은 날씨가 이어지며 최고기온 29°C, 최저기온은 각각 21°C와 19°C를 기록하겠다. 파키스탄 수도 이슬라마바드는 토요일과 일요일 모두 대체로 맑은 하늘을 보이는 가운데 최고기온 27~28°C, 최저기온 17°C를 나타낸다. 방글라데시 수도",
+    "url": "internal://weather_group_남아시아_weekend20261017",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_남아시아_weekend20261017",
+    "region": "south_asia",
+    "country": "남아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-17 08:34",
+    "countries": [
+      "인도",
+      "방글라데시",
+      "파키스탄",
+      "스리랑카",
+      "네팔"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_india_20261017.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-17T08:34:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-17 08:34",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 312186,
     "title_en": "동남아시아, 전역 비 소식…우박·뇌우 동반한 변덕 날씨",
     "title_ko": "동남아시아, 전역 비 소식…우박·뇌우 동반한 변덕 날씨",
@@ -1600,7 +1641,7 @@
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
-    "noindex": false
+    "noindex": true
   },
   {
     "id": 312048,
