@@ -8,14 +8,36 @@
    이미지 포함)를 쓴다. wiki_query를 문서 제목 그대로 줘서 근거자료가 정확히 그 문서로 잡힌다.
 """
 import csv
+import html
 import re
 import sys
 import time
+from concurrent.futures import ThreadPoolExecutor
 
 import requests
 
 UA = {"User-Agent": "NewsFinalBot/1.0 (https://newsfinal.co.kr)"}
 WIKI = "https://en.wikipedia.org/w/api.php"
+
+# 월터스 공개 CSV(creators.csv/art.csv)에는 attribution qualifier(Workshop of/Attributed to/
+# Circle of 등 — 공방작·추정작·모작 여부) 컬럼이 없음(2026-10-17 직접 확인). 이 정보는 개별
+# 작품 페이지에만 렌더링되어 있어, 2026-10-17 834건 수동 재검증에서 쓴 방식을 harvest 단계에
+# 편입(사용자 지시).
+_AUTHOR_RE = re.compile(r'<div class="section__author">\s*<a[^>]*>([^<]+)</a>', re.S)
+_QUALIFIER_RE = re.compile(
+    r"^(workshop of|attributed to|circle of|follower of|school of|after |manner of|style of|"
+    r"copy after|imitator of|studio of|possibly by|probably by|pseudo)", re.I)
+
+
+def _official_attribution(accession):
+    """월터스 개별 작품 페이지에서 공식 attribution 텍스트를 가져온다. 실패 시 None(호출부는
+    캐벗 없이 진행 — fail-closed, 잘못 단정하지 않음)."""
+    try:
+        page_html = requests.get(f"https://art.thewalters.org/object/{accession}/", headers=UA, timeout=20).text
+    except Exception:
+        return None
+    m = _AUTHOR_RE.search(page_html)
+    return html.unescape(m.group(1).strip()) if m else None
 
 
 def _plain(t):
@@ -60,6 +82,7 @@ def from_walters(art_csv, media_csv, creators_csv, geo_of_en):
             "image_credit": "이미지 출처: The Walters Art Museum (CC0 퍼블릭 도메인)",
             "museum_grounding": " ".join(f for f in facts if not f.endswith(": ")),
             "_len": len(text),
+            "_accession": r["AccessionNumber"].strip(),
         })
     # 작가당 3점(문화권 표기뿐인 작자 미상은 문화권당 6점) — 해설이 긴 것 우선
     cnt, kept = {}, []
@@ -68,8 +91,23 @@ def from_walters(art_csv, media_csv, creators_csv, geo_of_en):
         if cnt.get(a["artist_en"], 0) < cap:
             cnt[a["artist_en"]] = cnt.get(a["artist_en"], 0) + 1
             kept.append(a)
+
+    # attribution qualifier(공방작/추정작/모작 등) 확인 — 캡 통과분에만, 요청 수를 줄임
+    def _attach_attribution(a):
+        official = _official_attribution(a["_accession"])
+        if official and _QUALIFIER_RE.match(official) and official.split(" (")[0].strip().lower() != a["artist_en"].strip().lower():
+            marker = f"작가/전통: {a['artist_en']}"
+            if marker in a["museum_grounding"]:
+                a["museum_grounding"] = a["museum_grounding"].replace(
+                    marker, f"{marker} [공식 귀속: {official}, art.thewalters.org/object/{a['_accession']}]", 1)
+        return a
+
+    with ThreadPoolExecutor(max_workers=6) as ex:
+        kept = list(ex.map(_attach_attribution, kept))
+
     for a in kept:
         a.pop("_len", None)
+        a.pop("_accession", None)
     print(f"월터스 회화 후보 {len(kept)}건(상한 적용 전 {len(out)})", file=sys.stderr)
     return kept
 
