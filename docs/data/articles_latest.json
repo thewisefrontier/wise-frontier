@@ -1,5 +1,51 @@
 [
   {
+    "id": 312452,
+    "title_en": "아프리카, 주말 곳곳 뇌우와 이슬비…최고 33도 무더위",
+    "title_ko": "아프리카, 주말 곳곳 뇌우와 이슬비…최고 33도 무더위",
+    "summary_ko": "17일(현지시간) 아프리카 주요국은 지역별로 기온 차가 뚜렷한 가운데 비 소식이 이어지는 주말을 맞이한다. 전체적으로 최저기온은 10도, 최고기온은 33도 분포를 보인다. 토요일 나이지리아와 가나는 각각 부분적으로 흐리고 약한 이슬비가 내리며, 케냐와 남아공에서도 약한 이슬비가 예보되었다.\n\n알제리는 뇌우가 발생하고, 모로코는 안개가 끼는 가운데 이집트와 탄자니아는 부분적으로 흐린 날씨를 보인다. 에티오피아와 앙골라는 흐린 하늘 아래 주말을 시작한다.\n\n일요일에는 기상 변화가 더욱 두드러진다. 나이지리아, 모로코, 가나에는 뇌우가 ",
+    "url": "internal://weather_group_아프리카_weekend20261017",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_아프리카_weekend20261017",
+    "region": "africa",
+    "country": "아프리카",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-17 13:22",
+    "countries": [
+      "나이지리아",
+      "케냐",
+      "남아공",
+      "이집트",
+      "모로코",
+      "알제리",
+      "에티오피아",
+      "가나",
+      "탄자니아",
+      "앙골라"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_nigeria_20261017.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-17T13:22:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-17 13:22",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 312247,
     "title_en": "미 법원, 배우 티모시 버스필드 아동 성범죄 혐의 기소 기각…검찰 위법 행위 인정",
     "title_ko": "미 법원, 배우 티모시 버스필드 아동 성범죄 혐의 기소 기각…검찰 위법 행위 인정",
@@ -2451,51 +2497,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": false
-  },
-  {
-    "id": 311820,
-    "title_en": "아프리카, 폭염과 뇌우 교차…지역별 기온차 뚜렷",
-    "title_ko": "아프리카, 폭염과 뇌우 교차…지역별 기온차 뚜렷",
-    "summary_ko": "16일(현지시간) 아프리카 주요국 수도권의 기온은 최저 11°C에서 최고 32°C 사이의 분포를 보인다. 남아공 프리토리아와 나이지리아 아부자가 최고 32°C를 기록하며 가장 더운 날씨를 보인 반면, 에티오피아 아디스아바바는 최저 11°C, 최고 22°C에 머물러 가장 선선한 기온을 나타냈다. 특히 아디스아바바는 프리토리아보다 최고 기온이 10°C나 낮아 대륙 내에서도 지역별 기온 편차가 크게 나타나고 있다.\n\n나이지리아의 포트하커트와 이바단, 가나의 타말레 지역은 최고 기온이 38°C를 넘어서는 폭염이 관측되었으며, 탄자니아 음완",
-    "url": "internal://weather_group_아프리카_today20261016",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_아프리카_today20261016",
-    "region": "africa",
-    "country": "아프리카",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-16 13:21",
-    "countries": [
-      "나이지리아",
-      "케냐",
-      "남아공",
-      "이집트",
-      "모로코",
-      "알제리",
-      "에티오피아",
-      "가나",
-      "탄자니아",
-      "앙골라"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_nigeria_20261016.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-16T13:21:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-16 13:21",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
   }
 ]
