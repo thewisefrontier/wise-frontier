@@ -1,5 +1,55 @@
 [
   {
+    "id": 313840,
+    "title_en": "트럼프, 대러 제재 면제 강행…젤렌스키 \"스타링크 속도 제한은 계획된 작전\"",
+    "title_ko": "트럼프, 대러 제재 면제 강행…젤렌스키 \"스타링크 속도 제한은 계획된 작전\"",
+    "summary_ko": "도널드 트럼프 미국 대통령이 지난 9월 의회를 통과한 대러시아 제재법의 핵심 조항들을 면제하는 행정명령을 16일(현지시간) 서명했다. 이번 조치로 러시아의 그림자 함대와 고위 인사를 겨냥했던 경제적 압박이 상당 부분 완화됐으며, 러시아산 에너지 수입국에 대한 관세 부과 권한도 행사되지 않게 됐다. 트럼프 행정부는 국내 에너지 가격 안정과 국가 이익을 이유로 들었으나, 민주당과 공화당 양측에서 모두 강력한 반발이 터져 나오고 있다.\n\n볼로디미르 젤렌스키 우크라이나 대통령은 미국의 이번 결정이 러시아의 전쟁 지속력을 높이는 배신 행위라",
+    "url": "internal://cluster_20261018_7ce2d2dd",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "cluster_20261018_7ce2d2dd",
+    "region": "global",
+    "country": "미국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-18 06:13",
+    "countries": [
+      "미국",
+      "우크라이나",
+      "러시아"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_graham_act.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-18T06:13:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-18 06:13",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "src_ids": [
+        587637,
+        587561,
+        587375,
+        587275,
+        587375,
+        587102,
+        586040,
+        585440
+      ]
+    },
+    "image_credit": "이미지 출처: Wikimedia Commons",
+    "continuation_of_id": 312600,
+    "summary_3lines_en": "",
+    "investment_idea_en": "",
+    "noindex": false
+  },
+  {
     "id": 313833,
     "title_en": "콜롬비아 국립박물관 예술품 철거에 반대하는 대규모 시위 발생",
     "title_ko": "콜롬비아 국립박물관 예술품 철거에 반대하는 대규모 시위 발생",
@@ -2866,60 +2916,6 @@
     "is_travel": false,
     "source_published_at": null,
     "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 312168,
-    "title_en": "[국제유가] WTI 배럴당 99달러…중동 공급 차질 지속",
-    "title_ko": "[국제유가] WTI 배럴당 99달러…중동 공급 차질 지속",
-    "summary_ko": "국제유가가 16일(현지시간) 상승했다. 시장 집계에 따르면 WTI 원유 선물은 뉴욕상업거래소(NYMEX)에서 배럴당 98.93달러에 마감했으며, 전일 종가(93.74달러) 대비 5.54%(5.19달러) 올랐다.\n\n브렌트유 역시 상승세를 나타내며 배럴당 109.68달러를 기록했다. 전일 종가(106.65달러) 대비 2.84%(3.03달러) 상승했다.\n\n이 같은 유가 상승은 중동 지역의 지속적인 공급 차질과 주요 산유국의 정책 및 수요 전망 변화가 복합적으로 작용한 결과다. 중동발 공급 불안 요인이 해소되지 않으면서 원유 가격을 끌어올",
-    "url": "internal://oil_price_2026-10-16",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국제유가",
-    "region": "글로벌",
-    "country": "국제",
-    "country_flag": "🛢️",
-    "score": 1,
-    "created_at": "2026-10-17 06:06",
-    "countries": [
-      "미국",
-      "사우디아라비아",
-      "러시아"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/oil_2026_10_16_pid5989284.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-17T06:06:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-17 06:06",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "wti": {
-        "pct": 5.536590569660778,
-        "prev": 93.74,
-        "price": 98.93,
-        "change": 5.190000000000012
-      },
-      "date": "2026-10-16",
-      "brent": {
-        "pct": 2.841068917018285,
-        "prev": 106.65,
-        "price": 109.68,
-        "change": 3.030000000000001
-      },
-      "source": "Yahoo Finance"
-    },
     "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
