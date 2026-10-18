@@ -1088,6 +1088,22 @@
     "updated_at": null
   },
   {
+    "id": "ahold_delhaize",
+    "name": "Koninklijke Ahold Delhaize N.V.",
+    "name_ko": "아홀드 델하이즈",
+    "country": "네덜란드",
+    "country_flag": "🌍",
+    "exchange": "AMS",
+    "ticker": "AD",
+    "sector": "유통",
+    "description": "아홀드 델하이즈는 2016년 네덜란드의 아홀드와 벨기에의 델하이즈 그룹이 합병하여 설립된 글로벌 식료품 유통 기업이다. 유럽과 미국 시장에서 슈퍼마켓과 e커머스 플랫폼을 운영하며 업계 선두권의 지위를 유지하고 있다. 본사는 네덜란드 잔단에 위치해 있다.",
+    "founded_year": 2016,
+    "headquarters": "잔단, 네덜란드",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-10-18 23:07"
+  },
+  {
     "id": "upper_trishuli_1_hydropower",
     "name": "Upper Trishuli-1 Hydropower Project",
     "name_ko": "상부 트리슐리-1 수력발전 프로젝트",
@@ -1232,22 +1248,6 @@
     "updated_at": "2026-07-31 00:33"
   },
   {
-    "id": "vk",
-    "name": "VK Company Limited",
-    "name_ko": "브이케이",
-    "country": "러시아",
-    "country_flag": "🌍",
-    "exchange": "MOEX",
-    "ticker": "VKCO",
-    "sector": "정보기술",
-    "description": "2007년에 설립된 러시아의 대표적인 테크 기업으로, 소셜미디어 플랫폼 브이콘탁테(VKontakte)와 다양한 디지털 서비스를 운영하고 있습니다. 러시아 내에서 가장 영향력 있는 온라인 커뮤니케이션 및 미디어 생태계를 구축하고 있습니다. 자국 시장을 중심으로 소셜 네트워크, 이메일, 게임 등 다양한 인터넷 서비스를 제공합니다.",
-    "founded_year": 2007,
-    "headquarters": "모스크바, 러시아",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-21 19:48"
-  },
-  {
     "id": "vkontakte",
     "name": "VK Company Limited",
     "name_ko": "브이케이",
@@ -1262,6 +1262,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-10-18 17:37"
+  },
+  {
+    "id": "vk",
+    "name": "VK Company Limited",
+    "name_ko": "브이케이",
+    "country": "러시아",
+    "country_flag": "🌍",
+    "exchange": "MOEX",
+    "ticker": "VKCO",
+    "sector": "정보기술",
+    "description": "2007년에 설립된 러시아의 대표적인 테크 기업으로, 소셜미디어 플랫폼 브이콘탁테(VKontakte)와 다양한 디지털 서비스를 운영하고 있습니다. 러시아 내에서 가장 영향력 있는 온라인 커뮤니케이션 및 미디어 생태계를 구축하고 있습니다. 자국 시장을 중심으로 소셜 네트워크, 이메일, 게임 등 다양한 인터넷 서비스를 제공합니다.",
+    "founded_year": 2007,
+    "headquarters": "모스크바, 러시아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-21 19:48"
   },
   {
     "id": "teba",
@@ -2512,22 +2528,6 @@
     "updated_at": "2026-08-09 07:08"
   },
   {
-    "id": "stoneco",
-    "name": "StoneCo Ltd.",
-    "name_ko": "스톤코",
-    "country": "브라질",
-    "country_flag": "🌍",
-    "exchange": "NASDAQ",
-    "ticker": "STNE",
-    "sector": "핀테크",
-    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
-    "founded_year": 2012,
-    "headquarters": "상파울루, 브라질",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-29 20:49"
-  },
-  {
     "id": "stone_co",
     "name": "StoneCo Ltd.",
     "name_ko": "스톤",
@@ -2542,6 +2542,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-22 23:37"
+  },
+  {
+    "id": "stoneco",
+    "name": "StoneCo Ltd.",
+    "name_ko": "스톤코",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "NASDAQ",
+    "ticker": "STNE",
+    "sector": "핀테크",
+    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
+    "founded_year": 2012,
+    "headquarters": "상파울루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-29 20:49"
   },
   {
     "id": "xp_inc",
@@ -5200,22 +5216,6 @@
     "updated_at": "2026-08-14 23:23"
   },
   {
-    "id": "singareni_collieries",
-    "name": "The Singareni Collieries Company Limited",
-    "name_ko": "싱가레니 콜리어리스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "",
-    "sector": "에너지",
-    "description": "싱가레니 콜리어리스는 인도의 국영 탄광 및 에너지 기업으로, 주로 텔랑가나주에서 석탄 채굴 및 화력 발전 사업을 수행하고 있습니다. 1920년에 설립되었으며, 인도 남부 지역의 전력 공급과 산업 성장에 필수적인 에너지 자원을 안정적으로 공급하는 핵심적인 역할을 담당하고 있습니다. 인도 정부와 텔랑가나주 정부가 공동으로 소유하고 있는 대형 민간 및 공공 성격의 기업입니다.",
-    "founded_year": 1920,
-    "headquarters": "하이드라바드, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-30 17:03"
-  },
-  {
     "id": "singareni_collieries_company",
     "name": "The Singareni Collieries Company Limited",
     "name_ko": "싱가레니 콜리어리스",
@@ -5230,6 +5230,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-08 01:12"
+  },
+  {
+    "id": "singareni_collieries",
+    "name": "The Singareni Collieries Company Limited",
+    "name_ko": "싱가레니 콜리어리스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "싱가레니 콜리어리스는 인도의 국영 탄광 및 에너지 기업으로, 주로 텔랑가나주에서 석탄 채굴 및 화력 발전 사업을 수행하고 있습니다. 1920년에 설립되었으며, 인도 남부 지역의 전력 공급과 산업 성장에 필수적인 에너지 자원을 안정적으로 공급하는 핵심적인 역할을 담당하고 있습니다. 인도 정부와 텔랑가나주 정부가 공동으로 소유하고 있는 대형 민간 및 공공 성격의 기업입니다.",
+    "founded_year": 1920,
+    "headquarters": "하이드라바드, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-30 17:03"
   },
   {
     "id": "tata_power",
@@ -6704,22 +6720,6 @@
     "updated_at": null
   },
   {
-    "id": "bank_of_the_philippines_islands",
-    "name": "Bank of the Philippine Islands",
-    "name_ko": "필리핀 제도은행",
-    "country": "필리핀",
-    "country_flag": "🇵🇭",
-    "exchange": "PSE",
-    "ticker": "BPI",
-    "sector": "은행",
-    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 종합 금융 서비스를 제공하며 필리핀 금융 시장에서 높은 신뢰와 견고한 입지를 다지고 있다. 본 기사에서는 공공 인프라 지출 감소 추정을 발표한 주요 금융기관으로 언급되었다.",
-    "founded_year": 1851,
-    "headquarters": "마카티, 필리핀",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-07 13:12"
-  },
-  {
     "id": "bank_of_the_philippine_islands",
     "name": "Bank of the Philippine Islands",
     "name_ko": "필리핀 제도은행",
@@ -6734,6 +6734,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-30 02:38"
+  },
+  {
+    "id": "bank_of_the_philippines_islands",
+    "name": "Bank of the Philippine Islands",
+    "name_ko": "필리핀 제도은행",
+    "country": "필리핀",
+    "country_flag": "🇵🇭",
+    "exchange": "PSE",
+    "ticker": "BPI",
+    "sector": "은행",
+    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 종합 금융 서비스를 제공하며 필리핀 금융 시장에서 높은 신뢰와 견고한 입지를 다지고 있다. 본 기사에서는 공공 인프라 지출 감소 추정을 발표한 주요 금융기관으로 언급되었다.",
+    "founded_year": 1851,
+    "headquarters": "마카티, 필리핀",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-07 13:12"
   },
   {
     "id": "basel_tiles",
