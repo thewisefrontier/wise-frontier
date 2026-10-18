@@ -1,5 +1,51 @@
 [
   {
+    "id": 314077,
+    "title_en": "아프리카, 8도에서 34도 오가는 기온차…일부 지역 비",
+    "title_ko": "아프리카, 8도에서 34도 오가는 기온차…일부 지역 비",
+    "summary_ko": "18일(현지시간) 아프리카 주요국 다음주 날씨는 최저 8도에서 최고 34도 사이의 기온 분포를 보일 것으로 관측된다. 에티오피아에서 최저 8도의 기온이 나타나며 가장 낮은 기온을 기록하겠고, 남아공과 탄자니아는 최고 34도까지 기온이 올라 가장 높은 수치를 나타낸다. 전반적으로 광범위한 기온 차이가 발생하는 가운데, 케냐와 알제리, 그리고 가나 지역에서는 비 소식이 예보되어 있다.\n\n국가별 상세 기온을 살펴보면 나이지리아는 최고 32도와 최저 22도, 케냐는 최고 30도와 최저 16도를 기록한다. 남아공은 최고 34도와 최저 14도",
+    "url": "internal://weather_group_아프리카_weekly20261018",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_아프리카_weekly20261018",
+    "region": "africa",
+    "country": "아프리카",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-18 13:22",
+    "countries": [
+      "나이지리아",
+      "케냐",
+      "남아공",
+      "이집트",
+      "모로코",
+      "알제리",
+      "에티오피아",
+      "가나",
+      "탄자니아",
+      "앙골라"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_nigeria_20261018.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-18T13:22:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-18 13:22",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 314076,
     "title_en": "[주간 가상자산 시황] 비트코인·이더리움 하락 마감…레버리지 포지션 청산 여파",
     "title_ko": "[주간 가상자산 시황] 비트코인·이더리움 하락 마감…레버리지 포지션 청산 여파",
@@ -2285,51 +2331,5 @@
     "summary_3lines_en": "",
     "investment_idea_en": "",
     "noindex": false
-  },
-  {
-    "id": 312452,
-    "title_en": "아프리카, 주말 곳곳 뇌우와 이슬비…최고 33도 무더위",
-    "title_ko": "아프리카, 주말 곳곳 뇌우와 이슬비…최고 33도 무더위",
-    "summary_ko": "17일(현지시간) 아프리카 주요국은 지역별로 기온 차가 뚜렷한 가운데 비 소식이 이어지는 주말을 맞이한다. 전체적으로 최저기온은 10도, 최고기온은 33도 분포를 보인다. 토요일 나이지리아와 가나는 각각 부분적으로 흐리고 약한 이슬비가 내리며, 케냐와 남아공에서도 약한 이슬비가 예보되었다.\n\n알제리는 뇌우가 발생하고, 모로코는 안개가 끼는 가운데 이집트와 탄자니아는 부분적으로 흐린 날씨를 보인다. 에티오피아와 앙골라는 흐린 하늘 아래 주말을 시작한다.\n\n일요일에는 기상 변화가 더욱 두드러진다. 나이지리아, 모로코, 가나에는 뇌우가 ",
-    "url": "internal://weather_group_아프리카_weekend20261017",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_아프리카_weekend20261017",
-    "region": "africa",
-    "country": "아프리카",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-17 13:22",
-    "countries": [
-      "나이지리아",
-      "케냐",
-      "남아공",
-      "이집트",
-      "모로코",
-      "알제리",
-      "에티오피아",
-      "가나",
-      "탄자니아",
-      "앙골라"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_nigeria_20261017.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-17T13:22:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-17 13:22",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
   }
 ]
