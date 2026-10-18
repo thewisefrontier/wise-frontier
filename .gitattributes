@@ -5,6 +5,7 @@
 scripts/*_writer.py filter=git-crypt diff=git-crypt
 scripts/*guard*.py filter=git-crypt diff=git-crypt
 scripts/gemini_summarizer.py filter=git-crypt diff=git-crypt
+scripts/weather_report.py filter=git-crypt diff=git-crypt
 scripts/ai_digest.py filter=git-crypt diff=git-crypt
 scripts/daily_digest.py filter=git-crypt diff=git-crypt
 scripts/backfill_value_add.py filter=git-crypt diff=git-crypt
