@@ -1,0 +1,29 @@
+# git-crypt 암호화 대상(2026-10-18) — 기사 작성·검수 프롬프트와 규칙, 수집·사진 기준은 공개 저장소에서 암호문으로만 보인다.
+# 키: 시크릿 GIT_CRYPT_KEY(Actions가 워크플로 첫 단계에서 unlock), PC는 .git/git-crypt + .env 백업.
+# ⚠️ docs/**·functions/**(Cloudflare가 키 없이 빌드)와 data/*.json(Actions가 계속 커밋 → 암호문은 병합 불가)은 넣지 말 것.
+# 새 작성기(*_writer.py)·가드(*guard*.py)는 이름 패턴으로 자동 포함된다.
+scripts/*_writer.py filter=git-crypt diff=git-crypt
+scripts/*guard*.py filter=git-crypt diff=git-crypt
+scripts/gemini_summarizer.py filter=git-crypt diff=git-crypt
+scripts/ai_digest.py filter=git-crypt diff=git-crypt
+scripts/daily_digest.py filter=git-crypt diff=git-crypt
+scripts/backfill_value_add.py filter=git-crypt diff=git-crypt
+scripts/verify_entities.py filter=git-crypt diff=git-crypt
+scripts/article_reviewer.py filter=git-crypt diff=git-crypt
+scripts/article_store.py filter=git-crypt diff=git-crypt
+scripts/check_transliteration.py filter=git-crypt diff=git-crypt
+scripts/script_leak.py filter=git-crypt diff=git-crypt
+scripts/work_title.py filter=git-crypt diff=git-crypt
+scripts/kr_coverage.py filter=git-crypt diff=git-crypt
+scripts/reverify_held.py filter=git-crypt diff=git-crypt
+scripts/auto_dedup.py filter=git-crypt diff=git-crypt
+scripts/test_script_leak_meta_note.py filter=git-crypt diff=git-crypt
+scripts/test_seeded_image_dedup.py filter=git-crypt diff=git-crypt
+scripts/domestic_kr_fetcher.py filter=git-crypt diff=git-crypt
+scripts/rss_fetcher.py filter=git-crypt diff=git-crypt
+scripts/text_crawl.py filter=git-crypt diff=git-crypt
+sources/*.yaml filter=git-crypt diff=git-crypt
+scripts/one_off/init_prompts.py filter=git-crypt diff=git-crypt
+scripts/one_off/init_digest_prompt.py filter=git-crypt diff=git-crypt
+scripts/one_off/update_writer_rules.py filter=git-crypt diff=git-crypt
+scripts/one_off/update_digest_rules.py filter=git-crypt diff=git-crypt
