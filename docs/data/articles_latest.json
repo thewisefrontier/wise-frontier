@@ -1,5 +1,43 @@
 [
   {
+    "id": 314424,
+    "title_en": "북미, 최저 6도에서 최고 21도 분포",
+    "title_ko": "북미, 최저 6도에서 최고 21도 분포",
+    "summary_ko": "18일(현지시간) 예보된 북미 주요국 날씨 데이터에 따르면, 다음주 월요일부터 금요일까지 해당 지역의 최저기온은 6°C, 최고기온은 21°C의 기온 범위를 나타낼 것으로 집계됐다.\n\n미국은 주간 최저기온 6°C에서 최고기온 21°C 사이의 기온 분포를 보일 것으로 예상되는 등 북미 지역 전반의 주간 기온 흐름이 이와 같이 형성된다.\n\n[미국]\n\n- 워싱턴DC(수도): 한 주 내내 비슷한 기온대를 유지하며 비 소식 없이 대체로 맑겠습니다. [월 흐림(18°/6°) → 화 흐림(21°/11°) → 수 맑음(19°/10°) → 목 맑음(",
+    "url": "internal://weather_group_북미_weekly20261018",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_북미_weekly20261018",
+    "region": "north_america",
+    "country": "북미",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-18 18:11",
+    "countries": [
+      "미국",
+      "캐나다"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_united_states_20261018.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-18T18:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-18 18:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 314108,
     "title_en": "인도 마디아프라데시주서 트럭 돌진…축제 즐기던 순례객 등 14명 사망",
     "title_ko": "인도 사찰 인근 축제 행렬 덮친 트럭…어린이·여성 등 14명 사망",
@@ -2115,44 +2153,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 312879,
-    "title_en": "북미, 토요일 미국 이슬비·캐나다 흐림…일요일 일대 맑음과 구름",
-    "title_ko": "북미, 토요일 미국 이슬비·캐나다 흐림…일요일 일대 맑음과 구름",
-    "summary_ko": "17일(현지시간) 예보된 북미 주요국 주말 날씨는 지역별로 뚜렷한 기온 차와 강수 여부를 보인다. 이번 주말 북미 지역의 최저기온은 0°C에서 최고기온은 17°C 분포를 기록한다. 국가별 수도의 주말 예보에 따르면 미국과 캐나다는 토요일에 각각 다른 기상 상황을 맞이하며, 일요일에는 대체로 안정된 흐름을 나타낸다.\n\n미국의 수도 워싱턴 D.C. 등 미국 지역은 토요일에 이슬비가 내리는 가운데 최고기온 17°C, 최저기온 6°C를 기록하며 강수 확률은 71%에 달한다. 반면 일요일에는 맑은 날씨가 이어지며 최고기온 16°C, 최저기온",
-    "url": "internal://weather_group_북미_weekend20261017",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_북미_weekend20261017",
-    "region": "north_america",
-    "country": "북미",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-17 18:10",
-    "countries": [
-      "미국",
-      "캐나다"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_united_states_20261017.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-17T18:10:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-17 18:10",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
