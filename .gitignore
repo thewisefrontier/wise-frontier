@@ -18,8 +18,8 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
-# Claude Code 개인 설정(권한 규칙 등) - 사람마다 다를 수 있어 커밋 안 함
-.claude/settings.local.json
+# Claude Code 개인 설정/프리뷰 설정 - 사람마다 다를 수 있고 저장소에 둘 필요 없음
+.claude/
 
 # GA4 서비스 계정 키(로컬 테스트용, CI는 GA4_SERVICE_ACCOUNT_JSON 시크릿)
 ga4-key.json
