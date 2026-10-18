@@ -15,6 +15,18 @@ jobs:
       - name: 코드 체크아웃
         uses: actions/checkout@v5
 
+      - name: 암호화 파일 잠금 해제(git-crypt)
+        # 프롬프트·검수 코드는 git-crypt로 암호화돼 있다(2026-10-18) — 키는 시크릿 GIT_CRYPT_KEY.
+        # 암호화 지정(.gitattributes)이 없으면 그냥 통과해서, 도입 전후 어느 쪽에서도 안전하다.
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
+        run: |
+          if ! grep -qs "filter=git-crypt" .gitattributes; then echo "암호화 파일 없음 — 건너뜀"; exit 0; fi
+          sudo apt-get install -y -qq git-crypt >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y -qq git-crypt >/dev/null)
+          printf '%s' "$GIT_CRYPT_KEY" | base64 -d > "$RUNNER_TEMP/gc.key"
+          git-crypt unlock "$RUNNER_TEMP/gc.key"
+          rm -f "$RUNNER_TEMP/gc.key"
+
       - name: Python 설정
         uses: actions/setup-python@v6
         with:
