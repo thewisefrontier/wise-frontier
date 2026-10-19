@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-19 19:17",
+  "updated_at": "2026-10-19 19:29",
   "indices": [
     {
       "name": "S&P 500",
@@ -39,15 +39,15 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 110021.56,
-      "change_pct": -0.82,
+      "price": 110017.2,
+      "change_pct": -0.83,
       "up": false
     },
     {
       "name": "EGX30 (이집트)",
       "symbol": "^CASE30",
-      "price": 51252.3,
-      "change_pct": 0.7,
+      "price": 51341.1,
+      "change_pct": 0.87,
       "up": true
     },
     {
@@ -89,7 +89,7 @@
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
       "price": 16.45,
-      "change_pct": -0.33,
+      "change_pct": -0.34,
       "up": false
     }
   ],
@@ -137,15 +137,15 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 110021.56,
-        "change_pct": -0.82,
+        "price": 110017.2,
+        "change_pct": -0.83,
         "up": false
       },
       {
         "name": "EGX30 (이집트)",
         "symbol": "^CASE30",
-        "price": 51252.3,
-        "change_pct": 0.7,
+        "price": 51341.1,
+        "change_pct": 0.87,
         "up": true
       },
       {
@@ -189,7 +189,7 @@
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
         "price": 16.45,
-        "change_pct": -0.33,
+        "change_pct": -0.34,
         "up": false
       }
     ]
