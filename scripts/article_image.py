@@ -191,6 +191,22 @@ def fetch_wikimedia_image(query: str, allow_artwork: bool = False):
                 continue
             if any(w in categories_lower for w in category_avoid_words):
                 continue
+            # 2026-10-20 실사고(사용자 제보, id=316082 — "프랑스 시위 격화로
+            # 체포 2400명 육박" 2026년 기사에 2005년 프랑스 폭동 때 만들어진
+            # "체포자 수" 꺾은선 그래프가 붙음): 파일명이 "2005france riots
+            # arrests.png"라 제목·분류 차단어("chart"/"graph" 등) 어디에도
+            # 안 걸렸다 — 2005년 사건용으로 만든 그래프인데 "riots"·"arrests"
+            # 키워드만 겹쳐 2026년 전혀 다른 사건 기사에 잘못 붙은 것. 이
+            # 파일의 ImageDescription은 "created by [사용자] for the article
+            # [위키백과 문서]"— 위키백과 에디터가 그 문서 전용으로 직접 그린
+            # 도표라는 뜻이라, 파일명에 chart/graph가 없어도 사진이 아님을
+            # 알 수 있는 일반적인 신호다. 이 패턴이 있으면 제목 필터를
+            # 우회하는 모든 수제 도표·지도·그래프에 똑같이 적용된다.
+            description_lower = html.unescape(
+                _HTML_TAG_RE.sub("", meta.get("ImageDescription", {}).get("value", ""))
+            ).lower()
+            if "created by" in description_lower and "for the article" in description_lower:
+                continue
             license_key = (meta.get("License", {}).get("value") or "").lower()
             restrictions = (meta.get("Restrictions", {}).get("value") or "").strip()
             if restrictions or license_key not in _WIKI_LICENSE_ALLOW:
