@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-19 12:47",
+  "updated_at": "2026-10-19 12:49",
   "indices": [
     {
       "name": "S&P 500",
@@ -25,15 +25,15 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 5706.07,
-      "change_pct": 2.73,
+      "price": 5712.78,
+      "change_pct": 2.85,
       "up": true
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 799.03,
-      "change_pct": 5.02,
+      "price": 799.82,
+      "change_pct": 5.13,
       "up": true
     },
     {
@@ -53,22 +53,22 @@
     {
       "name": "SET (태국)",
       "symbol": "^SET.BK",
-      "price": 1577.99,
-      "change_pct": 0.32,
+      "price": 1576.65,
+      "change_pct": 0.23,
       "up": true
     },
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 4917.7,
-      "change_pct": -5.16,
+      "price": 4918.65,
+      "change_pct": -5.14,
       "up": false
     },
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 5810.28,
-      "change_pct": 0.48,
+      "price": 5806.38,
+      "change_pct": 0.41,
       "up": true
     },
     {
@@ -121,15 +121,15 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 5706.07,
-        "change_pct": 2.73,
+        "price": 5712.78,
+        "change_pct": 2.85,
         "up": true
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 799.03,
-        "change_pct": 5.02,
+        "price": 799.82,
+        "change_pct": 5.13,
         "up": true
       }
     ],
@@ -151,22 +151,22 @@
       {
         "name": "SET (태국)",
         "symbol": "^SET.BK",
-        "price": 1577.99,
-        "change_pct": 0.32,
+        "price": 1576.65,
+        "change_pct": 0.23,
         "up": true
       },
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 4917.7,
-        "change_pct": -5.16,
+        "price": 4918.65,
+        "change_pct": -5.14,
         "up": false
       },
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 5810.28,
-        "change_pct": 0.48,
+        "price": 5806.38,
+        "change_pct": 0.41,
         "up": true
       }
     ],
@@ -205,8 +205,8 @@
     "ACB": {
       "name": "Asia Commercial Joint Stock Bank",
       "symbol": "ACB.VN",
-      "price": 20550.0,
-      "change_pct": -0.24,
+      "price": 20500.0,
+      "change_pct": -0.49,
       "up": false
     }
   }
