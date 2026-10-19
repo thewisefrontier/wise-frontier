@@ -1,5 +1,59 @@
 [
   {
+    "id": 317211,
+    "title_en": "[국제유가] WTI 배럴당 98달러…중동 공급 차질 우려",
+    "title_ko": "[국제유가] WTI 배럴당 98달러…중동 공급 차질 우려",
+    "summary_ko": "국제유가가 19일(현지시간) 상승했다. 시장 집계에 따르면 WTI 원유 선물은 뉴욕상업거래소(NYMEX)에서 배럴당 98.27달러에 거래를 마쳤으며, 전일 종가(95.09달러) 대비 3.34%(3.18달러) 올랐다.\n\n브렌트유 역시 상승세를 나타냈다. 브렌트유는 배럴당 109.23달러로 마감되었고, 전일 종가(106.06달러) 대비 2.99%(3.17달러) 상승했다.\n\n이번 유가 상승은 중동 지역의 지정학적 리스크가 지속되는 가운데 공급 차질 우려가 커졌기 때문이다. 외신 보도에 따르면 중동 내 원유 생산 및 수송 차질이 지속될 가",
+    "url": "internal://oil_price_2026-10-19",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국제유가",
+    "region": "글로벌",
+    "country": "국제",
+    "country_flag": "🛢️",
+    "score": 1,
+    "created_at": "2026-10-20 06:08",
+    "countries": [
+      "미국",
+      "사우디아라비아",
+      "러시아"
+    ],
+    "is_published": true,
+    "image_url": "",
+    "view_count": 0,
+    "first_published_at": "2026-10-20T06:08:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-20 06:08",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "wti": {
+        "pct": 3.344200231359756,
+        "prev": 95.09,
+        "price": 98.27,
+        "change": 3.1799999999999926
+      },
+      "date": "2026-10-19",
+      "brent": {
+        "pct": 2.9888742221384135,
+        "prev": 106.06,
+        "price": 109.23,
+        "change": 3.1700000000000017
+      },
+      "source": "Yahoo Finance"
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 317208,
     "title_en": "한국, 서울·부산·구름 많고 비…전국 11~24도",
     "title_ko": "한국, 서울·부산·구름 많고 비…전국 11~24도",
@@ -2949,179 +3003,6 @@
     "update_log": [
       {
         "timestamp": "2026-10-19 06:24",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 314766,
-    "title_en": "프랑스 전역 시위 격화로 855명 체포…파리 등지서 약탈 및 시설 피해 발생",
-    "title_ko": "프랑스 전역 시위 격화로 855명 체포…파리 등지서 약탈 및 시설 피해 발생",
-    "summary_ko": "[업데이트]\n■ 10월 19일 05:46 — 체포된 인원은 총 1,200명으로 늘어났으며, 시위대와의 충돌 과정에서 부상을 입은 경찰관의 수도 150명에 달하는 것으로 집계되었다. 사태가 악화일로를 걷는 가운데 마크롱 대통령의 행보를 둘러싼 논란도 거세지고 있다. 시위가 격화되던 당시 마크롱 대통령이 엘튼 존의 콘서트장을 방문해 즐거운 시간을 보내는 모습이 포착되면서, 국가적 위기 상황에서 대통령의 안일한 대응이 부적절했다는 비판이 정치권과 대중 사이에서 확산하고 있다.\n\n이와 함께 언론의 보도 태도를 향한 비판 여론도 들끓고 있다",
-    "url": "internal://realtrend_French_riots_and_Limoges_2026101822",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "realtrend_French_riots_and_Lim",
-    "region": "europe",
-    "country": "프랑스",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-10-19 05:46",
-    "countries": [
-      "프랑스"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_4506339.jpg",
-    "view_count": 1,
-    "first_published_at": "2026-10-18T22:57:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-18 22:57",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-10-19 05:46",
-        "note": "체포자 1,200명으로 늘고 마크롱 대통령 비판 확산."
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 315396,
-    "title_en": "젤렌스키 \"미국과 정보 공유 재개\"…스타실드 제한 논란은 지속",
-    "title_ko": "젤렌스키 \"미국과 정보 공유 재개\"…스타실드 제한 논란은 지속",
-    "summary_ko": "볼로디미르 젤렌스키 우크라이나 대통령은 18일(현지시간) 미국 정부가 일시적으로 중단했던 대우크라이나 정보 공유를 재개했다고 밝혔다. 우크라이나는 러시아의 탄도미사일 공격을 탐지하기 위해 미국 측 정보에 의존해왔으며, 젤렌스키 대통령은 NBC 방송의 밋 더 프레스(Meet the Press)에 출연해 정보 공유가 중단되었다가 다시 정상화되었다고 설명했다.\n\n그러나 젤렌스키 대통령은 미국 정부가 러시아산 디젤 수입 계약을 체결하고 이번 주 시행 예정이었던 대러시아 제재를 유예한 조치가 우크라이나에 타격을 줄 것이라고 비판했다. 그는 ",
-    "url": "internal://cluster_20261019_6311ff1a",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "cluster_20261019_6311ff1a",
-    "region": "global",
-    "country": "우크라이나",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-19 05:39",
-    "countries": [
-      "우크라이나",
-      "미국",
-      "러시아"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_6234694.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-19T05:39:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-19 05:39",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        607733,
-        606993,
-        607079,
-        605659,
-        605660,
-        605661
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": false
-  },
-  {
-    "id": 315393,
-    "title_en": "브라질 대선 결선 투표 일주일 앞두고 룰라-플라비우 볼소나루 첫 TV 토론 격돌",
-    "title_ko": "브라질 대선 결선 투표 일주일 앞두고 룰라-플라비우 보우소나루 첫 TV 토론 격돌",
-    "summary_ko": "브라질 대통령 선거 결선 투표를 일주일 앞두고 루이스 이나시우 룰라 다시우바 대통령과 야당 후보인 플라비우 보우소나루 상원의원이 19일(현지시간) 첫 TV 토론에서 정면으로 맞붙는다. 이번 토론은 상파울루의 TV 반드(TV Band) 스튜디오에서 진행되며, 지난 4일 열린 1차 투표 이후 양측 후보가 처음으로 마주하는 자리라는 점에서 대선 승패를 가를 핵심 분수령으로 평가받는다.\n\n지난 1차 투표에서는 자이르 보우소나루 전 대통령의 아들인 플라비우 보우소나루 후보가 47%의 득표율로 45%를 기록한 룰라 대통령을 앞섰다. 당초 여론",
-    "url": "internal://cluster_20261019_9d5bfbd6",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "cluster_20261019_9d5bfbd6",
-    "region": "latin_america",
-    "country": "브라질",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-19 05:38",
-    "countries": [
-      "브라질"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_2586565.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-19T05:38:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-19 05:38",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        608253,
-        608385,
-        607756,
-        606286,
-        606166,
-        605654,
-        605262
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": false
-  },
-  {
-    "id": 315383,
-    "title_en": "한국, 전국·맑고 흐린 날씨 엇갈려…부산 비",
-    "title_ko": "한국, 전국·맑고 흐린 날씨 엇갈려…부산 비",
-    "summary_ko": "19일 한국의 날씨는 전국이 대체로 맑고 구름 많은 가운데 남부지방과 제주도를 중심으로 흐리고 비가 내리는 날씨를 보이겠다. 기상청에 따르면 오늘 전국 최저기온은 11도, 최고기온은 24도로 예보되었으며, 현재 기상 특보는 발효되지 않은 상태다.\n\n서울은 오전과 오후 모두 맑은 날씨가 이어지겠으며, 최저기온 11도, 최고기온 19도를 기록하겠다. 서울의 오전과 오후 강수확률은 모두 20%이며, 최대풍속은 9km/h로 잔잔하겠다.\n\n남부지방과 제주도의 경우 지역별로 흐린 날씨와 함께 비 소식이 이어진다. 부산은 오전과 오후 모두 흐리",
-    "url": "internal://weather_한국_today20261019",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_한국_today20261019",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-19 05:23",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20261019.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-19T05:23:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-19 05:23",
         "note": "최초 게시"
       }
     ],
