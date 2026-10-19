@@ -1,5 +1,71 @@
 [
   {
+    "id": 317206,
+    "title_en": "[국내유가] 휘발유 리터당 1856원…전국 평균 가격 소폭 하락세 기록",
+    "title_ko": "[국내유가] 휘발유 리터당 1856원…전국 평균 가격 소폭 하락세 기록",
+    "summary_ko": "한국석유공사 오피넷이 20일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1856원으로 집계됐다. 이는 전일 대비 0.13원 내린 수치다.\n\n이날 함께 공개된 경유는 리터당 1842.03원으로 전일보다 0.59원 하락했다. LPG 부탄 역시 리터당 1143.73원을 기록하며 전일 대비 0.13원 내렸다. 모든 주요 유종의 가격이 전일 대비 소폭 내림세를 보였다.\n\n오피넷에 따르면 유가 변동은 국제시세와 정유사 공급가격을 비롯해 관련 업계의 유통 구조에 영향을 받는 것으로 파악된다. 주유소협회는 앞서 기름값 변동의",
+    "url": "internal://opinet_price_2026-10-20",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-10-20 05:12",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "",
+    "view_count": 0,
+    "first_published_at": "2026-10-20T05:12:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-20 05:12",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-10-20",
+      "prices": {
+        "B027": {
+          "diff": -0.13,
+          "name": "휘발유",
+          "price": 1856.11
+        },
+        "B034": {
+          "diff": 0.51,
+          "name": "고급휘발유",
+          "price": 2396.16
+        },
+        "C004": {
+          "diff": -0.18,
+          "name": "실내등유",
+          "price": 1571.77
+        },
+        "D047": {
+          "diff": -0.59,
+          "name": "경유",
+          "price": 1842.03
+        },
+        "K015": {
+          "diff": -0.13,
+          "name": "LPG(부탄)",
+          "price": 1143.73
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 317203,
     "title_en": "The Turn of the Screw",
     "title_ko": "[오늘의 책] 헨리 제임스의 『나사의 회전』, 모호함으로 인간 심리를 파고든 고딕 공포의 고전",
@@ -2353,13 +2419,17 @@
       "프랑스"
     ],
     "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_france_riots.png",
+    "image_url": "",
     "view_count": 1,
     "first_published_at": "2026-10-19T12:36:00",
     "update_log": [
       {
         "timestamp": "2026-10-19 12:36",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-10-20 05:06",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -2380,7 +2450,7 @@
         609518
       ]
     },
-    "image_credit": "이미지 출처: Wikimedia Commons",
+    "image_credit": "",
     "continuation_of_id": 314766,
     "summary_3lines_en": "",
     "investment_idea_en": "",
@@ -3022,72 +3092,6 @@
     "is_travel": false,
     "source_published_at": null,
     "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 315382,
-    "title_en": "[국내유가] 휘발유 리터당 1856원…전일 대비 소폭 하락",
-    "title_ko": "[국내유가] 휘발유 리터당 1856원…전일 대비 소폭 하락",
-    "summary_ko": "한국석유공사 오피넷이 19일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1856원으로 집계됐다. 이날 오피넷 공개 데이터에 따르면 휘발유 가격은 리터당 1856.28원으로 전일 대비 0.01원 내려 하락세를 나타냈다. 반면 경유는 리터당 1842.21원으로 전일 대비 0.16원 올랐으며, LPG 부탄은 리터당 1143.81원으로 전일 대비 0.03원 하락했다.\n\n이 같은 유가 변동은 국제유가 흐름과 정유사 공급가격 조정 등이 복합적으로 작용한 결과로 분석된다. 최근 국제 석유시장의 가격 변동성과 정유사의 도매가",
-    "url": "internal://opinet_price_2026-10-19",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국내유가",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "🇰🇷",
-    "score": 1,
-    "created_at": "2026-10-19 05:11",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_10_19_pid5432002.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-19T05:11:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-19 05:11",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "date": "2026-10-19",
-      "prices": {
-        "B027": {
-          "diff": -0.01,
-          "name": "휘발유",
-          "price": 1856.28
-        },
-        "B034": {
-          "diff": 0.24,
-          "name": "고급휘발유",
-          "price": 2394.86
-        },
-        "C004": {
-          "diff": -0.14,
-          "name": "실내등유",
-          "price": 1571.71
-        },
-        "D047": {
-          "diff": 0.16,
-          "name": "경유",
-          "price": 1842.21
-        },
-        "K015": {
-          "diff": -0.03,
-          "name": "LPG(부탄)",
-          "price": 1143.81
-        }
-      }
-    },
     "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
