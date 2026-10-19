@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-20 07:11",
+  "updated_at": "2026-10-20 07:34",
   "indices": [
     {
       "name": "S&P 500",
@@ -89,7 +89,7 @@
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
       "price": 16.41,
-      "change_pct": -0.58,
+      "change_pct": -0.62,
       "up": false
     }
   ],
@@ -189,25 +189,9 @@
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
         "price": 16.41,
-        "change_pct": -0.58,
+        "change_pct": -0.62,
         "up": false
       }
     ]
-  },
-  "company_prices": {
-    "ANTM": {
-      "name": "Aneka Tambang Tbk",
-      "symbol": "ANTM.JK",
-      "price": 2480.0,
-      "change_pct": -2.75,
-      "up": false
-    },
-    "ACB": {
-      "name": "Asia Commercial Joint Stock Bank",
-      "symbol": "ACB.VN",
-      "price": 20250.0,
-      "change_pct": -1.7,
-      "up": false
-    }
   }
 }
