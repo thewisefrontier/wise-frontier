@@ -49,6 +49,16 @@ jobs:
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
 
+      # Aiven 무료 한도(디스크 1GB — 차면 읽기 전용, 연결 20) 감시. 경고 60%·위험 75%면
+      # 관리자 텔레그램 알림, 위험이면 실패로 표시(2026-10-20, Supabase 402 차단 재발 방지).
+      - name: DB 용량·연결 점검 (Aiven 한도)
+        if: always()
+        run: python scripts/db_capacity_check.py
+        env:
+          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
+
       # 고PV 기사 패턴 분석용 실측 PV 적재(GA4 → article_pv_daily). 최근 3일 덮어쓰기.
       - name: 기사별 PV 수집 (GA4)
         run: python scripts/pv_stats.py
