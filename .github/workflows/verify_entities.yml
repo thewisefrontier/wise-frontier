@@ -33,7 +33,7 @@ jobs:
         with:
           aiven-uri: ${{ secrets.AIVEN_SERVICE_URI }}
           jwt-secret: ${{ secrets.PGRST_JWT_SECRET }}
-          pool: "2"
+          pool: "1"
 
       - name: Python 설정
         uses: actions/setup-python@v6
