@@ -115,7 +115,7 @@ select string_agg(pg_get_functiondef(p.oid) || ';', E'\n\n' order by p.proname)
 from pg_proc p join pg_namespace n on n.oid=p.pronamespace
 where n.nspname='public' and p.prokind in ('f','p')
   and not exists (select 1 from pg_depend d where d.objid=p.oid and d.deptype='e')
-  and p.proname <> all (%s)
+  and p.proname not in (%s)
 """
 
 TRIGGER_SQL = r"""
@@ -227,7 +227,20 @@ def main():
     dcur.execute("SET statement_timeout = 0")
     dcur.execute(one(scur, CONSTRAINT_INDEX_SQL))
     dst.commit()
+    finish(src, dst, tables, src_counts)
 
+
+def source_counts(scur, tables):
+    """[5]부터 다시 돌릴 때(migrate_supabase_to_aiven_finish.py) 복사 때와 같은 조건으로 원본 건수를 다시 센다."""
+    counts = {}
+    for t in tables:
+        counts[t] = one(scur, f"select count(*) from public.{t} where {source_filter(t)}")
+    return counts
+
+
+def finish(src, dst, tables, src_counts):
+    scur, dcur = src.cursor(), dst.cursor()
+    dcur.execute("SET statement_timeout = 0")
     print("[5] 함수·트리거")
     dcur.execute(one(scur, FUNC_SQL % ", ".join(f"'{f}'" for f in EXCLUDE_FUNCS)))
     scur.execute(TRIGGER_SQL)

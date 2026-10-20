@@ -29,6 +29,13 @@ jobs:
           git-crypt unlock "$RUNNER_TEMP/gc.key"
           rm -f "$RUNNER_TEMP/gc.key"
 
+      - name: Aiven PostgREST 기동(Supabase 이탈, 2026-10-20)
+        uses: ./.github/actions/aiven-postgrest
+        with:
+          aiven-uri: ${{ secrets.AIVEN_SERVICE_URI }}
+          jwt-secret: ${{ secrets.PGRST_JWT_SECRET }}
+          pool: "2"
+
       - uses: actions/setup-python@v6
         with:
           python-version: '3.11'

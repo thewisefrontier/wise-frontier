@@ -1,0 +1,65 @@
+name: Aiven PostgREST (local)
+description: >
+  2026-10-20 Supabase 이탈(무료 플랜 이그레스 초과로 공개 REST 402). 이 작업 안에서만 PostgREST를
+  띄워 Aiven에 붙이고, nginx로 /rest/v1/ 접두사를 벗겨 넘긴다 — 스크립트들은 지금처럼
+  {SUPABASE_URL}/rest/v1/... 를 호출하면 된다(코드 수정 없음). 외부에 노출되지 않는 일회성
+  프로세스라 별도 호스팅·슬립·계정이 필요 없다.
+  시크릿 SUPABASE_URL=http://127.0.0.1:8080, SUPABASE_SERVICE_KEY=JWT(role=Aiven 접속 계정,
+  PGRST_JWT_SECRET로 서명)로 바꿔 두는 것이 전제.
+inputs:
+  aiven-uri:
+    description: Aiven 접속 문자열(secrets.AIVEN_SERVICE_URI)
+    required: true
+  jwt-secret:
+    description: PostgREST JWT 서명 비밀(secrets.PGRST_JWT_SECRET)
+    required: true
+  pool:
+    description: Aiven 연결 수(Aiven 무료 max_connections=20을 여러 워크플로·Hyperdrive가 나눠 씀)
+    required: false
+    default: "2"
+runs:
+  using: composite
+  steps:
+    - name: PostgREST 기동 (Aiven)
+      shell: bash
+      env:
+        PGRST_DB_URI: ${{ inputs.aiven-uri }}
+        PGRST_JWT_SECRET: ${{ inputs.jwt-secret }}
+        PGRST_DB_POOL: ${{ inputs.pool }}
+      run: |
+        set -euo pipefail
+        VER=v14.18
+        curl -fsSL -o "$RUNNER_TEMP/pgrst.tar.xz" \
+          "https://github.com/PostgREST/postgrest/releases/download/${VER}/postgrest-${VER}-linux-static-x86-64.tar.xz"
+        tar -xJf "$RUNNER_TEMP/pgrst.tar.xz" -C "$RUNNER_TEMP"
+        # Supabase와 같은 동작: 응답 행 상한 1000, public 스키마.
+        # 익명 역할도 접속 계정으로 둔다 — 이 프로세스는 127.0.0.1에서만 열린다.
+        ROLE=$(python3 -c "import os,urllib.parse as u;print(u.urlparse(os.environ['PGRST_DB_URI']).username)")
+        PGRST_DB_SCHEMAS=public PGRST_DB_ANON_ROLE="$ROLE" PGRST_DB_MAX_ROWS=1000 \
+        PGRST_SERVER_HOST=127.0.0.1 PGRST_SERVER_PORT=3000 PGRST_DB_POOL_ACQUISITION_TIMEOUT=30 \
+          nohup "$RUNNER_TEMP/postgrest" > "$RUNNER_TEMP/postgrest.log" 2>&1 &
+        command -v nginx >/dev/null || sudo apt-get install -y -qq nginx >/dev/null
+        sudo tee /etc/nginx/conf.d/pgrst.conf >/dev/null <<'NGINX'
+        server {
+          listen 127.0.0.1:8080;
+          client_max_body_size 64m;
+          location /rest/v1/ {
+            proxy_pass http://127.0.0.1:3000/;
+            proxy_read_timeout 180s;
+            proxy_set_header Host $host;
+          }
+        }
+        NGINX
+        sudo rm -f /etc/nginx/sites-enabled/default
+        sudo nginx -t -q && (sudo systemctl restart nginx || sudo nginx)
+        # 스키마 캐시 적재가 Aiven(1 vCPU) 부하·동시 기동에 따라 13초~30초 넘게 걸린다
+        # (2026-10-20 실측: 동시에 두 작업이 뜨자 30초 안에 못 끝나 유가 작업 1건 실패) → 150초까지 기다린다.
+        for i in $(seq 1 150); do
+          if curl -fsS -o /dev/null "http://127.0.0.1:8080/rest/v1/settings?limit=1" 2>/dev/null; then
+            echo "PostgREST 준비 완료(${i}초)"; break
+          fi
+          sleep 1
+          if [ "$i" = 150 ]; then echo "::error::PostgREST 기동 실패"; tail -20 "$RUNNER_TEMP/postgrest.log"; exit 1; fi
+        done
+        # db.py의 Aiven 이중 쓰기 미러를 끈다 — 이제 Aiven이 원본이라 같은 행을 또 쓰게 된다.
+        echo "AIVEN_IS_PRIMARY=1" >> "$GITHUB_ENV"

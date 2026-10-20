@@ -70,6 +70,13 @@ jobs:
           git-crypt unlock "$RUNNER_TEMP/gc.key"
           rm -f "$RUNNER_TEMP/gc.key"
 
+      - name: Aiven PostgREST 기동(Supabase 이탈, 2026-10-20)
+        uses: ./.github/actions/aiven-postgrest
+        with:
+          aiven-uri: ${{ secrets.AIVEN_SERVICE_URI }}
+          jwt-secret: ${{ secrets.PGRST_JWT_SECRET }}
+          pool: "3"
+
       - name: Python 설정
         uses: actions/setup-python@v6
         with:
@@ -277,6 +284,13 @@ jobs:
           git-crypt unlock "$RUNNER_TEMP/gc.key"
           rm -f "$RUNNER_TEMP/gc.key"
 
+      - name: Aiven PostgREST 기동(Supabase 이탈, 2026-10-20)
+        uses: ./.github/actions/aiven-postgrest
+        with:
+          aiven-uri: ${{ secrets.AIVEN_SERVICE_URI }}
+          jwt-secret: ${{ secrets.PGRST_JWT_SECRET }}
+          pool: "2"
+
       - name: Python 설정
         uses: actions/setup-python@v6
         with:
@@ -375,6 +389,13 @@ jobs:
             echo "60분 이내 -> 이번 실행은 작업 없이 통과(success)"
             echo "skip=true" >> "$GITHUB_OUTPUT"
           fi
+
+      - name: Aiven PostgREST 기동(Supabase 이탈, 2026-10-20)
+        uses: ./.github/actions/aiven-postgrest
+        with:
+          aiven-uri: ${{ secrets.AIVEN_SERVICE_URI }}
+          jwt-secret: ${{ secrets.PGRST_JWT_SECRET }}
+          pool: "3"
 
       - name: Python 설정
         if: steps.guard.outputs.skip != 'true'
@@ -523,6 +544,31 @@ jobs:
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
           IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
           UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
+
+      - name: 일별 조회수 스냅샷 (Supabase pg_cron 대체, 2026-10-20)
+        # 원래 Supabase pg_cron이 매일 00:05 KST에 take_view_snapshot()을 불렀다. 그 날짜 첫
+        # 사이클에서 한 번만 찍어 "그날 시작 시점 누적 조회수" 의미를 그대로 지킨다
+        # (매 사이클 덮어쓰면 daily_views()의 일별 증감이 하루씩 밀린다).
+        if: steps.guard.outputs.skip != 'true'
+        continue-on-error: true
+        run: |
+          python - <<'PY'
+          import os, requests
+          from datetime import datetime, timedelta, timezone
+          base = os.environ["SUPABASE_URL"].rstrip("/") + "/rest/v1"
+          key = os.environ["SUPABASE_SERVICE_KEY"]
+          h = {"apikey": key, "Authorization": f"Bearer {key}", "Content-Type": "application/json"}
+          today = datetime.now(timezone(timedelta(hours=9))).date().isoformat()
+          r = requests.get(f"{base}/view_snapshots", headers=h, params={"select": "article_id", "snap_date": f"eq.{today}", "limit": "1"}, timeout=30)
+          if r.ok and not r.json():
+              r2 = requests.post(f"{base}/rpc/take_view_snapshot", headers=h, json={}, timeout=120)
+              print("스냅샷:", r2.status_code, r2.text[:80])
+          else:
+              print("오늘 스냅샷 이미 있음 — 스킵" if r.ok else f"조회 실패 {r.status_code}")
+          PY
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
 
       - name: 웹사이트 데이터 내보내기
         if: steps.guard.outputs.skip != 'true'

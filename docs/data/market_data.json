@@ -193,5 +193,21 @@
         "up": false
       }
     ]
+  },
+  "company_prices": {
+    "ANTM": {
+      "name": "Aneka Tambang Tbk",
+      "symbol": "ANTM.JK",
+      "price": 2480.0,
+      "change_pct": -2.75,
+      "up": false
+    },
+    "ACB": {
+      "name": "Asia Commercial Joint Stock Bank",
+      "symbol": "ACB.VN",
+      "price": 20250.0,
+      "change_pct": -1.7,
+      "up": false
+    }
   }
 }

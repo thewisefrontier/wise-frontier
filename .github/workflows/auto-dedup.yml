@@ -58,6 +58,13 @@ jobs:
             echo "skip=true" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Aiven PostgREST 기동(Supabase 이탈, 2026-10-20)
+        uses: ./.github/actions/aiven-postgrest
+        with:
+          aiven-uri: ${{ secrets.AIVEN_SERVICE_URI }}
+          jwt-secret: ${{ secrets.PGRST_JWT_SECRET }}
+          pool: "2"
+
       - name: Python 설정
         if: steps.guard.outputs.skip != 'true'
         uses: actions/setup-python@v6
@@ -75,6 +82,15 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
+          # 통합 재작성(옛 Supabase Edge Function merge-articles를 auto_dedup.py로 이식, 2026-10-20)
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
+          GEMINI_API_KEY_4: ${{ secrets.GEMINI_API_KEY_4 }}
+          GEMINI_API_KEY_5: ${{ secrets.GEMINI_API_KEY_5 }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          NEWSFINAL_CONFIG_D1_ID: ${{ secrets.NEWSFINAL_CONFIG_D1_ID }}
 
       - name: 웹사이트 데이터 내보내기
         if: steps.guard.outputs.skip != 'true'
