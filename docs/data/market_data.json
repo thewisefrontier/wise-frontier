@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-20 21:28",
+  "updated_at": "2026-10-20 21:59",
   "indices": [
     {
       "name": "S&P 500",
@@ -39,9 +39,9 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 108901.74,
-      "change_pct": -0.09,
-      "up": false
+      "price": 109312.9,
+      "change_pct": 0.29,
+      "up": true
     },
     {
       "name": "EGX30 (이집트)",
@@ -74,15 +74,15 @@
     {
       "name": "USD/NGN",
       "symbol": "USDNGN=X",
-      "price": 1325.04,
-      "change_pct": -0.59,
+      "price": 1328.56,
+      "change_pct": -0.32,
       "up": false
     },
     {
       "name": "USD/KES",
       "symbol": "USDKES=X",
-      "price": 129.82,
-      "change_pct": 0.62,
+      "price": 129.8,
+      "change_pct": 0.6,
       "up": true
     },
     {
@@ -137,9 +137,9 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 108901.74,
-        "change_pct": -0.09,
-        "up": false
+        "price": 109312.9,
+        "change_pct": 0.29,
+        "up": true
       },
       {
         "name": "EGX30 (이집트)",
@@ -174,15 +174,15 @@
       {
         "name": "USD/NGN",
         "symbol": "USDNGN=X",
-        "price": 1325.04,
-        "change_pct": -0.59,
+        "price": 1328.56,
+        "change_pct": -0.32,
         "up": false
       },
       {
         "name": "USD/KES",
         "symbol": "USDKES=X",
-        "price": 129.82,
-        "change_pct": 0.62,
+        "price": 129.8,
+        "change_pct": 0.6,
         "up": true
       },
       {
