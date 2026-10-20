@@ -11,16 +11,15 @@
 //       클라가 wrapper를 덮어쓰므로 SSR과 클라 결과는 거의 동일하며,
 //       별도 이중렌더 가드는 불필요(가드를 넣으면 위 인터랙션이 스킵됨).
 //
-// 데이터: article.html 상단 상수와 동일한 anon(공개 읽기전용) 값 재사용.
-//         원하면 Pages 환경변수로 분리 가능(env.SUPABASE_URL 등).
+// 데이터: 2026-10-20 Supabase 이탈 후 Hyperdrive(env.HYPERDRIVE) → Aiven 직접 조회(server/pgrest.js).
 
 import { publicUpdateLog } from '../docs/js/update-log-filter.js';
 import { imageCreditLabel } from '../docs/js/image-credit.js';
 import { esc } from '../docs/js/esc.js';
-import { fetchRelatedTimeline, relatedTimelineHtml } from '../docs/js/related-timeline.js';
+import { relatedTimelineHtml } from '../docs/js/related-timeline.js';
+// 2026-10-20 Supabase 이탈 — Hyperdrive(env.HYPERDRIVE)로 Aiven을 직접 조회한다.
+import { db, fetchArticle, fetchRelated } from '../server/pgrest.js';
 
-const SUPABASE_URL = 'https://fotdngseksqaghvtcvqh.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_rT3kSEAAdM0DJlDW5fEWww_M37h6dDW';
 const SITE = 'https://newsfinal.co.kr';
 
 const REGION_KO = {
@@ -247,32 +246,13 @@ export async function onRequestGet(context) {
     });
   }
 
+  const sql = db(env);
   try {
-    // Supabase 서버 조회 (is_published=true 1건)
-    let a = null;
-    const apiUrl = `${SUPABASE_URL}/rest/v1/articles?id=eq.${encodeURIComponent(id)}&is_published=eq.true&select=*`;
-    // Worker의 fetch()는 대상 서버 응답의 Cache-Control에 따라 Cloudflare 엣지에
-    // 캐시될 수 있다 — 이 응답에 실어 보내는 no-store 헤더는 우리가 브라우저에
-    // 주는 응답에만 적용되고, 이 서브리퀘스트 자체와는 무관하다. 그 결과 기사가
-    // 갱신돼도 낡은 캐시가 한동안 노출되는 문제가 있었다(실사고: id=63237).
-    // 이 사안의 흐름(관련 기사)은 기사 조회와 병렬로 — 실패해도 빈 배열이라 렌더에 영향 없음
-    const relatedP = fetchRelatedTimeline(SUPABASE_URL, SUPABASE_ANON_KEY, id);
-    const dbRes = await fetch(apiUrl, { headers: { apikey: SUPABASE_ANON_KEY }, cache: 'no-store' });
-
-    // ⚠️ 실사고(2026-08-16): dbRes.ok가 false인 걸 "기사 없음"과 똑같이 취급해
-    // 404를 내리고 있었다 — Supabase 일시 오류(레이트리밋·타임아웃 등)로 멀쩡한
-    // 기사가 순간적으로 "없는 페이지"로 신고되는 버그. "확실히 없음"과 "일시적으로
-    // 조회 실패"는 구분해야 한다 — 후자는 503(+Retry-After)로 응답해 크롤러가
-    // 나중에 재시도하게 해야지, 확정적 404/소프트 200으로 잘못 신고하면 안 된다.
-    if (!dbRes.ok) {
-      return new Response(shell.body, {
-        status: 503,
-        headers: { 'content-type': 'text/html; charset=utf-8', 'retry-after': '120' },
-      });
-    }
-
-    const rows = await dbRes.json();
-    a = rows[0] || null;
+    // 공개 기사 1건(is_published=true) + 이 사안의 흐름(관련 기사)을 병렬로.
+    // ⚠️ 실사고(2026-08-16): "확실히 없음"(404)과 "일시적으로 조회 실패"(503+Retry-After)를
+    // 구분한다 — DB 오류는 아래 catch로 가서 503이 된다(크롤러가 나중에 재시도).
+    const relatedP = fetchRelated(sql, id);
+    const a = await fetchArticle(sql, id);
 
     // 기사 없음/미게시 → 404 상태로 셸 반환(크롤러에 not found 신호)
     if (!a) {
@@ -337,5 +317,7 @@ export async function onRequestGet(context) {
         'x-ssr-error': String(e && e.message || e).slice(0, 150),
       },
     });
+  } finally {
+    context.waitUntil(sql.end());
   }
 }
