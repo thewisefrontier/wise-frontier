@@ -44,10 +44,12 @@ export function db(env) {
 
 async function columns(sql) {
   if (columnCache) return columnCache;
-  const rows = await sql`select table_name, column_name, data_type from information_schema.columns
-                         where table_schema = 'public' and table_name in ${sql(Object.keys(TABLES))}`;
+  // 타입은 format_type(실제 SQL 타입명, 예: boolean·text[]·jsonb)으로 — 값을 $n::text로 받아 이 타입으로 바꾼다.
+  const rows = await sql`select c.relname as table_name, a.attname as column_name, format_type(a.atttypid, a.atttypmod) as sqltype
+                         from pg_attribute a join pg_class c on c.oid = a.attrelid join pg_namespace n on n.oid = c.relnamespace
+                         where n.nspname = 'public' and c.relname in ${sql(Object.keys(TABLES))} and a.attnum > 0 and not a.attisdropped`;
   const m = {};
-  for (const r of rows) (m[r.table_name] ||= new Map()).set(r.column_name, r.data_type);
+  for (const r of rows) (m[r.table_name] ||= new Map()).set(r.column_name, r.sqltype);
   columnCache = m;
   return m;
 }
@@ -79,12 +81,16 @@ function condition(cols, col, expr, params) {
   const op = expr.slice(0, dot), val = expr.slice(dot + 1);
   const c = q(col);
   let sqlPart;
+  // ⚠️ 값은 반드시 $n::text로 받아 SQL에서 컬럼 타입으로 바꾼다. 그냥 $n으로 두면 postgres.js가 서버가 알려준
+  // 타입(boolean 등)의 변환기로 문자열을 직렬화하는데, 불리언 변환기는 JS true가 아니면 전부 'f'로 보내
+  // is_published=eq.true가 조용히 0건이 됐다(2026-10-20 배포 직후 실측).
+  const typ = cols.get(col);
   if (OPS[op]) {
     params.push(val);
-    sqlPart = `${c} ${OPS[op]} $${params.length}`;
+    sqlPart = `${c} ${OPS[op]} $${params.length}::text::${typ}`;
   } else if (op === 'like' || op === 'ilike') {
     params.push(val.replace(/\*/g, '%'));
-    sqlPart = `${c}::text ${op === 'like' ? 'LIKE' : 'ILIKE'} $${params.length}`;
+    sqlPart = `${c}::text ${op === 'like' ? 'LIKE' : 'ILIKE'} $${params.length}::text`;
   } else if (op === 'in') {
     const items = splitTop(val.replace(/^\(|\)$/g, '')).map((v) => v.replace(/^"|"$/g, ''));
     params.push(items);
@@ -95,7 +101,7 @@ function condition(cols, col, expr, params) {
     sqlPart = `${c} IS ${v}`;
   } else if (op === 'cs') {
     params.push(val);
-    sqlPart = cols.get(col) === 'jsonb' ? `${c} @> $${params.length}::jsonb` : `${c} @> $${params.length}::text[]`;
+    sqlPart = `${c} @> $${params.length}::text::${typ}`;
   } else {
     throw new BadRequest(`unsupported operator ${op}`);
   }
