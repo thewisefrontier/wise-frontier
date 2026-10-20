@@ -52,12 +52,14 @@ runs:
         NGINX
         sudo rm -f /etc/nginx/sites-enabled/default
         sudo nginx -t -q && (sudo systemctl restart nginx || sudo nginx)
-        for i in $(seq 1 30); do
-          if curl -fsS -o /dev/null "http://127.0.0.1:8080/rest/v1/settings?limit=1"; then
+        # 스키마 캐시 적재가 Aiven(1 vCPU) 부하·동시 기동에 따라 13초~30초 넘게 걸린다
+        # (2026-10-20 실측: 동시에 두 작업이 뜨자 30초 안에 못 끝나 유가 작업 1건 실패) → 150초까지 기다린다.
+        for i in $(seq 1 150); do
+          if curl -fsS -o /dev/null "http://127.0.0.1:8080/rest/v1/settings?limit=1" 2>/dev/null; then
             echo "PostgREST 준비 완료(${i}초)"; break
           fi
           sleep 1
-          if [ "$i" = 30 ]; then echo "::error::PostgREST 기동 실패"; tail -20 "$RUNNER_TEMP/postgrest.log"; exit 1; fi
+          if [ "$i" = 150 ]; then echo "::error::PostgREST 기동 실패"; tail -20 "$RUNNER_TEMP/postgrest.log"; exit 1; fi
         done
         # db.py의 Aiven 이중 쓰기 미러를 끈다 — 이제 Aiven이 원본이라 같은 행을 또 쓰게 된다.
         echo "AIVEN_IS_PRIMARY=1" >> "$GITHUB_ENV"
