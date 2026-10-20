@@ -3,9 +3,9 @@ import assert from 'node:assert/strict';
 import { handleTable } from './pgrest.js';
 
 const COLS = [['id', 'bigint'], ['title_ko', 'text'], ['summary_ko', 'text'], ['full_text', 'text'],
-  ['created_at', 'text'], ['source', 'text'], ['is_published', 'boolean'], ['countries', 'ARRAY'],
+  ['created_at', 'text'], ['source', 'text'], ['is_published', 'boolean'], ['countries', 'text[]'],
   ['country', 'text'], ['category', 'text'], ['subcategory', 'text']]
-  .map(([c, d]) => ({ table_name: 'articles', column_name: c, data_type: d }));
+  .map(([c, d]) => ({ table_name: 'articles', column_name: c, sqltype: d }));
 
 const calls = [];
 const sql = () => Promise.resolve(COLS);
@@ -19,7 +19,7 @@ const run = async (qs, h = {}) => {
 
 // 검색(index.html): OR + ilike, 강제 공개 조건, 행 상한
 let r = await run('select=id,title_ko&source=eq.NewsFinal&is_published=eq.true&or=(title_ko.ilike.*케냐*,summary_ko.ilike.*케냐*)&order=created_at.desc&limit=50');
-assert.match(r.calls[0].q, /WHERE is_published = true AND "source" = \$1 AND "is_published" = \$2 AND \("title_ko"::text ILIKE \$3 OR "summary_ko"::text ILIKE \$4\)/);
+assert.match(r.calls[0].q, /WHERE is_published = true AND "source" = \$1::text::text AND "is_published" = \$2::text::boolean AND \("title_ko"::text ILIKE \$3::text OR "summary_ko"::text ILIKE \$4::text\)/);
 assert.deepEqual(r.calls[0].params, ['NewsFinal', 'true', '%케냐%', '%케냐%']);
 assert.match(r.calls[0].q, /ORDER BY "created_at" DESC LIMIT 50 OFFSET 0/);
 
@@ -33,7 +33,7 @@ assert.deepEqual(r.calls[0].params, ['2026-10-01', '2026-10-19 23:59', '사회']
 
 // 국가 페이지: 배열 포함 + like 와일드카드, 상한 1000
 r = await run('select=id&countries=cs.{케냐}&subcategory=like.digest_*&order=created_at.desc&limit=5000');
-assert.match(r.calls[0].q, /"countries" @> \$1::text\[\]/);
+assert.match(r.calls[0].q, /"countries" @> \$1::text::text\[\]/);
 assert.deepEqual(r.calls[0].params, ['{케냐}', 'digest_%']);
 assert.match(r.calls[0].q, /LIMIT 1000 /);
 
