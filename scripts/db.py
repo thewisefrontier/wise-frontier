@@ -79,7 +79,9 @@ AIVEN_STATEMENT_TIMEOUT_MS = 3000
 
 def _aiven_conn_get():
     global _aiven_conn
-    if not AIVEN_SERVICE_URI:
+    # 2026-10-20 Supabase 이탈 후엔 Aiven이 원본(.github/actions/aiven-postgrest가 켬) — 미러가
+    # 같은 행을 또 쓰고 Aiven 연결(무료 20개)까지 하나 더 잡아먹으므로 끈다.
+    if not AIVEN_SERVICE_URI or os.getenv("AIVEN_IS_PRIMARY"):
         return None
     try:
         if _aiven_conn is None or _aiven_conn.closed:

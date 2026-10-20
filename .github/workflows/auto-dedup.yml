@@ -58,6 +58,13 @@ jobs:
             echo "skip=true" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Aiven PostgREST 기동(Supabase 이탈, 2026-10-20)
+        uses: ./.github/actions/aiven-postgrest
+        with:
+          aiven-uri: ${{ secrets.AIVEN_SERVICE_URI }}
+          jwt-secret: ${{ secrets.PGRST_JWT_SECRET }}
+          pool: "2"
+
       - name: Python 설정
         if: steps.guard.outputs.skip != 'true'
         uses: actions/setup-python@v6
