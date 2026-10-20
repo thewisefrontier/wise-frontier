@@ -32,6 +32,14 @@ import unicodedata
 
 import requests
 
+# 2026-10-20 실사고: 같은 날 아침 국제유가·글로벌마켓 기사가 Pixabay 이미지 다운로드 429(요청 과다)로,
+# 국내유가 기사가 R2 업로드 워커 SSL 연결 끊김(SSLEOFError)으로 사진 없이 발행됐다 — 둘 다 일시적
+# 오류인데 재시도 없이 한 번에 포기했다(같은 실행에서 몇 초 뒤 다른 사진은 정상 저장됨). 공용 재시도
+# 세션(429·5xx·연결 오류, 백오프·Retry-After 존중)으로 교체한다. 호출이 기사당 1~2회뿐이라
+# rss_fetcher.py 때 같은 처리 시간 폭증 위험은 없다.
+from http_retry import get_session
+requests = get_session()
+
 IMAGE_UPLOAD_URL = os.getenv("IMAGE_UPLOAD_URL", "")
 UPLOAD_SECRET = os.getenv("UPLOAD_SECRET", "")
 
