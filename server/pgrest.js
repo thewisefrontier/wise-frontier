@@ -33,7 +33,7 @@ const RPCS = {
 };
 
 const OPS = { eq: '=', neq: '<>', gt: '>', gte: '>=', lt: '<', lte: '<=' };
-const RESERVED = new Set(['select', 'order', 'limit', 'offset', 'or', 'and']);
+export const RESERVED = new Set(['select', 'order', 'limit', 'offset', 'or', 'and', 'columns', 'on_conflict']);
 
 let columnCache = null; // isolate 수명 동안 재사용(테이블별 컬럼 → data_type)
 
@@ -54,11 +54,11 @@ async function columns(sql) {
   return m;
 }
 
-class BadRequest extends Error {}
+export class BadRequest extends Error {}
 
-const q = (ident) => '"' + ident.replace(/"/g, '""') + '"';
+export const q = (ident) => '"' + ident.replace(/"/g, '""') + '"';
 
-function splitTop(s) {
+export function splitTop(s) {
   // or=(a.eq.1,b.ilike.*x*) 의 최상위 쉼표만 자른다(괄호·따옴표 안 쉼표는 보존).
   const out = []; let depth = 0, cur = '', quote = false;
   for (const ch of s) {
@@ -72,7 +72,7 @@ function splitTop(s) {
   return out;
 }
 
-function condition(cols, col, expr, params) {
+export function condition(cols, col, expr, params) {
   if (!cols.has(col)) throw new BadRequest(`unknown column ${col}`);
   let negate = false;
   if (expr.startsWith('not.')) { negate = true; expr = expr.slice(4); }
@@ -108,7 +108,7 @@ function condition(cols, col, expr, params) {
   return negate ? `NOT (${sqlPart})` : sqlPart;
 }
 
-function orGroup(cols, raw, params) {
+export function orGroup(cols, raw, params) {
   const inner = raw.replace(/^\(|\)$/g, '');
   const parts = splitTop(inner).map((p) => {
     const d = p.indexOf('.');

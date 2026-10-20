@@ -351,12 +351,16 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  // Supabase 설정 — 여기에 프로젝트 정보 입력
-  const SUPABASE_URL = 'https://fotdngseksqaghvtcvqh.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable_rT3kSEAAdM0DJlDW5fEWww_M37h6dDW'; // anon public key 입력
+  // 2026-10-20 Supabase 이탈 — supabase-js 클라이언트는 그대로 쓰되 데이터 요청은 같은 사이트의
+  // /admin-api/rest/v1(Pages Functions → Aiven, 세션 쿠키 필수)로 간다. 로그인은 Supabase Auth 대신
+  // /admin-api/login(Pages 시크릿 ADMIN_EMAIL·ADMIN_PASSWORD와 비교, HttpOnly 세션 쿠키 발급).
+  const SUPABASE_URL = location.origin + '/admin-api';
+  const SUPABASE_ANON_KEY = 'unused'; // supabase-js가 요구하는 자리값 — 서버는 쿠키로만 인증한다
 
   const { createClient } = supabase;
-  const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+  });
 
   let currentUser = null;
   let currentRole = null;
@@ -375,12 +379,16 @@
     const errEl = document.getElementById('login-error');
     errEl.style.display = 'none';
 
-    const { data, error } = await sb.auth.signInWithPassword({ email, password: pw });
-    if (error) {
+    const res = await fetch('/admin-api/login', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: pw }),
+    }).catch(() => null);
+    if (!res || !res.ok) {
       errEl.textContent = '이메일 또는 비밀번호가 올바르지 않습니다.';
       errEl.style.display = 'block';
       return;
     }
+    const data = await res.json();
     await initApp(data.user);
   }
 
@@ -424,14 +432,14 @@
   }
 
   async function logout() {
-    await sb.auth.signOut();
+    await fetch('/admin-api/logout', { method: 'POST' }).catch(() => {});
     location.reload();
   }
 
-  // 자동 로그인
+  // 자동 로그인 — 유효한 세션 쿠키가 있으면 바로 들어간다
   window.onload = async () => {
-    const { data: { session } } = await sb.auth.getSession();
-    if (session) await initApp(session.user);
+    const res = await fetch('/admin-api/session').catch(() => null);
+    if (res && res.ok) await initApp((await res.json()).user);
   };
 
   // ── 기사 목록 ─────────────────────────────────────────
@@ -801,11 +809,8 @@
   }
 
   function openAddUser() {
-    const email = prompt('초대할 이메일 주소:');
-    if (!email) return;
-    const name = prompt('이름:');
-    const role = confirm('관리자 권한을 부여하시겠습니까?\n(확인: 관리자, 취소: 기자)') ? 'admin' : 'reporter';
-    toast(`${email} 초대 링크를 Supabase Auth에서 직접 발송해주세요.\n역할: ${role === 'admin' ? '관리자' : '기자'}`, 'success');
+    // 2026-10-20 Supabase Auth 폐지 — 로그인은 Pages 시크릿(ADMIN_EMAIL·ADMIN_PASSWORD)의 관리자 계정 하나뿐이다.
+    toast('사용자 추가는 지원하지 않습니다 — 관리자 계정은 Cloudflare Pages 시크릿(ADMIN_EMAIL·ADMIN_PASSWORD)으로 관리합니다.', 'error');
   }
 
   // ── 경제 일정 관리 ───────────────────────────────────────
