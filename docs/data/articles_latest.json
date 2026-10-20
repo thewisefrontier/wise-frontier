@@ -1,5 +1,113 @@
 [
   {
+    "id": 317434,
+    "title_en": "[국내유가] 휘발유 리터당 1856원…정유사 공급가 조정 속 소폭 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1856원…정유사 공급가 조정 속 소폭 하락",
+    "summary_ko": "한국석유공사 오피넷이 21일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1856원으로 집계됐다.\n\n이날 공개된 오피넷 자료 기준 전국 주유소 휘발유 가격은 리터당 1855.98원으로 전일보다 0.10원 하락했다. 경유는 리터당 1842.04원으로 전일 대비 0.47원 내려 하락세를 보였으며, 반면 LPG(부탄)는 리터당 1143.87원으로 전일보다 0.11원 상승했다.\n\n이번 유가 변동은 최근 정유사의 도매가 조정 및 공급가 변동 흐름과 맞물려 나타난 것으로 분석된다. 관련 업계에서는 정유사들의 공급 가격 조정",
+    "url": "internal://opinet_price_2026-10-21",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-10-21 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_10_21_pid7908694.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-21T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-21 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-10-21",
+      "prices": {
+        "B027": {
+          "diff": -0.1,
+          "name": "휘발유",
+          "price": 1855.98
+        },
+        "B034": {
+          "diff": 0.35,
+          "name": "고급휘발유",
+          "price": 2397.39
+        },
+        "C004": {
+          "diff": 0.07,
+          "name": "실내등유",
+          "price": 1571.68
+        },
+        "D047": {
+          "diff": -0.47,
+          "name": "경유",
+          "price": 1842.04
+        },
+        "K015": {
+          "diff": 0.11,
+          "name": "LPG(부탄)",
+          "price": 1143.87
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 317433,
+    "title_en": "The Saint of Bright Doors",
+    "title_ko": "[오늘의 책] 바지라 찬드라세케라의 『The Saint of Bright Doors』, 신화적 문을 통과한 탈종교와 구원의 서사",
+    "summary_ko": "스리랑카 출신 작가 바지라 찬드라세케라(Vajra Chandrasekera)의 2023년 장편소설 『The Saint of Bright Doors』(국내 번역판 제목 미확인)는 발표 이후 유수의 문학상을 휩쓸며 문단의 주목을 받았다. 이 작품은 네뷸러상 장편 부문과 로커스상 최우수 데뷔 소설상을 비롯해 크로퍼드상과 이그나이트상을 수상했으며, 휴고상 장편 부문 최종 후보에도 이름을 올렸다. 또한 뉴욕타임스의 주목할 만한 도서이자 2023년 최고의 판타지로 꼽히며 작품성을 널리 인정받았다.\n\n찬드라세케라는 스리랑카 콜롬보(Colombo",
+    "url": "internal://literature_Q125198708",
+    "source": "NewsFinal",
+    "category": "문화·예술",
+    "subcategory": "오늘의책",
+    "region": "global",
+    "country": "스리랑카",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-21 05:10",
+    "countries": [
+      "스리랑카"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/literature_q125198708_pid2606859.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-21T05:10:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-21 05:10",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "enwiki": "The Saint of Bright Doors",
+      "kowiki": null,
+      "source": "prize",
+      "wikidata": "Q125198708"
+    },
+    "image_credit": "",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
     "id": 317432,
     "title_en": "[오늘의 AI 소식] 미국 정부, 딥시크 사용 금지 조치 및 주요 AI 기업 대규모 투자 유치 잇달아",
     "title_ko": "[오늘의 AI 소식] 미국 정부, 딥시크 사용 금지 조치 및 주요 AI 기업 대규모 투자 유치 잇달아",
@@ -2453,51 +2561,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 317203,
-    "title_en": "The Turn of the Screw",
-    "title_ko": "[오늘의 책] 헨리 제임스의 『나사의 회전』, 모호함으로 인간 심리를 파고든 고딕 공포의 고전",
-    "summary_ko": "1898년에 발표된 헨리 제임스(Henry James)의 중편소설 『나사의 회전』은 1950년 브로드웨이 연극과 1954년 챔버 오페라, 1961년과 2020년 두 차례의 영화, 2020년 미니시리즈로 각색되며 오늘날까지 끊임없이 재해석되고 있다. 발표 초기에는 무서운 유령 이야기로만 받아들여졌으나 1930년대 심리학적 해석과 1970년대 구조주의적 분석을 거쳐 텍스트의 모호성이 핵심 특징으로 인정받는 등 문학사에서 다채로운 비평적 전환을 이끌어 냈다.\n\n이 작품은 크리스마스이브에 벽난로가에 모인 사람들 중 더글러스(Douglas)",
-    "url": "internal://literature_Q625923",
-    "source": "NewsFinal",
-    "category": "문화·예술",
-    "subcategory": "오늘의책",
-    "region": "europe",
-    "country": "영국",
-    "country_flag": "🇬🇧",
-    "score": 1,
-    "created_at": "2026-10-20 05:04",
-    "countries": [
-      "영국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/literature_cover_q625923.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-20T05:04:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-20 05:04",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-10-20 18:00",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "enwiki": "The Turn of the Screw",
-      "kowiki": "나사의 회전 (소설)",
-      "source": "gutenberg",
-      "wikidata": "Q625923"
-    },
-    "image_credit": "나사의 회전 표지",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   }
 ]
