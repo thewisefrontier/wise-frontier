@@ -1,5 +1,53 @@
 [
   {
+    "id": 317393,
+    "title_en": "구글 클라우드 런던 리전 장애…영국 은행·택배사 '결제 대란'",
+    "title_ko": "구글 클라우드 런던 리전 장애…영국 은행·택배사 '결제 대란'",
+    "summary_ko": "20일(현지시간) 영국 런던에 위치한 구글 클라우드(Google Cloud) 데이터센터에서 발생한 대규모 서비스 장애로 인해 현지 주요 은행과 배송 업체, 웹사이트 등의 접속과 결제 시스템이 큰 차질을 빚었다. 이번 장애는 구글 클라우드의 유럽 서부 지역인 europe-west2 리전의 데이터센터에서 발생한 전력 사고가 원인인 것으로 파악됐다.\n\n구글의 공식 상태 대시보드에 따르면 이번 사고는 20일 오전 7시 8분 영국 시각 기준으로 시작되었으며, 컴퓨트 엔진(Compute Engine), 쿠버네티스 엔진(Kubernetes En",
+    "url": "internal://cluster_20261020_e988b7fe",
+    "source": "NewsFinal",
+    "category": "IT·과학",
+    "subcategory": "cluster_20261020_e988b7fe",
+    "region": "global",
+    "country": "영국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-20 22:23",
+    "countries": [
+      "영국",
+      "스페인",
+      "프랑스"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_2160321.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-20T22:23:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-20 22:23",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "src_ids": [
+        676318,
+        675660,
+        673877,
+        673858,
+        673804
+      ],
+      "kr_coverage_30d": 10
+    },
+    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "continuation_of_id": null,
+    "summary_3lines_en": "",
+    "investment_idea_en": "",
+    "noindex": false
+  },
+  {
     "id": 317389,
     "title_en": "가나, 남아공 철수 기록 오류 해명…야권은 독립 감사 요구",
     "title_ko": "가나, 남아공 철수 기록 오류 해명…야권은 독립 감사 요구",
@@ -2952,45 +3000,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": false
-  },
-  {
-    "id": 316883,
-    "title_en": "에티오피아 주재 이스라엘 대사, 소말리아 내 군사 주둔과 연계해 소말릴란드 승인 거부 배경 설명",
-    "title_ko": "에티오피아 주재 이스라엘 대사, 소말리아 내 군사 주둔과 연계해 소말릴란드 승인 거부 배경 설명",
-    "summary_ko": "테스파예 예타예 안테네(Tesfaye Yetayeh Anteneh) 에티오피아 주재 이스라엘 대사는 17일(현지시간) i24NEWS 인터뷰에서 에티오피아가 소말릴란드(Somaliland) 승인을 보류하는 이유가 소말리아 내 자국 군사 주둔과 직결되어 있다고 밝혔다. 안테네 대사는 에티오피아가 소말릴란드를 공식 승인하는 즉시 소말리아 정부가 에티오피아군 철수를 요구할 것이며, 이는 알샤바브(Al-Shabaab) 세력에 기회를 제공해 지역 안보를 심각하게 위협할 것이라고 설명했다.\n\n소말리아와 에티오피아는 2024년 1월 에티오피아가 ",
-    "url": "internal://trend_소말리아_2026101922",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "trend_소말리아",
-    "region": "africa",
-    "country": "소말리아",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-10-19 22:24",
-    "countries": [
-      "소말리아",
-      "에티오피아",
-      "이스라엘",
-      "튀르키예"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_al_shabaab_somalia.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-19T22:24:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-19 22:24",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: Wikimedia Commons",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
   }
 ]
