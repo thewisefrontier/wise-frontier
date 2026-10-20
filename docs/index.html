@@ -675,7 +675,7 @@
 
   async function searchSupabase(query) {
     if (query !== currentQuery) return;
-    const SUPABASE_URL = 'https://fotdngseksqaghvtcvqh.supabase.co';
+    const SUPABASE_URL = ''; // 2026-10-20 Supabase 이탈 — 같은 사이트 /rest/v1(Pages Functions→Aiven)
     const SUPABASE_ANON_KEY = 'sb_publishable_rT3kSEAAdM0DJlDW5fEWww_M37h6dDW';
     try {
       // 2026-09-27 사용자 지적("검색이 DB에 부담 가지 않나") — select=*는 이 카드
@@ -1144,7 +1144,7 @@ function cleanBody(text) {
       // "로딩 중"이 통째로 멈췄다. 기사 목록은 그 자체로 완결된 요청이라 다이제스트를
       // 기다릴 이유가 없다 — 목록을 먼저 렌더링하고, 다이제스트는 타임아웃을 걸어
       // 별도로 붙인다(실패/지연해도 목록엔 영향 없음).
-      const SUPABASE_URL = 'https://fotdngseksqaghvtcvqh.supabase.co';
+      const SUPABASE_URL = ''; // 2026-10-20 Supabase 이탈 — 같은 사이트 /rest/v1(Pages Functions→Aiven)
       const SUPABASE_ANON_KEY = 'sb_publishable_rT3kSEAAdM0DJlDW5fEWww_M37h6dDW';
       const res = await fetch('data/articles_latest.json');
       if (!res.ok) throw new Error();
@@ -1216,7 +1216,7 @@ function cleanBody(text) {
     const container = document.getElementById('calendar-widget');
     if (!container) return;
     try {
-      const SUPABASE_URL = 'https://fotdngseksqaghvtcvqh.supabase.co';
+      const SUPABASE_URL = ''; // 2026-10-20 Supabase 이탈 — 같은 사이트 /rest/v1(Pages Functions→Aiven)
       const SUPABASE_ANON_KEY = 'sb_publishable_rT3kSEAAdM0DJlDW5fEWww_M37h6dDW';
       const now = nowKST();
       const today = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;

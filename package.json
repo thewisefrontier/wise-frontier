@@ -1,0 +1,9 @@
+{
+  "name": "newsfinal-site",
+  "private": true,
+  "type": "module",
+  "description": "Cloudflare Pages Functions 의존성 — Hyperdrive로 Aiven 조회(2026-10-20 Supabase 이탈)",
+  "dependencies": {
+    "postgres": "3.4.9"
+  }
+}
