@@ -1,5 +1,42 @@
 [
   {
+    "id": 317688,
+    "title_en": "서울, 완연한 맑은 날씨…전국 최저 5도 쌀쌀",
+    "title_ko": "서울, 완연한 맑은 날씨…전국 최저 5도 쌀쌀",
+    "summary_ko": "22일 한국의 날씨는 전국이 대체로 맑은 가운데 오전과 오후 모두 맑은 하늘을 보이겠으며, 기상청에 따르면 아침까지 기온이 낮아 다소 쌀쌀한 날씨가 이어질 전망이다. 서울은 오전과 오후 모두 맑겠고 최저기온 5도, 최고기온 16도로 예상되며, 오전과 오후 강수확률은 0%를 기록하겠고 최대풍속은 9km/h로 잔잔한 바람이 불겠다. 주요 지역별 상세 날씨를 보면 부산은 오전과 오후 맑은 날씨 속 최저 9도, 최고 19도를 기록하겠으며 오전과 오후 강수확률은 0%, 최대풍속은 15km/h다.\n\n대구는 최저 5도, 최고 16도이며 오전과 ",
+    "url": "internal://weather_한국_today20261022",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_한국_today20261022",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-22 05:23",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20261022.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-22T05:23:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-22 05:23",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 317682,
     "title_en": "[국내유가] 휘발유 리터당 1856원…정유사 공급가격 영향",
     "title_ko": "[국내유가] 휘발유 리터당 1856원…정유사 공급가격 영향",
@@ -2667,109 +2704,6 @@
         "change": 3.25
       },
       "source": "Yahoo Finance"
-    },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 317440,
-    "title_en": "서울, 아침 비 그치고 오후 맑음…전국 9~22도",
-    "title_ko": "서울, 아침 비 그치고 오후 맑음…전국 9~22도",
-    "summary_ko": "21일 한국의 날씨는 전국이 대체로 흐리다가 낮부터 차차 맑아지는 가운데, 오전까지 중부지방과 일부 남부 및 제주도에 비가 내린 뒤 오후에는 대부분 지역에서 구름이 걷히거나 맑은 날씨를 보이겠다. 기상청에 따르면 이날 오전 서울은 흐리고 비가 내린 후 오후 들어 맑아지겠으며, 아침 최저기온 9°C, 낮 최고기온 16°C를 기록하겠고 오전 강수확률은 60%, 오후는 20%, 최대풍속은 20km/h로 나타나겠다. 주요 지역별 상세 날씨를 보면 부산은 오전 흐림과 비를 거쳐 오후에 구름이 많겠고 최저 13°C, 최고 22°C, 오전 강수",
-    "url": "internal://weather_한국_today20261021",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_한국_today20261021",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-21 05:23",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20261021.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-21T05:23:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-21 05:23",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 317434,
-    "title_en": "[국내유가] 휘발유 리터당 1856원…정유사 공급가 조정 속 소폭 하락",
-    "title_ko": "[국내유가] 휘발유 리터당 1856원…정유사 공급가 조정 속 소폭 하락",
-    "summary_ko": "한국석유공사 오피넷이 21일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1856원으로 집계됐다.\n\n이날 공개된 오피넷 자료 기준 전국 주유소 휘발유 가격은 리터당 1855.98원으로 전일보다 0.10원 하락했다. 경유는 리터당 1842.04원으로 전일 대비 0.47원 내려 하락세를 보였으며, 반면 LPG(부탄)는 리터당 1143.87원으로 전일보다 0.11원 상승했다.\n\n이번 유가 변동은 최근 정유사의 도매가 조정 및 공급가 변동 흐름과 맞물려 나타난 것으로 분석된다. 관련 업계에서는 정유사들의 공급 가격 조정",
-    "url": "internal://opinet_price_2026-10-21",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국내유가",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "🇰🇷",
-    "score": 1,
-    "created_at": "2026-10-21 05:11",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_10_21_pid7908694.jpg",
-    "view_count": 1,
-    "first_published_at": "2026-10-21T05:11:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-21 05:11",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "date": "2026-10-21",
-      "prices": {
-        "B027": {
-          "diff": -0.1,
-          "name": "휘발유",
-          "price": 1855.98
-        },
-        "B034": {
-          "diff": 0.35,
-          "name": "고급휘발유",
-          "price": 2397.39
-        },
-        "C004": {
-          "diff": 0.07,
-          "name": "실내등유",
-          "price": 1571.68
-        },
-        "D047": {
-          "diff": -0.47,
-          "name": "경유",
-          "price": 1842.04
-        },
-        "K015": {
-          "diff": 0.11,
-          "name": "LPG(부탄)",
-          "price": 1143.87
-        }
-      }
     },
     "image_credit": null,
     "continuation_of_id": null,
