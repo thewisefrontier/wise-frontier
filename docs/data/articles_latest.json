@@ -2,8 +2,8 @@
   {
     "id": 317534,
     "title_en": "미국 플로리다주, 올해 18번째 사형 집행…77세 수감자 윌리엄 리브스 사망",
-    "title_ko": "미국 플로리다주, 올해 18번째 사형 집행…77세 수감자 윌리엄 리브스 사망",
-    "summary_ko": "미국 플로리다주가 20일(현지시간) 77세 수감자 윌리엄 리브스에 대한 사형을 집행했다. 이번 집행은 올해 들어 플로리다주에서 시행된 18번째 사형으로, 론 드샌티스 주지사의 임기 말 사형제 적극 활용 기조에 따라 이루어졌다. 리브스는 이날 오후 6시 12분 플로리다주 스타크 인근 플로리다 주립 교도소에서 약물 주입 방식으로 사망 판정을 받았다.\n\n리브스는 1986년 9월 인디언 리버 카운티 보안관 대리 리처드 라츠코우스키를 총기로 살해한 혐의로 1급 살인 유죄 판결을 받았다. 당시 사건은 리브스가 편의점 밖 공중전화에서 911 신",
+    "title_ko": "플로리다주, 77세 수감자 윌리엄 리브스 사형 집행…올해 18번째",
+    "summary_ko": "미국 플로리다주가 20일(현지시간) 77세 수감자 윌리엄 리브스에 대한 사형을 집행했다. 이번 집행은 올해 들어 플로리다주에서 시행된 18번째 사형으로, 론 드샌티스 주지사의 임기 말 사형제 적극 활용 기조에 따라 이루어졌다. 리브스는 이날 오후 6시 12분 플로리다주 스타크 인근 플로리다 주립 교도소에서 약물 주입 방식으로 사망 판정을 받았다.\n\n리브스는 1986년 9월 인디언 리버 카운티 보안관 대리 리처드 라츠코우스키를 총기로 살해한 혐의로 1급 살인 유죄 판결을 받았다. 사건 당시 리브스는 편의점 밖 공중전화에서 911 신고",
     "url": "internal://cluster_20261021_2cf988fb",
     "source": "NewsFinal",
     "category": "사회",
@@ -11,8 +11,8 @@
     "region": "global",
     "country": "미국",
     "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-21 13:55",
+    "score": 2,
+    "created_at": "2026-10-21 15:45",
     "countries": [
       "미국"
     ],
@@ -24,6 +24,10 @@
       {
         "timestamp": "2026-10-21 13:55",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-10-21 15:45",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -36,6 +40,101 @@
       ]
     },
     "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "continuation_of_id": null,
+    "summary_3lines_en": "",
+    "investment_idea_en": "",
+    "noindex": false
+  },
+  {
+    "id": 317544,
+    "title_en": "나이지리아, 아부자서 에볼라 확진자 발생…콩고발 확산세 심화",
+    "title_ko": "나이지리아, 아부자서 에볼라 확진자 발생…콩고발 확산세 심화",
+    "summary_ko": "나이지리아 보건당국이 수도 아부자에서 에볼라 바이러스 감염 사례를 확인했다고 20일(현지시간) 밝혔다. 무함마드 알리 파테 나이지리아 보건부 장관은 아부자의 한 사립 병원에 입원 중인 여성 환자가 실험실 검사 결과 에볼라 양성 판정을 받았다고 발표했다. 해당 환자는 지난 7일 증상이 시작되어 11일 병원에 입원했으며, 동아프리카의 우간다를 거쳐 나이지리아로 입국한 것으로 파악됐다.\n\n우간다 보건부는 이 환자가 자국을 경유했을 뿐이며, 우간다 내에는 현재 확인된 에볼라 발병 사례가 없다고 공식 입장을 밝혔다. 나이지리아 당국은 해당 ",
+    "url": "internal://cluster_20261021_9c8b51a5",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "cluster_20261021_9c8b51a5",
+    "region": "africa",
+    "country": "나이지리아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-21 15:41",
+    "countries": [
+      "나이지리아",
+      "우간다",
+      "콩고민주공화국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_ebola_virus.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-21T15:41:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-21 15:41",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": true,
+    "source_published_at": null,
+    "source_data": {
+      "src_ids": [
+        722366,
+        720844,
+        719766,
+        718245,
+        716176,
+        714154
+      ]
+    },
+    "image_credit": "사진: NIAID (CC BY 2.0, Wikimedia Commons)",
+    "continuation_of_id": null,
+    "summary_3lines_en": "",
+    "investment_idea_en": "",
+    "noindex": false
+  },
+  {
+    "id": 317542,
+    "title_en": "테슬라 로드스터, 1초 미만 가속력 자랑…실제 주행 환경은 물음표",
+    "title_ko": "테슬라 로드스터, 1초 미만 가속력 자랑…실제 주행 환경은 물음표",
+    "summary_ko": "테슬라가 지난 10월 15일 미국 텍사스주 스페이스엑스(SpaceX) 시험장에서 차세대 슈퍼카 로드스터(Roadster)를 공개했다. 이번에 공개된 로드스터는 알루미늄과 탄소 섬유를 결합한 전용 섀시를 기반으로 제작되었으며, 전자식 조향 시스템인 스티어 바이 와이어(steer-by-wire)와 전자식 제동 시스템인 브레이크 바이 와이어(brake-by-wire)를 적용했다. 탄소 세라믹 브레이크 디스크를 장착한 이 차량은 800에서 1000볼트 고전압 배터리 시스템을 탑재했다.\n\n테슬라는 로드스터를 로드스터(표준), 퍼포먼스(Per",
+    "url": "internal://cluster_20261021_66010552",
+    "source": "NewsFinal",
+    "category": "산업·기업",
+    "subcategory": "cluster_20261021_66010552",
+    "region": "global",
+    "country": "미국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-21 15:37",
+    "countries": [
+      "미국",
+      "베트남"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_tesla_roadster.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-21T15:37:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-21 15:37",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "src_ids": [
+        726833,
+        722525,
+        722458,
+        720480,
+        720305,
+        720192
+      ]
+    },
+    "image_credit": "사진: Logti (CC BY-SA 4.0, Wikimedia Commons)",
     "continuation_of_id": null,
     "summary_3lines_en": "",
     "investment_idea_en": "",
@@ -1410,7 +1509,7 @@
     "id": 317408,
     "title_en": "콩고민주공화국 에볼라 확산 속 북키부주 사망자 집계 논란 및 자금 투명성 조사",
     "title_ko": "콩고민주공화국 에볼라 확산 속 북키부주 사망자 집계 논란 및 자금 투명성 조사",
-    "summary_ko": "[업데이트]\n■ 10월 21일 13:32 — 18일(현지시간) 기준 콩고민주공화국 북키부주에서 하루 동안 97명의 에볼라 신규 확진자가 발생하며 지난 10월 3일 이후 최대치를 기록했다. 이로 인해 북키부주는 기존 진원지였던 이투리주를 제치고 새로운 감염 중심지로 부상했다. 민족재건전선(FRN)의 보급로 봉쇄 여파로 물가 급등세가 이어지며 비누 가격이 1000프랑에서 2500프랑으로, 소금 가격이 1500프랑에서 5000프랑으로 폭등했다.\n\n이에 19일 에바리스테 소모 카쿨레 북키부주 주지사는 주요 도시의 경제 활동과 학교 수업을 ",
+    "summary_ko": "[업데이트]\n■ 10월 21일 15:26 — 콩고민주공화국 북키부주에서 민족재건전선(FRN)의 고마-왈리카레 도로 봉쇄가 한 달째 이어지며 왈리카레를 포함한 키부아, 음포피, 무통고, 핑가 지역의 물류난과 생필품 가격 폭등이 심화하고 있다. 이와 관련해 20일(현지시간) 카토이 지역 우파만두에서는 콜레라 유사 설사병이 창궐하여 부시이레 20명, 키코마 15명, 비올로 5명 등 수십 명이 사망하고 100명 이상의 감염자가 발생했다. 현재 카토이 보건 구역 내 22개 보건 시설 중 절반인 11곳만이 정상 운영 중이며, 21일 의료진은 ",
     "url": "internal://trend_에볼라_2026102102",
     "source": "NewsFinal",
     "category": "사회",
@@ -1442,6 +1541,10 @@
       {
         "timestamp": "2026-10-21 13:32",
         "note": "북키부주 에볼라 확진 급증 및 경제 활동 중단 선포."
+      },
+      {
+        "timestamp": "2026-10-21 15:26",
+        "note": "북키부주 콜레라 창궐로 수십 명 사망 및 에볼라 급증."
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -1452,7 +1555,7 @@
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
-    "noindex": false
+    "noindex": true
   },
   {
     "id": 317405,
@@ -2393,53 +2496,5 @@
     "summary_3lines_en": "",
     "investment_idea_en": "",
     "noindex": true
-  },
-  {
-    "id": 317291,
-    "title_en": "후티 반군 공세에 사우디 안보 위기 고조…FII 투자회의 2027년으로 연기",
-    "title_ko": "후티 반군 공세에 사우디 안보 위기 고조…FII 투자회의 2027년으로 연기",
-    "summary_ko": "예멘 후티 반군이 사우디아라비아 주요 시설과 정부군을 겨냥한 공세를 강화하면서 사우디 내 안보 불안이 극도로 치솟고 있다. 19일(현지시간) 사우디 내 공격으로 필리핀인 7명이 부상을 입고 이 중 3명이 위독한 상태에 빠지는 등 인명 피해도 발생했다. 이어 20일에는 예멘 샤브와주 정부군 훈련 캠프가 후티의 탄도미사일 공격을 받아 53명이 사망하고 200여 명이 부상했다.\n\n후티 반군 대변인 야히야 사리는 지난 48시간 동안 탄도미사일과 순항미사일, 드론을 동원해 6차례 군사 작전을 수행했다고 주장했다. 공격 대상에는 리야드 킹 칼",
-    "url": "internal://cluster_20261020_81bf2f79",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "cluster_20261020_81bf2f79",
-    "region": "middle_east",
-    "country": "사우디아라비아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-20 14:26",
-    "countries": [
-      "사우디아라비아",
-      "사우디",
-      "예멘",
-      "파키스탄"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_fii.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-20T14:26:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-20 14:26",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": true,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        644188,
-        643904,
-        641357,
-        636434,
-        635863
-      ]
-    },
-    "image_credit": "이미지 출처: Wikimedia Commons",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": false
   }
 ]
