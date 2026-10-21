@@ -1611,7 +1611,7 @@
     "id": 317432,
     "title_en": "[오늘의 AI 소식] 미국 정부, 딥시크 사용 금지 조치 및 주요 AI 기업 대규모 투자 유치 잇달아",
     "title_ko": "[오늘의 AI 소식] 미국 정부, 딥시크 사용 금지 조치 및 주요 AI 기업 대규모 투자 유치 잇달아",
-    "summary_ko": "[미국 연방기관, 중국 딥시크 AI 시스템 퇴출 명령]\n- 미국 정부는 국가 안보 우려를 이유로 연방 민간 기관에 중국 AI 스타트업 딥시크의 제품 및 서비스 구매 중단과 정부 IT 시스템에서의 제거를 20일(현지시간) 명령했다. - 해당 조치는 딥시크의 운영과 관련된 보안 위험을 차단하기 위한 것으로, 다수의 매체가 이를 비중 있게 보도했다. [오픈AI, 1조 4,000억 달러 기업가치로 300억 달러 투자 유치 추진]\n- 오픈AI는 앤스로픽의 기업공개(IPO)를 앞두고 1조 4,000억 달러의 기업 가치로 300억 달러 규모의 ",
+    "summary_ko": "[미국 연방기관, 중국 딥시크 AI 시스템 퇴출 명령]\n- 미국 정부는 국가 안보 우려를 이유로 연방 민간 기관에 중국 AI 스타트업 딥시크의 제품 및 서비스 구매 중단과 정부 IT 시스템에서의 제거를 20일(현지시간) 명령했다. - 해당 조치는 딥시크의 운영과 관련된 보안 위험을 차단하기 위한 것으로, 다수의 매체가 이를 비중 있게 보도했다. [오픈AI, 1조 4,000억 달러 기업가치로 300억 달러 투자 유치 추진]\n- 오픈AI는 앤트로픽의 기업공개(IPO)를 앞두고 1조 4,000억 달러의 기업 가치로 300억 달러 규모의 ",
     "url": "internal://ai_digest_20261021",
     "source": "NewsFinal",
     "category": "IT·과학",
@@ -1626,7 +1626,12 @@
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/digest_20261021.jpg",
     "view_count": 1,
     "first_published_at": null,
-    "update_log": [],
+    "update_log": [
+      {
+        "timestamp": "2026-10-21 21:01",
+        "note": "최초 게시"
+      }
+    ],
     "byline": "뉴스파이널 편집국",
     "is_travel": false,
     "source_published_at": null,
@@ -2220,193 +2225,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 317377,
-    "title_en": "스페인 야권 연대 가속화…PP와 Vox, 상원 다선거구 협상 착수",
-    "title_ko": "스페인 야권 연대 가속화…PP와 Vox, 상원 다선거구 협상 착수",
-    "summary_ko": "스페인 보수 야당인 국민당(PP)과 극우 성향 정당 Vox가 다가오는 11월 29일 총선을 앞두고 상원 선거 연대를 위한 공식 협상에 돌입했다. 알베르토 누녜스 페이호(Alberto Núñez Feijóo) 국민당 대표는 20일(현지시간) 카데나 코페(Cadena Cope) 방송 인터뷰를 통해 양당이 상원에서의 우파 표분산을 막기 위한 대화를 이어가고 있다고 밝혔다.\n\n이번 협상은 최근 사회노동당(PSOE)이 프론테 암플리오(Frente Amplio, 광범위한 좌파 연합) 및 지역 정당들과 상원 단일 후보 추대 연합을 전격 결성한 ",
-    "url": "internal://cluster_20261020_d9b18afc",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "cluster_20261020_d9b18afc",
-    "region": "global",
-    "country": "스페인",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-20 20:21",
-    "countries": [
-      "스페인"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_4878405.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-20T20:21:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-20 20:21",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        666255,
-        665683,
-        664280,
-        662000
-      ],
-      "kr_coverage_30d": 0
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": false
-  },
-  {
-    "id": 317358,
-    "title_en": "연료 주입구 뚜껑 누락된 영국 공군기 추락…지상 인명 피해 모면",
-    "title_ko": "정비 실수로 연료 캡 장착 누락… 영국 공군 훈련기 추락 사고 발생",
-    "summary_ko": "영국 공군(RAF)의 고성능 훈련용 제트기가 연료 캡이 장착되지 않은 상태로 이륙했다가 추락하는 사고가 발생했다. 국방사고조사국(DAIB) 등의 조사 결과에 따르면, 지난 9월 23일 웨일스 북부 RAF 밸리 기지를 이륙한 호크 T2(Hawk T2) 제트기가 이륙 직후 기체 결함을 일으키며 추락해 거대한 화염에 휩싸였다.\n\n사고 당시 기체는 이륙 직후부터 불규칙하게 요동쳤으며, 비행 조종사 두 명은 기체가 지면을 향해 급강하하기 직전 탈출 장치인 이탈 시트를 작동해 탈출에 성공했다. 조종사들은 낙하산을 타고 지상으로 내려와 가벼운 ",
-    "url": "internal://cluster_20261020_dbbfd461",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "cluster_20261020_dbbfd461",
-    "region": "global",
-    "country": "영국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-10-20 20:18",
-    "countries": [
-      "영국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_63032.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-20T18:12:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-20 18:12",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-10-20 20:18",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        662242,
-        660189
-      ],
-      "kr_coverage_30d": 16
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": false
-  },
-  {
-    "id": 317360,
-    "title_en": "예멘군, 타이즈 격전서 친이란 후티 반군 129명 사망 발표… 평화 협상과 충돌 병행",
-    "title_ko": "예멘군, 타이즈서 후티 반군 공세…이틀간 129명 사망",
-    "summary_ko": "예멘 정부군은 20일 남서부 타이즈주에서 친이란 후티 반군과의 교전 및 공습으로 반군 129명이 사망하고 176명이 부상했다고 밝혔다.\n\n예멘군 타이즈 군사축선 사령부는 성명을 통해 정부군이 타이즈시 남쪽 알미스크라크 지역에서 후티 반군 거점을 상대로 이틀째 공세를 이어갔다고 전했다. 이번 작전은 현지 민병대와 주민들의 지원 속에 진행됐으며, 군경은 알아크루드 전선의 반군 진지를 급습해 사상자를 발생시켰다. 또한 전날 저녁 군용기가 후티 반군의 진지와 무기, 군사 장비, 탄약고, 집결지를 겨냥해 13차례 공습을 감행했다.\n\n이번에 ",
-    "url": "internal://cluster_20261020_182e7a13",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "cluster_20261020_182e7a13",
-    "region": "global",
-    "country": "예멘",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-10-20 20:18",
-    "countries": [
-      "예멘",
-      "사우디아라비아",
-      "이집트"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_6231616.jpg",
-    "view_count": 1,
-    "first_published_at": "2026-10-20T18:13:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-20 18:13",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-10-20 20:18",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": true,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        662045
-      ],
-      "kr_coverage_30d": 42
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": false
-  },
-  {
-    "id": 317372,
-    "title_en": "프랑스 폭동 피해 상점 3000곳 넘어…보험사 “추가 폭력 사태 감당 불가”",
-    "title_ko": "프랑스 폭동 피해 상점 3000곳 넘어…보험사 “추가 폭력 사태 감당 불가”",
-    "summary_ko": "프랑스 전역을 뒤흔든 대규모 시위와 약탈 여파로 피해 상점이 3000곳을 넘어선 가운데, 보험 업계가 추가 폭력 사태가 발생할 경우 이를 보장하기 어렵다는 경고를 내놓았다. 악화된 치안 속에 상인들의 시름이 깊어지는 상황에서 정부는 사태 수습을 위한 후속 대책 마련에 총력을 기울이고 있다.\n\n토마 부베르 악사 최고경영자는 20일(현지시간) 방송 인터뷰를 통해 지난 주말 발생한 것과 같은 폭력과 약탈이 반복된다면 보험사들이 이를 감당할 수 없다고 밝혔다. 그는 한 차례의 피해는 복구를 도울 수 있지만 사태가 거듭되면 보험이 보호 역할",
-    "url": "internal://cluster_20261020_cf4c1a53",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "cluster_20261020_cf4c1a53",
-    "region": "global",
-    "country": "프랑스",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-20 20:11",
-    "countries": [
-      "프랑스"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_5375897.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-20T20:11:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-20 20:11",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": true,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        668065,
-        668101,
-        667738,
-        664213,
-        662094,
-        662129,
-        659879
-      ],
-      "kr_coverage_30d": 0
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": 317130,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": false
   }
 ]
