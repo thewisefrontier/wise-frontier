@@ -1,5 +1,59 @@
 [
   {
+    "id": 317702,
+    "title_en": "[국제유가] WTI 배럴당 98달러…수요 둔화 전망",
+    "title_ko": "[국제유가] WTI 배럴당 98달러…수요 둔화 전망",
+    "summary_ko": "국제유가가 21일(현지시간) 하락했다. 시장 집계에 따르면 WTI 원유 선물은 뉴욕상업거래소(NYMEX)에서 배럴당 97.72달러에 거래를 마쳤으며, 이는 전일 종가(101.41달러) 대비 3.64%(3.69달러) 하락한 수치다.\n\n런던ICE선물거래소에서 거래된 브렌트유는 배럴당 109.67달러를 기록했다. 브렌트유의 전일 종가는 109.86달러였으며, 전일 종가 대비 0.17%(0.19달러) 내렸다.\n\n석유수출국기구(OPEC)와 국제에너지기구(IEA) 등이 향후 수요 전망을 하향 조정한 점이 유가 하락 압력으로 작용했다. 중동 지",
+    "url": "internal://oil_price_2026-10-21",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국제유가",
+    "region": "글로벌",
+    "country": "국제",
+    "country_flag": "🛢️",
+    "score": 1,
+    "created_at": "2026-10-22 06:07",
+    "countries": [
+      "미국",
+      "사우디아라비아",
+      "러시아"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/oil_2026_10_21_pid4691574.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-22T06:07:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-22 06:07",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "wti": {
+        "pct": -3.638694408835418,
+        "prev": 101.41,
+        "price": 97.72,
+        "change": -3.6899999999999977
+      },
+      "date": "2026-10-21",
+      "brent": {
+        "pct": -0.172947387584196,
+        "prev": 109.86,
+        "price": 109.67,
+        "change": -0.18999999999999773
+      },
+      "source": "Yahoo Finance"
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 317697,
     "title_en": "미국 부통령 밴스, 라마스웨이 측 선거 광고 비판하는 당내 인사들에 일침",
     "title_ko": "미국 부통령 밴스, 라마스웨이 측 선거 광고 비판하는 당내 인사들에 일침",
@@ -2919,60 +2973,6 @@
     "is_travel": false,
     "source_published_at": null,
     "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 317447,
-    "title_en": "[국제유가] WTI 배럴당 98달러…중동 지정학적 긴장과 선박 공격",
-    "title_ko": "[국제유가] WTI 배럴당 98달러…중동 지정학적 긴장과 선박 공격",
-    "summary_ko": "국제유가가 20일(현지시간) 상승했다. 시장 집계에 따르면 WTI 원유 선물은 뉴욕상업거래소(NYMEX)에서 배럴당 98.23달러에 거래를 마쳤으며, 전일 종가(97.97달러) 대비 0.27%(0.26달러) 올랐다.\n\n북해산 브렌트유는 배럴당 109.17달러에 마감되어 전일 종가(105.92달러) 대비 3.07%(3.25달러) 상승했다.\n\n이날 유가 상승은 중동 지역의 지정학적 리스크가 고조된 영향이다. 외신 보도에 따르면 중동 내 외교적 진전에 대한 기대감이 제기되는 한편, 선박과 주요 시설에 대한 공격이 발생하면서 공급 차질 우",
-    "url": "internal://oil_price_2026-10-20",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국제유가",
-    "region": "글로벌",
-    "country": "국제",
-    "country_flag": "🛢️",
-    "score": 1,
-    "created_at": "2026-10-21 06:06",
-    "countries": [
-      "미국",
-      "사우디아라비아",
-      "러시아"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/oil_2026_10_20_pid5562741.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-21T06:06:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-21 06:06",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "wti": {
-        "pct": 0.26538736347862113,
-        "prev": 97.97,
-        "price": 98.23,
-        "change": 0.2600000000000051
-      },
-      "date": "2026-10-20",
-      "brent": {
-        "pct": 3.0683534743202414,
-        "prev": 105.92,
-        "price": 109.17,
-        "change": 3.25
-      },
-      "source": "Yahoo Finance"
-    },
     "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
