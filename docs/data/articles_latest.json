@@ -1,5 +1,49 @@
 [
   {
+    "id": 317943,
+    "title_en": "동남아시아, 폭염·뇌우 겹친 찜통더위…곳곳 강한 비",
+    "title_ko": "동남아시아, 폭염·뇌우 겹친 찜통더위…곳곳 강한 비",
+    "summary_ko": "23일(현지시간) 동남아시아 주요국은 최저 24도에서 최고 35도 사이의 기온 분포를 보이며 전역에서 고온 다습한 날씨가 이어지고 있다. 인도네시아 자카르타가 35도로 가장 높은 기온을 기록하며 폭염이 기승을 부리는 반면, 말레이시아 쿠알라룸푸르는 31도로 비교적 선선한 기온을 나타냈다. 베트남 하노이와 호치민, 껀터, 인도네시아 자카르타와 마카사르는 폭염이 지속되는 지역으로 분류됐다.\n\n이와 함께 베트남 호치민과 껀터, 태국 푸켓, 필리핀 세부에서는 뇌우가 발생해 기상 상황이 악화했다. 인도네시아, 태국, 말레이시아, 싱가포르 등",
+    "url": "internal://weather_group_동남아시아_today20261023",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_동남아시아_today20261023",
+    "region": "southeast_asia",
+    "country": "동남아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-23 07:33",
+    "countries": [
+      "베트남",
+      "인도네시아",
+      "태국",
+      "필리핀",
+      "미얀마",
+      "캄보디아",
+      "말레이시아",
+      "싱가포르"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_indonesia_20261023.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-23T07:33:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-23 07:33",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 317938,
     "title_en": "[가상자산 동향] 비트코인 4.01% 하락…미 연준 금리 인하 속도 조절 우려",
     "title_ko": "[가상자산 동향] 비트코인 4.01% 하락…미 연준 금리 인하 속도 조절 우려",
@@ -1106,7 +1150,7 @@
     "id": 317906,
     "title_en": "[데일리 다이제스트] 글로벌 기술 규제 강화와 지정학적 안보 위기 심화",
     "title_ko": "[데일리 다이제스트] 글로벌 기술 규제 강화와 지정학적 안보 위기 심화",
-    "summary_ko": "[글로벌 기술 기업에 대한 대규모 제재와 사법 리스크 확산]\n- 미국 뉴멕시코주 법원은 21일(현지시간) 페이스북 이용자의 개인정보 보호 관행과 관련해 허위 진술을 한 혐의로 메타에 250억 달러의 배상금을 지급하라고 명령했다. - 독일 연방정보보안청(BSI)은 22일 전 세계적으로 널리 사용되는 프로그래밍 언어 PHP에서 심각한 보안 취약점이 발견되어 글로벌 IT 인프라와 웹사이트 운영에 비상이 걸렸다고 밝혔다. - 스페이스X는 20일 AI 부문 매출이 76억 달러로 급증하며 스타링크를 넘어섰고, 공기업 전환 이후 첫 영업이익 흑",
+    "summary_ko": "[업데이트]\n■ 10월 23일 07:32 — 21일(현지시간)부터 일본, 튀니지, 캐나다 등 세계 각국에서 PHP 보안 취약점으로 인한 온라인 서비스 중단 사태가 현실화하며 글로벌 IT 인프라에 비상이 걸렸다. 이번 사태는 AI 기술을 통해 시스템 결함이 발견되면서 촉발되었으며, 일본에서는 은행과 정부 기관 등이 예방 차원에서 서비스를 중단했고 효고현은 27개 현립 시설의 예약 시스템이 이용 불가능한 상태라고 밝혔다. 러시아 국가컴퓨터사고조율센터는 중요 인프라 시설의 웹사이트 접근 제한을 권고했으며, 튀니지 국가사이버보안청은 보안 ",
     "url": "internal://digest_20261023",
     "source": "NewsFinal",
     "category": "다이제스트",
@@ -1121,7 +1165,12 @@
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/digest_20261023.jpg",
     "view_count": 0,
     "first_published_at": null,
-    "update_log": [],
+    "update_log": [
+      {
+        "timestamp": "2026-10-23 07:32",
+        "note": "최초 게시"
+      }
+    ],
     "byline": "뉴스파이널 편집국",
     "is_travel": false,
     "source_published_at": null,
@@ -2950,118 +2999,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 317716,
-    "title_en": "미얀마 군부, 민간인 대상 공습 강화 속 희토류 공급망 통제권 분쟁 격화",
-    "title_ko": "미얀마 군부, 민간인 대상 공습 강화 속 희토류 공급망 통제권 분쟁 격화",
-    "summary_ko": "미얀마 군사정권은 20일(현지시간) 마궤와 만달레이 지역, 친주 등지에서 자이로콥터와 가미카제 드론, 제트 전투기를 동원한 공습을 감행해 민간인 16명을 살해했다. 이번 공격은 군부가 민간인 거주지를 표적으로 삼아 무차별적인 화력을 퍼부은 사례로 기록됐다.\n\n이와 동시에 미얀마 군부 지도자 민 아웅 흘라잉(Min Aung Hlaing)은 19일 야르 퍄에(Yar Pyae)를 신임 국방장관으로 임명하는 등 내각 개편을 단행했다. 야르 퍄에는 민족연대평화협상위원회(NSPNC) 의장 출신으로, 16일 전국휴전협정(NCA) 11주년 기념 ",
-    "url": "internal://trend_미얀마_2026102207",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "trend_미얀마",
-    "region": "southeast_asia",
-    "country": "미얀마",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-10-22 07:31",
-    "countries": [
-      "미얀마",
-      "중국",
-      "태국",
-      "영국",
-      "인도"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_myanmar_civil_war.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-22T07:31:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-22 07:31",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "사진: Myanmar Pressphoto Agency (CC BY 3.0, Wikimedia Commons)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 317715,
-    "title_en": "[종목 동향] 애플 주가 1.32% 상승…아이폰 서비스 확장 및 시장 회복세",
-    "title_ko": "[종목 동향] 애플 주가 1.32% 상승…아이폰 서비스 확장 및 시장 회복세",
-    "summary_ko": "◆ 주가 동향\n나스닥에서 애플 주가는 21일(현지시간) 전일 대비 1.32% 상승한 343.99달러에 거래를 마쳤다. 이날 주가 상승은 최근 기업용 모바일 솔루션 업체인 큐니티(Qnity)가 애플의 아이폰 비즈니스 파트너십을 확보했다는 소식이 투자 심리에 긍정적인 영향을 미친 결과다.\n\n애플은 기업 고객을 대상으로 한 아이폰 보급 확대 전략을 구체화하고 있다. 시장에서는 이러한 B2B 부문에서의 서비스 확장성이 향후 매출 다변화에 기여할 것으로 평가한다.\n\n또한 거시경제 측면에서 시장 전반의 투자 심리가 개선된 점도 주가 상승을 견",
-    "url": "internal://stock_news_2026-10-21",
-    "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "종목동향",
-    "region": "global",
-    "country": "미국",
-    "country_flag": "🇺🇸",
-    "score": 1,
-    "created_at": "2026-10-22 07:27",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/stock_news_2026_10_21_pid1853262.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-22T07:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-22 07:27",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
-  },
-  {
-    "id": 317705,
-    "title_en": "[가상자산 동향] 리플 4.07% 상승…미국 규제 완화 기대감 확산",
-    "title_ko": "[가상자산 동향] 리플 4.07% 상승…미국 규제 완화 기대감 확산",
-    "summary_ko": "◆ 가격 동향\n\n22일 06:29(한국시간) 야후 파이낸스에 따르면 리플 가격은 전일 대비 4.07% 상승한 1.39달러를 기록했다. 최근 미국 증권거래위원회(SEC)의 가상자산 규제 기조가 완화될 것이라는 시장의 전망이 리플 매수세를 견인했다.\n\n특히 리플랩스와 금융 당국 간의 법적 공방이 마무리 단계에 접어들었다는 분석이 나오면서 투자 심리가 개선됐다. 기관 투자자들의 자금 유입이 지속되는 가운데 리플의 결제 네트워크 확장성에 대한 긍정적인 평가가 가격 상승을 뒷받침했다.\n\n◆ 주요 지표\n\n리플의 당일 거래 범위는 1.33달러에",
-    "url": "internal://crypto_news_2026-10-22",
-    "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "가상자산동향_crypto",
-    "region": "global",
-    "country": "글로벌",
-    "country_flag": "🌐",
-    "score": 1,
-    "created_at": "2026-10-22 06:30",
-    "countries": [],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_10_22_pid8575459.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-22T06:30:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-22 06:30",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   }
 ]
