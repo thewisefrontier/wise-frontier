@@ -1,5 +1,71 @@
 [
   {
+    "id": 317911,
+    "title_en": "[국내유가] 휘발유 리터당 1856원…경유는 하락 전환",
+    "title_ko": "[국내유가] 휘발유 리터당 1856원…경유는 하락 전환",
+    "summary_ko": "한국석유공사 오피넷이 23일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1856원으로 집계됐다. 이번에 공개된 수치는 전일 대비 0.10원 상승한 값이다.\n\n이날 오피넷에 따르면 경유는 리터당 1841.90원으로 전일 대비 0.73원 하락했다. LPG 부탄은 리터당 1143.89원으로 전일보다 0.01원 내린 가격에 거래를 마쳤다.\n\n이번 유가 변동은 최근의 국제유가 흐름과 정유사들의 공급가격 조정 등이 복합적으로 작용한 결과로 분석된다. 주유소협회 측은 최근의 가격 변동 국면에서 정유사의 도매가 책정이 주요한",
+    "url": "internal://opinet_price_2026-10-23",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-10-23 05:12",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_10_23_pid2157211.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-23T05:12:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-23 05:12",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-10-23",
+      "prices": {
+        "B027": {
+          "diff": 0.1,
+          "name": "휘발유",
+          "price": 1855.94
+        },
+        "B034": {
+          "diff": 0.02,
+          "name": "고급휘발유",
+          "price": 2397.29
+        },
+        "C004": {
+          "diff": -0.19,
+          "name": "실내등유",
+          "price": 1571.76
+        },
+        "D047": {
+          "diff": -0.73,
+          "name": "경유",
+          "price": 1841.9
+        },
+        "K015": {
+          "diff": -0.01,
+          "name": "LPG(부탄)",
+          "price": 1143.89
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 317910,
     "title_en": "The Poisonwood Bible",
     "title_ko": "[오늘의 책] 바버라 킹솔버의 『The Poisonwood Bible』, 콩고의 격변 속에서 울려 퍼지는 여성들의 목소리",
@@ -2805,113 +2871,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 317682,
-    "title_en": "[국내유가] 휘발유 리터당 1856원…정유사 공급가격 영향",
-    "title_ko": "[국내유가] 휘발유 리터당 1856원…정유사 공급가격 영향",
-    "summary_ko": "한국석유공사 오피넷이 22일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1856원으로 집계됐다. 이번 수치는 직전 조사일 대비 소폭 변동된 흐름을 나타낸 것이다.\n\n이날 오피넷에 따르면 경유 판매가격은 리터당 1842.02원으로 전일 대비 0.52원 하락했다. 반면 LPG 부탄은 리터당 1143.87원을 기록해 전일과 같은 수준을 유지하며 보합세를 보였다.\n\n최근 국내 유가 변동은 국제시세와 연동된 정유사 도매가 조정 및 공급가격 흐름이 복합적으로 작용한 결과인 것으로 알려졌다. 이와 관련해 주유소 업계와 정유",
-    "url": "internal://opinet_price_2026-10-22",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국내유가",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "🇰🇷",
-    "score": 1,
-    "created_at": "2026-10-22 05:11",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_10_22_pid4474606.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-22T05:11:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-22 05:11",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "date": "2026-10-22",
-      "prices": {
-        "B027": {
-          "diff": -0.05,
-          "name": "휘발유",
-          "price": 1855.9
-        },
-        "B034": {
-          "diff": -0.32,
-          "name": "고급휘발유",
-          "price": 2397.14
-        },
-        "C004": {
-          "diff": -0.06,
-          "name": "실내등유",
-          "price": 1571.57
-        },
-        "D047": {
-          "diff": -0.52,
-          "name": "경유",
-          "price": 1842.02
-        },
-        "K015": {
-          "diff": 0.0,
-          "name": "LPG(부탄)",
-          "price": 1143.87
-        }
-      }
-    },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 317681,
-    "title_en": "Crow's-Eye View",
-    "title_ko": "[오늘의 책] 파격적인 실험과 불안의 미학으로 문학사를 뒤흔든 『오감도』",
-    "summary_ko": "한국 아방가르드 문학의 대표작으로 꼽히는 시인 이상의 연작 시 『오감도』는 시대를 앞서간 독창성 덕분에 오늘날까지도 현대인들에게 끊임없이 읽히고 있다. 암울한 일제강점기 속에서 피어난 이 명작은 파격적인 형식과 절망적인 시대 정서를 담아내며 현대 음악과 게임 등 후대의 다양한 예술 영역에 커다란 영감을 주고 있다.\n\n이 작품은 1934년 조선중앙일보에 연재되며 세상에 처음 모습을 드러냈다. 원래 30회 연재로 기획되었으나 작품이 난해하다는 독자들의 거센 항의 투서가 이어지면서 결국 15회 만에 연재가 중단되었다. 새가 높은 곳에서 ",
-    "url": "internal://literature_Q12607717",
-    "source": "NewsFinal",
-    "category": "문화·예술",
-    "subcategory": "오늘의책",
-    "region": "asia",
-    "country": "한국",
-    "country_flag": "🇰🇷",
-    "score": 1,
-    "created_at": "2026-10-22 05:08",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/literature_q12607717.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-22T05:08:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-22 05:08",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "enwiki": "Crow's Eye View",
-      "kowiki": "오감도",
-      "source": "curated",
-      "wikidata": "Q12607717"
-    },
-    "image_credit": "이미지 출처: Wikimedia Commons (퍼블릭 도메인)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   }
 ]
