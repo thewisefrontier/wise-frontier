@@ -1,5 +1,51 @@
 [
   {
+    "id": 318003,
+    "title_en": "아프리카, 탄자니아 35도 폭염 속 가나 등 곳곳 비 소식",
+    "title_ko": "아프리카, 탄자니아 35도 폭염 속 가나 등 곳곳 비 소식",
+    "summary_ko": "23일(현지시간) 아프리카 주요국 수도의 기온은 최저 11도에서 최고 35도 사이를 기록하며 지역별로 큰 편차를 보였다. 탄자니아 도도마는 최고기온 35도로 아프리카 주요국 중 가장 더운 날씨를 보인 반면, 모로코 라바트는 최고 23도로 가장 선선한 기온 분포를 나타냈다. 특히 나이지리아 포트하커트와 가나 타말레 지역은 기온이 38도를 넘어서는 폭염이 이어지고 있으며, 가나 아크라에서는 약한 이슬비가 내리며 강수확률 98%를 기록하고 있다.\n\n케냐 나이로비 역시 약한 이슬비가 내리는 가운데 0.3mm의 강수량이 관측되었다. 나이로비",
+    "url": "internal://weather_group_아프리카_today20261023",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_아프리카_today20261023",
+    "region": "africa",
+    "country": "아프리카",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-23 13:16",
+    "countries": [
+      "나이지리아",
+      "케냐",
+      "남아공",
+      "이집트",
+      "모로코",
+      "알제리",
+      "에티오피아",
+      "가나",
+      "탄자니아",
+      "앙골라"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_nigeria_20261023.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-23T13:16:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-23 13:16",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 318001,
     "title_en": "유럽, 곳곳 비 소식 속 기온 차 뚜렷",
     "title_ko": "유럽, 곳곳 비 소식 속 기온 차 뚜렷",
@@ -2788,50 +2834,6 @@
     "update_log": [
       {
         "timestamp": "2026-10-22 13:23",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 317766,
-    "title_en": "유럽, 로마 22도 온화한 가운데 중북부 비 소식",
-    "title_ko": "유럽, 로마 22도 온화한 가운데 중북부 비 소식",
-    "summary_ko": "22일(현지시간) 유럽 주요국 수도의 기온은 최저 3도에서 최고 22도 사이의 분포를 보이고 있다. 이탈리아 로마가 22도로 가장 높은 기온을 기록하며 온화한 날씨를 보이는 반면, 러시아 모스크바는 11도로 가장 선선한 기온을 나타냈다. 로마는 내일도 22도의 최고기온을 유지할 것으로 예상되나, 모스크바는 내일 최고기온이 10도로 오늘보다 1도 낮아질 전망이다.\n\n전반적으로 남부 지역은 흐린 날씨를 보이는 가운데 중북부 국가를 중심으로 강수가 집중되는 양상이다. 영국 런던은 14도, 독일 베를린은 13도, 프랑스 파리는 15도, 폴",
-    "url": "internal://weather_group_유럽_today20261022",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_유럽_today20261022",
-    "region": "europe",
-    "country": "유럽",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-22 12:19",
-    "countries": [
-      "영국",
-      "독일",
-      "프랑스",
-      "이탈리아",
-      "스페인",
-      "러시아",
-      "폴란드",
-      "우크라이나"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_germany_20261022.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-22T12:19:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-22 12:19",
         "note": "최초 게시"
       }
     ],
