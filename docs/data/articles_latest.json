@@ -1,5 +1,42 @@
 [
   {
+    "id": 318172,
+    "title_en": "한국, 서울·부산·주말 남부 중심 비와 맑은 날씨 교차",
+    "title_ko": "한국, 서울·부산·주말 남부 중심 비와 맑은 날씨 교차",
+    "summary_ko": "24일 이번 주말 한국의 날씨는 남부지방과 제주도를 중심으로 비가 내리는 가운데 지역별로 흐림과 맑음이 엇갈리는 양상을 보인다. 한국 기상청에 따르면 이번 예보 기간 중 부산, 대구, 광주, 제주 등은 강수확률이 60% 이상을 기록하며 토요일과 일요일 중 하루 이상 비가 내리는 지역으로 분류됐다. 서울의 토요일 날씨는 오전 흐림에 이어 오후에는 구름이 많겠으며 기온은 최저 15°C에서 최고 20°C를 나타낸다.\n\n이어지는 일요일의 서울은 오전과 오후 모두 맑은 하늘을 보이겠고 최저기온 12°C, 최고기온 24°C로 기온 폭이 다소 ",
+    "url": "internal://weather_한국_weekend20261024",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_한국_weekend20261024",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-24 05:23",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20261024.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-24T05:23:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-24 05:23",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 318171,
     "title_en": "Venomous Lumpsucker",
     "title_ko": "[오늘의 책] 아서 C. 클라크상 수상작, 네드 보먼의 『독쑤기미: 멸종을 사고 팝니다』",
@@ -3042,42 +3079,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": false
-  },
-  {
-    "id": 317912,
-    "title_en": "한국, 전국·아침 쌀쌀·오후 남부 비",
-    "title_ko": "한국, 전국·아침 쌀쌀·오후 남부 비",
-    "summary_ko": "23일 한국의 날씨는 전국이 가끔 구름 많은 가운데 아침까지 기온이 낮아 춥겠으나, 오후부터 남부지방과 제주도를 중심으로 차차 흐려져 비가 내릴 전망이다. 기상청에 따르면 오늘 전국 최저기온은 7°C, 최고기온은 22°C로 분포하겠으며, 지역별로 기온과 하늘 상태에 차이가 나타나겠다. 서울은 오전과 오후 모두 맑은 날씨가 이어지겠으며, 최저기온 7°C, 최고기온 21°C를 기록하겠다.\n\n오전 강수확률은 30%, 오후 강수확률은 20%이며 최대풍속은 8km/h다. 반면 남부지방과 제주도는 구름이 많거나 흐린 날씨를 보이겠다. 부산은 ",
-    "url": "internal://weather_한국_today20261023",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_한국_today20261023",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-23 05:23",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20261023.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-23T05:23:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-23 05:23",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
   }
 ]
