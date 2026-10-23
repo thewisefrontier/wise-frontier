@@ -64,6 +64,22 @@
     "updated_at": "2026-10-14 09:12"
   },
   {
+    "id": "aramco",
+    "name": "Saudi Aramco",
+    "name_ko": "사우디 아람코",
+    "country": "",
+    "country_flag": "🌍",
+    "exchange": "TADAWUL",
+    "ticker": "2222",
+    "sector": "에너지",
+    "description": "1933년 설립된 사우디아라비아의 국영 석유 기업으로 세계 최대 규모의 원유 생산 및 매장량을 보유하고 있습니다. 석유 탐사, 생산, 정제 및 석유화학 제품 생산을 주력으로 하며 글로벌 에너지 시장에서 압도적인 영향력을 행사합니다. 사우디 증권거래소에 상장되어 있으며 국가 경제의 핵심적인 역할을 수행하고 있습니다.",
+    "founded_year": 1933,
+    "headquarters": "다란, 사우디아라비아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-10-23 09:45"
+  },
+  {
     "id": "unicredit",
     "name": "UniCredit S.p.A.",
     "name_ko": "유니크레디트",
@@ -2096,22 +2112,6 @@
     "updated_at": "2026-08-14 23:23"
   },
   {
-    "id": "singareni_collieries_company",
-    "name": "The Singareni Collieries Company Limited",
-    "name_ko": "싱가레니 콜리어리스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "",
-    "sector": "에너지",
-    "description": "싱가레니 콜리어리스는 1920년에 설립된 인도 텔랑가나주의 국영 석탄 채굴 기업입니다. 주로 인도 남부 지역의 전력 및 산업 수요를 충족하기 위해 석탄을 공급하며, 지역 경제에서 중요한 위치를 차지하고 있습니다. 토목 및 인프라 개발과 관련된 지역 사회 공헌 활동도 함께 수행하고 있습니다.",
-    "founded_year": 1920,
-    "headquarters": "코다구뎀, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-08 01:12"
-  },
-  {
     "id": "singareni_collieries",
     "name": "The Singareni Collieries Company Limited",
     "name_ko": "싱가레니 콜리어리스",
@@ -2126,6 +2126,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-30 17:03"
+  },
+  {
+    "id": "singareni_collieries_company",
+    "name": "The Singareni Collieries Company Limited",
+    "name_ko": "싱가레니 콜리어리스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "싱가레니 콜리어리스는 1920년에 설립된 인도 텔랑가나주의 국영 석탄 채굴 기업입니다. 주로 인도 남부 지역의 전력 및 산업 수요를 충족하기 위해 석탄을 공급하며, 지역 경제에서 중요한 위치를 차지하고 있습니다. 토목 및 인프라 개발과 관련된 지역 사회 공헌 활동도 함께 수행하고 있습니다.",
+    "founded_year": 1920,
+    "headquarters": "코다구뎀, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-08 01:12"
   },
   {
     "id": "tata_power",
