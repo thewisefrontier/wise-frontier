@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-23 16:13",
+  "updated_at": "2026-10-23 16:38",
   "indices": [
     {
       "name": "S&P 500",
@@ -39,8 +39,8 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 108525.49,
-      "change_pct": -0.0,
+      "price": 108397.83,
+      "change_pct": -0.12,
       "up": false
     },
     {
@@ -60,8 +60,8 @@
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 5435.21,
-      "change_pct": 0.88,
+      "price": 5411.91,
+      "change_pct": 0.45,
       "up": true
     },
     {
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.53,
-      "change_pct": 0.99,
+      "price": 16.54,
+      "change_pct": 1.06,
       "up": true
     }
   ],
@@ -137,8 +137,8 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 108525.49,
-        "change_pct": -0.0,
+        "price": 108397.83,
+        "change_pct": -0.12,
         "up": false
       },
       {
@@ -158,8 +158,8 @@
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 5435.21,
-        "change_pct": 0.88,
+        "price": 5411.91,
+        "change_pct": 0.45,
         "up": true
       },
       {
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.53,
-        "change_pct": 0.99,
+        "price": 16.54,
+        "change_pct": 1.06,
         "up": true
       }
     ]
@@ -198,15 +198,15 @@
     "ANTM": {
       "name": "Aneka Tambang Tbk",
       "symbol": "ANTM.JK",
-      "price": 2870.0,
-      "change_pct": 1.06,
-      "up": true
+      "price": 2830.0,
+      "change_pct": -0.35,
+      "up": false
     },
     "ACB": {
       "name": "Asia Commercial Joint Stock Bank",
       "symbol": "ACB.VN",
-      "price": 21050.0,
-      "change_pct": 3.19,
+      "price": 20950.0,
+      "change_pct": 2.7,
       "up": true
     }
   }
