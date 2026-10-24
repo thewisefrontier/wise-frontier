@@ -1,5 +1,42 @@
 [
   {
+    "id": 318607,
+    "title_en": "서울, 기온 널뛰기 속 목요일 비",
+    "title_ko": "서울, 기온 널뛰기 속 목요일 비",
+    "summary_ko": "25일 기준 다음 주 한국의 날씨는 월요일부터 금요일까지 맑음과 흐림, 비가 번갈아 나타나는 가운데 기온의 변동 폭이 크게 전개된다. 한국 기상청에 따르면 서울의 다음 주 최고기온은 21°C에서 최저기온 2°C 사이의 분포를 보이며, 주 초반의 포근한 날씨에서 주중 급격한 기온 하강과 함께 비 소식이 예고되어 있다.\n\n요일별 상세 날씨를 보면 월요일 서울은 맑은 날씨 속에 최고기온 21°C, 최저기온 15°C를 기록하며 비교적 온화한 기온을 보인다. 이어 화요일에는 맑은 하늘이 이어지는 가운데 기온이 내려가 최고 16°C, 최저 1",
+    "url": "internal://weather_한국_weekly20261025",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_한국_weekly20261025",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-25 05:23",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_south_korea_20261025.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-25T05:23:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-25 05:23",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 318606,
     "title_en": "[국내유가] 휘발유 리터당 1856원…전일 대비 소폭 하락",
     "title_ko": "[국내유가] 휘발유 리터당 1856원…전일 대비 소폭 하락",
@@ -2783,51 +2820,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 318171,
-    "title_en": "Venomous Lumpsucker",
-    "title_ko": "[오늘의 책] 아서 C. 클라크상 수상작, 네드 보먼의 『독쑤기미: 멸종을 사고 팝니다』",
-    "summary_ko": "네드 보먼(Ned Beauman)의 소설 『독쑤기미: 멸종을 사고 팝니다』는 2023년 아서 C. 클라크상(Arthur C. Clarke Award)을 수상하며 문학적 성과를 인정받은 작품이다. 이 소설은 생물 멸종에 관한 거래 시스템이라는 독특한 설정을 바탕으로 과학적 상상력과 사회 비판을 결합해 화제를 모았다. 국내에서는 최세진의 번역으로 2025년 8월 28일 황금가지에서 출간되었다.\n\n작품은 인간이 수많은 종을 멸종으로 내몰고 있는 가까운 미래를 배경으로 세계생물멸종위원회(World Commission on Species E",
-    "url": "internal://literature_Q133510892",
-    "source": "NewsFinal",
-    "category": "문화·예술",
-    "subcategory": "오늘의책",
-    "region": "europe",
-    "country": "영국",
-    "country_flag": "🇬🇧",
-    "score": 1,
-    "created_at": "2026-10-24 05:17",
-    "countries": [
-      "영국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/literature_cover_q133510892.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-24T05:17:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-24 05:17",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-10-24 19:50",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "enwiki": "Venomous Lumpsucker",
-      "kowiki": null,
-      "source": "prize",
-      "wikidata": "Q133510892"
-    },
-    "image_credit": "독쑤기미: 멸종을 사고 팝니다 표지",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   }
 ]
