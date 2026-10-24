@@ -1614,7 +1614,7 @@
     "id": 318127,
     "title_en": "요르단 카라크 교회 총격 테러 발생…장례식 참례객 등 7명 사망",
     "title_ko": "요르단 카라크 교회 총격 테러 발생…장례식 참례객 등 7명 사망",
-    "summary_ko": "[업데이트]\n■ 10월 24일 09:30 — 23일(현지시간) 요르단 카라크주 하무드 마을의 그리스 정교회에서 발생한 총기 테러로 인한 부상자 수가 기존 34명에서 40명으로 늘어났으며, 이들 중 일부는 위독한 상태이다. 이번 사건과 관련해 요르단 정부는 전역에 3일간의 국가 애도 기간을 선포했다. 압둘라 2세 국왕은 이번 테러를 강력히 규탄하며 책임자들에게 엄중한 처벌을 내릴 것을 천명했고, 자파르 하산 총리는 이번 범죄가 맹목적인 극단주의와 테러리즘 이데올로기에 기인한 것이라고 지적했다.\n\n23일 기준 이번 공격을 자처한 단체는",
+    "summary_ko": "[업데이트]\n■ 10월 24일 11:30 — 요르단 카라크주 교회 총격 사건과 별개로, 23일(현지시간) 이스라엘은 서안지구에 대한 전면 봉쇄를 단행하고 헤브론에서 군사 작전을 강행했다. 베냐민 네타냐후 이스라엘 총리는 헤브론을 방문해 테러범 거주지의 주민 대피와 건물 철거를 지시했으며, 이 과정에서 발생한 총격전으로 팔레스타인인 2명과 이스라엘 군인 2명이 사망했다. 이스라엘군은 서안지구 전역의 통행을 제한하고 건물 철거 작업을 본격화했다.\n\n또한 같은 날 호르무즈 해협에서 선박 2척이 공격받는 사건이 발생하면서, 요르단 총격 사",
     "url": "internal://cluster_20261024_e333ae26",
     "source": "NewsFinal",
     "category": "사회",
@@ -1639,6 +1639,10 @@
       {
         "timestamp": "2026-10-24 09:30",
         "note": "요르단 총기 테러 부상자 40명으로 늘어났다."
+      },
+      {
+        "timestamp": "2026-10-24 11:30",
+        "note": "이스라엘 서안지구 봉쇄 및 총격전으로 4명 사망했습니다."
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -2200,7 +2204,7 @@
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
-    "noindex": false
+    "noindex": true
   },
   {
     "id": 318064,
@@ -2870,64 +2874,5 @@
     "summary_3lines_en": "",
     "investment_idea_en": "",
     "noindex": false
-  },
-  {
-    "id": 317985,
-    "title_en": "프랑스에서 세계 최초 인간 감염 샤몬다 바이러스 사망 사례 발생",
-    "title_ko": "프랑스에서 세계 최초 인간 감염 샤몬다 바이러스 사망 사례 발생",
-    "summary_ko": "프랑스 보건 당국은 22일(현지시간) 샤몬다 바이러스(SHAV)에 감염된 환자가 사망했다고 밝혔다. 이는 전 세계적으로 보고된 첫 번째 인간 감염 사례다. 해당 환자는 평소 면역 체계가 심각하게 저하된 상태였으며, 바이러스와 관련된 뇌 합병증을 앓았던 것으로 확인됐다.\n\n그동안 이 바이러스는 인간에게는 전염되지 않는 것으로 간주되어 왔다. 그러나 이번 프랑스 사례를 통해 인간에게도 치명적인 영향을 미칠 수 있다는 사실이 처음으로 입증됐다.\n\n이 바이러스는 주로 소를 비롯해 양, 염소 등 가축에게 큰 피해를 준다. 감염된 소는 고열과",
-    "url": "internal://realtrend_Shamonda_Virus_(샤몬다_바이러스)_2026102311",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "realtrend_Shamonda_Virus_(샤몬다_",
-    "region": "europe",
-    "country": "프랑스",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-10-23 11:31",
-    "countries": [
-      "프랑스",
-      "스위스",
-      "독일",
-      "오스트리아",
-      "벨기에"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_2030265.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-23T11:31:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-23 11:31",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "tags": [
-        "animals",
-        "don’t panic",
-        "enfermedades animales",
-        "epidemiology",
-        "europe",
-        "france",
-        "francuska",
-        "infection",
-        "infectious disease",
-        "internacional",
-        "mundo",
-        "public health",
-        "science / health",
-        "svijet",
-        "virus shamonda"
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
   }
 ]
