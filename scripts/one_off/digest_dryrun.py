@@ -23,11 +23,15 @@ for name in ("startup", "newtech"):
     if len(cands) < d.AI_DIGEST_MIN_CANDIDATES:
         print("→ 후보 부족, 초안 생략")
         continue
-    content = d.call_gemini_article(d.build_digest_prompt(topic, cands), max_tokens=4000)
+    content = d.call_gemini_article(d.build_digest_prompt(topic, cands), max_tokens=8000)
     if not content:
         print("→ Gemini 응답 없음")
         continue
     title, body = parse_title_and_body(content)
+    title, body, dropped, n_sections = d.apply_money_guard(topic, title, body, cands)
+    for line in dropped:
+        print(f"  ✂️ 금액 검증 삭제: {line[:100]}")
+    print(f"  금액 검증 후 소식 {n_sections}건")
     bad, why = check_date_hallucination(body, d._digest_sources(cands), base_date=now_kst().date())
     print(f"\n[제목] {title}\n[날짜가드] {'걸림: ' + why if bad else '통과'}  [본문 {len(body)}자]\n")
     print(format_digest_body(keep_first_local_time(body)))

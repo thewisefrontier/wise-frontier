@@ -75,6 +75,36 @@ jobs:
           IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
           UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
 
+      - name: 오늘의 스타트업 소식 생성
+        run: python scripts/ai_digest.py startup
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
+          GEMINI_API_KEY_4: ${{ secrets.GEMINI_API_KEY_4 }}
+          GEMINI_API_KEY_5: ${{ secrets.GEMINI_API_KEY_5 }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
+          UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
+
+      - name: 오늘의 신기술 소식 생성
+        run: python scripts/ai_digest.py newtech
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
+          GEMINI_API_KEY_4: ${{ secrets.GEMINI_API_KEY_4 }}
+          GEMINI_API_KEY_5: ${{ secrets.GEMINI_API_KEY_5 }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
+          UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
+
       - name: 웹사이트 데이터 내보내기
         run: python scripts/export_articles.py
         env:
