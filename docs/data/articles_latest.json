@@ -1,5 +1,192 @@
 [
   {
+    "id": 318339,
+    "title_en": "[주간 시세] 10월 19~23일 글로벌 증시·환율·유가·금·비트코인 한 주 성적표",
+    "title_ko": "[주간 시세] 10월 19~23일 글로벌 증시·환율·유가·금·비트코인 한 주 성적표",
+    "summary_ko": "10월 19일부터 23일까지 한 주 동안 집계 대상 시세 13개 가운데 2개가 올랐고 11개가 내렸다. 주간 상승률이 가장 컸던 항목은 WTI 원유(+2.00%), 하락률이 가장 컸던 항목은 코스닥(-5.42%)다.\n\n[증시]\n- S&P500(뉴욕증시): 10월 23일 종가 7,623.68, 주간 -0.47% (직전 주 10월 16일 종가 7,659.44)\n- 나스닥종합(뉴욕증시): 10월 23일 종가 25,955.34, 주간 -0.71% (직전 주 10월 16일 종가 26,140.03)\n- 다우존스(뉴욕증시): 10월 23일 종가",
+    "url": "internal://weekly_market_2026-10-23",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "주간시세_crypto",
+    "region": "global",
+    "country": "",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-24 11:51",
+    "countries": [],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weekly_market_2026_10_23_pid2251648.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-24T11:51:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-24 11:51",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "items": [
+        {
+          "end": 7623.68017578125,
+          "pct": -0.4669,
+          "name": "S&P500",
+          "prev": 7659.43994140625,
+          "end_date": "2026-10-23",
+          "prev_date": "2026-10-16"
+        },
+        {
+          "end": 25955.341796875,
+          "pct": -0.7065,
+          "name": "나스닥종합",
+          "prev": 26140.029296875,
+          "end_date": "2026-10-23",
+          "prev_date": "2026-10-16"
+        },
+        {
+          "end": 52215.16015625,
+          "pct": 0.4091,
+          "name": "다우존스",
+          "prev": 52002.41015625,
+          "end_date": "2026-10-23",
+          "prev_date": "2026-10-16"
+        },
+        {
+          "end": 5550.2998046875,
+          "pct": -2.0774,
+          "name": "코스피",
+          "prev": 5668.0498046875,
+          "end_date": "2026-10-23",
+          "prev_date": "2026-10-16"
+        },
+        {
+          "end": 751.6900024414062,
+          "pct": -5.4216,
+          "name": "코스닥",
+          "prev": 794.780029296875,
+          "end_date": "2026-10-23",
+          "prev_date": "2026-10-16"
+        },
+        {
+          "end": 62693.16015625,
+          "pct": -4.0278,
+          "name": "닛케이225",
+          "prev": 65324.2890625,
+          "end_date": "2026-10-23",
+          "prev_date": "2026-10-16"
+        },
+        {
+          "end": 25181.650390625,
+          "pct": -1.721,
+          "name": "DAX",
+          "prev": 25622.609375,
+          "end_date": "2026-10-23",
+          "prev_date": "2026-10-16"
+        },
+        {
+          "end": 7782.81982421875,
+          "pct": -2.1853,
+          "name": "CAC40",
+          "prev": 7956.7001953125,
+          "end_date": "2026-10-23",
+          "prev_date": "2026-10-16"
+        },
+        {
+          "end": 10690.400390625,
+          "pct": -1.7598,
+          "name": "FTSE100",
+          "prev": 10881.900390625,
+          "end_date": "2026-10-23",
+          "prev_date": "2026-10-16"
+        },
+        {
+          "end": 1323.6600341796875,
+          "pct": -1.2894,
+          "name": "원/달러 환율",
+          "prev": 1340.949951171875,
+          "end_date": "2026-10-23",
+          "prev_date": "2026-10-16"
+        },
+        {
+          "end": 103.44000244140625,
+          "pct": 2.0018,
+          "name": "WTI 원유",
+          "prev": 101.41000366210938,
+          "end_date": "2026-10-23",
+          "prev_date": "2026-10-16"
+        },
+        {
+          "end": 4010.0,
+          "pct": -4.0922,
+          "name": "금",
+          "prev": 4181.10009765625,
+          "end_date": "2026-10-23",
+          "prev_date": "2026-10-16"
+        },
+        {
+          "end": 80829.5625,
+          "pct": -0.679,
+          "name": "비트코인",
+          "prev": 81382.1484375,
+          "end_date": "2026-10-24",
+          "prev_date": "2026-10-17"
+        }
+      ],
+      "week_end": "2026-10-23"
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
+    "id": 318336,
+    "title_en": "에누구 레인저스, CAF 챔피언스리그 조별리그 진출 좌절…MC 알제에 역전패",
+    "title_ko": "에누구 레인저스, CAF 챔피언스리그 조별리그 진출 좌절…MC 알제에 역전패",
+    "summary_ko": "나이지리아의 축구 클럽 에누구 레인저스(Rangers International of Enugu)가 아프리카축구연맹(CAF, Confederation of African Football) 챔피언스리그 조별리그 진출을 눈앞에 두고 고배를 마셨다. 에누구 레인저스는 23일(현지시간) 알제리 알제 알리 라 푸앵트 스타디움에서 열린 MC 알제(MC Alger)와의 CAF 챔피언스리그 2차 예선 2차전 원정 경기에서 0대 3으로 패했다.\n\n지난주 나이지리아 아베오쿠타에서 열린 1차전 홈 경기에서 2대 0으로 승리하며 유리한 고지를 점했던 에누",
+    "url": "internal://cluster_20261024_268c92a5",
+    "source": "NewsFinal",
+    "category": "스포츠",
+    "subcategory": "cluster_20261024_268c92a5",
+    "region": "africa",
+    "country": "알제리",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-24 11:47",
+    "countries": [
+      "알제리",
+      "나이지리아"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_rangers_international_of_enugu.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-24T11:47:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-24 11:47",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "src_ids": [
+        930371,
+        928407,
+        926352
+      ]
+    },
+    "image_credit": "사진: Funman19 (CC BY-SA 4.0, Wikimedia Commons)",
+    "continuation_of_id": null,
+    "summary_3lines_en": "",
+    "investment_idea_en": "",
+    "noindex": false
+  },
+  {
     "id": 318324,
     "title_en": "중동, 최고 38도 폭염·흐림 가득한 주말",
     "title_ko": "중동, 최고 38도 폭염·흐림 가득한 주말",
@@ -2781,98 +2968,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 317996,
-    "title_en": "미 법무부, 코리 르완도우스키 전 DHS 고문 범죄 수사 착수",
-    "title_ko": "미 법무부, 코리 르완도우스키 전 DHS 고문 범죄 수사 착수",
-    "summary_ko": "미국 법무부(DOJ)가 도널드 트럼프 전 대통령의 측근이자 국토안보부(DHS) 고문을 지낸 코리 르완도우스키에 대한 범죄 수사에 22일(현지시간) 착수했다. 이번 수사는 DHS 내부 감찰관실이 르완도우스키의 정부 계약 개입 의혹과 관련해 법무부에 형사 고발을 의뢰하면서 시작됐다. 르완도우스키는 크리스티 노엄 전 국토안보부 장관 재임 시절 고문으로 활동하며 정부 직위를 이용해 사적 이익을 취했다는 의혹을 받고 있다.\n\n수사의 핵심 배경에는 2억 2000만 달러 규모의 국토안보부 광고 계약이 있다. 당시 노엄 장관은 표준 입찰 절차를 ",
-    "url": "internal://cluster_20261023_e818a4b1",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "cluster_20261023_e818a4b1",
-    "region": "global",
-    "country": "미국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-23 11:50",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_corey_lewandowski.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-23T11:50:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-23 11:50",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        861523,
-        859348,
-        859348,
-        857171,
-        853925,
-        851201
-      ]
-    },
-    "image_credit": "이미지 출처: Wikimedia Commons",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": false
-  },
-  {
-    "id": 317994,
-    "title_en": "미 대사관, 캐나다의 선거 개입 의혹 제기…캐나다 외교관 활동 제한 조치",
-    "title_ko": "미 대사관, 캐나다의 선거 개입 의혹 제기…캐나다 외교관 활동 제한 조치",
-    "summary_ko": "미국 대사관이 캐나다 정부와 주요 인사들이 자국 선거에 개입하고 있다고 공개적으로 비판하며 양국 간 외교적 긴장이 고조되고 있다. 피트 훅스트라(Pete Hoekstra) 주캐나다 미국 대사가 이끄는 대사관은 21일(현지시간) ‘캐나다의 미국 정치 활동 감시’라는 제목의 팩트 시트를 발표하고 캐나다 측의 정치적 간섭 사례를 구체적으로 나열했다.\n\n미 대사관은 멜라니 졸리(Mélanie Joly) 산업부 장관, 더그 포드(Doug Ford) 온타리오주 총리, 앤서니 하우스파더(Anthony Housefather) 자유당 하원의원(MP",
-    "url": "internal://cluster_20261023_687b966b",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "cluster_20261023_687b966b",
-    "region": "global",
-    "country": "캐나다",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-23 11:46",
-    "countries": [
-      "캐나다",
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_2893863.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-23T11:46:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-23 11:46",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        857548,
-        857614,
-        857170,
-        851972,
-        849653,
-        849653
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": false
   }
 ]
