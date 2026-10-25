@@ -28,10 +28,10 @@ out, dropped, n = d.strip_unverified_money("[잘못 200만 달러]\n- 사실.\n\
 assert "[잘못" not in out and n == 1
 
 # 천 단위 쉼표는 사이트 표기("6000만")에 맞춰 제거, 제목의 검증 안 된 금액은 기본 제목으로.
-t, b, _, _ = d.apply_money_guard(T["startup"], "[오늘의 스타트업 소식] 에이크미 6,000만 달러 유치", "[A]\n- 6,000만 달러 유치.",
+t, b, _, _ = d.apply_money_guard(T["startup"], "[오늘의 스타트업] 에이크미 6,000만 달러 유치", "[A]\n- 6,000만 달러 유치.",
                                  [{"title_en": "Acme raises $60M", "full_text": ""}])
 assert t.endswith("6000만 달러 유치") and "6000만 달러" in b, (t, b)
-t, _, _, _ = d.apply_money_guard(T["startup"], "[오늘의 스타트업 소식] 에이크미 1억 달러 유치", "[A]\n- 사실.", [{"title_en": "Acme raises $60M", "full_text": ""}])
-assert t == "[오늘의 스타트업 소식] 주요 동향", t
+t, _, _, _ = d.apply_money_guard(T["startup"], "[오늘의 스타트업] 에이크미 1억 달러 유치", "[A]\n- 사실.", [{"title_en": "Acme raises $60M", "full_text": ""}])
+assert t == "[오늘의 스타트업] 주요 동향", t
 
 print("ok")
