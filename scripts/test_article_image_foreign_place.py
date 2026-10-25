@@ -36,4 +36,10 @@ assert ECB in filter_foreign_place_hits([ECB], allowed_countries_from_text(ecb_t
 assert NYC in filter_foreign_place_hits([NYC], set(), "new york stock exchange building")
 assert NYC not in filter_foreign_place_hits([NYC], set(), "stock market chart")
 
+# 2026-10-25: 태그에 기업·상표명이 박힌 스톡사진(SHELL 주유기)은 일반 소재 검색 후보에서 뺀다.
+from article_image import _hit_has_brand  # noqa: E402
+assert _hit_has_brand({"tags": "gas pump, petrol station, shell, fuel"})
+assert not _hit_has_brand({"tags": "sea, shell, beach"}) and not _hit_has_brand({"tags": "apple, fruit"})
+assert _hit_has_brand({"tags": "bottle, coca cola"})
+
 print("test_article_image_foreign_place ok")
