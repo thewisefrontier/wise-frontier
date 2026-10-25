@@ -68,6 +68,9 @@ _WIKI_TITLE_AVOID_WORDS = (
     # 있으면 제외한다.
     "chart", "graph", "diagram", "infographic", "statistics", "our world in data",
     "owid", "deaths in", "cases in", "map", "distribution of", "timeline of",
+    # 2026-10-25: JPEG로 올라온 그래프·표도 거른다(여론조사·선거 결과·점유율 계열)
+    "opinion poll", "polling", "election results", "results of the", "vote share", "seat projection",
+    "table of", "ranking of",
     "trend in", "trends in", "by country", "by year", "per capita",
     # 2026-10-10 실사고(id=301955 — "앤스로픽 AI..." 기사에 회사 소개 사진 대신
     # "Anthropic's corporate structure, updated.svg" 지배구조 플로차트가 붙음,
@@ -151,7 +154,12 @@ def fetch_wikimedia_image(query: str, allow_artwork: bool = False):
             if not infos:
                 continue
             info = infos[0]
-            if info.get("mime") not in ("image/jpeg", "image/png", "image/webp", "image/svg+xml"):
+            # 2026-10-25 사용자 지시("웬만하면 그래프는 넣지 않도록 하자. 직접 만들어서 넣는 게 아니라면
+            # 의미가 없어") — id=318735(세르비아 총선)에 "Opinion polling for the 2026 Serbian
+            # parliamentary election.svg" 여론조사 추세 그래프가 붙었다. 제목 차단어로 그래프를 하나씩
+            # 막는 방식은 매번 새 이름(polling·results…)에 뚫렸다. 커먼즈의 SVG·PNG는 거의 전부
+            # 그래프·지도·도표·로고라 형식 자체로 거르고, 사진 형식(JPEG·WebP)만 쓴다.
+            if info.get("mime") not in ("image/jpeg", "image/webp"):
                 continue
             title_lower = (page.get("title") or "").lower()
             # 2026-09-14 실사고(사용자 재제보, id=171860 등 — 몇 주 전 이미
@@ -429,7 +437,31 @@ _PIXABAY_NAME_BLOCKLIST = {
 
 def _hit_has_blocked_name(hit: dict, allow: set) -> bool:
     tags = (hit.get("tags") or "").lower()
-    return any(name in tags for name in _PIXABAY_NAME_BLOCKLIST if name not in allow)
+    return any(name in tags for name in _PIXABAY_NAME_BLOCKLIST if name not in allow) or _hit_has_brand(hit)
+
+
+# 2026-10-25 실사고(id=318778 — 중앙아프리카공화국 시위 기사에 빈티지 "SHELL" 주유기 사진, 사용자 "중앙
+# 아프리카 공화국 기사에 로열 더치 쉘 주유기?"): 이 경로는 일반 소재 키워드(유가·시위 등)로 스톡사진을
+# 고르는데, 태그에 기업명이 박힌 사진은 특정 기업 광고처럼 보이고 기사 내용과도 무관하다. 태그에
+# 기업·상표명이 있으면 후보에서 뺀다. "shell"(조개껍질)·"apple"(과일)처럼 일반 단어와 겹치는 이름은
+# 연료·기기 단어가 같이 있을 때만 상표로 본다.
+_PIXABAY_BRAND_TAGS = {
+    "exxon", "exxonmobil", "chevron", "texaco", "bp", "aral", "esso", "mcdonalds", "mcdonald's", "starbucks",
+    "coca cola", "coca-cola", "pepsi", "nike", "adidas", "tesla", "ikea", "walmart", "amazon", "google",
+    "facebook", "instagram", "samsung", "huawei", "microsoft", "volkswagen", "bmw", "mercedes", "toyota",
+}
+_PIXABAY_AMBIGUOUS_BRANDS = {
+    "shell": {"petrol", "gas", "gasoline", "fuel", "pump", "station", "filling", "oil", "diesel"},
+    "apple": {"iphone", "mac", "macbook", "ipad", "logo", "store", "technology", "smartphone"},
+    "total": {"petrol", "gas", "fuel", "pump", "station", "oil"},
+}
+
+
+def _hit_has_brand(hit: dict) -> bool:
+    tags = {t.strip().lower() for t in (hit.get("tags") or "").split(",")}
+    if tags & _PIXABAY_BRAND_TAGS:
+        return True
+    return any(b in tags and tags & ctx for b, ctx in _PIXABAY_AMBIGUOUS_BRANDS.items())
 
 
 def pick_safe_pixabay_hit(hits: list, allow_name: str = ""):
