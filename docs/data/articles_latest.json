@@ -1,5 +1,44 @@
 [
   {
+    "id": 318650,
+    "title_en": "중앙아시아, 최저 영하권 추위 속 낮 기온 21도까지 올라",
+    "title_ko": "중앙아시아, 최저 영하권 추위 속 낮 기온 21도까지 올라",
+    "summary_ko": "25일(현지시간) 중앙아시아 지역의 다음주 날씨 예보에 따르면, 이번 주간 최저기온은 -2°C, 최고기온은 21°C의 기온 범위를 기록할 것으로 예보됐다. 전반적으로 큰 일교차를 보이는 가운데 국가별로 뚜렷한 기온 차이가 나타날 전망이다.\n\n카자흐스탄 지역의 다음주 주간 최고기온은 9°C, 최저기온은 -2°C로 나타났다. 우즈베키스탄 지역은 주간 최고기온 21°C, 최저기온 6°C의 기온 분포를 보일 것으로 예상된다.\n\n[카자흐스탄]\n\n- 아스타나(수도): 한 주 내내 비슷한 기온대를 유지하며 비 소식 없이 대체로 맑겠습니다. [월",
+    "url": "internal://weather_group_중앙아시아_weekly20261025",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_중앙아시아_weekly20261025",
+    "region": "central_asia",
+    "country": "중앙아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-25 09:08",
+    "countries": [
+      "카자흐스탄",
+      "우즈베키스탄",
+      "키르기스스탄"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_kazakhstan_20261025.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-25T09:08:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-25 09:08",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 318647,
     "title_en": "남아시아, 최고 37도 더위…곳곳 비",
     "title_ko": "남아시아, 최고 37도 더위…곳곳 비",
@@ -2282,47 +2321,6 @@
     "update_log": [
       {
         "timestamp": "2026-10-24 09:09",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 318303,
-    "title_en": "남아시아, 주말 수도권 곳곳 이슬비…최고 34도 기온 분포",
-    "title_ko": "남아시아, 주말 수도권 곳곳 이슬비…최고 34도 기온 분포",
-    "summary_ko": "24일(현지시간) 남아시아 주요국 수도의 주말 날씨는 국가별로 다른 기상 흐름을 보이고 있다. 이번 주말 남아시아 지역 전체의 최저기온은 14°C에서 최고기온은 34°C 사이의 분포를 기록하는 가운데, 파키스탄 지역에 비 소식이 예보되었다.\n\n토요일 인도 수도는 최저 20°C, 최고 32°C를 기록하며 약한 이슬비와 함께 25%의 강수 확률을 보이고, 일요일에는 대체로 맑은 날씨 속에서 최고 31°C, 최저 20°C 및 강수 확률 2%를 나타낸다. 방글라데시 수도는 토요일과 일요일 모두 흐린 날씨가 이어지며 토요일은 최고 33°C·",
-    "url": "internal://weather_group_남아시아_weekend20261024",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_남아시아_weekend20261024",
-    "region": "south_asia",
-    "country": "남아시아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-24 09:07",
-    "countries": [
-      "인도",
-      "방글라데시",
-      "파키스탄",
-      "스리랑카",
-      "네팔"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_india_20261024.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-24T09:07:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-24 09:07",
         "note": "최초 게시"
       }
     ],
