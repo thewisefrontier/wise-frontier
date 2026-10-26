@@ -105,6 +105,13 @@ jobs:
           IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
           UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
 
+      - name: 미발행 기사 만료 정리(중복·분량 부족·복수 토픽, 3일 경과)
+        # 2026-10-27 신설 — 삭제분은 article_revisions에 14일 보관 후 정리(scripts/expire_unpublished.py 참고)
+        continue-on-error: true
+        run: python scripts/expire_unpublished.py --apply
+        env:
+          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
+
       - name: 웹사이트 데이터 내보내기
         run: python scripts/export_articles.py
         env:
