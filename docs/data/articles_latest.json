@@ -1,5 +1,44 @@
 [
   {
+    "id": 319476,
+    "title_en": "동아시아, 베이징 14도 포근함 속 일교차 커",
+    "title_ko": "동아시아, 베이징 14도 포근함 속 일교차 커",
+    "summary_ko": "27일(현지시간) 동아시아 주요국 수도의 기온은 최저 -10°C에서 최고 14°C의 분포를 기록했다. 중국 베이징은 최고기온 14°C, 최저기온 6°C로 이번 조사 지역 중 가장 더운 곳으로 나타났다. 반면 몽골 울란바토르는 최고기온이 2°C에 그치고 최저기온은 -10°C까지 떨어져 가장 선선하고 추운 날씨를 보였다.\n\n베이징의 최고기온은 울란바토르보다 12도 더 높았으며, 베이징과 울란바토르 모두 맑거나 대체로 맑은 날씨를 보였다. 중국 베이징의 내일 최고기온은 13°C로 오늘보다 소폭 내려갈 것으로 예상되며, 몽골 울란바토르의 ",
+    "url": "internal://weather_group_동아시아_today20261027",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_동아시아_today20261027",
+    "region": "east_asia",
+    "country": "동아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-27 06:25",
+    "countries": [
+      "일본",
+      "중국",
+      "몽골"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_china_20261027.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-27T06:25:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-27 06:25",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 319475,
     "title_en": "[국제금값] 금 온스당 4031달러…달러 및 금리 변화에 반등",
     "title_ko": "[국제금값] 금 온스당 4031달러…달러 및 금리 변화에 반등",
@@ -1985,44 +2024,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": false
-  },
-  {
-    "id": 319221,
-    "title_en": "도쿄, 19도 빗속 가을 추위",
-    "title_ko": "도쿄, 19도 빗속 가을 추위",
-    "summary_ko": "26일(현지시간) 동아시아 주요국 수도의 기온이 최저 15°C에서 최고 19°C 분포를 보이는 가운데, 지역별로 뚜렷한 날씨 양상이 나타나고 있다. 아시아 전역에서 몬순과 폭우로 인해 주택이 침수되고 사상자가 발생하는 등 기상 격차가 극심한 와중에도, 일본 도쿄는 이날 최저기온 15°C, 최고기온 19°C를 기록하며 하루 종일 비가 이어지고 있다. 특히 도쿄는 이날 동아시아 주요국 수도 가운데 가장 더운 곳이자 가장 선선한 곳으로 동시에 기록됐다.\n\n최고기온과 최저기온이 모두 19°C와 15°C로 머물며 단일 기온대를 형성했기 때문",
-    "url": "internal://weather_group_동아시아_today20261026",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_동아시아_today20261026",
-    "region": "east_asia",
-    "country": "동아시아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-26 06:25",
-    "countries": [
-      "일본",
-      "중국",
-      "몽골"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_china_20261026.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-26T06:25:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-26 06:25",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
   }
 ]
