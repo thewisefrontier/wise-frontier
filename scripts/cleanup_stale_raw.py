@@ -57,7 +57,12 @@ BATCH = 300
 # 거의 영향 없다 — id만 조회(SELECT)하고 Prefer: return=minimal로 지워 응답이
 # 가벼워, 하루 상한을 더 낮출 필요는 없다. 상한은 "한 번에 큰 트랜잭션을 만들지
 # 않는다"는 안전 목적이다.
-UNPUBLISHED_DELETE_DAILY_CAP = int(os.getenv("UNPUBLISHED_DELETE_DAILY_CAP", "400"))
+# 2026-10-27: 400건 상한이 실제 유입(하루 약 500건 — 자체 기사 100여 건 + 원문 보관 행 400여 건)을 못 따라가 3일 넘은
+# 미발행이 1만여 건 쌓여 있었다(사용자: "그냥 미발행 기사도 오래 된건 보존하지 말고 지워"). 적체는 그날 일괄 정리했고,
+# 상한은 유입의 몇 배로 올린다(한 번에 큰 트랜잭션을 막는 안전 목적은 300건 배치가 맡는다).
+UNPUBLISHED_DELETE_DAILY_CAP = int(os.getenv("UNPUBLISHED_DELETE_DAILY_CAP", "3000"))
+# 삭제된 자체 기사는 트리거(log_article_revision)가 행 전체를 article_revisions에 남긴다 — 복구용으로 이 기간만 두고 지운다.
+REVISION_KEEP_DAYS = int(os.getenv("REVISION_KEEP_DAYS", "14"))
 
 
 def _headers():
@@ -119,6 +124,15 @@ def cleanup_stale_unpublished_articles():
     r.raise_for_status()
     remaining = r.headers.get('content-range', '*/?').split('/')[-1]
     print(f"  → 남은 적체(미발행 {days}일 초과): {remaining}건")
+
+    # 삭제 이력(op=DELETE) 중 보관 기간이 지난 것 — 복구 기회는 REVISION_KEEP_DAYS일이면 충분하고, 안 지우면 용량이 그대로다.
+    rev_cutoff = (now_kst() - timedelta(days=REVISION_KEEP_DAYS)).strftime("%Y-%m-%d %H:%M:%S+09:00")
+    purged = _batched(
+        {"op": "eq.DELETE", "changed_at": f"lt.{rev_cutoff}"},
+        lambda url, ids: requests.delete(url, headers=_headers(), params={"id": ids}, timeout=60),
+        table="article_revisions",
+    )
+    print(f"  ✓ 삭제 기사 이력(article_revisions) {REVISION_KEEP_DAYS}일 초과 정리 {purged}건")
 
 
 def main():
