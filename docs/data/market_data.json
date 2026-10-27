@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-27 09:41",
+  "updated_at": "2026-10-27 09:56",
   "indices": [
     {
       "name": "S&P 500",
@@ -25,16 +25,16 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 5692.44,
-      "change_pct": 2.56,
+      "price": 5697.0,
+      "change_pct": 2.64,
       "up": true
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 751.61,
-      "change_pct": -0.01,
-      "up": false
+      "price": 753.64,
+      "change_pct": 0.26,
+      "up": true
     },
     {
       "name": "JSE (남아공)",
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.63,
-      "change_pct": 0.05,
+      "price": 16.64,
+      "change_pct": 0.06,
       "up": true
     }
   ],
@@ -121,16 +121,16 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 5692.44,
-        "change_pct": 2.56,
+        "price": 5697.0,
+        "change_pct": 2.64,
         "up": true
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 751.61,
-        "change_pct": -0.01,
-        "up": false
+        "price": 753.64,
+        "change_pct": 0.26,
+        "up": true
       }
     ],
     "frontier": [
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.63,
-        "change_pct": 0.05,
+        "price": 16.64,
+        "change_pct": 0.06,
         "up": true
       }
     ]
