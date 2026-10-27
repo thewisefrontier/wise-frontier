@@ -5,6 +5,7 @@ IPv6 문제 없이 HTTP로 동작
 """
 
 import os
+import re
 import time
 import threading
 import requests
@@ -533,26 +534,34 @@ def update_source_health(outcomes: dict, fail_threshold: int) -> dict:
 # 같은 원칙: 새 테이블은 GRANT도 RLS와 별도로 확인 — 이미 반영됨, apply_migration
 # rss_raw_queue_grants 참고).
 
-def image_used_recently(fragment: str, hours: int = 24) -> bool:
-    """image_url에 fragment(보통 Pixabay 사진 고유 id)가 포함된 기사가 최근
-    hours 시간 내에 있으면 True.
+# 한 번 쓴 Pixabay 사진은 4일간 다른 기사에 다시 쓰지 않는다(2026-10-27 사용자 지시 — "특정 사진을 쓰면
+# 최소한 그 사진은 3~4일은 쓰지 말도록"). 이전엔 24시간(시세 템플릿 20시간)이었고, 다이제스트·날씨 경로엔
+# 확인 자체가 없었다.
+# 실사고(2026-09-22): 러시아 총선 기사와 베를린 지방선거 기사가 서로 다른 검색어로 Pixabay를 검색했는데도
+# 같은 스톡사진(같은 photo id)이 1등으로 나와 무관한 두 기사에 2시간 간격으로 실렸다. 위키미디어 entity
+# 경로(백악관 기사에 백악관 사진처럼 "같은 대상은 같은 사진이 맞는" 경우)는 의도된 재사용이라 대상 아님.
+PIXABAY_REUSE_HOURS = 96
+# R2 파일 이름 속 Pixabay 사진 id — "article_pixabay_{id}"(일반 기사) 또는 "…_pid{id}"(그 외 전부).
+_PIXABAY_ID_RE = re.compile(r"(?:pixabay_|_pid)(\d+)(?!\d)")
 
-    실사고(2026-09-22): 러시아 총선 기사와 베를린 지방선거 기사가 서로 다른
-    검색어("election ballot voting booth" vs "ballot political protest city
-    hall")로 Pixabay를 검색했는데도 둘 다 같은 스톡사진(같은 photo id)이
-    1등으로 나와, 무관한 두 기사에 같은 사진이 2시간 간격으로 실렸다
-    (사용자 지적). article_image.py의 일반 Pixabay 검색 경로(entity 없이
-    제목/본문 키워드로 찾는 경우)에서만 쓴다 — 위키미디어 entity 경로(백악관
-    기사에 백악관 사진처럼 "같은 대상은 같은 사진이 맞는" 경우)는 의도된
-    재사용이라 이 체크 대상이 아니다."""
+
+def pixabay_ids_used_recently(ids, hours: int = PIXABAY_REUSE_HOURS) -> set:
+    """후보 Pixabay 사진 id 중 최근 hours 시간 안에 기사 image_url에 쓰인 것(문자열 id 집합).
+    후보 전체를 한 번의 조회로 확인한다. 조회 실패는 예외로 올려 호출자가 판단하게 한다."""
+    ids = {str(i) for i in ids if i}
+    if not ids:
+        return set()
     since = (now_kst() - timedelta(hours=hours)).strftime("%Y-%m-%d %H:%M")
+    ors = ",".join(f'image_url.ilike."*pixabay_{i}*",image_url.ilike."*pid{i}*"' for i in sorted(ids))
     res = requests.get(
         _url("articles"), headers=_headers(),
-        params={"select": "id", "image_url": f"ilike.*{fragment}*",
-                "created_at": f"gte.{since}", "limit": "1"},
-        timeout=10,
+        params={"select": "image_url", "created_at": f"gte.{since}", "or": f"({ors})", "limit": "500"},
+        timeout=15,
     )
-    return res.status_code in (200, 206) and len(res.json()) > 0
+    if res.status_code not in (200, 206):
+        raise RuntimeError(f"최근 사용 사진 조회 실패 {res.status_code}: {res.text[:100]}")
+    # ilike는 접두 일치도 걸리므로(pid12 ⊂ pid123) 정확한 id만 다시 뽑는다.
+    return {m for r in res.json() for m in _PIXABAY_ID_RE.findall(r.get("image_url") or "")} & ids
 
 
 def hydrate_full_text(rows: list, check_db: bool = True, workers: int = 8) -> int:

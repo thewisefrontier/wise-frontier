@@ -25,7 +25,7 @@ import re
 
 import requests
 
-from db import image_used_recently
+import db
 
 PIXABAY_API_KEY = os.getenv("PIXABAY_API_KEY", "")
 
@@ -374,15 +374,13 @@ def fetch_seeded_pixabay_image(keywords: list, seed: int, key_hint: str, allowed
         # id 기준)은 건너뛰고 첫 미사용 후보를 쓴다 — 여전히 결정론적(같은 seed+
         # 같은 사용 이력이면 같은 결과)이라 멱등성은 유지되면서 크로스스크립트
         # 충돌만 줄어든다. 전부 최근 사용이면 원래 고정 인덱스로 후퇴.
+        # (2026-10-27: 기준 20시간 → 4일. 또 이전 확인은 "seeded_pixabay_{id}"를 찾았는데 실제 파일 이름은
+        # "…_pid{id}"라 한 번도 걸리지 않았다 — db.pixabay_ids_used_recently가 두 형식을 모두 본다.)
         start = seed % len(hits)
         hit = hits[start]
         try:
-            from db import image_used_recently
-            for offset in range(len(hits)):
-                cand = hits[(start + offset) % len(hits)]
-                if not image_used_recently(f"seeded_pixabay_{cand.get('id')}", hours=20):
-                    hit = cand
-                    break
+            used = db.pixabay_ids_used_recently([h.get("id") for h in hits])
+            hit = next((h for h in hits[start:] + hits[:start] if str(h.get("id")) not in used), hit)
         except Exception as e:
             print(f"  ⚠️ 최근 사용 이미지 확인 실패(그냥 진행): {e}")
         # largeImageURL(최대 1280px)이 아니라 webformatURL(최대 640px)을 쓴다
@@ -394,7 +392,7 @@ def fetch_seeded_pixabay_image(keywords: list, seed: int, key_hint: str, allowed
         if not raw_url:
             return ""
         from image_store import store_image
-        # key_hint에 photo id를 접미사로 남겨야 image_used_recently()가 다음번에
+        # key_hint에 photo id를 접미사로 남겨야 db.pixabay_ids_used_recently()가 다음번에
         # 매치할 수 있다 — 스크립트별 접두어(oil_/frontier_markets_ 등)는 그대로
         # 유지해 파일명으로 어느 스크립트가 만들었는지 여전히 식별 가능하다.
         url = store_image(raw_url, key_hint=f"{key_hint}_pid{hit.get('id')}")
@@ -465,8 +463,8 @@ def _hit_has_brand(hit: dict) -> bool:
 
 
 def pick_safe_pixabay_hit(hits: list, allow_name: str = ""):
-    """Pixabay 검색 결과 중 (1) 블록리스트 인물이 안 나오고 (2) 최근 24시간
-    내 다른 기사에 안 쓰인 것을 우선 선택한다. 인물 필터를 통과하는 후보가
+    """Pixabay 검색 결과 중 (1) 블록리스트 인물이 안 나오고 (2) 최근 4일
+    (db.PIXABAY_REUSE_HOURS) 내 다른 기사에 안 쓰인 것을 우선 선택한다. 인물 필터를 통과하는 후보가
     하나도 없으면(드묾) 어쩔 수 없이 필터 없이 진행하되 로그를 남긴다 —
     그 경우에도 최근 재사용 체크는 유지한다.
 
@@ -483,15 +481,15 @@ def pick_safe_pixabay_hit(hits: list, allow_name: str = ""):
     if not candidates:
         print("  ⚠️ 모든 후보가 인물 블록리스트에 걸림 — 필터 없이 진행")
         candidates = hits
+    try:
+        used = db.pixabay_ids_used_recently([h.get("id") for h in candidates])
+    except Exception as e:
+        print(f"  ⚠️ 최근 사용 이미지 확인 실패(그냥 진행): {e}")
+        return candidates[0]
     for h in candidates:
-        frag = f"pixabay_{h.get('id')}"
-        try:
-            if not image_used_recently(frag):
-                return h
-        except Exception as e:
-            print(f"  ⚠️ 최근 사용 이미지 확인 실패(그냥 진행): {e}")
+        if str(h.get("id")) not in used:
             return h
-    print(f"  ⚠️ 후보 {len(candidates)}개 전부 최근 24시간 내 사용됨 — 1등 그대로 사용")
+    print(f"  ⚠️ 후보 {len(candidates)}개 전부 최근 {db.PIXABAY_REUSE_HOURS // 24}일 내 사용됨 — 1등 그대로 사용")
     return candidates[0]
 
 
