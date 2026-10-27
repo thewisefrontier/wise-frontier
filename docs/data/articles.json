@@ -1,5 +1,110 @@
 [
   {
+    "id": 319797,
+    "title_en": "[국제유가] WTI 배럴당 100달러…미·이란 외교 및 사우디 공격 영향",
+    "title_ko": "[국제유가] WTI 배럴당 100달러…미·이란 외교 및 사우디 공격 영향",
+    "summary_ko": "국제유가가 27일(현지시간) 하락했다. 시장 집계에 따르면 WTI 원유 선물은 뉴욕상업거래소(NYMEX)에서 배럴당 100.15달러에 거래를 마쳤으며, 전일 종가(101.76달러) 대비 1.58%(1.61달러) 내렸다.\n\n브렌트유 선물은 배럴당 109.72달러로 마감했다. 전일 종가(115.81달러) 대비 5.26%(6.09달러) 하락했다.\n\n이날 원유 시장은 미국과 이란 간의 외교적 움직임과 사우디아라비아에 대한 공격 가능성 등을 트레이더들이 평가하면서 하락세를 나타냈다. 미국이 이란을 상대로 새로운 군사적 타격을 가할 수 있다는",
+    "url": "internal://oil_price_2026-10-27",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국제유가",
+    "region": "글로벌",
+    "country": "국제",
+    "country_flag": "🛢️",
+    "score": 1,
+    "created_at": "2026-10-28 06:07",
+    "countries": [
+      "미국",
+      "사우디아라비아",
+      "러시아"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/oil_2026_10_27_pid3613526.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-28T06:07:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-28 06:07",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "wti": {
+        "pct": -1.5821561541194586,
+        "prev": 101.76000213623047,
+        "price": 100.15,
+        "change": -1.610002136230463
+      },
+      "date": "2026-10-27",
+      "brent": {
+        "pct": -5.258611248577683,
+        "prev": 115.80999755859375,
+        "price": 109.72,
+        "change": -6.089997558593751
+      },
+      "source": "Yahoo Finance"
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 319798,
+    "title_en": "[국제금값] 금 온스당 4074달러…연준 회의 앞두고 반등",
+    "title_ko": "[국제금값] 금 온스당 4074달러…연준 회의 앞두고 반등",
+    "summary_ko": "국제 금값이 27일(현지시간) 상승했다. 뉴욕 시장에서 금 선물은 온스당 4074.50달러에 거래를 마쳤다. 시장 집계에 따르면 이는 전일 종가(4038.40달러) 대비 0.89% 상승, 상승폭 36.10달러를 기록한 수치다.\n\n이날 장중 범위는 4001.60달러에서 4079.00달러 사이를 기록했다. 최근 5거래일 동안 금값은 21일 종가 4150.00달러 대비 1.82% 하락한 흐름을 보였다. 또한 현재 가격은 52주 고점 5586.20달러 대비 27.06% 낮은 수준에 위치하고 있다.\n\n이날 금값 변동은 연방준비제도(Fed)의",
+    "url": "internal://gold_price_2026-10-27",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국제금값",
+    "region": "글로벌",
+    "country": "국제",
+    "country_flag": "🪙",
+    "score": 1,
+    "created_at": "2026-10-28 06:07",
+    "countries": [
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/gold_2026_10_27_pid4212214.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-28T06:07:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-28 06:07",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "pct": 0.893920823326554,
+      "date": "2026-10-27",
+      "prev": 4038.39990234375,
+      "price": 4074.5,
+      "change": 36.10009765625,
+      "source": "시장 집계",
+      "day_low": 4001.60009765625,
+      "day_high": 4079.0,
+      "high_52w": 5586.2,
+      "week_pct": -1.819277108433735,
+      "week_start": 4150.0,
+      "from_high_pct": -27.06132970534531,
+      "week_start_date": "2026-10-21"
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
     "id": 319766,
     "title_en": "몰도바, 사이버 공격받은 공공 서비스 11개 복구… 75만 명 개인정보 유출 확인",
     "title_ko": "몰도바, 사이버 공격받은 공공 서비스 11개 복구… 75만 명 개인정보 유출 확인",
