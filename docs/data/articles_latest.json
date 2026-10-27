@@ -1,5 +1,71 @@
 [
   {
+    "id": 319752,
+    "title_en": "[국내유가] 휘발유 리터당 1856원…전국 평균 소폭 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1856원…전국 평균 소폭 하락",
+    "summary_ko": "한국석유공사 오피넷이 28일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1856원으로 집계됐다. 이는 전일 대비 0.09원 하락한 수치다.\n\n이와 함께 경유와 LPG 판매가격도 하락세를 나타냈다. 경유는 리터당 1841.66원으로 전일보다 0.53원 내렸으며, LPG 부탄은 리터당 1143.84원으로 전일 대비 0.01원 하락했다. 오피넷에 따르면 유종별 가격은 전반적으로 보합세 속에서 내림세를 기록했다.\n\n이번 유가 변동은 최근 국제유가 흐름과 정부의 유류세 인하 유지 조치 등이 복합적으로 작용한 결과로 풀이",
+    "url": "internal://opinet_price_2026-10-28",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-10-28 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_10_28_pid1596622.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-28T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-28 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-10-28",
+      "prices": {
+        "B027": {
+          "diff": -0.09,
+          "name": "휘발유",
+          "price": 1855.57
+        },
+        "B034": {
+          "diff": 0.21,
+          "name": "고급휘발유",
+          "price": 2398.45
+        },
+        "C004": {
+          "diff": -0.23,
+          "name": "실내등유",
+          "price": 1570.81
+        },
+        "D047": {
+          "diff": -0.53,
+          "name": "경유",
+          "price": 1841.66
+        },
+        "K015": {
+          "diff": -0.01,
+          "name": "LPG(부탄)",
+          "price": 1143.84
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 319747,
     "title_en": "Nettle & Bone",
     "title_ko": "[오늘의 책] 어슐러 버논의 『Nettle & Bone』, 잔혹 동화를 넘어선 구원과 연대의 서사",
