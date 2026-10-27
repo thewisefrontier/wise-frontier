@@ -31,7 +31,11 @@ for row in cur.fetchall():
 
 fixed = failed = 0
 for url, rows in groups.items():
-    for aid, sub, title, body, _ in rows[:-1]:   # 마지막(id 최대)이 파일 주인
+    # 파일 주인 = 파일 이름과 subcategory가 같은 기사(데일리 다이제스트 — 재수집하면 같은 파일을
+    # 또 덮어쓴다, 1차 실행 사고). 없으면 마지막(id 최대) 기사.
+    stem = url.rsplit("/", 1)[-1].rsplit(".", 1)[0]
+    owner = next((r for r in rows if r[1] == stem), rows[-1])
+    for aid, sub, title, body, _ in [r for r in rows if r is not owner]:
         new = fetch_article_image(title, body or "", key_hint=sub)
         if new and new != url:
             cur.execute("update articles set image_url=%s where id=%s", (new, aid))
