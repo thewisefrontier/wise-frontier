@@ -1,5 +1,71 @@
 [
   {
+    "id": 320023,
+    "title_en": "[국내유가] 휘발유 리터당 1855원…국제유가 변동 속 소폭 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1855원…국제유가 변동 속 소폭 하락",
+    "summary_ko": "한국석유공사 오피넷이 29일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1855.48원으로 집계됐다.\n\n이날 오피넷에 따르면 경유 평균 판매가격은 리터당 1841.69원으로 전일 대비 0.35원 내렸으며, LPG 부탄은 리터당 1143.89원으로 전일 대비 0.06원 하락했다. 휘발유 역시 전일 대비 0.14원 하락세를 기록했다.\n\n최근 국제유가 변동 흐름과 정유사 공급가격 조정 등이 이어지는 가운데, 주유소 판매가격도 이에 연동되어 소폭의 하락세를 나타내고 있는 것으로 분석된다. 국제 유가 및 정유사 도매가 ",
+    "url": "internal://opinet_price_2026-10-29",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-10-29 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_10_29_pid996617.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-29T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-29 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-10-29",
+      "prices": {
+        "B027": {
+          "diff": -0.14,
+          "name": "휘발유",
+          "price": 1855.48
+        },
+        "B034": {
+          "diff": 0.13,
+          "name": "고급휘발유",
+          "price": 2397.95
+        },
+        "C004": {
+          "diff": -0.15,
+          "name": "실내등유",
+          "price": 1570.78
+        },
+        "D047": {
+          "diff": -0.35,
+          "name": "경유",
+          "price": 1841.69
+        },
+        "K015": {
+          "diff": -0.06,
+          "name": "LPG(부탄)",
+          "price": 1143.89
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 320021,
     "title_en": "[기업 분석] 애플, 1290억 달러 순이익 기록하며 견조한 수익성 유지",
     "title_ko": "[기업 분석] 애플, 1290억 달러 순이익 기록하며 견조한 수익성 유지",
@@ -2275,121 +2341,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 319752,
-    "title_en": "[국내유가] 휘발유 리터당 1856원…전국 평균 소폭 하락",
-    "title_ko": "[국내유가] 휘발유 리터당 1856원…전국 평균 소폭 하락",
-    "summary_ko": "한국석유공사 오피넷이 28일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1856원으로 집계됐다. 이는 전일 대비 0.09원 하락한 수치다.\n\n이와 함께 경유와 LPG 판매가격도 하락세를 나타냈다. 경유는 리터당 1841.66원으로 전일보다 0.53원 내렸으며, LPG 부탄은 리터당 1143.84원으로 전일 대비 0.01원 하락했다. 오피넷에 따르면 유종별 가격은 전반적으로 보합세 속에서 내림세를 기록했다.\n\n이번 유가 변동은 최근 국제유가 흐름과 정부의 유류세 인하 유지 조치 등이 복합적으로 작용한 결과로 풀이",
-    "url": "internal://opinet_price_2026-10-28",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국내유가",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "🇰🇷",
-    "score": 1,
-    "created_at": "2026-10-28 05:11",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_10_28_pid1596622.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-28T05:11:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-28 05:11",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "date": "2026-10-28",
-      "prices": {
-        "B027": {
-          "diff": -0.09,
-          "name": "휘발유",
-          "price": 1855.57
-        },
-        "B034": {
-          "diff": 0.21,
-          "name": "고급휘발유",
-          "price": 2398.45
-        },
-        "C004": {
-          "diff": -0.23,
-          "name": "실내등유",
-          "price": 1570.81
-        },
-        "D047": {
-          "diff": -0.53,
-          "name": "경유",
-          "price": 1841.66
-        },
-        "K015": {
-          "diff": -0.01,
-          "name": "LPG(부탄)",
-          "price": 1143.84
-        }
-      }
-    },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 319747,
-    "title_en": "Nettle & Bone",
-    "title_ko": "[오늘의 책] 어슐러 버논의 『Nettle & Bone』, 잔혹 동화를 넘어선 구원과 연대의 서사",
-    "summary_ko": "어슐러 버논(Ursula Vernon)이 티 킹피셔(T. Kingfisher)라는 필명으로 2022년에 발표한 장편 소설 『Nettle & Bone』은 2023년 휴고상 장편 부문을 수상하며 현대 판타지 문학계에서 큰 주목을 받았다. 이 작품은 고전 잔혹 동화의 틀을 재해석하여 학대와 트라우마, 그리고 이에 맞서는 인물들의 연대를 깊이 있게 그려냈다. 로커스상과 네뷸러상 최종 후보에도 오르며 독창적인 세계관과 서사적 완성도를 입증했다.\n\n이야기는 막내 공주 마라(Marra)가 언니 카니아(Kania)가 왕국의 권력자인 볼링(Vorl",
-    "url": "internal://literature_Q122238085",
-    "source": "NewsFinal",
-    "category": "문화·예술",
-    "subcategory": "오늘의책",
-    "region": "global",
-    "country": "미국",
-    "country_flag": "🇺🇸",
-    "score": 1,
-    "created_at": "2026-10-28 05:09",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/literature_q122238085.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-28T05:09:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-28 05:09",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-10-28 05:09",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-10-28 11:57",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "enwiki": "Nettle & Bone",
-      "kowiki": null,
-      "source": "prize",
-      "wikidata": "Q122238085"
-    },
-    "image_credit": "이미지 출처: Wikimedia Commons · Rosiestep · CC BY-SA 4.0",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   }
 ]
