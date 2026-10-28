@@ -8,7 +8,12 @@ import sys
 os.environ.setdefault("SUPABASE_URL", "http://fake")
 os.environ.setdefault("SUPABASE_SERVICE_KEY", "fake")
 sys.path.insert(0, os.path.dirname(__file__))
-from art_weekly_writer import _NON_ARTWORK  # noqa: E402
+from art_weekly_writer import _NON_ARTWORK, strip_copyright_memo  # noqa: E402
+
+# 2026-10-28 id=319911: 저작권 메모가 "사후 70년이 경과한 작가이다"로 본문에 누출.
+g = "작가: Carl Larsson(스웨덴 화가, 사후 70년 경과). 분류: Paintings"
+assert strip_copyright_memo(g) == "작가: Carl Larsson(스웨덴 화가). 분류: Paintings", strip_copyright_memo(g)
+assert strip_copyright_memo("제작 시기: 1888 / 소장 기관: Gothenburg") == "제작 시기: 1888 / 소장 기관: Gothenburg"
 
 blocked = [
     "Collection d'autographes, de dessins et de portraits de personnages célèbres, français et étrangers, "
