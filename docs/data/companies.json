@@ -2128,22 +2128,6 @@
     "updated_at": "2026-08-14 23:23"
   },
   {
-    "id": "singareni_collieries_company",
-    "name": "The Singareni Collieries Company Limited",
-    "name_ko": "싱가레니 콜리어리스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "",
-    "sector": "에너지",
-    "description": "싱가레니 콜리어리스는 1920년에 설립된 인도 텔랑가나주의 국영 석탄 채굴 기업입니다. 주로 인도 남부 지역의 전력 및 산업 수요를 충족하기 위해 석탄을 공급하며, 지역 경제에서 중요한 위치를 차지하고 있습니다. 토목 및 인프라 개발과 관련된 지역 사회 공헌 활동도 함께 수행하고 있습니다.",
-    "founded_year": 1920,
-    "headquarters": "코다구뎀, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-08 01:12"
-  },
-  {
     "id": "singareni_collieries",
     "name": "The Singareni Collieries Company Limited",
     "name_ko": "싱가레니 콜리어리스",
@@ -2158,6 +2142,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-30 17:03"
+  },
+  {
+    "id": "singareni_collieries_company",
+    "name": "The Singareni Collieries Company Limited",
+    "name_ko": "싱가레니 콜리어리스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "싱가레니 콜리어리스는 1920년에 설립된 인도 텔랑가나주의 국영 석탄 채굴 기업입니다. 주로 인도 남부 지역의 전력 및 산업 수요를 충족하기 위해 석탄을 공급하며, 지역 경제에서 중요한 위치를 차지하고 있습니다. 토목 및 인프라 개발과 관련된 지역 사회 공헌 활동도 함께 수행하고 있습니다.",
+    "founded_year": 1920,
+    "headquarters": "코다구뎀, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-08 01:12"
   },
   {
     "id": "tata_power",
@@ -4304,22 +4304,6 @@
     "updated_at": "2026-08-09 07:08"
   },
   {
-    "id": "stoneco",
-    "name": "StoneCo Ltd.",
-    "name_ko": "스톤코",
-    "country": "브라질",
-    "country_flag": "🌍",
-    "exchange": "NASDAQ",
-    "ticker": "STNE",
-    "sector": "핀테크",
-    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
-    "founded_year": 2012,
-    "headquarters": "상파울루, 브라질",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-29 20:49"
-  },
-  {
     "id": "stone_co",
     "name": "StoneCo Ltd.",
     "name_ko": "스톤",
@@ -4334,6 +4318,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-22 23:37"
+  },
+  {
+    "id": "stoneco",
+    "name": "StoneCo Ltd.",
+    "name_ko": "스톤코",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "NASDAQ",
+    "ticker": "STNE",
+    "sector": "핀테크",
+    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
+    "founded_year": 2012,
+    "headquarters": "상파울루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-29 20:49"
   },
   {
     "id": "xp_inc",
@@ -4416,6 +4416,22 @@
     "updated_at": "2026-08-27 05:05"
   },
   {
+    "id": "adif",
+    "name": "Adif",
+    "name_ko": "아디프",
+    "country": "스페인",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "인프라",
+    "description": "스페인의 국영 철도 인프라 관리 기업으로 철도망의 건설과 유지보수를 담당합니다. 스페인 전역의 철도 선로와 관련 시설을 관리하는 핵심 공공기관입니다. 철도 운행 안전 및 관제 시스템 운영에 중요한 역할을 맡고 있습니다.",
+    "founded_year": 2005,
+    "headquarters": "마드리드, 스페인",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-10-28 21:13"
+  },
+  {
     "id": "caixabank",
     "name": "CaixaBank, S.A.",
     "name_ko": "카이샤뱅크",
@@ -4432,6 +4448,22 @@
     "updated_at": "2026-08-12 04:14"
   },
   {
+    "id": "irail",
+    "name": "Iryo",
+    "name_ko": "이리오",
+    "country": "스페인",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "운송",
+    "description": "스페인의 민간 고속철도 운영사로 이탈리아 국영철도 등의 컨소시엄에 의해 설립되었습니다. 스페인 고속철도 시장에 진출하여 렌페와 경쟁하며 주요 노선을 운행하고 있습니다. 스페인 고속철도 시장의 대표적인 민간 철도 기업입니다.",
+    "founded_year": 2021,
+    "headquarters": "마드리드, 스페인",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-10-28 21:13"
+  },
+  {
     "id": "naftogaz",
     "name": "Naftogaz of Ukraine",
     "name_ko": "나프토가스",
@@ -4446,6 +4478,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-09 04:26"
+  },
+  {
+    "id": "renfe",
+    "name": "Renfe Operadora",
+    "name_ko": "렌페",
+    "country": "스페인",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "운송",
+    "description": "스페인의 국영 철도 기업으로 여객 및 화물 운송 서비스를 제공합니다. 스페인의 고속철도망인 AVE를 운영하며 국내 철도 시장에서 독보적인 위치를 차지하고 있습니다. 스페인 정부가 소유한 대형 공기업입니다.",
+    "founded_year": 1941,
+    "headquarters": "마드리드, 스페인",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-10-28 21:13"
   },
   {
     "id": "saba_fk",
