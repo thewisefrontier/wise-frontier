@@ -34,4 +34,15 @@ assert t.endswith("6000만 달러 유치") and "6000만 달러" in b, (t, b)
 t, _, _, _ = d.apply_money_guard(T["startup"], "[오늘의 스타트업] 에이크미 1억 달러 유치", "[A]\n- 사실.", [{"title_en": "Acme raises $60M", "full_text": ""}])
 assert t == "[오늘의 스타트업] 주요 동향", t
 
+# 2026-10-28 id=319745: "R$ 2,9 bilhões"가 "[29 달러]"로 병기돼 "네오스페이스 29달러에 인수"로 발행.
+# id=319744: "S$150 million"이 미국 달러로 병기. 접두 통화는 따로, 소수점 콤마는 숫자로 이어 붙이지 않는다.
+a = d.annotate_money("Itaú compra NeoSpace por R$ 2,9 bilhões")
+assert "달러" not in a, a
+a = d.annotate_money("Singapore announces S$150 million; chip exports could fall by up to US$100 billion; Reuters $589 million")
+assert "[1억5000만 싱가포르달러]" in a and "[1000억 달러]" in a and "[5억8900만 달러]" in a, a
+assert "[1억5000만 달러]" not in a, a
+allowed = d._allowed_money([{"title_en": "Singapore announces S$150 million investment", "full_text": ""}])
+_, dropped, _ = d.strip_unverified_money("[싱가포르]\n- 1억5000만 달러를 투자했다.", allowed)
+assert dropped, "S$를 미국 달러로 쓴 불릿이 통과됨"
+
 print("ok")
