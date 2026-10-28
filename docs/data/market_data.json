@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-28 08:41",
+  "updated_at": "2026-10-28 09:06",
   "indices": [
     {
       "name": "S&P 500",
@@ -26,15 +26,15 @@
       "name": "코스피",
       "symbol": "^KS11",
       "price": 5638.34,
-      "change_pct": 1.59,
+      "change_pct": 3.09,
       "up": true
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
       "price": 743.83,
-      "change_pct": -1.05,
-      "up": false
+      "change_pct": 2.29,
+      "up": true
     },
     {
       "name": "JSE (남아공)",
@@ -75,21 +75,21 @@
       "name": "USD/NGN",
       "symbol": "USDNGN=X",
       "price": 1340.31,
-      "change_pct": 0.66,
+      "change_pct": 0.02,
       "up": true
     },
     {
       "name": "USD/KES",
       "symbol": "USDKES=X",
       "price": 129.86,
-      "change_pct": 3.33,
+      "change_pct": 0.71,
       "up": true
     },
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.63,
-      "change_pct": 0.02,
+      "price": 16.64,
+      "change_pct": 0.03,
       "up": true
     }
   ],
@@ -122,15 +122,15 @@
         "name": "코스피",
         "symbol": "^KS11",
         "price": 5638.34,
-        "change_pct": 1.59,
+        "change_pct": 3.09,
         "up": true
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
         "price": 743.83,
-        "change_pct": -1.05,
-        "up": false
+        "change_pct": 2.29,
+        "up": true
       }
     ],
     "frontier": [
@@ -175,21 +175,21 @@
         "name": "USD/NGN",
         "symbol": "USDNGN=X",
         "price": 1340.31,
-        "change_pct": 0.66,
+        "change_pct": 0.02,
         "up": true
       },
       {
         "name": "USD/KES",
         "symbol": "USDKES=X",
         "price": 129.86,
-        "change_pct": 3.33,
+        "change_pct": 0.71,
         "up": true
       },
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.63,
-        "change_pct": 0.02,
+        "price": 16.64,
+        "change_pct": 0.03,
         "up": true
       }
     ]
