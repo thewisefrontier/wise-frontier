@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-28 15:15",
+  "updated_at": "2026-10-28 15:19",
   "indices": [
     {
       "name": "S&P 500",
@@ -25,15 +25,15 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 6004.95,
-      "change_pct": 9.79,
+      "price": 6000.11,
+      "change_pct": 9.7,
       "up": true
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 768.2,
-      "change_pct": 5.64,
+      "price": 768.75,
+      "change_pct": 5.71,
       "up": true
     },
     {
@@ -67,8 +67,8 @@
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 5657.57,
-      "change_pct": -1.8,
+      "price": 5659.09,
+      "change_pct": -1.77,
       "up": false
     },
     {
@@ -121,15 +121,15 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 6004.95,
-        "change_pct": 9.79,
+        "price": 6000.11,
+        "change_pct": 9.7,
         "up": true
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 768.2,
-        "change_pct": 5.64,
+        "price": 768.75,
+        "change_pct": 5.71,
         "up": true
       }
     ],
@@ -165,8 +165,8 @@
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 5657.57,
-        "change_pct": -1.8,
+        "price": 5659.09,
+        "change_pct": -1.77,
         "up": false
       }
     ],
@@ -205,8 +205,8 @@
     "ACB": {
       "name": "Asia Commercial Joint Stock Bank",
       "symbol": "ACB.VN",
-      "price": 21150.0,
-      "change_pct": -0.7,
+      "price": 21200.0,
+      "change_pct": -0.47,
       "up": false
     }
   }
