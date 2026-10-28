@@ -105,6 +105,23 @@ jobs:
           IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
           UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
 
+      - name: 기업 분석 생성
+        # 2026-10-28 신설 — 매일 1건 개별 기업 분석. 실패해도 내보내기·커밋은 진행.
+        run: python scripts/company_analysis_writer.py
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
+          GEMINI_API_KEY_4: ${{ secrets.GEMINI_API_KEY_4 }}
+          GEMINI_API_KEY_5: ${{ secrets.GEMINI_API_KEY_5 }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          IMAGE_UPLOAD_URL: ${{ secrets.IMAGE_UPLOAD_URL }}
+          UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
+
       - name: 웹사이트 데이터 내보내기
         run: python scripts/export_articles.py
         env:
