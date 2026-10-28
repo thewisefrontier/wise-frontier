@@ -1,25 +1,25 @@
 {
-  "updated_at": "2026-10-28 23:21",
+  "updated_at": "2026-10-28 23:25",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7735.02,
-      "change_pct": 0.76,
+      "price": 7731.45,
+      "change_pct": 0.71,
       "up": true
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 26468.7,
-      "change_pct": 1.14,
+      "price": 26465.65,
+      "change_pct": 1.13,
       "up": true
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 52526.55,
-      "change_pct": 0.32,
+      "price": 52462.72,
+      "change_pct": 0.19,
       "up": true
     },
     {
@@ -39,8 +39,8 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 110148.34,
-      "change_pct": 0.3,
+      "price": 110070.29,
+      "change_pct": 0.23,
       "up": true
     },
     {
@@ -98,22 +98,22 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7735.02,
-        "change_pct": 0.76,
+        "price": 7731.45,
+        "change_pct": 0.71,
         "up": true
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 26468.7,
-        "change_pct": 1.14,
+        "price": 26465.65,
+        "change_pct": 1.13,
         "up": true
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 52526.55,
-        "change_pct": 0.32,
+        "price": 52462.72,
+        "change_pct": 0.19,
         "up": true
       }
     ],
@@ -137,8 +137,8 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 110148.34,
-        "change_pct": 0.3,
+        "price": 110070.29,
+        "change_pct": 0.23,
         "up": true
       },
       {
