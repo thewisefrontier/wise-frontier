@@ -1,5 +1,89 @@
 [
   {
+    "id": 320279,
+    "title_en": "동남아시아, 찜통더위와 뇌우 속 궂은날씨",
+    "title_ko": "동남아시아, 찜통더위와 뇌우 속 궂은날씨",
+    "summary_ko": "30일(현지시간) 동남아시아 주요국 수도 지역은 최저기온 23°C에서 최고기온 33°C 사이의 기온 분포를 보였다. 이 가운데 태국 방콕이 최고기온 33°C를 기록하며 가장 더운 곳으로 나타났고, 베트남 하노이는 최고기온 30°C로 가장 선선한 곳에 이름을 올렸다. 방콕이 하노이보다 최고기온이 3°C 더 높으며, 지역별로 기온 차가 확인된다.\n\n이날 베트남, 인도네시아, 태국, 필리핀, 미얀마, 캄보디아 등 다수의 국가에서 비 소식이 이어졌다. 특히 베트남 호치민·하이퐁·껀터, 태국 방콕·콘깬 등지에서는 뇌우가 발생했다. 또한 베트",
+    "url": "internal://weather_group_동남아시아_today20261030",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_동남아시아_today20261030",
+    "region": "southeast_asia",
+    "country": "동남아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-30 07:32",
+    "countries": [
+      "베트남",
+      "인도네시아",
+      "태국",
+      "필리핀",
+      "미얀마",
+      "캄보디아",
+      "말레이시아",
+      "싱가포르"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261030_pid10019682_indonesia.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-30T07:32:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-30 07:32",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 320278,
+    "title_en": "중앙아프리카공화국 접경지 긴장 고조 속 러시아 용병단 활동 논란",
+    "title_ko": "중앙아프리카공화국 접경지 긴장 고조 속 러시아 용병단 활동 논란",
+    "summary_ko": "중앙아프리카공화국과 차드 접경지에서 러시아 용병단 바그너 그룹(Wagner Group)의 군사 도발이 이어지며 양국 간 무력 충돌 위기가 고조되고 있다. 지난 10월 10일(현지시간) 바그너 그룹 용병들이 차드 접경지인 나바가예-티시(Nabagaye-Tissi) 지역에서 군사 작전을 수행하던 중 차드 군을 향해 발포해 16명의 부상자가 발생했다.\n\n차드 정부는 이번 공격에 대해 공식 항의하며 중앙아프리카공화국 측에 해명을 요구했으나, 중앙아프리카공화국 정부는 오히려 차드와 프랑스가 자국을 전복하려 한다는 근거 없는 주장을 펼치며 책",
+    "url": "internal://trend_중앙아프리카_2026103007",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "trend_중앙아프리카",
+    "region": "global",
+    "country": "중앙아프리카공화국",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-10-30 07:31",
+    "countries": [
+      "중앙아프리카공화국",
+      "차드",
+      "프랑스",
+      "러시아"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_4768756.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-30T07:31:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-30 07:31",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
     "id": 320271,
     "title_en": "[가상자산 동향] 리플 5.74% 하락…미 SEC 항소 절차 본격화",
     "title_ko": "[가상자산 동향] 리플 5.74% 하락…미 SEC 항소 절차 본격화",
@@ -1912,7 +1996,7 @@
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
-    "noindex": false
+    "noindex": true
   },
   {
     "id": 320161,
@@ -3668,7 +3752,7 @@
     "id": 319980,
     "title_en": "[이슈 파이널] 엘 파셰르 함락 1년, 인권 유린과 유령도시로 전락한 수단",
     "title_ko": "[이슈 파이널] 엘 파셰르 함락 1년, 인권 유린과 유령도시로 전락한 수단",
-    "summary_ko": "[업데이트]\n■ 10월 30일 05:25 — 사우디아라비아가 2023년 4월 15일 개전 이후 중재자를 자처해온 것과 달리 실제로는 수단 정규군에 대한 주요 재정 및 군수 지원국으로 부상한 가운데, 글로벌전략연구소가 2026년 7월에 발표한 조사에 따르면 포트수단과 리야드 간의 공수 작전을 통해 M777 155밀리미터 곡사포 포병대대 3개와 탄약이 공급되었고 이 과정에서 테러 단체로 지정된 알바라빈말릭 여단 등 연합 세력에까지 무기가 흘러 들어갔다는 의혹이 제기됐다. 또한 사우디의 군사 지원이 압델 파타 알부르한 수단군 총사령관이 ",
+    "summary_ko": "[업데이트]\n■ 10월 30일 07:27 — 사우디아라비아는 소말리아에서 5000명 규모의 병력을 훈련시키며 영향력을 확대하고 있으며, 이 병력이 수단 전선에 투입될 가능성이 제기된다. 또한 사우디는 에리트레아와의 안보 협력을 통해 지역 내 영향력을 강화하고 있으나, 이는 에티오피아와의 외교적 마찰을 빚고 있다. 유럽 민주주의 재단은 23일(현지시간) 보고서를 통해 사우디가 수단 내 이슬람주의 세력과 연계된 정부군을 지원하는 모순적인 정책을 펼치고 있다고 지적했다.\n\n한편 26일 수단 내전이 1년 넘게 지속되는 가운데, 외부 세력의",
     "url": "internal://explainer_319441",
     "source": "NewsFinal",
     "category": "정치·외교",
@@ -3727,6 +3811,10 @@
       {
         "timestamp": "2026-10-30 05:25",
         "note": "수단 시장 드론 공습으로 21명 사망"
+      },
+      {
+        "timestamp": "2026-10-30 07:27",
+        "note": "사우디의 소말리아 병력 훈련 및 수단 개입이 확인됐다."
       }
     ],
     "byline": "뉴스파이널 편집국",
