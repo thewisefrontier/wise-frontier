@@ -1,5 +1,44 @@
 [
   {
+    "id": 320265,
+    "title_en": "동아시아, 도쿄 22도 훈풍…울란바토르 영하권 추위",
+    "title_ko": "동아시아, 도쿄 22도 훈풍…울란바토르 영하권 추위",
+    "summary_ko": "30일(현지시간) 동아시아 주요국 수도는 최저기온 영하 12도에서 최고기온 22도에 이르는 폭넓은 기온 분포를 보였다. 이 가운데 일본 도쿄는 최고기온이 22도까지 올라 동아시아 주요국 수도 중 가장 더운 곳을 기록한 반면, 몽골 울란바토르는 최고기온 1도, 최저기온 영하 12도에 머물러 가장 선선한 곳으로 나타났다. 도쿄는 울란바토르보다 최고기온이 21도 높아 지역 간 큰 기온 차이를 보였다.\n\n일본 도쿄는 최고 22도, 최저 12도를 기록한 가운데 흐린 날씨를 보였으며 강수확률은 17%, 강수량은 0.0mm, 자외선지수는 4.0",
+    "url": "internal://weather_group_동아시아_today20261030",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_동아시아_today20261030",
+    "region": "east_asia",
+    "country": "동아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-30 06:24",
+    "countries": [
+      "일본",
+      "중국",
+      "몽골"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261030_pid5131521_china.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-30T06:24:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-30 06:24",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 320264,
     "title_en": "[국제금값] 금 온스당 4033달러…미 연준 긴축 경계감에 하락",
     "title_ko": "[국제금값] 금 온스당 4033달러…미 연준 긴축 경계감에 하락",
@@ -2664,60 +2703,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 320042,
-    "title_en": "[국제금값] 금 온스당 4082달러…미 연준 긴축 경계 속 상승",
-    "title_ko": "[국제금값] 금 온스당 4082달러…미 연준 긴축 경계 속 상승",
-    "summary_ko": "국제 금값이 28일(현지시간) 상승했다. 뉴욕 시장에서 금 선물은 온스당 4081.60달러에 거래를 마쳤다. 시장 집계에 따르면 이는 전일 종가(4074.60달러) 대비 0.17% 상승한 수치이며, 상승폭은 7.00달러를 기록했다.\n\n최근 5거래일 흐름을 보면, 22일 종가 4060.40달러 대비 0.52% 상승했다. 이날 장중 범위는 최저 4036.90달러에서 최고 4097.20달러 사이를 오갔다. 현재 가격은 52주 고점 5586.20달러 대비 26.93% 낮은 수준에 위치한다.\n\n이번 금 시세 변동은 미국 연방준비제도의 통화정",
-    "url": "internal://gold_price_2026-10-28",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국제금값",
-    "region": "글로벌",
-    "country": "국제",
-    "country_flag": "🪙",
-    "score": 1,
-    "created_at": "2026-10-29 06:07",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/gold_2026_10_28_pid2942447.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-29T06:07:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-29 06:07",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-10-29 12:00",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "pct": 0.1717960003983328,
-      "date": "2026-10-28",
-      "prev": 4074.60009765625,
-      "price": 4081.60009765625,
-      "change": 7.0,
-      "source": "시장 집계",
-      "day_low": 4036.89990234375,
-      "day_high": 4097.2001953125,
-      "high_52w": 5586.2,
-      "week_pct": 0.5221208704163053,
-      "week_start": 4060.39990234375,
-      "from_high_pct": -26.934229034831368,
-      "week_start_date": "2026-10-22"
-    },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   }
 ]
