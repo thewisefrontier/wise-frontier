@@ -346,43 +346,61 @@ def fetch_seeded_pixabay_image(keywords: list, seed: int, key_hint: str, allowed
     """
     if not PIXABAY_API_KEY or not keywords:
         return ""
-    query = keywords[seed % len(keywords)]
-    try:
-        res = requests.get(
-            "https://pixabay.com/api/",
-            params={
-                "key": PIXABAY_API_KEY,
-                "q": query,
-                "image_type": "photo",
-                "safesearch": "true",
-                "per_page": 10,
-            },
-            timeout=15,
-        )
-        if res.status_code != 200:
-            print(f"  ⚠️ Pixabay {res.status_code}: {res.text[:100]}")
+    # 2026-10-29 실사고(사용자 지적 — 장중특징주 구글·아마존과 다음 날 종목동향 3건이
+    # 같은 사진): 재사용 확인 자체는 정상이었지만, "다른 나라 지명" 필터가 10장 중 8장을
+    # 걸러 후보가 2장뿐이었고 둘 다 최근 사용이라 고정 인덱스로 후퇴했다. 한 키워드만
+    # 보던 것을 → 한 번에 50장씩 받고, 그래도 전부 최근 사용이면 다음 키워드로 넘어간다.
+    # 모든 키워드가 소진됐을 때만 첫 키워드의 고정 인덱스로 후퇴(기존 동작).
+    fallback = None
+    for k in range(len(keywords)):
+        query = keywords[(seed + k) % len(keywords)]
+        try:
+            hits = _pixabay_hits(query, allowed_countries)
+        except Exception as e:
+            print(f"  ⚠️ Pixabay 실패: {e}")
             return ""
-        hits = filter_foreign_place_hits(res.json().get("hits", []), set(allowed_countries), query)
         if not hits:
             print(f"  ⚠️ Pixabay 결과 없음: {query}")
-            return ""
+            continue
         # 2026-09-23 실사고(사용자 지적 — "종목동향이랑 글로벌마켓동향의 사진이
-        # 같다"): 서로 다른 데일리 템플릿 스크립트(frontier_markets_writer.py,
-        # stock_news_writer.py 등 총 12곳)가 같은 날 비슷한 금융 키워드로 검색해
-        # seed%len(hits) 고정 인덱스가 우연히 같은 사진을 가리켰다. 시작 인덱스는
-        # 그대로 seed로 정하되, 최근 20시간 내 다른 스크립트가 이미 쓴 사진(photo
-        # id 기준)은 건너뛰고 첫 미사용 후보를 쓴다 — 여전히 결정론적(같은 seed+
-        # 같은 사용 이력이면 같은 결과)이라 멱등성은 유지되면서 크로스스크립트
-        # 충돌만 줄어든다. 전부 최근 사용이면 원래 고정 인덱스로 후퇴.
-        # (2026-10-27: 기준 20시간 → 4일. 또 이전 확인은 "seeded_pixabay_{id}"를 찾았는데 실제 파일 이름은
-        # "…_pid{id}"라 한 번도 걸리지 않았다 — db.pixabay_ids_used_recently가 두 형식을 모두 본다.)
+        # 같다"): 서로 다른 데일리 템플릿 스크립트가 같은 날 비슷한 금융 키워드로 검색해
+        # seed%len(hits) 고정 인덱스가 같은 사진을 가리켰다 — 시작 인덱스는 seed로
+        # 정하되 최근 4일 내 쓰인 사진(photo id)은 건너뛴다(결정론 유지).
         start = seed % len(hits)
-        hit = hits[start]
+        fallback = fallback or (query, hits[start])
         try:
             used = db.pixabay_ids_used_recently([h.get("id") for h in hits])
-            hit = next((h for h in hits[start:] + hits[:start] if str(h.get("id")) not in used), hit)
         except Exception as e:
             print(f"  ⚠️ 최근 사용 이미지 확인 실패(그냥 진행): {e}")
+            break
+        hit = next((h for h in hits[start:] + hits[:start] if str(h.get("id")) not in used), None)
+        if hit:
+            return _store_pixabay_hit(query, hit, key_hint)
+        print(f"  🖼️ 후보 {len(hits)}장 모두 최근 사용 ({query}) → 다음 키워드")
+    if not fallback:
+        return ""
+    return _store_pixabay_hit(fallback[0], fallback[1], key_hint)
+
+
+def _pixabay_hits(query: str, allowed_countries) -> list:
+    res = requests.get(
+        "https://pixabay.com/api/",
+        params={
+            "key": PIXABAY_API_KEY,
+            "q": query,
+            "image_type": "photo",
+            "safesearch": "true",
+            "per_page": 50,
+        },
+        timeout=15,
+    )
+    if res.status_code != 200:
+        raise RuntimeError(f"Pixabay {res.status_code}: {res.text[:100]}")
+    return filter_foreign_place_hits(res.json().get("hits", []), set(allowed_countries), query)
+
+
+def _store_pixabay_hit(query: str, hit: dict, key_hint: str) -> str:
+    try:
         # largeImageURL(최대 1280px)이 아니라 webformatURL(최대 640px)을 쓴다
         # — 기사 히어로 이미지는 CSS상 max-height:420px라 1280px가 과잉이고,
         # R2 저장 용량만 몇 배로 먹는다(2026-09-04 사용자 지적 — "사진이
