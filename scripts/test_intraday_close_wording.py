@@ -13,6 +13,7 @@ from intraday_stock_digest import close_wording
 assert close_wording("전일 대비 0.03% 상승한 253.18달러로 거래를 마쳤다.")          # 319975
 assert close_wording("나스닥에서 장을 마감했다.")
 assert close_wording("이날 종가는 324.37달러였다.")
+assert close_wording("장중 저점 부근에서 마감하며 하락 압력이 지속됐다.")   # 319404
 assert not close_wording("전일 종가 대비 1.18% 오른 324.37달러에 거래되고 있다.")
 assert not close_wording("장중 한때 4% 넘게 오르기도 했다.")
 
