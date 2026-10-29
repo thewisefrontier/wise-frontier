@@ -40,6 +40,7 @@ stock_news_writer.py가 이미 쓰고 있던 "머니파이널(Finnhub) 실시간
 """
 
 import os
+import re
 import requests
 from datetime import date, datetime
 from zoneinfo import ZoneInfo
@@ -148,6 +149,19 @@ _MARKET_LOCAL_DATE = {
     "독일": lambda: datetime.now(EU_TZ).date(),
     "프랑스": lambda: datetime.now(EU_TZ).date(),
 }
+
+# 2026-10-29 실사고(사용자 지적): 장중 기사 10건 전부 장중 시세를 "거래를 마쳤다"처럼
+# 종가로 썼다. 프롬프트에 장중 지시를 넣고(intraday=True), 그래도 마감 표현이 남으면 발행
+# 차단(다음 사이클 재시도). "전일 종가"는 장중에도 맞는 표현이라 제외.
+_CLOSE_WORDING_RE = re.compile(
+    r"(?:거래를|장을|거래일을)\s*마(?:쳤|감)|마감했|(?<!전일 )(?<!전 거래일 )종가(?:는|가|로|를|에)"
+)
+
+
+def close_wording(text: str) -> list:
+    """장중 기사에 들어가면 안 되는 마감 표현 목록(없으면 빈 리스트)."""
+    return _CLOSE_WORDING_RE.findall(text or "")
+
 
 # GBp(펜스) → 파운드 환산. 나머지는 그대로(달러/유로는 야후가 이미 기본 단위로 줌.
 _CURRENCY_LABEL = {"USD": "달러", "EUR": "유로", "GBP": "파운드"}
@@ -263,7 +277,7 @@ def main():
     for ticker, name_ko, exchange, country, flag, article_date, hit_count, hook_headlines in picks:
         print(f"  → {name_ko}({ticker}, {exchange}) — 머니파이널 뉴스 {hit_count}건 언급")
 
-        data = fetch_stock_data(ticker)
+        data = fetch_stock_data(ticker, article_date)
         if not data:
             print("    [ERROR] 시세 수집 실패 → 스킵")
             continue
@@ -274,6 +288,7 @@ def main():
         prompt = build_article_prompt(
             ticker, name_ko, exchange, data, hook_headlines,
             article_date=article_date, market_label=market_label, currency_label=currency_label,
+            intraday=True,
         )
         article_text = call_gemini_article(prompt)
         if not article_text:
@@ -286,6 +301,10 @@ def main():
             print("    [ERROR] 응답 파싱 실패 → 스킵")
             continue
         body = ensure_paragraphs(body)
+        closed = close_wording(title + " " + body)
+        if closed:
+            print(f"    ⛔ [장중인데 마감 표현 {closed}] 발행 차단 → 다음 사이클 재시도")
+            continue
 
         dg_bad, dg_reason = check_date_hallucination(
             body, [{"source_published_at": article_date.isoformat()}], base_date=article_date
