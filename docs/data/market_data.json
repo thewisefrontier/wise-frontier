@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-29 10:56",
+  "updated_at": "2026-10-29 11:06",
   "indices": [
     {
       "name": "S&P 500",
@@ -25,16 +25,16 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 5881.39,
-      "change_pct": 4.31,
+      "price": 5837.35,
+      "change_pct": 3.53,
       "up": true
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 745.77,
-      "change_pct": 0.26,
-      "up": true
+      "price": 742.98,
+      "change_pct": -0.11,
+      "up": false
     },
     {
       "name": "JSE (남아공)",
@@ -61,14 +61,14 @@
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
       "price": 5282.31,
-      "change_pct": 0.31,
+      "change_pct": 0.0,
       "up": true
     },
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 5688.78,
-      "change_pct": 0.62,
+      "price": 5703.48,
+      "change_pct": 0.88,
       "up": true
     },
     {
@@ -121,16 +121,16 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 5881.39,
-        "change_pct": 4.31,
+        "price": 5837.35,
+        "change_pct": 3.53,
         "up": true
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 745.77,
-        "change_pct": 0.26,
-        "up": true
+        "price": 742.98,
+        "change_pct": -0.11,
+        "up": false
       }
     ],
     "frontier": [
@@ -159,14 +159,14 @@
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
         "price": 5282.31,
-        "change_pct": 0.31,
+        "change_pct": 0.0,
         "up": true
       },
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 5688.78,
-        "change_pct": 0.62,
+        "price": 5703.48,
+        "change_pct": 0.88,
         "up": true
       }
     ],
@@ -199,7 +199,7 @@
       "name": "Aneka Tambang Tbk",
       "symbol": "ANTM.JK",
       "price": 2800.0,
-      "change_pct": 1.08,
+      "change_pct": 0.0,
       "up": true
     },
     "ACB": {
