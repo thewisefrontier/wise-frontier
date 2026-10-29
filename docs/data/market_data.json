@@ -1,26 +1,26 @@
 {
-  "updated_at": "2026-10-29 23:06",
+  "updated_at": "2026-10-29 23:11",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7716.12,
-      "change_pct": -0.08,
+      "price": 7707.23,
+      "change_pct": -0.2,
       "up": false
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 26184.6,
-      "change_pct": -1.11,
+      "price": 26149.99,
+      "change_pct": -1.24,
       "up": false
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 52385.95,
-      "change_pct": 0.02,
-      "up": true
+      "price": 52285.47,
+      "change_pct": -0.18,
+      "up": false
     },
     {
       "name": "코스피",
@@ -39,9 +39,9 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 109860.49,
-      "change_pct": 0.09,
-      "up": true
+      "price": 109646.99,
+      "change_pct": -0.1,
+      "up": false
     },
     {
       "name": "EGX30 (이집트)",
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.64,
-      "change_pct": 0.02,
+      "price": 16.65,
+      "change_pct": 0.05,
       "up": true
     }
   ],
@@ -98,23 +98,23 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7716.12,
-        "change_pct": -0.08,
+        "price": 7707.23,
+        "change_pct": -0.2,
         "up": false
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 26184.6,
-        "change_pct": -1.11,
+        "price": 26149.99,
+        "change_pct": -1.24,
         "up": false
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 52385.95,
-        "change_pct": 0.02,
-        "up": true
+        "price": 52285.47,
+        "change_pct": -0.18,
+        "up": false
       }
     ],
     "kr": [
@@ -137,9 +137,9 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 109860.49,
-        "change_pct": 0.09,
-        "up": true
+        "price": 109646.99,
+        "change_pct": -0.1,
+        "up": false
       },
       {
         "name": "EGX30 (이집트)",
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.64,
-        "change_pct": 0.02,
+        "price": 16.65,
+        "change_pct": 0.05,
         "up": true
       }
     ]
