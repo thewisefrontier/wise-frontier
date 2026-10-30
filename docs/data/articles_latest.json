@@ -1671,7 +1671,7 @@
     "id": 320415,
     "title_en": "바이낸스 63억달러 해킹 사고 발생…가상자산 시장 15억달러 청산 사태",
     "title_ko": "바이낸스 63억달러 해킹 사고 발생…가상자산 시장 15억달러 청산 사태",
-    "summary_ko": "[업데이트]\n■ 10월 31일 05:00 — 바이낸스의 공동 최고경영자 리처드 텡은 이번 해킹이 단순한 엔지니어의 노트북 침해를 넘어선 복합적인 공격이며, 해커들이 거래소의 승인 제어를 우회하고 증거를 인멸하는 고도의 전술을 구사했다고 30일(현지시간) 밝혔다. 블록에이드 분석 결과 이번 공격 과정에서 이더리움 지갑 권한이 악용되었고, 단일 거래 내에서 50개의 승인 변형이 발생해 이 중 하나가 지갑의 계정 카운터와 일치하면서 공격이 성공했다. 미국 연방수사국과 비밀경호국은 이번 사건의 배후로 북한과 연계된 정예 해킹 조직을 지목하",
+    "summary_ko": "[업데이트]\n■ 10월 31일 07:05 — 30일(현지시간) 블록체인 분석 업체 체이널리시스는 해커가 짧은 시간 동안 수천 건의 거래를 실행해 자금 이동 경로를 복잡하게 만드는 자동화 세탁 기법을 동원하고 있다고 밝혔다. 또한 엘립틱은 해커들이 이전에 확인된 적 없는 새로운 자금 세탁 전술을 구사 중이라고 지적했다. 현재 해커는 2억 3300만 개의 리플(XRP)을 보유하고 있어 해당 자산의 매도 여부와 시장 파급력이 주목받고 있다.\n\n이번 사태와 관련해 일각에서는 자산이 이미 파편화되어 회수가 사실상 불가능할 것이라는 회의적인 ",
     "url": "internal://realtrend_Binance_Hack_2026103019",
     "source": "NewsFinal",
     "category": "IT·과학",
@@ -1690,7 +1690,7 @@
     "first_published_at": "2026-10-30T19:01:00",
     "update_log": [
       {
-        "timestamp": "2026-10-31 05:00",
+        "timestamp": "2026-10-31 07:05",
         "note": "최초 게시"
       }
     ],
@@ -2802,40 +2802,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 320271,
-    "title_en": "[가상자산 동향] 리플 5.74% 하락…미 SEC 항소 절차 본격화",
-    "title_ko": "[가상자산 동향] 리플 5.74% 하락…미 SEC 항소 절차 본격화",
-    "summary_ko": "◆ 가격 동향\n\n30일 06:28(한국시간) 야후 파이낸스에 따르면 리플 가격은 전일 대비 5.74% 하락한 1.25달러를 기록했다. 최근 미국 증권거래위원회(SEC)가 리플랩스와의 소송과 관련해 항소 절차를 본격화하며 법적 불확실성이 다시 부각된 점이 매도세를 이끌었다.\n\n시장에서는 SEC의 항소 제기 이후 리플의 자산 운용 효율성과 향후 사업 확장성에 대한 회의적인 시각이 확산했다. 기관 투자자들 사이에서 리플의 법적 리스크가 단기간에 해소되기 어렵다는 인식이 퍼지며 차익 실현 매물이 출회했다.\n\n이와 함께 거시경제적 측면에서 ",
-    "url": "internal://crypto_news_2026-10-30",
-    "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "가상자산동향_crypto",
-    "region": "global",
-    "country": "글로벌",
-    "country_flag": "🌐",
-    "score": 1,
-    "created_at": "2026-10-30 06:30",
-    "countries": [],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_10_30_pid9223462.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-30T06:30:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-30 06:30",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   }
 ]
