@@ -1,5 +1,110 @@
 [
   {
+    "id": 320516,
+    "title_en": "[국제금값] 금 온스당 3885달러…미 연준 긴축 압박에 하락",
+    "title_ko": "[국제금값] 금 온스당 3885달러…미 연준 긴축 압박에 하락",
+    "summary_ko": "국제 금값이 30일(현지시간) 하락했다. 뉴욕 시장에서 금 선물은 온스당 3885.00달러에 거래를 마쳤다. 시장 집계에 따르면 이는 전일 종가(4031.40달러) 대비 3.63% 하락, 하락폭 146.40달러를 기록한 수치다.\n\n이날 장중 범위는 3879.30달러에서 4038.20달러 사이를 기록했다. 최근 5거래일 기준으로는 26일 종가 4038.40달러 대비 3.80% 하락했다. 이는 52주 고점 5586.20달러 대비 30.45% 낮은 수준이다.\n\n이번 가격 하락은 미 연방준비제도의 긴축 압박과 금리 결정, PCE 물가 상승",
+    "url": "internal://gold_price_2026-10-30",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국제금값",
+    "region": "글로벌",
+    "country": "국제",
+    "country_flag": "🪙",
+    "score": 1,
+    "created_at": "2026-10-31 06:09",
+    "countries": [
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/gold_2026_10_30_pid2562055.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-31T06:09:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-31 06:09",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "pct": -3.6314904472423324,
+      "date": "2026-10-30",
+      "prev": 4031.39990234375,
+      "price": 3885.0,
+      "change": -146.39990234375,
+      "source": "시장 집계",
+      "day_low": 3879.300048828125,
+      "day_high": 4038.199951171875,
+      "high_52w": 5586.2,
+      "week_pct": -3.798531746564324,
+      "week_start": 4038.39990234375,
+      "from_high_pct": -30.453617843972648,
+      "week_start_date": "2026-10-26"
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
+    "id": 320515,
+    "title_en": "[국제유가] WTI 배럴당 103달러…중동 리스크와 수급 엇갈려",
+    "title_ko": "[국제유가] WTI 배럴당 103달러…중동 리스크와 수급 엇갈려",
+    "summary_ko": "국제유가가 30일(현지시간) 혼조세를 보였다. 시장 집계에 따르면 WTI 원유 선물은 뉴욕상업거래소(NYMEX)에서 배럴당 102.92달러에 마감했으며, 전일 종가(102.00달러) 대비 0.90%(0.92달러) 상승했다.\n\n브렌트유는 배럴당 112.31달러를 기록했으며, 전일 종가(114.88달러) 대비 2.24%(2.57달러) 하락했다. 이처럼 두 주요 유가가 엇갈린 흐름을 보인 것은 원유 시장 전반의 복합적인 수급 요인에 기인한다.\n\n최근 외신 보도에 따르면, 중동 지역의 화물선 피격 사건 등 지정학적 불안 요인이 시장에 지속",
+    "url": "internal://oil_price_2026-10-30",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국제유가",
+    "region": "글로벌",
+    "country": "국제",
+    "country_flag": "🛢️",
+    "score": 1,
+    "created_at": "2026-10-31 06:08",
+    "countries": [
+      "미국",
+      "사우디아라비아",
+      "러시아"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/oil_2026_10_30_pid168130.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-31T06:08:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-31 06:08",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "wti": {
+        "pct": 0.9019607843137273,
+        "prev": 102.0,
+        "price": 102.92,
+        "change": 0.9200000000000017
+      },
+      "date": "2026-10-30",
+      "brent": {
+        "pct": -2.2371146543020157,
+        "prev": 114.87999725341797,
+        "price": 112.31,
+        "change": -2.5699972534179665
+      },
+      "source": "Yahoo Finance"
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 320509,
     "title_en": "한국, 서울·대구·주말 비와 맑음 교차",
     "title_ko": "한국, 서울·대구·주말 비와 맑음 교차",
