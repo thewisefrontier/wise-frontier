@@ -45,4 +45,9 @@ allowed = d._allowed_money([{"title_en": "Singapore announces S$150 million inve
 _, dropped, _ = d.strip_unverified_money("[싱가포르]\n- 1억5000만 달러를 투자했다.", allowed)
 assert dropped, "S$를 미국 달러로 쓴 불릿이 통과됨"
 
+# 2026-10-30 id=320245 [기업 분석] 원스톱 시스템즈: 주당순손실 "$0.02"가 "[0 달러]"로 병기돼 "주당 0 달러"로 발행.
+a = d.annotate_money("net loss of $600,000 or $0.02 per share; EPS $1.25; $12.6 million; $3")
+assert "[0.02 달러]" in a and "[1.25 달러]" in a and "[1260만 달러]" in a and "[3 달러]" in a, a
+assert "0.02달러" in d._money_tokens(a), d._money_tokens(a)
+
 print("ok")
