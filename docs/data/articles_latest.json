@@ -1,5 +1,46 @@
 [
   {
+    "id": 320542,
+    "title_en": "남아시아, 방글라데시·스리랑카 뇌우 동반 비 소식",
+    "title_ko": "남아시아, 방글라데시·스리랑카 뇌우 동반 비 소식",
+    "summary_ko": "31일(현지시간) 남아시아 주요국들의 이번 주말 날씨는 국가별로 뚜렷한 기상 차이를 보인다. 인도와 파키스탄은 대체로 맑거나 흐린 날씨가 이어지는 반면, 방글라데시와 스리랑카는 비 소식이 예보되어 야외 활동 시 주의가 요구된다. 전체적인 기온 분포는 최저 15°C에서 최고 32°C 사이를 기록하며 지역별로 다소 큰 일교차를 보인다.\n\n인도는 토요일과 일요일 모두 맑은 날씨가 이어지며 최고기온 27~28°C, 최저기온 19°C를 기록한다. 파키스탄은 토요일 대체로 맑은 날씨에 최고 26°C, 최저 16°C를 보이고, 일요일에는 흐린 ",
+    "url": "internal://weather_group_남아시아_weekend20261031",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_남아시아_weekend20261031",
+    "region": "south_asia",
+    "country": "남아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-31 08:37",
+    "countries": [
+      "인도",
+      "방글라데시",
+      "파키스탄",
+      "스리랑카",
+      "네팔"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261031_pid866692_india.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-31T08:37:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-31 08:37",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 320537,
     "title_en": "[가상자산 동향] 비트코인 2.60% 하락…미 대선 불확실성 증대",
     "title_ko": "[가상자산 동향] 비트코인 2.60% 하락…미 대선 불확실성 증대",
@@ -2888,47 +2929,6 @@
     "update_log": [
       {
         "timestamp": "2026-10-30 09:08",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 320296,
-    "title_en": "남아시아, 폭우·폭염 속 기상 극단",
-    "title_ko": "남아시아, 폭우·폭염 속 기상 극단",
-    "summary_ko": "30일(현지시간) 남아시아 지역의 최저기온은 15°C에서 최고기온은 30°C의 분포를 보이고 있다. 아시아 전역에 극단적인 기상 현상이 이어지는 가운데, 이번 날씨는 지역별로 큰 편차를 나타냈다. 가장 더운 곳은 30°C를 기록한 스리랑카 콜롬보인 반면, 가장 선선한 곳은 18°C에 그친 네팔 카트만두로 두 지역 간의 최고기온 차이가 뚜렷했다.\n\n특히 스리랑카(콜롬보)의 자외선지수는 8.6에 달해 매우 높은 수준을 기록하며 강한 자외선에 대한 주의가 요구되는 상황이다. 각국 수도별 기상 상황을 보면 인도 뉴델리는 최고 27°C, 최",
-    "url": "internal://weather_group_남아시아_today20261030",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_남아시아_today20261030",
-    "region": "south_asia",
-    "country": "남아시아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-30 08:35",
-    "countries": [
-      "인도",
-      "방글라데시",
-      "파키스탄",
-      "스리랑카",
-      "네팔"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261030_pid10514028_india.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-30T08:35:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-30 08:35",
         "note": "최초 게시"
       }
     ],
