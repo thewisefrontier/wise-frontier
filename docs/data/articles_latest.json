@@ -1,5 +1,46 @@
 [
   {
+    "id": 320815,
+    "title_en": "남아시아, 10~33도 기온 분포 속 곳곳 비 소식",
+    "title_ko": "남아시아, 10~33도 기온 분포 속 곳곳 비 소식",
+    "summary_ko": "1일(현지시간) 남아시아 주요 지역의 다음주 기온은 최저 10도에서 최고 33도 사이의 분포를 보일 것으로 예보됐다. 지역별로 살펴보면 인도는 최고 29도와 최저 17도, 파키스탄은 최고 27도와 최저 15도의 기온을 기록할 전망이다. 방글라데시는 최고 33도와 최저 22도, 스리랑카는 최고 30도와 최저 23도, 네팔은 최고 24도와 최저 10도의 기온 분포를 나타낸다.\n\n이번 주간 기상 상황에서 방글라데시와 스리랑카, 그리고 네팔 지역에는 비 소식이 포함됐다. 방글라데시는 남아시아 주요국 중 가장 높은 33도의 최고 기온을 기록",
+    "url": "internal://weather_group_남아시아_weekly20261101",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_남아시아_weekly20261101",
+    "region": "south_asia",
+    "country": "남아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-01 08:36",
+    "countries": [
+      "인도",
+      "방글라데시",
+      "파키스탄",
+      "스리랑카",
+      "네팔"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261101_pid4109110_india.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-01T08:36:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-01 08:36",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 320806,
     "title_en": "동남아시아, 최고 35도 더위 속 전역 비 소식",
     "title_ko": "동남아시아, 최고 35도 더위 속 전역 비 소식",
@@ -2636,40 +2677,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 320537,
-    "title_en": "[가상자산 동향] 비트코인 2.60% 하락…미 대선 불확실성 증대",
-    "title_ko": "[가상자산 동향] 비트코인 2.60% 하락…미 대선 불확실성 증대",
-    "summary_ko": "◆ 가격 동향\n\n31일 07:57(한국시간) 야후 파이낸스에 따르면 비트코인 가격은 전일 대비 2.60% 하락한 7만6807.04달러를 기록했다. 이번 하락세는 미국 대선을 앞두고 시장의 불확실성이 커지면서 위험 자산에 대한 투자 심리가 위축된 결과다.\n\n최근 발표된 미국의 고용 지표가 예상보다 견조하게 나타나면서 연방준비제도의 금리 인하 속도가 늦춰질 것이라는 전망이 힘을 얻었다. 이는 가상자산 시장 전반에 하방 압력으로 작용했다.\n\n또한 대선 후보들의 가상자산 관련 정책 방향성에 대한 시장의 경계감이 높아지며 기관 투자자들의 차",
-    "url": "internal://crypto_news_2026-10-31",
-    "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "가상자산동향_crypto",
-    "region": "global",
-    "country": "글로벌",
-    "country_flag": "🌐",
-    "score": 1,
-    "created_at": "2026-10-31 07:58",
-    "countries": [],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_10_31_pid3126814.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-31T07:58:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-31 07:58",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   }
 ]
