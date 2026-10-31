@@ -1,5 +1,126 @@
 [
   {
+    "id": 320775,
+    "title_en": "[국내유가] 휘발유 리터당 1856원…정유사 공급가·국제유가 영향",
+    "title_ko": "[국내유가] 휘발유 리터당 1856원…정유사 공급가·국제유가 영향",
+    "summary_ko": "한국석유공사 오피넷이 1일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1856원으로 집계됐다. 오피넷 공개가는 전일 판매가격을 집계해 발표하는 방식으로 실제 판매 시점은 이보다 하루 이를 수 있다.\n\n경유 판매가격은 리터당 1841.81원으로 전일 대비 0.17원 하락해 오름세를 보인 휘발유와 대조를 이뤘다. 반면 LPG 부탄은 리터당 1153.37원을 기록해 전일보다 9.35원 상승하며 유종별로 엇갈린 흐름을 나타냈다.\n\n이번 유가 변동은 국제유가 흐름과 정유사 공급가 및 마진 구조의 영향을 받은 것으로 분석",
+    "url": "internal://opinet_price_2026-11-01",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-11-01 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_11_01_pid1665166.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-01T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-01 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-11-01",
+      "prices": {
+        "B027": {
+          "diff": 0.07,
+          "name": "휘발유",
+          "price": 1855.69
+        },
+        "B034": {
+          "diff": 0.24,
+          "name": "고급휘발유",
+          "price": 2397.36
+        },
+        "C004": {
+          "diff": 0.02,
+          "name": "실내등유",
+          "price": 1571.11
+        },
+        "D047": {
+          "diff": -0.17,
+          "name": "경유",
+          "price": 1841.81
+        },
+        "K015": {
+          "diff": 9.35,
+          "name": "LPG(부탄)",
+          "price": 1153.37
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 320724,
+    "title_en": "프랑스 연합시위 경로 갈등 격화…파리 동맹시위 강행 속 충돌",
+    "title_ko": "프랑스 전국 고물가 규탄 시위 격화…경찰 충돌로 296명 연행",
+    "summary_ko": "고물가 규탄과 청년층 지원을 요구하는 사회적 연대 시위가 31일(현지시간) 프랑스 전국에서 일제히 열린 가운데, 파리 도심 행진 경로를 둘러싼 당국과 주최 측의 대립이 격화하면서 곳곳에서 충돌이 빚어졌다.\n\n파리경찰청은 치안 불안과 도심 파손을 우려해 노동총동맹(CGT) 등 주최 측이 요구한 바스티유 광장에서 나시옹 광장에 이르는 도심 경로를 불허하고, 동부 외곽의 포르트 드 바뇨레에서 포르트 드 샤랑통에 이르는 우회 경로를 강제했다. 주최 측의 긴급 가처분 신청으로 행정법원이 일시적으로 초기 경로를 허용했으나, 경찰청의 즉각 항고",
+    "url": "internal://cluster_20261101_bd585cf6",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "cluster_20261101_bd585cf6",
+    "region": "global",
+    "country": "프랑스",
+    "country_flag": "",
+    "score": 18,
+    "created_at": "2026-11-01 05:10",
+    "countries": [
+      "프랑스",
+      "독일"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_4212403.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-01T01:18:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-01 01:18",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-01 03:14",
+        "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-01 03:16",
+        "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-01 05:10",
+        "note": "내용 업데이트"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": true,
+    "source_published_at": null,
+    "source_data": {
+      "src_ids": [
+        1507537,
+        1505797
+      ]
+    },
+    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "continuation_of_id": null,
+    "summary_3lines_en": "",
+    "investment_idea_en": "",
+    "noindex": false
+  },
+  {
     "id": 320774,
     "title_en": "Trust",
     "title_ko": "[오늘의 책] 네 개의 텍스트로 쌓아 올린 진실과 권력의 초상, 에르난 디아스의 『트러스트』",
@@ -371,56 +492,6 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 320724,
-    "title_en": "프랑스 연합시위 경로 갈등 격화…파리 동맹시위 강행 속 충돌",
-    "title_ko": "프랑스 전국 고물가 규탄 시위…당국 대치 속 32만 명 참여",
-    "summary_ko": "고물가 규탄과 청년층 지원을 요구하는 사회적 연대 시위가 31일(현지시간) 프랑스 전국에서 일제히 열린 가운데, 파리 도심 행진 경로를 둘러싼 당국과 주최 측의 대립이 격화하면서 곳곳에서 충돌이 빚어졌다.\n\n파리경찰청은 치안 불안과 도심 파손을 우려해 노동총동맹 등 주최 측이 요구한 바스티유 광장에서 나시옹 광장에 이르는 도심 경로를 불허하고, 동부 외곽의 포르트 드 바뇨레에서 포르트 드 샤랑통에 이르는 우회 경로를 강제했다. 주최 측의 긴급 가처분 신청으로 행정법원이 일시적으로 초기 경로를 허용했으나, 경찰청의 즉각 항고로 국참사",
-    "url": "internal://cluster_20261101_bd585cf6",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "cluster_20261101_bd585cf6",
-    "region": "global",
-    "country": "프랑스",
-    "country_flag": "",
-    "score": 8,
-    "created_at": "2026-11-01 03:16",
-    "countries": [
-      "프랑스"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_4212403.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-01T01:18:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-01 01:18",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-01 03:14",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-11-01 03:16",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": true,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        1507537,
-        1505797
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": false
   },
   {
     "id": 320740,
