@@ -1,5 +1,43 @@
 [
   {
+    "id": 320626,
+    "title_en": "북미, 흐린 날씨 속 일교차 큰 주말 예보",
+    "title_ko": "북미, 흐린 날씨 속 일교차 큰 주말 예보",
+    "summary_ko": "31일(현지시간) 예보된 북미 주요국 주말 날씨 데이터에 따르면, 이번 주말 북미 지역은 전반적으로 비 소식 없이 흐린 날씨가 이어질 전망이다. 최저기온은 영하권에서 최고기온은 영상 19도까지 기록하며 넓은 기온 범위를 보인다.\n\n미국 수도의 경우 토요일은 최고 18도, 최저 8도를 기록하며 흐린 날씨를 보이겠고 강수 확률은 1퍼센트로 나타났다. 일요일 역시 흐린 가운데 최고 19도, 최저 7도를 보이며 강수 확률은 3퍼센트로 예보됐다.\n\n캐나다 수도는 토요일 최고 8도, 최저 영하 2도의 기온 분포를 보이며 강수 확률은 0퍼센트인",
+    "url": "internal://weather_group_북미_weekend20261031",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_북미_weekend20261031",
+    "region": "north_america",
+    "country": "북미",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-10-31 18:09",
+    "countries": [
+      "미국",
+      "캐나다"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261031_pid1893985_united_states.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-10-31T18:09:00",
+    "update_log": [
+      {
+        "timestamp": "2026-10-31 18:09",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 320551,
     "title_en": "폴란드 헌법재판소장 직무 정지…세네갈 방문 중이던 대통령 급거 귀국",
     "title_ko": "폴란드 헌재소장 직무정지 사태…경찰 충돌 속 국가 위기 고조",
@@ -2868,43 +2906,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": false
-  },
-  {
-    "id": 320412,
-    "title_en": "오타와, 쌀쌀한 흐린 날씨…내일 기온 하락",
-    "title_ko": "오타와, 쌀쌀한 흐린 날씨…내일 기온 하락",
-    "summary_ko": "30일(현지시간) 북미 주요국 수도인 캐나다 오타와 지역은 최저기온 2도에서 최고기온 13도 사이의 기온 분포를 보이며 대체로 흐린 날씨를 기록했다. 이날 오타와는 북미 주요국 수도 중 가장 더운 곳이자 동시에 가장 선선한 곳으로 기록됐으며, 일교차가 11도에 달하는 쌀쌀한 대기 상태를 나타냈다. 이날 캐나다 오타와의 강수확률은 0%였으며 강수량 역시 0.0mm로 집계되어 비는 내리지 않았다.\n\n자외선지수는 3.0으로 보통 수준을 보였으며, 대기 중 특별한 기상 악화 현상 없이 흐린 하늘만 이어졌다. 한편 내일 최고기온은 오늘보다 ",
-    "url": "internal://weather_group_북미_today20261030",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_북미_today20261030",
-    "region": "north_america",
-    "country": "북미",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-10-30 18:08",
-    "countries": [
-      "미국",
-      "캐나다"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261030_pid2722988_united_states.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-10-30T18:08:00",
-    "update_log": [
-      {
-        "timestamp": "2026-10-30 18:08",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
   }
 ]
