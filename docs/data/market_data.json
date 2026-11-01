@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-01 18:25",
+  "updated_at": "2026-11-01 18:54",
   "indices": [
     {
       "name": "S&P 500",
@@ -46,9 +46,9 @@
     {
       "name": "EGX30 (이집트)",
       "symbol": "^CASE30",
-      "price": 49344.2,
-      "change_pct": 0.13,
-      "up": true
+      "price": 48892.1,
+      "change_pct": -0.79,
+      "up": false
     },
     {
       "name": "SET (태국)",
@@ -144,9 +144,9 @@
       {
         "name": "EGX30 (이집트)",
         "symbol": "^CASE30",
-        "price": 49344.2,
-        "change_pct": 0.13,
-        "up": true
+        "price": 48892.1,
+        "change_pct": -0.79,
+        "up": false
       },
       {
         "name": "SET (태국)",
