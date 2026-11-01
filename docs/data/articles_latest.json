@@ -1,5 +1,43 @@
 [
   {
+    "id": 321449,
+    "title_en": "오세아니아, 이슬비·강풍 궂은날씨",
+    "title_ko": "오세아니아, 이슬비·강풍 궂은날씨",
+    "summary_ko": "2일(현지시간) 오세아니아 주요국 수도의 지역 최저기온은 11°C에서 최고기온은 20°C 사이의 분포를 보이고 있다. 이 가운데 호주 캔버라는 최고기온 20°C, 최저기온 11°C를 기록하며 이번 조사 지역 중 가장 더운 곳으로 나타난 반면, 뉴질랜드 웰링턴은 최고기온 17°C, 최저기온 14°C로 가장 선선한 곳에 머물렀다. 호주 캔버라는 뉴질랜드 웰링턴보다 최고기온이 3°C 더 높게 형성됐다.\n\n호주 캔버라에는 이슬비 소식이 이어지며 강수확률 95%, 강수량 1.9mm를 기록했고, 자외선지수는 6.9로 집계됐다. 뉴질랜드 웰링턴",
+    "url": "internal://weather_group_오세아니아_today20261102",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_오세아니아_today20261102",
+    "region": "oceania",
+    "country": "오세아니아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-02 03:21",
+    "countries": [
+      "호주",
+      "뉴질랜드"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261102_pid4003692_australia.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-02T03:21:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-02 03:21",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 320551,
     "title_en": "폴란드 헌법재판소장 직무 정지…세네갈 방문 중이던 대통령 급거 귀국",
     "title_ko": "폴란드 헌법재판소 갈등 격화…투스크 정부의 소장 직무 정지에 '쿠데타' 반발",
@@ -3237,54 +3275,6 @@
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 320740,
-    "title_en": "이란, 미 부통령 서한 신중 검토…미·이 회동설은 일축",
-    "title_ko": "이란, 미 부통령 서한 신중 검토…미·이 회동설은 일축",
-    "summary_ko": "31일(현지시간) 압바스 아라그치 이란 외무부 장관이 알자지라 방송과의 인터뷰에서 제이디 밴스 미국 부통령이 모흐센 레자이 이란 최고국가안보회의 사무총장에게 보낸 서한을 신중하게 검토하고 있다고 밝혔다.\n\n아라그치 장관은 미국의 대화 재개 시도를 긍정적인 움직임으로 평가하면서도, 워싱턴의 의도가 분열을 조장하는 것이라면 이는 과거의 실수를 반복하는 또 다른 오류가 될 것이라고 경고했다. 현재 미국 고위 관리들과의 회동이나 회담 계획은 없으며 관련 보도는 단순한 언론의 억측에 불과하다고 선을 그었다.\n\n이란 측은 협상 재개를 위한 선",
-    "url": "internal://cluster_20261101_4304d5b9",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "cluster_20261101_4304d5b9",
-    "region": "middle_east",
-    "country": "이란",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-01 03:15",
-    "countries": [
-      "이란",
-      "미국",
-      "카타르",
-      "오만"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_abbas_araghchi.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-01T03:15:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-01 03:15",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        1512042,
-        1511949,
-        1510117,
-        1509977,
-        1508134
-      ]
-    },
-    "image_credit": "사진: IAEA Imagebank (CC BY 2.0, Wikimedia Commons)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
     "noindex": true
   }
 ]
