@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-03 08:26",
+  "updated_at": "2026-11-03 08:36",
   "indices": [
     {
       "name": "S&P 500",
@@ -89,8 +89,8 @@
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
       "price": 16.61,
-      "change_pct": -0.0,
-      "up": false
+      "change_pct": 0.0,
+      "up": true
     }
   ],
   "groups": {
@@ -189,8 +189,8 @@
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
         "price": 16.61,
-        "change_pct": -0.0,
-        "up": false
+        "change_pct": 0.0,
+        "up": true
       }
     ]
   },
