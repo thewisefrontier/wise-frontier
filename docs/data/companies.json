@@ -2080,22 +2080,6 @@
     "updated_at": "2026-08-02 21:12"
   },
   {
-    "id": "tcs",
-    "name": "Tata Consultancy Services Limited",
-    "name_ko": "타타 컨설턴시 서비시스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "TCS",
-    "sector": "IT 서비스",
-    "description": "1968년에 설립된 인도 타타 그룹 산하의 세계적인 IT 서비스 및 컨설팅 기업입니다. 전 세계 기업들을 상대로 디지털 전환, 소프트웨어 개발 및 아웃소싱 서비스를 제공합니다.",
-    "founded_year": 1968,
-    "headquarters": "뭄바이, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-02 17:22"
-  },
-  {
     "id": "tata_consultancy_services",
     "name": "Tata Consultancy Services Limited",
     "name_ko": "타타 컨설턴시 서비스",
@@ -2110,6 +2094,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-19 01:21"
+  },
+  {
+    "id": "tcs",
+    "name": "Tata Consultancy Services Limited",
+    "name_ko": "타타 컨설턴시 서비시스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "TCS",
+    "sector": "IT 서비스",
+    "description": "1968년에 설립된 인도 타타 그룹 산하의 세계적인 IT 서비스 및 컨설팅 기업입니다. 전 세계 기업들을 상대로 디지털 전환, 소프트웨어 개발 및 아웃소싱 서비스를 제공합니다.",
+    "founded_year": 1968,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-02 17:22"
   },
   {
     "id": "tata_motors",
@@ -3728,6 +3728,22 @@
     "updated_at": "2026-07-17 23:14"
   },
   {
+    "id": "bsr",
+    "name": "Binh Son Refining and Petrochemical Joint Stock Company",
+    "name_ko": "베트남석유화학정제공사",
+    "country": "베트남",
+    "country_flag": "🇻🇳",
+    "exchange": "UPCoM",
+    "ticker": "BSR",
+    "sector": "에너지",
+    "description": "2008년에 설립된 베트남의 대표적인 정유·석유화학 기업으로 둥꿜정유공장을 운영합니다. 베트남 국내 연료 공급의 핵심적인 역할을 담당하고 있으며, 막대한 현금 자산과 우수한 재무 구조를 갖추고 있습니다.",
+    "founded_year": 2008,
+    "headquarters": "꽝응아이, 베트남",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-11-02 19:52"
+  },
+  {
     "id": "doji",
     "name": "DOJI Gold and Gems Group",
     "name_ko": "도지 그룹",
@@ -3934,6 +3950,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-10-19 00:37"
+  },
+  {
+    "id": "vietinbank",
+    "name": "Vietnam Joint Stock Commercial Bank for Industry and Trade",
+    "name_ko": "베트남공상은행",
+    "country": "베트남",
+    "country_flag": "🇻🇳",
+    "exchange": "HOSE",
+    "ticker": "CTG",
+    "sector": "은행",
+    "description": "1988년에 설립된 베트남의 주요 국영 상업은행 중 하나입니다. 기업금융과 소매금융 등 종합적인 금융 서비스를 제공하며 베트남 금융 시장에서 높은 영향력을 행사하고 있습니다.",
+    "founded_year": 1988,
+    "headquarters": "하노이, 베트남",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-11-02 19:52"
   },
   {
     "id": "techcombank",
