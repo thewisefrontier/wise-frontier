@@ -1,5 +1,43 @@
 [
   {
+    "id": 321718,
+    "title_en": "오세아니아, 캔버라 소나기·웰링턴 이슬비",
+    "title_ko": "오세아니아, 캔버라 소나기·웰링턴 이슬비",
+    "summary_ko": "3일(현지시간) 오세아니아 주요국 수도의 기온은 최저 11°C에서 최고 22°C 사이의 분포를 보였다. 가장 더운 곳은 최고기온 22°C를 기록한 호주 캔버라이고, 가장 선선한 곳은 최고기온 18°C를 기록한 뉴질랜드 웰링턴이다. 캔버라는 웰링턴보다 최고기온이 4°C 높게 나타나 지역별 기온 차이를 보였다.\n\n호주에는 비 소식이 전해진 가운데, 시드니 지역에서는 뇌우가 발생했다. 호주 캔버라는 소나기가 내리며 강수확률 100%, 강수량 7.6mm를 기록했고 자외선지수 8.0을 나타냈다. 뉴질랜드 웰링턴은 약한 이슬비가 내려 강수확률",
+    "url": "internal://weather_group_오세아니아_today20261103",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_오세아니아_today20261103",
+    "region": "oceania",
+    "country": "오세아니아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-03 03:22",
+    "countries": [
+      "호주",
+      "뉴질랜드"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261103_pid425008_australia.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-03T03:22:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-03 03:22",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 321712,
     "title_en": "유럽 전역 슈퍼마켓 냉동·냉장고 연쇄 해킹…프랑스 이어 벨기에·스웨덴 등 확산",
     "title_ko": "유럽 전역 슈퍼마켓 냉동·냉장고 연쇄 해킹…프랑스 이어 벨기에·스웨덴 등 확산",
@@ -3148,44 +3186,6 @@
     "continuation_of_id": null,
     "summary_3lines_en": "",
     "investment_idea_en": "",
-    "noindex": true
-  },
-  {
-    "id": 321449,
-    "title_en": "오세아니아, 이슬비·강풍 궂은날씨",
-    "title_ko": "오세아니아, 이슬비·강풍 궂은날씨",
-    "summary_ko": "2일(현지시간) 오세아니아 주요국 수도의 지역 최저기온은 11°C에서 최고기온은 20°C 사이의 분포를 보이고 있다. 이 가운데 호주 캔버라는 최고기온 20°C, 최저기온 11°C를 기록하며 이번 조사 지역 중 가장 더운 곳으로 나타난 반면, 뉴질랜드 웰링턴은 최고기온 17°C, 최저기온 14°C로 가장 선선한 곳에 머물렀다. 호주 캔버라는 뉴질랜드 웰링턴보다 최고기온이 3°C 더 높게 형성됐다.\n\n호주 캔버라에는 이슬비 소식이 이어지며 강수확률 95%, 강수량 1.9mm를 기록했고, 자외선지수는 6.9로 집계됐다. 뉴질랜드 웰링턴",
-    "url": "internal://weather_group_오세아니아_today20261102",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_오세아니아_today20261102",
-    "region": "oceania",
-    "country": "오세아니아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-02 03:21",
-    "countries": [
-      "호주",
-      "뉴질랜드"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261102_pid4003692_australia.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-02T03:21:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-02 03:21",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
     "noindex": true
   }
 ]
