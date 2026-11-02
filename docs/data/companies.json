@@ -2144,22 +2144,6 @@
     "updated_at": "2026-08-14 23:23"
   },
   {
-    "id": "singareni_collieries_company",
-    "name": "The Singareni Collieries Company Limited",
-    "name_ko": "싱가레니 콜리어리스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "",
-    "sector": "에너지",
-    "description": "싱가레니 콜리어리스는 1920년에 설립된 인도 텔랑가나주의 국영 석탄 채굴 기업입니다. 주로 인도 남부 지역의 전력 및 산업 수요를 충족하기 위해 석탄을 공급하며, 지역 경제에서 중요한 위치를 차지하고 있습니다. 토목 및 인프라 개발과 관련된 지역 사회 공헌 활동도 함께 수행하고 있습니다.",
-    "founded_year": 1920,
-    "headquarters": "코다구뎀, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-08 01:12"
-  },
-  {
     "id": "singareni_collieries",
     "name": "The Singareni Collieries Company Limited",
     "name_ko": "싱가레니 콜리어리스",
@@ -2174,6 +2158,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-30 17:03"
+  },
+  {
+    "id": "singareni_collieries_company",
+    "name": "The Singareni Collieries Company Limited",
+    "name_ko": "싱가레니 콜리어리스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "싱가레니 콜리어리스는 1920년에 설립된 인도 텔랑가나주의 국영 석탄 채굴 기업입니다. 주로 인도 남부 지역의 전력 및 산업 수요를 충족하기 위해 석탄을 공급하며, 지역 경제에서 중요한 위치를 차지하고 있습니다. 토목 및 인프라 개발과 관련된 지역 사회 공헌 활동도 함께 수행하고 있습니다.",
+    "founded_year": 1920,
+    "headquarters": "코다구뎀, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-08 01:12"
   },
   {
     "id": "tata_power",
@@ -4816,6 +4816,22 @@
     "updated_at": "2026-10-06 19:06"
   },
   {
+    "id": "e_leclerc",
+    "name": "Association E. Leclerc",
+    "name_ko": "르클레르",
+    "country": "프랑스",
+    "country_flag": "🌍",
+    "exchange": null,
+    "ticker": "",
+    "sector": "유통",
+    "description": "르클레르는 1949년에 설립된 프랑스의 대형 협동조합형 대형마트 및 유통 기업입니다. 프랑스 소매 시장에서 높은 점유율을 차지하며 대형 슈퍼마켓과 주유소 체인을 운영하고 있습니다. 합리적인 가격 정책을 바탕으로 소비재 및 연료 유통 시장에서 강력한 영향력을 행사합니다.",
+    "founded_year": 1949,
+    "headquarters": "이우리쉬, 프랑스",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-11-02 21:41"
+  },
+  {
     "id": "getlink",
     "name": "Getlink SE",
     "name_ko": "겟링크",
@@ -4830,6 +4846,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-10-16 07:17"
+  },
+  {
+    "id": "totalenergies",
+    "name": "TotalEnergies SE",
+    "name_ko": "토탈에너지",
+    "country": "프랑스",
+    "country_flag": "🌍",
+    "exchange": "EPA",
+    "ticker": "TTE",
+    "sector": "에너지",
+    "description": "토탈에너지는 1924년에 설립된 프랑스의 다국적 종합 에너지 기업으로 석유, 가스 및 재생에너지 사업을 영위합니다. 글로벌 에너지 시장에서 선도적인 위치를 차지하며 정유 및 주유소 네트워크를 운영하고 있습니다. 전 세계적인 저탄소 에너지 전환 전략을 추진하며 친환경 에너지 포트폴리오를 확대하고 있습니다.",
+    "founded_year": 1924,
+    "headquarters": "쿠르베보아, 프랑스",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-11-02 21:41"
   },
   {
     "id": "arte_ceramics",
