@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-02 10:45",
+  "updated_at": "2026-11-02 11:11",
   "indices": [
     {
       "name": "S&P 500",
@@ -25,15 +25,15 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 5803.84,
-      "change_pct": -2.25,
+      "price": 5771.66,
+      "change_pct": -2.8,
       "up": false
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 730.26,
-      "change_pct": -3.05,
+      "price": 726.13,
+      "change_pct": -3.6,
       "up": false
     },
     {
@@ -60,8 +60,8 @@
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 5057.05,
-      "change_pct": -0.8,
+      "price": 5004.91,
+      "change_pct": -1.03,
       "up": false
     },
     {
@@ -89,7 +89,7 @@
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
       "price": 16.7,
-      "change_pct": 0.58,
+      "change_pct": 0.57,
       "up": true
     }
   ],
@@ -121,15 +121,15 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 5803.84,
-        "change_pct": -2.25,
+        "price": 5771.66,
+        "change_pct": -2.8,
         "up": false
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 730.26,
-        "change_pct": -3.05,
+        "price": 726.13,
+        "change_pct": -3.6,
         "up": false
       }
     ],
@@ -158,8 +158,8 @@
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 5057.05,
-        "change_pct": -0.8,
+        "price": 5004.91,
+        "change_pct": -1.03,
         "up": false
       },
       {
@@ -189,7 +189,7 @@
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
         "price": 16.7,
-        "change_pct": 0.58,
+        "change_pct": 0.57,
         "up": true
       }
     ]
@@ -198,15 +198,15 @@
     "ANTM": {
       "name": "Aneka Tambang Tbk",
       "symbol": "ANTM.JK",
-      "price": 2620.0,
-      "change_pct": -1.87,
+      "price": 2580.0,
+      "change_pct": -1.53,
       "up": false
     },
     "ACB": {
       "name": "Asia Commercial Joint Stock Bank",
       "symbol": "ACB.VN",
       "price": 21000.0,
-      "change_pct": -1.64,
+      "change_pct": -1.41,
       "up": false
     }
   }
