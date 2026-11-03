@@ -1,5 +1,71 @@
 [
   {
+    "id": 321941,
+    "title_en": "[국내유가] 휘발유 리터당 1855원…경유 소폭 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1855원…경유 소폭 하락",
+    "summary_ko": "한국석유공사 오피넷이 4일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1855원으로 집계됐다.\n\n이날 오피넷에 따르면 휘발유 평균 가격은 전일 대비 0.10원 하락한 1855.32원을 기록했다. 경유는 리터당 1841.47원으로 전일 대비 0.65원 내려 하락세를 보였다. 반면 LPG(부탄)는 리터당 1176.90원으로 전일 대비 0.24원 상승했다.\n\n최근 유가 변동은 국제유가 흐름과 정유사 공급가 조정 등에 영향을 받고 있는 것으로 파악된다. 이와 관련해 정유사 공급가격 책정을 둘러싼 업계의 입장 차이와 주",
+    "url": "internal://opinet_price_2026-11-04",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-11-04 05:12",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_11_04_pid2157211.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-04T05:12:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-04 05:12",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-11-04",
+      "prices": {
+        "B027": {
+          "diff": -0.1,
+          "name": "휘발유",
+          "price": 1855.32
+        },
+        "B034": {
+          "diff": 0.06,
+          "name": "고급휘발유",
+          "price": 2396.71
+        },
+        "C004": {
+          "diff": -0.04,
+          "name": "실내등유",
+          "price": 1570.71
+        },
+        "D047": {
+          "diff": -0.65,
+          "name": "경유",
+          "price": 1841.47
+        },
+        "K015": {
+          "diff": 0.24,
+          "name": "LPG(부탄)",
+          "price": 1176.9
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 321940,
     "title_en": "Middlemarch",
     "title_ko": "[오늘의 책] 19세기 영국 지방 사회의 정밀한 초상, 조지 엘리엇의 『미들마치』",
@@ -765,7 +831,7 @@
     "region": "africa",
     "country": "세네갈",
     "country_flag": "",
-    "score": 21,
+    "score": 22,
     "created_at": "2026-11-03 21:22",
     "countries": [
       "세네갈",
@@ -823,7 +889,7 @@
       }
     ],
     "byline": "뉴스파이널 편집국",
-    "is_travel": false,
+    "is_travel": true,
     "source_published_at": null,
     "source_data": {
       "src_ids": [
@@ -2799,132 +2865,6 @@
       "wikidata": "Q7977895"
     },
     "image_credit": "We the Animals 표지",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
-  },
-  {
-    "id": 321739,
-    "title_en": "[국내유가] 휘발유 리터당 1855원…전일 대비 소폭 하락",
-    "title_ko": "[국내유가] 휘발유 리터당 1855원…전일 대비 소폭 하락",
-    "summary_ko": "한국석유공사 오피넷이 3일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1855원으로 집계됐다. 오피넷이 매일 0시에 전일 판매가격을 집계해 공개하는 특성상 실제 판매 가격은 이보다 하루 이른 시점에 적용된 수치다.\n\n이날 함께 공개된 경유 판매가격은 리터당 1841.64원으로 전일 대비 0.47원 하락했다. 반면 LPG(부탄) 판매가격은 리터당 1176.21원을 기록해 전일 대비 0.67원 상승한 것으로 나타났다. 휘발유 역시 전일 대비 0.04원 내려가며 전체적으로 석유제품 가격은 혼조세를 보였다.\n\n최근 유",
-    "url": "internal://opinet_price_2026-11-03",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국내유가",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "🇰🇷",
-    "score": 1,
-    "created_at": "2026-11-03 05:11",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_11_03_pid1130645.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-03T05:11:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-03 05:11",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "date": "2026-11-03",
-      "prices": {
-        "B027": {
-          "diff": -0.04,
-          "name": "휘발유",
-          "price": 1855.43
-        },
-        "B034": {
-          "diff": -0.03,
-          "name": "고급휘발유",
-          "price": 2396.81
-        },
-        "C004": {
-          "diff": 0.05,
-          "name": "실내등유",
-          "price": 1570.66
-        },
-        "D047": {
-          "diff": -0.47,
-          "name": "경유",
-          "price": 1841.64
-        },
-        "K015": {
-          "diff": 0.67,
-          "name": "LPG(부탄)",
-          "price": 1176.21
-        }
-      }
-    },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 321737,
-    "title_en": "[오늘의 신기술] 메타의 가정용 휴머노이드 로봇 프로토타입 공개와 우주 추진체용 겔 개발",
-    "title_ko": "[오늘의 신기술] 메타의 가정용 휴머노이드 로봇 프로토타입 공개와 우주 추진체용 겔 개발",
-    "summary_ko": "[메타, 가정용 휴머노이드 로봇 프로토타입 개발]\n- 해당 소식은 2개 이상의 다른 매체에서도 함께 보도되었다.\n\n[콘코디아 대학, 우주 추진체용 케로신 기반 겔 개발]\n- 콘코디아 대학 연구진은 11월 2일(현지시간) 로켓 및 위성 추진 분야의 오랜 난제인 연료 저장 안정성과 엔진 유입을 해결하는 케로신 기반 겔을 개발했다.\n\n[카자흐스탄, 원자력 교육용 소형 모듈 원자로 시뮬레이터 개소]\n- 카자흐스탄은 11월 2일 원자력 교육을 위한 소형 모듈 원자로 시뮬레이터를 개소했다.\n\n[나미비아, Henties 그린 수소 프로젝트 추진",
-    "url": "internal://newtech_digest_20261103",
-    "source": "NewsFinal",
-    "category": "IT·과학",
-    "subcategory": "newtech_digest_20261103",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 12,
-    "created_at": "2026-11-03 05:10",
-    "countries": null,
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/newtech_digest_20261103_pid4535760.jpg",
-    "view_count": 0,
-    "first_published_at": null,
-    "update_log": [],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
-  },
-  {
-    "id": 321736,
-    "title_en": "[오늘의 스타트업] 우주 스타트업 노스우드 스페이스, 3억7500만 달러 시리즈C 투자 유치",
-    "title_ko": "[오늘의 스타트업] 우주 스타트업 노스우드 스페이스, 3억7500만 달러 시리즈C 투자 유치",
-    "summary_ko": "[우주 스타트업 노스우드 스페이스, 3억7500만 달러 시리즈C 투자 유치]\n- 11월 2일(현지시간) 노스우드 스페이스는 a16z와 DFJ growth로부터 3억7500만 달러 규모의 시리즈C 투자 라운드를 유치했다.\n- 이번 투자 라운드를 통해 노스우드 스페이스는 20억 달러의 기업 가치를 인정받았다.\n\n[미사일 스타트업 하이퍼소니카, 1억 유로 투자 유치]\n- 11월 2일 하이퍼소니카는 라이트스피드와 제너럴 카탈리스트로부터 1억 유로 규모의 투자를 유치했다.\n\n[클린테크 스타트업 씨모어테크, 110만 유로 시드 투자 유치]\n-",
-    "url": "internal://startup_digest_20261103",
-    "source": "NewsFinal",
-    "category": "산업·기업",
-    "subcategory": "startup_digest_20261103",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 30,
-    "created_at": "2026-11-03 05:08",
-    "countries": null,
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/startup_digest_20261103_pid3408523.jpg",
-    "view_count": 0,
-    "first_published_at": null,
-    "update_log": [],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,

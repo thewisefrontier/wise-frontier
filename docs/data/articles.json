@@ -1,5 +1,71 @@
 [
   {
+    "id": 321941,
+    "title_en": "[국내유가] 휘발유 리터당 1855원…경유 소폭 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1855원…경유 소폭 하락",
+    "summary_ko": "한국석유공사 오피넷이 4일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1855원으로 집계됐다.\n\n이날 오피넷에 따르면 휘발유 평균 가격은 전일 대비 0.10원 하락한 1855.32원을 기록했다. 경유는 리터당 1841.47원으로 전일 대비 0.65원 내려 하락세를 보였다. 반면 LPG(부탄)는 리터당 1176.90원으로 전일 대비 0.24원 상승했다.\n\n최근 유가 변동은 국제유가 흐름과 정유사 공급가 조정 등에 영향을 받고 있는 것으로 파악된다. 이와 관련해 정유사 공급가격 책정을 둘러싼 업계의 입장 차이와 주",
+    "url": "internal://opinet_price_2026-11-04",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-11-04 05:12",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_11_04_pid2157211.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-04T05:12:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-04 05:12",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-11-04",
+      "prices": {
+        "B027": {
+          "diff": -0.1,
+          "name": "휘발유",
+          "price": 1855.32
+        },
+        "B034": {
+          "diff": 0.06,
+          "name": "고급휘발유",
+          "price": 2396.71
+        },
+        "C004": {
+          "diff": -0.04,
+          "name": "실내등유",
+          "price": 1570.71
+        },
+        "D047": {
+          "diff": -0.65,
+          "name": "경유",
+          "price": 1841.47
+        },
+        "K015": {
+          "diff": 0.24,
+          "name": "LPG(부탄)",
+          "price": 1176.9
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 321940,
     "title_en": "Middlemarch",
     "title_ko": "[오늘의 책] 19세기 영국 지방 사회의 정밀한 초상, 조지 엘리엇의 『미들마치』",
@@ -765,7 +831,7 @@
     "region": "africa",
     "country": "세네갈",
     "country_flag": "",
-    "score": 21,
+    "score": 22,
     "created_at": "2026-11-03 21:22",
     "countries": [
       "세네갈",
@@ -823,7 +889,7 @@
       }
     ],
     "byline": "뉴스파이널 편집국",
-    "is_travel": false,
+    "is_travel": true,
     "source_published_at": null,
     "source_data": {
       "src_ids": [
