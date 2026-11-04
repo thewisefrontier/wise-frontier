@@ -805,6 +805,10 @@
       {
         "timestamp": "2026-11-04 07:07",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-04 12:00",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -1223,6 +1227,10 @@
       {
         "timestamp": "2026-11-04 05:12",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-04 12:00",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -1265,6 +1273,10 @@
       {
         "timestamp": "2026-11-04 05:08",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-04 12:00",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -1301,7 +1313,12 @@
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/startup_digest_20261104_pid3392100.jpg",
     "view_count": 0,
     "first_published_at": null,
-    "update_log": [],
+    "update_log": [
+      {
+        "timestamp": "2026-11-04 12:00",
+        "note": "최초 게시"
+      }
+    ],
     "byline": "뉴스파이널 편집국",
     "is_travel": false,
     "source_published_at": null,
@@ -1373,36 +1390,6 @@
     "noindex": true
   },
   {
-    "id": 321937,
-    "title_en": "[오늘의 AI 소식] 앤스로픽 11월 IPO 앞두고 성장세 둔화 및 대규모 주식 발행 추진",
-    "title_ko": "[오늘의 AI 소식] 앤스로픽 11월 IPO 앞두고 성장세 둔화 및 대규모 주식 발행 추진",
-    "summary_ko": "[앤스로픽 11월 IPO 앞두고 매출 성장세 둔화]\n- 11월 2일(현지시간) 공개된 앤스로픽의 11월 기업공개(IPO) 앞선 수정 실적에서 매출 성장세가 급격히 둔화된 것으로 나타났다.\n- 다수의 다른 매체들도 앤스로픽의 실적 발표와 IPO 관련 소식을 함께 보도했다.\n\n[바이낸스 63억 달러 해킹 사건에 AI 도구 연루]\n- 11월 3일 바이낸스는 63억 달러 규모의 해킹 사건이 가짜 면접과 취약점에 노출된 AI 도구와 연계되어 발생했다고 추적 결과를 밝혔다.\n\n[오픈AI 미국 육군 전 장관 영입]\n- 11월 3일 오픈AI는 국",
-    "url": "internal://ai_digest_20261104",
-    "source": "NewsFinal",
-    "category": "IT·과학",
-    "subcategory": "ai_digest_20261104_crypto",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 40,
-    "created_at": "2026-11-04 05:02",
-    "countries": null,
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/ai_digest_20261104_pid1340649.jpg",
-    "view_count": 0,
-    "first_published_at": null,
-    "update_log": [],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
-  },
-  {
     "id": 321936,
     "title_en": "Landscape of the Roman \"\"Compagna\"\"",
     "title_ko": "[오늘의 그림] 얀 프란스 판 블로멘의 《로마 캄파냐의 풍경》, 고전적 전통으로 그린 로마 근교의 이상향",
@@ -1427,6 +1414,10 @@
       {
         "timestamp": "2026-11-04 05:02",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-04 12:00",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -1434,6 +1425,41 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "이미지 출처: The Walters Art Museum (CC0 퍼블릭 도메인)",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
+    "id": 321937,
+    "title_en": "[오늘의 AI 소식] 앤스로픽 11월 IPO 앞두고 성장세 둔화 및 대규모 주식 발행 추진",
+    "title_ko": "[오늘의 AI 소식] 앤스로픽 11월 IPO 앞두고 성장세 둔화 및 대규모 주식 발행 추진",
+    "summary_ko": "[앤스로픽 11월 IPO 앞두고 매출 성장세 둔화]\n- 11월 2일(현지시간) 공개된 앤스로픽의 11월 기업공개(IPO) 앞선 수정 실적에서 매출 성장세가 급격히 둔화된 것으로 나타났다.\n- 다수의 다른 매체들도 앤스로픽의 실적 발표와 IPO 관련 소식을 함께 보도했다.\n\n[바이낸스 63억 달러 해킹 사건에 AI 도구 연루]\n- 11월 3일 바이낸스는 63억 달러 규모의 해킹 사건이 가짜 면접과 취약점에 노출된 AI 도구와 연계되어 발생했다고 추적 결과를 밝혔다.\n\n[오픈AI 미국 육군 전 장관 영입]\n- 11월 3일 오픈AI는 국",
+    "url": "internal://ai_digest_20261104",
+    "source": "NewsFinal",
+    "category": "IT·과학",
+    "subcategory": "ai_digest_20261104_crypto",
+    "region": "global",
+    "country": "",
+    "country_flag": "",
+    "score": 40,
+    "created_at": "2026-11-04 05:02",
+    "countries": null,
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/ai_digest_20261104_pid1340649.jpg",
+    "view_count": 0,
+    "first_published_at": null,
+    "update_log": [
+      {
+        "timestamp": "2026-11-04 12:00",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
@@ -1633,6 +1659,10 @@
       {
         "timestamp": "2026-11-04 01:28",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-04 12:00",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -3810,6 +3840,10 @@
       {
         "timestamp": "2026-11-03 07:09",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-04 12:00",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -4019,7 +4053,7 @@
     "id": 321744,
     "title_en": "[기업 분석] 넷플릭스, 매출 500억 달러 기록 및 주가 변동성 직면",
     "title_ko": "[기업 분석] 넷플릭스, 매출 500억 달러 기록 및 주가 변동성 직면",
-    "summary_ko": "[사업]\n- 넷플릭스는 인터넷과 영화를 합성한 이름으로 전 세계 190개국 이상의, 실제로 4억 명 이상의 고객들이 시청하는 2억 3000만 명의 직접 회원을 보유한 스트리밍 엔터테인먼트 기업이다.\n- 영화와 드라마, TV 프로그램, 다큐멘터리, 애니메이션 등의 매우 다양한 장르의 컨텐츠들을 언제, 어디서나 무제한으로 모든 기기에서 볼 수 있는 플랫폼을 제공한다.\n- 닐슨에 따르면 유튜브가 시청 시간을 계속 지배하고 있으며 넷플릭스는 2위에 위치한다.\n- 월트 디즈니, Roku, 아마존 프라임을 포함한 수십 개의 다른 스트리밍 서비",
+    "summary_ko": "[사업]\n- 넷플릭스는 인터넷과 영화를 합성한 이름으로 전 세계 190개국 이상에서 스트리밍 서비스를 제공하는 엔터테인먼트 기업이다.\n- 영화와 드라마, TV 프로그램, 다큐멘터리, 애니메이션 등의 매우 다양한 장르의 컨텐츠들을 언제, 어디서나 무제한으로 모든 기기에서 볼 수 있는 플랫폼을 제공한다.\n- 닐슨에 따르면 유튜브가 시청 시간을 계속 지배하고 있으며 넷플릭스는 2위에 위치한다.\n- 월트 디즈니, Roku, 아마존 프라임을 포함한 수십 개의 다른 스트리밍 서비스보다 앞선 위치에 있다.\n\n[최근 실적]\n- 2026년 10월 ",
     "url": "internal://company_analysis_20261103_netflix",
     "source": "NewsFinal",
     "category": "산업·기업",
@@ -4038,6 +4072,10 @@
       {
         "timestamp": "2026-11-03 05:14",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-04 12:00",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -4080,6 +4118,10 @@
       {
         "timestamp": "2026-11-03 05:13",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-04 12:00",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -4212,7 +4254,12 @@
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/startup_digest_20261103_pid3408523.jpg",
     "view_count": 0,
     "first_published_at": null,
-    "update_log": [],
+    "update_log": [
+      {
+        "timestamp": "2026-11-04 12:00",
+        "note": "최초 게시"
+      }
+    ],
     "byline": "뉴스파이널 편집국",
     "is_travel": false,
     "source_published_at": null,
@@ -4227,7 +4274,7 @@
     "id": 321735,
     "title_en": "[오늘의 AI 소식] 앤스로픽 기업공개 추진 및 대규모 인프라 투자 잇달아",
     "title_ko": "[오늘의 AI 소식] 앤트로픽 기업공개 추진 및 대규모 인프라 투자 잇달아",
-    "summary_ko": "[앤트로픽, 기업공개 앞두고 실적 공개]\n- 앤트로픽은 11월 2일(현지시간) 블록버스터급 기업공개를 앞두고 실적을 발표했다.\n- 해당 기업은 3분기 동안 매출이 급증하고 분기 손실이 줄어들었다.\n\n[마블, 루멘텀을 1150억 달러에 인수]\n- 마블은 11월 2일 AI 데이터센터 부문 강화를 위해 루멘텀을 인수하는 계약을 체결했다.\n- 인수 규모는 1150억 달러에 달한다.\n\n[오픈AI, 아부다비 ADNOC 및 G42와 파트너십 체결]\n- 샘 알트먼 오픈AI CEO의 아랍에미리트 방문에 맞춰 ADNOC 및 G42와 계약이 체결됐다.",
+    "summary_ko": "[앤트로픽, 기업공개 앞두고 실적 공개]\n- 앤트로픽은 11월 2일(현지시간) 블록버스터급 기업공개를 앞두고 실적을 발표했다.\n- 해당 기업은 3분기 동안 매출이 급증하고 분기 손실이 줄어들었다.\n\n[마벨, 루멘텀을 1150억 달러에 인수]\n- 마벨은 11월 2일 AI 데이터센터 부문 강화를 위해 루멘텀을 인수하는 계약을 체결했다.\n- 인수 규모는 1150억 달러에 달한다.\n\n[오픈AI, 아부다비 ADNOC 및 G42와 파트너십 체결]\n- 샘 알트먼 오픈AI CEO의 아랍에미리트 방문에 맞춰 ADNOC 및 G42와 계약이 체결됐다.",
     "url": "internal://ai_digest_20261103",
     "source": "NewsFinal",
     "category": "IT·과학",
@@ -4246,6 +4293,10 @@
       {
         "timestamp": "2026-11-03 21:01",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-04 12:00",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -4261,8 +4312,8 @@
   {
     "id": 321733,
     "title_en": "Madonna and Child with Saints",
-    "title_ko": "[오늘의 그림] 프란체스코 디 보시오 차가넬리의 《성모 자자와 성인들》",
-    "summary_ko": "1510년에서 1515년 사이에 제작된 《성모 자자와 성인들》(Madonna and Child with Saints)은 이탈리아 르네상스 시기의 회화 작품이다. 현재 미국 볼티모어의 월터스 미술관에 소장되어 있으며 나무 패널 위에 유채로 그려졌다.\n\n이 작품은 성모 마리아와 아기 예수, 그리고 성 마들렌, 제롬, 이름이 확인되지 않은 남성 성인, 세바스티안 등 여러 성인이 등장하는 구성을 취한다. 인물들이 서로 대화를 나눌 수 있는 통일된 공간에 함께 배치되어 이른바 '사크라 콘베르차치오네(성스러운 대화)' 형식으로 알려져 있다. ",
+    "title_ko": "[오늘의 그림] 프란체스코 디 보시오 차가넬리의 《성모자와 성인들》",
+    "summary_ko": "1510년에서 1515년 사이에 제작된 《성모자와 성인들》(Madonna and Child with Saints)은 이탈리아 르네상스 시기의 회화 작품이다. 현재 미국 볼티모어의 월터스 미술관에 소장되어 있으며 나무 패널 위에 유채로 그려졌다.\n\n이 작품은 성모 마리아와 아기 예수, 그리고 성 마들렌, 제롬, 이름이 확인되지 않은 남성 성인, 세바스티안 등 여러 성인이 등장하는 구성을 취한다. 인물들이 서로 대화를 나눌 수 있는 통일된 공간에 함께 배치되어 이른바 '사크라 콘베르차치오네(성스러운 대화)' 형식으로 알려져 있다. 이러",
     "url": "internal://art_weekly_2026-11-03",
     "source": "NewsFinal",
     "category": "문화·예술",
@@ -4283,6 +4334,10 @@
       {
         "timestamp": "2026-11-03 05:03",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-04 12:00",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -6872,6 +6927,10 @@
       {
         "timestamp": "2026-11-02 05:14",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-04 12:00",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -6978,6 +7037,10 @@
       {
         "timestamp": "2026-11-02 05:06",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-04 12:00",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -7044,7 +7107,12 @@
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/startup_digest_20261102_pid5355820.jpg",
     "view_count": 0,
     "first_published_at": null,
-    "update_log": [],
+    "update_log": [
+      {
+        "timestamp": "2026-11-04 12:00",
+        "note": "최초 게시"
+      }
+    ],
     "byline": "뉴스파이널 편집국",
     "is_travel": false,
     "source_published_at": null,
@@ -7078,6 +7146,10 @@
       {
         "timestamp": "2026-11-02 21:01",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-04 12:00",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -7115,6 +7187,10 @@
       {
         "timestamp": "2026-11-02 05:02",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-04 12:00",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -7868,6 +7944,10 @@
       {
         "timestamp": "2026-11-02 00:36",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-04 12:00",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
