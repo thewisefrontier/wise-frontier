@@ -66,4 +66,7 @@ assert [x[:8] for x in dropped] == ["[미국 제조기업", "[알파벳 주가 "
 assert "하이브" in b and "앤스로픽" in b and "파워래티스" in b and "리빌드" not in b and NL * 3 not in b, b
 assert d.drop_reposted(new, [])[0] == new
 
+a = d.annotate_money("Oracle plans $20-billion bond and share sale; a $5-million seed; $3 fee")  # 321735
+assert "[200억 달러]" in a and "[500만 달러]" in a and "[3 달러]" in a and "[20 달러]" not in a, a
+
 print("ok")
