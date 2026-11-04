@@ -2080,22 +2080,6 @@
     "updated_at": "2026-08-02 21:12"
   },
   {
-    "id": "tata_consultancy_services",
-    "name": "Tata Consultancy Services Limited",
-    "name_ko": "타타 컨설턴시 서비스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "TCS",
-    "sector": "IT 서비스",
-    "description": "1968년 설립된 글로벌 IT 서비스 및 컨설팅 기업으로 타타 그룹의 핵심 계열사입니다. 전 세계 기업들을 대상으로 소프트웨어 개발, 비즈니스 솔루션, IT 아웃소싱 서비스를 제공합니다. 인도 IT 산업의 선구자이자 세계적인 수준의 기술력을 보유한 기업으로 평가받습니다.",
-    "founded_year": 1968,
-    "headquarters": "뭄바이, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-19 01:21"
-  },
-  {
     "id": "tcs",
     "name": "Tata Consultancy Services Limited",
     "name_ko": "타타 컨설턴시 서비시스",
@@ -2110,6 +2094,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-02 17:22"
+  },
+  {
+    "id": "tata_consultancy_services",
+    "name": "Tata Consultancy Services Limited",
+    "name_ko": "타타 컨설턴시 서비스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "TCS",
+    "sector": "IT 서비스",
+    "description": "1968년 설립된 글로벌 IT 서비스 및 컨설팅 기업으로 타타 그룹의 핵심 계열사입니다. 전 세계 기업들을 대상으로 소프트웨어 개발, 비즈니스 솔루션, IT 아웃소싱 서비스를 제공합니다. 인도 IT 산업의 선구자이자 세계적인 수준의 기술력을 보유한 기업으로 평가받습니다.",
+    "founded_year": 1968,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-19 01:21"
   },
   {
     "id": "tata_motors",
@@ -2144,22 +2144,6 @@
     "updated_at": "2026-08-14 23:23"
   },
   {
-    "id": "singareni_collieries",
-    "name": "The Singareni Collieries Company Limited",
-    "name_ko": "싱가레니 콜리어리스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "",
-    "sector": "에너지",
-    "description": "싱가레니 콜리어리스는 인도의 국영 탄광 및 에너지 기업으로, 주로 텔랑가나주에서 석탄 채굴 및 화력 발전 사업을 수행하고 있습니다. 1920년에 설립되었으며, 인도 남부 지역의 전력 공급과 산업 성장에 필수적인 에너지 자원을 안정적으로 공급하는 핵심적인 역할을 담당하고 있습니다. 인도 정부와 텔랑가나주 정부가 공동으로 소유하고 있는 대형 민간 및 공공 성격의 기업입니다.",
-    "founded_year": 1920,
-    "headquarters": "하이드라바드, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-30 17:03"
-  },
-  {
     "id": "singareni_collieries_company",
     "name": "The Singareni Collieries Company Limited",
     "name_ko": "싱가레니 콜리어리스",
@@ -2174,6 +2158,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-08 01:12"
+  },
+  {
+    "id": "singareni_collieries",
+    "name": "The Singareni Collieries Company Limited",
+    "name_ko": "싱가레니 콜리어리스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "싱가레니 콜리어리스는 인도의 국영 탄광 및 에너지 기업으로, 주로 텔랑가나주에서 석탄 채굴 및 화력 발전 사업을 수행하고 있습니다. 1920년에 설립되었으며, 인도 남부 지역의 전력 공급과 산업 성장에 필수적인 에너지 자원을 안정적으로 공급하는 핵심적인 역할을 담당하고 있습니다. 인도 정부와 텔랑가나주 정부가 공동으로 소유하고 있는 대형 민간 및 공공 성격의 기업입니다.",
+    "founded_year": 1920,
+    "headquarters": "하이드라바드, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-30 17:03"
   },
   {
     "id": "tata_power",
@@ -4112,6 +4112,22 @@
     "updated_at": "2026-07-22 18:03"
   },
   {
+    "id": "botafogo",
+    "name": "Botafogo de Futebol e Regatas",
+    "name_ko": "보타포구",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "B3",
+    "ticker": "",
+    "sector": "스포츠 및 엔터테인먼트",
+    "description": "1904년에 설립된 리오데자네이루 기반의 유서 깊은 프로 축구 클럽입니다. 최근 미국 투자자 그룹의 인수를 통해 구단 운영의 현대화와 재정적 투명성 강화를 추진하고 있습니다. 브라질 축구 리그 내에서 높은 위상을 차지하며 다수의 국가대표 선수를 배출한 명문 구단입니다.",
+    "founded_year": 1904,
+    "headquarters": "리오데자네이루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-11-04 11:23"
+  },
+  {
     "id": "brazilian_banks_federation",
     "name": "Brazilian Federation of Banks",
     "name_ko": "브라질리언뱅크스연맹",
@@ -4144,6 +4160,22 @@
     "updated_at": "2026-07-29 20:50"
   },
   {
+    "id": "flamengo",
+    "name": "Clube de Regatas do Flamengo",
+    "name_ko": "플라멩구",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "B3",
+    "ticker": "",
+    "sector": "스포츠 및 엔터테인먼트",
+    "description": "1895년에 설립된 브라질의 명문 축구 클럽으로, 브라질 내에서 가장 많은 팬을 보유한 대형 스포츠 기업입니다. 축구팀 운영을 핵심 사업으로 하며, 스폰서십, 중계권, 머천다이징 등 다각화된 수익 모델을 가지고 있습니다. 브라질 축구 시장의 상업적 영향력이 매우 큰 구단 중 하나입니다.",
+    "founded_year": 1895,
+    "headquarters": "리오데자네이루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-11-04 11:23"
+  },
+  {
     "id": "compania_de_minas_buenaventura",
     "name": "Compañía de Minas Buenaventura S.A.A.",
     "name_ko": "부에나벤투라",
@@ -4158,6 +4190,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-03 14:55"
+  },
+  {
+    "id": "cruzeiro",
+    "name": "Cruzeiro Esporte Clube",
+    "name_ko": "크루제이루",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "B3",
+    "ticker": "",
+    "sector": "스포츠 및 엔터테인먼트",
+    "description": "1921년에 설립된 브라질 미나스제라이스주를 연고로 하는 전통의 프로 축구 클럽입니다. 브라질 세리에 A에서 다수의 우승 경력을 보유한 명문 구단으로, 최근 기업형 구단 운영 체제로 전환하며 재정 안정화를 꾀하고 있습니다. 지역 사회 내에서 강력한 브랜드 인지도와 팬덤을 확보하고 있습니다.",
+    "founded_year": 1921,
+    "headquarters": "벨루오리존치, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-11-04 11:23"
   },
   {
     "id": "davita_bank",
@@ -4368,22 +4416,6 @@
     "updated_at": "2026-08-09 07:08"
   },
   {
-    "id": "stoneco",
-    "name": "StoneCo Ltd.",
-    "name_ko": "스톤코",
-    "country": "브라질",
-    "country_flag": "🌍",
-    "exchange": "NASDAQ",
-    "ticker": "STNE",
-    "sector": "핀테크",
-    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
-    "founded_year": 2012,
-    "headquarters": "상파울루, 브라질",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-29 20:49"
-  },
-  {
     "id": "stone_co",
     "name": "StoneCo Ltd.",
     "name_ko": "스톤",
@@ -4398,6 +4430,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-22 23:37"
+  },
+  {
+    "id": "stoneco",
+    "name": "StoneCo Ltd.",
+    "name_ko": "스톤코",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "NASDAQ",
+    "ticker": "STNE",
+    "sector": "핀테크",
+    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
+    "founded_year": 2012,
+    "headquarters": "상파울루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-29 20:49"
   },
   {
     "id": "xp_inc",
