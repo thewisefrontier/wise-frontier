@@ -1,53 +1,62 @@
 [
   {
-    "id": 322073,
-    "title_en": "중남미, 30도 불볕더위 속 수도권 곳곳 비",
-    "title_ko": "중남미, 30도 불볕더위 속 수도권 곳곳 비",
-    "summary_ko": "4일(현지시간) 중남미 주요국 수도는 최저기온 10°C에서 최고기온 30°C의 기온 분포를 보인 가운데, 브라질, 아르헨티나, 콜롬비아, 페루, 쿠바 등지에서 비 소식이 이어졌다. 엘니뇨 등 기후 현상과 맞물린 이번 강수로 인해 일부 지역에서는 진흙 슬라이드 등 국지적 영향이 나타난 것으로 전해졌다. 지역별로는 도미니카공화국 산토도밍고가 30°C로 가장 더운 반면, 콜롬비아 보고타는 최고기온 21°C, 최저기온 10°C로 가장 선선한 날씨를 기록했다.\n\n두 수도 간 최고기온 격차는 9°C에 달해 대조를 보였다. 각국 수도별 상세 기",
-    "url": "internal://weather_group_중남미_today20261104",
+    "id": 322086,
+    "title_en": "미시간 상원 선거서 민주 압승…압둘 엘사예드 첫 무슬림 상원의원 당선",
+    "title_ko": "미시간 상원 선거서 민주 압승…압둘 엘사예드 첫 무슬림 상원의원 당선",
+    "summary_ko": "4일(현지시간) 미국 미시간주 연방 상원의원 선거에서 진보 성향의 민주당 후보 압둘 엘사예드가 공화당의 마이크 로저스 후보를 꺾고 승리를 거뒀다고 미국 언론들이 보도했다. 이로써 42세의 전직 공중보건 관료인 엘사예드는 미국 역사상 최초의 무슬림 연방 상원의원으로 기록되게 됐다. 이번 선거는 미시간주를 공화당에 빼앗기지 않으려는 민주당과 의회 주도권을 다투는 양당 간의 가장 치열한 접전지 중 하나로 꼽혔다.\n\n이집트계 미국인 이민자 가정 출신인 엘사예드는 의료보장 확대와 기업 자금의 정치권 유입 차단 등 노동계급 중심의 민생 공약을",
+    "url": "internal://cluster_20261104_8645b83e",
     "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_중남미_today20261104",
-    "region": "latin_america",
-    "country": "중남미",
+    "category": "정치·외교",
+    "subcategory": "cluster_20261104_8645b83e",
+    "region": "global",
+    "country": "미국",
     "country_flag": "",
     "score": 1,
-    "created_at": "2026-11-04 17:10",
+    "created_at": "2026-11-04 18:44",
     "countries": [
-      "브라질",
-      "멕시코",
-      "아르헨티나",
-      "칠레",
-      "콜롬비아",
-      "페루",
-      "쿠바",
-      "도미니카공화국"
+      "미국"
     ],
     "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261104_pid1145762_brazil.jpg",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_abdul_el_sayed.jpg",
     "view_count": 0,
-    "first_published_at": "2026-11-04T17:10:00",
+    "first_published_at": "2026-11-04T18:44:00",
     "update_log": [
       {
-        "timestamp": "2026-11-04 17:10",
+        "timestamp": "2026-11-04 18:44",
         "note": "최초 게시"
       }
     ],
     "byline": "뉴스파이널 편집국",
     "is_travel": false,
     "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
+    "source_data": {
+      "src_ids": [
+        1794643,
+        1794326,
+        1794325,
+        1794180,
+        1794235,
+        1794180,
+        1794075,
+        1792582,
+        1792278,
+        1790778,
+        1790733,
+        1787875
+      ],
+      "kr_coverage_30d": 41
+    },
+    "image_credit": "사진: Conlan Houston (CC BY-SA 4.0, Wikimedia Commons)",
     "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
+    "summary_3lines_en": "",
+    "investment_idea_en": "",
     "noindex": true
   },
   {
     "id": 322045,
     "title_en": "미 중간선거서 민주당 압승…상·하원 장악하며 트럼프 국정 운영 제동",
-    "title_ko": "미 중간선거서 민주당 압승…상·하원 장악하며 트럼프 국정 운영 제동",
-    "summary_ko": "3일(현지시간) 치러진 미국 중간선거에서 민주당이 상원과 하원을 모두 장악하는 압승을 거뒀다. 도널드 트럼프 대통령은 선거 결과를 수용하겠다는 입장을 밝히며 민주당 주도의 의회와 협력할 의사를 내비쳤으나, 정치권은 이번 선거를 트럼프 대통령의 국정 운영에 대한 심판으로 규정하고 있다.\n\n민주당은 이번 선거에서 텍사스, 캔자스, 오하이오, 아이오와, 노스캐롤라이나, 사우스캐롤라이나 등 전통적인 공화당 강세 지역에서 의석을 확보하는 이변을 일으켰다. 특히 상원에서는 기존 53대 47의 열세를 뒤집고 과반인 52석을 확보하며 주도권을 가",
+    "title_ko": "미국 중간선거 민주당 압승…상·하원 장악 속 트럼프 정책 타격",
+    "summary_ko": "[업데이트]\n■ 11월 4일 18:45 — 미시간주 상원 선거에서 민주당 소속 압둘 엘사예드가 공화당 마이크 로저스를 꺾고 당선되며 미국 역사상 최초로 무슬림 상원의원이 탄생했다. 상하원을 모두 장악한 야당은 트럼프 행정부의 핵심 정책인 관세 부과와 메디케이드 축소 법안에 제동을 걸고 정부 정책 전반에 대한 고강도 의회 조사를 예고했다. 의회의 예산 심의권과 인사 청문회 통제권이 강화되면서 향후 연방 판사와 고위 공직자 임명 과정에서 극심한 마찰이 예상된다.\n\n하킴 제프리스 민주당 하원 원내대표는 100시간 이내에 서민 경제 안정을",
     "url": "internal://cluster_20261104_85605220",
     "source": "NewsFinal",
     "category": "정치·외교",
@@ -55,8 +64,8 @@
     "region": "global",
     "country": "미국",
     "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-04 16:45",
+    "score": 20,
+    "created_at": "2026-11-04 18:42",
     "countries": [
       "미국"
     ],
@@ -68,6 +77,14 @@
       {
         "timestamp": "2026-11-04 16:45",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-04 18:42",
+        "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-04 18:45",
+        "note": "민주당의 상하원 장악으로 탄핵 소추 가능성 거론"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -119,6 +136,239 @@
     "continuation_of_id": null,
     "summary_3lines_en": "",
     "investment_idea_en": "",
+    "noindex": true
+  },
+  {
+    "id": 322084,
+    "title_en": "유럽 전역 항공편·크루즈선 대상 폭파 협박 잇따라",
+    "title_ko": "유럽 전역 항공편·크루즈선 대상 폭파 협박 잇따라",
+    "summary_ko": "3일(현지시간) 유럽 전역의 항공편과 크루즈선을 대상으로 한 폭파 협박이 동시다발적으로 발생해 공항 운영에 차질이 빚어졌다. 이번 사태로 최소 10여 편의 항공기가 보안 위협의 대상이 되었으며, 각국 당국은 즉각적인 수색과 대응 조치에 나섰다.\n\n폴란드 바르샤바 공항은 폭파 협박으로 인해 일시적으로 폐쇄되었으며, 이탈리아에서는 위협을 받은 항공기를 보호하기 위해 공군 전투기가 출격해 착륙까지 호위하는 상황이 벌어졌다. 불가리아 소피아 공항으로 향하던 항공편 2편과 로마행 항공편 2편, 스페인 무르시아 공항행 항공편 등 유럽 각지로 ",
+    "url": "internal://realtrend_bomb_threats_2026110418",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "realtrend_bomb_threats",
+    "region": "europe",
+    "country": "폴란드",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-11-04 18:36",
+    "countries": [
+      "폴란드",
+      "이탈리아",
+      "불가리아",
+      "스페인"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_bomb_threats.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-04T18:36:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-04 18:36",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "tags": [
+        "airplane",
+        "airports",
+        "bulgaria",
+        "economy",
+        "europe",
+        "false bomb threat",
+        "flights",
+        "greece",
+        "hungary",
+        "italy",
+        "poland",
+        "ryanair",
+        "spain",
+        "world"
+      ]
+    },
+    "image_credit": "사진: Georges Seguin (Okki) (CC BY-SA 3.0, Wikimedia Commons)",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 322083,
+    "title_en": "파라과이 디지털 은행 우에노 금융 위기 사태로 중앙은행 총재 사임",
+    "title_ko": "파라과이 디지털 은행 우에노 금융 위기 사태로 중앙은행 총재 사임",
+    "summary_ko": "파라과이 디지털 은행 우에노(Ueno)의 재정 부실 의혹이 불거지며 금융권 혼란이 확산되는 가운데, 3일(현지시간) 카를로스 카르발로(Carlos Carvallo) 파라과이 중앙은행 총재가 사임했다. 이번 사태는 우에노 은행의 지급 능력 지표가 규제 기준치인 최소 요구량의 절반 이하로 급락하며 촉발됐다.\n\n우에노 은행은 파라과이 내 약 300만명의 고객을 보유한 대형 디지털 은행이자 최대 신용카드 발행사다. 최근 재무제표 조정 과정에서 자산 건전성 문제가 드러나자, 예금자들은 은행 지점을 찾아가 자금 인출을 요구하는 등 뱅크런 조짐",
+    "url": "internal://realtrend_Paraguai_BC_2026110418",
+    "source": "NewsFinal",
+    "category": "금융",
+    "subcategory": "realtrend_Paraguai_BC",
+    "region": "latin_america",
+    "country": "파라과이",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-11-04 18:33",
+    "countries": [
+      "파라과이",
+      "브라질"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_10290205.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-04T18:33:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-04 18:33",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "tags": [
+        "g1"
+      ]
+    },
+    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
+    "id": 322082,
+    "title_en": "남아공 대통령 농장 절도범 2명 유죄 판결…5억8000만달러 규모 사건 일단락",
+    "title_ko": "남아공 대통령 농장 절도범 2명 유죄 판결…5억8000만달러 규모 사건 일단락",
+    "summary_ko": "남아프리카공화국 모디몰레 지방법원은 4일(현지시간) 시릴 라마포사(Cyril Ramaphosa) 대통령의 팔라 팔라(Phala Phala) 야생동물 농장에서 발생한 절도 사건의 피고인 2명에게 유죄를 선고했다. 유죄 판결을 받은 인물은 나미비아 국적의 이마누엘라 데이비드(Imanuwela David)와 그의 자매인 플로리아나 조셉(Floriana Joseph)이다. 이들은 지난 2020년 2월 라마포사 대통령의 농장에 침입해 소파 속에 숨겨져 있던 58만달러를 훔친 혐의로 기소되었다.\n\n법원은 이마누엘라 데이비드에게 주거 침입 및 ",
+    "url": "internal://realtrend_Phala_Phala_2026110418",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "realtrend_Phala_Phala_crypto",
+    "region": "africa",
+    "country": "남아공",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-11-04 18:31",
+    "countries": [
+      "남아공",
+      "나미비아"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_phala_phala.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-04T18:31:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-04 18:31",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "tags": [
+        "crime",
+        "featured",
+        "important",
+        "maverick news",
+        "national",
+        "phala phala farm",
+        "sa-nuus",
+        "south africa"
+      ]
+    },
+    "image_credit": "이미지 출처: Wikimedia Commons",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
+    "id": 322081,
+    "title_en": "유엔 콩고민주공화국 안정미션 수석, 고마서 전 대통령 카빌라 측과 회담 진행",
+    "title_ko": "유엔 콩고민주공화국 안정미션 수석, 고마서 전 대통령 카빌라 측과 회담 진행",
+    "summary_ko": "유엔 콩고민주공화국 안정미션(MONUSCO) 수석이자 유엔 사무총장 특별대표인 제임스 스완(James Swan)은 2일 고마에서 전 대통령 조셉 카빌라(Joseph Kabila)가 이끄는 반군 후신 조직 '국가재창건전선(FRN)' 대표들과 회담했다. 이번 방문은 민간인 보호와 인도적 지원 접근, 그리고 휴전 감시 메커니즘의 이행을 위한 정례 협의의 일환으로 진행됐다. 회담에는 안정미션 고위 관계자들과 함께 FRN 부대표인 코르넬레 나가아(Corneille Nangaa)와 베르트랑 비심와(Bertrand Bisimwa) 등이 배석했다",
+    "url": "internal://trend_DRC 분쟁_2026110418",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "trend_DRC 분쟁",
+    "region": "africa",
+    "country": "콩고민주공화국",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-11-04 18:28",
+    "countries": [
+      "콩고민주공화국",
+      "르완다",
+      "카타르",
+      "미국",
+      "프랑스"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_democratic_republic_of_the_congo_conflict.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-04T18:28:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-04 18:28",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "사진: Foreign, Commonwealth & Development Office (CC BY 4.0, Wikimedia Commons)",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
+    "id": 322073,
+    "title_en": "중남미, 30도 불볕더위 속 수도권 곳곳 비",
+    "title_ko": "중남미, 30도 불볕더위 속 수도권 곳곳 비",
+    "summary_ko": "4일(현지시간) 중남미 주요국 수도는 최저기온 10°C에서 최고기온 30°C의 기온 분포를 보인 가운데, 브라질, 아르헨티나, 콜롬비아, 페루, 쿠바 등지에서 비 소식이 이어졌다. 엘니뇨 등 기후 현상과 맞물린 이번 강수로 인해 일부 지역에서는 진흙 슬라이드 등 국지적 영향이 나타난 것으로 전해졌다. 지역별로는 도미니카공화국 산토도밍고가 30°C로 가장 더운 반면, 콜롬비아 보고타는 최고기온 21°C, 최저기온 10°C로 가장 선선한 날씨를 기록했다.\n\n두 수도 간 최고기온 격차는 9°C에 달해 대조를 보였다. 각국 수도별 상세 기",
+    "url": "internal://weather_group_중남미_today20261104",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_중남미_today20261104",
+    "region": "latin_america",
+    "country": "중남미",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-04 17:10",
+    "countries": [
+      "브라질",
+      "멕시코",
+      "아르헨티나",
+      "칠레",
+      "콜롬비아",
+      "페루",
+      "쿠바",
+      "도미니카공화국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261104_pid1145762_brazil.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-04T17:10:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-04 17:10",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
     "noindex": true
   },
   {
@@ -2557,7 +2807,7 @@
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
-    "noindex": false
+    "noindex": true
   },
   {
     "id": 321864,
