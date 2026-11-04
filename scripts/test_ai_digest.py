@@ -69,4 +69,11 @@ assert d.drop_reposted(new, [])[0] == new
 a = d.annotate_money("Oracle plans $20-billion bond and share sale; a $5-million seed; $3 fee")  # 321735
 assert "[200억 달러]" in a and "[500만 달러]" in a and "[3 달러]" in a and "[20 달러]" not in a, a
 
+# 2026-11-04 날짜 밀림: 엄격 묶음(핵심어 3개 겹침)의 가장 이른 보도일을 쓰고, 2개만 겹치는 무관 기사는 섞지 않는다
+pool = [{"source_published_at": "2026-11-03T15:00:00+00:00"}, {"source_published_at": "2026-11-02T20:00:00+00:00"},
+        {"source_published_at": "2026-11-01T01:00:00+00:00"}]
+kws = [{"openai", "quietly", "renaming", "data", "centers"}, {"openai", "rebrand", "data", "centers"}, {"openai", "data", "other"}]
+assert d._first_pub(pool, kws, 0).startswith("2026-11-02"), d._first_pub(pool, kws, 0)
+assert d._first_pub(pool, kws, 2).startswith("2026-11-01")
+
 print("ok")
