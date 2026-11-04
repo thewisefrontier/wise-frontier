@@ -1,5 +1,102 @@
 [
   {
+    "id": 322146,
+    "title_en": "오세아니아 주요국, 쌀쌀한 아침 속 포근한 낮 기온",
+    "title_ko": "오세아니아 주요국, 쌀쌀한 아침 속 포근한 낮 기온",
+    "summary_ko": "5일(현지시간) 오세아니아 주요국 수도의 기온은 최저 8°C에서 최고 21°C 사이의 분포를 보이고 있다. 아침에는 쌀쌀한 기온을 기록했으나 낮에는 비교적 포근한 날씨가 나타나는 중이다. 호주 캔버라는 최저 8°C, 최고 19°C로 오세아니아 주요국 수도 중 가장 선선한 곳으로 기록됐다.\n\n캔버라는 약한 이슬비가 내리며 강수확률 46%, 강수량 0.1mm를 나타내고 있다. 반면 뉴질랜드 웰링턴은 최고 21°C, 최저 14°C로 가장 더운 곳을 기록했다. 웰링턴은 흐린 날씨를 보이며 강수확률 9%, 강수량 0.0mm를 기록 중이다.\n",
+    "url": "internal://weather_group_오세아니아_today20261105",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_오세아니아_today20261105",
+    "region": "oceania",
+    "country": "오세아니아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-05 03:22",
+    "countries": [
+      "호주",
+      "뉴질랜드"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261105_pid3381786_australia.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-05T03:22:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-05 03:22",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 322131,
+    "title_en": "미국 중간선거 민주당 압승…하원·상원 석권으로 정국 변화",
+    "title_ko": "미국 중간선거 민주당 압승…상하원 모두 장악하며 트럼프 행정부 견제 예고",
+    "summary_ko": "미국 중간선거에서 민주당이 하원과 상원을 모두 장악하며 압승을 거뒀다고 주요 외신들이 4일(현지시간) 보도했다. 이번 선거 결과로 공화당의 의회 통제권이 상실되었으며, 도널드 트럼프 대통령의 남은 임기 2년 동안 행정부는 강력한 의회 권력과 마주하게 되었다.\n\n개표가 진행 중인 가운데 CBS뉴스는 민주당이 하원 435석 중 과반인 218석을 훌쩍 넘긴 최소 245석을 확보할 것으로 전망했다. 반면 공화당은 166석에 그칠 것으로 예상된다. 100석 규모의 상원에서도 민주당은 54석을 확보하며 다수당 지위를 탈환했다.\n\n아이오와주에서",
+    "url": "internal://cluster_20261104_dc8d4fd0",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "cluster_20261104_dc8d4fd0_crypto",
+    "region": "global",
+    "country": "미국",
+    "country_flag": "",
+    "score": 15,
+    "created_at": "2026-11-05 03:14",
+    "countries": [
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_4933481.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-04T23:23:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-04 23:23",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-05 01:16",
+        "note": "소수계 및 성소수자 주지사 등 다수 당선"
+      },
+      {
+        "timestamp": "2026-11-05 03:14",
+        "note": "내용 업데이트"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "src_ids": [
+        1808232,
+        1808232,
+        1805923,
+        1804305,
+        1804336,
+        1804156,
+        1804077,
+        1804212,
+        1803844,
+        1802628
+      ],
+      "kr_coverage_30d": 92
+    },
+    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "continuation_of_id": null,
+    "summary_3lines_en": "",
+    "investment_idea_en": "",
+    "noindex": false
+  },
+  {
     "id": 322142,
     "title_en": "[이슈 파이널] 트럼프 임기 반환점 맞은 미국 중간선거, 의회 권력 행방은",
     "title_ko": "[이슈 파이널] 트럼프 임기 반환점 맞은 미국 중간선거, 의회 권력 행방은",
@@ -77,61 +174,6 @@
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
-    "noindex": false
-  },
-  {
-    "id": 322131,
-    "title_en": "미국 중간선거 민주당 압승…하원·상원 석권으로 정국 변화",
-    "title_ko": "미국 중간선거 민주당 압승…하원·상원 석권으로 정국 변화",
-    "summary_ko": "[업데이트]\n■ 11월 5일 01:16 — 미국 중간선거에서 민주당이 주지사 선거에서도 공화당 현직 주지사를 꺾고 조지아의 키샤 런스 보텀스, 오하이오의 에이미 액턴, 아이오와의 롭 샌드, 텍사스의 지나 히노호사가 당선되는 등 우세 지역에서 주정부 권력을 교체했다. 정치학자 밥 샤피로는 이번 결과가 조지 W. 부시 행정부 말기인 2006년 민주당의 의회 석권 이후 가장 큰 규모의 정권 심판 바람이라고 진단했다.\n\n선거 참패 직후 제이디 밴스(JD) 부통령은 소셜미디어를 통해 이란과의 전쟁과 민생 경제에 대한 집중 부족이 공화당의 포",
-    "url": "internal://cluster_20261104_dc8d4fd0",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "cluster_20261104_dc8d4fd0_crypto",
-    "region": "global",
-    "country": "미국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-04 23:23",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_4933481.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-04T23:23:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-04 23:23",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-05 01:16",
-        "note": "소수계 및 성소수자 주지사 등 다수 당선"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        1808232,
-        1808232,
-        1805923,
-        1804305,
-        1804336,
-        1804156,
-        1804077,
-        1804212,
-        1803844,
-        1802628
-      ],
-      "kr_coverage_30d": 92
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
     "noindex": false
   },
   {
@@ -2342,90 +2384,6 @@
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 321914,
-    "title_en": "대통령 순방단 개인정보 유출 논란…외교부 \"내부 유출 무게\"",
-    "title_ko": "대통령 순방단 개인정보 유출 논란…외교부 \"내부 유출 무게\"",
-    "summary_ko": "3일(현지시간) 대통령 부부와 순방 관계자들의 개인정보가 담긴 명단이 외부로 유출된 사실이 드러나면서 경찰이 정식 수사에 착수했다. 유출된 정보는 공군 1호기 탑승자 명단으로, 외교부 문서 형식의 엑셀 파일에 담겨 있었던 것으로 확인됐다.\n\n외교부는 이번 사태와 관련해 외부 해킹보다는 내부 유출 가능성에 무게를 두고 조사를 진행 중이다. 외교부 관계자는 유출된 문서가 외교부 내부 문서 형식인 것은 맞지만, 정식 공문 형태는 아니라고 설명했다.\n\n이번 유출로 대통령 부부를 포함한 순방단 관계자들의 인적 사항이 노출되면서 대통령실의 보",
-    "url": "internal://realtrend_대통령_순방단_명단_유출_2026110403",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "realtrend_대통령_순방단_명단_유출",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-11-04 03:21",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_1850613.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-04T03:21:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-04 03:21",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 321913,
-    "title_en": "니스 유치원서 흉기·가짜 총동원 인질극…용의자는 극단주의 추적 대상자",
-    "title_ko": "니스 유치원서 흉기·가짜 총동원 인질극…용의자는 극단주의 추적 대상자",
-    "summary_ko": "3일(현지시간) 현지 언론 보도에 따르면, 전날 오전 9시께 니스에 위치한 클레망 루살(Clément Roassal) 유치원에 36세 여성 학부모가 침입해 약 1시간 동안 교사 2명을 감금하고 위협했다.\n\n로랑 누녜스(Laurent Nuñez) 내무장관이 국회에서 밝힌 바에 따르면, 이 여성은 원생의 어머니로 튀니지와 이탈리아 이중국적을 보유하고 있다. 이어 사무실을 나가면서 다른 교사에게도 총기를 겨누고 뺨을 때린 뒤 도주했다.\n\n용의자는 사건 발생 직후 인근 자택에서 경찰에 체포되어 구금됐다. 니스의 다미앙 마르티네리(Damie",
-    "url": "internal://cluster_20261104_b8e71c13",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "cluster_20261104_b8e71c13",
-    "region": "global",
-    "country": "프랑스",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-04 03:15",
-    "countries": [
-      "프랑스"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_986047.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-04T03:15:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-04 03:15",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        1746324,
-        1745502,
-        1744340,
-        1744318,
-        1742949,
-        1742520,
-        1742094
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
     "noindex": true
   }
 ]
