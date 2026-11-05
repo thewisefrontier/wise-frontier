@@ -2,8 +2,8 @@
   {
     "id": 322283,
     "title_en": "유럽 항공업계 잇단 폭탄 테러 위협…더블린발 에어링구스 여객기 에브뢰 기지 비상 착륙",
-    "title_ko": "유럽 항공업계 잇단 폭탄 테러 위협…더블린발 에어링구스 여객기 에브뢰 기지 비상 착륙",
-    "summary_ko": "5일(현지시간) 아일랜드 더블린에서 출발해 이탈리아 로마로 향하던 에어링구스(Aer Lingus) 소속 A320 여객기가 폭탄 테러 위협으로 인해 프랑스 에브뢰 공군기지에 비상 착륙했다. 프랑스 총리실(Matignon)은 해당 항공기가 비행 중 폭탄 테러 경고를 접수한 뒤 항로를 변경해 오전 10시 4분경 에브뢰 기지에 안전하게 착륙했다고 밝혔다. 당시 기내에는 승객 151명과 승무원 6명이 탑승하고 있었으며, 착륙 직후 이들은 모두 안전한 장소로 대피했다.\n\n현재 기지 내 폭발물 처리반이 해당 여객기를 대상으로 정밀 수색 작업을 ",
+    "title_ko": "유럽 상공 잇단 폭탄 테러 위협…에어링구스 여객기 등 비상 착륙",
+    "summary_ko": "5일(현지시간) 아일랜드 더블린에서 출발해 이탈리아 로마로 향하던 에어링구스(Aer Lingus) 소속 A320 여객기가 비행 중 폭탄 테러 위협을 접수하고 프랑스 에브뢰 공군기지에 비상 착륙했다. 프랑스 총리실은 해당 항공기가 항로를 변경해 오전 10시 4분경 기지에 안전하게 착륙했으며, 탑승객 151명과 승무원 6명 전원이 안전한 장소로 대피했다고 밝혔다. 기지 내 폭발물 처리반이 즉각 정밀 수색을 진행했으나 폭발물은 발견되지 않았다.\n\n프랑스 공군 및 우주군은 위협 신고 직후 생디지에 공군기지에서 라팔(Rafale) 전투기를 ",
     "url": "internal://cluster_20261105_06884c2e",
     "source": "NewsFinal",
     "category": "사회",
@@ -11,12 +11,13 @@
     "region": "global",
     "country": "프랑스",
     "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-05 21:14",
+    "score": 8,
+    "created_at": "2026-11-05 21:26",
     "countries": [
       "프랑스",
       "아일랜드",
-      "이탈리아"
+      "이탈리아",
+      "폴란드"
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_170272.jpg",
@@ -26,6 +27,10 @@
       {
         "timestamp": "2026-11-05 21:14",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-05 21:26",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -51,6 +56,52 @@
     "summary_3lines_en": "",
     "investment_idea_en": "",
     "noindex": false
+  },
+  {
+    "id": 322284,
+    "title_en": "프랑스 전역 대규모 노동자 총파업…정부와 갈등 고조",
+    "title_ko": "프랑스 전역 대규모 노동자 총파업…정부와 갈등 고조",
+    "summary_ko": "프랑스 전역에서 5일(현지시간) 임금 인상과 물가 안정을 요구하는 대규모 노동자 총파업과 시위가 벌어졌다. 노동조합들은 이번 파업을 통해 최저임금(Smic)의 실질적인 인상과 전반적인 급여 수준 상향, 공공서비스 보호를 촉구했다. 특히 2012년 이후 최저임금에 대한 실질적인 보완책이 없었다는 점을 지적하며, 치솟는 연료비와 긴축 재정 기조 속에서 생계 위기에 내몰린 노동자들의 분노가 임계점에 달했다고 주장했다.\n\n이번 파업에는 노동총동맹(CGT), 프랑스민주노동연맹(CFDT), 노동자의 힘(FO) 등 주요 노조가 대거 참여했다. ",
+    "url": "internal://cluster_20261105_c884a754",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "cluster_20261105_c884a754",
+    "region": "global",
+    "country": "프랑스",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-05 21:20",
+    "countries": [
+      "프랑스"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_3654603.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-05T21:20:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-05 21:20",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": true,
+    "source_published_at": null,
+    "source_data": {
+      "src_ids": [
+        1874766,
+        1872433,
+        1870859,
+        1870712,
+        1868656
+      ],
+      "kr_coverage_30d": 13
+    },
+    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "continuation_of_id": null,
+    "summary_3lines_en": "",
+    "investment_idea_en": "",
+    "noindex": true
   },
   {
     "id": 322281,
@@ -2026,154 +2077,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": false
-  },
-  {
-    "id": 322045,
-    "title_en": "미 중간선거서 민주당 압승…상·하원 장악하며 트럼프 국정 운영 제동",
-    "title_ko": "미 중간선거 민주당 상하원 장악…트럼프 '거부권' 경고 속 정국 격돌",
-    "summary_ko": "3일(현지시간) 치러진 미국 중간선거에서 민주당이 상원과 하원을 모두 장악하는 압승을 거뒀다. 이번 선거는 도널드 트럼프 대통령의 국정 운영에 대한 심판 성격을 띠었으며, 높은 물가와 경제 상황에 대한 유권자들의 불만이 반영된 결과라는 분석이 지배적이다. CNN의 출구조사 결과 응답자의 39%가 경제를 가장 중요한 투표 이유로 꼽았으며, 트럼프 대통령의 국정 수행에 대해 62%가 부정적인 평가를 내렸다. 정치학자 밥 샤피로는 이번 결과가 2006년 민주당의 의회 석권 이후 가장 큰 규모의 정권 심판 바람이라고 진단했다.\n\n민주당은 ",
-    "url": "internal://cluster_20261104_85605220",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "cluster_20261104_85605220",
-    "region": "global",
-    "country": "미국",
-    "country_flag": "",
-    "score": 21,
-    "created_at": "2026-11-04 21:24",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "",
-    "view_count": 0,
-    "first_published_at": "2026-11-04T16:45:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-04 16:45",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-04 18:42",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-11-04 18:45",
-        "note": "민주당의 상하원 장악으로 탄핵 소추 가능성 거론"
-      },
-      {
-        "timestamp": "2026-11-04 21:24",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-11-05 15:36",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        1786626,
-        1786431,
-        1786516,
-        1786225,
-        1785735,
-        1784807,
-        1784322,
-        1784239,
-        1783966,
-        1783939,
-        1783941,
-        1783951,
-        1783913,
-        1782558,
-        1782576,
-        1782549,
-        1782458,
-        1782458,
-        1782205,
-        1782067,
-        1782074,
-        1782100,
-        1780841,
-        1780693,
-        1780218,
-        1780332,
-        1780376,
-        1780352,
-        1780232,
-        1780376,
-        1780218,
-        1780332,
-        1780352,
-        1779932,
-        1780002,
-        1778751,
-        1775815,
-        1774806
-      ]
-    },
-    "image_credit": "",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": true
-  },
-  {
-    "id": 322120,
-    "title_en": "이란 전국서 13 아반 기념 ‘세계 반제국주의 투쟁의 날’ 대규모 행진",
-    "title_ko": "이란 전국서 13 아반 기념 ‘세계 반제국주의 투쟁의 날’ 대규모 행진",
-    "summary_ko": "4일(현지시간) 이란 전국에서 미국 주도 제국주의에 맞서는 ‘세계 반제국주의 투쟁의 날’인 13 아반을 맞아 대규모 기념행진이 개최됐다. 이번 행사는 수도 테헤란의 전 미국 대사관(옛 스파이 소굴) 앞을 비롯해 전국 각지에서 일제히 열렸다.\n\n수도 테헤란 외에도 이란 북부와 서부 등 각 지역에서 학생들이 주축이 돼 반미 구호를 외치며 거리로 나섰다. 특히 이란 남부의 호르무즈 해협을 수호하는 이슬람혁명 방위대 소속 학생과 청년층을 비롯해 각계각층의 시민들이 동참해 최고지도자 알리 하메네이에 대한 충성을 맹세했다.\n\n지방 도시들에서도",
-    "url": "internal://cluster_20261104_06e0e26a",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "cluster_20261104_06e0e26a",
-    "region": "middle_east",
-    "country": "이란",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-04 21:23",
-    "countries": [
-      "이란"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_13_aban.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-04T21:23:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-04 21:23",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-05 15:00",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        1800618,
-        1800624,
-        1798646,
-        1798634,
-        1798634,
-        1798579,
-        1798581,
-        1796210,
-        1792810,
-        1792781
-      ],
-      "kr_coverage_30d": 7
-    },
-    "image_credit": "사진: Ali Entezari (CC BY 4.0, Wikimedia Commons)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": true
   }
 ]
