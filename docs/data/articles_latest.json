@@ -1,60 +1,9 @@
 [
   {
-    "id": 322366,
-    "title_en": "[국제금값] 금 온스당 4098달러…달러 약세와 중앙은행 매입에 반등",
-    "title_ko": "[국제금값] 금 온스당 4098달러…달러 약세와 중앙은행 매입에 반등",
-    "summary_ko": "국제 금값이 5일(현지시간) 상승했다. 뉴욕 시장에서 금 선물은 온스당 4098.00달러에 거래를 마쳤다. 시장 집계에 따르면 전일 종가(4073.00달러) 대비 0.61% 상승, 상승폭 25.00달러를 기록했다.\n\n이날 장중 범위는 4067.00달러에서 4155.80달러 사이에서 형성됐다. 최근 5거래일 동안 30일 종가 3898.90달러 대비 5.11% 상승했다. 52주 고점 5586.20달러 대비 26.64% 낮은 수준이다.\n\n최근 외신 보도에 따르면 국제 금값은 미 달러화 약세와 국채 수익률 하락, 중앙은행의 지속적인 금 매",
-    "url": "internal://gold_price_2026-11-05",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국제금값",
-    "region": "글로벌",
-    "country": "국제",
-    "country_flag": "🪙",
-    "score": 1,
-    "created_at": "2026-11-06 07:08",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/gold_2026_11_05_pid2048287.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-06T07:08:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-06 07:08",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "pct": 0.6137981831573779,
-      "date": "2026-11-05",
-      "prev": 4073.0,
-      "price": 4098.0,
-      "change": 25.0,
-      "source": "시장 집계",
-      "day_low": 4067.0,
-      "day_high": 4155.7998046875,
-      "high_52w": 5586.2,
-      "week_pct": 5.106571151943776,
-      "week_start": 3898.89990234375,
-      "from_high_pct": -26.64065017364219,
-      "week_start_date": "2026-10-30"
-    },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
-  },
-  {
     "id": 322083,
     "title_en": "파라과이 디지털 은행 우에노 금융 위기 사태로 중앙은행 총재 사임",
-    "title_ko": "우에노은행 파산 파장…산티아고 페냐 파라과이 대통령 사임",
-    "summary_ko": "산티아고 페냐 파라과이 대통령이 5일(현지시간) 우에노은행(Ueno Bank)의 파산으로 촉발된 금융 위기와 탄핵 압박을 견디지 못하고 사임했다. 페냐 대통령은 소셜미디어 X를 통해 공개한 영상 메시지에서 국가의 안정과 민주적 제도 보존을 위해 사퇴를 결정했다고 밝혔다. 그는 재임 기간 국민의 신뢰를 저버린 점에 대해 사과하며, 예금자들의 자산 보호가 최우선 과제임을 강조했다.\n\n이번 사태는 파라과이 중앙은행(BCP)이 3일 우에노은행의 지급 불능 상태를 확인하고 영업 정지 및 청산 절차에 착수하면서 시작됐다. 우에노은행은 성인 인",
+    "title_ko": "파라과이 우에노은행 파산 사태…페냐 대통령 사임",
+    "summary_ko": "산티아고 페냐 파라과이 대통령이 5일(현지시간) 우에노은행(Ueno Bank)의 파산과 그에 따른 탄핵 압박을 견디지 못하고 사임했다. 페냐 대통령은 소셜미디어 X를 통해 공개한 영상 메시지에서 국가 안정과 민주적 제도 보존을 위해 사퇴를 결정했다고 밝혔다. 그는 재임 중 국민의 신뢰를 저버린 점에 대해 사과하며 예금자 자산 보호가 최우선 과제임을 강조했다.\n\n이번 사태는 파라과이 중앙은행(BCP)이 3일 우에노은행의 지급 불능 상태를 확인하고 영업 정지 및 청산 절차에 착수하면서 본격화했다. 우에노은행은 파라과이 성인 인구의 약 ",
     "url": "internal://realtrend_Paraguai_BC_2026110418",
     "source": "NewsFinal",
     "category": "금융",
@@ -62,10 +11,11 @@
     "region": "latin_america",
     "country": "파라과이",
     "country_flag": "",
-    "score": 50,
-    "created_at": "2026-11-06 07:07",
+    "score": 51,
+    "created_at": "2026-11-06 07:11",
     "countries": [
-      "파라과이"
+      "파라과이",
+      "아르헨티나"
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_10290205.jpg",
@@ -119,6 +69,10 @@
       {
         "timestamp": "2026-11-06 07:07",
         "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-06 07:11",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -134,6 +88,57 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
+  },
+  {
+    "id": 322366,
+    "title_en": "[국제금값] 금 온스당 4098달러…달러 약세와 중앙은행 매입에 반등",
+    "title_ko": "[국제금값] 금 온스당 4098달러…달러 약세와 중앙은행 매입에 반등",
+    "summary_ko": "국제 금값이 5일(현지시간) 상승했다. 뉴욕 시장에서 금 선물은 온스당 4098.00달러에 거래를 마쳤다. 시장 집계에 따르면 전일 종가(4073.00달러) 대비 0.61% 상승, 상승폭 25.00달러를 기록했다.\n\n이날 장중 범위는 4067.00달러에서 4155.80달러 사이에서 형성됐다. 최근 5거래일 동안 30일 종가 3898.90달러 대비 5.11% 상승했다. 52주 고점 5586.20달러 대비 26.64% 낮은 수준이다.\n\n최근 외신 보도에 따르면 국제 금값은 미 달러화 약세와 국채 수익률 하락, 중앙은행의 지속적인 금 매",
+    "url": "internal://gold_price_2026-11-05",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국제금값",
+    "region": "글로벌",
+    "country": "국제",
+    "country_flag": "🪙",
+    "score": 1,
+    "created_at": "2026-11-06 07:08",
+    "countries": [
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/gold_2026_11_05_pid2048287.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-06T07:08:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-06 07:08",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "pct": 0.6137981831573779,
+      "date": "2026-11-05",
+      "prev": 4073.0,
+      "price": 4098.0,
+      "change": 25.0,
+      "source": "시장 집계",
+      "day_low": 4067.0,
+      "day_high": 4155.7998046875,
+      "high_52w": 5586.2,
+      "week_pct": 5.106571151943776,
+      "week_start": 3898.89990234375,
+      "from_high_pct": -26.64065017364219,
+      "week_start_date": "2026-10-30"
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
   },
   {
     "id": 322365,
