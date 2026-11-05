@@ -42,6 +42,7 @@ stock_news_writer.py가 이미 쓰고 있던 "머니파이널(Finnhub) 실시간
 import os
 import re
 import requests
+from cause_guard import strip_unsupported_causes
 from datetime import date, datetime
 from zoneinfo import ZoneInfo
 from dotenv import load_dotenv
@@ -296,6 +297,8 @@ def main():
             continue
 
         title, body = parse_article_output(article_text)
+
+        body = strip_unsupported_causes(body)
         title = enforce_title_prefix(title)
         if not title or not body:
             print("    [ERROR] 응답 파싱 실패 → 스킵")
