@@ -1,5 +1,42 @@
 [
   {
+    "id": 322351,
+    "title_en": "서울, 쌀쌀한 날씨 속 맑은 하늘…최저 3도",
+    "title_ko": "서울, 쌀쌀한 날씨 속 맑은 하늘…최저 3도",
+    "summary_ko": "6일 한국의 날씨는 전국이 대체로 맑은 가운데 서울의 최저기온이 3도, 최고기온이 9도를 기록하는 등 쌀쌀한 날씨가 이어지겠다고 한국 기상청이 예보했다. 서울은 오전과 오후 모두 맑은 날씨를 보이겠으며, 강수확률은 오전과 오후 모두 0%로 비 소식이 없다. 최대풍속은 18km/h로 예상된다.\n\n주요 지역별 날씨를 보면 부산은 오전 구름이 많다가 오후에 맑아지겠으며 최저기온 6도, 최고기온 16도를 나타내겠다. 대구는 오전과 오후 모두 맑고 최저 3도, 최고 12도를 기록하겠으며, 광주는 오전 구름이 조금 끼는 곳이 있겠으나 오후에는",
+    "url": "internal://weather_한국_today20261106",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_한국_today20261106",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-06 05:24",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261106_pid7507028_south_korea.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-06T05:24:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-06 05:24",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 322345,
     "title_en": "The Poppy War",
     "title_ko": "[오늘의 책] R. F. 쾅의 『The Poppy War』, 20세기 동아시아 역사와 하이 판타지의 만남",
@@ -39,6 +76,54 @@
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
+    "noindex": false
+  },
+  {
+    "id": 321882,
+    "title_en": "프랑스 할인점 기피, 법정관리 돌입…500여 개 매장과 6000명 고용 위기",
+    "title_ko": "프랑스 할인점 기피 법정관리 돌입…전국적 사회 갈등과 맞물려",
+    "summary_ko": "프랑스 대형 할인점 체인 기피(Gifi)가 경영 악화를 극복하지 못하고 3일(현지시간) 툴루즈 상사법원으로부터 법정관리 개시 결정을 받았다. 패트릭 퓌(Patrick Puy) 대표가 지난달 23일 지급불능 상태를 공식 선언하고 법원에 절차 개시를 신청한 데 따른 후속 조치다. 법원은 향후 6개월간 관찰 기간을 거쳐 기업의 지속 가능성을 평가할 예정이다.\n\n1981년 필립 지네스테(Philippe Ginestet)가 설립한 기피는 프랑스 내 513개, 벨기에 내 80개 매장을 운영하는 저가 인테리어 및 잡화 시장의 강자였다. 그러나 ",
+    "url": "internal://cluster_20261103_173d714c",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "cluster_20261103_173d714c",
+    "region": "global",
+    "country": "프랑스",
+    "country_flag": "",
+    "score": 6,
+    "created_at": "2026-11-06 05:14",
+    "countries": [
+      "프랑스",
+      "벨기에"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_gifi.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-03T21:15:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-03 21:15",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-06 05:14",
+        "note": "내용 업데이트"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "src_ids": [
+        1726394,
+        1720223
+      ],
+      "kr_coverage_30d": 1
+    },
+    "image_credit": "사진: Sn-wp78 (CC BY-SA 4.0, Wikimedia Commons)",
+    "continuation_of_id": null,
+    "summary_3lines_en": "",
+    "investment_idea_en": "",
     "noindex": false
   },
   {
@@ -5738,49 +5823,6 @@
     "noindex": true
   },
   {
-    "id": 321882,
-    "title_en": "프랑스 할인점 기피, 법정관리 돌입…500여 개 매장과 6000명 고용 위기",
-    "title_ko": "프랑스 할인점 기피, 법정관리 돌입…500여 개 매장과 6000명 고용 위기",
-    "summary_ko": "프랑스를 대표하는 대형 할인점 체인 기피(Gifi)가 경영 악화를 이기지 못하고 3일(현지시간) 툴루즈 상사법원으로부터 법정관리 개시 결정을 받았다. 이번 조치는 현재 기업을 이끄는 패트릭 퓌(Patrick Puy) 대표가 지난달 23일 지급불능 상태를 공식 선언하고 법원에 절차 개시를 신청한 데 따른 후속 조치다.\n\n법원은 향후 6개월 동안의 관찰 기간을 부여하고 기업의 지속 가능성을 타진하기로 했다. 이 기간 동안 회사의 경제 및 사회적 상황을 종합적으로 평가해 사업을 계속 이어갈지 아니면 타사에 매각할지를 결정하게 된다. 법원",
-    "url": "internal://cluster_20261103_173d714c",
-    "source": "NewsFinal",
-    "category": "산업·기업",
-    "subcategory": "cluster_20261103_173d714c",
-    "region": "global",
-    "country": "프랑스",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-03 21:15",
-    "countries": [
-      "프랑스"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_gifi.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-03T21:15:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-03 21:15",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        1726394,
-        1720223
-      ],
-      "kr_coverage_30d": 1
-    },
-    "image_credit": "사진: Sn-wp78 (CC BY-SA 4.0, Wikimedia Commons)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": false
-  },
-  {
     "id": 321880,
     "title_en": "네팔 에베레스트 지역서 헬기 충돌…인도 관광객 사망·뉴질랜드인 부상",
     "title_ko": "네팔 에베레스트 지역서 헬기 충돌…인도 관광객 사망·뉴질랜드인 부상",
@@ -10827,7 +10869,7 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_3493887.jpg",
-    "view_count": 0,
+    "view_count": 1,
     "first_published_at": "2026-11-02T04:37:00",
     "update_log": [
       {
@@ -15141,7 +15183,7 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261031_pid2654550_saudi_arabia.jpg",
-    "view_count": 0,
+    "view_count": 1,
     "first_published_at": "2026-10-31T11:14:00",
     "update_log": [
       {
