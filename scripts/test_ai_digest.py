@@ -76,4 +76,8 @@ kws = [{"openai", "quietly", "renaming", "data", "centers"}, {"openai", "rebrand
 assert d._first_pub(pool, kws, 0).startswith("2026-11-02"), d._first_pub(pool, kws, 0)
 assert d._first_pub(pool, kws, 2).startswith("2026-11-01")
 
+# 2026-11-07 제목-본문 불일치(322909): 제목 금액이 본문에 없으면 첫 소식 소제목으로
+assert d.fix_stale_title("[오늘의 스타트업] 지라인, 15억 달러 투자 유치", "[세슘아스트로 7억3000만 달러 유치]\n- 6일 유치") == "[오늘의 스타트업] 세슘아스트로 7억3000만 달러 유치"
+assert d.fix_stale_title("[오늘의 스타트업] 세슘, 7억3000만 달러", "[세슘 7억3000만 달러]\n- x") == "[오늘의 스타트업] 세슘, 7억3000만 달러"
+assert d.fix_stale_title("[오늘의 AI 소식] 주요 동향", "[a 1억 달러]\n- x") == "[오늘의 AI 소식] 주요 동향"
 print("ok")
