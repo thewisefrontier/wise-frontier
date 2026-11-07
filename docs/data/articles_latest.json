@@ -1,5 +1,113 @@
 [
   {
+    "id": 323183,
+    "title_en": "[국내유가] 휘발유 리터당 1855원…국제유가 흐름 반영",
+    "title_ko": "[국내유가] 휘발유 리터당 1855원…국제유가 흐름 반영",
+    "summary_ko": "한국석유공사 오피넷이 8일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1855원으로 집계됐다. 오피넷은 매일 0시에 전일 판매가격을 집계해 공개하므로, 실제 판매 시점은 공개일보다 하루 이를 수 있다.\n\n이날 함께 공개된 경유는 리터당 1841.42원으로 전일 대비 0.26원 하락했고, LPG 부탄은 리터당 1177.82원으로 전일과 같은 수준을 유지했다. 휘발유는 전일보다 0.01원 올랐다.\n\n최근 국내 기름값은 국제유가 흐름과 정유사 공급가 변동 등의 영향을 받아왔다. 정유사 공급가격 조정과 유류세 인하 정",
+    "url": "internal://opinet_price_2026-11-08",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-11-08 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_11_08_pid2722787.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-08T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-08 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-11-08",
+      "prices": {
+        "B027": {
+          "diff": 0.01,
+          "name": "휘발유",
+          "price": 1855.3
+        },
+        "B034": {
+          "diff": -0.28,
+          "name": "고급휘발유",
+          "price": 2391.57
+        },
+        "C004": {
+          "diff": -0.04,
+          "name": "실내등유",
+          "price": 1570.25
+        },
+        "D047": {
+          "diff": -0.26,
+          "name": "경유",
+          "price": 1841.42
+        },
+        "K015": {
+          "diff": 0.0,
+          "name": "LPG(부탄)",
+          "price": 1177.82
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 323182,
+    "title_en": "Cleaned Out",
+    "title_ko": "[오늘의 책] 아니 에르노의 『빈 옷장』, 개인의 기억과 사회적 맥락을 포괄한 자전 문학의 출발점",
+    "summary_ko": "2022년 노벨문학상 수상 작가 아니 에르노(Annie Ernaux)의 데뷔작 『빈 옷장』은 개인의 기억을 사회학적 시선과 결합해 통찰한 자전적 소설의 출발점으로 평가받는다. 이 작품은 작가가 겪은 노동자 계급의 가정 환경과 개인적 소외를 용기 있게 파헤치며 현대 문학에서 자전적 글쓰기의 새로운 지평을 열었다. 1974년 발표된 이래 집단적 구속과 개인의 정체성 갈등을 날카롭게 포착해낸 문학적 성취로 지금까지도 세계적인 주목을 받고 있다.\n\n프랑스 노르망디(Normandie) 이브토(Yvetot)의 노동자 계급 지역에서 카페와 식료",
+    "url": "internal://literature_Q3230679",
+    "source": "NewsFinal",
+    "category": "문화·예술",
+    "subcategory": "오늘의책",
+    "region": "europe",
+    "country": "프랑스",
+    "country_flag": "🇫🇷",
+    "score": 1,
+    "created_at": "2026-11-08 05:09",
+    "countries": [
+      "프랑스"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/literature_cover_q3230679.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-08T05:09:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-08 05:09",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "enwiki": "Cleaned Out",
+      "kowiki": null,
+      "source": "prize",
+      "wikidata": "Q3230679"
+    },
+    "image_credit": "빈 옷장 표지",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
     "id": 323181,
     "title_en": "[기업 분석] 어펌, 회계연도 2027년 1분기 실적 발표와 인공지능 기반 성장 전략 공개",
     "title_ko": "[기업 분석] 어펌, 회계연도 2027년 1분기 실적 발표와 인공지능 기반 성장 전략 공개",
@@ -2598,95 +2706,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 322912,
-    "title_en": "Chinaman: The Legend of Pradeep Mathew",
-    "title_ko": "[오늘의 책] 스리랑카 사회의 단면을 포착한 쉐한 카루나틸라카의 데뷔작 『Chinaman: The Legend of Pradeep Mathew』",
-    "summary_ko": "스리랑카 출신 작가 쉐한 카루나틸라카(Shehan Karunatilaka)의 데뷔 소설 『Chinaman: The Legend of Pradeep Mathew』는 발표 직후 커먼웰스 도서상과 DSC 남아시아 문학상을 잇달아 수상하며 현대 남아시아 문학의 중요한 작품으로 자리 잡았다. 이 작품은 2019년 위즈던(Wisden)이 선정한 역사상 최고의 크리켓 서적 중 하나로 이름을 올렸으며 2022년 영국 엘리자베스 2세(Elizabeth II)의 플래티넘 주빌리를 기념하는 70권의 커먼웰스 작가 도서 목록에도 포함되었다. 한 알코올 ",
-    "url": "internal://literature_Q39047834",
-    "source": "NewsFinal",
-    "category": "문화·예술",
-    "subcategory": "오늘의책",
-    "region": "global",
-    "country": "스리랑카",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-07 05:09",
-    "countries": [
-      "스리랑카"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/literature_q39047834.jpg",
-    "view_count": 1,
-    "first_published_at": "2026-11-07T05:09:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-07 05:09",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-07 09:58",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "enwiki": "Chinaman: The Legend of Pradeep Mathew",
-      "kowiki": null,
-      "source": "prize",
-      "wikidata": "Q39047834"
-    },
-    "image_credit": "이미지 출처: Wikimedia Commons · Deshan Tennekoon · CC BY-SA 4.0",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
-  },
-  {
-    "id": 322911,
-    "title_en": "[기업 분석] 알파앤오메가반도체, 회계연도 2027년 1분기 매출 1억7780만 달러 기록",
-    "title_ko": "[기업 분석] 알파앤오메가반도체, 회계연도 2027년 1분기 매출 1억7780만 달러 기록",
-    "summary_ko": "[사업]\n- 알파앤오메가는 전력 반도체 분야의 기업으로, 인공지능 인프라, 고성능 전력 솔루션, 배터리 보호 솔루션 등을 공급한다.\n- 이 회사는 인공지능 서버, 그래픽 카드, 스마트폰 배터리 보호 회로 모듈(PCM), 전력 공급 장치, 모터 제어, 직류 팬(DC 팬) 등 다양한 응용처를 대상으로 제품 포트폴리오를 전개하고 있다.\n- 고급 컴퓨팅 부문은 인공지능 서버와 그래픽 카드를 포함하며 전체 컴퓨팅 부문의 거의 절반을 차지한다.\n\n[최근 실적]\n- 알파앤오메가는 회계연도 2027년 1분기 매출 1억7780만 달러를 기록했다.\n",
-    "url": "internal://company_analysis_20261107_aos",
-    "source": "NewsFinal",
-    "category": "산업·기업",
-    "subcategory": "company_analysis_20261107_aos",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 120,
-    "created_at": "2026-11-07 05:06",
-    "countries": null,
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/company_analysis_20261107_aos_pid3092486.jpg",
-    "view_count": 0,
-    "first_published_at": null,
-    "update_log": [
-      {
-        "timestamp": "2026-11-07 05:06",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-07 09:58",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "company": "AOS",
-      "src_ids": [
-        1968506
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   }
 ]
