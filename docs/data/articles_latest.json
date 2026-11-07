@@ -1,5 +1,49 @@
 [
   {
+    "id": 322986,
+    "title_en": "주말 중동, 토·일 맑은 날씨",
+    "title_ko": "주말 중동, 토·일 맑은 날씨",
+    "summary_ko": "중동 주요국은 이번 주말 최저 -2°C에서 최고 36°C 사이를 오갈 전망이다. 이란, 이라크 등에서는 비 소식이 있다.\n\n[사우디아라비아]\n\n- 리야드(수도): 한 주 내내 비슷한 기온대를 유지하며 비 소식 없이 대체로 맑겠습니다. [토 흐림(32°/23°) → 일 흐림(33°/24°)]. 최고 33°C(일)·최저 23°C(토)\n\n- 제다: 한 주 내내 비슷한 기온대를 유지하며 토요일 무렵 비 소식이 집중되겠습니다. [토 강한 이슬비(30°/24°) → 일 약한 이슬비(31°/24°)]. 최고 31°C(일)·최저 24°C(토), ",
+    "url": "internal://weather_group_중동_weekend20261107",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_중동_weekend20261107",
+    "region": "middle_east",
+    "country": "중동",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-07 11:11",
+    "countries": [
+      "사우디아라비아",
+      "아랍에미리트",
+      "튀르키예",
+      "이스라엘",
+      "이란",
+      "이라크",
+      "카타르",
+      "요르단"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261107_pid3986723_saudi_arabia.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-07T11:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-07 11:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 322982,
     "title_en": "[주간 시세] 11월 2~6일 글로벌 증시·환율·유가·금·비트코인 한 주 성적표",
     "title_ko": "[주간 시세] 11월 2~6일 글로벌 증시·환율·유가·금·비트코인 한 주 성적표",
@@ -697,7 +741,7 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_170272.jpg",
-    "view_count": 0,
+    "view_count": 1,
     "first_published_at": "2026-11-07T05:57:00",
     "update_log": [
       {
@@ -848,7 +892,7 @@
     ],
     "is_published": true,
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/literature_q39047834.jpg",
-    "view_count": 0,
+    "view_count": 1,
     "first_published_at": "2026-11-07T05:09:00",
     "update_log": [
       {
@@ -2912,138 +2956,5 @@
     "summary_3lines_en": "",
     "investment_idea_en": "",
     "noindex": false
-  },
-  {
-    "id": 322413,
-    "title_en": "중동, 아부다비 36도 폭염 속 곳곳 뇌우·비 소식",
-    "title_ko": "중동, 아부다비 36도 폭염 속 곳곳 뇌우·비 소식",
-    "summary_ko": "6일(현지시간) 중동 주요국 수도의 기온은 최저 4도에서 최고 36도 사이를 기록하며 지역별로 큰 기온 차를 보였다. 가장 더운 곳은 아랍에미리트 아부다비로 최고기온 36도를 기록했으며, 가장 선선한 곳은 튀르키예 앙카라로 최고기온 10도에 머물렀다. 특히 아랍에미리트 샤르자 지역은 최고기온이 36도임에도 체감온도가 38도까지 치솟으며 폭염이 이어졌다.\n\n이스라엘 텔아비브와 이라크 모술 등 일부 지역에서는 뇌우가 발생했고, 이라크 바그다드에는 0.6mm의 비가 내리는 등 대기 불안정이 나타났다. 국가별로 살펴보면 사우디아라비아 리야",
-    "url": "internal://weather_group_중동_today20261106",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_중동_today20261106",
-    "region": "middle_east",
-    "country": "중동",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-06 11:10",
-    "countries": [
-      "사우디아라비아",
-      "아랍에미리트",
-      "튀르키예",
-      "이스라엘",
-      "이란",
-      "이라크",
-      "카타르",
-      "요르단"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261106_pid3986721_saudi_arabia.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-06T11:10:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-06 11:10",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 322407,
-    "title_en": "LA 시장 선거서 니티아 라만 당선…현직 캐런 배스 꺾은 이변",
-    "title_ko": "LA 시장 선거서 니티아 라만 당선…현직 캐런 배스 꺾은 이변",
-    "summary_ko": "미국 로스앤젤레스(LA) 시장 선거에서 민주사회주의자(DSA, Democratic Socialists of America)의 지원을 받은 니티아 라만(Nithya Raman) 후보가 현직 시장인 캐런 배스(Karen Bass)를 꺾고 당선됐다. 5일(현지시간) 개표 결과에 따르면 라만 당선인은 52.1%의 득표율을 기록해 47.9%에 그친 배스 시장을 제쳤다. 이번 선거는 LA에서 20년 만에 현직 시장이 낙선한 사례로 기록됐다.\n\n도시 계획가이자 시의원 출신인 라만 당선인은 지난 6월 예비선거를 거쳐 본선에 진출했다. 당초 배스 ",
-    "url": "internal://cluster_20261106_f5cfc792",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "cluster_20261106_f5cfc792",
-    "region": "global",
-    "country": "미국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-06 10:46",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_nithya_raman.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-06T10:46:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-06 10:46",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        1913141,
-        1911106,
-        1908996,
-        1907338,
-        1906759,
-        1903141
-      ]
-    },
-    "image_credit": "이미지 출처: Wikimedia Commons",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": false
-  },
-  {
-    "id": 322406,
-    "title_en": "나이지리아 법원, 볼라 티누부 정부 전복 모의 혐의자 6명 재판 12월 7일 개시",
-    "title_ko": "나이지리아 법원, 볼라 티누부 정부 전복 모의 혐의자 6명 재판 12월 7일 개시",
-    "summary_ko": "나이지리아 아부자 연방고등법원은 볼라 티누부 대통령 정부를 무력으로 전복하려 한 혐의를 받는 6명의 피고인에 대한 정식 재판을 오는 12월 7일 진행하기로 결정했다.\n\n이번 재판에 넘겨진 피고인은 퇴역 소장 모하메드 가나, 퇴역 해군 대령 에라스무스 빅터, 경감 아흐메드 이브라힘, 제케리 우모루, 부카르 고니, 압둘카디르 사니 등 총 6명이다. 이들은 지난 4월 20일 로티미 오예데포 연방 공소국장에 의해 기소됐으며, 같은 달 22일 반역 및 테러, 안보 기밀 누설, 테러 자금 조달과 연루된 자금 세탁 등 13개 혐의로 정식 기소 ",
-    "url": "internal://cluster_20261106_7a86d42e",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "cluster_20261106_7a86d42e",
-    "region": "africa",
-    "country": "나이지리아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-06 10:45",
-    "countries": [
-      "나이지리아"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_898931.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-06T10:45:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-06 10:45",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        1912611,
-        1907231,
-        1906923
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": true
   }
 ]
