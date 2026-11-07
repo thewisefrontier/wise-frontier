@@ -1,5 +1,49 @@
 [
   {
+    "id": 323211,
+    "title_en": "동남아시아, 최고 34도 무더위…곳곳 비",
+    "title_ko": "동남아시아, 최고 34도 무더위…곳곳 비",
+    "summary_ko": "8일(현지시간) 동남아시아 주요국 기상청 예보에 따르면, 다음주(월~금) 해당 지역의 기온은 최저 16°C에서 최고 34°C 분포를 보일 것으로 예상된다.\n\n이번 주간 베트남은 최저 16°C에서 최고 26°C의 기온을 나타내며 비 소식이 예고되었다. 미얀마는 최저 20°C, 최고 29°C의 기온과 함께 비가 내릴 것으로 보인다. 말레이시아는 최저 24°C, 최고 31°C의 기온 속에서 비 소식이 포함되었으며, 싱가포르는 최저 23°C, 최고 32°C의 기온 분포를 보이며 비가 올 전망이다.\n\n인도네시아는 최고 33°C, 최저 24°",
+    "url": "internal://weather_group_동남아시아_weekly20261108",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_동남아시아_weekly20261108",
+    "region": "southeast_asia",
+    "country": "동남아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-08 07:32",
+    "countries": [
+      "베트남",
+      "인도네시아",
+      "태국",
+      "필리핀",
+      "미얀마",
+      "캄보디아",
+      "말레이시아",
+      "싱가포르"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261108_pid2505850_indonesia.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-08T07:32:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-08 07:32",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 323202,
     "title_en": "중국, 영하의 추위와 영상 기온 오가는 주간 날씨",
     "title_ko": "중국, 영하의 추위와 영상 기온 오가는 주간 날씨",
@@ -2426,186 +2470,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 322940,
-    "title_en": "[종목 동향] 비자 주가 0.01% 강보세 마감",
-    "title_ko": "[종목 동향] 비자 주가 0.01% 강보세 마감",
-    "summary_ko": "◆ 주가 동향\n\n뉴욕증권거래소에서 비자 주가는 6일(현지시간) 전일 대비 0.01% 상승한 422.65달러를 기록했다. 최근 통신사 보도를 통해 전해진 미국 행정부의 비자 발급 관련 인도주의적 조치 및 글로벌 정치·사회적 이슈들이 금융 시장에 혼재된 영향을 미쳤다. 다만 이번 거래일 동안 비자 결제 네트워크의 본질적 사업 모델에 직결되는 직접적인 대규모 규제나 실적 발표 뉴스는 부재했다.\n\n이에 따라 주가는 장초반부터 좁은 등락 폭 안에서 제한적인 움직임을 나타냈다.\n\n◆ 주요 지표\n\n이날 비자의 당일 거래 범위는 최저 413.00",
-    "url": "internal://stock_news_2026-11-06",
-    "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "종목동향",
-    "region": "global",
-    "country": "미국",
-    "country_flag": "🇺🇸",
-    "score": 1,
-    "created_at": "2026-11-07 07:27",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/stock_news_2026_11_06_pid6544383.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-07T07:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-07 07:27",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
-  },
-  {
-    "id": 322935,
-    "title_en": "[국제금값] 금 온스당 4080달러…미 고용 지표와 달러 강세에 하락",
-    "title_ko": "[국제금값] 금 온스당 4080달러…미 고용 지표와 달러 강세에 하락",
-    "summary_ko": "국제 금값이 6일(현지시간) 하락했다. 뉴욕 시장에서 금 선물은 온스당 4080.10달러에 거래를 마쳤다. 시장 집계에 따르면 이는 전일 종가(4113.50달러) 대비 0.81% 하락, 하락폭 33.40달러를 기록한 수치이다.\n\n이날 장중 거래 범위는 최저 4035.60달러에서 최고 4116.20달러 사이를 기록했다. 최근 5거래일 동안의 흐름을 보면 2일 종가 3969.60달러 대비 2.78% 상승한 수준을 나타냈다. 또한 52주 고점인 5586.20달러와 비교하면 26.96% 낮은 수준에 위치했다.\n\n이날 금값 하락은 미국의 강",
-    "url": "internal://gold_price_2026-11-06",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국제금값",
-    "region": "글로벌",
-    "country": "국제",
-    "country_flag": "🪙",
-    "score": 1,
-    "created_at": "2026-11-07 07:08",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/gold_2026_11_06_pid3765829.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-07T07:08:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-07 07:08",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-07 09:58",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "pct": -0.8119582434362465,
-      "date": "2026-11-06",
-      "prev": 4113.5,
-      "price": 4080.10009765625,
-      "change": -33.39990234375,
-      "source": "시장 집계",
-      "day_low": 4035.60009765625,
-      "day_high": 4116.2001953125,
-      "high_52w": 5586.2,
-      "week_pct": 2.7836557154772827,
-      "week_start": 3969.60009765625,
-      "from_high_pct": -26.961080919833698,
-      "week_start_date": "2026-11-02"
-    },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
-  },
-  {
-    "id": 322934,
-    "title_en": "[국제유가] WTI 배럴당 90달러…중동 공급 차질 우려",
-    "title_ko": "[국제유가] WTI 배럴당 90달러…중동 공급 차질 우려",
-    "summary_ko": "국제유가가 6일(현지시간) 하락했다. WTI 원유 선물은 시장 집계에 따르면 뉴욕상업거래소(NYMEX)에서 배럴당 90.36달러에 거래를 마쳤으며, 전일 종가(90.52달러) 대비 0.18%(0.16달러) 하락했다.\n\n런던ICE선물의 브렌트유는 배럴당 97.76달러로 마감되었으며, 전일 종가(98.29달러) 대비 0.54%(0.53달러) 하락했다.\n\n최근 원유 시장은 중동 지역의 공급 차질 가능성과 오만 인근 화물선 피격 사건 등의 지정학적 리스크가 맞물려 변동성을 나타내고 있다. 다만 미국과 이란 간 관계 완화에 대한 기대감이 확",
-    "url": "internal://oil_price_2026-11-06",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국제유가",
-    "region": "글로벌",
-    "country": "국제",
-    "country_flag": "🛢️",
-    "score": 1,
-    "created_at": "2026-11-07 07:06",
-    "countries": [
-      "미국",
-      "사우디아라비아",
-      "러시아"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/oil_2026_11_06_pid863227.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-07T07:06:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-07 07:06",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "wti": {
-        "pct": -0.17675281595214482,
-        "prev": 90.5199966430664,
-        "price": 90.36,
-        "change": -0.15999664306640682
-      },
-      "date": "2026-11-06",
-      "brent": {
-        "pct": -0.5392215999497584,
-        "prev": 98.29000091552734,
-        "price": 97.76,
-        "change": -0.5300009155273386
-      },
-      "source": "Yahoo Finance"
-    },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 322928,
-    "title_en": "[가상자산 동향] 리플 3.58% 하락…바이낸스 해커 자산 스왑 여파",
-    "title_ko": "[가상자산 동향] 리플 3.58% 하락…바이낸스 해커 자산 스왑 여파",
-    "summary_ko": "◆ 가격 동향\n\n7일 06:26(한국시간) 야후 파이낸스에 따르면 리플 가격은 1.18달러로 전일 대비 3.58퍼센트 하락했다. 최근 바이낸스 해커들이 탈취한 약 5000만달러 상당의 리플을 대부분 비트코인으로 스왑했다는 엘립틱의 분석 결과가 보도되면서 시장에 매도 압력이 작용했다. 가상자산 전반에서 자금 유출 흐름이 나타난 가운데 암호화폐 ETF에서도 대규모 자금이 이탈한 점이 가격 하락을 뒷받침했다.\n\n◆ 주요 지표\n\n당일 거래 범위는 1.17달러에서 1.22달러 사이를 기록했다. 52주 최고가인 2.58달러와 최저가인 0.99",
-    "url": "internal://crypto_news_2026-11-07",
-    "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "가상자산동향_crypto",
-    "region": "global",
-    "country": "글로벌",
-    "country_flag": "🌐",
-    "score": 1,
-    "created_at": "2026-11-07 06:27",
-    "countries": [],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_11_07_pid3159208.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-07T06:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-07 06:27",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   }
 ]
