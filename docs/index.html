@@ -951,6 +951,20 @@ function stripUpdates(text) {
   return nl === -1 ? '' : rest.slice(nl + 1).replace(/^\n+/, '');
 }
 
+// 카드·다이제스트 미리보기 공용: 업데이트 블록·[소제목] 줄·구분선·글머리표를 빼고 한 줄로 잇는다.
+// 2026-11-09: 데일리 다이제스트 미리보기만 이 정리를 안 거쳐 "[소제목] - …"이 그대로 보였다.
+function previewText(text) {
+  return cleanBody(stripUpdates(text || ''))
+    .replace(/^\s*\[[^\]\n]{1,80}\]\s*$/gm, '')
+    .replace(/^\s*■\s*\d+월 \d+일 \d+:\d+\s*—.*$/gm, '')
+    .replace(/^\s*─{3,}\s*$/gm, '')
+    .replace(/^\s*[◆■][^\n.。]{0,30}$/gm, '')
+    .replace(/^\s*[-•]\s+/gm, '')
+    .replace(/^\s*[◆■]\s*/gm, '')
+    .replace(/\s*\n+\s*/g, ' ')
+    .trim();
+}
+
 function cleanBody(text) {
     if (!text) return '';
     text = text
@@ -1011,7 +1025,7 @@ function cleanBody(text) {
         <div class="card-media">
           ${a.image_url ? `<img src="${window.safeUrl(a.image_url)}" alt="" loading="lazy" class="card-thumb" onerror="this.remove()">` : ''}
           <div class="media-text">
-            ${a.summary_ko ? `<div class="article-summary">${window.esc(cleanBody(stripUpdates(a.summary_ko)).replace(/^\s*\[[^\]\n]{1,80}\]\s*$/gm,'').replace(/^\s*■\s*\d+월 \d+일 \d+:\d+\s*—.*$/gm,'').replace(/^\s*─{3,}\s*$/gm,'').replace(/^\s*[◆■][^\n.。]{0,30}$/gm,'').replace(/^\s*[-•]\s+/gm,'').replace(/^\s*[◆■]\s*/gm,'').replace(/\s*\n+\s*/g,' ').trim().slice(0,120))}${a.summary_ko.length>120?'…':''}</div>` : ''}
+            ${a.summary_ko ? `<div class="article-summary">${window.esc(previewText(a.summary_ko).slice(0,120))}${a.summary_ko.length>120?'…':''}</div>` : ''}
           </div>
         </div>
         <div class="article-footer">
@@ -1110,7 +1124,7 @@ function cleanBody(text) {
 
     const title = digest.title_ko || digest.title_en || '';
     const body = cleanBody(digest.summary_ko || '');
-    const preview = body.split('\n').filter(l => l.trim()).slice(0, 3).join(' ').slice(0, 180);
+    const preview = previewText(digest.summary_ko).slice(0, 180);
 
     box.innerHTML = `
       <div class="digest-label">📋 오늘의 다이제스트</div>
