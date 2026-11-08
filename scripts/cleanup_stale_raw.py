@@ -65,9 +65,9 @@ UNPUBLISHED_DELETE_DAILY_CAP = int(os.getenv("UNPUBLISHED_DELETE_DAILY_CAP", "30
 # 삭제된 자체 기사는 트리거(log_article_revision)가 행 전체를 article_revisions에 남긴다 — 복구용으로 이 기간만 두고 지운다.
 REVISION_KEEP_DAYS = int(os.getenv("REVISION_KEEP_DAYS", "14"))
 # 수정 이력(op=UPDATE)은 영구히 쌓이던 것을 30일만 둔다(2026-11-08 사용자 지시 — Aiven 1GB 여유 확보). 30일 넘은 수정을
-# 되돌릴 일은 없다. 적체(5831건)는 하루 300건(배치 1개)씩 약 20일에 나눠 지운다(사용자: "1000건도 많은데") — 몰아서 쓰면 WAL로 디스크가 찬다(같은 날 읽기 전용 사고).
+# 되돌릴 일은 없다. 적체(5831건)는 하루 100건씩 약 두 달에 나눠 지운다(사용자: "하루 100건으로 해") — 몰아서 쓰면 WAL로 디스크가 찬다(같은 날 읽기 전용 사고).
 UPDATE_REVISION_KEEP_DAYS = int(os.getenv("UPDATE_REVISION_KEEP_DAYS", "30"))
-UPDATE_REVISION_DAILY_CAP = int(os.getenv("UPDATE_REVISION_DAILY_CAP", "300"))
+UPDATE_REVISION_DAILY_CAP = int(os.getenv("UPDATE_REVISION_DAILY_CAP", "100"))
 
 
 def _headers():
