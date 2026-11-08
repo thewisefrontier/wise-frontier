@@ -20,6 +20,13 @@ inputs:
 runs:
   using: composite
   steps:
+    # 2026-11-08 실사고: GitHub Releases 다운로드가 504를 내면서(상태 페이지는 정상 표시) 16:47 KST부터
+    # 모든 작업이 이 단계에서 죽었다. 바이너리를 캐시하고, 없으면 Releases → Docker Hub 같은 버전 순으로 받는다.
+    - name: PostgREST 바이너리 캐시
+      uses: actions/cache@v4
+      with:
+        path: ${{ runner.temp }}/pgrst-bin
+        key: postgrest-v14.18-linux-x86-64
     - name: PostgREST 기동 (Aiven)
       shell: bash
       env:
@@ -29,9 +36,21 @@ runs:
       run: |
         set -euo pipefail
         VER=v14.18
-        curl -fsSL -o "$RUNNER_TEMP/pgrst.tar.xz" \
-          "https://github.com/PostgREST/postgrest/releases/download/${VER}/postgrest-${VER}-linux-static-x86-64.tar.xz"
-        tar -xJf "$RUNNER_TEMP/pgrst.tar.xz" -C "$RUNNER_TEMP"
+        BIN_DIR="$RUNNER_TEMP/pgrst-bin"
+        mkdir -p "$BIN_DIR"
+        if [ ! -x "$BIN_DIR/postgrest" ]; then
+          if curl -fsSL --retry 2 --max-time 90 -o "$RUNNER_TEMP/pgrst.tar.xz" \
+               "https://github.com/PostgREST/postgrest/releases/download/${VER}/postgrest-${VER}-linux-static-x86-64.tar.xz"; then
+            tar -xJf "$RUNNER_TEMP/pgrst.tar.xz" -C "$BIN_DIR"
+          else
+            echo "::warning::GitHub Releases 다운로드 실패 — Docker Hub postgrest/postgrest:${VER}에서 꺼낸다"
+            CID=$(docker create "postgrest/postgrest:${VER}")
+            docker cp "$CID:/bin/postgrest" "$BIN_DIR/postgrest"
+            docker rm "$CID" >/dev/null
+          fi
+          chmod +x "$BIN_DIR/postgrest"
+        fi
+        cp "$BIN_DIR/postgrest" "$RUNNER_TEMP/postgrest"
         # Supabase와 같은 동작: 응답 행 상한 1000, public 스키마.
         # 익명 역할도 접속 계정으로 둔다 — 이 프로세스는 127.0.0.1에서만 열린다.
         ROLE=$(python3 -c "import os,urllib.parse as u;print(u.urlparse(os.environ['PGRST_DB_URI']).username)")
