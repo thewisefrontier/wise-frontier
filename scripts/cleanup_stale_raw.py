@@ -34,6 +34,7 @@ cleanup_stale_unpublished_articles()로 실제 삭제까지 구현(적체 4,117�
 
 import os
 import sys
+import time
 import requests
 from datetime import timedelta
 from dotenv import load_dotenv
@@ -78,15 +79,19 @@ def _headers():
     }
 
 
-def _batched(filters: dict, apply, table: str = "raw_candidates", max_total: int = None) -> int:
-    """filters에 맞는 행 id를 BATCH개씩 조회해 apply(id목록)를 반복. max_total을 주면 그
-    건수에서 멈춘다(적체를 한 번에 다 지우면 안 되는 대상용). 처리 건수 반환."""
+def _batched(filters: dict, apply, table: str = "raw_candidates", max_total: int = None,
+             batch: int = BATCH, pause: float = 0) -> int:
+    """filters에 맞는 행 id를 batch개씩 조회해 apply(id목록)를 반복. max_total을 주면 그
+    건수에서 멈춘다(적체를 한 번에 다 지우면 안 되는 대상용). pause초씩 묶음 사이를 쉰다
+    (WAL이 Aiven 백업으로 내보내질 틈 — 1GB 디스크). 처리 건수 반환."""
     url = f"{SUPABASE_URL}/rest/v1/{table}"
     done, last = 0, 0
     while max_total is None or done < max_total:
+        if done and pause:
+            time.sleep(pause)
         # id>last로 이어서 조회한다 — 매번 앞에서부터 다시 찾으면 방금 지운(아직
         # vacuum 전) 죽은 행을 반복해서 훑어 점점 느려지다 타임아웃(실측 1.2만 건째).
-        limit = BATCH if max_total is None else min(BATCH, max_total - done)
+        limit = batch if max_total is None else min(batch, max_total - done)
         res = requests.get(url, headers=_headers(), timeout=60,
                            params={**filters, "id": f"gt.{last}", "select": "id", "order": "id",
                                    "limit": str(limit)})
@@ -98,7 +103,7 @@ def _batched(filters: dict, apply, table: str = "raw_candidates", max_total: int
         r.raise_for_status()
         last = ids[-1]
         done += len(ids)
-        if done % 3000 < BATCH:
+        if done % 3000 < batch:
             print(f"    … {done}건")
     return done
 
@@ -144,6 +149,7 @@ def cleanup_stale_unpublished_articles():
         lambda url, ids: requests.delete(url, headers=_headers(), params={"id": ids}, timeout=60),
         table="article_revisions",
         max_total=UPDATE_REVISION_DAILY_CAP,
+        batch=100, pause=10,   # 사용자: "100건씩 해서 지우는 걸로"
     )
     print(f"  ✓ 수정 이력(article_revisions) {UPDATE_REVISION_KEEP_DAYS}일 초과 정리 {purged}건 (하루 상한 {UPDATE_REVISION_DAILY_CAP}건)")
 
