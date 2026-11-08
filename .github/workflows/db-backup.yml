@@ -94,6 +94,8 @@ jobs:
       # 덤프를 그렇게 둘 수 없어 옮긴다. 버킷은 공개 접근/커스텀 도메인을 켜지 않는 한 비공개.
       # 한계: wrangler object put은 파일 1개 약 300MB 상한(현재 덤프 약 130MB) — 넘으면 S3 멀티파트로 전환.
       - name: R2 버킷 준비 (비공개, 30일 만료)
+        # R2가 실패해도 구글 드라이브 최종 백업은 해야 한다(2026-11-08: 토큰 R2 권한이 빠져 R2 실패 → 드라이브까지 건너뛰던 구조).
+        continue-on-error: true
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -102,6 +104,8 @@ jobs:
           npx --yes wrangler@4 r2 bucket lifecycle list newsfinal-backups 2>&1 | grep -q expire-30d || npx --yes wrangler@4 r2 bucket lifecycle add newsfinal-backups expire-30d "" --expire-days 30 --force
 
       - name: R2 업로드 + 무결성 대조
+        # R2가 실패해도 구글 드라이브 최종 백업은 해야 한다(2026-11-08: 토큰 R2 권한이 빠져 R2 실패 → 드라이브까지 건너뛰던 구조).
+        continue-on-error: true
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
