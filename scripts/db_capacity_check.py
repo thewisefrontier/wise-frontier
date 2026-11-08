@@ -31,7 +31,13 @@ sys.stdout.reconfigure(encoding='utf-8')
 load_dotenv()
 
 DISK_LIMIT_MB = int(os.getenv("DB_DISK_LIMIT_MB", "1024"))
-WARN_RATIO, CRIT_RATIO = 0.60, 0.75
+# 2026-11-08 실사고: DB 474MB일 때 콘솔 디스크 사용률이 이미 70%(약 717MB)였다 — WAL·시스템 파일이
+# pg_database_size 밖에서 약 250MB를 상시 차지한다. DB 크기만 1GB에 견주던 탓에 실제 디스크는 85%를
+# 넘어야 경고가 나는 구조였고, 그 상태에서 기사 4500행 일괄 UPDATE의 WAL 폭증(수백 MB)으로 100%에
+# 닿아 읽기 전용이 됐다. 추정 디스크 = DB 크기 + 이 값으로 판정한다.
+# ponytail: 고정 추정치 — Aiven API 토큰이 생기면 콘솔 Metrics의 실제 디스크 %로 바꿀 것.
+DISK_OVERHEAD_MB = int(os.getenv("DB_DISK_OVERHEAD_MB", "250"))
+WARN_RATIO, CRIT_RATIO = 0.70, 0.80
 CONN_WARN_RATIO = 0.80
 STUCK_TX_MINUTES = 10
 
@@ -39,13 +45,13 @@ STUCK_TX_MINUTES = 10
 def evaluate(size_mb: float, conns: int, conn_cap: int, stuck_tx: int) -> tuple:
     """(등급, 문제 목록) — 등급은 ok/warn/crit."""
     issues, level = [], "ok"
-    ratio = size_mb / DISK_LIMIT_MB
+    ratio = (size_mb + DISK_OVERHEAD_MB) / DISK_LIMIT_MB
     if ratio >= CRIT_RATIO:
         level = "crit"
-        issues.append(f"DB 용량 {size_mb:.0f}MB / {DISK_LIMIT_MB}MB ({ratio:.0%}) — 위험")
+        issues.append(f"추정 디스크 {ratio:.0%} (DB {size_mb:.0f}MB + WAL 등 {DISK_OVERHEAD_MB}MB / {DISK_LIMIT_MB}MB) — 위험")
     elif ratio >= WARN_RATIO:
         level = "warn"
-        issues.append(f"DB 용량 {size_mb:.0f}MB / {DISK_LIMIT_MB}MB ({ratio:.0%}) — 경고")
+        issues.append(f"추정 디스크 {ratio:.0%} (DB {size_mb:.0f}MB + WAL 등 {DISK_OVERHEAD_MB}MB / {DISK_LIMIT_MB}MB) — 경고")
     if conns >= conn_cap * CONN_WARN_RATIO:
         level = "warn" if level == "ok" else level
         issues.append(f"연결 {conns}/{conn_cap}")

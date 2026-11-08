@@ -4,8 +4,9 @@ sys.path.insert(0, os.path.dirname(__file__))
 from db_capacity_check import evaluate
 
 assert evaluate(377, 6, 17, 0) == ("ok", [])            # 2026-10-20 실측치
-assert evaluate(620, 6, 17, 0)[0] == "warn"             # 60% 초과
-assert evaluate(800, 6, 17, 0)[0] == "crit"             # 75% 초과
+assert evaluate(413, 6, 17, 0)[0] == "ok"               # 2026-11-08 테이블 정리 후(추정 65%)
+assert evaluate(474, 6, 17, 0)[0] == "warn"             # 2026-11-08 사고 직전(콘솔 실측 70%)
+assert evaluate(600, 6, 17, 0)[0] == "crit"             # 추정 80% 초과
 assert evaluate(377, 14, 17, 0)[0] == "warn"            # 연결 80% 이상
 assert evaluate(377, 6, 17, 1)[0] == "warn"             # 멈춘 트랜잭션
 assert evaluate(800, 14, 17, 1)[0] == "crit"            # 위험이 경고에 덮이지 않음
