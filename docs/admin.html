@@ -1757,7 +1757,12 @@
     const { data: stats, error } = statsRes;
     if (error) { document.getElementById('main-content').innerHTML = `<div class="empty">오류: ${error.message}</div>`; return; }
     const vdata = viewsRes.data || {};
-    const vDaily = vdata.daily || [];
+    // GA4 일일 PV(article_pv_daily)는 조회가 있던 날만 행이 있다 — 차트가 이어지게 30일을 0으로 채운다.
+    const vByDay = Object.fromEntries((vdata.daily || []).map(r => [r.day, r.total]));
+    const vDaily = (vdata.daily || []).length === 0 ? [] : Array.from({ length: 30 }, (_, i) => {
+      const day = new Date(Date.now() + 9 * 3600e3 - (29 - i) * 86400e3).toISOString().slice(0, 10);
+      return { day, total: vByDay[day] || 0 };
+    });
     const vTop = vdata.top || [];
     const vTopDay = vdata.top_day || null;
 
@@ -1809,7 +1814,7 @@
           <span>${cat}</span><span class="muted">${cnt}건</span>
         </div>`).join('');
 
-    // ── 조회수 델타(스냅샷 기반) ──
+    // ── 조회수(GA4 일일 PV 기준, 2026-11-08 — 자체 카운터 스냅샷은 봇까지 세서 폐기) ──
     const vMax = Math.max(...vDaily.map(r => r.total), 1);
     const vSum30 = vDaily.reduce((s, r) => s + r.total, 0);
     const vTopDayTotal = (vDaily.find(r => r.day === vTopDay) || {}).total || 0;
@@ -1828,7 +1833,7 @@
         </div>`;
     }).join('');
     const vChartBlock = vDaily.length === 0
-      ? `<div class="empty" style="line-height:1.7;">조회수 증가 데이터는 매일 00:05(KST) 수집됩니다.<br><span class="muted">2일치가 쌓이면 내일부터 표시됩니다.</span></div>`
+      ? `<div class="empty" style="line-height:1.7;">최근 30일 GA4 조회수 데이터가 없습니다.<br><span class="muted">GA4 수치는 매일 정리 작업(pv_stats.py)에서 1~2일 늦게 들어옵니다.</span></div>`
       : `<div style="display:flex;gap:2px;align-items:flex-end;">${vBarsHtml}</div>`;
     const vTopRows = vDaily.length === 0
       ? `<div class="muted" style="font-size:12px;padding:8px 0;">데이터 대기 중</div>`
@@ -1864,12 +1869,12 @@
           <div style="font-size:20px;font-weight:700;">${avg7}건</div>
         </div>
         <div style="flex:1;min-width:140px;background:var(--bg2);border:1px solid var(--border);padding:12px 16px;">
-          <div style="font-size:11px;color:var(--muted);">조회수 증가 (측정일)</div>
+          <div style="font-size:11px;color:var(--muted);">조회수 (최근 측정일 · GA4)</div>
           <div style="font-size:20px;font-weight:700;color:var(--accent);">+${vTopDayTotal.toLocaleString()}</div>
           <div style="font-size:11px;color:var(--muted);margin-top:2px;">${vTopDay || '대기 중'}</div>
         </div>
         <div style="flex:1;min-width:140px;background:var(--bg2);border:1px solid var(--border);padding:12px 16px;">
-          <div style="font-size:11px;color:var(--muted);">조회수 증가 (30일)</div>
+          <div style="font-size:11px;color:var(--muted);">조회수 (30일 · GA4)</div>
           <div style="font-size:20px;font-weight:700;">+${vSum30.toLocaleString()}</div>
         </div>
       </div>
@@ -1878,7 +1883,7 @@
         <div style="display:flex;gap:2px;align-items:flex-end;">${barsHtml}</div>
       </div>
       <div style="background:var(--bg2);border:1px solid var(--border);padding:16px;margin-bottom:20px;">
-        <div style="font-size:12px;font-weight:700;margin-bottom:12px;">일별 증가 조회수 (발행 자체기사)</div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:12px;">일별 조회수 (GA4 · 자체기사)</div>
         ${vChartBlock}
       </div>
       <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start;">
@@ -1887,7 +1892,7 @@
           ${categoryRows}
         </div>
         <div style="flex:1;min-width:280px;background:var(--bg2);border:1px solid var(--border);padding:16px;">
-          <div style="font-size:12px;font-weight:700;margin-bottom:8px;">당일 상승 기사 Top 10 <span class="muted" style="font-weight:400;">(${vTopDay || '-'})</span></div>
+          <div style="font-size:12px;font-weight:700;margin-bottom:8px;">최근 측정일 조회 상위 Top 10 <span class="muted" style="font-weight:400;">(${vTopDay || '-'})</span></div>
           ${vTopRows}
         </div>
       </div>`;
