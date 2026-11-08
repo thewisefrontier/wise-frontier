@@ -23,7 +23,7 @@ for name in ("ai", "startup", "newtech"):
     if len(cands) < d.AI_DIGEST_MIN_CANDIDATES:
         print("→ 후보 부족, 초안 생략")
         continue
-    content = d.call_gemini_article(d.build_digest_prompt(topic, cands), max_tokens=8000)
+    content = d.call_gemini_article(d.build_digest_prompt(topic, cands), max_tokens=8000, facts=d.digest_facts(cands))
     if not content:
         print("→ Gemini 응답 없음")
         continue
