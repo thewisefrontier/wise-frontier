@@ -63,6 +63,10 @@ BATCH = 300
 UNPUBLISHED_DELETE_DAILY_CAP = int(os.getenv("UNPUBLISHED_DELETE_DAILY_CAP", "3000"))
 # 삭제된 자체 기사는 트리거(log_article_revision)가 행 전체를 article_revisions에 남긴다 — 복구용으로 이 기간만 두고 지운다.
 REVISION_KEEP_DAYS = int(os.getenv("REVISION_KEEP_DAYS", "14"))
+# 수정 이력(op=UPDATE)은 영구히 쌓이던 것을 30일만 둔다(2026-11-08 사용자 지시 — Aiven 1GB 여유 확보). 30일 넘은 수정을
+# 되돌릴 일은 없다. 적체(5831건)는 하루 상한으로 며칠에 나눠 지운다 — 몰아서 쓰면 WAL로 디스크가 찬다(같은 날 읽기 전용 사고).
+UPDATE_REVISION_KEEP_DAYS = int(os.getenv("UPDATE_REVISION_KEEP_DAYS", "30"))
+UPDATE_REVISION_DAILY_CAP = int(os.getenv("UPDATE_REVISION_DAILY_CAP", "1000"))
 
 
 def _headers():
@@ -133,6 +137,15 @@ def cleanup_stale_unpublished_articles():
         table="article_revisions",
     )
     print(f"  ✓ 삭제 기사 이력(article_revisions) {REVISION_KEEP_DAYS}일 초과 정리 {purged}건")
+
+    upd_cutoff = (now_kst() - timedelta(days=UPDATE_REVISION_KEEP_DAYS)).strftime("%Y-%m-%d %H:%M:%S+09:00")
+    purged = _batched(
+        {"op": "eq.UPDATE", "changed_at": f"lt.{upd_cutoff}"},
+        lambda url, ids: requests.delete(url, headers=_headers(), params={"id": ids}, timeout=60),
+        table="article_revisions",
+        max_total=UPDATE_REVISION_DAILY_CAP,
+    )
+    print(f"  ✓ 수정 이력(article_revisions) {UPDATE_REVISION_KEEP_DAYS}일 초과 정리 {purged}건 (하루 상한 {UPDATE_REVISION_DAILY_CAP}건)")
 
 
 def main():
