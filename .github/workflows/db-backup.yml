@@ -97,7 +97,8 @@ jobs:
         # R2가 실패해도 구글 드라이브 최종 백업은 해야 한다(2026-11-08: 토큰 R2 권한이 빠져 R2 실패 → 드라이브까지 건너뛰던 구조).
         continue-on-error: true
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          # 백업 전용 R2 토큰(2026-11-08) — 공용 CLOUDFLARE_API_TOKEN은 10/4 교체 뒤 R2 권한이 없다.
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_R2_TOKEN || secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           npx --yes wrangler@4 r2 bucket info newsfinal-backups >/dev/null 2>&1 || npx --yes wrangler@4 r2 bucket create newsfinal-backups
@@ -107,7 +108,8 @@ jobs:
         # R2가 실패해도 구글 드라이브 최종 백업은 해야 한다(2026-11-08: 토큰 R2 권한이 빠져 R2 실패 → 드라이브까지 건너뛰던 구조).
         continue-on-error: true
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          # 백업 전용 R2 토큰(2026-11-08) — 공용 CLOUDFLARE_API_TOKEN은 10/4 교체 뒤 R2 권한이 없다.
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_R2_TOKEN || secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           f=$(ls newsfinal-*.dump.enc)
