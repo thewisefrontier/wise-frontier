@@ -1,5 +1,71 @@
 [
   {
+    "id": 323864,
+    "title_en": "[국내유가] 휘발유 리터당 1855원…경유 소폭 상승",
+    "title_ko": "[국내유가] 휘발유 리터당 1855원…경유 소폭 상승",
+    "summary_ko": "한국석유공사 오피넷이 9일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1855원으로 집계됐다. 이번에 공개된 휘발유 가격은 전일 대비 변동이 없는 보합세를 나타냈다.\n\n오피넷에 따르면 경유 평균 판매가격은 리터당 1841.53원으로 전일 대비 0.13원 상승했다. 반면 LPG 부탄은 리터당 1177.83원으로 전일 대비 0.01원 하락하며 소폭 내림세를 보였다.\n\n국내 유가는 최근 국제유가 흐름과 정유사 공급가격 변동 등의 영향을 받아왔다. 정유사 도매가 조정 상황과 국제시세 변화가 복합적으로 작용하면서 유종별",
+    "url": "internal://opinet_price_2026-11-09",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-11-09 05:12",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_11_09_pid4978824.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-09T05:12:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-09 05:12",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-11-09",
+      "prices": {
+        "B027": {
+          "diff": 0.0,
+          "name": "휘발유",
+          "price": 1855.23
+        },
+        "B034": {
+          "diff": -0.09,
+          "name": "고급휘발유",
+          "price": 2391.56
+        },
+        "C004": {
+          "diff": 0.11,
+          "name": "실내등유",
+          "price": 1570.34
+        },
+        "D047": {
+          "diff": 0.13,
+          "name": "경유",
+          "price": 1841.53
+        },
+        "K015": {
+          "diff": -0.01,
+          "name": "LPG(부탄)",
+          "price": 1177.83
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 323863,
     "title_en": "Snow Country",
     "title_ko": "[오늘의 책] 가와바타 야스나리의 『설국』, 일본 문학 최초 노벨상 수상의 서정적 정수",
