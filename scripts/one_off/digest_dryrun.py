@@ -2,7 +2,7 @@
 scripts/one_off/digest_dryrun.py
 --------------------------------
 스타트업·신기술 연재(ai_digest.py TOPICS) 발행 전 점검: 후보 선정 결과와 AI 초안을 보여주기만 하고
-DB에는 아무것도 쓰지 않는다(저장·이미지 업로드 없음).
+DB에는 아무것도 쓰지 않는다(저장·이미지 업로드 없음. 단 후보 원문 본문 크롤링 결과는 raw_candidates에 캐시된다).
 """
 
 import os
@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."
 import ai_digest as d  # noqa: E402
 from daily_digest import parse_title_and_body, format_digest_body, keep_first_local_time, check_date_hallucination, now_kst  # noqa: E402
 
-for name in ("startup", "newtech"):
+for name in ("ai", "startup", "newtech"):
     topic = d.TOPICS[name]
     print(f"\n==================== {topic['tag']} ====================")
     cands = d.get_candidates(topic)
@@ -31,7 +31,10 @@ for name in ("startup", "newtech"):
     title, body, dropped, n_sections = d.apply_money_guard(topic, title, body, cands)
     for line in dropped:
         print(f"  ✂️ 금액 검증 삭제: {line[:100]}")
-    print(f"  금액 검증 후 소식 {n_sections}건")
+    body, short, n_sections = d.drop_short_sections(body)
+    for line in short:
+        print(f"  ✂️ 불릿 {d.MIN_BULLETS}개 미만 삭제: {line[:100]}")
+    print(f"  금액·불릿 검증 후 소식 {n_sections}건")
     bad, why = check_date_hallucination(body, d._digest_sources(cands), base_date=now_kst().date())
     print(f"\n[제목] {title}\n[날짜가드] {'걸림: ' + why if bad else '통과'}  [본문 {len(body)}자]\n")
     print(format_digest_body(keep_first_local_time(body)))
