@@ -43,6 +43,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 load_dotenv()
 
 from db import now_kst
+from db_write_guard import wait_wal_drain
 
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
@@ -89,6 +90,7 @@ def _batched(filters: dict, apply, table: str = "raw_candidates", max_total: int
     while max_total is None or done < max_total:
         if done and pause:
             time.sleep(pause)
+        wait_wal_drain()   # 묶음마다 WAL 내보내기를 기다린다 — 몰아 쓰면 1GB 디스크가 차 읽기 전용(2026-11-08)
         # id>last로 이어서 조회한다 — 매번 앞에서부터 다시 찾으면 방금 지운(아직
         # vacuum 전) 죽은 행을 반복해서 훑어 점점 느려지다 타임아웃(실측 1.2만 건째).
         limit = batch if max_total is None else min(batch, max_total - done)
