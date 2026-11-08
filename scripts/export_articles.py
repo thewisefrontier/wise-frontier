@@ -103,6 +103,18 @@ SUMMARY_PREVIEW_LEN = 300
 INTERNAL_ONLY_NOTE_RE = re.compile(r"실시간 트렌드 감지|자동 중복정리|음역 자동 교정|문자셋 이탈|복수주제 분리 파킹|수동 정리")
 
 
+def strip_update_block(text: str) -> str:
+    """본문 맨 앞 업데이트 블록을 뗀 원래 본문. docs/index.html stripUpdates()와 같은 규칙."""
+    if not text.lstrip().startswith("[업데이트]"):
+        return text
+    i = text.find("\n────────")
+    if i == -1:
+        return text
+    rest = text[i + 1:]
+    nl = rest.find("\n")
+    return "" if nl == -1 else rest[nl + 1:].lstrip("\n")
+
+
 def sanitize_update_log(log):
     if not isinstance(log, list):
         return []
@@ -211,8 +223,11 @@ def export_articles(limit=9999):
         # 전체를 매번 통째로 내려받고 있었다. 본문 전문은 article.html이
         # Supabase에서 라이브로 따로 조회하므로(article.html 상단 주석 참조)
         # 목록용 JSON에는 미리보기+로컬 검색에 충분한 길이만 남긴다.
-        if isinstance(a.get("summary_ko"), str) and len(a["summary_ko"]) > SUMMARY_PREVIEW_LEN:
-            a["summary_ko"] = a["summary_ko"][:SUMMARY_PREVIEW_LEN]
+        # 2026-11-08: 업데이트 블록("[업데이트]\n■ … ────────")을 먼저 떼고 자른다 — 블록이 300자를
+        # 넘으면 잘린 텍스트에 구분선이 없어 목록의 stripUpdates가 못 떼고, 카드 미리보기가 "…"만
+        # 남았다(#323192). 목록 화면은 어차피 전부 업데이트 블록을 떼고 본문 앞부분을 보여준다.
+        if isinstance(a.get("summary_ko"), str):
+            a["summary_ko"] = strip_update_block(a["summary_ko"])[:SUMMARY_PREVIEW_LEN]
 
     final = all_articles
 
