@@ -56,6 +56,7 @@ jobs:
         run: python scripts/db_capacity_check.py
         env:
           AIVEN_SERVICE_URI: ${{ secrets.AIVEN_SERVICE_URI }}
+          GITHUB_TOKEN: ${{ github.token }}   # 마지막 실제 백업 확인용(Actions 실행 기록 읽기)
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
 

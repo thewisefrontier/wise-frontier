@@ -89,7 +89,39 @@ def _alert(msg: str):
         print(f"[WARN] 텔레그램 알림 실패: {e}")
 
 
+BACKUP_MAX_AGE_DAYS = 8
+
+
+def last_backup_age_days():
+    """db-backup.yml에서 backup 작업이 실제로 성공한 마지막 실행이 며칠 전인지. 못 찾으면 None.
+    2026-11-08: 요일 판정 오류로 6주간 매번 건너뛰었는데 실행은 초록색이라 아무도 몰랐다 — 실행 성공이 아니라
+    backup 작업 성공을 본다. 공개 저장소라 토큰 없이도 읽히지만 있으면 쓴다."""
+    from datetime import datetime, timezone
+    repo = os.getenv("GITHUB_REPOSITORY", "thewisefrontier/wise-frontier")
+    h = {"Accept": "application/vnd.github+json"}
+    if os.getenv("GITHUB_TOKEN"):
+        h["Authorization"] = f"Bearer {os.environ['GITHUB_TOKEN']}"
+    api = f"https://api.github.com/repos/{repo}/actions"
+    runs = requests.get(f"{api}/workflows/db-backup.yml/runs", headers=h, params={"status": "completed", "per_page": 15},
+                        timeout=30).json().get("workflow_runs", [])
+    for run in runs:
+        jobs = requests.get(f"{api}/runs/{run['id']}/jobs", headers=h, timeout=30).json().get("jobs", [])
+        if any(j["name"] == "backup" and j["conclusion"] == "success" for j in jobs):
+            done = datetime.fromisoformat(run["created_at"].replace("Z", "+00:00"))
+            return (datetime.now(timezone.utc) - done).days
+    return None
+
+
 def main():
+    try:
+        age = last_backup_age_days()
+        print(f"마지막 실제 DB 백업: {age}일 전" if age is not None else "마지막 실제 DB 백업: 최근 15회 중 없음")
+        if age is None or age > BACKUP_MAX_AGE_DAYS:
+            _alert(f"[뉴스파이널 DB 백업 경고] 마지막 실제 백업이 {age if age is not None else '15회 넘게'}일 전입니다"
+                   f" — db-backup.yml 실행 로그(backup 작업) 확인 필요")
+    except Exception as e:
+        print(f"[WARN] 백업 점검 실패: {e}")
+
     conn = psycopg2.connect(os.environ["AIVEN_SERVICE_URI"], connect_timeout=30)
     try:
         m = measure(conn.cursor())
