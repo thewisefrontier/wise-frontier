@@ -289,6 +289,8 @@ export async function onRequestGet(context) {
       .on('meta[property="og:title"]', { element(el) { el.setAttribute('content', fullTitle); } })
       .on('meta[property="og:description"]', { element(el) { el.setAttribute('content', desc); } })
       .on('meta[property="og:image"]', { element(el) { el.setAttribute('content', ogImage); } })
+      // 셸의 180×180은 기본 파비콘 크기 — 기사 사진(보통 960×640)에도 그대로 붙어 메신저가 작은 썸네일로 보였다.
+      .on('meta[property="og:image:width"], meta[property="og:image:height"]', { element(el) { el.remove(); } })
       .on('meta[property="og:type"]', { element(el) { el.after(extraHead, { html: true }); } })
       .on('link[rel="canonical"]', { element(el) { el.setAttribute('href', canonical); } })
       .on('#article-wrapper', { element(el) { el.setInnerContent(wrapperHtml, { html: true }); } });
