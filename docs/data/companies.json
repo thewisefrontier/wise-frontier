@@ -3312,22 +3312,6 @@
     "updated_at": "2026-07-31 00:33"
   },
   {
-    "id": "vkontakte",
-    "name": "VK Company Limited",
-    "name_ko": "브이케이",
-    "country": "러시아",
-    "country_flag": "🌍",
-    "exchange": "MOEX",
-    "ticker": "VKCO",
-    "sector": "통신/IT",
-    "description": "2007년에 설립된 러시아의 대표적인 인터넷 및 기술 기업으로, 동명의 소셜미디어 VKontakte(VK)와 다양한 디지털 서비스를 운영하고 있습니다. 러시아 소셜 미디어 시장에서 독보적인 점유율을 차지하며 현지 온라인 생태계의 핵심 역할을 담당하고 있습니다. 데이터센터 및 온라인 플랫폼 인프라를 기반으로 미디어, 이커머스, 간편결제 등 다방면으로 사업을 확장해 왔습니다.",
-    "founded_year": 2007,
-    "headquarters": "모스크바, 러시아",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-10-18 17:37"
-  },
-  {
     "id": "vk",
     "name": "VK Company Limited",
     "name_ko": "브이케이",
@@ -3342,6 +3326,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-21 19:48"
+  },
+  {
+    "id": "vkontakte",
+    "name": "VK Company Limited",
+    "name_ko": "브이케이",
+    "country": "러시아",
+    "country_flag": "🌍",
+    "exchange": "MOEX",
+    "ticker": "VKCO",
+    "sector": "통신/IT",
+    "description": "2007년에 설립된 러시아의 대표적인 인터넷 및 기술 기업으로, 동명의 소셜미디어 VKontakte(VK)와 다양한 디지털 서비스를 운영하고 있습니다. 러시아 소셜 미디어 시장에서 독보적인 점유율을 차지하며 현지 온라인 생태계의 핵심 역할을 담당하고 있습니다. 데이터센터 및 온라인 플랫폼 인프라를 기반으로 미디어, 이커머스, 간편결제 등 다방면으로 사업을 확장해 왔습니다.",
+    "founded_year": 2007,
+    "headquarters": "모스크바, 러시아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-10-18 17:37"
   },
   {
     "id": "teba",
@@ -4432,22 +4432,6 @@
     "updated_at": "2026-08-09 07:08"
   },
   {
-    "id": "stoneco",
-    "name": "StoneCo Ltd.",
-    "name_ko": "스톤코",
-    "country": "브라질",
-    "country_flag": "🌍",
-    "exchange": "NASDAQ",
-    "ticker": "STNE",
-    "sector": "핀테크",
-    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
-    "founded_year": 2012,
-    "headquarters": "상파울루, 브라질",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-29 20:49"
-  },
-  {
     "id": "stone_co",
     "name": "StoneCo Ltd.",
     "name_ko": "스톤",
@@ -4462,6 +4446,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-22 23:37"
+  },
+  {
+    "id": "stoneco",
+    "name": "StoneCo Ltd.",
+    "name_ko": "스톤코",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "NASDAQ",
+    "ticker": "STNE",
+    "sector": "핀테크",
+    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
+    "founded_year": 2012,
+    "headquarters": "상파울루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-29 20:49"
   },
   {
     "id": "xp_inc",
@@ -7438,6 +7438,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-17 12:46"
+  },
+  {
+    "id": "nis_ekspres",
+    "name": "Niš Ekspres",
+    "name_ko": "니스 엑스프레스",
+    "country": "크로아티아",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "운송",
+    "description": "1951년에 설립된 세르비아의 대표적인 버스 운송 및 여행 기업입니다. 세르비아 남부 지역을 중심으로 국내외 버스 노선을 운영하며 여객 운송 서비스를 제공합니다. 발칸 반도 지역에서 오랜 역사와 인지도를 가진 민간 운수 회사입니다.",
+    "founded_year": 1951,
+    "headquarters": "니스, 세르비아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-11-08 23:14"
   },
   {
     "id": "zodia_markets",
