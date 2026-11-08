@@ -1011,7 +1011,8 @@ function cleanBody(text) {
         <div class="card-media">
           ${a.image_url ? `<img src="${window.safeUrl(a.image_url)}" alt="" loading="lazy" class="card-thumb" onerror="this.remove()">` : ''}
           <div class="media-text">
-            ${a.summary_ko ? `<div class="article-summary">${window.esc(cleanBody(stripUpdates(a.summary_ko)).slice(0,120))}${a.summary_ko.length>120?'…':''}</div>` : ''}
+            ${a.summary_ko ? `<div class="article-summary">${window.esc(cleanBody(stripUpdates(a.summary_ko)).replace(/^\s*[-•]\s*/gm,'').replace(/\s*
++\s*/g,' ').trim().slice(0,120))}${a.summary_ko.length>120?'…':''}</div>` : ''}
           </div>
         </div>
         <div class="article-footer">
