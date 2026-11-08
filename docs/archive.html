@@ -423,7 +423,7 @@ function cleanBody(text) {
 
     container.innerHTML = articles.map(a => {
       const title = window.esc(a.title_ko || a.title_en);
-      const summary = window.esc(cleanBody(stripUpdates(a.summary_ko || '')).replace(/^\s*[-•]\s+/gm,'').replace(/^\s*[◆■]\s*/gm,'').replace(/\s*
+      const summary = window.esc(cleanBody(stripUpdates(a.summary_ko || '')).replace(/^\s*\[업데이트\]\s*$/gm,'').replace(/^\s*■\s*\d+월 \d+일 \d+:\d+\s*—.*$/gm,'').replace(/^\s*─{3,}\s*$/gm,'').replace(/^\s*[◆■][^\n.。]{0,30}$/gm,'').replace(/^\s*[-•]\s+/gm,'').replace(/^\s*[◆■]\s*/gm,'').replace(/\s*
 +\s*/g,' ').trim().slice(0, 100));
       const catTag = a.category ? `<span class="tag">${window.esc(a.category)}</span>` : '';
       const regionTag = a.region ? `<span class="tag">${window.esc(REGION_KO[a.region] || a.region)}</span>` : '';
