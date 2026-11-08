@@ -47,7 +47,9 @@ jobs:
         env:
           FORCE: ${{ inputs.force }}
         run: |
-          if [ "$FORCE" = "true" ] || [ "$(date -u +%u)" = "7" ]; then echo "run=true" >> "$GITHUB_OUTPUT"
+          # 2026-11-08: 요일을 KST로 본다. cron-job.org가 토 19:00 UTC(=일 04:00 KST)에 부르는데 UTC로 일요일인지 보던
+          # 탓에 10/3~11/7 6주 동안 매번 "일요일 아님"으로 백업이 건너뛰어졌다(실행은 초록색이라 안 드러남).
+          if [ "$FORCE" = "true" ] || [ "$(TZ=Asia/Seoul date +%u)" = "7" ]; then echo "run=true" >> "$GITHUB_OUTPUT"
           else echo "run=false" >> "$GITHUB_OUTPUT"; echo "일요일 아님 — 건너뜀(수동 실행 시 force=true로 우회 가능)"; fi
 
   backup:
