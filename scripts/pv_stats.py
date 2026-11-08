@@ -10,6 +10,7 @@ GA4 수치는 1~2일 뒤에야 확정되므로 매 실행마다 최근 PV_DAYS�
 """
 import json
 import os
+import time
 from collections import defaultdict
 from urllib.parse import parse_qs, urlsplit
 
@@ -89,6 +90,23 @@ def main():
     records = aggregate(rows)
     upsert(records)
     print(f"GA4 {len(rows)}행 → 기사×일 {len(records)}건 적재 (최근 {DAYS}일)")
+    sync_view_counts()
+
+
+def sync_view_counts():
+    """articles.view_count(관리자 목록·조회수순)를 GA4 누적으로 맞춘다(2026-11-08 — 사이트 카운터는 봇까지 세서 폐기).
+    DB 함수가 값이 다른 행만 한 번에 200행씩 고친다. 기사 행 일괄 UPDATE는 본문 검색 색인 때문에 WAL이 행당
+    수백 KB라 1GB 디스크를 채운 적이 있다 — 평소엔 하루 수십 행이라 한두 번이면 끝나고, 상한을 넘으면 다음 날 이어서."""
+    done = 0
+    for _ in range(5):
+        r = requests.post(_url("rpc/sync_view_counts_from_ga4"), headers=_headers(), json={"p_limit": 200}, timeout=60)
+        r.raise_for_status()
+        n = int(r.json() or 0)
+        done += n
+        if n < 200:
+            break
+        time.sleep(30)
+    print(f"누적 조회수 GA4 반영 {done}건")
 
 
 if __name__ == "__main__":

@@ -25,11 +25,6 @@ const RPCS = {
     sql: 'select coalesce(json_agg(t), \'[]\')::text as j from related_articles($1::bigint, $2::int) t',
     args: (b) => [b.p_id, b.p_limit ?? 6],
   },
-  increment_view_count: {
-    sql: 'select increment_view_count($1::int)::text as j',
-    args: (b) => [b.article_id],
-    noContent: true,
-  },
 };
 
 const OPS = { eq: '=', neq: '<>', gt: '>', gte: '>=', lt: '<', lte: '<=' };

@@ -394,15 +394,7 @@ function cleanBody(text) {
       renderArticle(article, articles);
       loadIssueTimeline(article);
 
-      // view_count 증가
-      fetch(`${SUPABASE_URL}/rest/v1/rpc/increment_view_count`, {
-        method: 'POST',
-        headers: {
-          'apikey': SUPABASE_ANON_KEY,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ article_id: parseInt(id) })
-      }).catch(() => {});
+      // 조회수는 GA4 일일 PV로 센다(scripts/pv_stats.py) — 여기서 올리던 카운터는 봇까지 세서 2026-11-08 폐기.
 
     } catch(e) {
       document.getElementById('article-wrapper').innerHTML = '<div class="error">오류가 발생했습니다.</div>';
