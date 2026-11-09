@@ -291,6 +291,26 @@ _PLACE_TAG_COUNTRY = {
     "tokyo": "일본", "kyoto": "일본", "osaka": "일본", "beijing": "중국", "shanghai": "중국", "hong kong": "중국",
     "seoul": "한국", "bangkok": "태국", "hanoi": "베트남", "ho chi minh": "베트남",
     "rio de janeiro": "브라질", "mumbai": "인도", "delhi": "인도", "cairo": "이집트",
+    # 세계 유명 명소 (2026-11-09 id=323929: 아르헨티나 교황 방문 기사에 타지마할 사진 — 태그에 나라명이 없어
+    # 통과. 일반 키워드 검색은 'landmark·monument·architecture' 류 명소 사진을 자주 끌어온다)
+    "taj mahal": "인도", "agra": "인도", "india gate": "인도", "jaipur": "인도", "varanasi": "인도", "kerala": "인도",
+    "great wall": "중국", "great wall of china": "중국", "forbidden city": "중국", "terracotta army": "중국",
+    "pyramids": "이집트", "pyramid": "이집트", "giza": "이집트", "sphinx": "이집트", "luxor": "이집트",
+    "petra": "요르단", "angkor wat": "캄보디아", "angkor": "캄보디아", "machu picchu": "페루", "cusco": "페루",
+    "christ the redeemer": "브라질", "colosseum": "이탈리아", "pisa": "이탈리아", "vatican": "이탈리아",
+    "st peter's basilica": "이탈리아", "sagrada familia": "스페인", "alhambra": "스페인", "seville": "스페인",
+    "acropolis": "그리스", "parthenon": "그리스", "athens": "그리스", "santorini": "그리스",
+    "kremlin": "러시아", "red square": "러시아", "saint basil's cathedral": "러시아", "st petersburg": "러시아",
+    "neuschwanstein": "독일", "brandenburg gate": "독일", "louvre": "프랑스", "notre dame": "프랑스",
+    "mont saint michel": "프랑스", "buckingham palace": "영국", "stonehenge": "영국", "edinburgh": "영국",
+    "white house": "미국", "capitol": "미국", "lincoln memorial": "미국", "mount rushmore": "미국",
+    "times square": "미국", "las vegas": "미국", "grand canyon": "미국", "cn tower": "캐나다",
+    "petronas towers": "말레이시아", "kuala lumpur": "말레이시아", "marina bay sands": "싱가포르",
+    "mount fuji": "일본", "fuji": "일본", "hagia sophia": "튀르키예", "blue mosque": "튀르키예",
+    "cappadocia": "튀르키예", "jerusalem": "이스라엘", "tel aviv": "이스라엘", "dead sea": "이스라엘",
+    "table mountain": "남아공", "cape town": "남아공", "chichen itza": "멕시코", "mexico city": "멕시코",
+    "marrakech": "모로코", "bali": "인도네시아", "jakarta": "인도네시아", "halong bay": "베트남",
+    "buenos aires": "아르헨티나", "patagonia": "아르헨티나", "iguazu falls": "아르헨티나", "lima": "페루",
 }
 _EUROPE_KO = {"영국", "독일", "프랑스", "이탈리아", "스페인", "러시아", "폴란드", "우크라이나",
               "네덜란드", "스위스", "오스트리아", "체코", "헝가리", "그리스", "포르투갈", "유럽"}
