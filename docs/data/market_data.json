@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-09 11:57",
+  "updated_at": "2026-11-09 12:11",
   "indices": [
     {
       "name": "S&P 500",
@@ -25,8 +25,8 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 5153.76,
-      "change_pct": -4.27,
+      "price": 5143.94,
+      "change_pct": -4.46,
       "up": false
     },
     {
@@ -60,15 +60,15 @@
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 5099.13,
-      "change_pct": 0.96,
+      "price": 5084.61,
+      "change_pct": 0.68,
       "up": true
     },
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 5721.73,
-      "change_pct": -0.7,
+      "price": 5729.13,
+      "change_pct": -0.57,
       "up": false
     },
     {
@@ -89,7 +89,7 @@
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
       "price": 16.49,
-      "change_pct": 0.05,
+      "change_pct": 0.06,
       "up": true
     }
   ],
@@ -121,8 +121,8 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 5153.76,
-        "change_pct": -4.27,
+        "price": 5143.94,
+        "change_pct": -4.46,
         "up": false
       },
       {
@@ -158,15 +158,15 @@
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 5099.13,
-        "change_pct": 0.96,
+        "price": 5084.61,
+        "change_pct": 0.68,
         "up": true
       },
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 5721.73,
-        "change_pct": -0.7,
+        "price": 5729.13,
+        "change_pct": -0.57,
         "up": false
       }
     ],
@@ -189,7 +189,7 @@
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
         "price": 16.49,
-        "change_pct": 0.05,
+        "change_pct": 0.06,
         "up": true
       }
     ]
@@ -205,8 +205,8 @@
     "ACB": {
       "name": "Asia Commercial Joint Stock Bank",
       "symbol": "ACB.VN",
-      "price": 20350.0,
-      "change_pct": -0.97,
+      "price": 20300.0,
+      "change_pct": -1.22,
       "up": false
     }
   }
