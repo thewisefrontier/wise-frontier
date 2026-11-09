@@ -1,5 +1,113 @@
 [
   {
+    "id": 324145,
+    "title_en": "[국내유가] 휘발유 리터당 1855원…전국 평균 소폭 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1855원…전국 평균 소폭 하락",
+    "summary_ko": "한국석유공사 오피넷이 10일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1855원으로 집계됐다. 이는 전일 대비 0.16원 하락한 수치다.\n\n경유와 LPG 가격도 동반 하락세를 기록했다. 경유는 리터당 1841.37원으로 전일 대비 0.62원 내려갔으며, LPG 부탄은 리터당 1177.75원으로 전일 대비 0.16원 하락했다.\n\n오피넷에 따르면 이번 가격 변동은 국제유가 흐름과 정유사 공급가에 따라 영향을 받은 것으로 분석된다. 최근 국내 기름값은 고공행진을 지속하는 가운데 정유사 공급가격 조정과 국제유가 변동",
+    "url": "internal://opinet_price_2026-11-10",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-11-10 05:12",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_11_10_pid481164.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-10T05:12:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-10 05:12",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-11-10",
+      "prices": {
+        "B027": {
+          "diff": -0.16,
+          "name": "휘발유",
+          "price": 1855.11
+        },
+        "B034": {
+          "diff": -0.3,
+          "name": "고급휘발유",
+          "price": 2390.6
+        },
+        "C004": {
+          "diff": -0.18,
+          "name": "실내등유",
+          "price": 1570.36
+        },
+        "D047": {
+          "diff": -0.62,
+          "name": "경유",
+          "price": 1841.37
+        },
+        "K015": {
+          "diff": -0.16,
+          "name": "LPG(부탄)",
+          "price": 1177.75
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 324144,
+    "title_en": "The Netanyahus",
+    "title_ko": "[오늘의 책] 퓰리처상 수상작 조슈아 코언의 『네타냐후』, 역사와 허구가 만난 유대인 정체성의 서사",
+    "summary_ko": "조슈아 코언(Joshua Cohen)의 소설 『네타냐후』는 2022년 퓰리처상 픽션 부문과 2021년 전미 유대 북 어워드를 수상하며 미국 현대 문학에서 중요한 화제작으로 자리 잡았다. 2024년 국내에도 정식 출판된 이 작품은 유대계 미국인의 정체성을 둘러싼 복잡한 논쟁과 갈등을 날카로운 해학으로 풀어내어 평단의 주목을 받았다.\n\n이야기의 배경은 1950년대 후반 뉴욕주에 위치한 가상의 코빈 대학으로, 학과의 유일한 유대인 사학자 루빈 블룸(Ruben Blum) 교수가 주인공으로 등장한다. 블룸은 자신에게 크리스마스 파티의 산타클",
+    "url": "internal://literature_Q108871736",
+    "source": "NewsFinal",
+    "category": "문화·예술",
+    "subcategory": "오늘의책",
+    "region": "global",
+    "country": "미국",
+    "country_flag": "🇺🇸",
+    "score": 1,
+    "created_at": "2026-11-10 05:10",
+    "countries": [
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/literature_cover_q108871736.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-10T05:10:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-10 05:10",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "enwiki": "The Netanyahus",
+      "kowiki": null,
+      "source": "prize",
+      "wikidata": "Q108871736"
+    },
+    "image_credit": "네타냐후 표지",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
     "id": 324143,
     "title_en": "[기업 분석] 온, 혁신적인 러닝화 기술을 바탕으로 한 글로벌 스포츠 브랜드의 성장세",
     "title_ko": "[기업 분석] 온, 혁신적인 러닝화 기술을 바탕으로 한 글로벌 스포츠 브랜드의 성장세",
@@ -2825,51 +2933,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 323863,
-    "title_en": "Snow Country",
-    "title_ko": "[오늘의 책] 가와바타 야스나리의 『설국』, 일본 문학 최초 노벨상 수상의 서정적 정수",
-    "summary_ko": "가와바타 야스나리(Yasunari Kawabata)의 『설국』은 1968년 일본인 최초로 노벨 문학상을 수상할 당시 노벨 위원회가 주요 업적으로 꼽은 대표작이다. 1935년부터 잡지 연재를 거쳐 1948년에 완전판으로 완성된 이 소설은 일본 문학의 서정성을 극대화한 고전으로 평가받는다. 특유의 정교한 미의식과 감각적인 표현 덕분에 이 작품은 세대를 넘어 오늘날까지도 전 세계 독자들에게 널리 읽히고 있다.\n\n작가가 니가타현(Niigata)의 에치고유자와(Echigo-Yuzawa) 온천장에 머물며 계절의 변화를 직접 관찰해 집필한 이 ",
-    "url": "internal://literature_Q1376060",
-    "source": "NewsFinal",
-    "category": "문화·예술",
-    "subcategory": "오늘의책",
-    "region": "asia",
-    "country": "일본",
-    "country_flag": "🇯🇵",
-    "score": 1,
-    "created_at": "2026-11-09 05:09",
-    "countries": [
-      "일본"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/literature_q1376060.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-09T05:09:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-09 05:09",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-09 12:00",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "enwiki": "Snow Country",
-      "kowiki": "설국",
-      "source": "curated",
-      "wikidata": "Q1376060"
-    },
-    "image_credit": "이미지 출처: Wikimedia Commons (퍼블릭 도메인)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   }
 ]
