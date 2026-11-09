@@ -1,72 +1,35 @@
 [
   {
-    "id": 323946,
-    "title_en": "브라질, 엠폭스 백신 2만 5천 회분 확보… 고위험군 중심 전략적 대응 강화",
-    "title_ko": "브라질, 엠폭스 백신 2만 5천 회분 확보… 고위험군 중심 전략적 대응 강화",
-    "summary_ko": "브라질 보건부는 8일(현지시간) 엠폭스 백신 2만 5천 회분을 확보했다고 공식 발표했다. 이번 물량은 범미보건기구(PAHO)를 통해 덴마크의 백신 제조사와 협상한 결과로, 당초 계획했던 2만 회분에서 5천 회분이 추가된 규모다. 백신은 향후 3주 이내에 브라질에 도착할 예정이다.\n\n브라질 정부는 전 세계적인 백신 공급 부족 사태를 고려해 피내 접종 방식을 도입했다. 알렉상드르 파질랴(Alexandre Padilha) 보건부 장관은 이 기술을 적용할 경우 한 회분의 백신으로 최대 5명까지 접종이 가능해져 제한된 물량으로도 방역 효율을",
-    "url": "internal://trend_mpox_2026110912",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "trend_mpox",
-    "region": "latin_america",
-    "country": "브라질",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-11-09 12:26",
-    "countries": [
-      "브라질"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_5935581.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-09T12:26:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-09 12:26",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
-  },
-  {
-    "id": 323938,
-    "title_en": "중동, 아부다비 36도 무더위 속 앙카라 영하권 추위",
-    "title_ko": "중동, 아부다비 36도 무더위 속 앙카라 영하권 추위",
-    "summary_ko": "9일(현지시간) 중동 주요국 수도의 기온은 최저 영하 4도에서 최고 36도까지 큰 폭의 차이를 보였다. 아랍에미리트 아부다비가 최고기온 36도를 기록하며 가장 더운 날씨를 보인 반면, 튀르키예 앙카라는 최저기온 영하 4도, 최고기온 7도로 가장 선선한 기온 분포를 나타냈다. 아부다비는 앙카라보다 최고기온이 29도 더 높게 형성되며 지역별로 극명한 온도 차이가 확인된다.\n\n사우디아라비아 담맘 지역에서는 뇌우가 발생했으며, 리야드는 1.8mm의 이슬비가 내렸다. 카타르 도하 역시 1.5mm의 강수량을 기록하며 비가 내리는 날씨를 보였다",
-    "url": "internal://weather_group_중동_today20261109",
+    "id": 323956,
+    "title_en": "유럽, 로마 18도 온화…프랑스·스페인 비 소식",
+    "title_ko": "유럽, 로마 18도 온화…프랑스·스페인 비 소식",
+    "summary_ko": "9일(현지시간) 유럽 주요국 수도의 기온은 최저 -2도에서 최고 18도 사이의 분포를 보일 것으로 예상될 전망이다. 이탈리아 로마가 최고기온 18도로 가장 높은 기온을 기록할 것으로 보이며, 독일 베를린은 최고 5도로 가장 선선한 날씨를 보일 전망이다. 로마의 경우 내일도 오늘과 같은 18도를 유지할 것으로 보이나, 프랑스 파리는 오늘 최고 9도에서 내일 16도로 기온이 크게 오를 것으로 예상될 전망이다.\n\n반면 폴란드 바르샤바는 오늘 최고 5도에서 내일 4도로 기온이 다소 낮아질 것으로 보일 전망이다. 프랑스와 스페인에는 비 소식",
+    "url": "internal://weather_group_유럽_today20261109",
     "source": "NewsFinal",
     "category": "날씨",
-    "subcategory": "weather_group_중동_today20261109",
-    "region": "middle_east",
-    "country": "중동",
+    "subcategory": "weather_group_유럽_today20261109",
+    "region": "europe",
+    "country": "유럽",
     "country_flag": "",
     "score": 1,
-    "created_at": "2026-11-09 11:15",
+    "created_at": "2026-11-09 13:19",
     "countries": [
-      "사우디아라비아",
-      "아랍에미리트",
-      "튀르키예",
-      "이스라엘",
-      "이란",
-      "이라크",
-      "카타르",
-      "요르단"
+      "영국",
+      "독일",
+      "프랑스",
+      "이탈리아",
+      "스페인",
+      "러시아",
+      "폴란드",
+      "우크라이나"
     ],
     "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261109_pid6672041_saudi_arabia.jpg",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261109_pid2863539_germany.jpg",
     "view_count": 0,
-    "first_published_at": "2026-11-09T11:15:00",
+    "first_published_at": "2026-11-09T13:19:00",
     "update_log": [
       {
-        "timestamp": "2026-11-09 11:15",
+        "timestamp": "2026-11-09 13:19",
         "note": "최초 게시"
       }
     ],
@@ -81,53 +44,102 @@
     "noindex": true
   },
   {
-    "id": 323934,
-    "title_en": "미 민주당 의회 장악에 트럼프 행정부 반격…법무장관 \"조사 시 좌시 안 해\"",
-    "title_ko": "미 민주당 의회 장악에 트럼프 행정부 반격…법무장관 \"조사 시 좌시 안 해\"",
-    "summary_ko": "도널드 트럼프 미국 대통령과 내년 1월 출범할 민주당 주도 의회 간의 정면충돌이 예고됐다. 토드 블랑쉬 미국 법무장관은 8일(현지시간) CNN과의 인터뷰에서 민주당이 추진하는 행정부 대상 조사에 대해 \"매우 걱정해야 할 것\"이라며 강한 경고 메시지를 보냈다.\n\n이번 경고는 트럼프 대통령이 민주당의 의회 내 공세에 대응해 법무부의 개입을 지시하겠다고 밝힌 직후 나왔다. 트럼프 대통령은 민주당이 행정부 관료뿐만 아니라 자신과 관련된 기업 및 후원자들을 대상으로 탄핵이나 각종 제재를 언급하며 위협하고 있다고 주장했다.\n\n특히 민주당은 최",
-    "url": "internal://cluster_20261109_c0a4b469",
+    "id": 323955,
+    "title_en": "아프리카, 폭염과 뇌우 겹친 변덕스러운 날씨",
+    "title_ko": "아프리카, 폭염과 뇌우 겹친 변덕스러운 날씨",
+    "summary_ko": "9일(현지시간) 아프리카 주요국 수도권의 기온은 최저 11°C에서 최고 34°C 사이의 분포를 보일 것으로 예상될 전망이다. 탄자니아 도도마가 최고기온 34°C를 기록하며 가장 더운 지역으로 나타난 반면, 남아공 프리토리아는 최고 22°C, 최저 11°C로 가장 선선한 날씨를 보일 전망이다. 특히 나이지리아의 포트하커트와 이바단, 가나의 타말레 지역은 최고기온이 32~35°C 수준임에도 불구하고 체감온도가 39~41°C까지 치솟아 폭염이 이어질 것으로 보일 전망이다.\n\n탄자니아 도도마의 최고기온은 남아공 프리토리아보다 12°C 더 ",
+    "url": "internal://weather_group_아프리카_today20261109",
     "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "cluster_20261109_c0a4b469_crypto",
-    "region": "global",
-    "country": "미국",
+    "category": "날씨",
+    "subcategory": "weather_group_아프리카_today20261109",
+    "region": "africa",
+    "country": "아프리카",
     "country_flag": "",
     "score": 1,
-    "created_at": "2026-11-09 10:55",
+    "created_at": "2026-11-09 13:15",
     "countries": [
-      "미국"
+      "나이지리아",
+      "케냐",
+      "남아공",
+      "이집트",
+      "모로코",
+      "알제리",
+      "에티오피아",
+      "가나",
+      "탄자니아",
+      "앙골라"
     ],
     "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_1624419.jpg",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261109_pid254688_nigeria.jpg",
     "view_count": 0,
-    "first_published_at": "2026-11-09T10:55:00",
+    "first_published_at": "2026-11-09T13:15:00",
     "update_log": [
       {
-        "timestamp": "2026-11-09 10:55",
+        "timestamp": "2026-11-09 13:15",
         "note": "최초 게시"
       }
     ],
     "byline": "뉴스파이널 편집국",
     "is_travel": false,
     "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 323949,
+    "title_en": "후티 반군, 사우디 아람코 타워 미사일 공격…사우디 연합군 방공망 대응",
+    "title_ko": "후티 반군, 사우디 아람코 타워 미사일 공격…사우디 연합군 방공망 대응",
+    "summary_ko": "9일(현지시간) 예멘 후티 반군의 미사일 및 드론 공격으로 사우디아라비아 수도 리야드의 킹 압둘라 금융 지구에 위치한 사우디 국영 석유 기업 아람코의 사무용 빌딩이 파손됐다. 이번 공격으로 해당 건물의 상층부 유리창이 깨지고 외벽 일부가 파손되는 등 구조적인 충격이 가해졌으나, 사우디 에너지부는 인명 피해는 발생하지 않았다고 밝혔다. 사우디 주도 연합군은 공군 방어 체계를 가동해 리야드로 향하던 탄도 미사일 2발을 포함한 여러 발의 미사일을 요격했다고 발표했다.\n\n하지만 요격 과정에서 발생한 파편이 아람코 건물에 떨어지며 경미한 피",
+    "url": "internal://cluster_20261109_e7ed9867",
+    "source": "NewsFinal",
+    "category": "자원·에너지",
+    "subcategory": "cluster_20261109_e7ed9867",
+    "region": "middle_east",
+    "country": "사우디아라비아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-09 12:49",
+    "countries": [
+      "사우디아라비아",
+      "사우디",
+      "예멘"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_saudi_aramco.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-09T12:49:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-09 12:49",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": true,
+    "source_published_at": null,
     "source_data": {
       "src_ids": [
-        2139134,
-        2134416,
-        2132676
+        2149494,
+        2143381,
+        2143208,
+        2141001
       ]
     },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "image_credit": "이미지 출처: Wikimedia Commons",
     "continuation_of_id": null,
     "summary_3lines_en": "",
     "investment_idea_en": "",
-    "noindex": false
+    "noindex": true
   },
   {
     "id": 322083,
     "title_en": "파라과이 디지털 은행 우에노 금융 위기 사태로 중앙은행 총재 사임",
-    "title_ko": "파라과이 우에노은행 파산 파장…페냐 전 대통령 구속 및 탄핵",
-    "summary_ko": "자산 건전성 악화로 청산 절차를 밟고 있는 파라과이 우에노은행(Ueno Bank) 사태와 관련해 산티아고 페냐 전 대통령이 7일(현지시간) 배임 및 직권 남용 혐의로 구속됐다. 훔베르토 오타수 경제범죄 담당 판사는 도주 우려와 증거 인멸 가능성을 이유로 페냐 전 대통령에 대한 구속영장을 발부했다. 페냐 전 대통령은 현재 대통령 경호대 군사 시설에 구금된 상태다.\n\n앞서 파라과이 의회는 6일 탄핵 심판을 열어 찬성 44표, 반대 0표로 페냐 전 대통령을 파면했다.\n\n검찰은 페냐 전 대통령이 재임 기간 사회보장청(IPS)을 비롯해 이타",
+    "title_ko": "파라과이 우에노은행 파산 사태…페냐 전 대통령 구속 및 자택 압수수색",
+    "summary_ko": "파라과이 우에노은행(Ueno Bank)의 자산 건전성 악화로 인한 청산 절차와 관련해 산티아고 페냐(Santiago Peña) 전 대통령이 7일(현지시간) 배임 및 직권 남용 혐의로 구속됐다. 훔베르토 오타수(Humberto Otazú) 경제범죄 담당 판사는 도주 우려와 증거 인멸 가능성을 이유로 페냐 전 대통령에 대한 구속영장을 발부했다. 페냐 전 대통령은 현재 아순시온에 위치한 대통령 경호대 군사 시설에 수감된 상태다.\n\n앞서 파라과이 상원은 6일 탄핵 심판을 열어 찬성 44표, 반대 0표로 페냐 전 대통령을 파면했다. 검찰은 ",
     "url": "internal://realtrend_Paraguai_BC_2026110418",
     "source": "NewsFinal",
     "category": "금융",
@@ -135,8 +147,8 @@
     "region": "latin_america",
     "country": "파라과이",
     "country_flag": "",
-    "score": 70,
-    "created_at": "2026-11-09 10:54",
+    "score": 71,
+    "created_at": "2026-11-09 12:46",
     "countries": [
       "파라과이"
     ],
@@ -276,6 +288,10 @@
       {
         "timestamp": "2026-11-09 10:54",
         "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-09 12:46",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -291,6 +307,299 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
+  },
+  {
+    "id": 323250,
+    "title_en": "폴란드 크라쿠프서 총기 난사 발생…6명 사망·16명 부상",
+    "title_ko": "폴란드 크라쿠프 총기 난사로 6명 사망…정부, 테러 범죄로 규정",
+    "summary_ko": "7일(현지시간) 폴란드 남부 크라쿠프의 메인 마켓 광장에서 24세 남성이 차량을 몰고 돌진하며 AR-15 반자동 소총을 난사해 6명이 사망하고 15명 이상이 부상을 입었다. 사망자 중에는 영국인 1명과 오스트리아인 1명이 포함됐으며 나머지 4명은 폴란드인으로 확인됐다. 부상자들은 폴란드인을 비롯해 영국, 오스트리아, 독일, 포르투갈, 러시아 등 다국적 국적자로 구성됐다.\n\n범인 미하우 O. (24)는 전술 장비를 착용한 채 범행을 저질렀으며 현장에서 경찰과 총격전을 벌이다 부상을 입고 체포됐다. 범인은 병원에서 치료를 받고 있으며 ",
+    "url": "internal://cluster_20261108_91db303f",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "cluster_20261108_91db303f",
+    "region": "global",
+    "country": "폴란드",
+    "country_flag": "",
+    "score": 29,
+    "created_at": "2026-11-09 12:39",
+    "countries": [
+      "폴란드",
+      "영국",
+      "오스트리아"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_3953745.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-08T09:40:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-08 09:40",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-08 11:38",
+        "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-08 13:41",
+        "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-08 15:40",
+        "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-08 17:33",
+        "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-09 03:32",
+        "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-09 04:37",
+        "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-09 06:41",
+        "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-09 08:46",
+        "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-09 10:31",
+        "note": "폴란드 총기 난사범은 군사 생도로 밝혀졌다."
+      },
+      {
+        "timestamp": "2026-11-09 10:45",
+        "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-09 12:39",
+        "note": "내용 업데이트"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": true,
+    "source_published_at": null,
+    "source_data": {
+      "src_ids": [
+        2063865,
+        2062273,
+        2061989,
+        2061867,
+        2061839,
+        2061742,
+        2061508,
+        2060267,
+        2060160,
+        2060102,
+        2059977,
+        2057996,
+        2057470,
+        2056133,
+        2055601,
+        2055449,
+        2055372,
+        2055213,
+        2054326,
+        2053869,
+        2053926
+      ]
+    },
+    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "continuation_of_id": null,
+    "summary_3lines_en": "",
+    "investment_idea_en": "",
+    "noindex": true
+  },
+  {
+    "id": 323897,
+    "title_en": "바르셀로나, 아틀레티코 마드리드 2-1 제압…라리가 단독 선두 질주",
+    "title_ko": "바르셀로나, 아틀레티코 마드리드 2-1 제압…라리가 단독 선두 질주",
+    "summary_ko": "FC 바르셀로나가 8일(현지시간) 스페인 마드리드의 리야드 에어 메트로폴리탄에서 열린 2026-27 시즌 라리가 12라운드 원정 경기에서 아틀레티코 마드리드를 2-1로 꺾고 리그 단독 선두 자리를 굳혔다. 이번 승리로 바르셀로나는 승점 33점을 기록하며, 전날 발렌시아를 3-0으로 완파한 2위 레알 마드리드와의 격차를 3점으로 벌렸다. 반면 아틀레티코 마드리드는 승점 28점에 머물며 3위로 내려앉았다.\n\n경기 초반 분위기는 홈팀 아틀레티코 마드리드가 주도했다. 전반 10분 줄리아노 시메오네가 훌리안 알바레스의 패스를 받아 선제골을 ",
+    "url": "internal://cluster_20261109_bbb0b08c",
+    "source": "NewsFinal",
+    "category": "스포츠",
+    "subcategory": "cluster_20261109_bbb0b08c",
+    "region": "global",
+    "country": "스페인",
+    "country_flag": "",
+    "score": 15,
+    "created_at": "2026-11-09 12:38",
+    "countries": [
+      "스페인"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_laliga.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-09T08:41:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-09 08:41",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-09 12:38",
+        "note": "내용 업데이트"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "src_ids": [
+        2139369,
+        2139200,
+        2139180,
+        2138937,
+        2138994,
+        2138785,
+        2138762,
+        2138755,
+        2138694,
+        2138465,
+        2136675,
+        2136707,
+        2134648,
+        2133158,
+        2132882,
+        2132883,
+        2132384,
+        2131278
+      ]
+    },
+    "image_credit": "사진: Anidae (CC BY-SA 4.0, Wikimedia Commons)",
+    "continuation_of_id": null,
+    "summary_3lines_en": "",
+    "investment_idea_en": "",
+    "noindex": false
+  },
+  {
+    "id": 323946,
+    "title_en": "브라질, 엠폭스 백신 2만 5천 회분 확보… 고위험군 중심 전략적 대응 강화",
+    "title_ko": "브라질, 엠폭스 백신 2만 5천 회분 확보… 고위험군 중심 전략적 대응 강화",
+    "summary_ko": "브라질 보건부는 8일(현지시간) 엠폭스 백신 2만 5천 회분을 확보했다고 공식 발표했다. 이번 물량은 범미보건기구(PAHO)를 통해 덴마크의 백신 제조사와 협상한 결과로, 당초 계획했던 2만 회분에서 5천 회분이 추가된 규모다. 백신은 향후 3주 이내에 브라질에 도착할 예정이다.\n\n브라질 정부는 전 세계적인 백신 공급 부족 사태를 고려해 피내 접종 방식을 도입했다. 알렉상드르 파질랴(Alexandre Padilha) 보건부 장관은 이 기술을 적용할 경우 한 회분의 백신으로 최대 5명까지 접종이 가능해져 제한된 물량으로도 방역 효율을",
+    "url": "internal://trend_mpox_2026110912",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "trend_mpox",
+    "region": "latin_america",
+    "country": "브라질",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-11-09 12:26",
+    "countries": [
+      "브라질"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_5935581.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-09T12:26:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-09 12:26",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
+    "id": 323938,
+    "title_en": "중동, 아부다비 36도 무더위 속 앙카라 영하권 추위",
+    "title_ko": "중동, 아부다비 36도 무더위 속 앙카라 영하권 추위",
+    "summary_ko": "9일(현지시간) 중동 주요국 수도의 기온은 최저 영하 4도에서 최고 36도까지 큰 폭의 차이를 보였다. 아랍에미리트 아부다비가 최고기온 36도를 기록하며 가장 더운 날씨를 보인 반면, 튀르키예 앙카라는 최저기온 영하 4도, 최고기온 7도로 가장 선선한 기온 분포를 나타냈다. 아부다비는 앙카라보다 최고기온이 29도 더 높게 형성되며 지역별로 극명한 온도 차이가 확인된다.\n\n사우디아라비아 담맘 지역에서는 뇌우가 발생했으며, 리야드는 1.8mm의 이슬비가 내렸다. 카타르 도하 역시 1.5mm의 강수량을 기록하며 비가 내리는 날씨를 보였다",
+    "url": "internal://weather_group_중동_today20261109",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_중동_today20261109",
+    "region": "middle_east",
+    "country": "중동",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-09 11:15",
+    "countries": [
+      "사우디아라비아",
+      "아랍에미리트",
+      "튀르키예",
+      "이스라엘",
+      "이란",
+      "이라크",
+      "카타르",
+      "요르단"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261109_pid6672041_saudi_arabia.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-09T11:15:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-09 11:15",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 323934,
+    "title_en": "미 민주당 의회 장악에 트럼프 행정부 반격…법무장관 \"조사 시 좌시 안 해\"",
+    "title_ko": "미 민주당 의회 장악에 트럼프 행정부 반격…법무장관 \"조사 시 좌시 안 해\"",
+    "summary_ko": "도널드 트럼프 미국 대통령과 내년 1월 출범할 민주당 주도 의회 간의 정면충돌이 예고됐다. 토드 블랑쉬 미국 법무장관은 8일(현지시간) CNN과의 인터뷰에서 민주당이 추진하는 행정부 대상 조사에 대해 \"매우 걱정해야 할 것\"이라며 강한 경고 메시지를 보냈다.\n\n이번 경고는 트럼프 대통령이 민주당의 의회 내 공세에 대응해 법무부의 개입을 지시하겠다고 밝힌 직후 나왔다. 트럼프 대통령은 민주당이 행정부 관료뿐만 아니라 자신과 관련된 기업 및 후원자들을 대상으로 탄핵이나 각종 제재를 언급하며 위협하고 있다고 주장했다.\n\n특히 민주당은 최",
+    "url": "internal://cluster_20261109_c0a4b469",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "cluster_20261109_c0a4b469_crypto",
+    "region": "global",
+    "country": "미국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-09 10:55",
+    "countries": [
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_1624419.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-09T10:55:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-09 10:55",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "src_ids": [
+        2139134,
+        2134416,
+        2132676
+      ]
+    },
+    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "continuation_of_id": null,
+    "summary_3lines_en": "",
+    "investment_idea_en": "",
+    "noindex": false
   },
   {
     "id": 322426,
@@ -473,107 +782,6 @@
     "summary_3lines_en": "",
     "investment_idea_en": "",
     "noindex": false
-  },
-  {
-    "id": 323250,
-    "title_en": "폴란드 크라쿠프서 총기 난사 발생…6명 사망·16명 부상",
-    "title_ko": "폴란드 크라쿠프 총기 난사 범인, 군사 생도 출신…테러 사건으로 수사 전환",
-    "summary_ko": "폴란드 남부 크라쿠프의 메인 마켓 광장에서 7일(현지시간) 발생한 총기 난사 사건의 범인이 군사 생도였던 것으로 확인됐다. 이번 사건으로 6명이 사망하고 15명 이상이 부상을 입었다. 사망자 중에는 영국인 1명과 오스트리아인 1명이 포함됐으며, 나머지 4명은 폴란드인으로 밝혀졌다.\n\n부상자들은 오스트리아, 독일, 포르투갈, 러시아, 영국 출신 등 다국적 국적자로 구성됐다.\n\n범인 미하우 O. (24)는 전술 장비를 착용한 채 차량을 몰고 광장 일대를 돌며 AR-15 반자동 소총을 발사했다. 범인은 현장에서 경찰과 총격전을 벌이다 부",
-    "url": "internal://cluster_20261108_91db303f",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "cluster_20261108_91db303f",
-    "region": "global",
-    "country": "폴란드",
-    "country_flag": "",
-    "score": 28,
-    "created_at": "2026-11-09 10:45",
-    "countries": [
-      "폴란드"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_3953745.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-08T09:40:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-08 09:40",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-08 11:38",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-11-08 13:41",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-11-08 15:40",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-11-08 17:33",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-11-09 03:32",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-11-09 04:37",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-11-09 06:41",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-11-09 08:46",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-11-09 10:31",
-        "note": "폴란드 총기 난사범은 군사 생도로 밝혀졌다."
-      },
-      {
-        "timestamp": "2026-11-09 10:45",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": true,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        2063865,
-        2062273,
-        2061989,
-        2061867,
-        2061839,
-        2061742,
-        2061508,
-        2060267,
-        2060160,
-        2060102,
-        2059977,
-        2057996,
-        2057470,
-        2056133,
-        2055601,
-        2055449,
-        2055372,
-        2055213,
-        2054326,
-        2053869,
-        2053926
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": true
   },
   {
     "id": 323929,
@@ -886,64 +1094,6 @@
     "summary_3lines_en": "",
     "investment_idea_en": "",
     "noindex": true
-  },
-  {
-    "id": 323897,
-    "title_en": "바르셀로나, 아틀레티코 마드리드 2-1 제압…라리가 단독 선두 질주",
-    "title_ko": "바르셀로나, 아틀레티코 마드리드 2-1 제압…라리가 단독 선두 질주",
-    "summary_ko": "FC 바르셀로나가 8일(현지시간) 스페인 마드리드의 리야드 에어 메트로폴리탄에서 열린 2026-27 시즌 라리가 12라운드 원정 경기에서 아틀레티코 마드리드를 2-1로 꺾고 리그 단독 선두 자리를 굳혔다. 이날 승리로 바르셀로나는 승점 33점을 기록하며, 전날 발렌시아를 3-0으로 완파한 2위 레알 마드리드와의 격차를 3점으로 벌렸다. 반면 아틀레티코 마드리드는 승점 28점에 머물며 3위로 내려앉았다.\n\n경기 초반 분위기는 아틀레티코 마드리드가 주도했다. 전반 10분, 아틀레티코 마드리드의 줄리아노 시메오네가 훌리안 알바레스의 패스",
-    "url": "internal://cluster_20261109_bbb0b08c",
-    "source": "NewsFinal",
-    "category": "스포츠",
-    "subcategory": "cluster_20261109_bbb0b08c",
-    "region": "global",
-    "country": "스페인",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-09 08:41",
-    "countries": [
-      "스페인"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_laliga.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-09T08:41:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-09 08:41",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        2139369,
-        2139200,
-        2139180,
-        2138937,
-        2138994,
-        2138785,
-        2138762,
-        2138755,
-        2138694,
-        2138465,
-        2136675,
-        2136707,
-        2134648,
-        2133158,
-        2132882,
-        2132883,
-        2132384,
-        2131278
-      ]
-    },
-    "image_credit": "사진: Anidae (CC BY-SA 4.0, Wikimedia Commons)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": false
   },
   {
     "id": 323893,
