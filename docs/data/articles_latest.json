@@ -1,5 +1,110 @@
 [
   {
+    "id": 324173,
+    "title_en": "[국제금값] 금 온스당 4150달러…원유가 하락과 인플레이션 우려 완화",
+    "title_ko": "[국제금값] 금 온스당 4150달러…원유가 하락과 인플레이션 우려 완화",
+    "summary_ko": "국제 금값이 9일(현지시간) 상승했다. 뉴욕 시장에서 금 선물은 온스당 4149.80달러에 거래를 마쳤다. 시장 집계에 따르면 이는 전일 종가(4074.90달러) 대비 1.84% 상승, 상승폭 74.90달러를 기록한 수치다.\n\n이날 금 선물은 장중 최저 4062.50달러에서 최고 4157.70달러 사이에서 움직였다. 최근 5거래일 동안 금 가격은 3일 종가 3940.40달러 대비 5.31% 상승했다. 아울러 현재 가격은 52주 고점 5586.20달러 대비 25.71% 낮은 수준에 위치하고 있다.\n\n최근 원유 가격 하락에 따라 인플레",
+    "url": "internal://gold_price_2026-11-09",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국제금값",
+    "region": "글로벌",
+    "country": "국제",
+    "country_flag": "🪙",
+    "score": 1,
+    "created_at": "2026-11-10 07:08",
+    "countries": [
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/gold_2026_11_09_pid1841132.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-10T07:08:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-10 07:08",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "pct": 1.8380795636395881,
+      "date": "2026-11-09",
+      "prev": 4074.89990234375,
+      "price": 4149.7998046875,
+      "change": 74.89990234375,
+      "source": "시장 집계",
+      "day_low": 4062.5,
+      "day_high": 4157.7001953125,
+      "high_52w": 5586.2,
+      "week_pct": 5.314178954760377,
+      "week_start": 3940.39990234375,
+      "from_high_pct": -25.71336857456768,
+      "week_start_date": "2026-11-03"
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
+    "id": 324172,
+    "title_en": "[국제유가] WTI 배럴당 86달러…OPEC·IEA 수요 전망 하향",
+    "title_ko": "[국제유가] WTI 배럴당 86달러…OPEC·IEA 수요 전망 하향",
+    "summary_ko": "국제유가가 9일(현지시간) 하락했다. 시장 집계에 따르면 WTI 원유 선물은 뉴욕상업거래소(NYMEX)에서 배럴당 86.40달러에 거래를 마쳤으며, 전일 종가(90.83달러) 대비 4.88%(4.43달러) 하락했다.\n\n브렌트유는 배럴당 92.20달러에 마감되어, 전일 종가(98.32달러) 대비 6.22%(6.12달러) 하락했다.\n\n이날 유가 하락은 석유수출국기구(OPEC)와 국제에너지기구(IEA)가 수요 전망을 하향 조정한 것과 관련이 있다. 아울러 중동 지역의 공급 차질 우려와 해상 화물선 피격 사건 등 지정학적 리스크가 복합적으",
+    "url": "internal://oil_price_2026-11-09",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국제유가",
+    "region": "글로벌",
+    "country": "국제",
+    "country_flag": "🛢️",
+    "score": 1,
+    "created_at": "2026-11-10 07:07",
+    "countries": [
+      "미국",
+      "사우디아라비아",
+      "러시아"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/oil_2026_11_09_pid206150.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-10T07:07:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-10 07:07",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "wti": {
+        "pct": -4.877245119178307,
+        "prev": 90.83000183105469,
+        "price": 86.4,
+        "change": -4.430001831054682
+      },
+      "date": "2026-11-09",
+      "brent": {
+        "pct": -6.224572532363816,
+        "prev": 98.31999969482422,
+        "price": 92.2,
+        "change": -6.119999694824216
+      },
+      "source": "Yahoo Finance"
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 324166,
     "title_en": "[가상자산 동향] 솔라나 0.55% 상승…스타트업 아이디어 발표",
     "title_ko": "[가상자산 동향] 솔라나 0.55% 상승…스타트업 아이디어 발표",
@@ -2880,140 +2985,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 323882,
-    "title_en": "독일 베를린 실종 13세 소녀, 브란덴부르크 빈집서 숨진 채 발견",
-    "title_ko": "독일 베를린 실종 13세 소녀, 브란덴부르크 빈집서 숨진 채 발견",
-    "summary_ko": "독일 베를린 마르찬 지역에서 지난 3일(현지시간) 실종된 13세 소녀 리사 T가 8일 브란덴부르크주 바트 프라이엔발데의 한 빈집에서 숨진 채 발견됐다. 베를린 검찰은 이날 발견된 시신이 실종된 리사 T임을 확인했다고 밝혔다. 현장에서는 중상을 입은 남성 한 명이 함께 발견돼 경찰에 체포됐다.\n\n해당 남성은 리사 T를 납치해 살해한 혐의를 받고 있다. 이 남성은 발견 당시 스스로 치명상을 입은 상태였으며 현재 병원에서 치료를 받고 있으나 생사가 불투명한 위중한 상태다. 검찰은 이 남성이 범행 후 극단적 선택을 시도한 것으로 보고 있다",
-    "url": "internal://cluster_20261109_78ae5656",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "cluster_20261109_78ae5656",
-    "region": "global",
-    "country": "독일",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-09 06:49",
-    "countries": [
-      "독일",
-      "폴란드"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_2556094.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-09T06:49:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-09 06:49",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        2132264,
-        2132178,
-        2129250,
-        2129029,
-        2127248,
-        2127192,
-        2127054,
-        2126660
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": true
-  },
-  {
-    "id": 323773,
-    "title_en": "남아공 넬슨만델라베이서 UDM 소속 당선인 피살… 선거 직후 정치 테러 공포 확산",
-    "title_ko": "남아공 지방선거 후 정치 폭력 확산…UDM 당선인 피살",
-    "summary_ko": "7일(현지시간) 남아프리카공화국 동케이프주 지케베하 마더웰 지역에서 통합민주운동(UDM) 소속 지방선거 당선인 룩솔로 나메테가 총격을 받아 사망했다. 나메테는 비례대표 후보로 출마해 당선이 확정된 상태였으며, 사건 당일 마더웰 우눌루 스트리트의 이발소에서 머리를 자르던 중 밖으로 나섰다가 머리에 총상을 입고 현장에서 숨졌다.\n\n동케이프주 경찰청 대변인 노분투 간타나 경정은 오후 3시 50분께 신고를 받고 출동해 수사에 착수했다고 밝혔다. 현재 정치적 살인 전담 수사팀인 PKTT가 투입되어 용의자와 범행 동기를 추적 중이다. 나메테는",
-    "url": "internal://cluster_20261109_280db85e",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "cluster_20261109_280db85e",
-    "region": "africa",
-    "country": "남아공",
-    "country_flag": "",
-    "score": 7,
-    "created_at": "2026-11-09 06:47",
-    "countries": [
-      "남아프리카공화국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_3243661.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-09T01:06:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-09 01:06",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-09 02:37",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-11-09 06:47",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": true,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        2111048,
-        2110795,
-        2108907
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": false
-  },
-  {
-    "id": 323872,
-    "title_en": "[가상자산 동향] 이더리움 0.36% 하락…중간선거 이후 ETF 유출 증가",
-    "title_ko": "[가상자산 동향] 이더리움 0.36% 하락…중간선거 이후 ETF 유출 증가",
-    "summary_ko": "◆ 가격 동향\n\n9일 06:27(한국시간) 야후 파이낸스에 따르면 이더리움 가격은 2221.80달러를 기록하며 전일 대비 0.36% 하락했다. 벤징가 등 외신 보도에 따르면 미국 중간선거 이후 가상자산 시장에서 비트코인과 이더리움, 솔라나 등 주요 상장지수펀드(ETF)의 자금 유출이 증가하면서 가격에 하방 압력을 가했다. 시장 내 주요 공포 지표가 하락하는 등 투자 심리가 위축된 점도 시세 하락에 영향을 미쳤다.\n\n한편 그레이스케일은 이더리움이 스테이블코인과 토큰화 자산 부문에서 스마트 컨트랙트 플랫폼을 주도하고 있다고 평가했다.\n",
-    "url": "internal://crypto_news_2026-11-09",
-    "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "가상자산동향_crypto",
-    "region": "global",
-    "country": "글로벌",
-    "country_flag": "🌐",
-    "score": 1,
-    "created_at": "2026-11-09 06:28",
-    "countries": [],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_11_09_pid6537382.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-09T06:28:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-09 06:28",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   }
 ]
