@@ -1,121 +1,79 @@
 [
   {
-    "id": 323956,
-    "title_en": "유럽, 로마 18도 온화…프랑스·스페인 비 소식",
-    "title_ko": "유럽, 로마 18도 온화…프랑스·스페인 비 소식",
-    "summary_ko": "9일(현지시간) 유럽 주요국 수도의 기온은 최저 -2도에서 최고 18도 사이의 분포를 보일 것으로 예상될 전망이다. 이탈리아 로마가 최고기온 18도로 가장 높은 기온을 기록할 것으로 보이며, 독일 베를린은 최고 5도로 가장 선선한 날씨를 보일 전망이다. 로마의 경우 내일도 오늘과 같은 18도를 유지할 것으로 보이나, 프랑스 파리는 오늘 최고 9도에서 내일 16도로 기온이 크게 오를 것으로 예상될 전망이다.\n\n반면 폴란드 바르샤바는 오늘 최고 5도에서 내일 4도로 기온이 다소 낮아질 것으로 보일 전망이다. 프랑스와 스페인에는 비 소식",
-    "url": "internal://weather_group_유럽_today20261109",
+    "id": 323250,
+    "title_en": "폴란드 크라쿠프서 총기 난사 발생…6명 사망·16명 부상",
+    "title_ko": "폴란드 크라쿠프 총기 난사로 6명 사망…정부, 테러 범죄 규정",
+    "summary_ko": "7일(현지시간) 폴란드 남부 크라쿠프의 메인 마켓 광장에서 24세 남성이 차량을 몰고 돌진한 뒤 반자동 소총인 AR-15를 난사해 6명이 사망하고 15명 이상이 부상을 입었다. 사망자 중에는 영국인 1명과 오스트리아인 1명이 포함됐으며, 나머지 4명은 폴란드인으로 확인됐다. 부상자들 역시 폴란드인을 비롯해 영국, 오스트리아, 독일, 포르투갈, 러시아 등 다국적 국적자로 구성됐다.\n\n범인 미하우 O. (24)는 전술 장비를 착용한 채 범행을 저질렀으며, 현장에서 경찰과 총격전을 벌이다 부상을 입고 체포됐다. 병원으로 이송된 범인은 현",
+    "url": "internal://cluster_20261108_91db303f",
     "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_유럽_today20261109",
-    "region": "europe",
-    "country": "유럽",
+    "category": "사회",
+    "subcategory": "cluster_20261108_91db303f",
+    "region": "global",
+    "country": "폴란드",
     "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-09 13:19",
+    "score": 30,
+    "created_at": "2026-11-09 14:42",
     "countries": [
-      "영국",
-      "독일",
-      "프랑스",
-      "이탈리아",
-      "스페인",
-      "러시아",
       "폴란드",
-      "우크라이나"
+      "영국",
+      "오스트리아"
     ],
     "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261109_pid2863539_germany.jpg",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_3953745.jpg",
     "view_count": 0,
-    "first_published_at": "2026-11-09T13:19:00",
+    "first_published_at": "2026-11-08T09:40:00",
     "update_log": [
       {
-        "timestamp": "2026-11-09 13:19",
+        "timestamp": "2026-11-08 09:40",
         "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 323955,
-    "title_en": "아프리카, 폭염과 뇌우 겹친 변덕스러운 날씨",
-    "title_ko": "아프리카, 폭염과 뇌우 겹친 변덕스러운 날씨",
-    "summary_ko": "9일(현지시간) 아프리카 주요국 수도권의 기온은 최저 11°C에서 최고 34°C 사이의 분포를 보일 것으로 예상될 전망이다. 탄자니아 도도마가 최고기온 34°C를 기록하며 가장 더운 지역으로 나타난 반면, 남아공 프리토리아는 최고 22°C, 최저 11°C로 가장 선선한 날씨를 보일 전망이다. 특히 나이지리아의 포트하커트와 이바단, 가나의 타말레 지역은 최고기온이 32~35°C 수준임에도 불구하고 체감온도가 39~41°C까지 치솟아 폭염이 이어질 것으로 보일 전망이다.\n\n탄자니아 도도마의 최고기온은 남아공 프리토리아보다 12°C 더 ",
-    "url": "internal://weather_group_아프리카_today20261109",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_아프리카_today20261109",
-    "region": "africa",
-    "country": "아프리카",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-09 13:15",
-    "countries": [
-      "나이지리아",
-      "케냐",
-      "남아공",
-      "이집트",
-      "모로코",
-      "알제리",
-      "에티오피아",
-      "가나",
-      "탄자니아",
-      "앙골라"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261109_pid254688_nigeria.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-09T13:15:00",
-    "update_log": [
+      },
       {
-        "timestamp": "2026-11-09 13:15",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 323949,
-    "title_en": "후티 반군, 사우디 아람코 타워 미사일 공격…사우디 연합군 방공망 대응",
-    "title_ko": "후티 반군, 사우디 아람코 타워 미사일 공격…사우디 연합군 방공망 대응",
-    "summary_ko": "9일(현지시간) 예멘 후티 반군의 미사일 및 드론 공격으로 사우디아라비아 수도 리야드의 킹 압둘라 금융 지구에 위치한 사우디 국영 석유 기업 아람코의 사무용 빌딩이 파손됐다. 이번 공격으로 해당 건물의 상층부 유리창이 깨지고 외벽 일부가 파손되는 등 구조적인 충격이 가해졌으나, 사우디 에너지부는 인명 피해는 발생하지 않았다고 밝혔다. 사우디 주도 연합군은 공군 방어 체계를 가동해 리야드로 향하던 탄도 미사일 2발을 포함한 여러 발의 미사일을 요격했다고 발표했다.\n\n하지만 요격 과정에서 발생한 파편이 아람코 건물에 떨어지며 경미한 피",
-    "url": "internal://cluster_20261109_e7ed9867",
-    "source": "NewsFinal",
-    "category": "자원·에너지",
-    "subcategory": "cluster_20261109_e7ed9867",
-    "region": "middle_east",
-    "country": "사우디아라비아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-09 12:49",
-    "countries": [
-      "사우디아라비아",
-      "사우디",
-      "예멘"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_saudi_aramco.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-09T12:49:00",
-    "update_log": [
+        "timestamp": "2026-11-08 11:38",
+        "note": "내용 업데이트"
+      },
       {
-        "timestamp": "2026-11-09 12:49",
-        "note": "최초 게시"
+        "timestamp": "2026-11-08 13:41",
+        "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-08 15:40",
+        "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-08 17:33",
+        "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-09 03:32",
+        "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-09 04:37",
+        "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-09 06:41",
+        "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-09 08:46",
+        "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-09 10:31",
+        "note": "폴란드 총기 난사범은 군사 생도로 밝혀졌다."
+      },
+      {
+        "timestamp": "2026-11-09 10:45",
+        "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-09 12:39",
+        "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-09 14:42",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -123,23 +81,106 @@
     "source_published_at": null,
     "source_data": {
       "src_ids": [
-        2149494,
-        2143381,
-        2143208,
-        2141001
+        2063865,
+        2062273,
+        2061989,
+        2061867,
+        2061839,
+        2061742,
+        2061508,
+        2060267,
+        2060160,
+        2060102,
+        2059977,
+        2057996,
+        2057470,
+        2056133,
+        2055601,
+        2055449,
+        2055372,
+        2055213,
+        2054326,
+        2053869,
+        2053926
       ]
     },
-    "image_credit": "이미지 출처: Wikimedia Commons",
+    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
     "continuation_of_id": null,
     "summary_3lines_en": "",
     "investment_idea_en": "",
     "noindex": true
   },
   {
+    "id": 323897,
+    "title_en": "바르셀로나, 아틀레티코 마드리드 2-1 제압…라리가 단독 선두 질주",
+    "title_ko": "바르셀로나, 아틀레티코 마드리드 2-1 제압…라리가 단독 선두 질주",
+    "summary_ko": "FC 바르셀로나가 8일(현지시간) 스페인 마드리드의 리야드 에어 메트로폴리탄에서 열린 2026-27 시즌 라리가 12라운드 원정 경기에서 아틀레티코 마드리드를 2-1로 꺾었다. 이번 승리로 바르셀로나는 승점 33점을 확보하며 2위 레알 마드리드와의 격차를 3점으로 벌리고 리그 단독 선두 자리를 굳혔다. 패배한 아틀레티코 마드리드는 승점 28점에 머물며 리그 3위로 내려앉았다.\n\n경기 초반 분위기는 홈팀 아틀레티코 마드리드가 주도했다. 전반 10분 바에나의 패스를 받은 이강인이 공을 몰고 가다 훌리안 알바레스에게 연결했고, 알바레스가",
+    "url": "internal://cluster_20261109_bbb0b08c",
+    "source": "NewsFinal",
+    "category": "스포츠",
+    "subcategory": "cluster_20261109_bbb0b08c",
+    "region": "global",
+    "country": "스페인",
+    "country_flag": "",
+    "score": 16,
+    "created_at": "2026-11-09 14:39",
+    "countries": [
+      "스페인"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_laliga.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-09T08:41:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-09 08:41",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-09 12:38",
+        "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-09 14:39",
+        "note": "내용 업데이트"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "src_ids": [
+        2139369,
+        2139200,
+        2139180,
+        2138937,
+        2138994,
+        2138785,
+        2138762,
+        2138755,
+        2138694,
+        2138465,
+        2136675,
+        2136707,
+        2134648,
+        2133158,
+        2132882,
+        2132883,
+        2132384,
+        2131278
+      ]
+    },
+    "image_credit": "사진: Anidae (CC BY-SA 4.0, Wikimedia Commons)",
+    "continuation_of_id": null,
+    "summary_3lines_en": "",
+    "investment_idea_en": "",
+    "noindex": false
+  },
+  {
     "id": 322083,
     "title_en": "파라과이 디지털 은행 우에노 금융 위기 사태로 중앙은행 총재 사임",
-    "title_ko": "파라과이 우에노은행 파산 사태…페냐 전 대통령 구속 및 자택 압수수색",
-    "summary_ko": "파라과이 우에노은행(Ueno Bank)의 자산 건전성 악화로 인한 청산 절차와 관련해 산티아고 페냐(Santiago Peña) 전 대통령이 7일(현지시간) 배임 및 직권 남용 혐의로 구속됐다. 훔베르토 오타수(Humberto Otazú) 경제범죄 담당 판사는 도주 우려와 증거 인멸 가능성을 이유로 페냐 전 대통령에 대한 구속영장을 발부했다. 페냐 전 대통령은 현재 아순시온에 위치한 대통령 경호대 군사 시설에 수감된 상태다.\n\n앞서 파라과이 상원은 6일 탄핵 심판을 열어 찬성 44표, 반대 0표로 페냐 전 대통령을 파면했다. 검찰은 ",
+    "title_ko": "파라과이 우에노은행 청산 사태…페냐 전 대통령 구속 및 탄핵 파면",
+    "summary_ko": "파라과이의 우에노은행(Ueno Bank)이 자산 건전성 악화로 지난 3일 청산 절차에 돌입한 가운데, 산티아고 페냐(Santiago Peña) 전 대통령이 7일(현지시간) 배임 및 직권 남용 혐의로 구속됐다. 훔베르토 오타수(Humberto Otazú) 경제범죄 담당 판사는 도주 우려와 증거 인멸 가능성을 이유로 구속영장을 발부했다. 페냐 전 대통령은 현재 아순시온의 대통령 경호대 군사 시설에 수감된 상태다.\n\n앞서 파라과이 상원은 6일 탄핵 심판을 열어 찬성 44표, 반대 0표로 페냐 전 대통령을 파면했다. 검찰은 페냐 전 대통령",
     "url": "internal://realtrend_Paraguai_BC_2026110418",
     "source": "NewsFinal",
     "category": "금융",
@@ -147,8 +188,8 @@
     "region": "latin_america",
     "country": "파라과이",
     "country_flag": "",
-    "score": 71,
-    "created_at": "2026-11-09 12:46",
+    "score": 72,
+    "created_at": "2026-11-09 14:37",
     "countries": [
       "파라과이"
     ],
@@ -292,6 +333,10 @@
       {
         "timestamp": "2026-11-09 12:46",
         "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-09 14:37",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -309,173 +354,94 @@
     "noindex": true
   },
   {
-    "id": 323250,
-    "title_en": "폴란드 크라쿠프서 총기 난사 발생…6명 사망·16명 부상",
-    "title_ko": "폴란드 크라쿠프 총기 난사로 6명 사망…정부, 테러 범죄로 규정",
-    "summary_ko": "7일(현지시간) 폴란드 남부 크라쿠프의 메인 마켓 광장에서 24세 남성이 차량을 몰고 돌진하며 AR-15 반자동 소총을 난사해 6명이 사망하고 15명 이상이 부상을 입었다. 사망자 중에는 영국인 1명과 오스트리아인 1명이 포함됐으며 나머지 4명은 폴란드인으로 확인됐다. 부상자들은 폴란드인을 비롯해 영국, 오스트리아, 독일, 포르투갈, 러시아 등 다국적 국적자로 구성됐다.\n\n범인 미하우 O. (24)는 전술 장비를 착용한 채 범행을 저질렀으며 현장에서 경찰과 총격전을 벌이다 부상을 입고 체포됐다. 범인은 병원에서 치료를 받고 있으며 ",
-    "url": "internal://cluster_20261108_91db303f",
+    "id": 323956,
+    "title_en": "유럽, 로마 18도 온화…프랑스·스페인 비 소식",
+    "title_ko": "유럽, 로마 18도 온화…프랑스·스페인 비 소식",
+    "summary_ko": "9일(현지시간) 유럽 주요국 수도의 기온은 최저 -2도에서 최고 18도 사이의 분포를 보일 것으로 예상될 전망이다. 이탈리아 로마가 최고기온 18도로 가장 높은 기온을 기록할 것으로 보이며, 독일 베를린은 최고 5도로 가장 선선한 날씨를 보일 전망이다. 로마의 경우 내일도 오늘과 같은 18도를 유지할 것으로 보이나, 프랑스 파리는 오늘 최고 9도에서 내일 16도로 기온이 크게 오를 것으로 예상될 전망이다.\n\n반면 폴란드 바르샤바는 오늘 최고 5도에서 내일 4도로 기온이 다소 낮아질 것으로 보일 전망이다. 프랑스와 스페인에는 비 소식",
+    "url": "internal://weather_group_유럽_today20261109",
     "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "cluster_20261108_91db303f",
-    "region": "global",
-    "country": "폴란드",
+    "category": "날씨",
+    "subcategory": "weather_group_유럽_today20261109",
+    "region": "europe",
+    "country": "유럽",
     "country_flag": "",
-    "score": 29,
-    "created_at": "2026-11-09 12:39",
+    "score": 1,
+    "created_at": "2026-11-09 13:19",
     "countries": [
-      "폴란드",
       "영국",
-      "오스트리아"
+      "독일",
+      "프랑스",
+      "이탈리아",
+      "스페인",
+      "러시아",
+      "폴란드",
+      "우크라이나"
     ],
     "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_3953745.jpg",
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261109_pid2863539_germany.jpg",
     "view_count": 0,
-    "first_published_at": "2026-11-08T09:40:00",
+    "first_published_at": "2026-11-09T13:19:00",
     "update_log": [
       {
-        "timestamp": "2026-11-08 09:40",
+        "timestamp": "2026-11-09 13:19",
         "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-08 11:38",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-11-08 13:41",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-11-08 15:40",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-11-08 17:33",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-11-09 03:32",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-11-09 04:37",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-11-09 06:41",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-11-09 08:46",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-11-09 10:31",
-        "note": "폴란드 총기 난사범은 군사 생도로 밝혀졌다."
-      },
-      {
-        "timestamp": "2026-11-09 10:45",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-11-09 12:39",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": true,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        2063865,
-        2062273,
-        2061989,
-        2061867,
-        2061839,
-        2061742,
-        2061508,
-        2060267,
-        2060160,
-        2060102,
-        2059977,
-        2057996,
-        2057470,
-        2056133,
-        2055601,
-        2055449,
-        2055372,
-        2055213,
-        2054326,
-        2053869,
-        2053926
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": true
-  },
-  {
-    "id": 323897,
-    "title_en": "바르셀로나, 아틀레티코 마드리드 2-1 제압…라리가 단독 선두 질주",
-    "title_ko": "바르셀로나, 아틀레티코 마드리드 2-1 제압…라리가 단독 선두 질주",
-    "summary_ko": "FC 바르셀로나가 8일(현지시간) 스페인 마드리드의 리야드 에어 메트로폴리탄에서 열린 2026-27 시즌 라리가 12라운드 원정 경기에서 아틀레티코 마드리드를 2-1로 꺾고 리그 단독 선두 자리를 굳혔다. 이번 승리로 바르셀로나는 승점 33점을 기록하며, 전날 발렌시아를 3-0으로 완파한 2위 레알 마드리드와의 격차를 3점으로 벌렸다. 반면 아틀레티코 마드리드는 승점 28점에 머물며 3위로 내려앉았다.\n\n경기 초반 분위기는 홈팀 아틀레티코 마드리드가 주도했다. 전반 10분 줄리아노 시메오네가 훌리안 알바레스의 패스를 받아 선제골을 ",
-    "url": "internal://cluster_20261109_bbb0b08c",
-    "source": "NewsFinal",
-    "category": "스포츠",
-    "subcategory": "cluster_20261109_bbb0b08c",
-    "region": "global",
-    "country": "스페인",
-    "country_flag": "",
-    "score": 15,
-    "created_at": "2026-11-09 12:38",
-    "countries": [
-      "스페인"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_laliga.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-09T08:41:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-09 08:41",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-09 12:38",
-        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
     "is_travel": false,
     "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        2139369,
-        2139200,
-        2139180,
-        2138937,
-        2138994,
-        2138785,
-        2138762,
-        2138755,
-        2138694,
-        2138465,
-        2136675,
-        2136707,
-        2134648,
-        2133158,
-        2132882,
-        2132883,
-        2132384,
-        2131278
-      ]
-    },
-    "image_credit": "사진: Anidae (CC BY-SA 4.0, Wikimedia Commons)",
+    "source_data": null,
+    "image_credit": null,
     "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": false
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 323955,
+    "title_en": "아프리카, 폭염과 뇌우 겹친 변덕스러운 날씨",
+    "title_ko": "아프리카, 폭염과 뇌우 겹친 변덕스러운 날씨",
+    "summary_ko": "9일(현지시간) 아프리카 주요국 수도권의 기온은 최저 11°C에서 최고 34°C 사이의 분포를 보일 것으로 예상될 전망이다. 탄자니아 도도마가 최고기온 34°C를 기록하며 가장 더운 지역으로 나타난 반면, 남아공 프리토리아는 최고 22°C, 최저 11°C로 가장 선선한 날씨를 보일 전망이다. 특히 나이지리아의 포트하커트와 이바단, 가나의 타말레 지역은 최고기온이 32~35°C 수준임에도 불구하고 체감온도가 39~41°C까지 치솟아 폭염이 이어질 것으로 보일 전망이다.\n\n탄자니아 도도마의 최고기온은 남아공 프리토리아보다 12°C 더 ",
+    "url": "internal://weather_group_아프리카_today20261109",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_아프리카_today20261109",
+    "region": "africa",
+    "country": "아프리카",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-09 13:15",
+    "countries": [
+      "나이지리아",
+      "케냐",
+      "남아공",
+      "이집트",
+      "모로코",
+      "알제리",
+      "에티오피아",
+      "가나",
+      "탄자니아",
+      "앙골라"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261109_pid254688_nigeria.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-09T13:15:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-09 13:15",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
   },
   {
     "id": 323946,
@@ -2469,8 +2435,8 @@
   {
     "id": 323491,
     "title_en": "사우디 수도 리야드 금융지구 피격…아람코 건물 일부 파손",
-    "title_ko": "사우디 수도 리야드 금융지구 피격…아람코 건물 일부 파손",
-    "summary_ko": "8일(현지시간) 사우디아라비아 수도 리야드의 킹 압둘라 금융지구(KAFD)에 있는 국영 석유회사 사우디 아람코의 행정 건물이 예멘 후티 반군의 미사일 공격으로 파손됐다. 사우디 에너지부는 이날 예멘 측이 발사한 미사일 2발이 리야드를 향해 날아왔으나 방공망에 의해 요격됐다고 밝혔다.\n\n요격된 미사일의 파편이 리야드의 32층 규모 아람코 타워 위로 떨어지면서 여러 층의 유리창이 깨지는 등 건물이 부분적으로 파손됐다. 사우디 관영 매체와 에너지부는 이번 사건으로 인한 인명 피해는 발생하지 않았다고 공식 확인했다. 목격자들은 리야드 상공",
+    "title_ko": "예멘 후티 반군, 사우디 아람코 건물 타격…리야드 금융지구 파손",
+    "summary_ko": "9일(현지시간) 예멘 후티 반군이 발사한 미사일과 드론이 사우디아라비아 수도 리야드의 킹 압둘라 금융지구(KAFD)에 위치한 국영 석유기업 사우디 아람코의 사무용 빌딩을 타격했다. 이 공격으로 해당 건물의 상층부 유리창이 파손되고 외벽 구조물이 노출되는 등 건물 일부가 손상됐다.\n\n사우디 에너지부와 관영 매체 등에 따르면 사우디 주도 연합군은 리야드로 향하던 탄도미사일 2발을 포함해 여러 발의 미사일과 드론을 요격했다고 발표했다. 그러나 요격 과정에서 발생한 잔해와 파편이 아람코 건물 위로 떨어지면서 건물에 피해가 발생했다. 목격자",
     "url": "internal://cluster_20261108_26ec38d1",
     "source": "NewsFinal",
     "category": "자원·에너지",
@@ -2504,6 +2470,10 @@
       {
         "timestamp": "2026-11-09 04:42",
         "note": "연합군, 후티 반군 미사일 발사대 파괴"
+      },
+      {
+        "timestamp": "2026-11-09 15:02",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -3288,6 +3258,10 @@
       {
         "timestamp": "2026-11-09 12:27",
         "note": "미군, 발리도글레 공군기지 주력 병력 철수 및 재배치."
+      },
+      {
+        "timestamp": "2026-11-09 14:23",
+        "note": "미군이 소말리아 내 발리도글레 기지 주력 병력을 철수했다."
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -3299,157 +3273,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": false
-  },
-  {
-    "id": 323284,
-    "title_en": "[주간 가상자산] 대선 이후 차익 실현 매물 출회…시장 변동성 확대",
-    "title_ko": "[주간 가상자산] 대선 이후 차익 실현 매물 출회…시장 변동성 확대",
-    "summary_ko": "11월 8일 13시(한국시간) 기준 비트코인(BTC)은 7만5738달러에 거래됐다. 7일 전인 11월 1일 7만8248달러 대비 3.21% 하락한 수치다.\n\n11월 8일 13시(한국시간) 기준 이더리움(ETH)은 2232달러에 거래됐다. 7일 전인 11월 1일 2273달러 대비 1.83% 하락한 수치다.\n\n미국 대선 이후 가상자산 시장은 기대감에 따른 상승세가 둔화하며 조정 국면을 맞이했다. 대선 직후 주식 시장과 동조화 현상을 보이며 상승 흐름을 탔으나, 이후 차익 실현 매물이 쏟아지며 비트코인을 비롯한 주요 자산들이 하락 압력을",
-    "url": "internal://weekly_crypto_2026-11-08",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "주간가상자산시황_crypto",
-    "region": "글로벌",
-    "country": "",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-08 13:58",
-    "countries": [],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weekly_crypto_2026_11_08_pid2902690.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-08T13:58:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-08 13:58",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-08 22:01",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "btc": {
-        "end": 75738.2265625,
-        "pct": -3.2080206857124427,
-        "prev": 78248.453125,
-        "end_date": "2026-11-08",
-        "prev_date": "2026-11-01"
-      },
-      "eth": {
-        "end": 2231.52001953125,
-        "pct": -1.8271567067529304,
-        "prev": 2273.05224609375,
-        "end_date": "2026-11-08",
-        "prev_date": "2026-11-01"
-      },
-      "week_end": "2026-11-08"
-    },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
-  },
-  {
-    "id": 323269,
-    "title_en": "레알 마드리드, 발렌시아 3-0 완파…리그 선두 바르셀로나와 승점 동률",
-    "title_ko": "레알 마드리드, 발렌시아 3-0 완파…리그 선두 바르셀로나와 승점 동률",
-    "summary_ko": "레알 마드리드가 7일(현지시간) 스페인 발렌시아의 에스타디오 데 메스타야에서 열린 2026/2027 시즌 라리가 12라운드 원정 경기에서 발렌시아를 3-0으로 완파했다. 조제 무리뉴 감독이 이끄는 레알 마드리드는 이번 승리로 공식전 8연승을 질주하며 승점 30점을 기록했다. 리그 선두 FC 바르셀로나와 승점이 같아졌으나 골 득실 차에서 밀려 2위를 유지했다.\n\n경기의 균형은 전반 28분에 깨졌다. 킬리안 음바페가 시도한 프리킥이 수비벽을 맞고 나오자 페데리코 발베르데가 페널티 박스 외곽에서 강력한 슈팅으로 연결해 선제골을 터뜨렸다.",
-    "url": "internal://cluster_20261108_eb7475e0",
-    "source": "NewsFinal",
-    "category": "스포츠",
-    "subcategory": "cluster_20261108_eb7475e0",
-    "region": "global",
-    "country": "스페인",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-11-08 13:46",
-    "countries": [
-      "스페인"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_real_madrid.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-08T11:45:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-08 11:45",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-08 13:46",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        2068028,
-        2064260,
-        2064386,
-        2063918,
-        2063792,
-        2062362,
-        2062032,
-        2061827,
-        2060332
-      ]
-    },
-    "image_credit": "사진: Ank Kumar (CC BY-SA 4.0, Wikimedia Commons)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": true
-  },
-  {
-    "id": 323275,
-    "title_en": "유럽, 영하권 추위와 비 소식 공존…지역별 기온 차 뚜렷",
-    "title_ko": "유럽, 영하권 추위와 비 소식 공존…지역별 기온 차 뚜렷",
-    "summary_ko": "8일(현지시간) 유럽 주요국은 최저 영하 1도에서 최고 22도에 이르는 폭넓은 기온 분포를 보일 전망이다. 다음주 유럽 전역은 지역에 따라 기온 차가 극명하게 갈리는 가운데, 영국과 프랑스, 이탈리아, 스페인, 폴란드, 우크라이나 등지에서는 비 소식이 예보되어 있다. 기온이 가장 높은 지역은 이탈리아로 최고 22도까지 오르겠으며, 가장 낮은 기온은 폴란드에서 영하 1도까지 떨어질 것으로 분석된다.\n\n국가별 상세 기온을 살펴보면 영국은 최고 13도와 최저 7도 사이를 오가며 비가 내리겠고, 프랑스와 스페인은 나란히 최고 18도, 최저",
-    "url": "internal://weather_group_유럽_weekly20261108",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_유럽_weekly20261108",
-    "region": "europe",
-    "country": "유럽",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-08 13:21",
-    "countries": [
-      "영국",
-      "독일",
-      "프랑스",
-      "이탈리아",
-      "스페인",
-      "러시아",
-      "폴란드",
-      "우크라이나"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261108_pid2096699_germany.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-08T13:21:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-08 13:21",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
   }
 ]
