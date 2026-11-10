@@ -101,6 +101,16 @@ _WIKI_CATEGORY_AVOID_WORDS = (
 # 충분하다(둘 다 이 기능이 다루는 명화가 아님).
 _WIKI_CATEGORY_AVOID_WORDS_ARTWORK = ("cartoon", "caricature", "satire", "personification")
 
+def _has_avoid_word(text: str, words) -> bool:
+    """차단어를 단어 단위로(복수형 s/es 허용) 찾는다. 2026-11-11: 부분 문자열로 찾던 탓에 "graph"가 분류명
+    "Photographs by the U.S. Department of State"에 걸려 미 국무부 공식 인물 사진이 전부 탈락했다(id=323060)."""
+    return any(re.search(r"(?<![a-z])" + re.escape(w.strip()) + r"(?:s|es)?(?![a-z])", text) for w in words)
+
+
+# 파일 제목에 있으면 여러 인물이 같이 찍힌 사진(회담·면담·흉내꾼 등) — fetch_wikimedia_image 참고(2026-11-11).
+_WIKI_MULTI_PERSON_WORDS = (" and ", " & ", " with ", " meets", " meeting", "courtesy call", " talks",
+                            "bilateral", "delegation", "impersonat", " visit to ")
+
 
 def fetch_wikimedia_image(query: str, allow_artwork: bool = False):
     """위키미디어 커먼즈에서 CC/PD 라이선스 이미지를 검색한다.
@@ -149,7 +159,20 @@ def fetch_wikimedia_image(query: str, allow_artwork: bool = False):
         anchor = _q_words[0].lower() if _q_words else ""
 
         pages = ((res.json().get("query") or {}).get("pages")) or {}
-        for page in pages.values():
+        # 2026-11-11 실사고(사용자 제보, id=323060 — 트럼프·카타르 총리 회담 기사에 "Fumio Kishida and
+        # Mohammed bin Abdulrahman Al Thani at the Japanese Kantei" 일본 총리 면담 사진): ① pages는 검색 순위가 아니라
+        # pageid 순 dict라 관련도 7~8위가 먼저 뽑혔다 — "index"(검색 순위)로 정렬한다. ② 제목이 "A and B"·"A & B"·
+        # "meets" 식이면 다른 인물이 같이 찍힌 사진이다 — 검색어 자체에 그 말이 없으면 뺀다. ③ 인물만 잘라낸
+        # "(cropped)"·공식 "portrait"를 앞으로 당긴다(같은 검색에 단독 사진이 있었다).
+        q_lower = query.lower()
+        # 명화 소개(allow_artwork)는 작품 제목에 "and"가 흔하다("Water-Lily Pond and Weeping Willow") — 거르지 않는다.
+        multi = [] if allow_artwork else [w for w in _WIKI_MULTI_PERSON_WORDS if w.strip() not in q_lower]
+        def _rank(p):
+            t = (p.get("title") or "").lower()
+            return (0 if ("(cropped)" in t or "portrait" in t) else 1, p.get("index", 99))
+        ranked = [p for p in sorted(pages.values(), key=_rank)
+                  if not any(w in (p.get("title") or "").lower().replace("_", " ") for w in multi)]
+        for page in ranked:
             infos = page.get("imageinfo") or []
             if not infos:
                 continue
@@ -172,7 +195,7 @@ def fetch_wikimedia_image(query: str, allow_artwork: bool = False):
             title_norm = title_lower.replace("-", " ").replace("_", " ")
             if title_lower in _WIKI_TITLE_BLOCKLIST:
                 continue
-            if any(w in title_norm for w in _WIKI_TITLE_AVOID_WORDS):
+            if _has_avoid_word(title_norm, _WIKI_TITLE_AVOID_WORDS):
                 continue
             # allow_artwork여도 "Detail of ..." 클로즈업 사진은 배제 — 붓터치만
             # 나오고 작품 전체 구도(연꽃·물 등)가 안 보인다(위 실사고).
@@ -195,9 +218,9 @@ def fetch_wikimedia_image(query: str, allow_artwork: bool = False):
             # 2026-10-10(id=301955 같은 건): 제목엔 안 걸리지만 분류에 "Diagram
             # images that should use vector graphics"처럼 명시된 경우도 있어,
             # 제목 차단어(차트·다이어그램 등)를 분류 문자열에도 똑같이 적용한다.
-            if any(w in categories_lower for w in _WIKI_TITLE_AVOID_WORDS):
+            if _has_avoid_word(categories_lower, _WIKI_TITLE_AVOID_WORDS):
                 continue
-            if any(w in categories_lower for w in category_avoid_words):
+            if _has_avoid_word(categories_lower, category_avoid_words):
                 continue
             # 2026-10-20 실사고(사용자 제보, id=316082 — "프랑스 시위 격화로
             # 체포 2400명 육박" 2026년 기사에 2005년 프랑스 폭동 때 만들어진
