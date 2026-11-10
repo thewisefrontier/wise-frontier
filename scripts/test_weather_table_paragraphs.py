@@ -15,3 +15,9 @@ r = soften_forecast(t + "\n\n▲ 서울 : [맑음] (4∼13) 보인다")
 assert "동반될 전망이다" in r and "나타날 전망이다" in r
 assert "현재 기온은 3°C를 기록한다." in r and r.endswith("(4∼13) 보인다")
 print("ok2")
+
+# 2026-11-10 324179: 이미 예상 어조인 문장에 또 붙여 "예상될 전망이다"·"것으로 보일 전망이다"가 됨
+r = soften_forecast("뇌우가 동반될 것으로 예상된다. 폭염이 나타날 것으로 보인다. 비가 내린다.")
+assert "예상될 전망이다" not in r and "보일 전망이다" not in r, r
+assert "예상된다." in r and "것으로 보인다." in r and "내릴 전망이다" in r, r
+print("ok3")
