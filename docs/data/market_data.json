@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-11 16:15",
+  "updated_at": "2026-11-11 16:37",
   "indices": [
     {
       "name": "S&P 500",
@@ -39,8 +39,8 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 114732.73,
-      "change_pct": 0.03,
+      "price": 115245.98,
+      "change_pct": 0.48,
       "up": true
     },
     {
@@ -53,15 +53,15 @@
     {
       "name": "SET (태국)",
       "symbol": "^SET.BK",
-      "price": 1501.61,
-      "change_pct": 0.35,
+      "price": 1498.99,
+      "change_pct": 0.18,
       "up": true
     },
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 5119.41,
-      "change_pct": -0.12,
+      "price": 5120.58,
+      "change_pct": -0.1,
       "up": false
     },
     {
@@ -137,8 +137,8 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 114732.73,
-        "change_pct": 0.03,
+        "price": 115245.98,
+        "change_pct": 0.48,
         "up": true
       },
       {
@@ -151,15 +151,15 @@
       {
         "name": "SET (태국)",
         "symbol": "^SET.BK",
-        "price": 1501.61,
-        "change_pct": 0.35,
+        "price": 1498.99,
+        "change_pct": 0.18,
         "up": true
       },
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 5119.41,
-        "change_pct": -0.12,
+        "price": 5120.58,
+        "change_pct": -0.1,
         "up": false
       },
       {
@@ -205,9 +205,9 @@
     "ACB": {
       "name": "Asia Commercial Joint Stock Bank",
       "symbol": "ACB.VN",
-      "price": 20450.0,
-      "change_pct": -0.24,
-      "up": false
+      "price": 20500.0,
+      "change_pct": 0.0,
+      "up": true
     }
   }
 }
