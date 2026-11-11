@@ -1,5 +1,71 @@
 [
   {
+    "id": 324687,
+    "title_en": "[국내유가] 휘발유 리터당 1855원…4주째 고공행진 이어져",
+    "title_ko": "[국내유가] 휘발유 리터당 1855원…4주째 고공행진 이어져",
+    "summary_ko": "한국석유공사 오피넷이 12일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1855원으로 집계됐다. 전일과 비교해 0.04원 소폭 상승한 수치다.\n\n경유와 LPG 판매가격은 전일 대비 하락세를 나타냈다. 오피넷에 따르면 경유는 리터당 1841.41원으로 전일 대비 0.40원 내렸으며, LPG(부탄)는 리터당 1177.83원으로 전일 대비 0.08원 하락했다.\n\n최근 국내 기름값은 국제시세 흐름과 정유사 공급가격 변동에 영향을 받으며 4주째 고공행진을 이어가고 있다. 정유사 도매가 조정과 유류세 인하 폭 확대 등의 ",
+    "url": "internal://opinet_price_2026-11-12",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-11-12 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_11_12_pid1275484.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-12T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-12 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-11-12",
+      "prices": {
+        "B027": {
+          "diff": 0.04,
+          "name": "휘발유",
+          "price": 1855.04
+        },
+        "B034": {
+          "diff": -0.87,
+          "name": "고급휘발유",
+          "price": 2384.04
+        },
+        "C004": {
+          "diff": -0.02,
+          "name": "실내등유",
+          "price": 1570.11
+        },
+        "D047": {
+          "diff": -0.4,
+          "name": "경유",
+          "price": 1841.41
+        },
+        "K015": {
+          "diff": -0.08,
+          "name": "LPG(부탄)",
+          "price": 1177.83
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 324685,
     "title_en": "[기업 분석] 아이오니스 파마슈티컬스, 3분기 총매출 2억4300만 달러 기록",
     "title_ko": "[기업 분석] 아이오니스 파마슈티컬스, 3분기 총매출 2억4300만 달러 기록",
