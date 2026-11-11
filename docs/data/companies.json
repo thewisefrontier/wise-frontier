@@ -3360,22 +3360,6 @@
     "updated_at": "2026-07-31 00:33"
   },
   {
-    "id": "vkontakte",
-    "name": "VK Company Limited",
-    "name_ko": "브이케이",
-    "country": "러시아",
-    "country_flag": "🌍",
-    "exchange": "MOEX",
-    "ticker": "VKCO",
-    "sector": "통신/IT",
-    "description": "2007년에 설립된 러시아의 대표적인 인터넷 및 기술 기업으로, 동명의 소셜미디어 VKontakte(VK)와 다양한 디지털 서비스를 운영하고 있습니다. 러시아 소셜 미디어 시장에서 독보적인 점유율을 차지하며 현지 온라인 생태계의 핵심 역할을 담당하고 있습니다. 데이터센터 및 온라인 플랫폼 인프라를 기반으로 미디어, 이커머스, 간편결제 등 다방면으로 사업을 확장해 왔습니다.",
-    "founded_year": 2007,
-    "headquarters": "모스크바, 러시아",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-10-18 17:37"
-  },
-  {
     "id": "vk",
     "name": "VK Company Limited",
     "name_ko": "브이케이",
@@ -3390,6 +3374,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-21 19:48"
+  },
+  {
+    "id": "vkontakte",
+    "name": "VK Company Limited",
+    "name_ko": "브이케이",
+    "country": "러시아",
+    "country_flag": "🌍",
+    "exchange": "MOEX",
+    "ticker": "VKCO",
+    "sector": "통신/IT",
+    "description": "2007년에 설립된 러시아의 대표적인 인터넷 및 기술 기업으로, 동명의 소셜미디어 VKontakte(VK)와 다양한 디지털 서비스를 운영하고 있습니다. 러시아 소셜 미디어 시장에서 독보적인 점유율을 차지하며 현지 온라인 생태계의 핵심 역할을 담당하고 있습니다. 데이터센터 및 온라인 플랫폼 인프라를 기반으로 미디어, 이커머스, 간편결제 등 다방면으로 사업을 확장해 왔습니다.",
+    "founded_year": 2007,
+    "headquarters": "모스크바, 러시아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-10-18 17:37"
   },
   {
     "id": "teba",
@@ -5710,6 +5710,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-10-18 23:07"
+  },
+  {
+    "id": "westfield",
+    "name": "Westfield",
+    "name_ko": "웨스트필드",
+    "country": "뉴질랜드",
+    "country_flag": "🌍",
+    "exchange": "ASX",
+    "ticker": "SCG",
+    "sector": "부동산",
+    "description": "1959년 설립된 호주 기반의 세계적인 쇼핑센터 개발 및 운영 기업입니다. 주로 호주와 뉴질랜드 전역의 대형 쇼핑몰을 소유 및 관리하며, 해당 지역 유통업계의 핵심 인프라 역할을 합니다. 글로벌 부동산 투자 신탁(REIT)으로서 상업용 부동산 시장에서 높은 시장 점유율을 차지하고 있습니다.",
+    "founded_year": 1959,
+    "headquarters": "시드니, 호주",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-11-11 16:11"
   },
   {
     "id": "wizz_air",
