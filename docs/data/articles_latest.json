@@ -586,12 +586,8 @@
     "first_published_at": "2026-11-13T08:07:00",
     "update_log": [
       {
-        "timestamp": "2026-11-13 08:07",
+        "timestamp": "2026-11-13 16:08",
         "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-13 14:07",
-        "note": "마이크로소프트, 서버 과부하 원인 확인 후 조치 완료."
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -1319,6 +1315,10 @@
       {
         "timestamp": "2026-11-13 03:44",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-13 15:59",
+        "note": "태국 외무장관, 미얀마 군부에 교전 중단 및 지원 요구."
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -1671,7 +1671,7 @@
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
-    "noindex": false
+    "noindex": true
   },
   {
     "id": 325033,
@@ -2978,208 +2978,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 324945,
-    "title_en": "러시아·우크라이나, 아부다비 평화협상서 포로 교환 합의…종전 논의는 평행선",
-    "title_ko": "러·우크라 아부다비 평화협상 종료…포로 교환 합의에도 영토 문제 이견",
-    "summary_ko": "미국 중재로 아랍에미리트 아부다비에서 2일간 열린 러시아와 우크라이나 간 평화 협상이 11일(현지시간) 종료됐다. 지난 2월 제네바 회담 이후 9개월 만에 재개된 이번 공식 대화에서 양측은 대규모 포로 교환에 원칙적으로 합의했으나, 전쟁 종식을 위한 핵심 쟁점인 영토 문제와 유럽 국가들의 협상 참여 여부 등에서는 뚜렷한 입장 차이를 확인했다.\n\n미국 측 협상 대표인 재러드 쿠슈너와 스티브 위트코프는 이번 합의가 전쟁 발발 이후 가장 큰 규모의 인도적 포로 석방이 될 것이라고 설명했다. 구체적인 교환 인원은 12일 추가 논의를 통해 ",
-    "url": "internal://cluster_20261112_f5278a02",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "cluster_20261112_f5278a02",
-    "region": "global",
-    "country": "러시아",
-    "country_flag": "",
-    "score": 8,
-    "created_at": "2026-11-12 16:09",
-    "countries": [
-      "러시아",
-      "우크라이나",
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_1979261.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-12T14:34:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-12 14:34",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-12 16:09",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        2373095,
-        2370806,
-        2367037,
-        2363064,
-        2360881,
-        2360610,
-        2357121
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": false
-  },
-  {
-    "id": 324958,
-    "title_en": "사헬 국가연합(AES), 전국 단위 생체인식 데이터베이스 구축 및 기금 모금 단속 강화",
-    "title_ko": "사헬 국가연합(AES), 전국 단위 생체인식 데이터베이스 구축 및 기금 모금 단속 강화",
-    "summary_ko": "부르키나파소 정부는 11일(현지시간) 전국 단위의 생체인식 데이터베이스 구축을 위한 시민 등록 절차를 공식 개시했다. 이브라힘 트라오레(Ibrahim Traoré) 부르키나파소 대통령은 이날 첫 번째 등록자로 참여하며 사업의 시작을 알렸다. 이번 사업은 모든 시민에게 12자리 전자 식별 번호를 부여하는 방식으로 진행된다.\n\n정부는 이동식 등록 팀 966개를 전국에 배치하여 난민, 노인, 장애인 등 취약 계층을 포함한 전 국민을 대상으로 등록을 추진한다.\n\n이번 조치는 부르키나파소, 말리, 니제르로 구성된 사헬 국가연합(AES)이 앞",
-    "url": "internal://trend_사헬 쿠데타_2026111215",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "trend_사헬 쿠데타",
-    "region": "africa",
-    "country": "부르키나파소",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-11-12 15:55",
-    "countries": [
-      "부르키나파소",
-      "말리",
-      "니제르",
-      "토고"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_5946820.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-12T15:55:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-12 15:55",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 324959,
-    "title_en": "중앙아프리카 바카가 지역서 무장세력 4명 피살, 러시아 용병단 개입 의혹 확산",
-    "title_ko": "중앙아프리카 바카가 지역서 무장세력 4명 피살, 러시아 용병단 개입 의혹 확산",
-    "summary_ko": "중앙아프리카공화국 바카가(Vakaga) 지역에서 자경단 소속 청년 4명이 참수되고 불에 탄 채 발견되는 사건이 발생했다. 9일(현지시간) 현지 매체 코르보 뉴스 센트라프리크(Corbeau News Centrafrique)에 따르면, 티링굴루와 델렘베 사이에서 희생자들의 시신이 발견된 이후 현지 주민들 사이에서는 러시아 용병단 바그너(Wagner) 그룹의 책임론이 거세게 일고 있다. 바카가 지역 청년들이 사용하는 모바일 메신저 단체 대화방에서는 용병들이 이번 살해 사건에 직접적으로 개입했다는 의혹이 제기됐으며, 이들이 사건을 은폐하기",
-    "url": "internal://trend_중앙아프리카_2026111215",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "trend_중앙아프리카",
-    "region": "global",
-    "country": "중앙아프리카공화국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-11-12 15:55",
-    "countries": [
-      "중앙아프리카공화국",
-      "러시아",
-      "콩고민주공화국",
-      "벨기에"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_60754.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-12T15:55:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-12 15:55",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-13 05:33",
-        "note": "프란츠 와그너 33득점 및 각계 와그너 인사 근황 확인."
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 324591,
-    "title_en": "스페인 주거난 반발 총파업 강행…주요 도시 교통·생산 마비",
-    "title_ko": "스페인 14년 만의 전국 총파업…주택난 항의에 400만 명 참여",
-    "summary_ko": "스페인 전역에서 11일(현지시간) 주택 가격과 임대료 폭등에 항의하는 대규모 전국 총파업이 발생했다. 이번 파업은 세입자연대가 주도하고 노동자위원회(CCOO)와 노동총동맹(UGT) 등 주요 노동조합이 가세하며 14년 만에 처음으로 전국 단위의 대규모 파업으로 기록됐다. 노조 측은 이번 파업에 약 400만 명의 노동자가 참여했다고 밝혔다.\n\n마드리드와 바르셀로나 등 주요 도시에서는 파업 참가자들이 도로를 점거하고 교통을 마비시켰다. 마드리드에서는 12만 명이, 바르셀로나에서는 주최 측 추산 40만 명(시 당국 추산 5만 5000명)이",
-    "url": "internal://cluster_20261111_e98dc2da",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "cluster_20261111_e98dc2da",
-    "region": "global",
-    "country": "스페인",
-    "country_flag": "",
-    "score": 13,
-    "created_at": "2026-11-12 14:43",
-    "countries": [
-      "스페인"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_spain_general_strike.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-11T18:12:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-11 18:12",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-11 21:39",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-11-11 21:40",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-11-12 10:37",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-11-12 12:42",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-11-12 14:43",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": true,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        2318513,
-        2316172,
-        2314469,
-        2314360,
-        2314269
-      ],
-      "kr_coverage_30d": 10
-    },
-    "image_credit": "사진: Antonio Zugaldia from Washington, D.C., United States (CC BY 2.0, Wikimedia Commons)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": false
   }
 ]
