@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-13 12:20",
+  "updated_at": "2026-11-13 12:25",
   "indices": [
     {
       "name": "S&P 500",
@@ -25,15 +25,15 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 5388.4,
-      "change_pct": 0.24,
+      "price": 5407.45,
+      "change_pct": 0.6,
       "up": true
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 713.61,
-      "change_pct": 1.21,
+      "price": 715.34,
+      "change_pct": 1.45,
       "up": true
     },
     {
@@ -53,21 +53,21 @@
     {
       "name": "SET (태국)",
       "symbol": "^SET.BK",
-      "price": 1501.55,
-      "change_pct": 0.17,
+      "price": 1501.91,
+      "change_pct": 0.19,
       "up": true
     },
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 5299.51,
-      "change_pct": 0.93,
+      "price": 5302.4,
+      "change_pct": 0.98,
       "up": true
     },
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 5661.7,
+      "price": 5661.89,
       "change_pct": 0.02,
       "up": true
     },
@@ -121,15 +121,15 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 5388.4,
-        "change_pct": 0.24,
+        "price": 5407.45,
+        "change_pct": 0.6,
         "up": true
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 713.61,
-        "change_pct": 1.21,
+        "price": 715.34,
+        "change_pct": 1.45,
         "up": true
       }
     ],
@@ -151,21 +151,21 @@
       {
         "name": "SET (태국)",
         "symbol": "^SET.BK",
-        "price": 1501.55,
-        "change_pct": 0.17,
+        "price": 1501.91,
+        "change_pct": 0.19,
         "up": true
       },
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 5299.51,
-        "change_pct": 0.93,
+        "price": 5302.4,
+        "change_pct": 0.98,
         "up": true
       },
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 5661.7,
+        "price": 5661.89,
         "change_pct": 0.02,
         "up": true
       }
