@@ -1,5 +1,43 @@
 [
   {
+    "id": 325306,
+    "title_en": "오세아니아, 주말 호주 뇌우·뉴질랜드 흐림",
+    "title_ko": "오세아니아, 주말 호주 뇌우·뉴질랜드 흐림",
+    "summary_ko": "14일(현지시간) 오세아니아 주요국 주말 날씨 데이터에 따르면, 이번 주말 지역 전체의 기온은 최저 13°C에서 최고 23°C 사이의 분포를 보일 것으로 예상된다. 국가별 수도의 기상 상황은 호주와 뉴질랜드 간에 서로 다른 양상을 나타낼 것으로 전망된다.\n\n호주 수도의 경우 토요일에는 뇌우가 동반되며 최고 23°C, 최저 14°C를 기록하고 강수 확률은 100%에 달할 것으로 보인다. 일요일에는 약한 이슬비가 이어지며 최고 22°C, 최저 13°C를 보이고 강수 확률은 71%가 될 것으로 예상된다. 반면 뉴질랜드 수도는 토요일과 일",
+    "url": "internal://weather_group_오세아니아_weekend20261114",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_오세아니아_weekend20261114",
+    "region": "oceania",
+    "country": "오세아니아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-14 03:21",
+    "countries": [
+      "호주",
+      "뉴질랜드"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261114_pid285059_australia.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-14T03:21:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-14 03:21",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 325247,
     "title_en": "수단 인민해방운동 당원 차량 습격…전직 기자 등 2명 사망",
     "title_ko": "수단 인민해방운동 예비선거 차량 총기 습격…여성 의원 후보 등 2명 사망",
@@ -2220,44 +2258,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 325057,
-    "title_en": "오세아니아, 수도별 최고 27도 기온차…호주 비 소식",
-    "title_ko": "오세아니아, 수도별 최고 27도 기온차…호주 비 소식",
-    "summary_ko": "13일(현지시간) 오세아니아 주요국 수도의 기온은 최저 12°C에서 최고 27°C의 분포를 보일 것으로 예상된다. 호주 캔버라는 최고기온 27°C, 최저기온 12°C를 기록하며 가장 더운 곳으로 꼽힌다. 캔버라에는 약한 이슬비가 내릴 전망이며, 강수확률은 74%, 강수량은 0.4mm로 예보됐다.\n\n뉴질랜드 웰링턴은 최고기온 18°C, 최저기온 13°C로 흐린 날씨를 보일 것으로 보인다. 웰링턴은 강수확률 10%, 강수량 0.0mm를 기록하며 비 소식이 없는 가운데, 가장 선선한 곳으로 나타났다. 캔버라는 웰링턴보다 최고기온이 9°C",
-    "url": "internal://weather_group_오세아니아_today20261113",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_오세아니아_today20261113",
-    "region": "oceania",
-    "country": "오세아니아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-13 03:21",
-    "countries": [
-      "호주",
-      "뉴질랜드"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261113_pid3926638_australia.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-13T03:21:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-13 03:21",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
