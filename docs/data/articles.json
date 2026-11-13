@@ -1,5 +1,206 @@
 [
   {
+    "id": 325133,
+    "title_en": "[글로벌 마켓 동향] 뉴욕증시 하락 마감…英 FTSE는 상승세",
+    "title_ko": "[글로벌 마켓 동향] 뉴욕증시 하락 마감…英 FTSE는 상승세",
+    "summary_ko": "◆ 뉴욕증시\n뉴욕증시(NYSE)에서 다우존스 지수는 12일(현지시간) 52297.09를 기록하며 전일 대비 0.36% 하락했다. S&P500 지수는 7592.40으로 마감해 전일 대비 0.35% 내렸다. 이날 뉴욕증시는 엔비디아 관련 악재와 유가 변동성 충격을 겪었다.\n\n엔비디아 관련 이슈와 유가 하락 여파로 장 초반 큰 폭의 낙폭을 보였다가 대부분의 손실을 만회하며 마감했다. ◆ 주요국 증시\n같은 날 앞서 유럽 증시에서는 영국 FTSE100 지수가 런던증권거래소(LSE)에서 10863.09로 거래를 마쳤다. 전일 대비 0.26% ",
+    "url": "internal://frontier_markets_2026-11-12",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "글로벌마켓동향",
+    "region": "global",
+    "country": "",
+    "country_flag": "🌍",
+    "score": 1,
+    "created_at": "2026-11-13 09:27",
+    "countries": [
+      "미국",
+      "튀르키예",
+      "나이지리아",
+      "남아공",
+      "이집트"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/frontier_markets_2026_11_12_pid2616931.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-13T09:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-13 09:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "currencies": [
+        {
+          "pct": 0.0491,
+          "name": "리라",
+          "prev": 50.282311385109914,
+          "price": 50.307,
+          "change": 0.024688614890088445,
+          "volume": 0,
+          "country": "튀르키예",
+          "day_low": 50.2183,
+          "currency": "TRY",
+          "day_high": 50.3751,
+          "exchange": "",
+          "long_name": "USD/TRY",
+          "exchange_name": "CCY",
+          "fifty_two_week_low": 42.1685,
+          "fifty_two_week_high": 50.3751
+        },
+        {
+          "pct": 0.0,
+          "name": "나이라",
+          "prev": 1342.6,
+          "price": 1342.6,
+          "change": 0.0,
+          "volume": 0,
+          "country": "나이지리아",
+          "day_low": 1342.6,
+          "currency": "NGN",
+          "day_high": 1345.18,
+          "exchange": "",
+          "long_name": "USD/NGN",
+          "exchange_name": "CCY",
+          "fifty_two_week_low": 1318.85,
+          "fifty_two_week_high": 1461.04
+        },
+        {
+          "pct": 0.0,
+          "name": "동",
+          "prev": 25674.0,
+          "price": 25674.0,
+          "change": 0.0,
+          "volume": 0,
+          "country": "베트남",
+          "day_low": 25651.0,
+          "currency": "VND",
+          "day_high": 25674.0,
+          "exchange": "",
+          "long_name": "USD/VND",
+          "exchange_name": "CCY",
+          "fifty_two_week_low": 25469.0,
+          "fifty_two_week_high": 26387.0
+        },
+        {
+          "pct": 0.0,
+          "name": "페소",
+          "prev": 1545.0,
+          "price": 1545.0,
+          "change": 0.0,
+          "volume": 0,
+          "country": "아르헨티나",
+          "day_low": 1542.5,
+          "currency": "ARS",
+          "day_high": 1546.5,
+          "exchange": "",
+          "long_name": "USD/ARS",
+          "exchange_name": "CCY",
+          "fifty_two_week_low": 1345.8066,
+          "fifty_two_week_high": 1556.1353
+        }
+      ],
+      "major_indices": [
+        {
+          "pct": -0.361,
+          "name": "다우존스",
+          "prev": 52486.56650508335,
+          "price": 52297.09,
+          "change": -189.4765050833521,
+          "volume": 1015162862,
+          "country": "미국",
+          "day_low": 52271.16,
+          "currency": "USD",
+          "day_high": 52751.22,
+          "exchange": "뉴욕증시",
+          "long_name": "Dow Jones Industrial Average",
+          "exchange_name": "DJI",
+          "fifty_two_week_low": 45057.28,
+          "fifty_two_week_high": 54744.33
+        },
+        {
+          "pct": -0.354,
+          "name": "S&P500",
+          "prev": 7619.372578929409,
+          "price": 7592.4,
+          "change": -26.972578929409792,
+          "volume": 3182097000,
+          "country": "미국",
+          "day_low": 7550.84,
+          "currency": "USD",
+          "day_high": 7652.76,
+          "exchange": "뉴욕증시",
+          "long_name": "S&P 500",
+          "exchange_name": "SNP",
+          "fifty_two_week_low": 6316.91,
+          "fifty_two_week_high": 7844.52
+        },
+        {
+          "pct": 0.255,
+          "name": "FTSE100",
+          "prev": 10835.459578075906,
+          "price": 10863.09,
+          "change": 27.630421924093753,
+          "volume": 0,
+          "country": "영국",
+          "day_low": 10820.61,
+          "currency": "GBP",
+          "day_high": 10886.06,
+          "exchange": "런던증권거래소(LSE)",
+          "long_name": "FTSE 100",
+          "exchange_name": "FTSE Index",
+          "fifty_two_week_low": 9423.9,
+          "fifty_two_week_high": 10989.5
+        }
+      ],
+      "frontier_indices": [
+        {
+          "pct": -1.544,
+          "name": "Top40",
+          "prev": 6835.459494596571,
+          "price": 6729.92,
+          "change": -105.53949459657088,
+          "volume": 0,
+          "country": "남아공",
+          "day_low": 6729.01,
+          "currency": "USD",
+          "day_high": 6863.07,
+          "exchange": "요하네스버그증권거래소(JSE)",
+          "long_name": "Top 40 USD Net TRI Index",
+          "exchange_name": "Johannesburg",
+          "fifty_two_week_low": 6120.39,
+          "fifty_two_week_high": 8184.71
+        },
+        {
+          "pct": -0.909,
+          "name": "EGX30",
+          "prev": 52500.630733366306,
+          "price": 52023.4,
+          "change": -477.2307333663048,
+          "volume": 174905000,
+          "country": "이집트",
+          "day_low": 51904.4,
+          "currency": "EGP",
+          "day_high": 52691.3,
+          "exchange": "이집트증권거래소(EGX)",
+          "long_name": "EGX 30 Price Return Index",
+          "exchange_name": "EGX",
+          "fifty_two_week_low": 51904.4,
+          "fifty_two_week_high": 52691.3
+        }
+      ]
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
     "id": 325132,
     "title_en": "중앙아시아, 우즈베키스탄 비 내리고 선선한 날씨",
     "title_ko": "중앙아시아, 우즈베키스탄 비 내리고 선선한 날씨",
@@ -332,6 +533,10 @@
       {
         "timestamp": "2026-11-13 07:07",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-13 09:13",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -686,6 +891,14 @@
       {
         "timestamp": "2026-11-13 05:11",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-13 09:13",
+        "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-13 09:23",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -726,6 +939,10 @@
       {
         "timestamp": "2026-11-13 05:09",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-13 09:13",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -762,7 +979,12 @@
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/startup_digest_20261113_pid594091.jpg",
     "view_count": 0,
     "first_published_at": null,
-    "update_log": [],
+    "update_log": [
+      {
+        "timestamp": "2026-11-13 09:13",
+        "note": "최초 게시"
+      }
+    ],
     "byline": "뉴스파이널 편집국",
     "is_travel": false,
     "source_published_at": null,
@@ -777,7 +999,7 @@
     "id": 325073,
     "title_en": "[오늘의 AI 소식] 젠슨 황 사임 여파 속 엔비디아 주가 하락과 코어위브 실적 호조",
     "title_ko": "[오늘의 AI 소식] 젠슨 황 사임 여파 속 엔비디아 주가 하락과 코어위브 실적 호조",
-    "summary_ko": "[코어위브 3분기 실적 호조 및 주가 급등]\n- 11월 11일(현지시간) 클라우드 제공업체 코어위브는 3분기 매출이 전년 동기 대비 168% 증가한 36억 6000만 달러를 기록했다고 밝혔다.\n- 코어위브 주가는 3분기 실적 발표와 함께 수요일 24.7% 급등했다.\n- 회사는 2026년 매출 전망치를 130억 달러에서 133억 달러 사이로 상향 조정했다.\n- 회사는 3분기 기준 1325억 달러의 매출 수주 잔고를 확보했다.\n\n[구글 검색의 젬마 4 하이드로젠 업데이트]\n- 11월 12일 구글은 검색 서비스에 새로운 모델인 젬마 4 ",
+    "summary_ko": "[코어위브 3분기 실적 호조 및 주가 급등]\n- 11월 11일(현지시간) 클라우드 제공업체 코어위브는 3분기 매출이 전년 동기 대비 168% 증가한 36억 6000만 달러를 기록했다고 밝혔다.\n- 코어위브 주가는 3분기 실적 발표와 함께 수요일 24.7% 급등했다.\n- 회사는 2026년 매출 전망치를 130억 달러에서 133억 달러 사이로 상향 조정했다.\n- 회사는 3분기 기준 1325억 달러의 매출 수주 잔고를 확보했다.\n\n[구글 검색의 제미나이 4 하이드로젠 업데이트]\n- 11월 12일 구글은 검색 서비스에 새로운 모델인 제미나",
     "url": "internal://ai_digest_20261113",
     "source": "NewsFinal",
     "category": "IT·과학",
@@ -792,7 +1014,16 @@
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/ai_digest_20261113_pid7304257.jpg",
     "view_count": 0,
     "first_published_at": null,
-    "update_log": [],
+    "update_log": [
+      {
+        "timestamp": "2026-11-13 09:13",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-13 09:23",
+        "note": "내용 업데이트"
+      }
+    ],
     "byline": "뉴스파이널 편집국",
     "is_travel": false,
     "source_published_at": null,
@@ -858,6 +1089,10 @@
       {
         "timestamp": "2026-11-13 05:02",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-13 09:13",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -1032,7 +1267,7 @@
     "id": 325046,
     "title_en": "[이슈 파이널] 루마니아 대통령의 '언론 출입금지' 선언... 사법개혁 질의가 부른 위법성 논란",
     "title_ko": "[이슈 파이널] 루마니아 대통령의 '언론 출입금지' 선언... 사법개혁 질의가 부른 위법성 논란",
-    "summary_ko": "니쿠쇼르 단 루마니아 대통령이 팔라툴 코트로체니(Palatul Cotroceni, 루마니아 대통령궁) 기자회견장에서 특정 언론인의 출입을 전면 금지해 위법성 논란이 확산하고 있다. 단 대통령은 11일(현지시간) 탐사보도 전문 매체 센트룰 데 인베스티가치 미디아 소속 오비디우 반겔레 기자의 질문을 받은 직후 자신의 남은 임기 동안 대통령궁 출입을 금지한다고 발표했다. 이는 권력 검증 질의에 답변을 거부하고 취재권을 박탈한 조치로 풀이되며 법적·정치적 갈등으로 번지는 모양새다.\n\n대통령의 강경 조치 배경에는 사법 개혁 공약 관련 질의에",
+    "summary_ko": "니쿠쇼르 단 루마니아 대통령이 팔라툴 코트로체니(Palatul Cotroceni, 루마니아 대통령궁) 기자회견장에서 특정 언론인의 출입을 전면 금지해 위법성 논란이 확산하고 있다. 단 대통령은 10일(현지시간) 저녁 탐사보도 전문 매체 센트룰 데 인베스티가치 미디아 소속 오비디우 반겔레 기자의 질문을 받은 직후 자신의 남은 임기 동안 대통령궁 출입을 금지한다고 발표했다. 이는 권력 검증 질의에 답변을 거부하고 취재권을 박탈한 조치로 풀이되며 법적·정치적 갈등으로 번지는 모양새다.\n\n대통령의 강경 조치 배경에는 사법 개혁 공약 관련 ",
     "url": "internal://explainer_324592",
     "source": "NewsFinal",
     "category": "정치·외교",
@@ -1053,6 +1288,10 @@
       {
         "timestamp": "2026-11-13 01:11",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-13 09:13",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -5176,7 +5415,7 @@
     "id": 324592,
     "title_en": "루마니아 코트로체니궁 기자회견서 언론인 영구 출입금지…법적 논란 확산",
     "title_ko": "루마니아 코트로체니궁 기자회견서 언론인 영구 출입금지…법적 논란 확산",
-    "summary_ko": "11일(현지시간) 니쿠쇼르 단 루마니아 대통령이 팔라툴 코트로체니(Palatul Cotroceni)에서 열린 기자회견 말미에 탐사보도 전문 매체 센트룰 데 인베스티가치 미디아(Centrul de Investigații Media) 소속의 오비디우 반겔레(Ovidiu Vanghele) 기자를 향해 자신의 임기 동안 대통령궁 기자회견장 출입을 전면 금지한다고 선언했다.\n\n사건의 발단은 회견 마지막 순서에서 오비디우 반겔레 기자가 니쿠쇼르 단 대통령에게 던진 질문이었다. 그는 니쿠쇼르 단 대통령이 지난 4월 8일 임명한 크리스티나 키리아",
+    "summary_ko": "10일(현지시간) 니쿠쇼르 단 루마니아 대통령이 팔라툴 코트로체니(Palatul Cotroceni)에서 열린 기자회견 말미에 탐사보도 전문 매체 센트룰 데 인베스티가치 미디아(Centrul de Investigații Media) 소속의 오비디우 반겔레(Ovidiu Vanghele) 기자를 향해 자신의 임기 동안 대통령궁 기자회견장 출입을 전면 금지한다고 선언했다.\n\n사건의 발단은 회견 마지막 순서에서 오비디우 반겔레 기자가 니쿠쇼르 단 대통령에게 던진 질문이었다. 그는 니쿠쇼르 단 대통령이 지난 4월 8일 임명한 크리스티나 키리아",
     "url": "internal://cluster_20261111_aedc085c",
     "source": "NewsFinal",
     "category": "정치·외교",
@@ -5197,6 +5436,10 @@
       {
         "timestamp": "2026-11-11 18:15",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-13 09:13",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
