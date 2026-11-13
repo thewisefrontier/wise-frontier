@@ -2,8 +2,8 @@
   {
     "id": 325264,
     "title_en": "러시아 드론 공습으로 우크라이나 키이우 병원 피해…오데사 사망자 발생",
-    "title_ko": "러시아 드론 공습으로 우크라이나 키이우 병원 피해…오데사 사망자 발생",
-    "summary_ko": "13일(현지시간) 우크라이나 수도 키이우의 셰우첸키우스키이 지역 의료시설이 러시아의 드론 공습을 받아 2층 건물이 부분적으로 파괴되고 화재가 발생했다. 우크라이나 국가비상서비스에 따르면 병원 직원들이 30명을 대피시켰고, 긴급 구조대가 추가로 7명을 구조했다. 비상서비스가 공개한 영상에는 휠체어와 목발을 이용하는 환자들이 소방대원들의 진화 작업 속에서 안전한 곳으로 대피하는 모습이 담겼다.\n\n남부 항구도시 오데사에서도 별도의 러시아 드론 공습으로 2명이 사망하고 5명이 부상했다고 세르히 리사크 오데사시 군행정청장이 밝혔다. 이번 공",
+    "title_ko": "우크라이나 전역 에너지 시설·의료기관 피습…사상자 속출",
+    "summary_ko": "13일(현지시간) 우크라이나 수도 키이우의 셰우첸키우스키이 지역 의료시설이 러시아의 드론 공습을 받아 2층 건물이 부분적으로 파괴되고 화재가 발생했다. 우크라이나 국가비상서비스에 따르면 병원 직원들이 30명을 대피시켰고, 긴급 구조대가 추가로 7명을 구조했다. 화재는 진화되었으나 이동이 불편한 환자들의 대피 과정에서 큰 차질이 빚어졌다.\n\n남부 항구도시 오데사에서도 러시아의 드론 공습으로 2명이 사망하고 5명이 부상했다고 세르히 리사크 오데사시 군행정청장이 밝혔다. 주택 1채와 차량 여러 대가 파손되었으며 소방대원들이 현장에서 진화",
     "url": "internal://cluster_20261113_aa1abec2",
     "source": "NewsFinal",
     "category": "자원·에너지",
@@ -11,8 +11,8 @@
     "region": "global",
     "country": "우크라이나",
     "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-13 22:23",
+    "score": 5,
+    "created_at": "2026-11-14 00:19",
     "countries": [
       "우크라이나",
       "러시아"
@@ -25,10 +25,14 @@
       {
         "timestamp": "2026-11-13 22:23",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-14 00:19",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
-    "is_travel": false,
+    "is_travel": true,
     "source_published_at": null,
     "source_data": {
       "src_ids": [
@@ -39,6 +43,50 @@
       "kr_coverage_30d": 29
     },
     "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "continuation_of_id": null,
+    "summary_3lines_en": "",
+    "investment_idea_en": "",
+    "noindex": true
+  },
+  {
+    "id": 325273,
+    "title_en": "세네갈, 7년 만의 홈경기 성황…티켓 대란 속 라민 카마라 건강 우려",
+    "title_ko": "세네갈, 7년 만의 홈경기 성황…티켓 대란 속 라민 카마라 건강 우려",
+    "summary_ko": "13일(현지시간) 세네갈 축구 국가대표팀은 다카르의 레올로프 세다르 센고르 스타디움에서 열린 수단과의 경기에서 4대 1로 승리했다. 이번 경기는 대표팀이 7년 만에 홈구장으로 복귀한 무대로 약 6만 장의 티켓이 완판되며 매진을 기록했다. 경기장에는 수많은 관중이 찾아와 열띤 응원을 펼쳤고 그라운드 위 선수들도 승리를 거두며 기대에 부응했다.\n\n그러나 경기 전부터 입장을 기다리던 관중들 사이에서 큰 혼란이 발생했다. 오렌지의 맥 이트를 통해 온라인으로 티켓을 구매한 많은 팬들이 게이트 앞의 미숙한 통제 시스템과 절대적으로 부족한 현장",
+    "url": "internal://cluster_20261114_0d04a56c",
+    "source": "NewsFinal",
+    "category": "스포츠",
+    "subcategory": "cluster_20261114_0d04a56c",
+    "region": "africa",
+    "country": "세네갈",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-14 00:18",
+    "countries": [
+      "세네갈"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_lamine_camara.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-14T00:18:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-14 00:18",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "src_ids": [
+        2477944,
+        2477880,
+        2475609
+      ],
+      "kr_coverage_30d": 0
+    },
+    "image_credit": "사진: Aboubacarkhoraa (CC BY-SA 4.0, Wikimedia Commons)",
     "continuation_of_id": null,
     "summary_3lines_en": "",
     "investment_idea_en": "",
@@ -686,6 +734,10 @@
       {
         "timestamp": "2026-11-13 22:22",
         "note": "마이크로소프트, 이메일 발송 대기 48시간 연장"
+      },
+      {
+        "timestamp": "2026-11-14 00:06",
+        "note": "MS, 장애 원인과 복구 시점 추가 조사 중"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -2252,228 +2304,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": false
-  },
-  {
-    "id": 325037,
-    "title_en": "알렉산드르 다르치예프 주미 러시아 대사 66세로 별세",
-    "title_ko": "알렉산드르 다르치예프 주미 러시아 대사 66세로 별세",
-    "summary_ko": "알렉산드르 다르치예프(Alexander Darchiev) 주미 러시아 대사가 11일(현지시간) 66세를 일기로 갑작스럽게 사망했다. 러시아 외무부는 이날 성명을 통해 다르치예프 대사의 별세 소식을 공식 확인했으나, 구체적인 사망 원인이나 경위에 대해서는 언급하지 않았다.\n\n다르치예프 대사는 지난 2025년 3월 주미 러시아 대사직에 부임했다. 그는 부임 이후 약 18개월 동안 워싱턴에서 러시아의 외교적 입장을 대변해 왔다. 그는 러시아 외교부 내에서 경험이 풍부한 지도자이자 뛰어난 외교관으로 평가받아 왔다.\n\n그는 러시아의 외교 정",
-    "url": "internal://realtrend_Alexander_Darchiev_2026111223",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "realtrend_Alexander_Darchiev",
-    "region": "europe",
-    "country": "러시아",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-11-12 23:55",
-    "countries": [
-      "러시아",
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_alexander_darchiev.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-12T23:55:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-12 23:55",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "tags": [
-        "ambassador",
-        "carousel",
-        "featured",
-        "international news",
-        "russia",
-        "texto",
-        "ប្រទេសរុស្ស៊ី",
-        "ព័ត៌មានអន្ដរជាតិ",
-        "សហរដ្ឋ​អាមេរិក"
-      ]
-    },
-    "image_credit": "사진: Russian Orthodox Cathedral of St John the Baptist, Washington DC (CC BY-SA 2.0, Wikimedia Commons)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 325036,
-    "title_en": "이탈리아 전역 학교서 폭탄 테러 허위 협박…정부 '대피 금지' 프로토콜 마련",
-    "title_ko": "이탈리아 전역 학교서 폭탄 테러 허위 협박…정부 '대피 금지' 프로토콜 마련",
-    "summary_ko": "이탈리아 전역의 수많은 학교를 대상으로 12일(현지시간) 또다시 폭탄 테러 협박 이메일이 발송돼 교육 현장에 큰 혼란이 빚어졌다. 전날 전국적으로 수천 곳의 학교를 마비시켰던 허위 협박 사태가 이틀째 이어지면서, 이탈리아 정부는 학교 현장에 무분별한 대피를 자제하라는 지침을 내렸다.\n\n이번 협박 메일은 필리핀 교육부 소속 과학 교사의 해킹된 계정을 통해 발송된 것으로 확인됐다. '미하일 안드로포프'라는 가명을 사용하는 발신자는 메일을 통해 이탈리아 정부 청사인 키지 궁(Palazzo Chigi)을 포함한 주요 시설에 폭발물을 설치했",
-    "url": "internal://cluster_20261112_efda37ba",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "cluster_20261112_efda37ba",
-    "region": "global",
-    "country": "이탈리아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-12 23:48",
-    "countries": [
-      "이탈리아",
-      "프랑스"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_1072366.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-12T23:48:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-12 23:48",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": true,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        2402628,
-        2399293,
-        2398744,
-        2398704
-      ],
-      "kr_coverage_30d": 31
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": false
-  },
-  {
-    "id": 325035,
-    "title_en": "프랑스 고교 시위 격화에 정부 '무관용'…교육계 폭력 사태 전면 사법처리",
-    "title_ko": "프랑스 고교 시위 격화에 정부 '무관용'…교육계 폭력 사태 전면 사법처리",
-    "summary_ko": "프랑스 정부가 12일(현지시간) 최근 고등학교 등교 거부 및 시위 과정에서 발생한 폭력 사태와 관련해 관련자 전원에 대한 '체포 및 사법처리' 방침을 공식화했다. 마티뇽 총리실은 지난 10일 교육부, 내무부, 법무부 등 관계 부처와 최다 피해 지역의 학교장 및 고검장들이 참석한 화상 회의를 열고 이 같은 대응책을 확정했다고 밝혔다.\n\n정부에 따르면 최근 시위는 '잔류 소수'의 학교를 중심으로 이어지고 있으나, 이 과정에서 벌어진 폭력의 수위는 극단으로 치닫고 있다. 현재까지 집계된 피해 규모는 학생 364명과 교직원 245명을 포함",
-    "url": "internal://cluster_20261112_8a4b9db3",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "cluster_20261112_8a4b9db3",
-    "region": "global",
-    "country": "프랑스",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-12 23:45",
-    "countries": [
-      "프랑스"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_4212403.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-12T23:45:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-12 23:45",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": true,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        2403469,
-        2401354,
-        2401403,
-        2399151,
-        2396940
-      ],
-      "kr_coverage_30d": 4
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": false
-  },
-  {
-    "id": 325034,
-    "title_en": "케냐 북동부 국경지대서 이슬람 극단주의 무장조직 알샤바브의 차량 매복 공격으로 8명 사망",
-    "title_ko": "케냐 북동부 국경지대서 이슬람 극단주의 무장조직 알샤바브의 차량 매복 공격으로 8명 사망",
-    "summary_ko": "지난 11일(현지시간) 소말리아와 국경을 맞댄 케냐 북동부 만데라 카운티의하다르수 지역에서 도로 건설 노동자들을 호위하던 차량이 알샤바브(Al-Shabaab) 소속 무장대원들의 매복 공격을 받아 최소 8명이 사망했다고 현지 경찰과 당국이 밝혔다. 모하메드 아단 칼리프(Mohamed Adan Khalif) 만데라 카운티 주지사는 이번 공격으로 도로 건설 노동자 5명과 경찰 예비군 2명, 그리고 차량 운전사 1명이 숨졌다고 확인했다. 희생된 운전사의 신원은 하산 후세인 쿠소(Hassan Hussein Kussow)로 확인되었으며, 경찰",
-    "url": "internal://trend_소말리아_2026111223",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "trend_소말리아",
-    "region": "africa",
-    "country": "소말리아",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-11-12 23:42",
-    "countries": [
-      "소말리아",
-      "케냐",
-      "에티오피아"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_al_shabaab_somalia.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-12T23:42:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-12 23:42",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: Wikimedia Commons",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 325033,
-    "title_en": "브라질, 엠폭스 백신 2만 5천 회분 확보… 오스트리아는 교도소 내 감염 발생",
-    "title_ko": "브라질, 엠폭스 백신 2만 5천 회분 확보… 오스트리아는 교도소 내 감염 발생",
-    "summary_ko": "브라질 보건부는 8일(현지시간) 엠폭스 백신 2만 5천 회분을 확보했다고 발표했다. 이번 물량은 범미보건기구(PAHO)를 통해 덴마크의 백신 제조사와 협상한 결과로, 향후 3주 이내에 브라질로 인도될 예정이다. 당초 2만 회분을 도입할 계획이었으나 협상을 통해 5천 회분을 추가로 확보했다.\n\n알렉산드르 파질랴(Alexandre Padilha) 브라질 보건부 장관은 이번 추가 도입이 전국적인 백신 재고를 강화하기 위한 조치라고 밝혔다. 브라질 정부는 엠폭스 백신이 전 세계적으로 부족한 상황임을 고려해, 기존 1회분으로 최대 5명까지 ",
-    "url": "internal://trend_mpox_2026111223",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "trend_mpox",
-    "region": "latin_america",
-    "country": "브라질",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-11-12 23:36",
-    "countries": [
-      "브라질",
-      "오스트리아"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_6165772.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-12T23:36:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-12 23:36",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-13 11:59",
-        "note": "브라질 엠폭스 확진자 1000명 넘어섰다."
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
   }
 ]

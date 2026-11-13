@@ -4512,22 +4512,6 @@
     "updated_at": "2026-08-09 07:08"
   },
   {
-    "id": "stone_co",
-    "name": "StoneCo Ltd.",
-    "name_ko": "스톤",
-    "country": "브라질",
-    "country_flag": "🌍",
-    "exchange": "NASDAQ",
-    "ticker": "STNE",
-    "sector": "핀테크",
-    "description": "2012년에 설립된 브라질의 대표적인 핀테크 기업으로, 소상공인을 위한 결제 처리 및 금융 관리 소프트웨어를 제공합니다. 결제 단말기뿐만 아니라 가맹점 관리 시스템과 금융 서비스를 통합하여 중소기업의 디지털 전환을 지원합니다. 브라질 결제 시장에서 혁신적인 기술력과 서비스로 강력한 점유율을 확보하고 있습니다.",
-    "founded_year": 2012,
-    "headquarters": "상파울루, 브라질",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-22 23:37"
-  },
-  {
     "id": "stoneco",
     "name": "StoneCo Ltd.",
     "name_ko": "스톤코",
@@ -4542,6 +4526,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-29 20:49"
+  },
+  {
+    "id": "stone_co",
+    "name": "StoneCo Ltd.",
+    "name_ko": "스톤",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "NASDAQ",
+    "ticker": "STNE",
+    "sector": "핀테크",
+    "description": "2012년에 설립된 브라질의 대표적인 핀테크 기업으로, 소상공인을 위한 결제 처리 및 금융 관리 소프트웨어를 제공합니다. 결제 단말기뿐만 아니라 가맹점 관리 시스템과 금융 서비스를 통합하여 중소기업의 디지털 전환을 지원합니다. 브라질 결제 시장에서 혁신적인 기술력과 서비스로 강력한 점유율을 확보하고 있습니다.",
+    "founded_year": 2012,
+    "headquarters": "상파울루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-22 23:37"
   },
   {
     "id": "xp_inc",
@@ -4606,6 +4606,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-10-15 04:10"
+  },
+  {
+    "id": "orange_sonatel",
+    "name": "Sonatel (Orange Group subsidiary)",
+    "name_ko": "소나텔 (오렌지 그룹 자회사)",
+    "country": "세네갈",
+    "country_flag": "🌍",
+    "exchange": "BRVM",
+    "ticker": "SNTS",
+    "sector": "통신",
+    "description": "소나텔은 세네갈의 선도적인 통신 기업으로, 프랑스 다국적 통신사 오렌지(Orange)의 자회사로 운영되고 있습니다. 모바일, 유선전화, 인터넷 및 모바일 금융 서비스(Orange Money)를 제공하며 서아프리카 지역에서 강력한 시장 지위를 갖고 있습니다. 세네갈을 포함한 서아프리카 경제통화연합(UEMOA) 지역의 핵심 통신 인프라를 담당합니다.",
+    "founded_year": 1985,
+    "headquarters": "다카르, 세네갈",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-11-14 00:18"
   },
   {
     "id": "rudisa",
@@ -5040,22 +5056,6 @@
     "updated_at": null
   },
   {
-    "id": "bank_of_the_philippines_islands",
-    "name": "Bank of the Philippine Islands",
-    "name_ko": "필리핀 제도은행",
-    "country": "필리핀",
-    "country_flag": "🇵🇭",
-    "exchange": "PSE",
-    "ticker": "BPI",
-    "sector": "은행",
-    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 종합 금융 서비스를 제공하며 필리핀 금융 시장에서 높은 신뢰와 견고한 입지를 다지고 있다. 본 기사에서는 공공 인프라 지출 감소 추정을 발표한 주요 금융기관으로 언급되었다.",
-    "founded_year": 1851,
-    "headquarters": "마카티, 필리핀",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-07 13:12"
-  },
-  {
     "id": "bank_of_the_philippine_islands",
     "name": "Bank of the Philippine Islands",
     "name_ko": "필리핀 제도은행",
@@ -5070,6 +5070,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-30 02:38"
+  },
+  {
+    "id": "bank_of_the_philippines_islands",
+    "name": "Bank of the Philippine Islands",
+    "name_ko": "필리핀 제도은행",
+    "country": "필리핀",
+    "country_flag": "🇵🇭",
+    "exchange": "PSE",
+    "ticker": "BPI",
+    "sector": "은행",
+    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 종합 금융 서비스를 제공하며 필리핀 금융 시장에서 높은 신뢰와 견고한 입지를 다지고 있다. 본 기사에서는 공공 인프라 지출 감소 추정을 발표한 주요 금융기관으로 언급되었다.",
+    "founded_year": 1851,
+    "headquarters": "마카티, 필리핀",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-07 13:12"
   },
   {
     "id": "basel_tiles",
