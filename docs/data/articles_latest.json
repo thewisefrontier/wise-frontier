@@ -1,5 +1,110 @@
 [
   {
+    "id": 325359,
+    "title_en": "[국제유가] WTI 배럴당 89달러…중동 정세와 평화 기대 속 소폭 상승",
+    "title_ko": "[국제유가] WTI 배럴당 89달러…중동 정세와 평화 기대 속 소폭 상승",
+    "summary_ko": "국제유가가 13일(현지시간) 상승했다. WTI 원유 선물은 시장 집계에 따르면 뉴욕상업거래소(NYMEX)에서 배럴당 88.92달러에 거래를 마쳤다. 전일 종가(88.74달러) 대비 0.20%(0.18달러) 올랐다.\n\n브렌트유는 배럴당 96.12달러를 기록했다. 전일 종가(95.82달러) 대비 0.31%(0.30달러) 상승했다.\n\n이날 유가 시장은 최근 이어진 중동 지역의 공격과 공급 차질 우려에도 불구하고, 이란과 우크라이나의 평화 기대감이 확산하면서 변동성을 보였다. 페르시아만 지역의 공급 회복 전망이 제기되는 한편, 지정학적 리",
+    "url": "internal://oil_price_2026-11-13",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국제유가",
+    "region": "글로벌",
+    "country": "국제",
+    "country_flag": "🛢️",
+    "score": 1,
+    "created_at": "2026-11-14 07:07",
+    "countries": [
+      "미국",
+      "사우디아라비아",
+      "러시아"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/oil_2026_11_13_pid6282376.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-14T07:07:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-14 07:07",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "wti": {
+        "pct": 0.20284216876678687,
+        "prev": 88.73999786376953,
+        "price": 88.92,
+        "change": 0.18000213623047046
+      },
+      "date": "2026-11-13",
+      "brent": {
+        "pct": 0.3130873576823759,
+        "prev": 95.81999969482422,
+        "price": 96.12,
+        "change": 0.3000003051757858
+      },
+      "source": "Yahoo Finance"
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 325360,
+    "title_en": "[국제금값] 금 온스당 3885달러…하락",
+    "title_ko": "[국제금값] 금 온스당 3885달러…하락",
+    "summary_ko": "국제 금값이 13일(현지시간) 하락했다. 뉴욕 시장에서 금 선물은 온스당 3885.20달러에 거래를 마쳤다. 시장 집계에 따르면 이는 전일 종가(3885.30달러) 대비 0.00% 하락, 하락폭 0.10달러를 기록한 수치다.\n\n이날 장중 거래 범위는 3871.10달러에서 3927.20달러 사이를 기록했다. 최근 5거래일 동안 금 가격은 9일 종가 4114.50달러 대비 5.57% 하락했다. 또한 현재 가격은 52주 고점 5586.20달러 대비 30.45% 낮은 수준에 머물고 있다.\n\n최근 외신 보도에 따르면 금 시장은 연방준비제도의",
+    "url": "internal://gold_price_2026-11-13",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국제금값",
+    "region": "글로벌",
+    "country": "국제",
+    "country_flag": "🪙",
+    "score": 1,
+    "created_at": "2026-11-14 07:07",
+    "countries": [
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/gold_2026_11_13_pid163553.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-14T07:07:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-14 07:07",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "pct": -0.0025763172725924016,
+      "date": "2026-11-13",
+      "prev": 3885.300048828125,
+      "price": 3885.199951171875,
+      "change": -0.10009765625,
+      "source": "시장 집계",
+      "day_low": 3871.10009765625,
+      "day_high": 3927.199951171875,
+      "high_52w": 5586.2,
+      "week_pct": -5.572974816578564,
+      "week_start": 4114.5,
+      "from_high_pct": -30.4500384667238,
+      "week_start_date": "2026-11-09"
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
     "id": 325354,
     "title_en": "동아시아, 영하권 강추위와 눈·흐림",
     "title_ko": "동아시아, 영하권 강추위와 눈·흐림",
