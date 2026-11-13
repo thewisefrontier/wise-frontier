@@ -1,5 +1,71 @@
 [
   {
+    "id": 325336,
+    "title_en": "[국내유가] 휘발유 리터당 1855원…전국 평균 소폭 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1855원…전국 평균 소폭 하락",
+    "summary_ko": "한국석유공사 오피넷이 14일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1855원으로 집계됐다.\n\n이날 오피넷에 따르면 휘발유 평균 가격은 리터당 1854.91원으로 전일 대비 0.10원 하락했다. 경유는 리터당 1841.23원으로 전일보다 0.38원 내렸으며, LPG 부탄은 리터당 1177.98원으로 전일에 비해 0.02원 하락했다.\n\n최근 유가 흐름은 국제시세 변동과 정유사 공급가격 조정에 영향을 받고 있는 것으로 나타났다. 정유사 도매가격 변화와 고공행진을 거듭한 유가 상승세가 맞물려 유종별 가격이 소폭의",
+    "url": "internal://opinet_price_2026-11-14",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-11-14 05:12",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_11_14_pid175122.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-14T05:12:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-14 05:12",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-11-14",
+      "prices": {
+        "B027": {
+          "diff": -0.1,
+          "name": "휘발유",
+          "price": 1854.91
+        },
+        "B034": {
+          "diff": -1.23,
+          "name": "고급휘발유",
+          "price": 2376.53
+        },
+        "C004": {
+          "diff": -0.2,
+          "name": "실내등유",
+          "price": 1569.7
+        },
+        "D047": {
+          "diff": -0.38,
+          "name": "경유",
+          "price": 1841.23
+        },
+        "K015": {
+          "diff": -0.02,
+          "name": "LPG(부탄)",
+          "price": 1177.98
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 325334,
     "title_en": "[기업 분석] 프로미스 뉴로사이언스, 알츠하이머 치료제 후보물질 임상 1b상 완료 앞두고 가이던스 제시",
     "title_ko": "[기업 분석] 프로미스 뉴로사이언스, 알츠하이머 치료제 후보물질 임상 1b상 완료 앞두고 가이던스 제시",

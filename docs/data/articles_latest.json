@@ -1,5 +1,71 @@
 [
   {
+    "id": 325336,
+    "title_en": "[국내유가] 휘발유 리터당 1855원…전국 평균 소폭 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1855원…전국 평균 소폭 하락",
+    "summary_ko": "한국석유공사 오피넷이 14일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1855원으로 집계됐다.\n\n이날 오피넷에 따르면 휘발유 평균 가격은 리터당 1854.91원으로 전일 대비 0.10원 하락했다. 경유는 리터당 1841.23원으로 전일보다 0.38원 내렸으며, LPG 부탄은 리터당 1177.98원으로 전일에 비해 0.02원 하락했다.\n\n최근 유가 흐름은 국제시세 변동과 정유사 공급가격 조정에 영향을 받고 있는 것으로 나타났다. 정유사 도매가격 변화와 고공행진을 거듭한 유가 상승세가 맞물려 유종별 가격이 소폭의",
+    "url": "internal://opinet_price_2026-11-14",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-11-14 05:12",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_11_14_pid175122.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-14T05:12:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-14 05:12",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-11-14",
+      "prices": {
+        "B027": {
+          "diff": -0.1,
+          "name": "휘발유",
+          "price": 1854.91
+        },
+        "B034": {
+          "diff": -1.23,
+          "name": "고급휘발유",
+          "price": 2376.53
+        },
+        "C004": {
+          "diff": -0.2,
+          "name": "실내등유",
+          "price": 1569.7
+        },
+        "D047": {
+          "diff": -0.38,
+          "name": "경유",
+          "price": 1841.23
+        },
+        "K015": {
+          "diff": -0.02,
+          "name": "LPG(부탄)",
+          "price": 1177.98
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 325334,
     "title_en": "[기업 분석] 프로미스 뉴로사이언스, 알츠하이머 치료제 후보물질 임상 1b상 완료 앞두고 가이던스 제시",
     "title_ko": "[기업 분석] 프로미스 뉴로사이언스, 알츠하이머 치료제 후보물질 임상 1b상 완료 앞두고 가이던스 제시",
@@ -2415,99 +2481,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 325076,
-    "title_en": "The Seven Moons of Maali Almeida",
-    "title_ko": "[오늘의 책] 쉐한 카루나티라카의 『The Seven Moons of Maali Almeida』, 죽음 너머의 시선으로 그려낸 스리랑카 비극",
-    "summary_ko": "스리랑카(Sri Lanka) 작가 쉐한 카루나티라카(Shehan Karunatilaka)의 소설 『The Seven Moons of Maali Almeida』는 2022년 세계적 권위의 부커상을 수상하며 문단의 큰 주목을 받았다. 스리랑카 내전의 참상을 독창적인 저승 세계관과 신랄한 풍자로 담아낸 이 작품은 역사적 비극과 문학적 상상력을 성공적으로 결합했다는 평가를 받는다. 서구 출판계의 난색 속에서도 뛰어난 작품성을 입증하며 세계적 문학상을 거머쥔 이 서사는 현재까지도 독자들에게 깊은 울림을 전하고 있다.\n\n1980년대 스리랑카를",
-    "url": "internal://literature_Q114732705",
-    "source": "NewsFinal",
-    "category": "문화·예술",
-    "subcategory": "오늘의책",
-    "region": "global",
-    "country": "스리랑카",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-13 05:11",
-    "countries": [
-      "스리랑카"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/literature_cover_q114732705.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-13T05:11:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-13 05:11",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-13 09:13",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-11-13 09:23",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "enwiki": "The Seven Moons of Maali Almeida",
-      "kowiki": null,
-      "source": "prize",
-      "wikidata": "Q114732705"
-    },
-    "image_credit": "The Seven Moons of Maali Almeida 표지",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
-  },
-  {
-    "id": 325075,
-    "title_en": "[기업 분석] 타깃, 매출 1048억 달러 기록",
-    "title_ko": "[기업 분석] 타깃, 매출 1048억 달러 기록",
-    "summary_ko": "[사업]\n- 타깃은 미국 전역에 1995개 매장을 운영하고 강력한 디지털 플랫폼을 갖춘 미국 유통 기업이다.\n- 이 회사는 식품부터 의류까지 다양한 상품을 판매하며 애플, 씨브이에스 헬스, 스타벅스, 울타 뷰티와 전략적 제휴를 맺었다.\n- 타깃은 소셜 미디어 플랫폼에서 가장 팔로워가 많은 유통 기업이며 여성 의류 사업을 전개하고 있다.\n- 타깃은 리모델링한 매장의 식품 섹션을 확장해 식품 사업을 강화했다.\n\n[최근 실적]\n- 타깃의 2025 회계연도 매출은 1048억 달러를 기록해 직전 회계연도보다 1.7% 줄었다.\n- 같은 기간 ",
-    "url": "internal://company_analysis_20261113_target",
-    "source": "NewsFinal",
-    "category": "산업·기업",
-    "subcategory": "company_analysis_20261113_target",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 200,
-    "created_at": "2026-11-13 05:09",
-    "countries": null,
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/company_analysis_20261113_target_pid1275480.jpg",
-    "view_count": 0,
-    "first_published_at": null,
-    "update_log": [
-      {
-        "timestamp": "2026-11-13 05:09",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-13 09:13",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "company": "Target",
-      "src_ids": [
-        2346226
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   }
 ]
