@@ -1,5 +1,95 @@
 [
   {
+    "id": 325435,
+    "title_en": "유럽, 주말 전역 비 소식…이탈리아 뇌우 동반",
+    "title_ko": "유럽, 주말 전역 비 소식…이탈리아 뇌우 동반",
+    "summary_ko": "14일(현지시간) 유럽 주요국은 주말 동안 대부분 지역에서 비가 내릴 것으로 예상된다. 영국과 독일, 프랑스, 이탈리아, 스페인, 러시아 등지에서는 주말 사이 비 소식이 이어질 전망이다. 영국은 토요일 흐린 날씨를 보이다 일요일 90%의 강수 확률로 비가 내릴 것으로 보이며, 기온은 최고 10도에서 최저 5도 사이를 오갈 것으로 예상된다.\n\n독일은 토요일 부분적으로 흐린 뒤 일요일 58%의 확률로 약한 비가 내릴 것으로 보이며, 프랑스 역시 토요일 흐린 날씨 끝에 일요일 85%의 확률로 약한 비가 내릴 것으로 전망된다. 이탈리아는 ",
+    "url": "internal://weather_group_유럽_weekend20261114",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_유럽_weekend20261114",
+    "region": "europe",
+    "country": "유럽",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-14 13:03",
+    "countries": [
+      "영국",
+      "독일",
+      "프랑스",
+      "이탈리아",
+      "스페인",
+      "러시아",
+      "폴란드",
+      "우크라이나"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261114_pid2863539_germany.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-14T13:03:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-14 13:03",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 325434,
+    "title_en": "아프리카, 지역별 뇌우와 소나기 동반한 변덕스러운 주말 예보",
+    "title_ko": "아프리카, 지역별 뇌우와 소나기 동반한 변덕스러운 주말 예보",
+    "summary_ko": "14일(현지시간) 아프리카 주요국은 지역에 따라 뚜렷한 기상 차이를 보일 것으로 예상된다. 이번 주말 나이지리아와 에티오피아 등은 대체로 흐리거나 맑은 날씨를 보이겠으나, 케냐와 남아공, 가나, 탄자니아, 앙골라 등지에서는 비 소식이 이어질 것으로 전망된다. 전체적으로 최저 8°C에서 최고 34°C 사이의 기온 분포를 나타낼 것으로 보인다.\n\n토요일 나이지리아는 흐린 날씨 속 최고 32°C, 최저 23°C를 기록할 것으로 보이며, 일요일에는 맑은 날씨와 함께 최고 34°C까지 기온이 오를 것으로 예상된다. 에티오피아는 토요일 부분적",
+    "url": "internal://weather_group_아프리카_weekend20261114",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_아프리카_weekend20261114",
+    "region": "africa",
+    "country": "아프리카",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-14 13:02",
+    "countries": [
+      "나이지리아",
+      "케냐",
+      "남아공",
+      "이집트",
+      "모로코",
+      "알제리",
+      "에티오피아",
+      "가나",
+      "탄자니아",
+      "앙골라"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261114_pid4639420_nigeria.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-14T13:02:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-14 13:02",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 325422,
     "title_en": "미국 전역 항공기 이륙 일시 중단 사태 발생…연방항공청 시스템 복구 완료",
     "title_ko": "미국 전역 항공 통신 장애…수천 편 결항·지연 항공 대란",
@@ -805,43 +895,6 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 325365,
-    "title_en": "[종목 동향] 엔비디아 주가 2.01% 하락…최고경영자 거취 보도 여파",
-    "title_ko": "[종목 동향] 엔비디아 주가 2.01% 하락…최고경영자 거취 보도 여파",
-    "summary_ko": "◆ 주가 동향\n\n나스닥에서 엔비디아 주가는 13일(현지시간) 젠슨 황 최고경영자(CEO)의 거취를 둘러싼 보도와 미국 상무부의 칩 수출 관련 조사 등 정치·경영 리스크가 겹치면서 하락세를 기록했다. 외신 보도에 따르면 엔비디아가 젠슨 황 CEO의 후임으로 암(Arm)의 르네 하스 최고경영자를 접촉했다는 소식이 전해지면서 조직 안정성에 대한 우려가 확산됐다.\n\n여기에 미국 의회가 엔비디아의 반도체 수출 스캔들과 관련해 하워드 루트닉 상무장관과 젠슨 황 CEO를 소환해 청문회를 개최하기로 하면서 규제 압박이 거세졌다. 백악관 내부의 대",
-    "url": "internal://stock_news_2026-11-13",
-    "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "종목동향",
-    "region": "global",
-    "country": "미국",
-    "country_flag": "🇺🇸",
-    "score": 1,
-    "created_at": "2026-11-14 07:27",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/stock_news_2026_11_13_pid1905224.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-14T07:27:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-14 07:27",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   },
   {
     "id": 325359,
@@ -1774,56 +1827,6 @@
     "summary_3lines_en": "",
     "investment_idea_en": "",
     "noindex": false
-  },
-  {
-    "id": 325312,
-    "title_en": "마이크로소프트 서비스 전 세계 먹통…74개국 기업·정부 업무 마비",
-    "title_ko": "마이크로소프트 서비스 전 세계 먹통…74개국 기업·정부 업무 마비",
-    "summary_ko": "13일(현지시간) 마이크로소프트의 클라우드 서비스가 전 세계 74개국에서 동시다발적으로 중단되는 대규모 장애가 발생했다. 이번 사태로 아웃룩(Outlook), 팀즈(Teams), 코파일럿(Copilot)을 포함한 마이크로소프트 365 서비스 접속이 차단되면서 전 세계 기업과 정부 기관, 학교 업무가 일시적으로 마비됐다.\n\n인도에서는 이번 장애의 여파로 스파이스젯(SpiceJet) 항공사가 항공편 3편을 취소했으며, 다수의 항공편 운항에 차질이 빚어졌다. 또한 각국 경찰과 은행 등 주요 사회 기반 시설에서도 시스템 오류가 보고되면서 ",
-    "url": "internal://realtrend_Microsoft_Global_Outage_2026111403",
-    "source": "NewsFinal",
-    "category": "IT·과학",
-    "subcategory": "realtrend_Microsoft_Global_Out",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-11-14 03:59",
-    "countries": [
-      "인도",
-      "호주",
-      "나이지리아",
-      "남수단"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_695164.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-14T03:59:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-14 03:59",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-14 04:08",
-        "note": "MS 장애 이틀째이나 복구 작업으로 정상화 중"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "tags": [
-        "sectors",
-        "tech news",
-        "world"
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
   },
   {
     "id": 325306,
