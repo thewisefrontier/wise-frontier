@@ -2112,22 +2112,6 @@
     "updated_at": "2026-08-02 21:12"
   },
   {
-    "id": "tcs",
-    "name": "Tata Consultancy Services Limited",
-    "name_ko": "타타 컨설턴시 서비시스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "TCS",
-    "sector": "IT 서비스",
-    "description": "1968년에 설립된 인도 타타 그룹 산하의 세계적인 IT 서비스 및 컨설팅 기업입니다. 전 세계 기업들을 상대로 디지털 전환, 소프트웨어 개발 및 아웃소싱 서비스를 제공합니다.",
-    "founded_year": 1968,
-    "headquarters": "뭄바이, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-02 17:22"
-  },
-  {
     "id": "tata_consultancy_services",
     "name": "Tata Consultancy Services Limited",
     "name_ko": "타타 컨설턴시 서비스",
@@ -2142,6 +2126,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-19 01:21"
+  },
+  {
+    "id": "tcs",
+    "name": "Tata Consultancy Services Limited",
+    "name_ko": "타타 컨설턴시 서비시스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "TCS",
+    "sector": "IT 서비스",
+    "description": "1968년에 설립된 인도 타타 그룹 산하의 세계적인 IT 서비스 및 컨설팅 기업입니다. 전 세계 기업들을 상대로 디지털 전환, 소프트웨어 개발 및 아웃소싱 서비스를 제공합니다.",
+    "founded_year": 1968,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-02 17:22"
   },
   {
     "id": "tata_motors",
@@ -3376,22 +3376,6 @@
     "updated_at": "2026-07-31 00:33"
   },
   {
-    "id": "vkontakte",
-    "name": "VK Company Limited",
-    "name_ko": "브이케이",
-    "country": "러시아",
-    "country_flag": "🌍",
-    "exchange": "MOEX",
-    "ticker": "VKCO",
-    "sector": "통신/IT",
-    "description": "2007년에 설립된 러시아의 대표적인 인터넷 및 기술 기업으로, 동명의 소셜미디어 VKontakte(VK)와 다양한 디지털 서비스를 운영하고 있습니다. 러시아 소셜 미디어 시장에서 독보적인 점유율을 차지하며 현지 온라인 생태계의 핵심 역할을 담당하고 있습니다. 데이터센터 및 온라인 플랫폼 인프라를 기반으로 미디어, 이커머스, 간편결제 등 다방면으로 사업을 확장해 왔습니다.",
-    "founded_year": 2007,
-    "headquarters": "모스크바, 러시아",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-10-18 17:37"
-  },
-  {
     "id": "vk",
     "name": "VK Company Limited",
     "name_ko": "브이케이",
@@ -3406,6 +3390,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-21 19:48"
+  },
+  {
+    "id": "vkontakte",
+    "name": "VK Company Limited",
+    "name_ko": "브이케이",
+    "country": "러시아",
+    "country_flag": "🌍",
+    "exchange": "MOEX",
+    "ticker": "VKCO",
+    "sector": "통신/IT",
+    "description": "2007년에 설립된 러시아의 대표적인 인터넷 및 기술 기업으로, 동명의 소셜미디어 VKontakte(VK)와 다양한 디지털 서비스를 운영하고 있습니다. 러시아 소셜 미디어 시장에서 독보적인 점유율을 차지하며 현지 온라인 생태계의 핵심 역할을 담당하고 있습니다. 데이터센터 및 온라인 플랫폼 인프라를 기반으로 미디어, 이커머스, 간편결제 등 다방면으로 사업을 확장해 왔습니다.",
+    "founded_year": 2007,
+    "headquarters": "모스크바, 러시아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-10-18 17:37"
   },
   {
     "id": "teba",
@@ -5056,22 +5056,6 @@
     "updated_at": null
   },
   {
-    "id": "bank_of_the_philippine_islands",
-    "name": "Bank of the Philippine Islands",
-    "name_ko": "필리핀 제도은행",
-    "country": "필리핀",
-    "country_flag": "🇵🇭",
-    "exchange": "PSE",
-    "ticker": "BPI",
-    "sector": "은행",
-    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 개인 및 기업 금융, 자산 관리, 보험 등 종합적인 금융 서비스를 제공한다. 필리핀 금융 시장에서 높은 신뢰도와 탄탄한 시장 지위를 유지하고 있다.",
-    "founded_year": 1851,
-    "headquarters": "마닐라, 필리핀",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-30 02:38"
-  },
-  {
     "id": "bank_of_the_philippines_islands",
     "name": "Bank of the Philippine Islands",
     "name_ko": "필리핀 제도은행",
@@ -5086,6 +5070,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-07 13:12"
+  },
+  {
+    "id": "bank_of_the_philippine_islands",
+    "name": "Bank of the Philippine Islands",
+    "name_ko": "필리핀 제도은행",
+    "country": "필리핀",
+    "country_flag": "🇵🇭",
+    "exchange": "PSE",
+    "ticker": "BPI",
+    "sector": "은행",
+    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 개인 및 기업 금융, 자산 관리, 보험 등 종합적인 금융 서비스를 제공한다. 필리핀 금융 시장에서 높은 신뢰도와 탄탄한 시장 지위를 유지하고 있다.",
+    "founded_year": 1851,
+    "headquarters": "마닐라, 필리핀",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-30 02:38"
   },
   {
     "id": "basel_tiles",
@@ -5774,6 +5774,38 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-11-11 16:11"
+  },
+  {
+    "id": "gabriel_resources",
+    "name": "Gabriel Resources Ltd.",
+    "name_ko": "가브리엘 리소시스",
+    "country": "루마니아",
+    "country_flag": "🌍",
+    "exchange": "TSX",
+    "ticker": "GBU",
+    "sector": "광업",
+    "description": "1997년에 설립된 캐나다의 광산 개발 기업으로, 루마니아 로시아 몬타나 금광 프로젝트의 대주주로 참여했습니다. 환경 및 허가 문제로 루마니아 정부와 오랜 기간 국제중재 소송을 벌였습니다. 최근 ICSID의 최종 승소 판정으로 거액의 배상금 청구가 기각된 당사자입니다.",
+    "founded_year": 1997,
+    "headquarters": "토론토, 캐나다",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-11-14 20:14"
+  },
+  {
+    "id": "minvest_rosia_montana",
+    "name": "Minvest Rosia Montana S.A.",
+    "name_ko": "민베스트 로시아 몬타나",
+    "country": "루마니아",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "광업",
+    "description": "루마니아의 국영 광업 관련 기업으로, 로시아 몬타나 금·은 광산 개발 프로젝트의 지분을 일부 보유하고 있습니다. 가브리엘 리소시스와 함께 프로젝트 법인인 RMGC의 주주로 참여했습니다. 루마니아 정부의 광산 개발 및 자원 관리 정책과 밀접한 연관이 있습니다.",
+    "founded_year": null,
+    "headquarters": "로시아 몬타나, 루마니아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-11-14 20:14"
   },
   {
     "id": "wizz_air",
