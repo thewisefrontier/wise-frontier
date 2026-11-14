@@ -1,5 +1,220 @@
 [
   {
+    "id": 325630,
+    "title_en": "이탈리아, 페이스북 운영사 메타에 8억 500만 유로 과징금 부과",
+    "title_ko": "이탈리아 당국, 메타에 8억 500만 유로 과징금 부과…갤러리 접근권한 오남용",
+    "summary_ko": "이탈리아 개인정보보호청은 14일(현지시간) 페이스북 이용자의 사진과 동영상에 사전 동의 없이 접근한 혐의로 메타에 8억 500만 유로의 과징금을 부과했다. 이번 제재는 이탈리아 당국이 빅테크 기업에 내린 역대 최대 규모의 과징금이다.\n\n당국은 메타가 안드로이드용 페이스북 앱을 통해 이용자의 갤러리 내 사진과 동영상, 관련 메타데이터를 수집했다고 밝혔다. 문제가 된 기능은 2023년부터 도입된 갤러리에서 제안 받기 기능으로, 이용자가 앱을 탐색할 때 게시물 아이디어를 얻을 수 있도록 스마트폰 갤러리 콘텐츠를 추천하는 서비스다.\n\n조사",
+    "url": "internal://cluster_20261115_39444a93",
+    "source": "NewsFinal",
+    "category": "IT·과학",
+    "subcategory": "cluster_20261115_39444a93",
+    "region": "global",
+    "country": "이탈리아",
+    "country_flag": "",
+    "score": 6,
+    "created_at": "2026-11-15 05:11",
+    "countries": [
+      "이탈리아"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_2765707.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-15T03:09:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-15 03:09",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-15 05:11",
+        "note": "내용 업데이트"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "src_ids": [
+        2568348,
+        2567968,
+        2567254,
+        2567119,
+        2565912,
+        2564175
+      ]
+    },
+    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "continuation_of_id": null,
+    "summary_3lines_en": "",
+    "investment_idea_en": "",
+    "noindex": false
+  },
+  {
+    "id": 325680,
+    "title_en": "[국내유가] 휘발유 리터당 1855원…국제유가 흐름에 소폭 상승",
+    "title_ko": "[국내유가] 휘발유 리터당 1855원…국제유가 흐름에 소폭 상승",
+    "summary_ko": "한국석유공사 오피넷이 15일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1855원으로 집계됐다. 이는 전일 대비 0.13원 오른 수치다.\n\n반면 휘발유를 제외한 다른 주요 유종은 하락세를 나타냈다. 경유는 리터당 1841.18원으로 전일 대비 0.06원 내려갔으며, LPG 부탄은 리터당 1177.97원으로 전일 대비 0.03원 하락했다.\n\n이 같은 국내 유가는 최근 국제유가 변동성과 정유사 공급가격의 흐름에 영향을 받고 있는 것으로 분석된다. 그동안 고공행진을 이어온 국내 기름값은 정유사 도매가 조정 및 비축유",
+    "url": "internal://opinet_price_2026-11-15",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-11-15 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_11_15_pid7292033.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-15T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-15 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-11-15",
+      "prices": {
+        "B027": {
+          "diff": 0.13,
+          "name": "휘발유",
+          "price": 1854.97
+        },
+        "B034": {
+          "diff": -0.33,
+          "name": "고급휘발유",
+          "price": 2374.8
+        },
+        "C004": {
+          "diff": -0.23,
+          "name": "실내등유",
+          "price": 1569.36
+        },
+        "D047": {
+          "diff": -0.06,
+          "name": "경유",
+          "price": 1841.18
+        },
+        "K015": {
+          "diff": -0.03,
+          "name": "LPG(부탄)",
+          "price": 1177.97
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 325679,
+    "title_en": "미 연방항공청, 낡은 구리선 교체 작업 중 오류로 미 전역 비행 중지 명령",
+    "title_ko": "미 연방항공청, 낡은 구리선 교체 작업 중 오류로 미 전역 비행 중지 명령",
+    "summary_ko": "13일(현지시간) 미국 전역의 항공편 운항이 수 시간 동안 전면 중단되는 초유의 사태가 발생했다. 연방항공청(FAA)은 통신 네트워크 장비 업그레이드 과정에서 발생한 시스템 불안정 문제를 이유로 전국적인 지상 정지 명령을 내렸다.\n\n션 더피 미국 교통부 장관은 15일 기자회견을 열고 전날 발생한 대규모 항공 대란의 원인이 오래된 통신선을 교체하는 과정에서 발생했다고 밝혔다. 연방정부 계약업체인 L3하리스(L3Harris) 소속 작업자들이 원격지에 위치한 시설에서 아날로그 구리선을 최신 광섬유 케이블로 교체하는 루틴 유지보수 작업을 ",
+    "url": "internal://cluster_20261115_ab2e34ce",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "cluster_20261115_ab2e34ce",
+    "region": "global",
+    "country": "미국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-15 05:08",
+    "countries": [
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_faa_ground_stop.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-15T05:08:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-15 05:08",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": true,
+    "source_published_at": null,
+    "source_data": {
+      "src_ids": [
+        2576193,
+        2574000,
+        2572127,
+        2572004,
+        2571820,
+        2568272,
+        2568300
+      ]
+    },
+    "image_credit": "사진: Sashimi-b (CC BY-SA 4.0, Wikimedia Commons)",
+    "continuation_of_id": null,
+    "summary_3lines_en": "",
+    "investment_idea_en": "",
+    "noindex": false
+  },
+  {
+    "id": 325633,
+    "title_en": "콩고민주공화국, 프랑코포니 총장 선거서 룰루바 후보 철회…루마니아 출신 치올로시 지지 선언",
+    "title_ko": "콩고민주공화국, 프랑코포니 총장 후보 단일화…르완다와 정면 충돌",
+    "summary_ko": "콩고민주공화국 외교부는 이번 결정이 조직의 분열을 막고 합의를 도출하기 위한 불가피한 선택이라고 설명했다. 동시에 다치안 치올로시 전 루마니아 총리를 차기 사무총장 단일 후보로 지지하겠다고 밝혔다.\n\n이번 조치는 15일부터 이틀간 열리는 제20차 프랑코포니 정상회의 개막을 앞두고 전격적으로 이루어졌다. 콩고민주공화국은 동부 지역 내전을 두고 대립해 온 르완다 출신의 현 사무총장 루이스 무시키와보의 3선 연임을 저지하기 위해 외교력을 집중해 왔다. 무시키와보 총장이 르완다 정부의 지지를 업고 재선을 노리는 가운데, 콩고민주공화국은 후",
+    "url": "internal://cluster_20261115_7785547e",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "cluster_20261115_7785547e",
+    "region": "global",
+    "country": "콩고민주공화국",
+    "country_flag": "",
+    "score": 8,
+    "created_at": "2026-11-15 05:07",
+    "countries": [
+      "콩고민주공화국",
+      "르완다",
+      "루마니아",
+      "세네갈"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_5319462.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-15T03:13:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-15 03:13",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-15 05:07",
+        "note": "내용 업데이트"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "src_ids": [
+        2568438,
+        2567243,
+        2565251,
+        2563865,
+        2563773
+      ]
+    },
+    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "continuation_of_id": null,
+    "summary_3lines_en": "",
+    "investment_idea_en": "",
+    "noindex": true
+  },
+  {
     "id": 325675,
     "title_en": "[기업 분석] 알파벳, 엔비디아 젠슨 황 사임 속 독자 칩 확장으로 주가 상승",
     "title_ko": "[기업 분석] 알파벳, 엔비디아 젠슨 황 사임 속 독자 칩 확장으로 주가 상승",
@@ -427,55 +642,6 @@
     "noindex": true
   },
   {
-    "id": 325633,
-    "title_en": "콩고민주공화국, 프랑코포니 총장 선거서 룰루바 후보 철회…루마니아 출신 치올로시 지지 선언",
-    "title_ko": "콩고민주공화국, 프랑코포니 총장 선거서 룰루바 후보 철회…루마니아 출신 치올로시 지지 선언",
-    "summary_ko": "14일(현지시간) 콩고민주공화국(RDC)이 캄보디아 프놈펜에서 열린 제48차 프랑코포니 장관급 회의(CMF)에서 국제프랑코포니기구(OIF) 사무총장 선거에 출마했던 줄리아나 아마토 룰루바 후보의 사퇴 의사를 공식 발표했다. 콩고민주공화국 외교부는 이번 결정이 조직의 분열을 막고 합의를 도출하기 위한 불가피한 선택이라고 설명했다. 동시에 콩고민주공화국은 다치안 치올로시 전 루마니아 총리를 차기 사무총장 후보로 지지하겠다고 밝혔다.\n\n이번 조치는 15일부터 이틀간 열리는 제20차 프랑코포니 정상회의 개막을 앞두고 전격적으로 이루어졌다.",
-    "url": "internal://cluster_20261115_7785547e",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "cluster_20261115_7785547e",
-    "region": "southeast_asia",
-    "country": "캄보디아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-15 03:13",
-    "countries": [
-      "캄보디아",
-      "콩고민주공화국",
-      "루마니아",
-      "르완다",
-      "세네갈"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_5319462.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-15T03:13:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-15 03:13",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        2568438,
-        2567243,
-        2565251,
-        2563865,
-        2563773
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": false
-  },
-  {
     "id": 325632,
     "title_en": "이탈리아 코센차 고속도로 터널서 차량 정면충돌… 5명 사망·1명 부상",
     "title_ko": "이탈리아 코센차 고속도로 터널서 차량 정면충돌… 5명 사망·1명 부상",
@@ -521,53 +687,6 @@
     "summary_3lines_en": "",
     "investment_idea_en": "",
     "noindex": true
-  },
-  {
-    "id": 325630,
-    "title_en": "이탈리아, 페이스북 운영사 메타에 8억 500만 유로 과징금 부과",
-    "title_ko": "이탈리아, 페이스북 운영사 메타에 8억 500만 유로 과징금 부과",
-    "summary_ko": "14일(현지시간) 이탈리아 개인정보보호청은 페이스북의 모기업인 메타에 8억 500만 유로의 과징금을 부과했다고 발표했다. 이번 조치는 이용자의 사전 동의 없이 사진에 접근한 행위에 대해 이탈리아 당국이 부과한 제재 중 역대 최대 규모다.\n\n당국에 따르면 메타는 안드로이드 기기용 페이스북 애플리케이션을 통해 이탈리아 이용자의 사진과 동영상, 관련 메타데이터에 접근했다. 이 과정에서 이용자들에게 적절한 정보를 제공하지 않았고 구체적인 동의도 구하지 않았다고 지적했다.\n\n이번 제재의 핵심은 2023년부터 도입된 갤러리에서 제안 받기 기능",
-    "url": "internal://cluster_20261115_39444a93",
-    "source": "NewsFinal",
-    "category": "IT·과학",
-    "subcategory": "cluster_20261115_39444a93",
-    "region": "global",
-    "country": "이탈리아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-15 03:09",
-    "countries": [
-      "이탈리아",
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_2765707.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-15T03:09:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-15 03:09",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        2568348,
-        2567968,
-        2567254,
-        2567119,
-        2565912,
-        2564175
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": false
   },
   {
     "id": 325627,
@@ -2455,6 +2574,10 @@
       {
         "timestamp": "2026-11-15 01:14",
         "note": "페루, 교황 방문 계기로 특별 칭호 부여"
+      },
+      {
+        "timestamp": "2026-11-15 05:10",
+        "note": "교황의 페루 방문 일정과 공로가 확인됨"
       }
     ],
     "byline": "뉴스파이널 편집국",
