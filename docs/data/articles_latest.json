@@ -1,5 +1,43 @@
 [
   {
+    "id": 325484,
+    "title_en": "북미, 흐린 날씨 속 완연한 주말 날씨 예보",
+    "title_ko": "북미, 흐린 날씨 속 완연한 주말 날씨 예보",
+    "summary_ko": "14일(현지시간) 북미 주요국의 이번 주말 날씨 예보에 따르면, 전반적으로 구름이 많은 흐린 날씨가 이어질 전망이다. 이번 주말 북미 지역의 기온 분포는 최저기온 영하 0도에서 최고기온 10도 사이를 오갈 것으로 예상된다.\n\n미국 수도 워싱턴 D.C. 등 주요 지역의 토요일 날씨는 흐린 가운데 최고기온 10도, 최저기온 3도를 기록할 것으로 보이며, 강수 확률은 2%에 머물 전망이다. 이어지는 일요일에도 흐린 날씨가 계속되면서 최고기온 10도, 최저기온 2도를 나타낼 것으로 예상되며, 강수 확률 역시 2%를 유지할 것으로 보인다.\n",
+    "url": "internal://weather_group_북미_weekend20261114",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_북미_weekend20261114",
+    "region": "north_america",
+    "country": "북미",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-14 19:23",
+    "countries": [
+      "미국",
+      "캐나다"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261114_pid5460563_united_states.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-14T19:23:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-14 19:23",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 325480,
     "title_en": "미 연방항공청, 통신 시스템 과부하로 전국 항공편 4시간 동안 전면 중단",
     "title_ko": "미 연방항공청, 통신 시스템 과부하로 전국 항공편 4시간 동안 전면 중단",
@@ -2657,50 +2695,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 325226,
-    "title_en": "스페인 총선 레이스 돌입…안테나 3 아바스칼 인터뷰 호평 속 극우 정당 공약 발표",
-    "title_ko": "스페인 총선 레이스 돌입…안테나 3 아바스칼 인터뷰 호평 속 극우 정당 공약 발표",
-    "summary_ko": "스페인에서 오는 11월 29일 치러지는 조기 총선을 향한 15일간의 공식 선거운동이 13일(현지시간) 자정을 기해 본격적으로 막을 올렸다. 각 정당은 앞으로의 운명을 결정할 결정적인 주간에 돌입하며 지지층 결집과 부동층 공략에 총력을 기울이고 있다.\n\n이번 선거는 지난 8년간 집권해 온 페드로 산체스 총리의 진보 연합 블록과, 정권 교체를 노리는 우파 및 극우 진영 간의 정면 승부로 전개되고 있다. 그간 대부분의 여론조사에서는 알베르토 누녜스 페이호가 이끄는 국민당의 우세가 점쳐져 왔으나, 선거 초반 변수가 잇따르며 판세가 요동치고",
-    "url": "internal://cluster_20261113_22a6d7cc",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "cluster_20261113_22a6d7cc",
-    "region": "global",
-    "country": "스페인",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-13 18:17",
-    "countries": [
-      "스페인"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_4878405.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-13T18:17:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-13 18:17",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        2459692,
-        2457059,
-        2453655,
-        2453565
-      ],
-      "kr_coverage_30d": 0
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": false
   }
 ]
