@@ -2,8 +2,8 @@
   {
     "id": 325422,
     "title_en": "미국 전역 항공기 이륙 일시 중단 사태 발생…연방항공청 시스템 복구 완료",
-    "title_ko": "미 전역 항공 이륙 중단 사태…통신 장비 과부하 원인",
-    "summary_ko": "13일(현지시간) 미국 전역에서 발생한 항공 교통 관제 시스템의 통신 오류로 인해 미 연방항공청(FAA)이 모든 공항에 이륙 중단 긴급 명령을 내렸다. 이번 조치로 미국 내에서만 1만 1000편 이상의 항공편이 결항하거나 지연되는 등 2001년 9.11 테러 이후 가장 광범위한 수준의 항공 운항 마비 사태가 벌어졌다.\n\n숀 더피 미 교통부 장관은 이번 사태의 원인으로 네트워크 스위치와 라우터 장비의 데이터 처리 용량 초과를 지목했다. 구형 하드웨어 기반의 노후화된 시스템이 현대적인 네트워크 데이터 과부하를 감당하지 못해 통신망과 레",
+    "title_ko": "미 항공 관제 시스템 마비…전국 항공기 운항 중단 사태",
+    "summary_ko": "13일(현지시간) 미국 전역에서 항공 교통 관제 시스템의 통신 오류가 발생해 미 연방항공청(FAA)이 모든 공항에 이륙 중단 긴급 명령을 내렸다. 이번 조치로 미국 내에서만 1만 1000편 이상의 항공편이 결항하거나 지연되는 등 2001년 9.11 테러 이후 가장 광범위한 수준의 항공 운항 마비 사태가 벌어졌다. 항공 분석 업체 플라이트레이더24(FlightRadar24)에 따르면 13일 하루 동안 4700편 이상의 항공편이 취소되고 1만 건에 가까운 지연 사례가 발생했다.\n\n숀 더피 미 교통부 장관은 이번 사태의 원인으로 네트워크",
     "url": "internal://realtrend_US_Nationwide_Ground_Stop_2026111412",
     "source": "NewsFinal",
     "category": "사회",
@@ -11,10 +11,11 @@
     "region": "global",
     "country": "미국",
     "country_flag": "",
-    "score": 21,
-    "created_at": "2026-11-14 14:16",
+    "score": 22,
+    "created_at": "2026-11-14 16:21",
     "countries": [
       "미국",
+      "일본",
       "멕시코"
     ],
     "is_published": true,
@@ -41,10 +42,54 @@
       {
         "timestamp": "2026-11-14 14:16",
         "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-14 16:21",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
     "is_travel": true,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 325454,
+    "title_en": "나이지리아, 에볼라 접촉자 62명 감시 종료…콩고민주공화국은 확산 지속",
+    "title_ko": "나이지리아, 에볼라 접촉자 62명 감시 종료…콩고민주공화국은 확산 지속",
+    "summary_ko": "나이지리아 질병통제예방센터(NCDC)는 13일(현지시간) 지난달 확인된 에볼라 바이러스 감염 사례와 관련해 추적 관찰하던 접촉자 62명 전원이 21일간의 감시 기간을 마쳤으며, 추가 전파 사례는 발견되지 않았다고 발표했다. 지데 이드리스(Jide Idris) NCDC 국장은 감시 기간 중 13명이 발열 등 의심 증상을 보였으나 모두 검사 결과 음성으로 판명됐다고 밝혔다.\n\n해당 감염 사례는 지난 10월 3일 우간다에서 출발해 에티오피아를 거쳐 나이지리아 아부자에 도착한 42세 여성이 10월 20일 확진 판정을 받으며 시작됐다. 환자",
+    "url": "internal://trend_에볼라_2026111415",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "trend_에볼라",
+    "region": "africa",
+    "country": "나이지리아",
+    "country_flag": "",
+    "score": 2,
+    "created_at": "2026-11-14 15:57",
+    "countries": [
+      "나이지리아",
+      "콩고민주공화국",
+      "우간다",
+      "스위스"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_5601437.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-14T15:57:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-14 15:57",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
     "source_published_at": null,
     "source_data": null,
     "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
@@ -551,6 +596,14 @@
       {
         "timestamp": "2026-11-14 14:19",
         "note": "미 항공기 운항 중단 원인은 구형 장비 오류로 확인됐다."
+      },
+      {
+        "timestamp": "2026-11-14 16:10",
+        "note": "미 항공 통신 장애 원인은 데이터 과부하로 확인됐다."
+      },
+      {
+        "timestamp": "2026-11-14 16:13",
+        "note": "미국 항공 대란 원인은 관제 시스템 데이터 과부하로 확인됐다."
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -2234,7 +2287,7 @@
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
-    "noindex": false
+    "noindex": true
   },
   {
     "id": 325250,
@@ -3265,6 +3318,10 @@
       {
         "timestamp": "2026-11-14 13:02",
         "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-14 16:18",
+        "note": "MS 서비스 장애 복구 완료 및 보험 손실액 5억 달러 추산."
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -8143,6 +8200,10 @@
       {
         "timestamp": "2026-11-14 13:58",
         "note": "케냐서 알샤바브 매복 공격으로 8명 사망했습니다."
+      },
+      {
+        "timestamp": "2026-11-14 15:58",
+        "note": "케냐 테러 희생자 8명 이송 및 실종 사건 조사 착수."
       }
     ],
     "byline": "뉴스파이널 편집국",
