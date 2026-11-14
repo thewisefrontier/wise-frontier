@@ -1,5 +1,376 @@
 [
   {
+    "id": 325405,
+    "title_en": "[주간 시세] 11월 9~13일 글로벌 증시·환율·유가·금·비트코인 한 주 성적표",
+    "title_ko": "[주간 시세] 11월 9~13일 글로벌 증시·환율·유가·금·비트코인 한 주 성적표",
+    "summary_ko": "11월 9일부터 13일까지 한 주 동안 집계 대상 시세 13개 가운데 9개가 올랐고 4개가 내렸다. 주간 상승률이 가장 컸던 항목은 코스닥(+8.11%), 하락률이 가장 컸던 항목은 비트코인(-9.93%)다.\n\n[증시]\n- S&P500(뉴욕증시): 11월 13일 종가 7,561.67, 주간 +2.51% (직전 주 11월 6일 종가 7,376.86)\n- 나스닥종합(뉴욕증시): 11월 13일 종가 25,136.27, 주간 +2.27% (직전 주 11월 6일 종가 24,579.43)\n- 다우존스(뉴욕증시): 11월 13일 종가 52,34",
+    "url": "internal://weekly_market_2026-11-13",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "주간시세_crypto",
+    "region": "global",
+    "country": "",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-14 10:23",
+    "countries": [],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weekly_market_2026_11_13_pid6525084.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-14T10:23:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-14 10:23",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "items": [
+        {
+          "end": 7561.669921875,
+          "pct": 2.5053,
+          "name": "S&P500",
+          "prev": 7376.85986328125,
+          "end_date": "2026-11-13",
+          "prev_date": "2026-11-06"
+        },
+        {
+          "end": 25136.2734375,
+          "pct": 2.2655,
+          "name": "나스닥종합",
+          "prev": 24579.4296875,
+          "end_date": "2026-11-13",
+          "prev_date": "2026-11-06"
+        },
+        {
+          "end": 52347.55078125,
+          "pct": 2.0704,
+          "name": "다우존스",
+          "prev": 51285.73046875,
+          "end_date": "2026-11-13",
+          "prev_date": "2026-11-06"
+        },
+        {
+          "end": 5342.72998046875,
+          "pct": 5.594,
+          "name": "코스피",
+          "prev": 5059.68994140625,
+          "end_date": "2026-11-12",
+          "prev_date": "2026-11-06"
+        },
+        {
+          "end": 696.530029296875,
+          "pct": 8.1115,
+          "name": "코스닥",
+          "prev": 644.27001953125,
+          "end_date": "2026-11-12",
+          "prev_date": "2026-11-06"
+        },
+        {
+          "end": 60819.359375,
+          "pct": 5.8929,
+          "name": "닛케이225",
+          "prev": 57434.76953125,
+          "end_date": "2026-11-12",
+          "prev_date": "2026-11-06"
+        },
+        {
+          "end": 26771.880859375,
+          "pct": 3.6852,
+          "name": "DAX",
+          "prev": 25820.359375,
+          "end_date": "2026-11-12",
+          "prev_date": "2026-11-06"
+        },
+        {
+          "end": 8361.3603515625,
+          "pct": 2.732,
+          "name": "CAC40",
+          "prev": 8139.0,
+          "end_date": "2026-11-12",
+          "prev_date": "2026-11-06"
+        },
+        {
+          "end": 10863.099609375,
+          "pct": 1.7725,
+          "name": "FTSE100",
+          "prev": 10673.900390625,
+          "end_date": "2026-11-12",
+          "prev_date": "2026-11-06"
+        },
+        {
+          "end": 1333.780029296875,
+          "pct": -1.6633,
+          "name": "원/달러 환율",
+          "prev": 1356.3399658203125,
+          "end_date": "2026-11-13",
+          "prev_date": "2026-11-06"
+        },
+        {
+          "end": 88.91999816894531,
+          "pct": -2.1028,
+          "name": "WTI 원유",
+          "prev": 90.83000183105469,
+          "end_date": "2026-11-13",
+          "prev_date": "2026-11-06"
+        },
+        {
+          "end": 3887.60009765625,
+          "pct": -4.5964,
+          "name": "금",
+          "prev": 4074.89990234375,
+          "end_date": "2026-11-13",
+          "prev_date": "2026-11-06"
+        },
+        {
+          "end": 68223.9921875,
+          "pct": -9.9324,
+          "name": "비트코인",
+          "prev": 75747.578125,
+          "end_date": "2026-11-14",
+          "prev_date": "2026-11-07"
+        }
+      ],
+      "week_end": "2026-11-13"
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
+    "id": 325401,
+    "title_en": "프랑스 럭비 대표팀, 강호 남아공 꺾고 21-19 승리…앙투안 뒤퐁 활약",
+    "title_ko": "프랑스 럭비 대표팀, 강호 남아공 꺾고 21-19 승리…앙투안 뒤퐁 활약",
+    "summary_ko": "프랑스 럭비 대표팀이 13일(현지시간) 파리 스타드 드 프랑스에서 열린 국가 대항전 챔피언십 5차전에서 세계 최강팀인 남아프리카 공화국을 상대로 21-19 승리를 거뒀다. 이번 경기는 2015년 11월 13일 발생한 파리 테러 희생자들을 추모하는 묵념과 함께 시작됐다. 프랑스는 과거 10번의 맞대결에서 9번 패배했던 열세와 주축 선수들의 부상이라는 악재 속에서도 투혼을 발휘하며 승리를 쟁취했다.\n\n경기 직전 프랑스 대표팀에는 비상이 걸렸다. 주전 후커인 줄리앙 마르샹(Julien Marchand)이 웜업 도중 근육 이상을 호소하며 ",
+    "url": "internal://cluster_20261114_031a3fef",
+    "source": "NewsFinal",
+    "category": "스포츠",
+    "subcategory": "cluster_20261114_031a3fef",
+    "region": "global",
+    "country": "프랑스",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-14 10:20",
+    "countries": [
+      "프랑스",
+      "남아프리카 공화국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_4498376.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-14T10:20:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-14 10:20",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "src_ids": [
+        2511516,
+        2507715,
+        2505759,
+        2505759,
+        2505517,
+        2504188
+      ]
+    },
+    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "continuation_of_id": null,
+    "summary_3lines_en": "",
+    "investment_idea_en": "",
+    "noindex": false
+  },
+  {
+    "id": 325400,
+    "title_en": "모로코·이집트, 아프리카 네이션스컵 예선서 압승…알제리·모리타니는 희비",
+    "title_ko": "모로코·이집트, 아프리카 네이션스컵 예선서 압승…알제리·모리타니는 희비",
+    "summary_ko": "모로코 축구 국가대표팀이 2027 아프리카 네이션스컵 예선에서 니제르를 상대로 5-1 대승을 거두며 본선 진출에 바짝 다가섰다. 13일(현지시간) 카사블랑카의 모하메드 V 경기장에서 열린 예선 1조 3차전에서 모로코는 전반 4분 만에 터진 야세르 자비리의 선제골로 기선을 제압했다. 이어 아슈라프 하키미가 전반 27분 강력한 중거리 슛으로 추가 골을 기록했고, 전반 추가시간에는 직접 프리킥으로 본인의 두 번째 골이자 팀의 세 번째 골을 성공시켰다. 니제르는 전반 41분 모하메드 압델 라흐만이 한 골을 만회했으나, 모로코의 골키퍼 야신",
+    "url": "internal://cluster_20261114_c19abb36",
+    "source": "NewsFinal",
+    "category": "스포츠",
+    "subcategory": "cluster_20261114_c19abb36",
+    "region": "africa",
+    "country": "모로코",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-14 10:19",
+    "countries": [
+      "모로코",
+      "이집트",
+      "알제리",
+      "모리타니"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_5430983.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-14T10:19:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-14 10:19",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "src_ids": [
+        2511807,
+        2510202,
+        2509990,
+        2507725,
+        2505618,
+        2505661,
+        2504020,
+        2503972,
+        2503972,
+        2504020,
+        2503864,
+        2503793
+      ]
+    },
+    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "continuation_of_id": null,
+    "summary_3lines_en": "",
+    "investment_idea_en": "",
+    "noindex": false
+  },
+  {
+    "id": 325399,
+    "title_en": "미국 전역 항공기 이륙 중단…FAA 통신 장애로 대규모 운항 차질",
+    "title_ko": "미국 전역 항공기 이륙 중단…FAA 통신 장애로 대규모 운항 차질",
+    "summary_ko": "미국 연방항공청(FAA)이 13일(현지시간) 통신 장애를 이유로 미국 내 모든 공항의 항공기 이륙을 전면 중단하는 조치를 내렸다. 숀 더피 교통부 장관은 이번 조치가 전국 공항의 항공 교통 관제 센터에 영향을 미치는 통신 문제로 인해 발생했다고 밝혔다. 이번 사태로 미국 전역의 상업용 및 개인용 항공기 운항이 일시적으로 마비됐다.\n\nFAA는 성명을 통해 이번 결정이 안전을 위한 극히 예외적인 조치라고 설명했다. 현재 기술진이 문제의 원인을 조사하고 있으며, 운항 재개 시점은 불투명한 상태다. 이미 비행 중인 항공기는 안전하게 착륙할",
+    "url": "internal://cluster_20261114_e9342c0c",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "cluster_20261114_e9342c0c",
+    "region": "global",
+    "country": "미국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-14 10:12",
+    "countries": [
+      "미국",
+      "캐나다",
+      "멕시코"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_faa_communication_outage.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-14T10:12:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-14 10:12",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-14 10:16",
+        "note": "미국 항공 대란 원인은 네트워크 라우터 문제로 확인됐다."
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": true,
+    "source_published_at": null,
+    "source_data": {
+      "src_ids": [
+        2512152,
+        2511856,
+        2511627,
+        2511628,
+        2511457,
+        2511566,
+        2509928,
+        2509926,
+        2509897,
+        2509765,
+        2509759,
+        2509548,
+        2509467,
+        2508022
+      ]
+    },
+    "image_credit": "사진: Sashimi-b (CC BY-SA 4.0, Wikimedia Commons)",
+    "continuation_of_id": null,
+    "summary_3lines_en": "",
+    "investment_idea_en": "",
+    "noindex": false
+  },
+  {
+    "id": 325398,
+    "title_en": "미 뉴올리언스 미시시피강서 유조선과 유람선 충돌…승객 전원 구조",
+    "title_ko": "미 뉴올리언스 미시시피강서 유조선과 유람선 충돌…승객 전원 구조",
+    "summary_ko": "13일(현지시간) 미국 루이지애나주 뉴올리언스 미시시피강에서 아스팔트 운반 유조선 애틀랜틱 아스팔트(Atlantic Asphalt)호가 정박 중이던 유람선 아메리칸 헤리티지(American Heritage)호를 들이받는 사고가 발생했다. 이 충돌로 아메리칸 헤리티지호가 침수되면서 선체가 옆으로 기울어 전복됐고, 당시 승선해 있던 승객과 승무원들이 강물로 추락했다.\n\n사고는 이날 오후 12시 30분경 뉴올리언스항 인근에서 일어났다. 사고 당시 아메리칸 헤리티지호에는 승객 129명과 다수의 승무원이 탑승해 하선을 준비 중이었다. 현장 ",
+    "url": "internal://cluster_20261114_e0121280",
+    "source": "NewsFinal",
+    "category": "사회",
+    "subcategory": "cluster_20261114_e0121280",
+    "region": "global",
+    "country": "미국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-14 10:10",
+    "countries": [
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_american_heritage.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-14T10:10:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-14 10:10",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": true,
+    "source_published_at": null,
+    "source_data": {
+      "src_ids": [
+        2511977,
+        2511660,
+        2511717,
+        2511728,
+        2511524,
+        2509913,
+        2509916,
+        2509810,
+        2509424,
+        2508120,
+        2508058,
+        2508045,
+        2508006,
+        2507962,
+        2507947,
+        2507615,
+        2507615,
+        2507674,
+        2507587,
+        2507571,
+        2507513,
+        2507450,
+        2506153,
+        2505925,
+        2505963,
+        2506020
+      ]
+    },
+    "image_credit": "이미지 출처: Wikimedia Commons",
+    "continuation_of_id": null,
+    "summary_3lines_en": "",
+    "investment_idea_en": "",
+    "noindex": false
+  },
+  {
     "id": 325396,
     "title_en": "뉴욕 브루클린 아파트 붕괴 사고로 8명 사망…이주민 사회 안전망 우려 확산",
     "title_ko": "뉴욕 브루클린 아파트 붕괴 사고로 8명 사망…이주민 사회 안전망 우려 확산",
