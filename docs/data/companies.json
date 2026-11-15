@@ -1440,22 +1440,6 @@
     "updated_at": "2026-07-30 14:14"
   },
   {
-    "id": "lic",
-    "name": "Life Insurance Corporation of India",
-    "name_ko": "인도생명보험공사",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "BSE",
-    "ticker": "LICI",
-    "sector": "보험",
-    "description": "1956년 설립된 인도의 국영 보험사로, 인도 생명보험 시장에서 압도적인 점유율을 차지하고 있는 최대 규모의 보험 기업입니다. 방대한 판매망과 자산 규모를 바탕으로 인도 금융 시장에서 핵심적인 역할을 수행하고 있습니다. 인도 정부가 대주주로 있으며, 인도 증권거래소에 상장된 주요 금융 기업 중 하나입니다.",
-    "founded_year": 1956,
-    "headquarters": "뭄바이, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-04 16:21"
-  },
-  {
     "id": "lic_india",
     "name": "Life Insurance Corporation of India",
     "name_ko": "인도 생명보험공사",
@@ -1470,6 +1454,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-20 15:32"
+  },
+  {
+    "id": "lic",
+    "name": "Life Insurance Corporation of India",
+    "name_ko": "인도생명보험공사",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "BSE",
+    "ticker": "LICI",
+    "sector": "보험",
+    "description": "1956년 설립된 인도의 국영 보험사로, 인도 생명보험 시장에서 압도적인 점유율을 차지하고 있는 최대 규모의 보험 기업입니다. 방대한 판매망과 자산 규모를 바탕으로 인도 금융 시장에서 핵심적인 역할을 수행하고 있습니다. 인도 정부가 대주주로 있으며, 인도 증권거래소에 상장된 주요 금융 기업 중 하나입니다.",
+    "founded_year": 1956,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-04 16:21"
   },
   {
     "id": "lumitime_technologies",
@@ -2112,22 +2112,6 @@
     "updated_at": "2026-08-02 21:12"
   },
   {
-    "id": "tata_consultancy_services",
-    "name": "Tata Consultancy Services Limited",
-    "name_ko": "타타 컨설턴시 서비스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "TCS",
-    "sector": "IT 서비스",
-    "description": "1968년 설립된 글로벌 IT 서비스 및 컨설팅 기업으로 타타 그룹의 핵심 계열사입니다. 전 세계 기업들을 대상으로 소프트웨어 개발, 비즈니스 솔루션, IT 아웃소싱 서비스를 제공합니다. 인도 IT 산업의 선구자이자 세계적인 수준의 기술력을 보유한 기업으로 평가받습니다.",
-    "founded_year": 1968,
-    "headquarters": "뭄바이, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-19 01:21"
-  },
-  {
     "id": "tcs",
     "name": "Tata Consultancy Services Limited",
     "name_ko": "타타 컨설턴시 서비시스",
@@ -2142,6 +2126,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-02 17:22"
+  },
+  {
+    "id": "tata_consultancy_services",
+    "name": "Tata Consultancy Services Limited",
+    "name_ko": "타타 컨설턴시 서비스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "TCS",
+    "sector": "IT 서비스",
+    "description": "1968년 설립된 글로벌 IT 서비스 및 컨설팅 기업으로 타타 그룹의 핵심 계열사입니다. 전 세계 기업들을 대상으로 소프트웨어 개발, 비즈니스 솔루션, IT 아웃소싱 서비스를 제공합니다. 인도 IT 산업의 선구자이자 세계적인 수준의 기술력을 보유한 기업으로 평가받습니다.",
+    "founded_year": 1968,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-19 01:21"
   },
   {
     "id": "tata_motors",
@@ -2176,22 +2176,6 @@
     "updated_at": "2026-08-14 23:23"
   },
   {
-    "id": "singareni_collieries_company",
-    "name": "The Singareni Collieries Company Limited",
-    "name_ko": "싱가레니 콜리어리스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "",
-    "sector": "에너지",
-    "description": "싱가레니 콜리어리스는 1920년에 설립된 인도 텔랑가나주의 국영 석탄 채굴 기업입니다. 주로 인도 남부 지역의 전력 및 산업 수요를 충족하기 위해 석탄을 공급하며, 지역 경제에서 중요한 위치를 차지하고 있습니다. 토목 및 인프라 개발과 관련된 지역 사회 공헌 활동도 함께 수행하고 있습니다.",
-    "founded_year": 1920,
-    "headquarters": "코다구뎀, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-08 01:12"
-  },
-  {
     "id": "singareni_collieries",
     "name": "The Singareni Collieries Company Limited",
     "name_ko": "싱가레니 콜리어리스",
@@ -2206,6 +2190,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-30 17:03"
+  },
+  {
+    "id": "singareni_collieries_company",
+    "name": "The Singareni Collieries Company Limited",
+    "name_ko": "싱가레니 콜리어리스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "싱가레니 콜리어리스는 1920년에 설립된 인도 텔랑가나주의 국영 석탄 채굴 기업입니다. 주로 인도 남부 지역의 전력 및 산업 수요를 충족하기 위해 석탄을 공급하며, 지역 경제에서 중요한 위치를 차지하고 있습니다. 토목 및 인프라 개발과 관련된 지역 사회 공헌 활동도 함께 수행하고 있습니다.",
+    "founded_year": 1920,
+    "headquarters": "코다구뎀, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-08 01:12"
   },
   {
     "id": "tata_power",
@@ -3376,22 +3376,6 @@
     "updated_at": "2026-07-31 00:33"
   },
   {
-    "id": "vk",
-    "name": "VK Company Limited",
-    "name_ko": "브이케이",
-    "country": "러시아",
-    "country_flag": "🌍",
-    "exchange": "MOEX",
-    "ticker": "VKCO",
-    "sector": "정보기술",
-    "description": "2007년에 설립된 러시아의 대표적인 테크 기업으로, 소셜미디어 플랫폼 브이콘탁테(VKontakte)와 다양한 디지털 서비스를 운영하고 있습니다. 러시아 내에서 가장 영향력 있는 온라인 커뮤니케이션 및 미디어 생태계를 구축하고 있습니다. 자국 시장을 중심으로 소셜 네트워크, 이메일, 게임 등 다양한 인터넷 서비스를 제공합니다.",
-    "founded_year": 2007,
-    "headquarters": "모스크바, 러시아",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-21 19:48"
-  },
-  {
     "id": "vkontakte",
     "name": "VK Company Limited",
     "name_ko": "브이케이",
@@ -3406,6 +3390,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-10-18 17:37"
+  },
+  {
+    "id": "vk",
+    "name": "VK Company Limited",
+    "name_ko": "브이케이",
+    "country": "러시아",
+    "country_flag": "🌍",
+    "exchange": "MOEX",
+    "ticker": "VKCO",
+    "sector": "정보기술",
+    "description": "2007년에 설립된 러시아의 대표적인 테크 기업으로, 소셜미디어 플랫폼 브이콘탁테(VKontakte)와 다양한 디지털 서비스를 운영하고 있습니다. 러시아 내에서 가장 영향력 있는 온라인 커뮤니케이션 및 미디어 생태계를 구축하고 있습니다. 자국 시장을 중심으로 소셜 네트워크, 이메일, 게임 등 다양한 인터넷 서비스를 제공합니다.",
+    "founded_year": 2007,
+    "headquarters": "모스크바, 러시아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-21 19:48"
   },
   {
     "id": "teba",
@@ -4286,6 +4286,38 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-03 14:55"
+  },
+  {
+    "id": "cni",
+    "name": "Confederação Nacional da Indústria",
+    "name_ko": "브라질 전국산업연맹",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "경제단체",
+    "description": "1938년에 설립된 브라질 산업계를 대표하는 최고 의사결정 기구입니다. 브라질 내 제조업 및 산업 부문의 이익을 대변하며, 산업 경쟁력 강화와 기술 혁신을 위한 정책을 제안합니다. 산하의 SESI와 SENAI를 통해 산업 노동자의 교육과 보건 서비스를 제공하는 국가적 규모의 민간 산업 협회입니다.",
+    "founded_year": 1938,
+    "headquarters": "브라질리아, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-11-15 10:48"
+  },
+  {
+    "id": "cnc",
+    "name": "Confederação Nacional do Comércio de Bens, Serviços e Turismo",
+    "name_ko": "브라질 전국상업연맹",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "경제단체",
+    "description": "1945년에 설립된 브라질 상업 및 서비스 부문을 대표하는 최대 규모의 경제단체입니다. 브라질 내 수백만 개의 기업을 대변하며 노동 정책, 세제 개편, 비즈니스 환경 개선을 위한 로비 활동을 수행합니다. SESC와 SENAC 등 사회 교육 및 복지 기관을 운영하며 브라질 경제 정책 결정에 강력한 영향력을 행사합니다.",
+    "founded_year": 1945,
+    "headquarters": "브라질리아, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-11-15 10:48"
   },
   {
     "id": "cruzeiro",
