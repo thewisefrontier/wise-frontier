@@ -1279,59 +1279,6 @@
     "noindex": false
   },
   {
-    "id": 325667,
-    "title_en": "마이크로소프트, 전 세계 업무 도구 마비시킨 대규모 서비스 장애 복구 완료",
-    "title_ko": "마이크로소프트, 전 세계 업무 도구 마비시킨 대규모 서비스 장애 복구 완료",
-    "summary_ko": "마이크로소프트(Microsoft)는 14일(현지시간) 아웃룩(Outlook), 팀즈(Teams), 코파일럿(Copilot) 등 주요 업무 도구에서 발생한 전 세계적인 서비스 장애를 완전히 복구했다고 발표했다. 이번 장애는 지난 14일 오전부터 시작되어 수많은 정부 기관과 기업의 업무를 마비시켰으며, 최근 수년간 발생한 IT 실패 사례 중 가장 심각한 수준으로 기록됐다.\n\n마이크로소프트는 자사 365 상태 페이지를 통해 장애의 근본 원인을 해결했으며, 영향을 받았던 모든 고객과 지역의 서비스가 정상화되었다고 밝혔다. 이번 사태로 인해",
-    "url": "internal://realtrend_Microsoft_Global_Outage_&_IT_Crisis_2026111504",
-    "source": "NewsFinal",
-    "category": "IT·과학",
-    "subcategory": "realtrend_Microsoft_Global_Out",
-    "region": "north_america",
-    "country": "미국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-11-15 04:57",
-    "countries": [
-      "미국",
-      "영국",
-      "아르헨티나",
-      "브라질",
-      "나이지리아"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_767776.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-15T04:57:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-15 04:57",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "tags": [
-        "computing",
-        "headlines",
-        "microsoft outlook",
-        "mundo",
-        "software",
-        "technology",
-        "tecnologia",
-        "uk news",
-        "world news"
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
     "id": 325638,
     "title_en": "오세아니아, 최고 27도 기온 속 곳곳 비 소식",
     "title_ko": "오세아니아, 최고 27도 기온 속 곳곳 비 소식",
@@ -5563,8 +5510,8 @@
   {
     "id": 325115,
     "title_en": "마이크로소프트 전 세계적 서비스 장애 발생…아웃룩·팀즈 등 접속 마비",
-    "title_ko": "마이크로소프트 전 세계 서비스 장애 장기화…74개국 업무 마비 속 복구 진행",
-    "summary_ko": "13일(현지시간) 마이크로소프트의 주요 클라우드 및 협업 서비스에서 전 세계적인 접속 장애가 발생해 금융, 항공, 보건 등 사회 전반에 큰 혼란이 빚어졌다. 이번 사태는 미국을 포함해 아시아와 유럽, 아프리카 등 74개국에서 동시다발적으로 나타났으며, 마이크로소프트 365, 팀즈, 코파일럿, 원드라이브, 셰어포인트 등 핵심 업무 도구가 광범위한 영향을 받았다. 오픈AI와 앤트로픽 등 커넥터를 사용하는 외부 AI 서비스에서도 연결 오류가 발생했다.\n\n다운디텍터에 따르면 미국에서만 아웃룩 관련 신고 건수가 13만 건을 넘어섰으며, 뉴질",
+    "title_ko": "마이크로소프트, 전 세계 74개국 업무 마비시킨 서비스 장애 복구 완료",
+    "summary_ko": "마이크로소프트는 14일(현지시간) 아웃룩, 팀즈, 코파일럿 등 주요 업무 도구에서 발생한 전 세계적인 서비스 장애를 완전히 복구했다고 발표했다. 이번 사태는 12일부터 시작되어 미국을 비롯해 아시아, 유럽, 아프리카 등 74개국에서 동시다발적으로 나타났으며, 금융과 항공, 보건 등 사회 전반에 큰 혼란을 빚었다. \n\n다운디텍터에 따르면 미국에서만 아웃룩 관련 신고 건수가 13만 건을 넘어섰다. 뉴질랜드 정부는 전 세계 모든 자국 대사관과 영사관, 대표부가 이메일 수신 장애 등의 타격을 입었다고 공식 발표했으며, 포르투갈에서는 보건부",
     "url": "internal://cluster_20261113_cef8b9e7",
     "source": "NewsFinal",
     "category": "IT·과학",
@@ -5609,6 +5556,10 @@
       {
         "timestamp": "2026-11-14 16:18",
         "note": "MS 서비스 장애 복구 완료 및 보험 손실액 5억 달러 추산."
+      },
+      {
+        "timestamp": "2026-11-15 13:26",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
