@@ -673,8 +673,8 @@
   {
     "id": 325682,
     "title_en": "A Master of Djinn",
-    "title_ko": "[오늘의 책] 피. 젤리 클라크의 『링 샤우트』, 1912년 카이로를 배경으로 펼쳐지는 판타지 스팀펑크 소설",
-    "summary_ko": "피. 젤리 클라크(P. Djèlí Clark)의 판타지 스팀펑크 소설 『링 샤우트』는 2022년 네뷸러상 장편 부문을 수상하며 평단의 주목을 받았다. 이 작품은 이그나이트상 장편 부문, 로커스상 최우수 첫 장편 부문, 컴프턴 크룩상을 함께 거머쥐며 주요 문학상을 석권했다. 다수의 문학상 후보에 오르며 서사적 완성도를 인정받아 출간 이후 꾸준히 읽히고 있다.\n\n이 소설은 1912년 카이로를 배경으로 펼쳐지며 단편 「A Dead Djinn in Cairo」와 중편 *The Haunting of Tram Car 015*의 세계관을 잇는 ",
+    "title_ko": "[오늘의 책] 피. 젤리 클라크의 『A Master of Djinn』, 1912년 카이로를 배경으로 펼쳐지는 판타지 스팀펑크 소설",
+    "summary_ko": "피. 젤리 클라크(P. Djèlí Clark)의 판타지 스팀펑크 소설 『A Master of Djinn』는 2022년 네뷸러상 장편 부문을 수상하며 평단의 주목을 받았다. 이 작품은 이그나이트상 장편 부문, 로커스상 최우수 첫 장편 부문, 컴프턴 크룩상을 함께 거머쥐며 주요 문학상을 석권했다. 다수의 문학상 후보에 오르며 서사적 완성도를 인정받아 출간 이후 꾸준히 읽히고 있다.\n\n이 소설은 1912년 카이로를 배경으로 펼쳐지며 단편 「A Dead Djinn in Cairo」와 중편 *The Haunting of Tram Car 01",
     "url": "internal://literature_Q111915309",
     "source": "NewsFinal",
     "category": "문화·예술",
@@ -695,6 +695,10 @@
       {
         "timestamp": "2026-11-15 05:17",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-15 11:34",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -903,6 +907,10 @@
       {
         "timestamp": "2026-11-15 05:06",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-15 11:34",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -972,6 +980,45 @@
     "noindex": false
   },
   {
+    "id": 325671,
+    "title_en": "[오늘의 스타트업] AI 에이전트 관리 스타트업 랑체인, 3억 달러 규모 시리즈 C 투자 유치로 30억 달러 가치 평가 달성",
+    "title_ko": "[오늘의 스타트업] AI 에이전트 관리 스타트업 랭체인, 3억 달러 규모 시리즈 C 투자 유치로 30억 달러 가치 평가 달성",
+    "summary_ko": "[AI 에이전트 플랫폼 랭체인, 시리즈 C 투자 유치로 기업 가치 30억 달러 기록]\n- 미국 스타트업 랭체인이 11월 13일(현지시간) 3억 달러 규모의 시리즈 C 투자를 유치했다고 발표했다.\n- 이번 투자로 랭체인의 기업 가치는 30억 달러를 기록했다.\n- CapitalG가 투자를 주도했으며 싱가포르 GIC, DFJ Growth, IVP, Sapphire Ventures 등이 참여했다.\n- 1년 전 IVP 주도로 1억2500만 달러를 유치 당시 기록했던 12억5000만 달러 가치 대비 2배 이상 상승했다.\n- 초기 LLM이 수행",
+    "url": "internal://startup_digest_20261115",
+    "source": "NewsFinal",
+    "category": "산업·기업",
+    "subcategory": "startup_digest_20261115",
+    "region": "global",
+    "country": "",
+    "country_flag": "",
+    "score": 21,
+    "created_at": "2026-11-15 05:03",
+    "countries": null,
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/startup_digest_20261115_pid5281985.jpg",
+    "view_count": 0,
+    "first_published_at": null,
+    "update_log": [
+      {
+        "timestamp": "2026-11-15 05:03",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-15 11:34",
+        "note": "내용 업데이트"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
     "id": 325670,
     "title_en": "[오늘의 AI 소식] 엔비디아 젠슨 황 사임 여파와 앤스로픽 기업공개 추진",
     "title_ko": "[오늘의 AI 소식] 엔비디아 젠슨 황 사임 여파와 앤스로픽 기업공개 추진",
@@ -990,39 +1037,9 @@
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/ai_digest_20261115_pid1340649.jpg",
     "view_count": 0,
     "first_published_at": null,
-    "update_log": [],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
-  },
-  {
-    "id": 325671,
-    "title_en": "[오늘의 스타트업] AI 에이전트 관리 스타트업 랑체인, 3억 달러 규모 시리즈 C 투자 유치로 30억 달러 가치 평가 달성",
-    "title_ko": "[오늘의 스타트업] AI 에이전트 관리 스타트업 랑체인, 3억 달러 규모 시리즈 C 투자 유치로 30억 달러 가치 평가 달성",
-    "summary_ko": "[AI 에이전트 플랫폼 랑체인, 시리즈 C 투자 유치로 기업 가치 30억 달러 기록]\n- 미국 스타트업 랑체인이 11월 13일(현지시간) 3억 달러 규모의 시리즈 C 투자를 유치했다고 발표했다.\n- 이번 투자로 랑체인의 기업 가치는 30억 달러를 기록했다.\n- CapitalG가 투자를 주도했으며 싱가포르 GIC, DFJ Growth, IVP, Sapphire Ventures 등이 참여했다.\n- 1년 전 IVP 주도로 1억2500만 달러를 유치 당시 기록했던 12억5000만 달러 가치 대비 2배 이상 상승했다.\n- 초기 LLM이 수행",
-    "url": "internal://startup_digest_20261115",
-    "source": "NewsFinal",
-    "category": "산업·기업",
-    "subcategory": "startup_digest_20261115",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 21,
-    "created_at": "2026-11-15 05:03",
-    "countries": null,
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/startup_digest_20261115_pid5281985.jpg",
-    "view_count": 0,
-    "first_published_at": null,
     "update_log": [
       {
-        "timestamp": "2026-11-15 05:03",
+        "timestamp": "2026-11-15 11:34",
         "note": "최초 게시"
       }
     ],
@@ -1091,6 +1108,10 @@
       {
         "timestamp": "2026-11-15 05:01",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-15 11:34",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -1354,6 +1375,10 @@
       {
         "timestamp": "2026-11-15 02:13",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-15 11:34",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -2594,50 +2619,6 @@
     "source_published_at": null,
     "source_data": null,
     "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 325412,
-    "title_en": "중동 주요국, 튀르키예 비 소식…최저 4도 쌀쌀한 날씨",
-    "title_ko": "중동 주요국, 튀르키예 비 소식…최저 4도 쌀쌀한 날씨",
-    "summary_ko": "14일(현지시간) 예보된 중동 주요국 주말 날씨는 지역별로 맑고 흐린 날씨가 이어지는 가운데 튀르키예에 비 소식이 예고되어 있다. 이번 주말 중동 주요국의 기온은 최저 4°C에서 최고 29°C 사이의 분포를 보일 것으로 예상된다.\n\n토요일 주요국 수도 날씨는 사우디아라비아와 카타르가 맑을 것으로 보이며 아랍에미리트와 이란은 부분적으로 흐릴 전망이다. 이스라엘, 이라크, 요르단은 흐릴 것으로 예상되는 가운데 튀르키예는 강수 확률 88%와 함께 약한 비가 내릴 것으로 보인다. 토요일 기온은 아랍에미리트가 최고 28°C로 가장 높고 이란",
-    "url": "internal://weather_group_중동_weekend20261114",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_중동_weekend20261114",
-    "region": "middle_east",
-    "country": "중동",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-14 11:26",
-    "countries": [
-      "사우디아라비아",
-      "아랍에미리트",
-      "튀르키예",
-      "이스라엘",
-      "이란",
-      "이라크",
-      "카타르",
-      "요르단"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261114_pid3986723_saudi_arabia.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-14T11:26:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-14 11:26",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
