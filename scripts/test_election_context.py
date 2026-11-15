@@ -35,3 +35,12 @@ _b = hb(["(2026-11-14) a", "(2024-11-06) b"], "[H]")
 assert "[H]\n- (2026-11-14) a" in _b and "[과거 보도" in _b and _b.rindex("(2024-11-06) b") > _b.index("[과거 보도")
 assert hb(["(2024-11-06) b"], "[H]") == ""  # 최근 헤드라인이 없으면 '헤드라인 없음' 분기
 print("ok block")
+# 주간 가상자산 게이트: 근거 헤드라인에 presidential이 없으면 '대선' 문장 제거(323284 재현 문장)
+import weekly_crypto_writer as _w
+from cause_guard import strip_unsupported_causes as _s
+_body = "미국 대선 이후 가상자산 시장은 조정을 맞이했다. 비트코인은 한 주간 하락했다."
+_o = _s(_body, evidence=["Bitcoin falls 6% in a day"])
+assert "대선" not in _o and "하락" in _o, _o
+assert "대선" in _s(_body, evidence=["Trump wins presidential election, bitcoin jumps"])
+assert isinstance(_w.LAST_FRESH, list)
+print("ok weekly gate")
