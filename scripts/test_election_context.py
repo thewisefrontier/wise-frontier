@@ -30,3 +30,8 @@ from news_context import split_by_age as sp
 _f, _o = sp(["(2026-11-14) a", "(2024-11-06) b", "무날짜"], date(2026, 11, 15))
 assert _f == ["(2026-11-14) a"] and len(_o) == 2
 print("ok sim")
+from news_context import headline_block as hb
+_b = hb(["(2026-11-14) a", "(2024-11-06) b"], "[H]")
+assert "[H]\n- (2026-11-14) a" in _b and "[과거 보도" in _b and _b.rindex("(2024-11-06) b") > _b.index("[과거 보도")
+assert hb(["(2024-11-06) b"], "[H]") == ""  # 최근 헤드라인이 없으면 '헤드라인 없음' 분기
+print("ok block")

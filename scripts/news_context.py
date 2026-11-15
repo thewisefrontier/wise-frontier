@@ -101,3 +101,16 @@ def split_by_age(headlines: list, today: date | None = None, days: int = 8):
         except ValueError:
             old.append(h)
     return fresh, old
+
+
+def headline_block(headlines: list, header: str, days: int = 8) -> str:
+    """최근 days일 헤드라인은 header 아래에, 오래된 보도는 "[과거 보도]" 블록으로 분리해 붙인다.
+    최근 헤드라인이 하나도 없으면 빈 문자열(호출부가 '헤드라인 없음' 분기를 타게 한다)."""
+    fresh, old = split_by_age(headlines, days=days)
+    if not fresh:
+        return ""
+    out = "\n" + header + "\n" + "\n".join(f"- {h}" for h in fresh)
+    if old:
+        out += ("\n\n[과거 보도 — 이번 기사의 일이 아님. 근거로 쓰지 말고, 쓰더라도 발행 연도를 밝힌 배경으로만]\n"
+                + "\n".join(f"- {h}" for h in old))
+    return out
