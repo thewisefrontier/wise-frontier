@@ -1,5 +1,71 @@
 [
   {
+    "id": 326203,
+    "title_en": "[국내유가] 휘발유 리터당 1855원…휘발유 내리고 경유 올라",
+    "title_ko": "[국내유가] 휘발유 리터당 1855원…휘발유 내리고 경유 올라",
+    "summary_ko": "한국석유공사 오피넷이 16일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1855원으로 집계됐다. 이번에 공개된 수치에 따르면 휘발유 평균가는 전일 대비 0.13원 내린 리터당 1854.80원을 기록하며 소폭 하락세를 보였다.\n\n반면 경유는 전일 대비 0.08원 오른 리터당 1841.26원으로 집계되며 상승 반전했다. 자동차용 LPG 부탄은 리터당 1177.97원을 기록해 전일과 같은 가격을 유지하며 보합세를 나타냈다.\n\n최근 국내 유가는 국제유가 변동성과 환율 추이의 영향을 받아 유종별로 엇갈린 흐름을 보이고 ",
+    "url": "internal://opinet_price_2026-11-16",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-11-16 05:12",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_11_16_pid6999637.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-16T05:12:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-16 05:12",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-11-16",
+      "prices": {
+        "B027": {
+          "diff": -0.13,
+          "name": "휘발유",
+          "price": 1854.8
+        },
+        "B034": {
+          "diff": -0.56,
+          "name": "고급휘발유",
+          "price": 2373.61
+        },
+        "C004": {
+          "diff": 0.0,
+          "name": "실내등유",
+          "price": 1569.48
+        },
+        "D047": {
+          "diff": 0.08,
+          "name": "경유",
+          "price": 1841.26
+        },
+        "K015": {
+          "diff": 0.0,
+          "name": "LPG(부탄)",
+          "price": 1177.97
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 326202,
     "title_en": "[기업 분석] 빌, 회계연도 2027년 1분기 핵심 매출 3억1640만 달러 기록",
     "title_ko": "[기업 분석] 빌, 회계연도 2027년 1분기 핵심 매출 3억1640만 달러 기록",

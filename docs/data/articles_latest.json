@@ -1,5 +1,71 @@
 [
   {
+    "id": 326203,
+    "title_en": "[국내유가] 휘발유 리터당 1855원…휘발유 내리고 경유 올라",
+    "title_ko": "[국내유가] 휘발유 리터당 1855원…휘발유 내리고 경유 올라",
+    "summary_ko": "한국석유공사 오피넷이 16일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1855원으로 집계됐다. 이번에 공개된 수치에 따르면 휘발유 평균가는 전일 대비 0.13원 내린 리터당 1854.80원을 기록하며 소폭 하락세를 보였다.\n\n반면 경유는 전일 대비 0.08원 오른 리터당 1841.26원으로 집계되며 상승 반전했다. 자동차용 LPG 부탄은 리터당 1177.97원을 기록해 전일과 같은 가격을 유지하며 보합세를 나타냈다.\n\n최근 국내 유가는 국제유가 변동성과 환율 추이의 영향을 받아 유종별로 엇갈린 흐름을 보이고 ",
+    "url": "internal://opinet_price_2026-11-16",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-11-16 05:12",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_11_16_pid6999637.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-16T05:12:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-16 05:12",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-11-16",
+      "prices": {
+        "B027": {
+          "diff": -0.13,
+          "name": "휘발유",
+          "price": 1854.8
+        },
+        "B034": {
+          "diff": -0.56,
+          "name": "고급휘발유",
+          "price": 2373.61
+        },
+        "C004": {
+          "diff": 0.0,
+          "name": "실내등유",
+          "price": 1569.48
+        },
+        "D047": {
+          "diff": 0.08,
+          "name": "경유",
+          "price": 1841.26
+        },
+        "K015": {
+          "diff": 0.0,
+          "name": "LPG(부탄)",
+          "price": 1177.97
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 326202,
     "title_en": "[기업 분석] 빌, 회계연도 2027년 1분기 핵심 매출 3억1640만 달러 기록",
     "title_ko": "[기업 분석] 빌, 회계연도 2027년 1분기 핵심 매출 3억1640만 달러 기록",
@@ -2526,121 +2592,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": false
-  },
-  {
-    "id": 325630,
-    "title_en": "이탈리아, 페이스북 운영사 메타에 8억 500만 유로 과징금 부과",
-    "title_ko": "이탈리아 당국, 메타에 8억 500만 유로 과징금 부과…갤러리 접근권한 오남용",
-    "summary_ko": "이탈리아 개인정보보호청은 14일(현지시간) 페이스북 이용자의 사진과 동영상에 사전 동의 없이 접근한 혐의로 메타에 8억 500만 유로의 과징금을 부과했다. 이번 제재는 이탈리아 당국이 빅테크 기업에 내린 역대 최대 규모의 과징금이다.\n\n당국은 메타가 안드로이드용 페이스북 앱을 통해 이용자의 갤러리 내 사진과 동영상, 관련 메타데이터를 수집했다고 밝혔다. 문제가 된 기능은 2023년부터 도입된 갤러리에서 제안 받기 기능으로, 이용자가 앱을 탐색할 때 게시물 아이디어를 얻을 수 있도록 스마트폰 갤러리 콘텐츠를 추천하는 서비스다.\n\n조사",
-    "url": "internal://cluster_20261115_39444a93",
-    "source": "NewsFinal",
-    "category": "IT·과학",
-    "subcategory": "cluster_20261115_39444a93",
-    "region": "global",
-    "country": "이탈리아",
-    "country_flag": "",
-    "score": 6,
-    "created_at": "2026-11-15 05:11",
-    "countries": [
-      "이탈리아"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_2765707.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-15T03:09:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-15 03:09",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-15 05:11",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        2568348,
-        2567968,
-        2567254,
-        2567119,
-        2565912,
-        2564175
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": false
-  },
-  {
-    "id": 325680,
-    "title_en": "[국내유가] 휘발유 리터당 1855원…국제유가 흐름에 소폭 상승",
-    "title_ko": "[국내유가] 휘발유 리터당 1855원…국제유가 흐름에 소폭 상승",
-    "summary_ko": "한국석유공사 오피넷이 15일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1855원으로 집계됐다. 이는 전일 대비 0.13원 오른 수치다.\n\n반면 휘발유를 제외한 다른 주요 유종은 하락세를 나타냈다. 경유는 리터당 1841.18원으로 전일 대비 0.06원 내려갔으며, LPG 부탄은 리터당 1177.97원으로 전일 대비 0.03원 하락했다.\n\n이 같은 국내 유가는 최근 국제유가 변동성과 정유사 공급가격의 흐름에 영향을 받고 있는 것으로 분석된다. 그동안 고공행진을 이어온 국내 기름값은 정유사 도매가 조정 및 비축유",
-    "url": "internal://opinet_price_2026-11-15",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국내유가",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "🇰🇷",
-    "score": 1,
-    "created_at": "2026-11-15 05:11",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_11_15_pid7292033.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-15T05:11:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-15 05:11",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "date": "2026-11-15",
-      "prices": {
-        "B027": {
-          "diff": 0.13,
-          "name": "휘발유",
-          "price": 1854.97
-        },
-        "B034": {
-          "diff": -0.33,
-          "name": "고급휘발유",
-          "price": 2374.8
-        },
-        "C004": {
-          "diff": -0.23,
-          "name": "실내등유",
-          "price": 1569.36
-        },
-        "D047": {
-          "diff": -0.06,
-          "name": "경유",
-          "price": 1841.18
-        },
-        "K015": {
-          "diff": -0.03,
-          "name": "LPG(부탄)",
-          "price": 1177.97
-        }
-      }
-    },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
   }
 ]
