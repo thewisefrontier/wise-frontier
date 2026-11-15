@@ -22,3 +22,11 @@ _p = {"title_ko": "비트코인 1.48% 상승…미 대선 불확실성 속 반�
 article_store._warn_bare_us_presidential(_p)
 assert _p["title_ko"].count("대선") == 1 and "경고" in _p["update_log"][0]["note"], _p
 print("ok warn")
+# 시뮬레이션 사례: 수식어 없는 "대선 이후"도 경고, 타국 대선("브라질 대선")은 통과
+assert fl("대선 이후 가파른 상승세를 보였던 비트코인", date(2026, 11, 15))
+assert not fl("브라질 대선 결선 투표에서 룰라가 재선에 성공했다.", date(2026, 11, 15))
+assert not fl("다음 주 시장은 대통령 선거 결과를 소화할 전망이다.", date(2026, 11, 15))
+from news_context import split_by_age as sp
+_f, _o = sp(["(2026-11-14) a", "(2024-11-06) b", "무날짜"], date(2026, 11, 15))
+assert _f == ["(2026-11-14) a"] and len(_o) == 2
+print("ok sim")

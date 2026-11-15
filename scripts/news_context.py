@@ -70,8 +70,9 @@ def election_context(today: date | None = None) -> str:
             "(예: \"2024년 미국 대선\", \"2026년 중간선거\").")
 
 
-_US_PRES = re.compile(r"(?:미국|미|美)\s?(?:대통령\s?)?대선")
-_PAST_CUE = re.compile(r"20\d\d|지난|당시|과거|차기|다음|내년|전년|이전|후보 확정|예비선거|경선")
+# 수식어 없는 "대선"(앞이 한글 단어+공백이 아닌 경우)도 포함 — 시뮬레이션에서 "대선 이후 가파른 상승세"가 "미국" 없이 나왔다.
+_US_PRES = re.compile(r"(?:(?:미국|미|美)\s?(?:대통령\s?)?|(?<![가-힣])(?<![가-힣]\s))대선")
+_PAST_CUE = re.compile(r"20\d\d|지난 ?(?:대선|선거)|당시|과거|차기|다음 (?:대선|선거)|내년 대선|후보 확정|예비선거|경선")
 
 
 def flag_bare_us_presidential(text: str, today: date | None = None) -> list:
@@ -82,3 +83,21 @@ def flag_bare_us_presidential(text: str, today: date | None = None) -> list:
     if today.year % 4 != 2:
         return []
     return [s.strip() for s in re.split(r"(?<=[.!?다])\s+|\n+", text or "") if _US_PRES.search(s) and not _PAST_CUE.search(s)]
+
+
+_DATED = re.compile(r"^\((\d{4})-(\d{2})-(\d{2})\)\s*")
+
+
+def split_by_age(headlines: list, today: date | None = None, days: int = 8):
+    """(최근 days일 이내, 그보다 오래됨/날짜 불명) 두 목록으로 나눈다. 시뮬레이션(2026-11-15): 2024년 대선 직후 헤드라인을
+    섞어 주면 모델이 "이번 주 소식"으로 쓴다 — 오래된 보도는 '이번 주 소식' 근거에서 빼고 배경으로만 보여준다."""
+    from datetime import datetime, timedelta as td, timezone
+    today = today or datetime.now(timezone(td(hours=9))).date()
+    fresh, old = [], []
+    for h in headlines:
+        m = _DATED.match(h)
+        try:
+            (fresh if m and (today - date(int(m[1]), int(m[2]), int(m[3]))).days <= days else old).append(h)
+        except ValueError:
+            old.append(h)
+    return fresh, old
