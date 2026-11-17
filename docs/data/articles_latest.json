@@ -1,5 +1,71 @@
 [
   {
+    "id": 327063,
+    "title_en": "[국내유가] 휘발유 리터당 1855원…전국 평균 소폭 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1855원…전국 평균 소폭 하락",
+    "summary_ko": "한국석유공사 오피넷이 18일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1855원으로 집계됐다.\n\n이날 공개된 오피넷 집계에 따르면 휘발유 평균가는 리터당 1854.66원으로 전일보다 0.14원 내렸고, 경유는 리터당 1841.13원으로 전일 대비 0.46원 하락했다. 반면 LPG(부탄)는 리터당 1177.90원을 기록하며 전일과 동일한 보합세를 나타냈다.\n\n국내 유가는 최근 국제유가 변동 추이와 정유사 공급가격 등 복합적인 요인의 영향을 받아 등락을 거듭하고 있다. 통상적으로 국제유가 변동분은 일정 기간의 시",
+    "url": "internal://opinet_price_2026-11-18",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-11-18 05:12",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_11_18_pid2722787.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-18T05:12:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-18 05:12",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-11-18",
+      "prices": {
+        "B027": {
+          "diff": -0.14,
+          "name": "휘발유",
+          "price": 1854.66
+        },
+        "B034": {
+          "diff": -1.1,
+          "name": "고급휘발유",
+          "price": 2368.27
+        },
+        "C004": {
+          "diff": -0.37,
+          "name": "실내등유",
+          "price": 1568.99
+        },
+        "D047": {
+          "diff": -0.46,
+          "name": "경유",
+          "price": 1841.13
+        },
+        "K015": {
+          "diff": 0.0,
+          "name": "LPG(부탄)",
+          "price": 1177.9
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 327060,
     "title_en": "[기업 분석] 아마존, 매출 7975억 달러와 인공지능 인프라 투자 집중",
     "title_ko": "[기업 분석] 아마존, 매출 7975억 달러와 인공지능 인프라 투자 집중",
@@ -2942,99 +3008,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 326629,
-    "title_en": "[기업 분석] 엔비디아, 연간 매출 3030억 달러 기록 및 사업 현황",
-    "title_ko": "[기업 분석] 엔비디아, 연간 매출 3030억 달러 기록 및 사업 현황",
-    "summary_ko": "[사업]\n- 엔비디아는 그래픽 처리 장치(GPU)와 현대 데이터 센터의 중추를 형성하는 네트워킹 소프트웨어를 제공한다.\n- 이 회사의 인프라는 마이크로소프트와 같은 주요 클라우드 제공업체와 파트너사가 사용한다.\n\n[최근 실적]\n- 2026년 7월 26일로 끝난 12개월 동안 매출은 전년 대비 약 83.4% 증가한 3030억 달러를 기록했다.\n- 해당 기간 순이익은 1929억 달러였으며 2026년 1월 25일로 끝난 회계연도 기준 잉여현금흐름은 967억 달러이다.\n- 최근 연례 보고서에 따르면 두 고객사가 전체 매출의 각각 약 22%",
-    "url": "internal://company_analysis_20261117_nvidia",
-    "source": "NewsFinal",
-    "category": "산업·기업",
-    "subcategory": "company_analysis_20261117_nvidia",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 200,
-    "created_at": "2026-11-17 05:10",
-    "countries": null,
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/company_analysis_20261117_nvidia_pid2852024.jpg",
-    "view_count": 0,
-    "first_published_at": null,
-    "update_log": [
-      {
-        "timestamp": "2026-11-17 05:10",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-17T14:41:04.886160",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "company": "NVIDIA",
-      "src_ids": [
-        2585829
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
-  },
-  {
-    "id": 326628,
-    "title_en": "The Rabbit Hutch",
-    "title_ko": "[오늘의 책] 테스 건티의 『우주의 알』, 미국 탈공업 도시의 고립을 조명한 다성악적 데뷔작",
-    "summary_ko": "테스 건티(Tess Gunty)의 첫 소설 『우주의 알』은 2022년 전미도서상 소설 부문을 비롯해 워터스톤스 데뷔 소설상과 반스앤노블 디스커버 어워드를 연달아 수상하며 현지 문단에서 큰 화제를 모았다. 이 작품은 미국 중서부 탈공업 도시의 아파트 단지에 모여 사는 인물들의 고립과 불협화음을 실험적인 다성악적 구조로 그려내며 평단의 찬사를 받았다. 국내에는 2024년 정식 출간되어 현대 사회의 균열과 인간 존재의 결핍을 다룬 독창적인 수작으로 지속해서 읽히고 있다.\n\n소설의 배경은 인디애나(Indiana)주의 가상의 쇠퇴한 공업 도",
-    "url": "internal://literature_Q115248886",
-    "source": "NewsFinal",
-    "category": "문화·예술",
-    "subcategory": "오늘의책",
-    "region": "global",
-    "country": "미국",
-    "country_flag": "🇺🇸",
-    "score": 1,
-    "created_at": "2026-11-17 05:08",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/literature_cover_q115248886.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-17T05:08:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-17 05:08",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-17T14:41:04.399426",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-11-17T14:42:12.897366",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "enwiki": "The Rabbit Hutch",
-      "kowiki": null,
-      "source": "prize",
-      "wikidata": "Q115248886"
-    },
-    "image_credit": "우주의 알 표지",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   }
 ]
