@@ -68,11 +68,11 @@ def _esc(v) -> str:
     return "'" + str(v).replace("'", "''") + "'"
 
 
-def _d1_exec(sql: str) -> bool:
+def _d1_exec(sql: str, params: list = None) -> bool:
     res = requests.post(
         f"https://api.cloudflare.com/client/v4/accounts/{CF_ACCOUNT}/d1/database/{D1_ID}/query",
         headers={"Authorization": f"Bearer {CF_TOKEN}", "Content-Type": "application/json"},
-        json={"sql": sql}, timeout=30,
+        json={"sql": sql, "params": params or []}, timeout=30,
     )
     data = res.json()
     if not data.get("success"):
@@ -81,11 +81,11 @@ def _d1_exec(sql: str) -> bool:
     return True
 
 
-def _d1_query(sql: str) -> list:
+def _d1_query(sql: str, params: list = None) -> list:
     res = requests.post(
         f"https://api.cloudflare.com/client/v4/accounts/{CF_ACCOUNT}/d1/database/{D1_ID}/query",
         headers={"Authorization": f"Bearer {CF_TOKEN}", "Content-Type": "application/json"},
-        json={"sql": sql}, timeout=30,
+        json={"sql": sql, "params": params or []}, timeout=30,
     )
     data = res.json()
     if not data.get("success"):
@@ -110,14 +110,17 @@ RSS_COLS = ["id", "name", "category", "subcategory", "url", "is_active"]
 
 
 def _get_meta_sig(table: str) -> str:
-    rows = _d1_query(f"SELECT signature FROM sync_meta WHERE table_name = {_esc(table)}")
+    # 2026-11-17 보안 점검: table/sig는 항상 내부 하드코딩 값이라 실질 위험은
+    # 낮지만, 수동 문자열 이스케이프(_esc) 대신 D1 바인딩 파라미터로 통일.
+    rows = _d1_query("SELECT signature FROM sync_meta WHERE table_name = ?", [table])
     return rows[0]["signature"] if rows else ""
 
 
 def _set_meta_sig(table: str, sig: str) -> None:
     _d1_exec(
-        f"INSERT INTO sync_meta (table_name, signature) VALUES ({_esc(table)}, {_esc(sig)}) "
-        "ON CONFLICT(table_name) DO UPDATE SET signature = excluded.signature;"
+        "INSERT INTO sync_meta (table_name, signature) VALUES (?, ?) "
+        "ON CONFLICT(table_name) DO UPDATE SET signature = excluded.signature;",
+        [table, sig],
     )
 
 
