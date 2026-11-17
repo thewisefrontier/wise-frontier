@@ -59,6 +59,15 @@ def _fetch_all(table: str, select: str) -> list:
 
 
 def _esc(v) -> str:
+    # 2026-11-17: 이 전체 재작성(DELETE+INSERT 전부)을 ?바인딩으로 바꾸려고 실제로
+    # 테스트용 D1 DB에 "한 sql에 여러 statement + params" / "배열(batch) 바디"를
+    # 둘 다 시도해봤는데 D1 HTTP API가 둘 다 거부한다(전자는 code 7400
+    # "params with multiple statements is not supported", 후자는 object를 기대한다며
+    # 거부). 즉 한 번의 원자적 HTTP 요청으로 테이블 전체를 재작성하려면 이 방식이 불가피.
+    # table/cols는 호출부(_sync_table)에서 항상 하드코딩 상수만 들어오고, 값은 이 함수가
+    # SQLite 표준 방식(홑따옴표를 ''로 이중화)으로 이스케이프하므로 주입 경로는 없다 —
+    # scripts/test_sync_config_to_d1.py가 이 계약(정상값 왕복·홑따옴표·SQLi 페이로드)을
+    # 고정해 회귀를 막는다.
     if v is None:
         return "NULL"
     if isinstance(v, bool):
@@ -68,11 +77,11 @@ def _esc(v) -> str:
     return "'" + str(v).replace("'", "''") + "'"
 
 
-def _d1_exec(sql: str) -> bool:
+def _d1_exec(sql: str, params: list = None) -> bool:
     res = requests.post(
         f"https://api.cloudflare.com/client/v4/accounts/{CF_ACCOUNT}/d1/database/{D1_ID}/query",
         headers={"Authorization": f"Bearer {CF_TOKEN}", "Content-Type": "application/json"},
-        json={"sql": sql}, timeout=30,
+        json={"sql": sql, "params": params or []}, timeout=30,
     )
     data = res.json()
     if not data.get("success"):
@@ -81,11 +90,11 @@ def _d1_exec(sql: str) -> bool:
     return True
 
 
-def _d1_query(sql: str) -> list:
+def _d1_query(sql: str, params: list = None) -> list:
     res = requests.post(
         f"https://api.cloudflare.com/client/v4/accounts/{CF_ACCOUNT}/d1/database/{D1_ID}/query",
         headers={"Authorization": f"Bearer {CF_TOKEN}", "Content-Type": "application/json"},
-        json={"sql": sql}, timeout=30,
+        json={"sql": sql, "params": params or []}, timeout=30,
     )
     data = res.json()
     if not data.get("success"):
@@ -110,14 +119,17 @@ RSS_COLS = ["id", "name", "category", "subcategory", "url", "is_active"]
 
 
 def _get_meta_sig(table: str) -> str:
-    rows = _d1_query(f"SELECT signature FROM sync_meta WHERE table_name = {_esc(table)}")
+    # 2026-11-17 보안 점검: table/sig는 항상 내부 하드코딩 값이라 실질 위험은
+    # 낮지만, 수동 문자열 이스케이프(_esc) 대신 D1 바인딩 파라미터로 통일.
+    rows = _d1_query("SELECT signature FROM sync_meta WHERE table_name = ?", [table])
     return rows[0]["signature"] if rows else ""
 
 
 def _set_meta_sig(table: str, sig: str) -> None:
     _d1_exec(
-        f"INSERT INTO sync_meta (table_name, signature) VALUES ({_esc(table)}, {_esc(sig)}) "
-        "ON CONFLICT(table_name) DO UPDATE SET signature = excluded.signature;"
+        "INSERT INTO sync_meta (table_name, signature) VALUES (?, ?) "
+        "ON CONFLICT(table_name) DO UPDATE SET signature = excluded.signature;",
+        [table, sig],
     )
 
 

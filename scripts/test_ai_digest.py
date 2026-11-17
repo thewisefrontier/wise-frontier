@@ -104,3 +104,35 @@ assert len(_dr) == 1 and "랭체인" in _dr[0] and "가라지" in _b, (_dr, _b)
 # 오탐 대조: 금액이 다른 같은 회사 새 라운드는 유지
 assert d.drop_reposted("[AI 에이전트 플랫폼 랭체인, 5억 달러 투자 유치]\n- 5억 달러.", _prev)[1] == []
 print("재게시 금액 추가 ok")
+
+# 날짜 근거 게이트(2026-11-17 326625 애플 16→15일, 326626 소풍커넥트 15→13일): 소제목 "(원문 N)"으로 원문을 잇고
+# 그 원문의 날짜 근거(요일·명시 날짜)에 없는 날짜 구절만 지운다.
+cands = [
+    {"title_en": "Apple needs your help to make health AI better", "source_published_at": "2026-11-16T08:52:29+00:00",
+     "full_text": "Apple said in a newsroom post published Sunday ... Adults aged 21 and older"},
+    {"title_en": "소풍커넥트, 데모데이 개최", "source_published_at": "2026-11-16T06:21:41+00:00",
+     "full_text": "소풍커넥트는 지난 13일 서울 광진구 NEST 광진에서 데모데이를 개최했다. 지난 10월 21일과 28일 열린 MINI IR DAY"},
+    {"title_en": "Plural raises €1bn", "source_published_at": "2026-11-16T13:43:51+00:00",
+     "full_text": "Plural announced the money on Monday on its website."},
+    {"title_en": "Acme raises $5M seed", "source_published_at": "2026-11-16T05:00:00+00:00", "full_text": "Acme has raised a seed round."},
+]
+raw = ("[애플 연구] (원문 1)\n- 애플은 새로운 연구 조사를 11월 16일 발표했다.\n- 21세 이상이 참여한다.\n\n"
+       "[소풍 데모데이] (원문 2)\n- 11월 15일 소풍커넥트가 데모데이를 개최했다.\n- 10월 21일과 28일 사전 행사를 열었다.\n\n"
+       "[플루럴] (원문 3)\n- 11월 16일(현지시간) 플루럴이 펀드를 조성했다.\n- 30일 이내에 집행한다.\n\n"
+       "[애크미] （원문 4）\n- 11월 16일 애크미가 시드 투자를 유치했다.\n- 11월 3일부터 접수했다.\n\n"
+       "[표시 없음]\n- 11월 1일 무언가 했다.")
+b, tags = d.split_source_tags(raw)
+assert "원문" not in b and tags == {"[애플 연구]": [1], "[소풍 데모데이]": [2], "[플루럴]": [3], "[애크미]": [4]}, (b, tags)
+out, rm = d.strip_unsupported_dates(b, tags, cands)
+assert "조사를 발표했다." in out and "- 소풍커넥트가 데모데이를" in out, out          # 근거(15일·13일)와 다른 날짜 삭제
+assert "11월 16일(현지시간) 플루럴" in out and "11월 16일 애크미" in out, out      # 요일 근거 일치 / 근거 없으면 발행일 허용
+assert "10월 21일과 28일" in out and "30일 이내" in out and "11월 3일부터" in out and "11월 1일 무언가" in out, out  # 범위·기간·표시 없는 소식은 그대로
+assert len(rm) == 2, rm
+ok = raw.replace("11월 16일 발표", "11월 15일 발표").replace("11월 15일 소풍", "11월 13일 소풍")
+assert d.strip_unsupported_dates(*d.split_source_tags(ok), cands)[1] == []          # 올바른 날짜는 건드리지 않음
+print("date gate ok")
+# "layer"·"fewer"를 ayer(어제)로 읽어 발행 전날만 근거로 삼던 오탐(11/17 시험, 드림팀·액슬)
+c = {"title_en": "Dreamteam Raises $53M", "source_published_at": "2026-11-16T14:00:24+00:00", "full_text": "That intelligence layer captures fewer errors."}
+assert d.strip_unsupported_dates("[드림팀]\n- 11월 16일 드림팀이 투자를 유치했다.", {"[드림팀]": [1]}, [c])[1] == []
+assert "(월) 발행]" not in d.build_digest_prompt(d.TOPICS["startup"], [c]) and "[원문 1] Dreamteam" in d.build_digest_prompt(d.TOPICS["startup"], [c])
+print("date gate 오탐 ok")

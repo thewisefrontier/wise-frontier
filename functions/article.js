@@ -92,7 +92,14 @@ function toIsoKST(str) {
 // 클라 renderArticle이 채우므로 SSR에서는 생략(함수 단순화·DB 쿼리 1건 유지).
 function buildWrapperHtml(a, related) {
   const title = a.title_ko || a.title_en || '';
-  const body = cleanBody(a.summary_ko || a.summary_en || '');
+  // 2026-11-17 보안 점검: docs/article.html의 renderArticle()은 2026-09-03부터
+  // cleanBody() 직후 esc()를 거쳐 p/ul/h2 구조화 이전에 이스케이프하는데(원문에
+  // 실제 <script> 등이 있어도 텍스트로만 남게), 이 SSR 경로(buildWrapperHtml)는
+  // 같은 원문을 esc() 없이 그대로 HTMLRewriter setInnerContent(html:true)로
+  // 넣고 있었다 — JS를 실행하지 않는 크롤러·뷰어에 그대로 노출되는 XSS.
+  // 이스케이프는 <,>,&,",'만 건드려 마크다운([]()*  )에 영향 없으므로 아래
+  // 블록 구조화·이미지/볼드 치환 로직은 그대로 둔다(docs/article.html과 동일 원칙).
+  const body = esc(cleanBody(a.summary_ko || a.summary_en || ''));
 
   // "- " 시작 줄을 <ul><li>로, 나머지는 <p>로 묶는다 (renderArticle과 동일).
   // 문단(빈 줄) 단위로 먼저 블록을 나눈 뒤 블록별로 처리한다.
