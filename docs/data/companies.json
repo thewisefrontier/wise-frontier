@@ -2224,22 +2224,6 @@
     "updated_at": "2026-08-14 23:23"
   },
   {
-    "id": "singareni_collieries_company",
-    "name": "The Singareni Collieries Company Limited",
-    "name_ko": "싱가레니 콜리어리스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "",
-    "sector": "에너지",
-    "description": "싱가레니 콜리어리스는 1920년에 설립된 인도 텔랑가나주의 국영 석탄 채굴 기업입니다. 주로 인도 남부 지역의 전력 및 산업 수요를 충족하기 위해 석탄을 공급하며, 지역 경제에서 중요한 위치를 차지하고 있습니다. 토목 및 인프라 개발과 관련된 지역 사회 공헌 활동도 함께 수행하고 있습니다.",
-    "founded_year": 1920,
-    "headquarters": "코다구뎀, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-08 01:12"
-  },
-  {
     "id": "singareni_collieries",
     "name": "The Singareni Collieries Company Limited",
     "name_ko": "싱가레니 콜리어리스",
@@ -2254,6 +2238,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-30 17:03"
+  },
+  {
+    "id": "singareni_collieries_company",
+    "name": "The Singareni Collieries Company Limited",
+    "name_ko": "싱가레니 콜리어리스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "싱가레니 콜리어리스는 1920년에 설립된 인도 텔랑가나주의 국영 석탄 채굴 기업입니다. 주로 인도 남부 지역의 전력 및 산업 수요를 충족하기 위해 석탄을 공급하며, 지역 경제에서 중요한 위치를 차지하고 있습니다. 토목 및 인프라 개발과 관련된 지역 사회 공헌 활동도 함께 수행하고 있습니다.",
+    "founded_year": 1920,
+    "headquarters": "코다구뎀, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-08 01:12"
   },
   {
     "id": "tata_power",
@@ -3278,6 +3278,22 @@
     "website": null,
     "is_published": true,
     "updated_at": null
+  },
+  {
+    "id": "antonov_company",
+    "name": "Antonov Company",
+    "name_ko": "안토노프",
+    "country": "러시아",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "항공우주 및 방위산업",
+    "description": "1946년 설립된 우크라이나의 국영 항공기 설계 및 제조 기업입니다. 수송기 분야에서 세계적인 기술력을 보유하고 있으며, 사고 기체인 An-12를 비롯한 다수의 군용 및 민간 수송기를 개발했습니다. 현재는 우크라이나 국영 방산 그룹인 우크로보론프롬(Ukroboronprom) 산하에 소속되어 있습니다.",
+    "founded_year": 1946,
+    "headquarters": "키이우, 우크라이나",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-11-18 06:39"
   },
   {
     "id": "antonov",
