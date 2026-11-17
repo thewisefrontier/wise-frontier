@@ -1,25 +1,25 @@
 {
-  "updated_at": "2026-11-17 23:42",
+  "updated_at": "2026-11-17 23:46",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7410.84,
-      "change_pct": -1.99,
+      "price": 7403.5,
+      "change_pct": -2.09,
       "up": false
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 24529.72,
-      "change_pct": -2.41,
+      "price": 24483.84,
+      "change_pct": -2.6,
       "up": false
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 51336.43,
-      "change_pct": -1.93,
+      "price": 51351.91,
+      "change_pct": -1.9,
       "up": false
     },
     {
@@ -39,8 +39,8 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 110440.42,
-      "change_pct": -0.97,
+      "price": 110310.37,
+      "change_pct": -1.09,
       "up": false
     },
     {
@@ -74,8 +74,8 @@
     {
       "name": "USD/NGN",
       "symbol": "USDNGN=X",
-      "price": 1351.41,
-      "change_pct": 0.62,
+      "price": 1352.16,
+      "change_pct": 0.68,
       "up": true
     },
     {
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 16.94,
-      "change_pct": 0.08,
+      "price": 16.93,
+      "change_pct": 0.04,
       "up": true
     }
   ],
@@ -98,22 +98,22 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7410.84,
-        "change_pct": -1.99,
+        "price": 7403.5,
+        "change_pct": -2.09,
         "up": false
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 24529.72,
-        "change_pct": -2.41,
+        "price": 24483.84,
+        "change_pct": -2.6,
         "up": false
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 51336.43,
-        "change_pct": -1.93,
+        "price": 51351.91,
+        "change_pct": -1.9,
         "up": false
       }
     ],
@@ -137,8 +137,8 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 110440.42,
-        "change_pct": -0.97,
+        "price": 110310.37,
+        "change_pct": -1.09,
         "up": false
       },
       {
@@ -174,8 +174,8 @@
       {
         "name": "USD/NGN",
         "symbol": "USDNGN=X",
-        "price": 1351.41,
-        "change_pct": 0.62,
+        "price": 1352.16,
+        "change_pct": 0.68,
         "up": true
       },
       {
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 16.94,
-        "change_pct": 0.08,
+        "price": 16.93,
+        "change_pct": 0.04,
         "up": true
       }
     ]
