@@ -415,7 +415,7 @@ def fetch_seeded_pixabay_image(keywords: list, seed: int, key_hint: str, allowed
         start = seed % len(hits)
         fallback = fallback or (query, hits[start])
         try:
-            used = db.pixabay_ids_used_recently([h.get("id") for h in hits])
+            used = db.pixabay_ids_used_recently([h.get("id") for h in hits], hours=db.DAILY_PIXABAY_REUSE_HOURS)
         except Exception as e:
             print(f"  ⚠️ 최근 사용 이미지 확인 실패(그냥 진행): {e}")
             break

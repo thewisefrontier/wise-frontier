@@ -541,6 +541,9 @@ def update_source_health(outcomes: dict, fail_threshold: int) -> dict:
 # 같은 스톡사진(같은 photo id)이 1등으로 나와 무관한 두 기사에 2시간 간격으로 실렸다. 위키미디어 entity
 # 경로(백악관 기사에 백악관 사진처럼 "같은 대상은 같은 사진이 맞는" 경우)는 의도된 재사용이라 대상 아님.
 PIXABAY_REUSE_HOURS = 96
+# 매일 나오는 정기 기사(유가·금값·마켓·날씨 등)는 주제가 같아 후보 사진이 한정적이다 — 4일을 지키려다 검색 결과
+# 뒤쪽의 무관한 사진(금값 기사에 성당)까지 내려갔다. 2026-11-18 사용자 지시: "매일 나오는 기사의 경우 타임라인을 2일로".
+DAILY_PIXABAY_REUSE_HOURS = 48
 # R2 파일 이름 속 Pixabay 사진 id — "article_pixabay_{id}"(일반 기사) 또는 "…_pid{id}"(그 외 전부).
 _PIXABAY_ID_RE = re.compile(r"(?:pixabay_|_pid)(\d+)(?!\d)")
 
