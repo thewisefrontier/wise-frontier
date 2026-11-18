@@ -54,3 +54,22 @@ assert a._has_avoid_word("election maps of serbia", a._WIKI_TITLE_AVOID_WORDS)
 assert a._has_avoid_word("1831 cartoons|cholera in art", a._WIKI_CATEGORY_AVOID_WORDS)
 assert not a._has_avoid_word("maple leaf flag", a._WIKI_TITLE_AVOID_WORDS)
 print("단어 단위 차단 ok")
+
+# 2026-11-18: 우표·포스터는 사진이 아니다(id=327152 크림대교 기사에 기념우표 전지)
+assert a._has_avoid_word("sheets of stamp of ukraine, crimean bridge encore.jpg", a._WIKI_TITLE_AVOID_WORDS)
+assert a._has_avoid_word("2022 crimean bridge explosion|wars on stamps of ukraine", a._WIKI_TITLE_AVOID_WORDS)
+assert not a._has_avoid_word("крымский мост после взрыва, 2022, 01.jpg|2022 crimean bridge explosion", a._WIKI_TITLE_AVOID_WORDS)
+
+# 2026-11-18: 키워드 호출에서 중심 인물도 받는다(id=326605 패틴슨 기사에 빈 극장 스톡사진)
+assert a.parse_person_and_keywords("인물: Robert Pattinson\n키워드: cinema, film premiere") == ("Robert Pattinson", "cinema  film premiere")
+assert a.parse_person_and_keywords("인물: 없음\n키워드: oil refinery, tanker") == ("", "oil refinery  tanker")
+assert a.parse_person_and_keywords("oil refinery, tanker") == ("", "oil refinery  tanker")      # 옛 형식 응답
+assert a.parse_person_and_keywords("**인물:** 시진핑\n키워드: summit")[0] == ""                 # 한글 이름은 위키 검색어로 안 씀
+
+# 2026-11-18: Pixabay 태그가 검색어와 충분히 겹쳐야 한다(금값 기사에 성당, 증시 기사에 여권+유로)
+assert not a.tags_match_query("cathedral, church, gold, architecture", "gold bars bullion")
+assert a.tags_match_query("gold, bullion, bar, finance", "gold bars bullion")
+assert a.tags_match_query("coins, gold, money", "gold coins")
+assert not a.tags_match_query("passport, money, euro, currency", "stock market chart")
+assert a.tags_match_query("stock market, chart, trading", "stock market chart")
+print("11/18 사진 규칙 ok")

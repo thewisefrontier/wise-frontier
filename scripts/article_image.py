@@ -81,6 +81,9 @@ _WIKI_TITLE_AVOID_WORDS = (
     # 조직도·플로차트가 1순위로 잡히기 쉽다.
     "corporate structure", "org chart", "organizational chart", "organisational chart",
     "flowchart", "flow chart", "schematic",
+    # 2026-11-18 사용자 제보(id=327152 "크림대교 타격" 기사에 우크라이나 기념우표 전지): 사건을 기념한 우표·
+    # 화폐·포스터는 사진이 아니다. 분류 "Wars on stamps of Ukraine"에도 걸린다(우표 확대본 "Enl crimea bridge").
+    "stamp", "postage", "philately", "banknote", "postcard", "poster", "coat of arms", "logo",
 )
 
 # 2026-09-14 실사고(사용자 재제보 — 위 차트를 걸렀더니 그 자리를 1831년
@@ -439,7 +442,21 @@ def _pixabay_hits(query: str, allowed_countries) -> list:
     )
     if res.status_code != 200:
         raise RuntimeError(f"Pixabay {res.status_code}: {res.text[:100]}")
-    return filter_foreign_place_hits(res.json().get("hits", []), set(allowed_countries), query)
+    hits = filter_foreign_place_hits(res.json().get("hits", []), set(allowed_countries), query)
+    return [h for h in hits if tags_match_query(h.get("tags", ""), query)]
+
+
+def tags_match_query(tags: str, query: str) -> bool:
+    """Pixabay 사진 태그가 검색어 단어를 충분히 담는지(2단어 이상 검색어면 2개, 1단어면 1개).
+    2026-11-18 사용자 제보(id=327094 금값 기사에 성당 천장, id=327095 뉴욕증시 기사에 러시아 여권+유로 지폐): 최근
+    사용 사진을 피하려 50장 중 뒤쪽 순위로 내려가면 검색어와 거의 무관한 사진이 섞인다 — 성당은 "gold" 태그
+    하나로만 "gold bars bullion"에 걸렸다."""
+    def stem(w):
+        return w[:-1] if len(w) > 3 and w.endswith("s") else w
+    tag_words = {stem(w) for w in re.findall(r"[a-z]+", (tags or "").lower())}
+    q_words = {stem(w) for w in re.findall(r"[a-z]+", query.lower()) if len(w) >= 3}
+    need = min(2, len(q_words))
+    return len(q_words & tag_words) >= need
 
 
 def _store_pixabay_hit(query: str, hit: dict, key_hint: str) -> str:
@@ -554,6 +571,22 @@ def pick_safe_pixabay_hit(hits: list, allow_name: str = ""):
     return candidates[0]
 
 
+def parse_person_and_keywords(text: str) -> tuple:
+    """'인물: X\n키워드: a, b' 응답 → (인물 영문명 또는 "", 검색어). 형식이 어긋나면 첫 줄을 키워드로 본다."""
+    person, query = "", ""
+    for line in (text or "").strip().splitlines():
+        line = line.strip().strip("*").strip()
+        if line.startswith("인물:"):
+            v = line[3:].strip().strip('"')
+            if v and v not in ("없음", "none", "None", "-") and re.fullmatch(r"[A-Za-z][A-Za-z .'\-]{2,60}", v):
+                person = v
+        elif line.startswith("키워드:"):
+            query = line[4:].strip()
+    if not query and text and "인물:" not in text:
+        query = text.strip().split("\n")[0]
+    return person, query.replace(",", " ").strip()[:100]
+
+
 def fetch_article_image(title: str, body: str, entity: str, call_gemini_fn) -> tuple:
     """기사 이미지를 찾는다. 반환: (image_url, image_credit).
 
@@ -583,16 +616,32 @@ def fetch_article_image(title: str, body: str, entity: str, call_gemini_fn) -> t
 
     if not PIXABAY_API_KEY:
         return "", ""
-    prompt = f"""아래 뉴스 기사의 이미지 검색용 영문 키워드를 2~3개 추출하세요.
-일반적인 시각 소재 위주로 (예: oil refinery, stock market, container port, farmland).
-인명·기업명·구체적 지명은 제외. 쉼표 구분, 키워드만 출력.
+    # 2026-11-18 사용자 제보(id=326605 로버트 패틴슨 007 낙점 기사에 빈 극장, id=326456 트럼프·시진핑·푸틴 3자
+    # 회담에 회의실 직장인 스톡사진): 위 위키 단계는 entity(keyword_en) 하나로만 찾는데, keyword_en이 사건명
+    # ("APEC Trilateral Summit")이거나 비어 있으면(재검증 경로 reverify_held는 "") 인물 사진을 못 찾고 여기로 온다.
+    # 키워드를 묻는 같은 호출에서 중심 인물 영문 이름도 받아 위키 인물 사진을 먼저 찾는다(호출 수 그대로).
+    prompt = f"""아래 뉴스 기사에 대해 두 줄로 답하세요.
+1줄: "인물: " 뒤에 기사의 중심 인물 1명의 영문 이름(위키백과 표기, 예: Xi Jinping). 특정 인물이 중심이 아니면 "인물: 없음".
+2줄: "키워드: " 뒤에 이미지 검색용 영문 키워드 2~3개(일반적인 시각 소재, 예: oil refinery, stock market, container port).
+키워드에는 인명·기업명·구체적 지명을 넣지 마세요.
 
 제목: {title}
 본문 앞부분: {(body or "")[:300]}"""
-    kw = call_gemini_fn(prompt, max_tokens=30, start_tier=4)
+    kw = call_gemini_fn(prompt, max_tokens=60, start_tier=4)
     if not kw:
         return "", ""
-    query = kw.strip().replace(",", " ").split("\n")[0][:100]
+    person, query = parse_person_and_keywords(kw)
+    if person and person.lower() != (entity or "").lower():
+        wiki_url, wiki_credit = fetch_wikimedia_image(person)
+        if wiki_url:
+            try:
+                from image_store import store_image
+                stored_url = store_image(wiki_url, key_hint=f"wiki_{person}")
+            except Exception as e:
+                print(f"  ⚠️ 위키미디어 이미지 R2 저장 실패, 원본 URL 사용: {e}")
+                stored_url = wiki_url
+            print(f"  🖼️ 위키미디어 커먼즈 인물 사진 사용: {person}")
+            return (stored_url or wiki_url), (wiki_credit or "")
     if not query:
         return "", ""
     try:
