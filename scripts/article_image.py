@@ -111,11 +111,11 @@ def _has_avoid_word(text: str, words) -> bool:
 
 
 # 파일 제목에 있으면 여러 인물이 같이 찍힌 사진(회담·면담·흉내꾼 등) — fetch_wikimedia_image 참고(2026-11-11).
-_WIKI_MULTI_PERSON_WORDS = (" and ", " & ", " with ", " meets", " meeting", "courtesy call", " talks",
+_WIKI_MULTI_PERSON_WORDS = (" and ", " & ", " with ", " meet ", " meets", " meeting", "courtesy call", " talks",
                             "bilateral", "delegation", "impersonat", " visit to ")
 
 
-def fetch_wikimedia_image(query: str, allow_artwork: bool = False):
+def fetch_wikimedia_image(query: str, allow_artwork: bool = False, file_title: str = ""):
     """위키미디어 커먼즈에서 CC/PD 라이선스 이미지를 검색한다.
 
     영화 포스터·앨범 커버 등 저작권이 있는 홍보물은 커먼즈 정책상 애초에
@@ -137,8 +137,10 @@ def fetch_wikimedia_image(query: str, allow_artwork: bool = False):
         res = requests.get(
             "https://commons.wikimedia.org/w/api.php",
             params={
-                "action": "query", "generator": "search",
-                "gsrsearch": query, "gsrnamespace": 6, "gsrlimit": 8,
+                "action": "query",
+                # file_title: 검색 대신 특정 파일 하나만 검사(위키백과 문서 대표 사진, wikipedia_lead_file 참고)
+                **({"titles": file_title} if file_title else
+                   {"generator": "search", "gsrsearch": query, "gsrnamespace": 6, "gsrlimit": 8}),
                 "prop": "imageinfo", "iiprop": "url|extmetadata|size|mime",
                 # 원본을 그대로 링크하면 히어로 이미지(max-height:420px)에
                 # 비해 과도하게 큰 파일(커먼즈 원본은 수 MB인 경우도 흔함)이
@@ -169,7 +171,9 @@ def fetch_wikimedia_image(query: str, allow_artwork: bool = False):
         # "(cropped)"·공식 "portrait"를 앞으로 당긴다(같은 검색에 단독 사진이 있었다).
         q_lower = query.lower()
         # 명화 소개(allow_artwork)는 작품 제목에 "and"가 흔하다("Water-Lily Pond and Weeping Willow") — 거르지 않는다.
-        multi = [] if allow_artwork else [w for w in _WIKI_MULTI_PERSON_WORDS if w.strip() not in q_lower]
+        # file_title(위키백과 문서 대표 사진)은 편집자가 고른 본인 초상 — 여러 인물·이름 확인을 건너뛴다(대표 사진이
+        # "Keir Starmer visits China (cropped)"처럼 다른 행사 사진을 잘라낸 경우가 흔하다)
+        multi = [] if (allow_artwork or file_title) else [w for w in _WIKI_MULTI_PERSON_WORDS if w.strip() not in q_lower]
         def _rank(p):
             t = (p.get("title") or "").lower()
             return (0 if ("(cropped)" in t or "portrait" in t) else 1, p.get("index", 99))
@@ -204,7 +208,7 @@ def fetch_wikimedia_image(query: str, allow_artwork: bool = False):
             # 나오고 작품 전체 구도(연꽃·물 등)가 안 보인다(위 실사고).
             if allow_artwork and ("detail of" in title_norm or "(detail)" in title_norm):
                 continue
-            if anchor and anchor not in title_lower:
+            if anchor and anchor not in title_lower and not file_title:
                 continue
             if (info.get("width") or 0) < 300 or (info.get("height") or 0) < 200:
                 continue
@@ -242,8 +246,11 @@ def fetch_wikimedia_image(query: str, allow_artwork: bool = False):
             if "created by" in description_lower and "for the article" in description_lower:
                 continue
             license_key = (meta.get("License", {}).get("value") or "").lower()
-            restrictions = (meta.get("Restrictions", {}).get("value") or "").strip()
-            if restrictions or license_key not in _WIKI_LICENSE_ALLOW:
+            # "personality"(초상권 주의)는 광고·상업적 보증 금지 안내라 보도 사진엔 문제없다 — 이걸로 막으면 유명인
+            # 사진이 대부분 탈락했다(2026-11-18 실측: 위키백과 대표 사진인 패틴슨·와인스틴·피에르 사진 전부). 상표·휘장 등
+            # 다른 제한은 계속 막는다.
+            restrictions = {r.strip() for r in (meta.get("Restrictions", {}).get("value") or "").split("|") if r.strip()}
+            if (restrictions - {"personality"}) or license_key not in _WIKI_LICENSE_ALLOW:
                 continue
             url = info.get("thumburl") or info.get("url", "")
             if not url:
@@ -571,6 +578,31 @@ def pick_safe_pixabay_hit(hits: list, allow_name: str = ""):
     return candidates[0]
 
 
+def wikipedia_lead_file(name: str, occupation: str = "") -> str:
+    """영어 위키백과에서 "이름 직업"으로 인물 문서를 찾아 그 문서 대표 사진의 파일명("File:…")을 돌려준다. 없으면 "".
+    2026-11-18: 커먼즈를 이름으로만 검색하면 동명이인(배우 Aaron Pierre 대신 축구 선수)이 나왔다 — 위키백과는
+    동명이인을 문서로 구분하고 대표 사진은 편집자가 고른 본인 초상이다. 문서 제목이 이름으로 시작할 때만 쓴다."""
+    try:
+        h = {"User-Agent": "NewsFinalBot/1.0 (+https://newsfinal.co.kr)"}
+        r = requests.get("https://en.wikipedia.org/w/api.php", headers=h, timeout=15, params={
+            "action": "query", "list": "search", "srsearch": f"{name} {occupation}".strip(), "srlimit": 5, "format": "json"})
+        titles = [x["title"] for x in (r.json().get("query") or {}).get("search") or []]
+        n = name.lower()
+        # 이름과 같은 문서 > "이름 (직업)" 동명이인 문서 > 이름으로 시작하는 문서("Xi Jinping Thought" 같은 건 마지막)
+        # 검색 순위(직업 포함 검색)대로 "이름" 또는 "이름 (…)" 문서의 첫 번째 — 이름과 똑같은 문서만 고르면
+        # 동명이인 문서가 뽑혔다("Aaron Pierre"=축구 선수, 배우는 "Aaron Pierre (actor)")
+        pick = next((t for t in titles if t.lower() == n or t.lower().startswith(n + " (")), None)
+        if not pick:
+            return ""
+        r = requests.get("https://en.wikipedia.org/w/api.php", headers=h, timeout=15, params={
+            "action": "query", "titles": pick, "prop": "pageimages", "piprop": "name", "format": "json"})
+        page = next(iter((r.json().get("query") or {}).get("pages", {}).values()), {})
+        return f"File:{page['pageimage']}" if page.get("pageimage") else ""
+    except Exception as e:
+        print(f"  ⚠️ 위키백과 대표 사진 조회 실패: {e}")
+        return ""
+
+
 def parse_person_and_keywords(text: str) -> tuple:
     """'인물: X\n키워드: a, b' 응답 → (인물 영문명 또는 "", 검색어). 형식이 어긋나면 첫 줄을 키워드로 본다."""
     person, query = "", ""
@@ -578,8 +610,12 @@ def parse_person_and_keywords(text: str) -> tuple:
         line = line.strip().strip("*").strip()
         if line.startswith("인물:"):
             v = line[3:].strip().strip('"')
-            if v and v not in ("없음", "none", "None", "-") and re.fullmatch(r"[A-Za-z][A-Za-z .'\-]{2,60}", v):
-                person = v
+            name, _, occ = v.partition("|")
+            name, occ = name.strip(), occ.strip().lower()
+            if name and name not in ("없음", "none", "None", "-") and re.fullmatch(r"[A-Za-z][A-Za-z .'\-]{2,60}", name):
+                # 직업을 붙여 찾는다 — 이름만으로는 동명이인이 나왔다(2026-11-18: 배우 Aaron Pierre 대신 축구 선수,
+                # 호주 독버섯 살인범 Erin Patterson 대신 군인). 형식: "이름|직업" (직업이 없거나 이상하면 이름만)
+                person = name + (f"|{occ}" if re.fullmatch(r"[a-z]{3,20}", occ or "") else "")
         elif line.startswith("키워드:"):
             query = line[4:].strip()
     if not query and text and "인물:" not in text:
@@ -621,7 +657,7 @@ def fetch_article_image(title: str, body: str, entity: str, call_gemini_fn) -> t
     # ("APEC Trilateral Summit")이거나 비어 있으면(재검증 경로 reverify_held는 "") 인물 사진을 못 찾고 여기로 온다.
     # 키워드를 묻는 같은 호출에서 중심 인물 영문 이름도 받아 위키 인물 사진을 먼저 찾는다(호출 수 그대로).
     prompt = f"""아래 뉴스 기사에 대해 두 줄로 답하세요.
-1줄: "인물: " 뒤에 기사의 중심 인물 1명의 영문 이름(위키백과 표기, 예: Xi Jinping). 특정 인물이 중심이 아니면 "인물: 없음".
+1줄: "인물: " 뒤에 기사의 중심 인물 1명의 영문 이름(위키백과 표기)과 " | " 뒤에 직업 영문 한 단어(예: "인물: Xi Jinping | politician", "인물: Aaron Pierre | actor"). 특정 인물이 중심이 아니면 "인물: 없음".
 2줄: "키워드: " 뒤에 이미지 검색용 영문 키워드 2~3개(일반적인 시각 소재, 예: oil refinery, stock market, container port).
 키워드에는 인명·기업명·구체적 지명을 넣지 마세요.
 
@@ -631,8 +667,15 @@ def fetch_article_image(title: str, body: str, entity: str, call_gemini_fn) -> t
     if not kw:
         return "", ""
     person, query = parse_person_and_keywords(kw)
-    if person and person.lower() != (entity or "").lower():
-        wiki_url, wiki_credit = fetch_wikimedia_image(person)
+    name, _, occ = person.partition("|")
+    if name and name.lower() != (entity or "").lower():
+        # 위키백과 문서 대표 사진 우선(동명이인 구분), 없으면 커먼즈를 "이름 직업"으로 — 이름만으로 다시 찾으면
+        # 동명이인으로 돌아간다(실측).
+        lead = wikipedia_lead_file(name, occ)
+        wiki_url, wiki_credit = fetch_wikimedia_image(name, file_title=lead) if lead else (None, None)
+        if not wiki_url:
+            wiki_url, wiki_credit = fetch_wikimedia_image(f"{name} {occ}" if occ else name)
+        person = name
         if wiki_url:
             try:
                 from image_store import store_image
