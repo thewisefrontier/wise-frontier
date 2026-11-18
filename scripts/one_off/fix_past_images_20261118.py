@@ -46,12 +46,34 @@ NOT_PERSON = re.compile(r"\b(Summit|Bank|Party|Group|Company|Corp|Airlines?|Univ
 conn = psycopg2.connect(os.environ["AIVEN_SERVICE_URI"], connect_timeout=15)
 conn.autocommit = True
 cur = conn.cursor()
-updates = []   # (id, image_url, image_credit, 사유)
+class Applier(list):
+    """append하면 바로 DB에 쓴다(2026-11-18 1차 실행이 Pixabay 시간 초과로 끝에서 죽어 하나도 반영 못 함). 50행마다 WAL 대기."""
+    def append(self, item):
+        aid, url, credit, why = item
+        if len(self) % 50 == 0:
+            wait_wal_drain(cur)
+        cur.execute("update articles set image_url=%s, image_credit=%s where id=%s", (url or None, credit or None, aid))
+        super().append(item)
+
+
+def safe(fn, *args, **kw):
+    try:
+        return fn(*args, **kw)
+    except Exception as e:
+        print(f"  ⚠️ 건너뜀: {fn.__name__} {str(e)[:80]}")
+        return None
+
+
+updates = Applier()   # (id, image_url, image_credit, 사유)
 
 
 def pixabay_tags(pid):
-    r = requests.get("https://pixabay.com/api/", params={"key": a.PIXABAY_API_KEY, "id": pid}, timeout=15)
     time.sleep(0.7)   # 분당 100회 한도
+    try:
+        r = requests.get("https://pixabay.com/api/", params={"key": a.PIXABAY_API_KEY, "id": pid}, timeout=30)
+    except Exception as e:
+        print(f"  ⚠️ 태그 조회 실패 pid{pid}: {str(e)[:60]}")
+        return None
     hits = r.json().get("hits", []) if r.ok else []
     return hits[0].get("tags", "") if hits else None
 
@@ -76,7 +98,7 @@ for aid, sub, url in seeded:
     bad += 1
     print(f"[정기] {aid} {sub} pid{pid} 태그 {tags!r} — 주제 불일치")
     if not DRY:
-        new = a.fetch_seeded_pixabay_image(pool, aid, f"{key}_fix_{aid}")
+        new = safe(a.fetch_seeded_pixabay_image, pool, aid, f"{key}_fix_{aid}")
         if new:
             updates.append((aid, new, DISCLAIMER, "정기 태그 불일치"))
 print(f"① 정기 기사 {checked}건 점검, 불일치 {bad}건")
@@ -131,8 +153,8 @@ for url, rows in by_url.items():
     wiki_bad += 1
     print(f"[위키] {query!r} 기사 {len(rows)}건 — 지금 사진 후보 {[t for _, _, t in matches]} 탈락 기준")
     if not DRY:
-        new_url, new_credit = a.fetch_wikimedia_image(query)
-        stored = store_image(new_url, key_hint=f"wiki_{query}_fix") if new_url else ""
+        new_url, new_credit = safe(a.fetch_wikimedia_image, query) or (None, None)
+        stored = safe(store_image, new_url, key_hint=f"wiki_{query}_fix") if new_url else ""
         if not stored:     # 대체 사진을 못 찾으면 지금 사진을 둔다(시험 실행: 콩고 47건·수단 20건이 통째로 빠질 뻔)
             print("    → 대체 사진 없음, 유지")
             continue
@@ -149,7 +171,7 @@ found = 0
 cache = {}
 for aid, kw in person_rows:
     if kw not in cache:
-        url, credit = a.fetch_wikimedia_image(kw)
+        url, credit = safe(a.fetch_wikimedia_image, kw) or (None, None)
         parts = kw.lower().split()
         fname = unquote(url or "").lower().replace("_", " ")
         ok = bool(url) and parts[0] in fname and parts[-1] in fname
@@ -161,13 +183,9 @@ for aid, kw in person_rows:
     found += 1
     print(f"[인물] {aid} {kw!r} → 위키 인물 사진")
     if not DRY:
-        stored = store_image(url, key_hint=f"wiki_{kw}")
+        stored = safe(store_image, url, key_hint=f"wiki_{kw}")
         if stored:
             updates.append((aid, stored, credit or "", "예시 사진 → 인물 사진"))
 print(f"③ 예시 사진 기사 중 인물명 키워드 {len(person_rows)}건, 인물 사진 찾음 {found}건")
 
-for i, (aid, url, credit, why) in enumerate(updates):
-    if i % 50 == 0:
-        wait_wal_drain(cur)
-    cur.execute("update articles set image_url=%s, image_credit=%s where id=%s", (url or None, credit or None, aid))
 print(f"교체 완료 {len(updates)}건 (DRY={DRY})")
