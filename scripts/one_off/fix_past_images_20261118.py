@@ -24,7 +24,7 @@ import article_image as a  # noqa: E402
 from db_write_guard import wait_wal_drain  # noqa: E402
 from image_store import store_image  # noqa: E402
 
-DRY = True
+DRY = False
 UA = {"User-Agent": "NewsFinalBot/1.0 (+https://newsfinal.co.kr)"}
 DISCLAIMER = "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)"
 POOL_BY_SUB = {  # subcategory 접두 → (모듈, 키워드 풀)
@@ -40,7 +40,8 @@ POOL_BY_SUB = {  # subcategory 접두 → (모듈, 키워드 풀)
 NOT_PERSON = re.compile(r"\b(Summit|Bank|Party|Group|Company|Corp|Airlines?|University|Ministry|Council|League|Cup|Festival|"
                         r"Crisis|Election|War|Attack|Agreement|Deal|Market|Exchange|Fund|Project|Bridge|Port|Airport|"
                         r"Stadium|Award|Prize|Federation|Union|Association|Committee|Court|Army|Force|Police|Bureau|"
-                        r"Agency|Institute|Foundation|Museum|Hospital|Mine|Mining|Oil|Gas|Energy|Motors?|Holdings)\b")
+                        r"Agency|Institute|Foundation|Museum|Hospital|Mine|Mining|Oil|Gas|Energy|Motors?|Holdings|"
+                        r"Island|Earthquake|Images|Gazeta|Administration|Senhora|Aparecida|Airways)\b")
 
 conn = psycopg2.connect(os.environ["AIVEN_SERVICE_URI"], connect_timeout=15)
 conn.autocommit = True
@@ -132,9 +133,11 @@ for url, rows in by_url.items():
     if not DRY:
         new_url, new_credit = a.fetch_wikimedia_image(query)
         stored = store_image(new_url, key_hint=f"wiki_{query}_fix") if new_url else ""
+        if not stored:     # 대체 사진을 못 찾으면 지금 사진을 둔다(시험 실행: 콩고 47건·수단 20건이 통째로 빠질 뻔)
+            print("    → 대체 사진 없음, 유지")
+            continue
         for aid, _, _ in rows:
-            updates.append((aid, stored, new_credit or "", "위키 탈락 사진") if stored
-                           else (aid, "", "", "위키 대체 사진 없음 — 사진 제거"))
+            updates.append((aid, stored, new_credit or "", "위키 탈락 사진"))
 print(f"② 위키 파일 {len(by_url)}개 점검, 교체 대상 {wiki_bad}개")
 
 # ③ 일반 기사 Pixabay 예시 사진 → 인물 위키 사진
