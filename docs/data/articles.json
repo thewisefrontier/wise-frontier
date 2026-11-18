@@ -1,5 +1,71 @@
 [
   {
+    "id": 327317,
+    "title_en": "[국내유가] 휘발유 리터당 1854원…전국 유가 나란히 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1854원…전국 유가 나란히 하락",
+    "summary_ko": "한국석유공사 오피넷이 19일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1854원으로 집계됐다. 이는 전일 대비 0.17원 내린 수치로, 최근의 가격 안정세가 반영된 결과다.\n\n이어 경유는 리터당 1840.92원으로 전일 대비 0.57원 하락했으며, LPG 부탄은 리터당 1177.91원으로 전일보다 0.09원 내렸다. 오피넷에 따르면 주요 유종의 가격이 전반적으로 소폭 하락세를 보였다.\n\n이번 유가 하락은 최근 국제유가 변동 추이와 정유사 공급가격 조정 등이 복합적으로 작용했기 때문이다. 환율 요인과 함께 그동",
+    "url": "internal://opinet_price_2026-11-19",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-11-19 05:12",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_11_19_pid7292033.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-19T05:12:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-19 05:12",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-11-19",
+      "prices": {
+        "B027": {
+          "diff": -0.17,
+          "name": "휘발유",
+          "price": 1854.45
+        },
+        "B034": {
+          "diff": -0.98,
+          "name": "고급휘발유",
+          "price": 2363.17
+        },
+        "C004": {
+          "diff": -0.07,
+          "name": "실내등유",
+          "price": 1568.82
+        },
+        "D047": {
+          "diff": -0.57,
+          "name": "경유",
+          "price": 1840.92
+        },
+        "K015": {
+          "diff": -0.09,
+          "name": "LPG(부탄)",
+          "price": 1177.91
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 327315,
     "title_en": "[기업 분석] 인텔, 외부 고객 위한 파운드리 모델 전환과 재무 지표 공개",
     "title_ko": "[기업 분석] 인텔, 외부 고객 위한 파운드리 모델 전환과 재무 지표 공개",
