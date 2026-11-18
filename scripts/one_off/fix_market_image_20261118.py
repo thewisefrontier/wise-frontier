@@ -12,7 +12,7 @@ from db_write_guard import wait_wal_drain  # noqa: E402
 
 for q in fm._MARKET_IMAGE_KEYWORDS + ["stock market trading screen"]:
     print(f"[측정] {q!r}: 통과 {len(a._pixabay_hits(q, frozenset()))}")
-url = a.fetch_seeded_pixabay_image(fm._MARKET_IMAGE_KEYWORDS, 739000 + 327095, "frontier_markets_fix2_20261118")
+url = a.fetch_seeded_pixabay_image(fm._MARKET_IMAGE_KEYWORDS, 739000 + 327095, "frontier_markets_fix3_20261118")
 print("[선택]", url)
 if url:
     conn = psycopg2.connect(os.environ["AIVEN_SERVICE_URI"], connect_timeout=15)
