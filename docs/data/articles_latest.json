@@ -1,5 +1,42 @@
 [
   {
+    "id": 327659,
+    "title_en": "[종목 동향] 엔비디아 주가 3.3% 하락…젠슨 황 거취 우려",
+    "title_ko": "[종목 동향] 엔비디아 주가 3.3% 하락…젠슨 황 거취 우려",
+    "summary_ko": "◆ 주가 동향\n나스닥에서 엔비디아 주가는 19일(현지시간) 전일 대비 3.30% 내린 145.98달러를 기록했다. 최근 공시 자료에 따르면 도널드 트럼프 미국 대통령이 지난 9월 엔비디아 주식을 최대 26만 5000달러어치 매입한 것으로 나타났다. 그러나 이와 동시에 젠슨 황 최고경영자의 거취를 둘러싼 시장의 소문과 우려가 확산했다.\n\n경영진의 공백 가능성과 잠재적 해킹 사고에 대한 조사가 겹치면서 투자 심리가 위축됐다. ◆ 주요 지표\n당일 거래 범위는 145.71달러에서 158.13달러 사이에서 형성됐다. 52주 최고가는 243.",
+    "url": "internal://stock_news_2026-11-19",
+    "source": "NewsFinal",
+    "category": "금융",
+    "subcategory": "종목동향",
+    "region": "global",
+    "country": "미국",
+    "country_flag": "🇺🇸",
+    "score": 1,
+    "created_at": "2026-11-20 07:27",
+    "countries": [
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/stock_news_2026_11_19_pid2746212.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-20T07:27:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-20 07:27",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
     "id": 327653,
     "title_en": "[국제금값] 금 온스당 3628달러…연준 통화정책 경계와 강달러에 급락",
     "title_ko": "[국제금값] 금 온스당 3628달러…연준 통화정책 경계와 강달러에 급락",
@@ -2512,65 +2549,6 @@
     "is_travel": false,
     "source_published_at": null,
     "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
-  },
-  {
-    "id": 327338,
-    "title_en": "[국제금값] 금 온스당 3726달러…연준의 긴축 기조 속 하락",
-    "title_ko": "[국제금값] 금 온스당 3726달러…연준의 긴축 기조 속 하락",
-    "summary_ko": "국제 금값이 18일(현지시간) 하락했다. 뉴욕 시장에서 금 선물은 온스당 3726.50달러에 거래를 마쳤다.\n\n시장 집계에 따르면 이날 금 선물은 전일 종가(3864.20달러) 대비 3.56% 하락했으며, 하락폭은 137.70달러를 기록했다. 이날 장중 범위는 3721.80달러에서 3859.30달러 사이에서 형성됐다.\n\n최근 5거래일 동안 금값은 12일 종가 3885.30달러 대비 4.09% 하락한 것으로 나타났다. 현재 가격은 52주 고점인 5586.20달러 대비 33.29% 낮은 수준에 머물러 있다.\n\n외신 보도에 따르면 미국 ",
-    "url": "internal://gold_price_2026-11-18",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국제금값",
-    "region": "글로벌",
-    "country": "국제",
-    "country_flag": "🪙",
-    "score": 1,
-    "created_at": "2026-11-19 07:07",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/gold_2026_11_18_pid797942.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-19T07:07:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-19 07:07",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-19 08:11",
-        "note": "12월 기준금리 0.25%p 인상 가능성 95% 이상"
-      },
-      {
-        "timestamp": "2026-11-19 12:00",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "pct": -3.5634789325566727,
-      "date": "2026-11-18",
-      "prev": 3864.199951171875,
-      "price": 3726.5,
-      "change": -137.699951171875,
-      "source": "시장 집계",
-      "day_low": 3721.800048828125,
-      "day_high": 3859.300048828125,
-      "high_52w": 5586.2,
-      "week_pct": -4.087201678954548,
-      "week_start": 3885.300048828125,
-      "from_high_pct": -33.290967025885216,
-      "week_start_date": "2026-11-12"
-    },
     "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,
