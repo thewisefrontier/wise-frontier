@@ -1,5 +1,71 @@
 [
   {
+    "id": 327625,
+    "title_en": "[국내유가] 휘발유 리터당 1854원…전국 유가 전반 하락세",
+    "title_ko": "[국내유가] 휘발유 리터당 1854원…전국 유가 전반 하락세",
+    "summary_ko": "한국석유공사 오피넷이 20일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1854원으로 집계됐다. 이번 공개 수치는 전일 판매가격 집계를 바탕으로 산출된 것으로, 실제 주유소에서 판매된 시점은 이보다 하루 이를 수 있다.\n\n이날 오피넷에 따르면 휘발유 가격은 리터당 1854.40원으로 전일 대비 0.01원 내렸다. 경유는 리터당 1840.97원으로 전일보다 0.41원 하락했다. 자동차용 LPG 부탄 또한 리터당 1177.86원을 기록하며 전일 대비 0.14원 내려앉았다.\n\n최근 국내 유가는 환율 변동과 국제유가 ",
+    "url": "internal://opinet_price_2026-11-20",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-11-20 05:12",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_11_20_pid4402756.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-20T05:12:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-20 05:12",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-11-20",
+      "prices": {
+        "B027": {
+          "diff": -0.01,
+          "name": "휘발유",
+          "price": 1854.4
+        },
+        "B034": {
+          "diff": -0.76,
+          "name": "고급휘발유",
+          "price": 2359.98
+        },
+        "C004": {
+          "diff": -0.02,
+          "name": "실내등유",
+          "price": 1568.58
+        },
+        "D047": {
+          "diff": -0.41,
+          "name": "경유",
+          "price": 1840.97
+        },
+        "K015": {
+          "diff": -0.14,
+          "name": "LPG(부탄)",
+          "price": 1177.86
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 327624,
     "title_en": "[기업 분석] 누홀딩스, 가파른 매출 성장에 순이익 39억 달러 기록",
     "title_ko": "[기업 분석] 누홀딩스, 가파른 매출 성장에 순이익 39억 달러 기록",
