@@ -1,5 +1,71 @@
 [
   {
+    "id": 327976,
+    "title_en": "[국내유가] 휘발유 리터당 1854원…전 품목 소폭 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1854원…전 품목 소폭 하락",
+    "summary_ko": "한국석유공사 오피넷이 21일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1854원으로 집계됐다.\n\n함께 공개된 경유 평균 판매가격은 리터당 1841.06원으로 전일 대비 0.23원 내렸고, LPG 부탄은 리터당 1177.97원으로 전일보다 0.10원 하락했다. 휘발유 역시 전일 대비 0.07원 내리며 전 품목이 소폭의 하락세를 나타냈다. 오피넷에 따르면 전일 판매 가격을 집계해 공개하는 이번 데이터는 유종별 가격이 모두 전날에 비해 미미한 내림세를 기록한 것으로 확인된다.\n\n최근의 국내 유가 하락세는 국제유가 ",
+    "url": "internal://opinet_price_2026-11-21",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-11-21 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_11_21_pid1130643.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-21T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-21 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-11-21",
+      "prices": {
+        "B027": {
+          "diff": -0.07,
+          "name": "휘발유",
+          "price": 1854.36
+        },
+        "B034": {
+          "diff": -1.16,
+          "name": "고급휘발유",
+          "price": 2356.6
+        },
+        "C004": {
+          "diff": 0.0,
+          "name": "실내등유",
+          "price": 1568.82
+        },
+        "D047": {
+          "diff": -0.23,
+          "name": "경유",
+          "price": 1841.06
+        },
+        "K015": {
+          "diff": -0.1,
+          "name": "LPG(부탄)",
+          "price": 1177.97
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 327975,
     "title_en": "[기업 분석] 스페이스엑스, 테슬라 인수 우려 속 주가 하락",
     "title_ko": "[기업 분석] 스페이스엑스, 테슬라 인수 우려 속 주가 하락",
@@ -2522,79 +2588,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 327624,
-    "title_en": "[기업 분석] 누홀딩스, 가파른 매출 성장에 순이익 39억 달러 기록",
-    "title_ko": "[기업 분석] 누홀딩스, 가파른 매출 성장에 순이익 39억 달러 기록",
-    "summary_ko": "[사업]\n- 누는 브라질과 멕시코 그리고 콜롬비아에서 전통 금융기관에 맞서는 디지털 중심의 은행이다.\n- 전 세계 1억4300만 명의 고객을 서비스하며 브라질에 거대한 입지를 가지고 있고 멕시코와 콜롬비아에서 운영을 확대하고 있다.\n- 누 글로벌을 통한 국제 송금을 제공하며 오프라인 지점의 높은 고정 비용을 피하고 35개 이상의 국가에서 유용성을 확장하고 있다.\n\n[최근 실적]\n- 2026년 9월 30일로 끝난 12개월 동안 매출은 거의 208억 달러에 도달했다.\n- 빠른 고객 확보와 더 깊은 제품 사용에 힘입어 매출 성장은 약 4",
-    "url": "internal://company_analysis_20261120_nu",
-    "source": "NewsFinal",
-    "category": "산업·기업",
-    "subcategory": "company_analysis_20261120_nu",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 200,
-    "created_at": "2026-11-20 05:08",
-    "countries": null,
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/company_analysis_20261120_nu_pid948603.jpg",
-    "view_count": 0,
-    "first_published_at": null,
-    "update_log": [
-      {
-        "timestamp": "2026-11-20 05:08",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-20 09:12",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "company": "Nu",
-      "src_ids": [
-        2944626
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
-  },
-  {
-    "id": 327623,
-    "title_en": "[오늘의 신기술] 휴머노이드 로봇용 모듈러 핸드 개발과 극고온 견디는 소방 로봇 공개",
-    "title_ko": "[오늘의 신기술] 휴머노이드 로봇용 모듈러 핸드 개발과 극고온 견디는 소방 로봇 공개",
-    "summary_ko": "[휴머노이드 로봇용 모듈러 로봇 핸드 개발]\n- 융합 기술 전문 기업인 슐크의 스핀오프 기업 택틸리아가 제조 및 물류 현장에서 활용할 수 있는 모듈러 로봇 손을 개발했다.\n- 이 로봇 손은 기계장치, 구동기, 센서와 물리적 인공지능 및 소프트웨어를 결합했다.\n- 다양한 부품과 물체를 안전하게 잡고 정밀하게 위치시킬 수 있도록 설계되었다.\n- 휴머노이드, 코봇, 모바일 매니퓰레이터 등 로봇 종류와 관계없이 사용할 수 있다.\n- 개발, 훈련 및 검증은 실제 산업 현장의 요구사항에 맞추어 진행되었다.\n\n[1000도 고온 견디는 소방 로봇",
-    "url": "internal://newtech_digest_20261120",
-    "source": "NewsFinal",
-    "category": "IT·과학",
-    "subcategory": "newtech_digest_20261120",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 19,
-    "created_at": "2026-11-20 05:07",
-    "countries": null,
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/newtech_digest_20261120_pid3104355.jpg",
-    "view_count": 0,
-    "first_published_at": null,
-    "update_log": [],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   }
 ]
