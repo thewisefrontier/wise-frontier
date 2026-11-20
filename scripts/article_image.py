@@ -84,6 +84,9 @@ _WIKI_TITLE_AVOID_WORDS = (
     # 2026-11-18 사용자 제보(id=327152 "크림대교 타격" 기사에 우크라이나 기념우표 전지): 사건을 기념한 우표·
     # 화폐·포스터는 사진이 아니다. 분류 "Wars on stamps of Ukraine"에도 걸린다(우표 확대본 "Enl crimea bridge").
     "stamp", "postage", "philately", "banknote", "postcard", "poster", "coat of arms", "logo",
+    # 2026-11-21 일주일 점검: 세르지우 모루 기사에 서명 이미지, 루마니아 지진에 USGS 진도 지도, 국민연합 압수수색에
+    # 1940년대 신문 지면이 붙었다.
+    "signature", "autograph", "shakemap", "newspaper", "clipping", "infographic",
 )
 
 # 2026-09-14 실사고(사용자 재제보 — 위 차트를 걸렀더니 그 자리를 1831년
@@ -450,7 +453,17 @@ def _pixabay_hits(query: str, allowed_countries) -> list:
     if res.status_code != 200:
         raise RuntimeError(f"Pixabay {res.status_code}: {res.text[:100]}")
     hits = filter_foreign_place_hits(res.json().get("hits", []), set(allowed_countries), query)
-    return [h for h in hits if tags_match_query(h.get("tags", ""), query)]
+    return [h for h in hits if tags_match_query(h.get("tags", ""), query) and not is_unfit_stock(h.get("tags", ""))]
+
+
+_UNFIT_STOCK_TAGS = re.compile(r"\b(toys?|figurines?|figures?|lego|playmobil|miniatures?|dioramas?|dolls?|plush|"
+                               r"covid|covid-19|coronavirus|corona)\b")
+
+
+def is_unfit_stock(tags: str) -> bool:
+    """뉴스 사진으로 부적절한 Pixabay 사진. 2026-11-21 일주일 점검(사용자 지시): 사망 사고·범죄 기사에 장난감 경찰
+    피규어·레고·디오라마가 5건, 홍역·콜레라 기사에 "COVID-19" 사진이 2건 붙었다."""
+    return bool(_UNFIT_STOCK_TAGS.search((tags or "").lower()))
 
 
 def tags_match_query(tags: str, query: str) -> bool:
@@ -562,7 +575,8 @@ def pick_safe_pixabay_hit(hits: list, allow_name: str = ""):
         return None
     allow_low = (allow_name or "").lower().replace("-", " ")
     allow = {name for name in _PIXABAY_NAME_BLOCKLIST if allow_low and (name in allow_low or allow_low in name)}
-    candidates = [h for h in hits if not _hit_has_blocked_name(h, allow)]
+    candidates = [h for h in hits if not _hit_has_blocked_name(h, allow) and not is_unfit_stock(h.get("tags", ""))] \
+        or [h for h in hits if not _hit_has_blocked_name(h, allow)]
     if not candidates:
         print("  ⚠️ 모든 후보가 인물 블록리스트에 걸림 — 필터 없이 진행")
         candidates = hits

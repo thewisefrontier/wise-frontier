@@ -13,20 +13,13 @@ from db_write_guard import wait_wal_drain  # noqa: E402
 from image_store import store_image  # noqa: E402
 
 DISCLAIMER = "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)"
-PERSON = {   # 기사 id → "이름|직업"
-    325492: "Xi Jinping|politician", 325594: "Charles III|king", 325753: "Gibran Rakabuming Raka|politician",
-    326445: "Martine Moïse|politician", 326574: "Pope Leo XIV|pope", 327373: "Dominique de Villepin|politician",
-    327400: "Sergio Moro|politician",
-}
-STOCK = {    # 기사 id → Pixabay 검색어
-    325348: "ukraine flag", 325398: "river barge", 325417: "water sanitation", 325607: "summit flags",
-    325809: "courtroom gavel", 326121: "police car night", 326169: "coast guard boat", 326177: "church candles",
-    326198: "handcuffs arrest", 326334: "elderly people", 326585: "court justice scales", 326624: "exam students",
-    326677: "ambulance emergency", 326767: "cargo ship sea", 327044: "ballot box election", 327052: "measles vaccination",
-    327078: "cyber fraud laptop", 327212: "earthquake damage", 327315: "semiconductor chip", 327339: "stock market chart",
-    327371: "rhinoceros", 327526: "video game controller", 327591: "vaccination children", 327605: "military drone",
-    327637: "police investigation", 327638: "ukraine flag", 327684: "hippopotamus", 327695: "european union flag",
-    327766: "india rupee", 327913: "protest crowd",
+# 2차(교체 결과를 직접 보고 다시 고를 5건): 장난감 피규어·시신 윤곽선·다른 주제 시위·사진 없음
+PERSON = {326198: "Gabito Ballesteros|singer"}
+STOCK = {
+    327637: ["police officers france", "police raid", "police officers"],
+    327913: ["soldiers patrol", "army soldiers"],
+    325607: ["international conference", "conference meeting", "diplomacy meeting"],
+    327605: ["drone attack", "military drone", "war ruins"],
 }
 
 
@@ -41,8 +34,12 @@ def person_image(spec):
     return store_image(url, key_hint=f"wiki_{name}_lead"), credit
 
 
-def stock_image(aid, query):
-    hits = a._pixabay_hits(query, frozenset())
+def stock_image(aid, queries):
+    hits = []
+    for query in queries:
+        hits = a._pixabay_hits(query, frozenset())
+        if hits:
+            break
     if not hits:
         return None, None
     hit = a.pick_safe_pixabay_hit(hits)

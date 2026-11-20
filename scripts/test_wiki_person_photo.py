@@ -73,3 +73,10 @@ assert a.tags_match_query("coins, gold, money", "gold coins")
 assert not a.tags_match_query("passport, money, euro, currency", "stock market chart")
 assert a.tags_match_query("stock market, chart, trading", "stock market chart")
 print("11/18 사진 규칙 ok")
+
+# 2026-11-21: 장난감 피규어·COVID 사진, 서명·진도 지도·신문 지면 제외
+assert a.is_unfit_stock("police, figure, toy, handcuffs") and a.is_unfit_stock("lego, police") and a.is_unfit_stock("covid-19, virus, vaccine")
+assert not a.is_unfit_stock("ambulance, emergency, rescue")
+assert a._has_avoid_word("file:sergio moro signature.png", a._WIKI_TITLE_AVOID_WORDS)
+assert a._has_avoid_word("usgs shakemap vrancea", a._WIKI_TITLE_AVOID_WORDS)
+print("11/21 사진 규칙 ok")
