@@ -57,3 +57,21 @@ assert d._parse_merge_output('{"title": "x", "body": "깨진', "옛 제목")[1] 
 
 print("ok")
 
+
+# 2026-11-21: 제목 표현이 달라 trigram 후보에 못 오른 같은 사건(뉴올리언스 유람선 3건)을 핵심어 공유로 올린다
+class _R:
+    status_code = 200
+    def __init__(self, d): self._d = d
+    def json(self): return self._d
+_rows = [{"id": 325398, "title_ko": "미시시피강서 유조선 충돌로 유람선 전복…인명 피해는 없어", "country": "미국", "created_at": "2026-11-14 10:10", "subcategory": "cluster_x", "category": "사회"},
+         {"id": 325775, "title_ko": "뉴올리언스 항구, 미시시피강 유조선 충돌 사고 관련 선박 압류 소송 제기", "country": "미국", "created_at": "2026-11-15 14:34", "subcategory": "realtrend_x", "category": "사회"},
+         {"id": 326166, "title_ko": "미국 미시시피강서 탱커선과 유람선 충돌… 32명 부상·항만 당국 법적 대응", "country": "미국", "created_at": "2026-11-16 02:30", "subcategory": "realtrend_y", "category": "사회"},
+         {"id": 1, "title_ko": "미국 대통령 관세 발표 관련 정부 입장", "country": "미국", "created_at": "2026-11-16 03:00", "subcategory": "cluster_z", "category": "경제"},
+         {"id": 2, "title_ko": "[국제유가] WTI 배럴당 86달러…중동 지정학", "country": "미국", "created_at": "2026-11-16 04:00", "subcategory": "국제유가", "category": "경제"}]
+d.requests.get = lambda *a, **k: _R(_rows)
+_kp = d.fetch_keyword_pairs()
+_ids = {frozenset((p["id_a"], p["id_b"])) for p in _kp}
+assert frozenset((325398, 325775)) in _ids and frozenset((325398, 326166)) in _ids, _kp
+assert all(1 not in s and 2 not in s for s in _ids)           # 불용어만 겹치는 기사·정기 기사는 제외
+assert all(p["kw"] and p["score"] == 0.5 for p in _kp)
+print("핵심어 공유 후보 ok")
