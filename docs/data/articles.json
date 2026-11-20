@@ -1,5 +1,273 @@
 [
   {
+    "id": 327976,
+    "title_en": "[국내유가] 휘발유 리터당 1854원…전 품목 소폭 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1854원…전 품목 소폭 하락",
+    "summary_ko": "한국석유공사 오피넷이 21일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1854원으로 집계됐다.\n\n함께 공개된 경유 평균 판매가격은 리터당 1841.06원으로 전일 대비 0.23원 내렸고, LPG 부탄은 리터당 1177.97원으로 전일보다 0.10원 하락했다. 휘발유 역시 전일 대비 0.07원 내리며 전 품목이 소폭의 하락세를 나타냈다. 오피넷에 따르면 전일 판매 가격을 집계해 공개하는 이번 데이터는 유종별 가격이 모두 전날에 비해 미미한 내림세를 기록한 것으로 확인된다.\n\n최근의 국내 유가 하락세는 국제유가 ",
+    "url": "internal://opinet_price_2026-11-21",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-11-21 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_11_21_pid1130643.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-21T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-21 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-11-21",
+      "prices": {
+        "B027": {
+          "diff": -0.07,
+          "name": "휘발유",
+          "price": 1854.36
+        },
+        "B034": {
+          "diff": -1.16,
+          "name": "고급휘발유",
+          "price": 2356.6
+        },
+        "C004": {
+          "diff": 0.0,
+          "name": "실내등유",
+          "price": 1568.82
+        },
+        "D047": {
+          "diff": -0.23,
+          "name": "경유",
+          "price": 1841.06
+        },
+        "K015": {
+          "diff": -0.1,
+          "name": "LPG(부탄)",
+          "price": 1177.97
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 327975,
+    "title_en": "[기업 분석] 스페이스엑스, 테슬라 인수 우려 속 주가 하락",
+    "title_ko": "[기업 분석] 스페이스엑스, 테슬라 인수 우려 속 주가 하락",
+    "summary_ko": "[사업]\n- 스페이스엑스는 우주 항공 제조, 우주 운송 서비스, 통신, 인공지능(AI) 서비스를 제공하는 미국 복합기업이다.\n- 일론 머스크는 스페이스엑스와 테슬라를 이끄는 최고경영자이다.\n\n[주가 움직임]\n- 스페이스엑스 주가는 금요일 오전 10시 35분 기준으로 6.9% 내렸다.\n- 앤스로픽은 전날 주당 83[83 달러]로 기업공개를 진행했고, 111.50[111.5 달러]로 거래를 시작해 34% 올랐으나 97.17[97.17 달러]로 마감했다.\n- 앤스로픽 주가는 그다음 날 10.7% 추가로 내렸다.\n\n[전망]\n- 에이치에스비",
+    "url": "internal://company_analysis_20261121_spacex",
+    "source": "NewsFinal",
+    "category": "산업·기업",
+    "subcategory": "company_analysis_20261121_spacex",
+    "region": "global",
+    "country": "",
+    "country_flag": "",
+    "score": 80,
+    "created_at": "2026-11-21 05:07",
+    "countries": null,
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/company_analysis_20261121_spacex_pid1863880.jpg",
+    "view_count": 0,
+    "first_published_at": null,
+    "update_log": [
+      {
+        "timestamp": "2026-11-21 05:07",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "company": "SpaceX",
+      "src_ids": [
+        3021474
+      ]
+    },
+    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
+    "id": 327974,
+    "title_en": "[오늘의 신기술] 양자컴퓨팅 상용화 가속과 전고체 배터리 항공기 비행 성공",
+    "title_ko": "[오늘의 신기술] 양자컴퓨팅 상용화 가속과 전고체 배터리 항공기 비행 성공",
+    "summary_ko": "[양자컴퓨팅 기업들의 기술 상용화 및 연구 개발 추진]\n- 11월 19일(현지시간) 공개된 양자컴퓨팅 산업 동향에 따르면 D-웨이브는 일본의 대형 무선 통신사 네트워크 트래픽 최적화 등 상용 업무를 수행하고 있다.\n- 아이온큐는 순수 양자 컴퓨팅 기업 중 가장 많은 현금을 보유하고 있으며 기계, 칩, 보안 도구 개발에 빠르게 자금을 투입하고 있다.\n- 마이크로소프트는 양자 칩 개발을 추진하고 있으며 실패하더라도 기존 사업에 미치는 영향이 미미한 구조를 갖추고 있다.\n- 큐비트는 0과 1의 이진법을 사용하는 일반 비트와 달리 여러 옵",
+    "url": "internal://newtech_digest_20261121",
+    "source": "NewsFinal",
+    "category": "IT·과학",
+    "subcategory": "newtech_digest_20261121",
+    "region": "global",
+    "country": "",
+    "country_flag": "",
+    "score": 17,
+    "created_at": "2026-11-21 05:06",
+    "countries": null,
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/newtech_digest_20261121_pid5673901.jpg",
+    "view_count": 0,
+    "first_published_at": null,
+    "update_log": [],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
+    "id": 327973,
+    "title_en": "[오늘의 스타트업] AI 에이전트 개발사 에버풀, 4850만 달러 시리즈 A 투자 유치",
+    "title_ko": "[오늘의 스타트업] AI 에이전트 개발사 에버풀, 4850만 달러 시리즈 A 투자 유치",
+    "summary_ko": "[AI 에이전트 개발사 에버풀, 4850만 달러 시리즈 A 투자 유치]\n- 샌프란시스코 소재 스타트업 에버풀이 4850만 달러 규모의 시리즈 A 투자를 유치했다.\n- 이번 투자는 버텍스 벤처스 동남아시아·인디아와 재너웨이 커피탈이 주도했으며 스퀘어 페그와 라이트스피드 등이 참여했다.\n- 에버풀의 AI 에이전트는 소매업체와 브랜드를 위해 공장을 발굴 및 검증하고 주문을 관리하는 기능을 수행한다.\n- 회사는 자체 검사를 통해 공장의 품질을 평가하고 직접 상품을 배송하는 방식을 취하고 있다.\n- 에버풀은 연말까지 연환산 매출 1억 달러를",
+    "url": "internal://startup_digest_20261121",
+    "source": "NewsFinal",
+    "category": "산업·기업",
+    "subcategory": "startup_digest_20261121",
+    "region": "global",
+    "country": "",
+    "country_flag": "",
+    "score": 32,
+    "created_at": "2026-11-21 05:05",
+    "countries": null,
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/startup_digest_20261121_pid2692459.jpg",
+    "view_count": 0,
+    "first_published_at": null,
+    "update_log": [
+      {
+        "timestamp": "2026-11-21 05:05",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
+    "id": 327972,
+    "title_en": "[오늘의 AI 소식] 앤트로픽 나스닥 상장과 전 세계 증시 및 가상자산 급락",
+    "title_ko": "[오늘의 AI 소식] 앤트로픽 나스닥 상장과 전 세계 증시 및 가상자산 급락",
+    "summary_ko": "[앤트로픽, 나스닥 상장과 대규모 자금 조달]\n- 19일(현지시간) 인공지능 기업 앤트로픽이 미국 나스닥에 상장했다.\n- 공모가는 83 달러로 결정되었으며 시초가는 111.5 달러를 기록했다.\n- 이번 상장을 통해 813억 달러의 자금을 조달하며 역대 최대 규모 기록을 세웠다.\n- 상장 주관사인 골드만삭스와 모건스탠리는 각각 1억 1300만 달러의 수수료를 챙겼다.\n- 상장 당일 뉴욕증권거래소 인근에서 기술 기업 독점을 반대하는 시위대가 벌어져 4명이 체포되었다.\n\n[앤트로픽 주가 하락과 글로벌 증시 동반 폭락]\n- 20일 상장 첫",
+    "url": "internal://ai_digest_20261121",
+    "source": "NewsFinal",
+    "category": "IT·과학",
+    "subcategory": "ai_digest_20261121_crypto",
+    "region": "global",
+    "country": "",
+    "country_flag": "",
+    "score": 34,
+    "created_at": "2026-11-21 05:03",
+    "countries": null,
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/ai_digest_20261121_pid5475664.jpg",
+    "view_count": 0,
+    "first_published_at": null,
+    "update_log": [],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
+    "id": 327971,
+    "title_en": "Tannhäuser",
+    "title_ko": "[오늘의 그림] 앙리 팡탱라투르의 《탄호이저》, 바그너 오페라의 세계를 담은 1886년 작",
+    "summary_ko": "앙리 팡탱라투르(Henri Fantin-Latour)가 1886년에 그린 《탄호이저》(Tannhäuser)는 바그너 오페라에서 영감을 받아 제작된 유화 작품이다. 이 그림은 현재 클리블랜드 미술관에 소장되어 있다. 1836년 프랑스 그르녹블에서 태어난 작가는 화가인 아버지 테오도르 팡탱라투르에게 처음 드로잉을 배웠고, 1850년 파리로 이주해 드로잉 학교에서 루이알렉상드르 페롱과 호라스 르코크 드 부아보드랑에게 사습했다.\n\n이후 에콜 데 보자르에 입학하여 에드가 드가, 알퐁스 르그로, 장샤를 카쟁 등과 함께 수학했다.\n\n작가는 파리",
+    "url": "internal://art_weekly_2026-11-21",
+    "source": "NewsFinal",
+    "category": "문화·예술",
+    "subcategory": "오늘의그림",
+    "region": "europe",
+    "country": "",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-21 05:02",
+    "countries": [
+      ""
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/art_weekly_tannhauser_03056a1cff.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-21T05:02:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-21 05:02",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": "이미지 출처: The Cleveland Museum of Art (CC0 퍼블릭 도메인)",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
+    "id": 327970,
+    "title_en": "[데일리 다이제스트] 글로벌 기술주 투매와 지정학적 리스크 심화",
+    "title_ko": "[데일리 다이제스트] 글로벌 기술주 투매와 지정학적 리스크 심화",
+    "summary_ko": "[글로벌 금융 시장의 기술주 투매와 가상자산 보안 위협]\n- 앤트로픽이 20일(현지시간) 나스닥 시장에서 813억 달러 규모의 사상 최대 IPO를 달성했으나 상장 이틀 만에 주가가 12% 급락하며 미국 기술주 전반의 투매 현상을 촉발했다.\n- 20일 가상자산 교환 서비스 와규의 래핑 토큰이 해킹 공격으로 520만 개가 탈취되면서 가격이 99% 이상 폭락했다.\n- 블록체인 파생상품 프로토콜 베리에이셔널이 20일 1억1000만 달러 규모의 시리즈B 투자를 유치하며 15억 달러의 기업 가치를 기록했다.\n\n[중동 및 아프리카 지역의 안보 ",
+    "url": "internal://digest_20261121",
+    "source": "NewsFinal",
+    "category": "다이제스트",
+    "subcategory": "digest_20261121_crypto",
+    "region": "global",
+    "country": "",
+    "country_flag": "",
+    "score": 55,
+    "created_at": "2026-11-21 05:01",
+    "countries": null,
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/digest_20261121_pid2160321.jpg",
+    "view_count": 0,
+    "first_published_at": null,
+    "update_log": [],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 327962,
     "title_en": "세네갈 U17 축구대표팀, 월드컵 첫 경기서 크로아티아와 1-1 무승부",
     "title_ko": "세네갈 U17 축구대표팀, 월드컵 첫 경기서 크로아티아와 1-1 무승부",
@@ -304,6 +572,10 @@
       {
         "timestamp": "2026-11-21 02:44",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-21 05:14",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -382,6 +654,14 @@
       },
       {
         "timestamp": "2026-11-21 00:46",
+        "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-21 05:14",
+        "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-21 05:15",
         "note": "내용 업데이트"
       }
     ],
@@ -555,6 +835,10 @@
       {
         "timestamp": "2026-11-20 22:45",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-21 05:15",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -752,54 +1036,6 @@
     "noindex": true
   },
   {
-    "id": 327805,
-    "title_en": "토럼 베트남 국가주석, 중국 윈난성 방문…APEC 일정을 마치고 양국 협력 강화 다짐",
-    "title_ko": "토럼 베트남 국가주석, 중국 윈난성 방문…APEC 일정을 마치고 양국 협력 강화 다짐",
-    "summary_ko": "토람(Tô Lâm) 베트남 공산당 총서기 겸 국가주석이 20일 중국 윈난성 쿤밍시에서 열린 베트남-중국 서남지역 발전 전략 연계 포럼에 참석해 양국 간 경제 및 인프라 협력 강화 방안을 논의했다. 이번 행사는 아시아 태평양 경제협력체(APEC) 정상회의 일정을 마친 뒤 이뤄진 양국 양자 일정의 일환으로 진행됐다.\n\n토람 국가주석은 포럼 연설에서 베트남과 중국 서남지역이 상호 보완적인 경제적 이점을 지니고 있다고 강조했다. 서남지역이 광대한 시장과 높은 산업 및 혁신 역량을 갖춘 반면, 베트남은 역동적인 경제 구조와 광범위한 국제 통",
-    "url": "internal://cluster_20261120_01960c44",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "cluster_20261120_01960c44",
-    "region": "southeast_asia",
-    "country": "베트남",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-20 19:18",
-    "countries": [
-      "베트남",
-      "중국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_594091.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-20T19:18:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-20 19:18",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        2999397,
-        2999397,
-        2993773,
-        2993701,
-        2993484,
-        2991288
-      ],
-      "kr_coverage_30d": 28
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": true
-  },
-  {
     "id": 327706,
     "title_en": "국제사법재판소, 미얀마 로힝야족 집단학살 판결…군부 정권은 아세안과 갈등 격화",
     "title_ko": "국제사법재판소, 미얀마 군부 로힝야족 제노사이드 판결… 군부는 반발",
@@ -851,6 +1087,58 @@
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 327805,
+    "title_en": "토럼 베트남 국가주석, 중국 윈난성 방문…APEC 일정을 마치고 양국 협력 강화 다짐",
+    "title_ko": "토럼 베트남 국가주석, 중국 윈난성 방문…APEC 일정을 마치고 양국 협력 강화 다짐",
+    "summary_ko": "토람(Tô Lâm) 베트남 공산당 총서기 겸 국가주석이 20일 중국 윈난성 쿤밍시에서 열린 베트남-중국 서남지역 발전 전략 연계 포럼에 참석해 양국 간 경제 및 인프라 협력 강화 방안을 논의했다. 이번 행사는 아시아 태평양 경제협력체(APEC) 정상회의 일정을 마친 뒤 이뤄진 양국 양자 일정의 일환으로 진행됐다.\n\n토람 국가주석은 포럼 연설에서 베트남과 중국 서남지역이 상호 보완적인 경제적 이점을 지니고 있다고 강조했다. 서남지역이 광대한 시장과 높은 산업 및 혁신 역량을 갖춘 반면, 베트남은 역동적인 경제 구조와 광범위한 국제 통",
+    "url": "internal://cluster_20261120_01960c44",
+    "source": "NewsFinal",
+    "category": "정치·외교",
+    "subcategory": "cluster_20261120_01960c44",
+    "region": "southeast_asia",
+    "country": "베트남",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-20 19:18",
+    "countries": [
+      "베트남",
+      "중국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_594091.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-20T19:18:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-20 19:18",
+        "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-21 05:14",
+        "note": "내용 업데이트"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "src_ids": [
+        2999397,
+        2999397,
+        2993773,
+        2993701,
+        2993484,
+        2991288
+      ],
+      "kr_coverage_30d": 28
+    },
+    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
+    "continuation_of_id": null,
+    "summary_3lines_en": "",
+    "investment_idea_en": "",
     "noindex": true
   },
   {
@@ -1709,6 +1997,10 @@
       {
         "timestamp": "2026-11-20 09:51",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-21 05:15",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -2613,6 +2905,10 @@
       {
         "timestamp": "2026-11-20 03:49",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-21 05:15",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -3380,7 +3676,7 @@
     "id": 327526,
     "title_en": "역대 최대 문화적 사건…'GTA 6', 20억 달러 예산 속 출시",
     "title_ko": "역대 최대 문화적 사건…'GTA 6', 20억 달러 예산 속 출시",
-    "summary_ko": "19일(현지시간) 플레이스테이션 5와 엑스박스 시리즈 콘솔을 통해 출시된 락스타 게임즈의 대작 비디오게임 '그랜드 테프트 오토 VI'가 전 세계 문화 산업 역사상 최대 규모의 출시 기록을 세우고 있다.\n\n개발 기간 8년 동안 4700여 명이 투입된 이 게임은 개발비와 마케팅비를 합쳐 약 20억 달러가 소요됐다. 이는 역대 어떤 영화보다도 막대한 예산이며, 출시 전부터 15만 장을 넘어 17만 장에 달하는 사전 주문량을 기록했다. 업계에서는 첫날에만 10억 달러 이상의 매출을 거둘 것으로 예상하고 있다.\n\n가상의 미국 마이애미인 바이",
+    "summary_ko": "19일(현지시간) 플레이스테이션 5와 엑스박스 시리즈 콘솔을 통해 출시된 락스타 게임즈의 대작 비디오게임 '그랜드 테프트 오토 VI'가 전 세계 문화 산업 역사상 최대 규모의 출시 기록을 세우고 있다.\n\n개발 기간 8년 동안 4700여 명이 투입된 이 게임은 개발비와 마케팅비를 합쳐 약 20억 달러가 소요됐다. 이는 역대 어떤 영화보다도 막대한 예산이며, 출시 전부터 사전 주문량이 1700만 장을 넘어섰다. 업계에서는 첫날에만 10억 달러 이상의 매출을 거둘 것으로 예상하고 있다.\n\n가상의 미국 마이애미인 바이스 시티와 플로리다를 ",
     "url": "internal://cluster_20261119_30d0b196",
     "source": "NewsFinal",
     "category": "문화·예술",
@@ -3402,6 +3698,10 @@
       {
         "timestamp": "2026-11-19 17:51",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-21 05:15",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -6188,6 +6488,10 @@
       {
         "timestamp": "2026-11-18 08:46",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-21 05:14",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -7268,7 +7572,7 @@
     "id": 327054,
     "title_en": "브라질 재무부, 2028년 연기론 일축…소비세율 개편안 심의 착수",
     "title_ko": "브라질 재무부, 2028년 연기론 일축…소비세율 개편안 심의 착수",
-    "summary_ko": "다리오 두리간 브라질 재무부 차관은 17일(현지시간) 상원 경제사정위원회(CAE) 공청회에 출석해 세제 개편을 2028년으로 연기해야 한다는 일부 기업계의 주장을 반박하며 예정대로 2027년 시행을 추진하겠다고 밝혔다. 연방세국은 개편안의 일환으로 기업들이 납부 세액과 공제받을 환급액을 미리 확인하고 오류를 줄일 수 있는 사전 채점 방식의 전자 신고 시스템을 이번 주 전국의 모든 기업에 전면 개방할 예정이다.\n\n이번 공청회는 2027년부터 기존의 PIS, 파제프(PIS/Pasep), 코핀스(Cofins) 등을 대체하는 연방세인 상품",
+    "summary_ko": "다리오 두리간 브라질 재무부 장관은 17일(현지시간) 상원 경제사정위원회(CAE) 공청회에 출석해 세제 개편을 2028년으로 연기해야 한다는 일부 기업계의 주장을 반박하며 예정대로 2027년 시행을 추진하겠다고 밝혔다. 연방세국은 개편안의 일환으로 기업들이 납부 세액과 공제받을 환급액을 미리 확인하고 오류를 줄일 수 있는 사전 채점 방식의 전자 신고 시스템을 이번 주 전국의 모든 기업에 전면 개방할 예정이다.\n\n이번 공청회는 2027년부터 기존의 PIS, 파제프(PIS/Pasep), 코핀스(Cofins) 등을 대체하는 연방세인 상품",
     "url": "internal://cluster_20261118_77ed016d",
     "source": "NewsFinal",
     "category": "경제",
@@ -7293,6 +7597,10 @@
       {
         "timestamp": "2026-11-18 06:44",
         "note": "브라질 재무장관이 조세 개혁의 물가 영향 가능성을 인정했다."
+      },
+      {
+        "timestamp": "2026-11-21 05:14",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -7344,6 +7652,10 @@
       {
         "timestamp": "2026-11-18 04:41",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-21 05:15",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -10428,7 +10740,7 @@
     "id": 326555,
     "title_en": "남아공서 하루 새 두 건의 총기 난사… 17명 사망",
     "title_ko": "남아공서 하루 새 두 건의 총기 난사… 17명 사망",
-    "summary_ko": "남아프리카공화국에서 하루 사이에 두 건의 대규모 총기 난사 사건이 발생해 최소 17명이 숨졌다고 경찰이 16일 밝혔다. 극심한 폭력 범죄에 시달려 온 남아프리카공화국에서는 통계청 집계 기준으로 하루 평균 약 60명이 살해당하고 있다.\n\n수도 프리토리아 인근의 한 비정규 거주지역 판잣집 내부에서 남성 6명과 여성 3명 등 9명이 총상을 입고 숨진 채 발견됐다. 사건은 전날 밤에 벌어진 것으로 파악되었으며, 현장에 출동한 경찰과 가우텡주 중대·폭력범죄수사부 등이 정확한 사건 경위를 조사하고 있다.\n\n이에 앞서 전날 밤 동부콰줄루나탈주 ",
+    "summary_ko": "남아프리카공화국에서 하루 사이에 두 건의 대규모 총기 난사 사건이 발생해 최소 17명이 숨졌다고 경찰이 16일 밝혔다. 극심한 폭력 범죄에 시달려 온 남아프리카공화국에서는 경찰 통계 기준으로 하루 평균 약 60명이 살해당하고 있다.\n\n수도 프리토리아 인근의 한 비정규 거주지역 판잣집 내부에서 남성 6명과 여성 3명 등 9명이 총상을 입고 숨진 채 발견됐다. 사건은 전날 밤에 벌어진 것으로 파악되었으며, 현장에 출동한 경찰과 가우텡주 중대·폭력범죄수사부 등이 정확한 사건 경위를 조사하고 있다.\n\n이에 앞서 전날 밤 동부콰줄루나탈주 피",
     "url": "internal://cluster_20261116_fc5e9839",
     "source": "NewsFinal",
     "category": "사회",
@@ -10450,6 +10762,10 @@
       {
         "timestamp": "2026-11-16 21:11",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-21 05:14",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
