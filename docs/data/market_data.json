@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-20 14:26",
+  "updated_at": "2026-11-20 14:56",
   "indices": [
     {
       "name": "S&P 500",
@@ -25,15 +25,15 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 4863.44,
-      "change_pct": -4.03,
+      "price": 4839.82,
+      "change_pct": -4.49,
       "up": false
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 648.58,
-      "change_pct": -2.15,
+      "price": 644.5,
+      "change_pct": -2.76,
       "up": false
     },
     {
@@ -53,8 +53,8 @@
     {
       "name": "SET (태국)",
       "symbol": "^SET.BK",
-      "price": 1448.68,
-      "change_pct": -1.63,
+      "price": 1445.64,
+      "change_pct": -1.83,
       "up": false
     },
     {
@@ -67,8 +67,8 @@
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 5261.1,
-      "change_pct": -3.96,
+      "price": 5269.11,
+      "change_pct": -3.81,
       "up": false
     },
     {
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 17.54,
-      "change_pct": 1.59,
+      "price": 17.53,
+      "change_pct": 1.52,
       "up": true
     }
   ],
@@ -121,15 +121,15 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 4863.44,
-        "change_pct": -4.03,
+        "price": 4839.82,
+        "change_pct": -4.49,
         "up": false
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 648.58,
-        "change_pct": -2.15,
+        "price": 644.5,
+        "change_pct": -2.76,
         "up": false
       }
     ],
@@ -151,8 +151,8 @@
       {
         "name": "SET (태국)",
         "symbol": "^SET.BK",
-        "price": 1448.68,
-        "change_pct": -1.63,
+        "price": 1445.64,
+        "change_pct": -1.83,
         "up": false
       },
       {
@@ -165,8 +165,8 @@
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 5261.1,
-        "change_pct": -3.96,
+        "price": 5269.11,
+        "change_pct": -3.81,
         "up": false
       }
     ],
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 17.54,
-        "change_pct": 1.59,
+        "price": 17.53,
+        "change_pct": 1.52,
         "up": true
       }
     ]
