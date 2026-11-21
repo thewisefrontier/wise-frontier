@@ -2938,6 +2938,10 @@
       {
         "timestamp": "2026-11-22 01:57",
         "note": "ADF 반군 습격으로 민간인 40명 사망"
+      },
+      {
+        "timestamp": "2026-11-22 05:55",
+        "note": "반군 습격으로 민간인 최소 40명이 사망했습니다."
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -3278,43 +3282,6 @@
     "update_log": [
       {
         "timestamp": "2026-11-21 06:25",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 327977,
-    "title_en": "한국, 서울·광주·영하권 추위 속 주말 날씨",
-    "title_ko": "한국, 서울·광주·영하권 추위 속 주말 날씨",
-    "summary_ko": "21일 이번 주말 한국의 날씨는 전국이 대체로 맑은 가운데 당분간 추위가 이어질 전망이며, 광주와 제주 등 일부 지역에서는 강수확률이 60% 이상을 기록할 것으로 예상된다. 한국 기상청에 따르면 주말 동안 전국적으로 기상 특보는 발효되지 않을 전망이다.\n\n서울의 경우 토요일과 일요일 모두 오전과 오후 통틀어 맑은 날씨가 이어질 것으로 보인다. 서울의 기온은 토요일 최저 -4°C, 최고 2°C를 기록할 것으로 예상되며, 일요일에는 최저 -4°C, 최고 5°C의 분포를 보일 전망이다.\n\n주말 동안 광주와 제주 등 일부 지역은 강수확률이",
-    "url": "internal://weather_한국_weekend20261121",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_한국_weekend20261121",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-21 05:24",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261121_pid7507027_south_korea.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-21T05:24:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-21 05:24",
         "note": "최초 게시"
       }
     ],
