@@ -1,5 +1,95 @@
 [
   {
+    "id": 328243,
+    "title_en": "유럽, 곳곳 비·눈 소식…주말 내내 흐리고 쌀쌀할 전망",
+    "title_ko": "유럽, 곳곳 비·눈 소식…주말 내내 흐리고 쌀쌀할 전망",
+    "summary_ko": "21일(현지시간) 유럽 주요국 기상 예보에 따르면 이번 주말은 대륙 곳곳에서 비와 눈이 섞인 궂은 날씨가 이어질 것으로 예상된다. 영국은 토요일과 일요일 모두 흐린 날씨가 지속될 것으로 보이며, 기온은 최고 10도에서 최저 5도 사이를 오갈 전망이다. 독일은 토요일 약한 소나기가 내린 뒤 일요일에도 약한 비가 이어질 것으로 보이며, 기온은 최고 5~6도, 최저 1~2도 분포를 나타낼 것으로 예상된다.\n\n이탈리아는 토요일 안개가 낀 가운데 최고 19도까지 기온이 오르겠으나, 일요일에는 약한 소나기가 내리며 최고 18도, 최저 13도를",
+    "url": "internal://weather_group_유럽_weekend20261121",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_유럽_weekend20261121",
+    "region": "europe",
+    "country": "유럽",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-21 13:21",
+    "countries": [
+      "영국",
+      "독일",
+      "프랑스",
+      "이탈리아",
+      "스페인",
+      "러시아",
+      "폴란드",
+      "우크라이나"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261121_pid3917054_germany.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-21T13:21:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-21 13:21",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 328242,
+    "title_en": "아프리카, 곳곳 소나기·이슬비…나이지리아는 34도 무더위",
+    "title_ko": "아프리카, 곳곳 소나기·이슬비…나이지리아는 34도 무더위",
+    "summary_ko": "21일(현지시간) 기상 예보에 따르면 이번 주말 아프리카 주요국은 지역별로 큰 기온 차와 함께 비 소식이 이어질 전망이다. 나이지리아는 토요일 맑은 가운데 최고 34도, 최저 23도를 기록할 것으로 보이며 일요일에는 부분적으로 흐린 날씨 속 최고 33도, 최저 22도의 기온 분포를 보일 것으로 예상된다. 반면 케냐는 토요일과 일요일 모두 100%의 강수 확률로 약한 소나기와 소나기가 반복될 것으로 보이며 기온은 16도에서 24도 사이를 오갈 것으로 전망된다.\n\n남아공은 토요일 이슬비가 내린 뒤 일요일에는 뇌우가 동반될 것으로 보이며",
+    "url": "internal://weather_group_아프리카_weekend20261121",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_아프리카_weekend20261121",
+    "region": "africa",
+    "country": "아프리카",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-21 13:17",
+    "countries": [
+      "나이지리아",
+      "케냐",
+      "남아공",
+      "이집트",
+      "모로코",
+      "알제리",
+      "에티오피아",
+      "가나",
+      "탄자니아",
+      "앙골라"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261121_pid4639420_nigeria.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-21T13:17:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-21 13:17",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 327882,
     "title_en": "튀니지 법원, 부패 연루 혐의로 시암 벤 세드린 전 진실과존엄위원회 위원장 등 중형 선고",
     "title_ko": "튀니지 전직 고위 인사들, 부패 혐의로 실형 선고…인권 단체는 정치적 보복 비판",
@@ -47,52 +137,6 @@
       "kr_coverage_30d": 0
     },
     "image_credit": "사진: fhimt.com (CC BY 2.0, Wikimedia Commons)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": false
-  },
-  {
-    "id": 328168,
-    "title_en": "GTA VI 출시 첫날 매출 37억 9000만 달러…역대 최고 기록 경신",
-    "title_ko": "GTA VI 출시 첫날 매출 37억 9000만 달러…역대 최고 기록 경신",
-    "summary_ko": "테이크투 인터랙티브(Take-Two Interactive)의 자회사 록스타 게임즈(Rockstar Games)가 개발한 그랜드 테프트 오토 VI(Grand Theft Auto VI, 이하 GTA VI)가 19일(현지시간) 출시 직후 기록적인 판매고를 올렸다. 록스타 게임즈는 게임이 출시된 당일 총 37억 9000만 달러의 매출을 기록했다고 20일 밝혔다.\n\n이번 매출 규모는 지난 2013년 출시된 전작 GTA V가 첫 24시간 동안 달성했던 8억 달러의 약 5배에 달하는 수치다. 또한 지난달까지 영화 역사상 가장 높은 수익을 기록했",
-    "url": "internal://cluster_20261121_ce3fa627",
-    "source": "NewsFinal",
-    "category": "문화·예술",
-    "subcategory": "cluster_20261121_ce3fa627",
-    "region": "global",
-    "country": "미국",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-21 12:44",
-    "countries": [
-      "미국",
-      "프랑스",
-      "벨기에"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_2619483.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-21T12:44:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-21 12:44",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        3049745,
-        3041556,
-        3040236,
-        3039444
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
     "continuation_of_id": null,
     "summary_3lines_en": "",
     "investment_idea_en": "",
@@ -749,52 +793,6 @@
     "noindex": true
   },
   {
-    "id": 327346,
-    "title_en": "아이티 갱단 거점 타격한 엘살바도르군, 현지 정부와 협력 강화",
-    "title_ko": "엘살바도르군 아이티 파병지 폭발 사고…군인 2명 사망·2명 부상",
-    "summary_ko": "아이티에 파병된 엘살바도르군 부대에서 20일(현지시간) 폭발 사고가 발생해 군인 2명이 사망하고 2명이 부상을 입었다. 엘살바도르군 당국은 파병 부대원들이 캠프 내에서 폭발물을 취급하던 중 사고가 발생했다고 밝혔다. 이번 사고는 지난 10월 18일 아이티 갱단의 매복 공격으로 실종된 엘살바도르군 소속 항공 기술자 4명을 찾고 치안을 지원하기 위해 파견된 2500명 규모의 특수 부대 내에서 처음으로 보고된 사망 사례다.\n\n나이브 부켈레 엘살바도르 대통령은 지난 18일 갱단 우두머리 제프의 저택을 공군력을 동원해 파괴하는 등 강경한 소",
-    "url": "internal://trend_아이티_2026111907",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "trend_아이티",
-    "region": "caribbean",
-    "country": "아이티",
-    "country_flag": "",
-    "score": 7,
-    "created_at": "2026-11-21 08:46",
-    "countries": [
-      "아이티",
-      "엘살바도르"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_haiti_gang_violence.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-19T07:57:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-19 07:57",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-20 13:47",
-        "note": "내용 업데이트"
-      },
-      {
-        "timestamp": "2026-11-21 08:46",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": true,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: Wikimedia Commons",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
     "id": 327989,
     "title_en": "프랑스 의회, 경찰의 무기 사용 합법성 추정 법안 최종 통과",
     "title_ko": "프랑스 의회, 경찰·헌병 무기 사용 합법성 추정 법안 최종 통과",
@@ -848,7 +846,7 @@
     "id": 327558,
     "title_en": "아이티 갱단 소탕 명목으로 진입한 엘살바도르군, 공중 폭격 강행하며 개입 수위 확대",
     "title_ko": "아이티 파견 엘살바도르군 캠프서 폭발물 사고… 군인 2명 사망·2명 부상",
-    "summary_ko": "20일(현지시간) 엘살바도르 군사 당국은 아이티에 파견된 자국 군인들이 주둔지 캠프 내에서 폭발물 작업 도중 발생한 폭발 사고로 사망했다고 공식 발표했다.\n\n이번 사고로 엘살바도르 군인 2명이 숨졌고, 다른 2명은 부상을 입어 현지에서 치료를 받고 있다. 군 당국은 사망한 장병들의 유가족에게 애도를 표명했으나, 구체적인 신원이나 계급, 사고가 발생한 캠프의 정확한 위치는 공개하지 않았다. 아이티 현지 당국 역시 이번 사고와 관련해 별도의 공식 입장을 내놓지 않은 상태다.\n\n이번 사상자 발생은 엘살바도르군이 대규모로 아이티에 투입된 ",
+    "summary_ko": "아이티에 파견된 엘살바도르군 부대에서 20일(현지시간) 폭발 사고가 발생해 군인 2명이 사망하고 2명이 부상을 입었다. 엘살바도르 군사 당국은 주둔지 캠프 내에서 군인들이 폭발물 작업 도중 사고가 발생했다고 공식 발표했다. 부상한 다른 2명은 현지에서 치료를 받고 있다. 군 당국은 사망한 장병들의 유가족에게 애도를 표명했으나, 구체적인 신원이나 계급, 캠프의 정확한 위치는 공개하지 않았다. 이번 사고는 지난 10월 18일 아이티 갱단의 매복 공격으로 실종된 엘살바도르군 소속 항공 기술자 4명을 찾고 치안을 지원하기 위해 파견된 25",
     "url": "internal://trend_아이티_2026111921",
     "source": "NewsFinal",
     "category": "글로벌",
@@ -873,6 +871,10 @@
       },
       {
         "timestamp": "2026-11-21 08:40",
+        "note": "내용 업데이트"
+      },
+      {
+        "timestamp": "2026-11-21 12:54",
         "note": "내용 업데이트"
       }
     ],
@@ -2052,60 +2054,6 @@
     "noindex": true
   },
   {
-    "id": 327915,
-    "title_en": "브라질 연방대법원장, 마스터 은행 스캔들 연관 안드레 멘돈사 장관 PF 보고서 공개 허가",
-    "title_ko": "브라질 연방대법원장, 마스터 은행 스캔들 연관 안드레 멘돈사 장관 PF 보고서 공개 허가",
-    "summary_ko": "브라질 연방대법원(STF) 에드송 파신(Edson Fachin) 대법원장이 20일(현지시간) 마스터 은행(Banco Master) 스캔들 수사와 관련해 안드레 멘돈사(André Mendonça) 연방대법원 대법관의 이름이 언급된 연방경찰(PF) 보고서의 비밀 해제를 승인했다.\n\n이번 결정은 멘돈사 대법관 본인이 문서에 대한 비밀유지 권리를 명시적으로 포기하고 대중 공개를 요청한 데 따른 조치다. 연방경찰이 제출한 해당 보고서에는 멘돈사 대법관이 마스터 은행의 전 소유주인 다니엘 보르카루(Daniel Vorcaro)와 직접 만난 적이",
-    "url": "internal://cluster_20261121_f4a7aab8",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "cluster_20261121_f4a7aab8",
-    "region": "latin_america",
-    "country": "브라질",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-21 00:42",
-    "countries": [
-      "브라질"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/wiki_andre_mendonca_8beb6e1155.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-21T00:42:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-21 00:42",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-21 10:39",
-        "note": "멘돈사 대법관 수사 형평성 논란 및 추가 조사 필요성 제기."
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        3015107,
-        3013993,
-        3014010,
-        3014021,
-        3013018,
-        3012067,
-        3011412,
-        3011172,
-        3011126,
-        3011135
-      ]
-    },
-    "image_credit": "사진: Luis Macedo/Câmara dos Deputados (CC BY 3.0, Wikimedia Commons)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": false
-  },
-  {
     "id": 327916,
     "title_en": "튀르키예, 자체 개발 무인 전투기 '키질렐마' 군 인도 시작",
     "title_ko": "튀르키예, 자체 개발 무인 전투기 '키질렐마' 군 인도 시작",
@@ -2742,46 +2690,6 @@
     "summary_3lines_en": "",
     "investment_idea_en": "",
     "noindex": true
-  },
-  {
-    "id": 327793,
-    "title_en": "잠비아 콜레라 확산세 속 백신 자국 생산 추진, 한국에서도 10년 만에 확진 환자 발생",
-    "title_ko": "잠비아 콜레라 확산세 속 백신 자국 생산 추진, 한국에서도 10년 만에 확진 환자 발생",
-    "summary_ko": "20일(현지시간) 한국과 잠비아 등 세계 각지에서 콜레라 감염 사례가 잇따라 확인되면서 보건 당국이 방역 강화와 대응책 마련에 총력을 기울이고 있다. 질병관리청은 창원시 소재 병원 응급실을 방문해 구토와 설사 증상을 보인 환자로부터 채취한 검체를 분석한 결과 콜레라균을 최종 확인했다고 발표했다. 이번 확진은 국내에서 지난 2016년 이후 10년 만에 발생한 사례다.\n\n방역 당국은 해당 환자가 지난 두 달간 해외 여행력을 가지고 있지 않으며 치료 후 지난 17일 퇴원했다고 밝혔다. 보건 당국은 감염 경로를 추적하는 한편 안전한 식수 ",
-    "url": "internal://trend_콜레라_2026112018",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "trend_콜레라",
-    "region": "africa",
-    "country": "잠비아",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-11-20 18:56",
-    "countries": [
-      "잠비아",
-      "한국",
-      "짐바브웨",
-      "중국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_1291129.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-20T18:56:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-20 18:56",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   },
   {
     "id": 327638,
@@ -4383,8 +4291,8 @@
   {
     "id": 327591,
     "title_en": "잠비아 콜레라 누적 확진 3099명… 백신 자체 생산 시설 착공",
-    "title_ko": "잠비아 콜레라 누적 확진 3099명… 백신 자체 생산 시설 착공",
-    "summary_ko": "잠비아국립공중보건연구소(ZNPHI)는 지난 16일(현지시간) 기준 지난 24시간 동안 74명의 콜레라 신규 확진자와 2명의 사망자가 발생해 누적 확진자가 3099명으로 집계됐다고 밝혔다. 이번 콜레라 유행은 7개 주 27개 지역으로 확산했으며, 101명의 환자가 의료시설에서 치료를 받고 있다. 지난 7월 28일 유행이 공식 선언된 이후 누적 사망자는 68명으로 늘어났고 2930명이 회복해 퇴원했다.\n\n가장 피해가 큰 루사카는 1959명의 환자가 발생했으며,치봄보 371명,총웨 158명,칠랑가 130명 등이 그 뒤를 이었다.\n\n잠비아",
+    "title_ko": "잠비아 콜레라 누적 확진 3392명 확산… 국내서 10년 만에 확진 판정",
+    "summary_ko": "20일(현지시간) 잠비아 내 콜레라 확산세가 이어지는 가운데 자국 내 백신 생산 시설 착공식이 열렸으며, 한국에서도 10년 만에 확진 환자가 발생하는 등 각국에서 감염병 대응이 강화되고 있다.\n\n잠비아 국가공중보건연구소는 20일 기준 누적 콜레라 확진자가 3392명으로 집계됐다고 밝혔다. 최근 24시간 동안 67명의 신규 확진자와 1명의 사망자가 추가로 발생해 누적 사망자는 68명으로 늘어났으며, 총 492명이 실험실 검사를 통해 확진 판정을 받았고 3243명이 회복해 퇴원했다. 지역별로는 루사카가 2143명으로 가장 큰 피해를 입",
     "url": "internal://trend_콜레라_2026112001",
     "source": "NewsFinal",
     "category": "사회",
@@ -4423,6 +4331,10 @@
       {
         "timestamp": "2026-11-21 12:25",
         "note": "잠비아 콜레라 확산 및 10년 만의 국내 확진자 발생."
+      },
+      {
+        "timestamp": "2026-11-21 12:54",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -4820,8 +4732,8 @@
   {
     "id": 327526,
     "title_en": "역대 최대 문화적 사건…'GTA 6', 20억 달러 예산 속 출시",
-    "title_ko": "역대 최대 문화적 사건…'GTA 6', 20억 달러 예산 속 출시",
-    "summary_ko": "19일(현지시간) 플레이스테이션 5와 엑스박스 시리즈 콘솔을 통해 출시된 락스타 게임즈의 대작 비디오게임 '그랜드 테프트 오토 VI'가 전 세계 문화 산업 역사상 최대 규모의 출시 기록을 세우고 있다.\n\n개발 기간 8년 동안 4700여 명이 투입된 이 게임은 개발비와 마케팅비를 합쳐 약 20억 달러가 소요됐다. 이는 역대 어떤 영화보다도 막대한 예산이며, 출시 전부터 사전 주문량이 1700만 장을 넘어섰다. 업계에서는 첫날에만 10억 달러 이상의 매출을 거둘 것으로 예상하고 있다.\n\n가상의 미국 마이애미인 바이스 시티와 플로리다를 ",
+    "title_ko": "'GTA 6' 출시 첫날 매출 37억 9000만 달러…역대 최대 엔터테인먼트 기록 경신",
+    "summary_ko": "19일(현지시간) 플레이스테이션 5와 엑스박스 시리즈 콘솔을 통해 출시된 락스타 게임즈의 대작 비디오게임 그랜드 테프트 오토 VI가 전 세계 문화 산업 역사상 최대 규모의 출시 기록을 세우고 있다. 락스타 게임즈는 게임이 출시된 당일 전 세계적으로 37억 9000만 달러의 소매 매출을 기록했다고 20일 밝혔다.\n\n이번 성과는 전작인 GTA 5의 첫날 매출인 8억 달러를 약 5배 상회하는 수치다. 영화 어벤져스: 엔드게임의 전 세계 누적 박스오피스 수익인 29억 달러를 단 하루 만에 넘어섰으며, 출시 전 사전 주문량은 3250만 장을",
     "url": "internal://cluster_20261119_30d0b196",
     "source": "NewsFinal",
     "category": "문화·예술",
@@ -4851,6 +4763,10 @@
       {
         "timestamp": "2026-11-21 10:35",
         "note": "GTA 6 출시 첫날 매출 37억 9천만 달러를 기록했다."
+      },
+      {
+        "timestamp": "2026-11-21 12:54",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -5555,8 +5471,8 @@
   {
     "id": 327357,
     "title_en": "브라질 연방경찰, 마스터 사건 관련 보고서 유출 조사…안드레이 청장 상원 출석",
-    "title_ko": "브라질 연방경찰, 마스터 사건 관련 보고서 유출 조사…안드레이 청장 상원 출석",
-    "summary_ko": "브라질 연방경찰(PF)의 안드레이 로드리게스 청장이 18일(현지시간) 상원 헌법사법위원회(CCJ)와 공공안전위원회의 합동 청문회에 출석했다. 안드레이 청장은 마스터 은행(Banco Master) 사건과 관련해 연방대법원(STF) 대법관들이 언급된 수사 보고서가 외부로 유출된 경위를 조사하고 있다고 밝혔다. 해당 보고서는 마스터 은행의 실질적 지배자인 다니엘 보르카루와 관련된 압수물에서 추출된 정보를 바탕으로 작성되었으며, 이 과정에서 연방대법원 대법관들과의 연루 의혹이 담긴 내용이 포함되었다.\n\n안드레이 청장은 연방경찰 지도부가 해",
+    "title_ko": "브라질 연방대법원, 마스터 은행 수사 보고서 비밀 해제 및 연방경찰 유출 조사 착수",
+    "summary_ko": "브라질 연방대법원의 에드송 파신 대법원장은 20일(현지시간) 마스터 은행(Banco Master) 스캔들 수사와 관련해 안드레 멘돈사 연방대법원 대법관의 이름이 언급된 연방경찰 보고서의 비밀 해제를 승인했다. 이번 결정은 멘돈사 대법관 본인이 문서에 대한 비밀유지 권리를 명시적으로 포기하고 대중 공개를 요청한 데 따른 조치다. 연방경찰은 마스터 은행 대주주인 다니엘 보르카루의 휴대전화에서 압수한 메시지를 바탕으로 연방대법원 대법관들과의 접촉 정황을 담은 10건의 보고서를 작성해 대법원에 제출한 바 있다.\n\n파신 대법원장은 이 중 6",
     "url": "internal://cluster_20261119_2f3c31d6",
     "source": "NewsFinal",
     "category": "정치·외교",
@@ -5581,6 +5497,10 @@
       {
         "timestamp": "2026-11-20 11:45",
         "note": "마스터 은행 사건 연방경찰 보고서 연방검찰 송치"
+      },
+      {
+        "timestamp": "2026-11-21 12:54",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
