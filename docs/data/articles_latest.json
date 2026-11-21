@@ -1,5 +1,49 @@
 [
   {
+    "id": 328498,
+    "title_en": "동남아, 최저 14도 선선함 속 곳곳 비 내릴 전망",
+    "title_ko": "동남아, 최저 14도 선선함 속 곳곳 비 내릴 전망",
+    "summary_ko": "22일(현지시간) 예보된 동남아시아 주요국 다음주 날씨 데이터에 따르면, 이번 주 지역 전체 기온은 최저 14°C에서 최고 36°C의 분포를 보일 것으로 예상된다. 베트남은 주간 최고 27°C, 최저 14°C를 기록하며 비 소식이 있을 것으로 전망된다. 인도네시아는 주간 최고 32°C, 최저 24°C, 필리핀은 주간 최고 34°C, 최저 26°C, 캄보디아는 주간 최고 33°C, 최저 25°C, 말레이시아는 주간 최고 32°C, 최저 23°C, 싱가포르는 주간 최고 32°C, 최저 23°C를 나타낼 것으로 보이며 이들 국가 모두 비",
+    "url": "internal://weather_group_동남아시아_weekly20261122",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_동남아시아_weekly20261122",
+    "region": "southeast_asia",
+    "country": "동남아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-22 07:23",
+    "countries": [
+      "베트남",
+      "인도네시아",
+      "태국",
+      "필리핀",
+      "미얀마",
+      "캄보디아",
+      "말레이시아",
+      "싱가포르"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261122_pid5783412_indonesia.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-22T07:23:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-22 07:23",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 328352,
     "title_en": "미국 정보 지원으로 멕시코 카르텔 두목 '엘 차포 이시드로' 체포",
     "title_ko": "멕시코 특수부대, FBI 지명수배 마약왕 체포… 보복 폭력에 11명 사망",
@@ -3131,152 +3175,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": false
-  },
-  {
-    "id": 328003,
-    "title_en": "[국제금값] 금 온스당 3538달러…연준 금리 인상 전망과 달러 강세에 하락",
-    "title_ko": "[국제금값] 금 온스당 3538달러…연준 금리 인상 전망과 달러 강세에 하락",
-    "summary_ko": "국제 금값이 20일(현지시간) 하락했다. 뉴욕 시장에서 금 선물은 온스당 3537.90달러에 거래를 마쳤다. 시장 집계에 따르면 이는 전일 종가(3685.50달러) 대비 4.00% 하락, 하락폭 147.60달러를 기록한 수치다.\n\n이날 금 선물은 장중 최저 3502.90달러에서 최고 3638.10달러 사이에서 움직였다. 최근 5거래일 동안 금값은 16일 종가 3853.00달러 대비 8.18% 하락하는 약세를 나타냈다. 현재 가격은 52주 고점 5586.20달러 대비 36.67% 낮은 수준에 위치하고 있다.\n\n이번 금값 하락은 연방준",
-    "url": "internal://gold_price_2026-11-20",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국제금값",
-    "region": "글로벌",
-    "country": "국제",
-    "country_flag": "🪙",
-    "score": 1,
-    "created_at": "2026-11-21 07:07",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/gold_2026_11_20_pid4722600.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-21T07:07:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-21 07:07",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "pct": -4.004886654626238,
-      "date": "2026-11-20",
-      "prev": 3685.5,
-      "price": 3537.89990234375,
-      "change": -147.60009765625,
-      "source": "시장 집계",
-      "day_low": 3502.89990234375,
-      "day_high": 3638.10009765625,
-      "high_52w": 5586.2,
-      "week_pct": -8.178045617862704,
-      "week_start": 3853.0,
-      "from_high_pct": -36.66714578168075,
-      "week_start_date": "2026-11-16"
-    },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
-  },
-  {
-    "id": 328002,
-    "title_en": "[국제유가] WTI 배럴당 84달러…공급 과잉 우려 속 혼조세",
-    "title_ko": "[국제유가] WTI 배럴당 84달러…공급 과잉 우려 속 혼조세",
-    "summary_ko": "국제유가가 20일(현지시간) 혼조세를 보였다. WTI 원유 선물은 시장 집계에 따르면 뉴욕상업거래소(NYMEX)에서 배럴당 83.56달러에 거래를 마쳤다. 전일 종가(83.21달러) 대비 0.42%(0.35달러) 상승했다.\n\n반면 브렌트유는 배럴당 89.87달러를 기록했다. 전일 종가(91.98달러) 대비 2.29%(2.11달러) 하락했다.\n\n이날 유가는 공급 과잉 우려와 중동 지역의 선박 위협 요인이 맞물리면서 엇갈린 흐름을 보였다. 특히 중동 지역의 수출 물량이 견조하게 유지되면서 유가는 공급 과잉 전망 속에 하락 압력을 받았다",
-    "url": "internal://oil_price_2026-11-20",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국제유가",
-    "region": "글로벌",
-    "country": "국제",
-    "country_flag": "🛢️",
-    "score": 1,
-    "created_at": "2026-11-21 07:06",
-    "countries": [
-      "미국",
-      "사우디아라비아",
-      "러시아"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/oil_2026_11_20_pid3174093.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-21T07:06:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-21 07:06",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "wti": {
-        "pct": 0.4206236262207311,
-        "prev": 83.20999908447266,
-        "price": 83.56,
-        "change": 0.350000915527346
-      },
-      "date": "2026-11-20",
-      "brent": {
-        "pct": -2.293980517423556,
-        "prev": 91.9800033569336,
-        "price": 89.87,
-        "change": -2.110003356933589
-      },
-      "source": "Yahoo Finance"
-    },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 328000,
-    "title_en": "나이지리아 남부서 조문객 태운 배 전복…30명 사망·300명 실종",
-    "title_ko": "나이지리아 남부서 조문객 태운 배 전복…30명 사망·300명 실종",
-    "summary_ko": "나이지리아 바옐사주 서던이조 지방정부 구역의 오웨이코로그하 지역 인근 강에서 지난 20일(현지시간) 조문객을 태운 배가 전복되는 사고가 발생했다. 이 사고로 최소 30명이 사망하고 약 300명이 실종된 것으로 추정된다.\n\n사고 당시 배에 탑승했던 조문객들은 우쿠비 지역에서 열리는 장례식에 참석하기 위해 이동 중이었다. 목격자들과 지역 주민들에 따르면 사고 선박은 정원 초과로 심하게 과적된 상태였다.\n\n일부 승객들은 배가 오웨이코로그하를 지날 무렵 선박이 너무 붐빈다며 정박해 인원을 줄일 것을 운항자에게 요구했으나, 이 제안은 받아들",
-    "url": "internal://cluster_20261121_8ca6b995",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "cluster_20261121_8ca6b995",
-    "region": "africa",
-    "country": "나이지리아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-21 06:46",
-    "countries": [
-      "나이지리아"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_1654446.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-21T06:46:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-21 06:46",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": true,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        3029882,
-        3028229
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
-    "noindex": true
   }
 ]
