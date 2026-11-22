@@ -1,5 +1,71 @@
 [
   {
+    "id": 328851,
+    "title_en": "[국내유가] 휘발유 리터당 1854원…전국 평균 소폭 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1854원…전국 평균 소폭 하락",
+    "summary_ko": "한국석유공사 오피넷이 23일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1854원으로 집계됐다.\n\n이날 함께 공개된 경유 평균 판매가격은 리터당 1840.80원으로 전일 대비 0.22원 내렸으며, LPG 부탄은 리터당 1178.03원으로 0.06원 하락했다. 휘발유 역시 전일보다 0.19원 내린 리터당 1854.14원을 기록하면서 주요 유종 모두 전날에 비해 소폭 하락세를 나타냈다. 오피넷에 따르면 이번 전국 평균 가격 집계는 전일 판매된 가격을 기준으로 산출됐다.\n\n국내 유가의 이러한 변동 흐름은 최근 국제유",
+    "url": "internal://opinet_price_2026-11-23",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-11-23 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_11_23_pid10228001.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-23T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-23 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-11-23",
+      "prices": {
+        "B027": {
+          "diff": -0.19,
+          "name": "휘발유",
+          "price": 1854.14
+        },
+        "B034": {
+          "diff": -0.12,
+          "name": "고급휘발유",
+          "price": 2354.08
+        },
+        "C004": {
+          "diff": -0.07,
+          "name": "실내등유",
+          "price": 1568.34
+        },
+        "D047": {
+          "diff": -0.22,
+          "name": "경유",
+          "price": 1840.8
+        },
+        "K015": {
+          "diff": -0.06,
+          "name": "LPG(부탄)",
+          "price": 1178.03
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 328850,
     "title_en": "[기업 분석] 포스트, 비용 인플레이션 속 2027 회계연도 하반기 가격 인상으로 마진 방어 추진",
     "title_ko": "[기업 분석] 포스트, 비용 인플레이션 속 2027 회계연도 하반기 가격 인상으로 마진 방어 추진",
@@ -2542,115 +2608,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 328430,
-    "title_en": "[국내유가] 휘발유 리터당 1854원…전국 평균 보합세 유지",
-    "title_ko": "[국내유가] 휘발유 리터당 1854원…전국 평균 보합세 유지",
-    "summary_ko": "한국석유공사 오피넷이 22일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1854원으로 집계됐다. 이는 전일 대비 가격 변동이 없는 보합세를 기록한 것이다. 오피넷이 매일 0시에 전일 판매 가격을 집계해 발표하는 구조상, 실제 주유소에서의 판매 시점은 공개일보다 하루 정도 이를 수 있다.\n\n이날 함께 공개된 다른 유종의 가격을 보면 경유는 리터당 1840.97원으로 전일 대비 0.12원 하락했고, LPG 부탄은 리터당 1178.01원으로 전일 대비 0.08원 내렸다. 휘발유 가격이 제자리걸음을 한 반면 경유와 L",
-    "url": "internal://opinet_price_2026-11-22",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국내유가",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "🇰🇷",
-    "score": 1,
-    "created_at": "2026-11-22 05:11",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_11_22_pid2722788.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-22T05:11:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-22 05:11",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "date": "2026-11-22",
-      "prices": {
-        "B027": {
-          "diff": 0.0,
-          "name": "휘발유",
-          "price": 1854.26
-        },
-        "B034": {
-          "diff": -0.45,
-          "name": "고급휘발유",
-          "price": 2354.8
-        },
-        "C004": {
-          "diff": -0.23,
-          "name": "실내등유",
-          "price": 1568.45
-        },
-        "D047": {
-          "diff": -0.12,
-          "name": "경유",
-          "price": 1840.97
-        },
-        "K015": {
-          "diff": -0.08,
-          "name": "LPG(부탄)",
-          "price": 1178.01
-        }
-      }
-    },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 328429,
-    "title_en": "[기업 분석] 앤스로픽, AI 비즈니스 확대 속 매출 급성장",
-    "title_ko": "[기업 분석] 앤트로픽, AI 비즈니스 확대 속 매출 급성장",
-    "summary_ko": "[사업]\n- 앤트로픽은 인공지능 어시스턴트 클로드(Claude)를 개발하여 기업들이 비즈니스에 인공지능을 통합할 수 있도록 지원한다.\n- 클로드는 오픈에이아이의 챗GPT, 알파벳의 구글 제미나이와 경쟁하며 시장 점유율을 확대하고 있다.\n\n[최근 실적]\n- 2026년 첫 9개월 동안 330억 달러의 매출을 기록했다.\n- 2025년 같은 기간 매출은 25억 달러였다.\n\n[재무]\n- 2026년 첫 3분기 동안 1040억 달러의 손실을 기록했다.\n- 전체 손실액 중 940억 달러는 전환사채의 공정 가치 변동에 따른 것이며 영업 손실은 13",
-    "url": "internal://company_analysis_20261122_anthropic",
-    "source": "NewsFinal",
-    "category": "산업·기업",
-    "subcategory": "company_analysis_20261122_anthropic",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 200,
-    "created_at": "2026-11-22 05:08",
-    "countries": null,
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/company_analysis_20261122_anthropic_pid10560829.jpg",
-    "view_count": 0,
-    "first_published_at": null,
-    "update_log": [
-      {
-        "timestamp": "2026-11-22 05:08",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-22T11:09:10.624395",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "company": "Anthropic",
-      "src_ids": [
-        3039910
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   }
 ]
