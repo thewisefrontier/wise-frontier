@@ -1,5 +1,49 @@
 [
   {
+    "id": 328882,
+    "title_en": "동남아시아, 방콕 36도 불볕더위…곳곳 뇌우·폭염",
+    "title_ko": "동남아시아, 방콕 36도 불볕더위…곳곳 뇌우·폭염",
+    "summary_ko": "23일(현지시간) 동남아시아 주요국 수도는 최저기온 19°C에서 최고기온 36°C의 기온 범위를 보일 것으로 예상된다. 가장 더운 곳은 최고기온 36°C를 기록할 태국 방콕인 반면, 가장 선선한 곳은 최고기온 27°C·최저기온 19°C에 그친 베트남 하노이로 나타났다. 방콕의 최고기온은 하노이보다 9도 높으며, 하노이는 약한 이슬비와 함께 강수확률 16%, 강수량 0.2mm, 자외선지수 4.6을 보일 것으로 전망된다.\n\n또한 태국 방콕은 내일도 최고기온 36°C를 유지할 것으로 예상되는 한편, 베트남 하노이는 내일 최고기온이 23°",
+    "url": "internal://weather_group_동남아시아_today20261123",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_동남아시아_today20261123",
+    "region": "southeast_asia",
+    "country": "동남아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-23 07:53",
+    "countries": [
+      "베트남",
+      "인도네시아",
+      "태국",
+      "필리핀",
+      "미얀마",
+      "캄보디아",
+      "말레이시아",
+      "싱가포르"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261123_pid4863234_indonesia.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-23T07:53:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-23 07:53",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 328871,
     "title_en": "[가상자산 동향] 리플 0.15% 하락…미국 추수감사절 주간 변동성 대비",
     "title_ko": "[가상자산 동향] 리플 0.15% 하락…미국 추수감사절 주간 변동성 대비",
@@ -2741,49 +2785,5 @@
     "summary_3lines_en": "",
     "investment_idea_en": "",
     "noindex": false
-  },
-  {
-    "id": 328498,
-    "title_en": "동남아, 최저 14도 선선함 속 곳곳 비 내릴 전망",
-    "title_ko": "동남아, 최저 14도 선선함 속 곳곳 비 내릴 전망",
-    "summary_ko": "22일(현지시간) 예보된 동남아시아 주요국 다음주 날씨 데이터에 따르면, 이번 주 지역 전체 기온은 최저 14°C에서 최고 36°C의 분포를 보일 것으로 예상된다. 베트남은 주간 최고 27°C, 최저 14°C를 기록하며 비 소식이 있을 것으로 전망된다. 인도네시아는 주간 최고 32°C, 최저 24°C, 필리핀은 주간 최고 34°C, 최저 26°C, 캄보디아는 주간 최고 33°C, 최저 25°C, 말레이시아는 주간 최고 32°C, 최저 23°C, 싱가포르는 주간 최고 32°C, 최저 23°C를 나타낼 것으로 보이며 이들 국가 모두 비",
-    "url": "internal://weather_group_동남아시아_weekly20261122",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_동남아시아_weekly20261122",
-    "region": "southeast_asia",
-    "country": "동남아시아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-22 07:23",
-    "countries": [
-      "베트남",
-      "인도네시아",
-      "태국",
-      "필리핀",
-      "미얀마",
-      "캄보디아",
-      "말레이시아",
-      "싱가포르"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261122_pid5783412_indonesia.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-22T07:23:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-22 07:23",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
   }
 ]
