@@ -530,7 +530,12 @@
     "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/digest_20261124_pid583163.jpg",
     "view_count": 0,
     "first_published_at": null,
-    "update_log": [],
+    "update_log": [
+      {
+        "timestamp": "2026-11-24 07:49",
+        "note": "최초 게시"
+      }
+    ],
     "byline": "뉴스파이널 편집국",
     "is_travel": false,
     "source_published_at": null,
@@ -2118,49 +2123,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": false
-  },
-  {
-    "id": 328882,
-    "title_en": "동남아시아, 방콕 36도 불볕더위…곳곳 뇌우·폭염",
-    "title_ko": "동남아시아, 방콕 36도 불볕더위…곳곳 뇌우·폭염",
-    "summary_ko": "23일(현지시간) 동남아시아 주요국 수도는 최저기온 19°C에서 최고기온 36°C의 기온 범위를 보일 것으로 예상된다. 가장 더운 곳은 최고기온 36°C를 기록할 태국 방콕인 반면, 가장 선선한 곳은 최고기온 27°C·최저기온 19°C에 그친 베트남 하노이로 나타났다. 방콕의 최고기온은 하노이보다 9도 높으며, 하노이는 약한 이슬비와 함께 강수확률 16%, 강수량 0.2mm, 자외선지수 4.6을 보일 것으로 전망된다.\n\n또한 태국 방콕은 내일도 최고기온 36°C를 유지할 것으로 예상되는 한편, 베트남 하노이는 내일 최고기온이 23°",
-    "url": "internal://weather_group_동남아시아_today20261123",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_동남아시아_today20261123",
-    "region": "southeast_asia",
-    "country": "동남아시아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-23 07:53",
-    "countries": [
-      "베트남",
-      "인도네시아",
-      "태국",
-      "필리핀",
-      "미얀마",
-      "캄보디아",
-      "말레이시아",
-      "싱가포르"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261123_pid4863234_indonesia.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-23T07:53:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-23 07:53",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
   }
 ]
