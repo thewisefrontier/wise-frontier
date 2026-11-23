@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-23 14:57",
+  "updated_at": "2026-11-23 15:26",
   "indices": [
     {
       "name": "S&P 500",
@@ -25,15 +25,15 @@
     {
       "name": "코스피",
       "symbol": "^KS11",
-      "price": 4734.51,
-      "change_pct": -7.85,
+      "price": 4732.59,
+      "change_pct": -7.89,
       "up": false
     },
     {
       "name": "코스닥",
       "symbol": "^KQ11",
-      "price": 642.61,
-      "change_pct": -6.16,
+      "price": 640.91,
+      "change_pct": -6.41,
       "up": false
     },
     {
@@ -67,8 +67,8 @@
     {
       "name": "PSEi (필리핀)",
       "symbol": "PSEI.PS",
-      "price": 5403.11,
-      "change_pct": 1.81,
+      "price": 5399.46,
+      "change_pct": 1.74,
       "up": true
     },
     {
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 17.44,
-      "change_pct": -0.3,
+      "price": 17.43,
+      "change_pct": -0.38,
       "up": false
     }
   ],
@@ -121,15 +121,15 @@
       {
         "name": "코스피",
         "symbol": "^KS11",
-        "price": 4734.51,
-        "change_pct": -7.85,
+        "price": 4732.59,
+        "change_pct": -7.89,
         "up": false
       },
       {
         "name": "코스닥",
         "symbol": "^KQ11",
-        "price": 642.61,
-        "change_pct": -6.16,
+        "price": 640.91,
+        "change_pct": -6.41,
         "up": false
       }
     ],
@@ -165,8 +165,8 @@
       {
         "name": "PSEi (필리핀)",
         "symbol": "PSEI.PS",
-        "price": 5403.11,
-        "change_pct": 1.81,
+        "price": 5399.46,
+        "change_pct": 1.74,
         "up": true
       }
     ],
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 17.44,
-        "change_pct": -0.3,
+        "price": 17.43,
+        "change_pct": -0.38,
         "up": false
       }
     ]
@@ -205,8 +205,8 @@
     "ACB": {
       "name": "Asia Commercial Joint Stock Bank",
       "symbol": "ACB.VN",
-      "price": 19650.0,
-      "change_pct": -2.0,
+      "price": 19600.0,
+      "change_pct": -2.24,
       "up": false
     }
   }
