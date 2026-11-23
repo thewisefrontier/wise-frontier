@@ -1,5 +1,101 @@
 [
   {
+    "id": 329165,
+    "title_en": "[국내유가] 휘발유 리터당 1854원…전일 대비 소폭 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1854원…전일 대비 소폭 하락",
+    "summary_ko": "한국석유공사 오피넷이 24일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1854원으로 집계됐다.\n\n이날 공개된 데이터에 따르면 경유는 리터당 1840.62원, LPG 부탄은 리터당 1177.91원을 기록했다. 전일과 비교해 휘발유는 0.17원, 경유는 0.59원, LPG는 0.17원 각각 하락한 수치다. 오피넷 집계에 따르면 주요 유종 모두 전날에 비해 소폭 내림세를 나타냈다.\n\n이번 유가 하락은 최근 국제유가 변동 추이와 국내 석유제품 공급가격의 시차 반영 등이 복합적으로 작용한 결과다. 국내 석유제품 가격은",
+    "url": "internal://opinet_price_2026-11-24",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-11-24 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_11_24_pid8272496.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-24T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-24 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-11-24",
+      "prices": {
+        "B027": {
+          "diff": -0.17,
+          "name": "휘발유",
+          "price": 1854.01
+        },
+        "B034": {
+          "diff": -0.8,
+          "name": "고급휘발유",
+          "price": 2351.26
+        },
+        "C004": {
+          "diff": -0.4,
+          "name": "실내등유",
+          "price": 1568.25
+        },
+        "D047": {
+          "diff": -0.59,
+          "name": "경유",
+          "price": 1840.62
+        },
+        "K015": {
+          "diff": -0.17,
+          "name": "LPG(부탄)",
+          "price": 1177.91
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 329163,
+    "title_en": "[오늘의 스타트업] AI 고객 서비스 기업 시에라, 17억 5000만 달러 투자 유치 외 4건",
+    "title_ko": "[오늘의 스타트업] AI 고객 서비스 기업 시에라, 17억 5000만 달러 투자 유치 외 4건",
+    "summary_ko": "[AI 고객 서비스 기업 시에라, 17억 5000만 달러 투자 유치]\n- 오픈아이의 브렛 테일러 회장이 공동 창업한 AI 고객 서비스 기업 시에라가 17억 5000만 달러를 유치했다.\n- 그린오크스와 라이트스피드 벤처 파트너스가 이번 투자를 주도했다.\n- 이번 투자로 회사의 기업 가치는 300억 달러로 평가받았다.\n- 지난 5월 158억 달러였던 가치에서 약 2배로 증가했다.\n- 10월 기준 연간 반복 매출은 4억 달러를 넘어섰다.\n\n[자율주행·무기 시뮬레이션 스타트업 아곤, 7000만 달러 투자 유치]\n- 런던 소재 자율주행 및 ",
+    "url": "internal://startup_digest_20261124",
+    "source": "NewsFinal",
+    "category": "산업·기업",
+    "subcategory": "startup_digest_20261124",
+    "region": "global",
+    "country": "",
+    "country_flag": "",
+    "score": 28,
+    "created_at": "2026-11-24 05:09",
+    "countries": null,
+    "is_published": true,
+    "image_url": "",
+    "view_count": 0,
+    "first_published_at": null,
+    "update_log": [],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
     "id": 329162,
     "title_en": "I Am a Cat",
     "title_ko": "[오늘의 책] 동물의 눈으로 본 인간 사회의 위선, 나쓰메 소세키의 『나는 고양이로소이다』",

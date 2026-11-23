@@ -1,5 +1,101 @@
 [
   {
+    "id": 329165,
+    "title_en": "[국내유가] 휘발유 리터당 1854원…전일 대비 소폭 하락",
+    "title_ko": "[국내유가] 휘발유 리터당 1854원…전일 대비 소폭 하락",
+    "summary_ko": "한국석유공사 오피넷이 24일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1854원으로 집계됐다.\n\n이날 공개된 데이터에 따르면 경유는 리터당 1840.62원, LPG 부탄은 리터당 1177.91원을 기록했다. 전일과 비교해 휘발유는 0.17원, 경유는 0.59원, LPG는 0.17원 각각 하락한 수치다. 오피넷 집계에 따르면 주요 유종 모두 전날에 비해 소폭 내림세를 나타냈다.\n\n이번 유가 하락은 최근 국제유가 변동 추이와 국내 석유제품 공급가격의 시차 반영 등이 복합적으로 작용한 결과다. 국내 석유제품 가격은",
+    "url": "internal://opinet_price_2026-11-24",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-11-24 05:11",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_11_24_pid8272496.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-24T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-24 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-11-24",
+      "prices": {
+        "B027": {
+          "diff": -0.17,
+          "name": "휘발유",
+          "price": 1854.01
+        },
+        "B034": {
+          "diff": -0.8,
+          "name": "고급휘발유",
+          "price": 2351.26
+        },
+        "C004": {
+          "diff": -0.4,
+          "name": "실내등유",
+          "price": 1568.25
+        },
+        "D047": {
+          "diff": -0.59,
+          "name": "경유",
+          "price": 1840.62
+        },
+        "K015": {
+          "diff": -0.17,
+          "name": "LPG(부탄)",
+          "price": 1177.91
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 329163,
+    "title_en": "[오늘의 스타트업] AI 고객 서비스 기업 시에라, 17억 5000만 달러 투자 유치 외 4건",
+    "title_ko": "[오늘의 스타트업] AI 고객 서비스 기업 시에라, 17억 5000만 달러 투자 유치 외 4건",
+    "summary_ko": "[AI 고객 서비스 기업 시에라, 17억 5000만 달러 투자 유치]\n- 오픈아이의 브렛 테일러 회장이 공동 창업한 AI 고객 서비스 기업 시에라가 17억 5000만 달러를 유치했다.\n- 그린오크스와 라이트스피드 벤처 파트너스가 이번 투자를 주도했다.\n- 이번 투자로 회사의 기업 가치는 300억 달러로 평가받았다.\n- 지난 5월 158억 달러였던 가치에서 약 2배로 증가했다.\n- 10월 기준 연간 반복 매출은 4억 달러를 넘어섰다.\n\n[자율주행·무기 시뮬레이션 스타트업 아곤, 7000만 달러 투자 유치]\n- 런던 소재 자율주행 및 ",
+    "url": "internal://startup_digest_20261124",
+    "source": "NewsFinal",
+    "category": "산업·기업",
+    "subcategory": "startup_digest_20261124",
+    "region": "global",
+    "country": "",
+    "country_flag": "",
+    "score": 28,
+    "created_at": "2026-11-24 05:09",
+    "countries": null,
+    "is_published": true,
+    "image_url": "",
+    "view_count": 0,
+    "first_published_at": null,
+    "update_log": [],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
     "id": 329162,
     "title_en": "I Am a Cat",
     "title_ko": "[오늘의 책] 동물의 눈으로 본 인간 사회의 위선, 나쓰메 소세키의 『나는 고양이로소이다』",
@@ -2088,150 +2184,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 328851,
-    "title_en": "[국내유가] 휘발유 리터당 1854원…전국 평균 소폭 하락",
-    "title_ko": "[국내유가] 휘발유 리터당 1854원…전국 평균 소폭 하락",
-    "summary_ko": "한국석유공사 오피넷이 23일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1854원으로 집계됐다.\n\n이날 함께 공개된 경유 평균 판매가격은 리터당 1840.80원으로 전일 대비 0.22원 내렸으며, LPG 부탄은 리터당 1178.03원으로 0.06원 하락했다. 휘발유 역시 전일보다 0.19원 내린 리터당 1854.14원을 기록하면서 주요 유종 모두 전날에 비해 소폭 하락세를 나타냈다. 오피넷에 따르면 이번 전국 평균 가격 집계는 전일 판매된 가격을 기준으로 산출됐다.\n\n국내 유가의 이러한 변동 흐름은 최근 국제유",
-    "url": "internal://opinet_price_2026-11-23",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국내유가",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "🇰🇷",
-    "score": 1,
-    "created_at": "2026-11-23 05:11",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_11_23_pid10228001.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-23T05:11:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-23 05:11",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "date": "2026-11-23",
-      "prices": {
-        "B027": {
-          "diff": -0.19,
-          "name": "휘발유",
-          "price": 1854.14
-        },
-        "B034": {
-          "diff": -0.12,
-          "name": "고급휘발유",
-          "price": 2354.08
-        },
-        "C004": {
-          "diff": -0.07,
-          "name": "실내등유",
-          "price": 1568.34
-        },
-        "D047": {
-          "diff": -0.22,
-          "name": "경유",
-          "price": 1840.8
-        },
-        "K015": {
-          "diff": -0.06,
-          "name": "LPG(부탄)",
-          "price": 1178.03
-        }
-      }
-    },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 328850,
-    "title_en": "[기업 분석] 포스트, 비용 인플레이션 속 2027 회계연도 하반기 가격 인상으로 마진 방어 추진",
-    "title_ko": "[기업 분석] 포스트, 비용 인플레이션 속 2027 회계연도 하반기 가격 인상으로 마진 방어 추진",
-    "summary_ko": "[사업]\n- 포스트는 식품 제조 및 유통 사업을 영위하며, 제조 기반 전반에 걸쳐 높은 설비 가동률을 유지하면서 기회주의적 인수를 위한 유연성을 보존하고 있다.\n- 포스트는 건조 개 운동식품(드라이 도그 푸드) 분야에서 판촉 활동을 벌였으며, 이로 인해 시장 점유율 회복이 지연되고 애완동물 부문 판매량이 보합세를 보였다.\n- 포스트는 식품 서비스 부문의 성장과 생산성 향상을 통해 재무적 모멘텀을 구축하고 있다.\n\n[최근 실적]\n- 포스트는 2026년 11월 20일에 개최한 2026 회계연도 4분기 실적 발표 콘퍼런스 콜에서 운송 및",
-    "url": "internal://company_analysis_20261123_post",
-    "source": "NewsFinal",
-    "category": "산업·기업",
-    "subcategory": "company_analysis_20261123_post",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 200,
-    "created_at": "2026-11-23 05:07",
-    "countries": null,
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/company_analysis_20261123_post_pid1232944.jpg",
-    "view_count": 0,
-    "first_published_at": null,
-    "update_log": [
-      {
-        "timestamp": "2026-11-23 05:07",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-23 09:13",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "company": "Post",
-      "src_ids": [
-        3124882
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
-  },
-  {
-    "id": 328849,
-    "title_en": "[오늘의 신기술] 우주 회수 성공부터 뇌 임플란트·양자 컴퓨팅 성과까지",
-    "title_ko": "[오늘의 신기술] 우주 회수 성공부터 뇌 임플란트·양자 컴퓨팅 성과까지",
-    "summary_ko": "[스페이스엑스 스타십 상단 로켓 회수 성공]\n- 스페이스엑스는 발사 타워에 부착된 기계 팔을 이용해 스타십 로켓의 상단부 회수에 최초로 성공했다.\n- 이번 시험 비행은 22시간 이상 진행된 궤도 비행을 마친 후 진행됐다.\n- 동반 진행된 임무에서 경쟁사인 ULA의 벌컨 로켓은 발사에 실패하며 아마존 위성 40기를 파괴했다.\n- 이번 성과는 우주 운송 비용을 낮추고 완전한 로켓 재사용 시스템을 구축하기 위한 진전이다.\n\n[뉴럴링크 N1 뇌 컴퓨터 인터페이스 임플란트 시연]\n- 2024년 1월 척수 손상으로 마비가 발생한 노랜드 아보가",
-    "url": "internal://newtech_digest_20261123",
-    "source": "NewsFinal",
-    "category": "IT·과학",
-    "subcategory": "newtech_digest_20261123",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 15,
-    "created_at": "2026-11-23 05:06",
-    "countries": null,
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/newtech_digest_20261123_pid67649.jpg",
-    "view_count": 0,
-    "first_published_at": null,
-    "update_log": [
-      {
-        "timestamp": "2026-11-23 05:06",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   }
 ]
