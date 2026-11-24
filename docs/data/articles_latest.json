@@ -1,5 +1,42 @@
 [
   {
+    "id": 329770,
+    "title_en": "서울, 쌀쌀한 날씨 속 구름 많음",
+    "title_ko": "서울, 쌀쌀한 날씨 속 구름 많음",
+    "summary_ko": "25일 한국의 날씨는 전국이 구름 많은 가운데 서울의 최저기온이 영하 4도, 최고기온이 7도를 기록할 것으로 예상된다. 한국 기상청에 따르면 서울은 오전에 구름이 많겠고 오후에는 맑아질 것으로 보이며, 오전과 오후 모두 강수확률은 20%를 나타낼 것으로 보인다. 서울의 최대풍속은 13km/h를 기록할 것으로 예상된다.\n\n지방별 날씨를 살펴보면 부산은 오전과 오후 모두 맑을 것으로 보이며 최저기온 영하 1도, 최고기온 10도를 기록할 것으로 예상된다. 부산의 강수확률은 종일 0%를 나타내겠고 최대풍속은 14km/h를 기록할 것으로 보",
+    "url": "internal://weather_한국_today20261125",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_한국_today20261125",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-25 05:22",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261125_pid599206_south_korea.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-25T05:22:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-25 05:22",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 329769,
     "title_en": "[국내유가] 휘발유 리터당 1854원…전국 평균 소폭 하락",
     "title_ko": "[국내유가] 휘발유 리터당 1854원…전국 평균 소폭 하락",
@@ -2257,49 +2294,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 329166,
-    "title_en": "[기업 분석] 암, 모바일 시장 지배하는 라이선스 모델의 강자",
-    "title_ko": "[기업 분석] 암, 모바일 시장 지배하는 라이선스 모델의 강자",
-    "summary_ko": "[사업]\n- 암은 자체 칩을 제조하지 않고 핵심 아키텍처를 설계하여 지식재산권을 라이선싱하는 모델을 운영한다.\n- 에너지 효율이 높은 설계 기술을 바탕으로 전 세계 스마트폰의 99% 이상에 자사 아키텍처를 공급하고 있다.\n- 최근에는 클라우드 데이터 센터와 자동차 분야로 사업을 확장하고 있으며, 더 높은 로열티 수익을 위해 완제품 형태에 가까운 칩 설계로 사업 범위를 넓히고 있다.\n\n[최근 실적]\n- 2026년 9월 30일까지 12개월간 매출은 55억 달러로 전년 대비 23.8% 성장했다.\n- 해당 기간 순이익은 9억 3600만 달",
-    "url": "internal://company_analysis_20261124_arm",
-    "source": "NewsFinal",
-    "category": "산업·기업",
-    "subcategory": "company_analysis_20261124_arm",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 200,
-    "created_at": "2026-11-24 05:13",
-    "countries": null,
-    "is_published": true,
-    "image_url": "",
-    "view_count": 0,
-    "first_published_at": null,
-    "update_log": [
-      {
-        "timestamp": "2026-11-24 05:13",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-24T11:42:59.927428",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "company": "Arm",
-      "src_ids": [
-        3205810
-      ]
-    },
-    "image_credit": "",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   }
 ]
