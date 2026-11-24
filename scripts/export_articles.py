@@ -115,6 +115,23 @@ def strip_update_block(text: str) -> str:
     return "" if nl == -1 else rest[nl + 1:].lstrip("\n")
 
 
+# 내용이 늘어난 업데이트가 아닌 기록 — 목록 정렬의 "최근 업데이트 시각"에 넣지 않는다(검증·교정·내용 없음 등).
+_NON_CONTENT_NOTE_RE = re.compile(r"^\s*(최초 게시|실시간 트렌드 감지|웹 검색으로|음역 자동 교정|추가된 내용 없음|내용 변경 없음|"
+                                  r"업데이트된 내용 없음|사실 교정|표기 교정|\[경고\]|통합 미발행|재검수|날짜 환각|고유명사|복수 토픽)")
+
+
+def last_content_update(log) -> str:
+    """새 내용이 붙은 마지막 업데이트 시각("YYYY-MM-DD HH:MM"). 없으면 "".
+    2026-11-24 사용자 지적("최대 이슈인 젠슨 황 엔비디아 CEO 복귀 기사가 안 보인다"): #329146은 03:43에 처음 나간 뒤
+    하루 종일 업데이트됐는데, 홈 목록이 처음 발행 시각으로만 정렬해 복권·시세 기사 아래 47건 중 27번째에 묻혔다."""
+    if not isinstance(log, list):
+        return ""
+    ts = [str(e.get("timestamp") or "")[:16] for e in log[1:]
+          if isinstance(e, dict) and not _NON_CONTENT_NOTE_RE.search(str(e.get("note") or ""))
+          and not INTERNAL_ONLY_NOTE_RE.search(str(e.get("note") or ""))]
+    return max(ts) if ts else ""
+
+
 def sanitize_update_log(log):
     if not isinstance(log, list):
         return []
@@ -206,8 +223,12 @@ def export_articles(limit=9999):
         _export_from_sqlite(limit)
         return
 
-    # 최신순 정렬
-    all_articles.sort(key=lambda a: a.get("created_at", ""), reverse=True)
+    # 최신순 정렬 — 새 내용이 붙은 기사는 마지막 업데이트 시각 기준(updated_at, 홈 목록 정렬에도 쓴다)
+    for a in all_articles:
+        upd = last_content_update(a.get("update_log"))
+        if upd and upd > (a.get("created_at") or ""):
+            a["updated_at"] = upd
+    all_articles.sort(key=lambda a: a.get("updated_at") or a.get("created_at", ""), reverse=True)
 
     # 내부 운영 기록·내부 전용 컬럼이 공개 JSON으로 새어나가지 않도록 정화
     for a in all_articles:

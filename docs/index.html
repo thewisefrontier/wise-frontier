@@ -518,11 +518,11 @@
         if (overlap >= 2) { group.push(b); used.add(j); }
       });
       // 클러스터 내부: 최신순
-      group.sort((x, y) => (y.created_at || '') > (x.created_at || '') ? 1 : -1);
+      group.sort((x, y) => sortTime(y) > sortTime(x) ? 1 : -1);
       clusters.push(group);
     });
     // 클러스터끼리: 대표 기사(첫 번째) 기준 최신순
-    clusters.sort((a, b) => (b[0].created_at || '') > (a[0].created_at || '') ? 1 : -1);
+    clusters.sort((a, b) => sortTime(b[0]) > sortTime(a[0]) ? 1 : -1);
     return clusters;
   }
 
@@ -555,6 +555,10 @@
     const now = nowKST();
     return `${now.getMonth()+1}월 ${now.getDate()}일`;
   })();
+
+  // 새 내용이 붙은 기사는 마지막 업데이트 시각으로 정렬한다(export_articles.py의 updated_at, 2026-11-24 — 젠슨 황 복귀
+  // 기사가 새벽 첫 발행 시각에 묶여 목록 27번째에 묻혔다).
+  function sortTime(a) { return (a && (a.updated_at || a.created_at)) || ''; }
 
   function formatTime(dateStr) {
     if (!dateStr) return '';
@@ -1019,7 +1023,7 @@ function cleanBody(text) {
           <div class="article-tags">
             ${liveBadge}${catTag}${subTag}${regionTag}${countryTag}
           </div>
-          <span class="article-time" data-created="${a.created_at}">${formatTime(a.created_at)}</span>
+          <span class="article-time" data-created="${sortTime(a)}">${formatTime(sortTime(a))}</span>${a.updated_at ? '<span class="article-time" style="margin-left:4px;color:var(--accent2);">업데이트</span>' : ''}
         </div>
         <div class="article-title">${window.esc(a.title_ko||a.title_en)}</div>
         <div class="card-media">
