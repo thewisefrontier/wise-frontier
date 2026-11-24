@@ -177,6 +177,9 @@ def _fetch_all(select, base_params, timeout=30):
     return rows
 
 
+EXPORT_FORMAT = 2   # 2: updated_at(마지막 내용 업데이트 시각) 추가
+
+
 def _watermark_of(rows):
     max_id = max((r.get("id") or 0) for r in rows) if rows else 0
     last_ts = ""
@@ -185,7 +188,9 @@ def _watermark_of(rows):
         if log and isinstance(log, list):
             ts = str(log[-1].get("timestamp") or "")
             last_ts = max(last_ts, ts)
-    return {"count": len(rows), "max_id": max_id, "last_log_ts": last_ts}
+    # format: 내보내기 형식이 바뀌면 올린다 — 데이터가 그대로여도 한 번은 새로 내보내게(2026-11-24 updated_at 추가 때
+    # "변경 없음"으로 건너뛰어 새 정렬이 반영되지 않았다).
+    return {"count": len(rows), "max_id": max_id, "last_log_ts": last_ts, "format": EXPORT_FORMAT}
 
 
 def export_articles(limit=9999):
