@@ -1,5 +1,49 @@
 [
   {
+    "id": 329795,
+    "title_en": "동남아, 34도 폭염 속 뇌우·비…곳곳 체감 40도 찜통더위",
+    "title_ko": "동남아, 34도 폭염 속 뇌우·비…곳곳 체감 40도 찜통더위",
+    "summary_ko": "25일(현지시간) 동남아시아 주요국 수도 지역은 최저기온 16°C에서 최고기온 34°C 사이의 기온 분포를 보일 전망이다. 역내에서 가장 더운 곳은 최고기온 34°C를 나타내는 태국 방콕인 반면, 가장 선선한 곳은 최고기온 20°C·최저기온 16°C를 기록하는 베트남 하노이로 파악될 전망이다. 하노이는 방콕보다 최고기온이 14°C 낮아 상대적으로 선선한 날씨를 보일 것으로 예상된다.\n\n이날 인도네시아, 필리핀, 말레이시아, 싱가포르 등에서는 비 소식이 이어질 전망이다. 베트남 껀터, 필리핀 다바오 및 일로일로, 말레이시아 쿠알라룸푸",
+    "url": "internal://weather_group_동남아시아_today20261125",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_동남아시아_today20261125",
+    "region": "southeast_asia",
+    "country": "동남아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-25 07:24",
+    "countries": [
+      "베트남",
+      "인도네시아",
+      "태국",
+      "필리핀",
+      "미얀마",
+      "캄보디아",
+      "말레이시아",
+      "싱가포르"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261125_pid2387688_indonesia.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-25T07:24:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-25 07:24",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 329794,
     "title_en": "[국제금값] 금 온스당 3554달러…금리 전망과 달러 흐름에 하락",
     "title_ko": "[국제금값] 금 온스당 3554달러…금리 전망과 달러 흐름에 하락",
@@ -706,7 +750,7 @@
     "id": 329765,
     "title_en": "[오늘의 AI 소식] 앤스로픽 주가 하락 및 엔비디아 젠슨 황 복귀에 따른 시장 변동",
     "title_ko": "[오늘의 AI 소식] 앤스로픽 주가 하락 및 엔비디아 젠슨 황 복귀에 따른 시장 변동",
-    "summary_ko": "[앤스로픽 주가 IPO 가격 밑으로 하락]\n- 24일(현지시간) 앤스로픽 주가가 IPO 가격인 83 달러 아래로 떨어졌다.\n- 장중 한때 79.42 달러까지 하락하며 전 거래일 대비 9.40% 내렸다.\n- 상장 직후 최고가인 111.53 달러와 비교하면 31% 하락한 수치이다.\n- 상장 당시 34% 상승하며 긍정적인 시장 반응을 얻었으나 이후 매도세가 이어졌다.\n\n[엔비디아 젠슨 황 CEO 복귀와 주가 급등]\n- 23일 엔비디아는 젠슨 황이 CEO 겸 이사회 의장으로 복귀했다고 발표했다.\n- 복귀 발표 당일 엔비디아 주가는 35% ",
+    "summary_ko": "[앤스로픽 주가 IPO 가격 밑으로 하락]\n- 24일(현지시간) 앤스로픽 주가가 IPO 가격인 83 달러 아래로 떨어졌다.\n- 장중 한때 79.42 달러까지 하락하며 전 거래일 대비 9.40% 내렸다.\n- 상장 직후 최고가인 111.53 달러와 비교하면 31% 하락한 수치이다.\n- 상장 당시 34% 상승하며 긍정적인 시장 반응을 얻었으나 이후 매도세가 이어졌다.\n\n[엔비디아 젠슨 황 CEO 복귀와 주가 급등]\n- 23일 엔비디아는 젠슨 황이 CEO 겸 이사회 의장으로 복귀했다고 발표했다.\n- 복귀 발표 당일(23일) 엔비디아 주가는",
     "url": "internal://ai_digest_20261125",
     "source": "NewsFinal",
     "category": "IT·과학",
@@ -725,6 +769,10 @@
       {
         "timestamp": "2026-11-25 07:11",
         "note": "최초 게시"
+      },
+      {
+        "timestamp": "2026-11-25 07:13",
+        "note": "내용 업데이트"
       }
     ],
     "byline": "뉴스파이널 편집국",
@@ -2350,49 +2398,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": false
-  },
-  {
-    "id": 329178,
-    "title_en": "동남아시아, 최고 36도 폭염 속 곳곳 뇌우·비 소식",
-    "title_ko": "동남아시아, 최고 36도 폭염 속 곳곳 뇌우·비 소식",
-    "summary_ko": "24일(현지시간) 동남아시아 주요국 수도는 최저기온 18°C에서 최고기온 36°C의 기온 분포를 보일 것으로 예상된다. 가장 더운 곳은 최고기온 36°C를 기록할 태국 방콕인 반면, 가장 선선한 곳은 최고기온 23°C와 최저기온 18°C에 그치는 베트남 하노이로 지역별 기온 차이가 뚜렷할 전망이다. 베트남 하노이는 소나기와 함께 강수확률 100%, 강수량 11.6mm를 기록할 것으로 보이며 내일 최고기온은 19°C로 오늘보다 낮아질 것으로 예상된다.\n\n이와 함께 베트남, 인도네시아, 필리핀, 캄보디아, 말레이시아, 싱가포르 등 다수",
-    "url": "internal://weather_group_동남아시아_today20261124",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_동남아시아_today20261124",
-    "region": "southeast_asia",
-    "country": "동남아시아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-24 07:24",
-    "countries": [
-      "베트남",
-      "인도네시아",
-      "태국",
-      "필리핀",
-      "미얀마",
-      "캄보디아",
-      "말레이시아",
-      "싱가포르"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261124_pid3332143_indonesia.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-24T07:24:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-24 07:24",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
   }
 ]
