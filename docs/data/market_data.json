@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-25 23:02",
+  "updated_at": "2026-11-25 23:06",
   "indices": [
     {
       "name": "S&P 500",
@@ -39,8 +39,8 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 104488.78,
-      "change_pct": -1.63,
+      "price": 104429.3,
+      "change_pct": -1.68,
       "up": false
     },
     {
@@ -74,9 +74,9 @@
     {
       "name": "USD/NGN",
       "symbol": "USDNGN=X",
-      "price": 1356.0,
-      "change_pct": 0.09,
-      "up": true
+      "price": 1354.22,
+      "change_pct": -0.04,
+      "up": false
     },
     {
       "name": "USD/KES",
@@ -137,8 +137,8 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 104488.78,
-        "change_pct": -1.63,
+        "price": 104429.3,
+        "change_pct": -1.68,
         "up": false
       },
       {
@@ -174,9 +174,9 @@
       {
         "name": "USD/NGN",
         "symbol": "USDNGN=X",
-        "price": 1356.0,
-        "change_pct": 0.09,
-        "up": true
+        "price": 1354.22,
+        "change_pct": -0.04,
+        "up": false
       },
       {
         "name": "USD/KES",
