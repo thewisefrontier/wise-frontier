@@ -136,3 +136,11 @@ c = {"title_en": "Dreamteam Raises $53M", "source_published_at": "2026-11-16T14:
 assert d.strip_unsupported_dates("[드림팀]\n- 11월 16일 드림팀이 투자를 유치했다.", {"[드림팀]": [1]}, [c])[1] == []
 assert "(월) 발행]" not in d.build_digest_prompt(d.TOPICS["startup"], [c]) and "[원문 1] Dreamteam" in d.build_digest_prompt(d.TOPICS["startup"], [c])
 print("date gate 오탐 ok")
+
+# 2026-11-26 id=330337: "Rs 28.80 crore"가 "28억8000만루피"(실제 2억8800만, 10배)로 발행 — 루피도 병기·검증한다.
+a = d.annotate_money("Prosus will invest Rs 28.80 crore; round of Rs 38.4 crore at Rs 21,221.92 per share")
+assert "[2억8800만 루피]" in a and "[3억8400만 루피]" in a, a
+allowed = d._allowed_money([{"title_en": "Vegapay", "full_text": "Prosus will invest Rs 28.80 crore"}])
+out, dropped, _ = d.strip_unverified_money("[베가페이]\n- 프로수스가 2억8800만루피를 투자한다.\n- 28억8000만루피를 투자한다.", allowed)
+assert dropped == ["- 28억8000만루피를 투자한다."] and "2억8800만루피" in out, (out, dropped)
+print("rupee ok")
