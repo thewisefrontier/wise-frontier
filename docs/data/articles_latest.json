@@ -1,5 +1,141 @@
 [
   {
+    "id": 330339,
+    "title_en": "[국내유가] 휘발유 리터당 1854원…전 유종 소폭 하락세",
+    "title_ko": "[국내유가] 휘발유 리터당 1854원…전 유종 소폭 하락세",
+    "summary_ko": "한국석유공사 오피넷이 26일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1853.82원으로 집계됐다. 이는 전일 대비 0.09원 하락한 수치다.\n\n경유와 LPG 가격도 내림세를 보였다. 경유는 전일 대비 0.38원 하락한 리터당 1840.61원을 기록했다. LPG(부탄) 역시 전일보다 0.10원 내린 리터당 1178.01원에 판매됐다.\n\n오피넷에 따르면 이번 집계는 전일 판매 가격을 기준으로 산출된 결과다.\n\n최근 국내 유가 변동은 국제 유가 흐름과 정유사 공급 가격의 영향을 받는다. 국제 원유 시장의 수급 상",
+    "url": "internal://opinet_price_2026-11-26",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-11-26 05:12",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_11_26_pid1130643.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-26T05:12:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-26 05:12",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-11-26",
+      "prices": {
+        "B027": {
+          "diff": -0.09,
+          "name": "휘발유",
+          "price": 1853.82
+        },
+        "B034": {
+          "diff": -1.24,
+          "name": "고급휘발유",
+          "price": 2344.68
+        },
+        "C004": {
+          "diff": 0.03,
+          "name": "실내등유",
+          "price": 1568.18
+        },
+        "D047": {
+          "diff": -0.38,
+          "name": "경유",
+          "price": 1840.61
+        },
+        "K015": {
+          "diff": -0.1,
+          "name": "LPG(부탄)",
+          "price": 1178.01
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 330338,
+    "title_en": "[오늘의 신기술] 파키스탄인 최초 중국 톈궁 우주정거장 탑승",
+    "title_ko": "[오늘의 신기술] 파키스탄인 최초 중국 톈궁 우주정거장 탑승",
+    "summary_ko": "[파키스탄인 최초 중국 톈궁 우주정거장 탑승]\n- 25일(현지시간) 파키스탄 국적의 40세 조종사 제샨 알리가 중국 톈궁 우주정거장에 탑승해 파키스탄 최초의 우주 비행사가 됐다.\n- 선저우 24호 우주선은 중국 북서부 주취안 위성발사센터에서 롱마치 2F 로켓을 이용해 발사됐으며 약 6시간 만인 오후 2시 35분에 톈궁에 도킹했다.\n- 제샨 알리는 탑재체 전문가 임무를 맡아 5일에서 10일 동안 우주정거장에 체류할 예정이다.\n- 알리는 비행을 준비하기 위해 7개월 동안 베이징에서 중국어 집중 수업, 중국 노래 학습, 시 읽기, 서예 ",
+    "url": "internal://newtech_digest_20261126",
+    "source": "NewsFinal",
+    "category": "IT·과학",
+    "subcategory": "newtech_digest_20261126_crypto",
+    "region": "global",
+    "country": "",
+    "country_flag": "",
+    "score": 16,
+    "created_at": "2026-11-26 05:09",
+    "countries": null,
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/newtech_digest_20261126_pid8908843.jpg",
+    "view_count": 0,
+    "first_published_at": null,
+    "update_log": [
+      {
+        "timestamp": "2026-11-26 05:09",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
+    "id": 330337,
+    "title_en": "[오늘의 스타트업] 주요 동향",
+    "title_ko": "[오늘의 스타트업] 주요 동향",
+    "summary_ko": "[아프리카 보안 스타트업 에온, 프리시드 투자금 200만 달러로 확대]\n- 아프리카와 글로벌 남반구를 위한 사이버 방어 인프라를 구축하는 나이지리아의 보안 기업 에온이 11월 25일에 프리시드 투자 라운드를 200만 달러로 확대했다.\n- 이번 투자에는 런치 아프리카 벤처스와 오케라 캐피털이 새로 참여했다.\n- 이 회사는 지난 9월 테라 인더스트리즈 등이 주도한 100만 달러 규모의 프리시드 투자를 유치한 바 있다.\n- 신규 자금은 엔지니어링 및 전문 사이버 보안 팀 확장에 투입된다.\n\n[핀테크 스타트업 베가페이, 프로수스 주도로 3",
+    "url": "internal://startup_digest_20261126",
+    "source": "NewsFinal",
+    "category": "산업·기업",
+    "subcategory": "startup_digest_20261126",
+    "region": "global",
+    "country": "",
+    "country_flag": "",
+    "score": 24,
+    "created_at": "2026-11-26 05:06",
+    "countries": null,
+    "is_published": true,
+    "image_url": "",
+    "view_count": 0,
+    "first_published_at": null,
+    "update_log": [
+      {
+        "timestamp": "2026-11-26 05:06",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
     "id": 330336,
     "title_en": "The Dangers in My Heart",
     "title_ko": "[오늘의 책] 사쿠라이 노리오의 『내 마음의 위험한 녀석 1』, 아싸 소년과 인싸 미소녀의 아슬아슬한 청춘 로맨스",
@@ -2616,158 +2752,5 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 329768,
-    "title_en": "[기업 분석] 비자, 글로벌 결제 네트워크와 탄탄한 현금 창출력",
-    "title_ko": "[기업 분석] 비자, 글로벌 결제 네트워크와 탄탄한 현금 창출력",
-    "summary_ko": "[사업]\n- 비자는 14000개 이상의 금융 기관과 수백만 개의 가맹점을 연결하는 전 세계적인 4파티 결제 모델을 운영한다.\n- 회사는 은행과 판매자 사이의 기술적 가교 역할을 하며 전 세계 디지털 거래에서 수조 달러 규모의 거래를 원활하게 처리한다.\n- 회사의 네트워크는 200개 이상의 국가에 걸쳐 있으며 주요 스포츠 및 엔터테인먼트 조직과의 파트너십을 통해 지원을 받는다.\n- 회사는 대출 기관이 아닌 네트워크 제공업체로서의 역할에 집중하여 전통적으로 은행업과 연관된 신용 위험을 피한다.\n\n[최근 실적]\n- 2026년 9월 30일",
-    "url": "internal://company_analysis_20261125_visa",
-    "source": "NewsFinal",
-    "category": "산업·기업",
-    "subcategory": "company_analysis_20261125_visa",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 125,
-    "created_at": "2026-11-25 05:10",
-    "countries": null,
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/company_analysis_20261125_visa_pid1583534.jpg",
-    "view_count": 0,
-    "first_published_at": null,
-    "update_log": [
-      {
-        "timestamp": "2026-11-25 05:10",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-25 07:11",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "company": "Visa",
-      "src_ids": [
-        3328329
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
-  },
-  {
-    "id": 329767,
-    "title_en": "[오늘의 신기술] 우주 탐사 및 양자 컴퓨팅 기술 진전",
-    "title_ko": "[오늘의 신기술] 우주 탐사 및 양자 컴퓨팅 기술 진전",
-    "summary_ko": "[파키스탄 최초의 우주인 중국 우주정거장 파견]\n- 25일(현지시간) 중국 주취안 위성발사센터에서 선저우-24 우주선이 발사될 예정이다.\n- 파키스탄 출신 조종사 지샨 알리가 이번 임무에 참여하며, 파키스탄인 최초이자 중국 우주정거장에 탑승하는 최초의 외국인이 된다.\n- 지샨 알리는 중국인 사령관 탕훙보, 비행 엔지니어 우이와 함께 3인승 승무원을 구성한다.\n- 승무원들은 우주정거장에 5일에서 10일간 머물며 각종 실험을 수행할 계획이다.\n- 이번 임무를 위해 지샨 알리는 베이징에서 7개월간 중국어, 중국 문화, 무선 통신 등을 포",
-    "url": "internal://newtech_digest_20261125",
-    "source": "NewsFinal",
-    "category": "IT·과학",
-    "subcategory": "newtech_digest_20261125",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 22,
-    "created_at": "2026-11-25 05:08",
-    "countries": null,
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/newtech_digest_20261125_pid67646.jpg",
-    "view_count": 0,
-    "first_published_at": null,
-    "update_log": [
-      {
-        "timestamp": "2026-11-25 05:08",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
-  },
-  {
-    "id": 329766,
-    "title_en": "[오늘의 스타트업] AI 데이터센터 광통신 기업 Avicena 등 6개사 투자 유치",
-    "title_ko": "[오늘의 스타트업] AI 데이터센터 광통신 기업 Avicena 등 6개사 투자 유치",
-    "summary_ko": "[광통신 기술 기업 Avicena, 시리즈 C 1억 달러 유치]\n- AI 데이터센터 내 구리 배선을 빛으로 대체하는 기술을 개발했다.\n- 마이크로 LED 기반의 LightBundle 솔루션을 통해 데이터 전송 효율을 개선했다.\n- 11월 24일(현지시간) 시리즈 C 라운드에서 1억 달러를 조달했다.\n- 데이터센터 내 가속기와 메모리 간의 전력 소모와 병목 현상을 해결하는 데 자금을 투입한다.\n\n[AI 가치 창출 기업 AIVC, 1억1200만 달러 투자 유치]\n- 뉴욕을 거점으로 기업의 AI 도입과 인프라 구축을 지원한다.\n- 11월",
-    "url": "internal://startup_digest_20261125",
-    "source": "NewsFinal",
-    "category": "산업·기업",
-    "subcategory": "startup_digest_20261125",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 19,
-    "created_at": "2026-11-25 05:06",
-    "countries": null,
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/startup_digest_20261125_pid4814456.jpg",
-    "view_count": 0,
-    "first_published_at": null,
-    "update_log": [
-      {
-        "timestamp": "2026-11-25 07:11",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
-  },
-  {
-    "id": 329765,
-    "title_en": "[오늘의 AI 소식] 앤스로픽 주가 하락 및 엔비디아 젠슨 황 복귀에 따른 시장 변동",
-    "title_ko": "[오늘의 AI 소식] 앤트로픽 주가 하락 및 엔비디아 젠슨 황 복귀에 따른 시장 변동",
-    "summary_ko": "[앤트로픽 주가 IPO 가격 밑으로 하락]\n- 24일(현지시간) 앤트로픽 주가가 IPO 가격인 83 달러 아래로 떨어졌다.\n- 장중 한때 79.42 달러까지 하락하며 전 거래일 대비 9.40% 내렸다.\n- 상장 직후 최고가인 111.53 달러와 비교하면 31% 하락한 수치이다.\n- 상장 당시 34% 상승하며 긍정적인 시장 반응을 얻었으나 이후 매도세가 이어졌다.\n\n[엔비디아 젠슨 황 CEO 복귀와 주가 급등]\n- 23일 엔비디아는 젠슨 황이 CEO 겸 이사회 의장으로 복귀했다고 발표했다.\n- 복귀 발표 당일(23일) 엔비디아 주가는",
-    "url": "internal://ai_digest_20261125",
-    "source": "NewsFinal",
-    "category": "IT·과학",
-    "subcategory": "ai_digest_20261125_crypto",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 37,
-    "created_at": "2026-11-25 05:05",
-    "countries": null,
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/ai_digest_20261125_pid2722098.jpg",
-    "view_count": 0,
-    "first_published_at": null,
-    "update_log": [
-      {
-        "timestamp": "2026-11-25 07:11",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-25 07:13",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   }
 ]
