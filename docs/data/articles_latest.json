@@ -1,5 +1,44 @@
 [
   {
+    "id": 330348,
+    "title_en": "동아시아 수도권, 영하의 눈발부터 영상의 포근함까지",
+    "title_ko": "동아시아 수도권, 영하의 눈발부터 영상의 포근함까지",
+    "summary_ko": "26일(현지시간) 동아시아 주요국 수도는 최저기온 영하 12도에서 최고기온 영상 14도 사이의 기온 범위를 나타낼 것으로 보인다. 이 가운데 가장 더운 곳은 최고기온 14도를 기록하는 일본 도쿄인 반면, 가장 선선한 곳은 최고기온이 영하 4도에 머무는 몽골 울란바토르로 집계되어 두 수도 간의 기온 차이가 뚜렷하게 나타날 전망이다. 국가별 상세 날씨를 보면, 일본 도쿄는 최저 4도, 최고 14도의 기온 분포 속에서 부분적으로 흐린 날씨를 보일 것으로 예상된다.\n\n강수확률은 0%, 강수량은 0.0mm를 나타내며 자외선지수는 3.1을 기",
+    "url": "internal://weather_group_동아시아_today20261126",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_동아시아_today20261126",
+    "region": "east_asia",
+    "country": "동아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-26 06:22",
+    "countries": [
+      "일본",
+      "중국",
+      "몽골"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261126_pid8058507_china.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-26T06:22:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-26 06:22",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 330342,
     "title_en": "한국, 전국·전국 맑음 속 최저 0도·최고 19도",
     "title_ko": "한국, 전국·전국 맑음 속 최저 0도·최고 19도",
@@ -1313,52 +1352,6 @@
     "noindex": true
   },
   {
-    "id": 329771,
-    "title_en": "콩고민주공화국 에볼라 사망자 공식 집계보다 7배 많아… 백신 도입 가속화",
-    "title_ko": "콩고민주공화국 에볼라 사망자 공식 집계보다 7배 많아… 백신 도입 가속화",
-    "summary_ko": "24일(현지시간) 콩고민주공화국(DRC) 내 에볼라 사망자 수가 공식 기록보다 7배 이상 많다는 조사 결과가 발표되면서 아프리카 전역의 방역 실태에 대한 경각심이 높아졌다. 로이터 통신은 위성 사진을 통해 이투리주 분야 지역 묘지의 매장 기록을 분석한 결과, 실제 사망자 규모가 당국 발표를 크게 상회한다고 보도했다.\n\n분야별 전문가들은 초기 대응 과정에서 진단 오류와 보고 누락이 발생해 피해가 확산했다고 지적했다. 콩고민주공화국 국립생물의학연구소장 장 자크 무옘베(Jean-Jacques Muyembe)는 초기 발병 시점의 정보 부족",
-    "url": "internal://trend_에볼라_2026112505",
-    "source": "NewsFinal",
-    "category": "사회",
-    "subcategory": "trend_에볼라",
-    "region": "africa",
-    "country": "콩고민주공화국",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-11-25 05:29",
-    "countries": [
-      "콩고민주공화국",
-      "나이지리아",
-      "우간다",
-      "벨기에",
-      "카타르"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_2030265.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-25T05:29:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-25 05:29",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-25 18:24",
-        "note": "에볼라 발병 후 여성·아동 60% 폭력 피해"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true,
-    "updated_at": "2026-11-25 18:24"
-  },
-  {
     "id": 330241,
     "title_en": "중남미, 32도 폭염 속 곳곳 뇌우·비…브라질 리우 체감 41도",
     "title_ko": "중남미, 32도 폭염 속 곳곳 뇌우·비…브라질 리우 체감 41도",
@@ -2666,88 +2659,6 @@
     "continuation_of_id": null,
     "summary_3lines_en": null,
     "investment_idea_en": null,
-    "noindex": false
-  },
-  {
-    "id": 329785,
-    "title_en": "동아시아, 최저 영하 12도 영하권 속 쌀쌀한 날씨",
-    "title_ko": "동아시아, 최저 영하 12도 영하권 속 쌀쌀한 날씨",
-    "summary_ko": "25일(현지시간) 동아시아 주요국 수도의 기온은 최저 -12°C에서 최고 13°C의 분포를 보일 것으로 예상된다. 이번 기상 데이터에 따르면, 일본 도쿄는 최고기온이 13°C, 최저기온이 6°C를 기록하며 가장 더운 지역이 될 것으로 보인다. 반면 몽골 울란바토르는 최고기온이 -2°C, 최저기온이 -12°C로 떨어져 가장 선선한 곳이 될 전망이다.\n\n도쿄와 울란바토르의 최고기온은 15도 이상 차이를 나타낼 것으로 보인다. 중국 베이징은 최고기온 7°C, 최저기온 -2°C를 기록할 것으로 예상된다. 도쿄와 베이징은 부분적으로 흐린 날",
-    "url": "internal://weather_group_동아시아_today20261125",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_동아시아_today20261125",
-    "region": "east_asia",
-    "country": "동아시아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-25 06:22",
-    "countries": [
-      "일본",
-      "중국",
-      "몽골"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261125_pid4370005_china.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-25T06:22:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-25 06:22",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 329782,
-    "title_en": "프랑스 상원, 2027년 예산안 심의 착수…퇴직자 세액공제 한도 1000유로로 제한",
-    "title_ko": "프랑스 상원, 2027년 예산안 심의 착수…퇴직자 세액공제 한도 1000유로로 제한",
-    "summary_ko": "프랑스 상원이 24일(현지시간) 2027년 예산안 심의를 시작하며 퇴직자 대상 10% 세액공제 제도를 전면 폐지하는 대신 한도를 1000유로로 설정하는 수정안을 가결했다. 당초 정부는 기초 연금의 물가 연동을 위해 해당 공제 제도를 폐지하려 했으나, 상원은 사회적 형평성을 고려해 공제 한도를 대폭 낮추는 타협안을 선택했다.\n\n이번 결정은 세바스티앙 르코르뉘 총리가 의회에 보낸 예산안 관련 서한 이후 나온 첫 주요 조치다. 르코르뉘 총리는 서한을 통해 2027년 예산안에 대한 의회의 타협을 촉구하며 430억 유로의 기존 절감 목표 외",
-    "url": "internal://cluster_20261125_7336638b",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "cluster_20261125_7336638b",
-    "region": "global",
-    "country": "프랑스",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-25 05:55",
-    "countries": [
-      "프랑스"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_385506.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-25T05:55:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-25 05:55",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "src_ids": [
-        3342749,
-        3338586,
-        3337078
-      ]
-    },
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": "",
-    "investment_idea_en": "",
     "noindex": false
   }
 ]
