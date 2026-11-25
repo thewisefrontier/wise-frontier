@@ -1504,22 +1504,6 @@
     "updated_at": "2026-07-30 14:14"
   },
   {
-    "id": "lic",
-    "name": "Life Insurance Corporation of India",
-    "name_ko": "인도생명보험공사",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "BSE",
-    "ticker": "LICI",
-    "sector": "보험",
-    "description": "1956년 설립된 인도의 국영 보험사로, 인도 생명보험 시장에서 압도적인 점유율을 차지하고 있는 최대 규모의 보험 기업입니다. 방대한 판매망과 자산 규모를 바탕으로 인도 금융 시장에서 핵심적인 역할을 수행하고 있습니다. 인도 정부가 대주주로 있으며, 인도 증권거래소에 상장된 주요 금융 기업 중 하나입니다.",
-    "founded_year": 1956,
-    "headquarters": "뭄바이, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-04 16:21"
-  },
-  {
     "id": "lic_india",
     "name": "Life Insurance Corporation of India",
     "name_ko": "인도 생명보험공사",
@@ -1534,6 +1518,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-20 15:32"
+  },
+  {
+    "id": "lic",
+    "name": "Life Insurance Corporation of India",
+    "name_ko": "인도생명보험공사",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "BSE",
+    "ticker": "LICI",
+    "sector": "보험",
+    "description": "1956년 설립된 인도의 국영 보험사로, 인도 생명보험 시장에서 압도적인 점유율을 차지하고 있는 최대 규모의 보험 기업입니다. 방대한 판매망과 자산 규모를 바탕으로 인도 금융 시장에서 핵심적인 역할을 수행하고 있습니다. 인도 정부가 대주주로 있으며, 인도 증권거래소에 상장된 주요 금융 기업 중 하나입니다.",
+    "founded_year": 1956,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-04 16:21"
   },
   {
     "id": "lumitime_technologies",
@@ -2192,22 +2192,6 @@
     "updated_at": "2026-08-02 21:12"
   },
   {
-    "id": "tata_consultancy_services",
-    "name": "Tata Consultancy Services Limited",
-    "name_ko": "타타 컨설턴시 서비스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "TCS",
-    "sector": "IT 서비스",
-    "description": "1968년 설립된 글로벌 IT 서비스 및 컨설팅 기업으로 타타 그룹의 핵심 계열사입니다. 전 세계 기업들을 대상으로 소프트웨어 개발, 비즈니스 솔루션, IT 아웃소싱 서비스를 제공합니다. 인도 IT 산업의 선구자이자 세계적인 수준의 기술력을 보유한 기업으로 평가받습니다.",
-    "founded_year": 1968,
-    "headquarters": "뭄바이, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-19 01:21"
-  },
-  {
     "id": "tcs",
     "name": "Tata Consultancy Services Limited",
     "name_ko": "타타 컨설턴시 서비시스",
@@ -2222,6 +2206,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-02 17:22"
+  },
+  {
+    "id": "tata_consultancy_services",
+    "name": "Tata Consultancy Services Limited",
+    "name_ko": "타타 컨설턴시 서비스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "TCS",
+    "sector": "IT 서비스",
+    "description": "1968년 설립된 글로벌 IT 서비스 및 컨설팅 기업으로 타타 그룹의 핵심 계열사입니다. 전 세계 기업들을 대상으로 소프트웨어 개발, 비즈니스 솔루션, IT 아웃소싱 서비스를 제공합니다. 인도 IT 산업의 선구자이자 세계적인 수준의 기술력을 보유한 기업으로 평가받습니다.",
+    "founded_year": 1968,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-19 01:21"
   },
   {
     "id": "tata_motors",
@@ -2622,6 +2622,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-20 23:49"
+  },
+  {
+    "id": "huawei",
+    "name": "Huawei Technologies Co., Ltd.",
+    "name_ko": "화웨이",
+    "country": "중국",
+    "country_flag": "🌍",
+    "exchange": "",
+    "ticker": "",
+    "sector": "통신 장비",
+    "description": "1987년에 설립된 중국 최대의 통신 장비 및 스마트폰 제조 기업입니다. 전 세계 통신 인프라 구축과 소비자 가전 시장에서 강력한 시장 지배력을 보유하고 있습니다. 비상장 기업으로 운영되며 글로벌 통신 기술 표준화 분야에서 핵심적인 역할을 수행하고 있습니다.",
+    "founded_year": 1987,
+    "headquarters": "선전, 중국",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-11-25 09:36"
   },
   {
     "id": "industrial_and_commercial_bank_of_china",
@@ -4400,22 +4416,6 @@
     "updated_at": "2026-07-29 20:50"
   },
   {
-    "id": "clube_de_regatas_do_flamengo",
-    "name": "Clube de Regatas do Flamengo",
-    "name_ko": "플라멩구",
-    "country": "브라질",
-    "country_flag": "🌍",
-    "exchange": "B3",
-    "ticker": "",
-    "sector": "스포츠 및 엔터테인먼트",
-    "description": "1895년에 설립된 브라질의 대표적인 스포츠 클럽으로, 축구팀을 중심으로 운영되는 대형 민간 법인입니다. 브라질 내에서 가장 많은 팬층을 보유하고 있으며, 강력한 브랜드 파워를 바탕으로 마케팅 및 라이선스 사업을 전개합니다. 브라질 세리 A의 최상위권 구단으로서 높은 상업적 가치를 지닌 기업형 클럽입니다.",
-    "founded_year": 1895,
-    "headquarters": "리오데자네이루, 브라질",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-11-22 16:15"
-  },
-  {
     "id": "flamengo",
     "name": "Clube de Regatas do Flamengo",
     "name_ko": "플라멩구",
@@ -4430,6 +4430,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-11-04 11:23"
+  },
+  {
+    "id": "clube_de_regatas_do_flamengo",
+    "name": "Clube de Regatas do Flamengo",
+    "name_ko": "플라멩구",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "B3",
+    "ticker": "",
+    "sector": "스포츠 및 엔터테인먼트",
+    "description": "1895년에 설립된 브라질의 대표적인 스포츠 클럽으로, 축구팀을 중심으로 운영되는 대형 민간 법인입니다. 브라질 내에서 가장 많은 팬층을 보유하고 있으며, 강력한 브랜드 파워를 바탕으로 마케팅 및 라이선스 사업을 전개합니다. 브라질 세리 A의 최상위권 구단으로서 높은 상업적 가치를 지닌 기업형 클럽입니다.",
+    "founded_year": 1895,
+    "headquarters": "리오데자네이루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-11-22 16:15"
   },
   {
     "id": "compania_de_minas_buenaventura",
@@ -4736,22 +4752,6 @@
     "updated_at": "2026-11-22 16:15"
   },
   {
-    "id": "stoneco",
-    "name": "StoneCo Ltd.",
-    "name_ko": "스톤코",
-    "country": "브라질",
-    "country_flag": "🌍",
-    "exchange": "NASDAQ",
-    "ticker": "STNE",
-    "sector": "핀테크",
-    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
-    "founded_year": 2012,
-    "headquarters": "상파울루, 브라질",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-29 20:49"
-  },
-  {
     "id": "stone_co",
     "name": "StoneCo Ltd.",
     "name_ko": "스톤",
@@ -4766,6 +4766,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-22 23:37"
+  },
+  {
+    "id": "stoneco",
+    "name": "StoneCo Ltd.",
+    "name_ko": "스톤코",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "NASDAQ",
+    "ticker": "STNE",
+    "sector": "핀테크",
+    "description": "2012년에 설립된 브라질의 대표적인 핀테크 및 디지털 결제 기업으로, 가맹점을 위한 결제 처리 및 금융 소프트웨어 솔루션을 제공합니다. 최근 디지털 결제 자회사인 파가르미를 단일 앱으로 통합하는 등 플랫폼 경쟁력을 강화하고 있습니다. 브라질 내에서 중소상공인을 위한 핵심 금융 인프라로 자리 잡고 있습니다.",
+    "founded_year": 2012,
+    "headquarters": "상파울루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-29 20:49"
   },
   {
     "id": "xp_inc",
