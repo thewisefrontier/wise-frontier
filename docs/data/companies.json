@@ -2256,22 +2256,6 @@
     "updated_at": "2026-08-14 23:23"
   },
   {
-    "id": "singareni_collieries",
-    "name": "The Singareni Collieries Company Limited",
-    "name_ko": "싱가레니 콜리어리스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "",
-    "sector": "에너지",
-    "description": "싱가레니 콜리어리스는 인도의 국영 탄광 및 에너지 기업으로, 주로 텔랑가나주에서 석탄 채굴 및 화력 발전 사업을 수행하고 있습니다. 1920년에 설립되었으며, 인도 남부 지역의 전력 공급과 산업 성장에 필수적인 에너지 자원을 안정적으로 공급하는 핵심적인 역할을 담당하고 있습니다. 인도 정부와 텔랑가나주 정부가 공동으로 소유하고 있는 대형 민간 및 공공 성격의 기업입니다.",
-    "founded_year": 1920,
-    "headquarters": "하이드라바드, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-07-30 17:03"
-  },
-  {
     "id": "singareni_collieries_company",
     "name": "The Singareni Collieries Company Limited",
     "name_ko": "싱가레니 콜리어리스",
@@ -2286,6 +2270,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-08-08 01:12"
+  },
+  {
+    "id": "singareni_collieries",
+    "name": "The Singareni Collieries Company Limited",
+    "name_ko": "싱가레니 콜리어리스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "싱가레니 콜리어리스는 인도의 국영 탄광 및 에너지 기업으로, 주로 텔랑가나주에서 석탄 채굴 및 화력 발전 사업을 수행하고 있습니다. 1920년에 설립되었으며, 인도 남부 지역의 전력 공급과 산업 성장에 필수적인 에너지 자원을 안정적으로 공급하는 핵심적인 역할을 담당하고 있습니다. 인도 정부와 텔랑가나주 정부가 공동으로 소유하고 있는 대형 민간 및 공공 성격의 기업입니다.",
+    "founded_year": 1920,
+    "headquarters": "하이드라바드, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-07-30 17:03"
   },
   {
     "id": "tata_power",
@@ -3520,22 +3520,6 @@
     "updated_at": "2026-07-31 00:33"
   },
   {
-    "id": "vk",
-    "name": "VK Company Limited",
-    "name_ko": "브이케이",
-    "country": "러시아",
-    "country_flag": "🌍",
-    "exchange": "MOEX",
-    "ticker": "VKCO",
-    "sector": "정보기술",
-    "description": "2007년에 설립된 러시아의 대표적인 테크 기업으로, 소셜미디어 플랫폼 브이콘탁테(VKontakte)와 다양한 디지털 서비스를 운영하고 있습니다. 러시아 내에서 가장 영향력 있는 온라인 커뮤니케이션 및 미디어 생태계를 구축하고 있습니다. 자국 시장을 중심으로 소셜 네트워크, 이메일, 게임 등 다양한 인터넷 서비스를 제공합니다.",
-    "founded_year": 2007,
-    "headquarters": "모스크바, 러시아",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-21 19:48"
-  },
-  {
     "id": "vkontakte",
     "name": "VK Company Limited",
     "name_ko": "브이케이",
@@ -3550,6 +3534,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-10-18 17:37"
+  },
+  {
+    "id": "vk",
+    "name": "VK Company Limited",
+    "name_ko": "브이케이",
+    "country": "러시아",
+    "country_flag": "🌍",
+    "exchange": "MOEX",
+    "ticker": "VKCO",
+    "sector": "정보기술",
+    "description": "2007년에 설립된 러시아의 대표적인 테크 기업으로, 소셜미디어 플랫폼 브이콘탁테(VKontakte)와 다양한 디지털 서비스를 운영하고 있습니다. 러시아 내에서 가장 영향력 있는 온라인 커뮤니케이션 및 미디어 생태계를 구축하고 있습니다. 자국 시장을 중심으로 소셜 네트워크, 이메일, 게임 등 다양한 인터넷 서비스를 제공합니다.",
+    "founded_year": 2007,
+    "headquarters": "모스크바, 러시아",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-21 19:48"
   },
   {
     "id": "vtb_bank",
@@ -4222,6 +4222,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-11-02 19:52"
+  },
+  {
+    "id": "petrovietnam",
+    "name": "Vietnam National Oil and Gas Group",
+    "name_ko": "페트로베트남",
+    "country": "베트남",
+    "country_flag": "🇻🇳",
+    "exchange": "HOSE",
+    "ticker": "",
+    "sector": "에너지",
+    "description": "페트로베트남은 1961년에 발족된 베트남의 국영 에너지 기업으로 석유 및 가스 탐사, 채굴부터 정유, 가치 밸류체인까지 아우르는 사업을 영위하고 있습니다. 베트남 국가 경제 발전의 핵심적인 역할을 담당해 온 최대 규모의 에너지 공기업입니다. 최근에는 전통적인 화석연료를 넘어 해상풍력 및 신재생에너지 분야로 사업 영역을 다각화하고 있습니다.",
+    "founded_year": 1961,
+    "headquarters": "하노이, 베트남",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-11-26 23:50"
   },
   {
     "id": "techcombank",
@@ -5312,22 +5328,6 @@
     "updated_at": null
   },
   {
-    "id": "bank_of_the_philippines_islands",
-    "name": "Bank of the Philippine Islands",
-    "name_ko": "필리핀 제도은행",
-    "country": "필리핀",
-    "country_flag": "🇵🇭",
-    "exchange": "PSE",
-    "ticker": "BPI",
-    "sector": "은행",
-    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 종합 금융 서비스를 제공하며 필리핀 금융 시장에서 높은 신뢰와 견고한 입지를 다지고 있다. 본 기사에서는 공공 인프라 지출 감소 추정을 발표한 주요 금융기관으로 언급되었다.",
-    "founded_year": 1851,
-    "headquarters": "마카티, 필리핀",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-07 13:12"
-  },
-  {
     "id": "bank_of_the_philippine_islands",
     "name": "Bank of the Philippine Islands",
     "name_ko": "필리핀 제도은행",
@@ -5342,6 +5342,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-30 02:38"
+  },
+  {
+    "id": "bank_of_the_philippines_islands",
+    "name": "Bank of the Philippine Islands",
+    "name_ko": "필리핀 제도은행",
+    "country": "필리핀",
+    "country_flag": "🇵🇭",
+    "exchange": "PSE",
+    "ticker": "BPI",
+    "sector": "은행",
+    "description": "1851년에 설립된 필리핀의 선도적인 대형 민간 상업 은행이다. 종합 금융 서비스를 제공하며 필리핀 금융 시장에서 높은 신뢰와 견고한 입지를 다지고 있다. 본 기사에서는 공공 인프라 지출 감소 추정을 발표한 주요 금융기관으로 언급되었다.",
+    "founded_year": 1851,
+    "headquarters": "마카티, 필리핀",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-07 13:12"
   },
   {
     "id": "basel_tiles",
