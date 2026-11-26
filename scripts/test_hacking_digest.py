@@ -56,3 +56,11 @@ out = d.group_events(t, cs)
 assert [c["title_en"] for c in out] == ["1Password hacked", "KICC 해킹"] and out[0]["_dup_count"] == 2, out
 d._prev_cache.clear()
 print("OK3")
+
+# 소제목 중복 정리(Gemini 응답 흉내): T1·T3 같은 사건 → 불릿 많은 T3만, T2는 이전 연재(Y1)와 같은 사건
+d.call_gemini = lambda *a, **k: "T1, T3\nT2, Y1\n"
+d._prev_cache[t["key"]] = [{"summary_ko": "[어제 소식]\n- a", "source_data": {}}]
+out, dropped = d.dedup_sections(t, "[빗썸 유출]\n- a\n\n[어제 사건]\n- b\n\n[빗썸 추가 유출]\n- c\n- d\n\n[KICC 해킹]\n- e")
+assert dropped == ["[빗썸 유출]", "[어제 사건]"] and "[빗썸 추가 유출]" in out and "[KICC 해킹]" in out, (out, dropped)
+d._prev_cache.clear()
+print("OK4")
