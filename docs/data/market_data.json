@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-27 08:11",
+  "updated_at": "2026-11-27 08:26",
   "indices": [
     {
       "name": "S&P 500",
@@ -74,8 +74,8 @@
     {
       "name": "USD/NGN",
       "symbol": "USDNGN=X",
-      "price": 1359.0,
-      "change_pct": 0.15,
+      "price": 1357.0,
+      "change_pct": 0.01,
       "up": true
     },
     {
@@ -88,9 +88,9 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 17.56,
-      "change_pct": 0.12,
-      "up": true
+      "price": 17.52,
+      "change_pct": -0.09,
+      "up": false
     }
   ],
   "groups": {
@@ -174,8 +174,8 @@
       {
         "name": "USD/NGN",
         "symbol": "USDNGN=X",
-        "price": 1359.0,
-        "change_pct": 0.15,
+        "price": 1357.0,
+        "change_pct": 0.01,
         "up": true
       },
       {
@@ -188,9 +188,9 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 17.56,
-        "change_pct": 0.12,
-        "up": true
+        "price": 17.52,
+        "change_pct": -0.09,
+        "up": false
       }
     ]
   },
