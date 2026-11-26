@@ -42,3 +42,8 @@ cands = [{"_cluster_titles": ["A", "A2"]}, {"_cluster_titles": ["B"]}]
 assert d.used_titles({"[x]": [1]}, cands) == ["A", "A2"]
 assert d.used_titles({}, cands) == ["A", "A2", "B"]
 print("OK")
+
+# 인원·건수 표기
+assert d.fix_counts("고객 650482명과 1520248명분, 8만6,611명, 1,000명, 2026년, 4000여 개") == \
+    "고객 65만482명과 152만248명분, 8만6611명, 1000명, 2026년, 4000여 개", d.fix_counts("고객 650482명과 1520248명분, 8만6,611명, 1,000명, 2026년, 4000여 개")
+print("OK2")
