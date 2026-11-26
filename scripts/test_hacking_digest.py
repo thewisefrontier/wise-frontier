@@ -47,3 +47,12 @@ print("OK")
 assert d.fix_counts("고객 650482명과 1520248명분, 8만6,611명, 1,000명, 2026년, 4000여 개") == \
     "고객 65만482명과 152만248명분, 8만6611명, 1000명, 2026년, 4000여 개", d.fix_counts("고객 650482명과 1520248명분, 8만6,611명, 1,000명, 2026년, 4000여 개")
 print("OK2")
+
+# 사건 묶기(Gemini 응답 흉내): T1·T3 합침, T2는 어제(Y1)와 같은 사건이라 제외
+d.call_gemini = lambda *a, **k: "T1, T3\nT2, Y1\n"
+d._prev_cache[t["key"]] = [{"summary_ko": "", "source_data": {"used_titles": ["CJ올리브영 해킹"]}}]
+cs = [{"title_en": "1Password hacked", "_dup_count": 1}, {"title_en": "올리브영 고객정보 유출"}, {"title_en": "원패스워드 해킹"}, {"title_en": "KICC 해킹"}]
+out = d.group_events(t, cs)
+assert [c["title_en"] for c in out] == ["1Password hacked", "KICC 해킹"] and out[0]["_dup_count"] == 2, out
+d._prev_cache.clear()
+print("OK3")
