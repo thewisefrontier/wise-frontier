@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-26 17:26",
+  "updated_at": "2026-11-26 17:52",
   "indices": [
     {
       "name": "S&P 500",
@@ -39,29 +39,29 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 106349.31,
-      "change_pct": 1.53,
+      "price": 106343.16,
+      "change_pct": 1.52,
       "up": true
     },
     {
       "name": "EGX30 (이집트)",
       "symbol": "^CASE30",
-      "price": 50565.2,
-      "change_pct": 0.05,
-      "up": true
+      "price": 50263.7,
+      "change_pct": -0.54,
+      "up": false
     },
     {
       "name": "SET (태국)",
       "symbol": "^SET.BK",
-      "price": 1419.72,
-      "change_pct": -0.61,
+      "price": 1417.36,
+      "change_pct": -0.78,
       "up": false
     },
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 5228.15,
-      "change_pct": 0.59,
+      "price": 5224.22,
+      "change_pct": 0.51,
       "up": true
     },
     {
@@ -74,8 +74,8 @@
     {
       "name": "USD/NGN",
       "symbol": "USDNGN=X",
-      "price": 1359.81,
-      "change_pct": 0.21,
+      "price": 1360.63,
+      "change_pct": 0.27,
       "up": true
     },
     {
@@ -137,29 +137,29 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 106349.31,
-        "change_pct": 1.53,
+        "price": 106343.16,
+        "change_pct": 1.52,
         "up": true
       },
       {
         "name": "EGX30 (이집트)",
         "symbol": "^CASE30",
-        "price": 50565.2,
-        "change_pct": 0.05,
-        "up": true
+        "price": 50263.7,
+        "change_pct": -0.54,
+        "up": false
       },
       {
         "name": "SET (태국)",
         "symbol": "^SET.BK",
-        "price": 1419.72,
-        "change_pct": -0.61,
+        "price": 1417.36,
+        "change_pct": -0.78,
         "up": false
       },
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 5228.15,
-        "change_pct": 0.59,
+        "price": 5224.22,
+        "change_pct": 0.51,
         "up": true
       },
       {
@@ -174,8 +174,8 @@
       {
         "name": "USD/NGN",
         "symbol": "USDNGN=X",
-        "price": 1359.81,
-        "change_pct": 0.21,
+        "price": 1360.63,
+        "change_pct": 0.27,
         "up": true
       },
       {
