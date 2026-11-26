@@ -1,5 +1,110 @@
 [
   {
+    "id": 331493,
+    "title_en": "[국제금값] 금 온스당 3593달러…금리 전망 속 상승",
+    "title_ko": "[국제금값] 금 온스당 3593달러…금리 전망 속 상승",
+    "summary_ko": "국제 금값이 26일(현지시간) 상승했다. 시장 집계에 따르면 뉴욕 시장에서 금 선물은 온스당 3593.40달러에 거래를 마쳤다. 전일 종가(3535.80달러) 대비 1.63% 상승했으며, 상승폭은 57.60달러를 기록했다.\n\n이날 장중 범위는 3578.80달러에서 3634.70달러 사이에서 형성됐다. 최근 5거래일 동안 금 선물은 20일 종가 3515.40달러 대비 2.22% 상승한 것으로 집계됐다. 현재 가격은 52주 고점 5586.20달러 대비 35.67% 낮은 수준이다.\n\n이번 금 시세 변동과 관련해 외신 보도에 따르면 연방준",
+    "url": "internal://gold_price_2026-11-26",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국제금값",
+    "region": "글로벌",
+    "country": "국제",
+    "country_flag": "🪙",
+    "score": 1,
+    "created_at": "2026-11-27 07:10",
+    "countries": [
+      "미국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/gold_2026_11_26_pid4886221.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-27T07:10:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-27 07:10",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "pct": 1.6290472515468006,
+      "date": "2026-11-26",
+      "prev": 3535.800048828125,
+      "price": 3593.39990234375,
+      "change": 57.599853515625,
+      "source": "시장 집계",
+      "day_low": 3578.800048828125,
+      "day_high": 3634.699951171875,
+      "high_52w": 5586.2,
+      "week_pct": 2.2188087320590943,
+      "week_start": 3515.39990234375,
+      "from_high_pct": -35.67362603659464,
+      "week_start_date": "2026-11-20"
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
+    "id": 331492,
+    "title_en": "[국제유가] WTI 배럴당 85달러…중동 리스크·OPEC+ 회의 주시",
+    "title_ko": "[국제유가] WTI 배럴당 85달러…중동 리스크·OPEC+ 회의 주시",
+    "summary_ko": "국제유가가 26일(현지시간) 혼조세를 보였다. 시장 집계에 따르면 WTI 원유 선물은 뉴욕상업거래소(NYMEX)에서 배럴당 84.91달러에 거래를 마쳤다. 전일 종가(83.68달러) 대비 1.47%(1.23달러) 상승했다.\n\n반면 브렌트유는 배럴당 91.73달러로 마감했다. 전일 종가(94.61달러) 대비 3.04%(2.88달러) 하락했다.\n\n이날 유가 변동은 중동 지역의 공급 차질 위험과 다가오는 OPEC+ 회의를 트레이더들이 저울질하는 과정에서 발생했다. 사우디아라비아 정유시설을 겨냥한 후티 반군의 공격 소식이 전해진 가운데, ",
+    "url": "internal://oil_price_2026-11-26",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국제유가",
+    "region": "글로벌",
+    "country": "국제",
+    "country_flag": "🛢️",
+    "score": 1,
+    "created_at": "2026-11-27 07:09",
+    "countries": [
+      "미국",
+      "사우디아라비아",
+      "러시아"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/oil_2026_11_26_pid1629074.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-27T07:09:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-27 07:09",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "wti": {
+        "pct": 1.4698849071922593,
+        "prev": 83.68000030517578,
+        "price": 84.91,
+        "change": 1.2299996948242153
+      },
+      "date": "2026-11-26",
+      "brent": {
+        "pct": -3.0440763045893577,
+        "prev": 94.61000061035156,
+        "price": 91.73,
+        "change": -2.8800006103515585
+      },
+      "source": "Yahoo Finance"
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 331487,
     "title_en": "[가상자산 동향] 리플 1.20% 상승…1달러 선 도달 눈앞",
     "title_ko": "[가상자산 동향] 리플 1.20% 상승…1달러 선 도달 눈앞",
@@ -1772,52 +1877,6 @@
     "noindex": true
   },
   {
-    "id": 330353,
-    "title_en": "사헬 국가 연합(AES), 보건 전략 통합 및 경제 주권 강화 박차",
-    "title_ko": "사헬 국가 연합, 제2회 국제 창업 박람회 개최 및 보건 전략 통합 추진",
-    "summary_ko": "사헬국가연합(AES) 소속 3개국 보건 장관들이 질병 감시 체계 통합과 보건 제품 공동 구매 전략을 확정했다고 25일(현지시간) 밝혔다. 말리 보건사회개발부 장관 아사 바디알로 투레는 부르키나파소 와가두구에서 열린 회의에 참석해 보건 전략을 조율했으며, 이는 지난 23일부터 진행된 전문가 사전 실무 회의의 결과물을 승인하기 위해 마련됐다. 이번 합의는 오는 12월 예정된 3개국 간 공식 협정 체결의 기초 자료로 활용될 예정이다.\n\n이에 앞서 지난 23일 말리 바마코에서는 연합의 경제적 자립과 가치 창출을 목표로 하는 제2회 국제 창",
-    "url": "internal://trend_사헬 쿠데타_2026112606",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "trend_사헬 쿠데타",
-    "region": "africa",
-    "country": "말리",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-11-26 06:56",
-    "countries": [
-      "말리",
-      "부르키나파소",
-      "니제르",
-      "기니",
-      "세네갈"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_840125.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-26T06:56:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-26 06:56",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-26 20:13",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true,
-    "updated_at": "2026-11-26 20:13"
-  },
-  {
     "id": 331357,
     "title_en": "벨기에 라루비에르 주택가서 가스 누출 추정 폭발…1명 실종·2명 부상",
     "title_ko": "벨기에 라루비에르 주택가서 가스 누출 추정 폭발…1명 실종·2명 부상",
@@ -2476,62 +2535,6 @@
     "summary_3lines_en": null,
     "investment_idea_en": null,
     "noindex": true
-  },
-  {
-    "id": 330359,
-    "title_en": "[국제금값] 금 온스당 3617달러…상승",
-    "title_ko": "[국제금값] 금 온스당 3617달러…상승",
-    "summary_ko": "국제 금값이 25일(현지시간) 상승했다. 뉴욕 시장에서 금 선물은 온스당 3617.30달러에 거래를 마쳤다. 시장 집계에 따르면 이는 전일 종가(3561.90달러) 대비 1.56% 상승한 수치이며, 상승폭은 55.40달러를 기록했다.\n\n이날 장중 거래 범위는 최저 3453.80달러에서 최고 3617.40달러 사이에서 형성됐다. 최근 5거래일 동안의 흐름을 보면, 19일 종가였던 3685.50달러 대비 1.85% 하락한 수준을 나타냈다. 또한 52주 고점인 5586.20달러와 비교하면 35.25% 낮은 수준에 머물렀다.\n\n외신 보도 ",
-    "url": "internal://gold_price_2026-11-25",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국제금값",
-    "region": "글로벌",
-    "country": "국제",
-    "country_flag": "🪙",
-    "score": 1,
-    "created_at": "2026-11-26 07:09",
-    "countries": [
-      "미국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/gold_2026_11_25_pid2496344.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-26T07:09:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-26 07:09",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-26 11:43",
-        "note": "내용 업데이트"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "pct": 1.5553538281050907,
-      "date": "2026-11-25",
-      "prev": 3561.89990234375,
-      "price": 3617.300048828125,
-      "change": 55.400146484375,
-      "source": "시장 집계",
-      "day_low": 3453.800048828125,
-      "day_high": 3617.39990234375,
-      "high_52w": 5586.2,
-      "week_pct": -1.8504938589574007,
-      "week_start": 3685.5,
-      "from_high_pct": -35.245783379969836,
-      "week_start_date": "2026-11-19"
-    },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false,
-    "updated_at": "2026-11-26 11:43"
   },
   {
     "id": 330643,
@@ -3229,94 +3232,5 @@
     "summary_3lines_en": "",
     "investment_idea_en": "",
     "noindex": true
-  },
-  {
-    "id": 330358,
-    "title_en": "[국제유가] WTI 배럴당 84달러…공급 과잉 우려 속 상승",
-    "title_ko": "[국제유가] WTI 배럴당 84달러…공급 과잉 우려 속 상승",
-    "summary_ko": "국제유가가 25일(현지시간) 엇갈린 흐름을 보였다. WTI 원유 선물은 뉴욕상업거래소(NYMEX)에서 배럴당 84.16달러에 거래를 마쳤다. 전일 종가(82.05달러) 대비 2.57%(2.11달러) 상승했다.\n\n반면 브렌트유는 배럴당 90.77달러로 마감했다. 전일 종가(91.40달러) 대비 0.69%(0.63달러) 하락했다.\n\n시장 집계에 따르면 이날 유가는 공급 과잉 전망과 중동 지역의 군사적 충돌 가능성 등이 복합적으로 작용하면서 품목별로 다른 등락률을 나타냈다. 트레이더들은 향후 글로벌 시장에서 공급 과잉 현상이 발생할 가능",
-    "url": "internal://oil_price_2026-11-25",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국제유가",
-    "region": "글로벌",
-    "country": "국제",
-    "country_flag": "🛢️",
-    "score": 1,
-    "created_at": "2026-11-26 07:08",
-    "countries": [
-      "미국",
-      "사우디아라비아",
-      "러시아"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/oil_2026_11_25_pid7166594.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-26T07:08:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-26 07:08",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "wti": {
-        "pct": 2.571598866256203,
-        "prev": 82.05000305175781,
-        "price": 84.16,
-        "change": 2.109996948242184
-      },
-      "date": "2026-11-25",
-      "brent": {
-        "pct": -0.6892795572881169,
-        "prev": 91.4000015258789,
-        "price": 90.77,
-        "change": -0.6300015258789102
-      },
-      "source": "Yahoo Finance"
-    },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 330354,
-    "title_en": "[가상자산 동향] 솔라나 1.85% 상승…일본 금융권 스테이블코인 도입",
-    "title_ko": "[가상자산 동향] 솔라나 1.85% 상승…일본 금융권 스테이블코인 도입",
-    "summary_ko": "◆ 가격 동향 26일 06:56(한국시간) 야후 파이낸스에 따르면 솔라나 가격은 70.63달러로 전일 대비 1.85퍼센트 상승했다. 최근 일본 최대 금융기관들이 스테이블코인 결제와 토큰화를 위해 솔라나 블록체인을 도입하기로 했다는 소식이 전해지면서 매수세가 유입됐다.\n\n다만 미국 인플레이션이 3.8퍼센트로 상승하고 연방준비제도 회의를 앞두면서 거시경제 불확실성도 함께 작용했다. ◆ 주요 지표 솔라나의 당일 거래 범위는 66.22달러에서 70.80달러 사이를 기록했다.\n\n52주 최고가는 148.22달러였고 최저가는 60.41달러였다.",
-    "url": "internal://crypto_news_2026-11-26",
-    "source": "NewsFinal",
-    "category": "금융",
-    "subcategory": "가상자산동향_crypto",
-    "region": "global",
-    "country": "글로벌",
-    "country_flag": "🌐",
-    "score": 1,
-    "created_at": "2026-11-26 06:57",
-    "countries": [],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/crypto_news_2026_11_26_pid3215526.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-26T06:57:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-26 06:57",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
   }
 ]
