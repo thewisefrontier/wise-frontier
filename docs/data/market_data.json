@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-27 17:01",
+  "updated_at": "2026-11-27 17:14",
   "indices": [
     {
       "name": "S&P 500",
@@ -39,8 +39,8 @@
     {
       "name": "JSE (남아공)",
       "symbol": "^J203.JO",
-      "price": 108818.47,
-      "change_pct": 2.05,
+      "price": 108592.68,
+      "change_pct": 1.84,
       "up": true
     },
     {
@@ -53,15 +53,15 @@
     {
       "name": "SET (태국)",
       "symbol": "^SET.BK",
-      "price": 1430.63,
-      "change_pct": 1.14,
+      "price": 1431.06,
+      "change_pct": 1.18,
       "up": true
     },
     {
       "name": "IDX (인도네시아)",
       "symbol": "^JKSE",
-      "price": 5331.11,
-      "change_pct": 1.7,
+      "price": 5325.22,
+      "change_pct": 1.58,
       "up": true
     },
     {
@@ -89,7 +89,7 @@
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
       "price": 17.33,
-      "change_pct": -1.24,
+      "change_pct": -1.2,
       "up": false
     }
   ],
@@ -137,8 +137,8 @@
       {
         "name": "JSE (남아공)",
         "symbol": "^J203.JO",
-        "price": 108818.47,
-        "change_pct": 2.05,
+        "price": 108592.68,
+        "change_pct": 1.84,
         "up": true
       },
       {
@@ -151,15 +151,15 @@
       {
         "name": "SET (태국)",
         "symbol": "^SET.BK",
-        "price": 1430.63,
-        "change_pct": 1.14,
+        "price": 1431.06,
+        "change_pct": 1.18,
         "up": true
       },
       {
         "name": "IDX (인도네시아)",
         "symbol": "^JKSE",
-        "price": 5331.11,
-        "change_pct": 1.7,
+        "price": 5325.22,
+        "change_pct": 1.58,
         "up": true
       },
       {
@@ -189,7 +189,7 @@
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
         "price": 17.33,
-        "change_pct": -1.24,
+        "change_pct": -1.2,
         "up": false
       }
     ]
