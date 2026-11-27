@@ -1,25 +1,25 @@
 {
-  "updated_at": "2026-11-28 00:56",
+  "updated_at": "2026-11-28 01:21",
   "indices": [
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "price": 7270.81,
-      "change_pct": 0.97,
+      "price": 7265.36,
+      "change_pct": 0.89,
       "up": true
     },
     {
       "name": "나스닥",
       "symbol": "^IXIC",
-      "price": 23980.15,
-      "change_pct": 1.04,
+      "price": 23945.3,
+      "change_pct": 0.89,
       "up": true
     },
     {
       "name": "다우존스",
       "symbol": "^DJI",
-      "price": 50699.6,
-      "change_pct": 1.36,
+      "price": 50662.87,
+      "change_pct": 1.29,
       "up": true
     },
     {
@@ -88,8 +88,8 @@
     {
       "name": "USD/ZAR",
       "symbol": "USDZAR=X",
-      "price": 17.37,
-      "change_pct": -0.97,
+      "price": 17.39,
+      "change_pct": -0.89,
       "up": false
     }
   ],
@@ -98,22 +98,22 @@
       {
         "name": "S&P 500",
         "symbol": "^GSPC",
-        "price": 7270.81,
-        "change_pct": 0.97,
+        "price": 7265.36,
+        "change_pct": 0.89,
         "up": true
       },
       {
         "name": "나스닥",
         "symbol": "^IXIC",
-        "price": 23980.15,
-        "change_pct": 1.04,
+        "price": 23945.3,
+        "change_pct": 0.89,
         "up": true
       },
       {
         "name": "다우존스",
         "symbol": "^DJI",
-        "price": 50699.6,
-        "change_pct": 1.36,
+        "price": 50662.87,
+        "change_pct": 1.29,
         "up": true
       }
     ],
@@ -188,8 +188,8 @@
       {
         "name": "USD/ZAR",
         "symbol": "USDZAR=X",
-        "price": 17.37,
-        "change_pct": -0.97,
+        "price": 17.39,
+        "change_pct": -0.89,
         "up": false
       }
     ]
