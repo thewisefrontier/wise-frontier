@@ -1,5 +1,113 @@
 [
   {
+    "id": 332133,
+    "title_en": "[국내유가] 휘발유 리터당 1854원…보합세 속 혼조세",
+    "title_ko": "[국내유가] 휘발유 리터당 1854원…보합세 속 혼조세",
+    "summary_ko": "한국석유공사 오피넷이 28일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1854원으로 집계됐다.\n\n이날 오피넷에 따르면 휘발유 평균가는 전일 대비 0.03원 하락한 리터당 1853.60원을 기록했다. 경유는 리터당 1840.54원으로 전일보다 0.29원 내려 하락세를 보였다. 반면 LPG(부탄)는 리터당 1178.04원으로 전일 대비 0.05원 상승했다.\n\n최근 국제유가는 글로벌 수요 둔화 우려와 산유국들의 공급 정책 변화 등 복합적인 요인에 따라 등락을 거듭하고 있다. 정유업계의 공급가격과 환율 변동성 역시 ",
+    "url": "internal://opinet_price_2026-11-28",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-11-28 05:12",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_11_28_pid2954372.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-28T05:12:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-28 05:12",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-11-28",
+      "prices": {
+        "B027": {
+          "diff": -0.03,
+          "name": "휘발유",
+          "price": 1853.6
+        },
+        "B034": {
+          "diff": -0.93,
+          "name": "고급휘발유",
+          "price": 2335.78
+        },
+        "C004": {
+          "diff": -0.01,
+          "name": "실내등유",
+          "price": 1567.59
+        },
+        "D047": {
+          "diff": -0.29,
+          "name": "경유",
+          "price": 1840.54
+        },
+        "K015": {
+          "diff": 0.05,
+          "name": "LPG(부탄)",
+          "price": 1178.04
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 332132,
+    "title_en": "Flesh",
+    "title_ko": "[오늘의 책] 데이비드 솔로이의 『Flesh』, 육체성과 절제의 언어로 담아낸 삶의 궤적",
+    "summary_ko": "데이비드 솔로이(David Szalay)의 여섯 번째 장편소설 『Flesh』는 2025년 부커상(Booker Prize)을 수상하며 세계 문단의 주목을 받았다. 심사위원장 로디 도일(Roddy Doyle)은 이 서사의 독창성을 짚으며 절제된 문체가 독자의 깊은 참여를 이끌어낸다고 평가했다. 이 소설은 빈곤한 환경에서 자란 인물의 삶을 통해 육체성과 인간관계의 변화를 간결한 문장으로 서술한다.\n\n작품은 헝가리의 주택단지에 거주하는 수줍은 15세 소년 이슈트반(István)의 이야기로 시작한다. 이슈트반은 유부녀와의 관계 및 그녀 남편",
+    "url": "internal://literature_Q134600232",
+    "source": "NewsFinal",
+    "category": "문화·예술",
+    "subcategory": "오늘의책",
+    "region": "global",
+    "country": "헝가리",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-28 05:11",
+    "countries": [
+      "헝가리"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/literature_cover_q134600232.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-28T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-28 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "enwiki": "Flesh (Szalay novel)",
+      "kowiki": null,
+      "source": "recent",
+      "wikidata": "Q134600232"
+    },
+    "image_credit": "Flesh 표지",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
     "id": 332131,
     "title_en": "[기업 분석] 다리오, 다중 질환 계약과 파트너 채널 중심으로 사업 전환 추진",
     "title_ko": "[기업 분석] 다리오, 다중 질환 계약과 파트너 채널 중심으로 사업 전환 추진",
@@ -3324,142 +3432,6 @@
     "is_travel": false,
     "source_published_at": null,
     "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
-  },
-  {
-    "id": 331462,
-    "title_en": "[오늘의 해킹] 빗썸·CJ올리브영 등 연이은 개인정보 유출 사고 발생 및 글로벌 암호화폐 탈취 악성코드 확산",
-    "title_ko": "[오늘의 해킹] 빗썸·CJ올리브영 등 연이은 개인정보 유출 사고 발생 및 글로벌 암호화폐 탈취 악성코드 확산",
-    "summary_ko": "[빗썸 내부 업무시스템 해킹으로 개인정보 추가 유출 확인]\n- 가상자산 거래소 빗썸의 개인정보 유출 사고 기간이 당초 알려진 1시간이 아닌 보름 이상 이어진 것으로 드러났다.\n- 최초 침입 시점은 오후 1시 49분이며 마지막 무단 접근은 오후 3시 22분에 확인됐다.\n- 회사는 오후 12시 14분에 비정상적인 접근을 처음 인지했다.\n- 후속 점검 과정에서 고객과 협력업체 직원의 개인정보가 추가로 확인됐으며 성명, 주민등록번호, 여권번호, 은행 계좌번호, 가상자산 거래내역 등 총 19개 항목이 포함됐다.\n- 이번 사고는 고객 계정 및",
-    "url": "internal://hacking_digest_20261127",
-    "source": "NewsFinal",
-    "category": "IT·과학",
-    "subcategory": "hacking_digest_20261127_crypto",
-    "region": "global",
-    "country": "",
-    "country_flag": "",
-    "score": 41,
-    "created_at": "2026-11-27 05:11",
-    "countries": null,
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/hacking_digest_20261127_pid2851201.jpg",
-    "view_count": 0,
-    "first_published_at": null,
-    "update_log": [
-      {
-        "timestamp": "2026-11-27 05:11",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "used_titles": [
-        "59분이라더니 보름 넘게 뚫려…준비금 감액한 빗썸, 개인정보 유출 피해 더 컸다",
-        "빗썸, 개인정보 유출 사고 추가 확인...침입 기간 '15일'로 확대",
-        "빗썸, 해킹 개인정보 유출 피해 추가 확인",
-        "“1시간 해킹이라더니 보름 넘게 뚫렸다”…빗썸, 개인정보 추가 유출 확인",
-        "빗썸, 개인정보 유출 조회 결과 없어도 방심 금물",
-        "[조은속보]빗썸 개인정보 유출, '59분' 아닌 보름이었다…\"여권번호 유출까지 2차피해 주의!\"",
-        "쿠팡 개인정보 유출사고 1년···“반성 대신 책임 회피로 일관” 규탄",
-        "쿠팡 개인정보 유출 사태 1년…경찰 수사는 ‘답보’",
-        "쿠팡 개인정보 유출 1년…시민·노동단체 “책임 회피 중단하고 피해 배상하라”",
-        "GTA 6 fans targeted by crypto-stealing malware disguised as PC download",
-        "Food delivery app tied to crypto stealing malware returns to App Store",
-        "UK Regulator Cites Binance Hack as It Plans Tougher DeFi Rules Than US and EU: Report",
-        "Binance Hack Highlights Money Laundering Risks as FCA Plans Tighter DeFi Rules",
-        "[2026 보안 이슈 결산-6] 사람 대신 ‘비인간 신원’(NHI) 노린 해커... API 키 관리 비상",
-        "[2026 보안 이슈 결산-5] 협력사 뚫어 대기업 털었다... ‘공급망 연쇄해킹’ 공포",
-        "경남대 시스템 해킹 개인정보 1천여 건 유출",
-        "경남대 연구행정망 뚫려 1202건 정보 유출",
-        "Linux/EasyShell: MalwareMustDie Identifies One of the Earliest Publicly Documented RATs Built for LoongArch Linux",
-        "Bicycle retailer Halfords hit by cyberattack, but states no customer data accessed",
-        "Recyclagepark Meerhout-Laakdal betrokken bij hacking: \"Pas op voor verdachte mails en phishing\"",
-        "Ransomware attacks could cost African businesses $368,000 per incident - Report",
-        "Wyoming uranium operation shuts down after cyberattack",
-        "Gegevens van meer dan 11.000 inwoners van Roosdaal in handen van hackers",
-        "‘36만건 개인정보 유출’ 노란우산 조사 착수",
-        "버려진 저장매체가 범죄의 통로로… 세종시, 개인정보 유출 차단 나서",
-        "반복되는 정보 유출에 개인정보보호법 개정안 줄줄이 대기",
-        "개인정보 유출 사이트 강제로 막는다…日 법제화 논의 착수",
-        "[단독] 패스오더, 휴대폰 번호·프로필 이미지 등 고객 개인정보 유출",
-        "한달 만에 2번 해킹 당한 수협은행…신학기 행장 연임 문턱 앞두고 ‘악재’",
-        "North Korea-Linked PolinRider Poisons Over 7,600 GitHub Repositories to Spread Malware",
-        "Most Wanted: The Phishing Kits and Techniques Getting Past Security Controls",
-        "Remus malware steals Gmail messages via fake Google Sheets extension"
-      ]
-    },
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": false
-  },
-  {
-    "id": 331463,
-    "title_en": "[국내유가] 휘발유 리터당 1854원…전반적 소폭 하락",
-    "title_ko": "[국내유가] 휘발유 리터당 1854원…전반적 소폭 하락",
-    "summary_ko": "한국석유공사 오피넷이 27일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1854원으로 집계됐다.\n\n이날 함께 공개된 경유는 리터당 1840.57원으로 전일 대비 0.42원 내렸고, LPG 부탄은 리터당 1177.92원으로 전일보다 0.16원 하락했다. 휘발유 역시 전일 대비 0.06원 내리며 모든 주요 유종이 하락세를 나타냈다.\n\n오피넷에 따르면 이번 가격 변동은 최근 국제유가 및 국내 정유사 공급가격의 등락 흐름이 시차를 두고 반영된 결과다. 통상 국제유가 변동분은 일정 기간을 두고 국내 주유소 판매가격에 반",
-    "url": "internal://opinet_price_2026-11-27",
-    "source": "NewsFinal",
-    "category": "경제",
-    "subcategory": "국내유가",
-    "region": "global",
-    "country": "한국",
-    "country_flag": "🇰🇷",
-    "score": 1,
-    "created_at": "2026-11-27 05:11",
-    "countries": [
-      "한국"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_11_27_pid7292033.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-27T05:11:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-27 05:11",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": {
-      "date": "2026-11-27",
-      "prices": {
-        "B027": {
-          "diff": -0.06,
-          "name": "휘발유",
-          "price": 1853.75
-        },
-        "B034": {
-          "diff": -0.99,
-          "name": "고급휘발유",
-          "price": 2340.35
-        },
-        "C004": {
-          "diff": -0.21,
-          "name": "실내등유",
-          "price": 1567.72
-        },
-        "D047": {
-          "diff": -0.42,
-          "name": "경유",
-          "price": 1840.57
-        },
-        "K015": {
-          "diff": -0.16,
-          "name": "LPG(부탄)",
-          "price": 1177.92
-        }
-      }
-    },
     "image_credit": null,
     "continuation_of_id": null,
     "summary_3lines_en": null,

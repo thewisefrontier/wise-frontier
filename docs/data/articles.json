@@ -1,5 +1,113 @@
 [
   {
+    "id": 332133,
+    "title_en": "[국내유가] 휘발유 리터당 1854원…보합세 속 혼조세",
+    "title_ko": "[국내유가] 휘발유 리터당 1854원…보합세 속 혼조세",
+    "summary_ko": "한국석유공사 오피넷이 28일 공개한 자료에 따르면 국내 주유소 휘발유 평균 판매가격은 리터당 1854원으로 집계됐다.\n\n이날 오피넷에 따르면 휘발유 평균가는 전일 대비 0.03원 하락한 리터당 1853.60원을 기록했다. 경유는 리터당 1840.54원으로 전일보다 0.29원 내려 하락세를 보였다. 반면 LPG(부탄)는 리터당 1178.04원으로 전일 대비 0.05원 상승했다.\n\n최근 국제유가는 글로벌 수요 둔화 우려와 산유국들의 공급 정책 변화 등 복합적인 요인에 따라 등락을 거듭하고 있다. 정유업계의 공급가격과 환율 변동성 역시 ",
+    "url": "internal://opinet_price_2026-11-28",
+    "source": "NewsFinal",
+    "category": "경제",
+    "subcategory": "국내유가",
+    "region": "global",
+    "country": "한국",
+    "country_flag": "🇰🇷",
+    "score": 1,
+    "created_at": "2026-11-28 05:12",
+    "countries": [
+      "한국"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/opinet_2026_11_28_pid2954372.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-28T05:12:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-28 05:12",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "date": "2026-11-28",
+      "prices": {
+        "B027": {
+          "diff": -0.03,
+          "name": "휘발유",
+          "price": 1853.6
+        },
+        "B034": {
+          "diff": -0.93,
+          "name": "고급휘발유",
+          "price": 2335.78
+        },
+        "C004": {
+          "diff": -0.01,
+          "name": "실내등유",
+          "price": 1567.59
+        },
+        "D047": {
+          "diff": -0.29,
+          "name": "경유",
+          "price": 1840.54
+        },
+        "K015": {
+          "diff": 0.05,
+          "name": "LPG(부탄)",
+          "price": 1178.04
+        }
+      }
+    },
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
+    "id": 332132,
+    "title_en": "Flesh",
+    "title_ko": "[오늘의 책] 데이비드 솔로이의 『Flesh』, 육체성과 절제의 언어로 담아낸 삶의 궤적",
+    "summary_ko": "데이비드 솔로이(David Szalay)의 여섯 번째 장편소설 『Flesh』는 2025년 부커상(Booker Prize)을 수상하며 세계 문단의 주목을 받았다. 심사위원장 로디 도일(Roddy Doyle)은 이 서사의 독창성을 짚으며 절제된 문체가 독자의 깊은 참여를 이끌어낸다고 평가했다. 이 소설은 빈곤한 환경에서 자란 인물의 삶을 통해 육체성과 인간관계의 변화를 간결한 문장으로 서술한다.\n\n작품은 헝가리의 주택단지에 거주하는 수줍은 15세 소년 이슈트반(István)의 이야기로 시작한다. 이슈트반은 유부녀와의 관계 및 그녀 남편",
+    "url": "internal://literature_Q134600232",
+    "source": "NewsFinal",
+    "category": "문화·예술",
+    "subcategory": "오늘의책",
+    "region": "global",
+    "country": "헝가리",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-28 05:11",
+    "countries": [
+      "헝가리"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/literature_cover_q134600232.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-28T05:11:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-28 05:11",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": {
+      "enwiki": "Flesh (Szalay novel)",
+      "kowiki": null,
+      "source": "recent",
+      "wikidata": "Q134600232"
+    },
+    "image_credit": "Flesh 표지",
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": false
+  },
+  {
     "id": 332131,
     "title_en": "[기업 분석] 다리오, 다중 질환 계약과 파트너 채널 중심으로 사업 전환 추진",
     "title_ko": "[기업 분석] 다리오, 다중 질환 계약과 파트너 채널 중심으로 사업 전환 추진",
