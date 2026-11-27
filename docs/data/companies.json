@@ -2192,22 +2192,6 @@
     "updated_at": "2026-08-02 21:12"
   },
   {
-    "id": "tcs",
-    "name": "Tata Consultancy Services Limited",
-    "name_ko": "타타 컨설턴시 서비시스",
-    "country": "인도",
-    "country_flag": "🌍",
-    "exchange": "NSE",
-    "ticker": "TCS",
-    "sector": "IT 서비스",
-    "description": "1968년에 설립된 인도 타타 그룹 산하의 세계적인 IT 서비스 및 컨설팅 기업입니다. 전 세계 기업들을 상대로 디지털 전환, 소프트웨어 개발 및 아웃소싱 서비스를 제공합니다.",
-    "founded_year": 1968,
-    "headquarters": "뭄바이, 인도",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-08-02 17:22"
-  },
-  {
     "id": "tata_consultancy_services",
     "name": "Tata Consultancy Services Limited",
     "name_ko": "타타 컨설턴시 서비스",
@@ -2222,6 +2206,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-07-19 01:21"
+  },
+  {
+    "id": "tcs",
+    "name": "Tata Consultancy Services Limited",
+    "name_ko": "타타 컨설턴시 서비시스",
+    "country": "인도",
+    "country_flag": "🌍",
+    "exchange": "NSE",
+    "ticker": "TCS",
+    "sector": "IT 서비스",
+    "description": "1968년에 설립된 인도 타타 그룹 산하의 세계적인 IT 서비스 및 컨설팅 기업입니다. 전 세계 기업들을 상대로 디지털 전환, 소프트웨어 개발 및 아웃소싱 서비스를 제공합니다.",
+    "founded_year": 1968,
+    "headquarters": "뭄바이, 인도",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-08-02 17:22"
   },
   {
     "id": "tata_motors",
@@ -4256,6 +4256,22 @@
     "updated_at": "2026-07-15 12:37"
   },
   {
+    "id": "viettel_telecom",
+    "name": "Viettel Telecom",
+    "name_ko": "비엣텔 텔레콤",
+    "country": "베트남",
+    "country_flag": "🇻🇳",
+    "exchange": "UPCoM",
+    "ticker": "VTK",
+    "sector": "통신",
+    "description": "2004년에 설립된 베트남의 국영 통신사이자 최대 이동통신 사업자입니다. 모회사인 베트남 국방부 산하의 비엣텔 그룹(Viettel Group)을 통해 유무선 통신, 인터넷, 디지털 서비스 등 다양한 통신 인프라를 제공하고 있습니다. 베트남 국내 통신 시장에서 압도적인 시장 점유율과 영향력을 보유하고 있습니다.",
+    "founded_year": 2004,
+    "headquarters": "하노이, 베트남",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-11-27 22:47"
+  },
+  {
     "id": "vng_corporation",
     "name": "VNG Corporation",
     "name_ko": "",
@@ -4432,22 +4448,6 @@
     "updated_at": "2026-07-29 20:50"
   },
   {
-    "id": "clube_de_regatas_do_flamengo",
-    "name": "Clube de Regatas do Flamengo",
-    "name_ko": "플라멩구",
-    "country": "브라질",
-    "country_flag": "🌍",
-    "exchange": "B3",
-    "ticker": "",
-    "sector": "스포츠 및 엔터테인먼트",
-    "description": "1895년에 설립된 브라질의 대표적인 스포츠 클럽으로, 축구팀을 중심으로 운영되는 대형 민간 법인입니다. 브라질 내에서 가장 많은 팬층을 보유하고 있으며, 강력한 브랜드 파워를 바탕으로 마케팅 및 라이선스 사업을 전개합니다. 브라질 세리 A의 최상위권 구단으로서 높은 상업적 가치를 지닌 기업형 클럽입니다.",
-    "founded_year": 1895,
-    "headquarters": "리오데자네이루, 브라질",
-    "website": null,
-    "is_published": true,
-    "updated_at": "2026-11-22 16:15"
-  },
-  {
     "id": "flamengo",
     "name": "Clube de Regatas do Flamengo",
     "name_ko": "플라멩구",
@@ -4462,6 +4462,22 @@
     "website": null,
     "is_published": true,
     "updated_at": "2026-11-04 11:23"
+  },
+  {
+    "id": "clube_de_regatas_do_flamengo",
+    "name": "Clube de Regatas do Flamengo",
+    "name_ko": "플라멩구",
+    "country": "브라질",
+    "country_flag": "🌍",
+    "exchange": "B3",
+    "ticker": "",
+    "sector": "스포츠 및 엔터테인먼트",
+    "description": "1895년에 설립된 브라질의 대표적인 스포츠 클럽으로, 축구팀을 중심으로 운영되는 대형 민간 법인입니다. 브라질 내에서 가장 많은 팬층을 보유하고 있으며, 강력한 브랜드 파워를 바탕으로 마케팅 및 라이선스 사업을 전개합니다. 브라질 세리 A의 최상위권 구단으로서 높은 상업적 가치를 지닌 기업형 클럽입니다.",
+    "founded_year": 1895,
+    "headquarters": "리오데자네이루, 브라질",
+    "website": null,
+    "is_published": true,
+    "updated_at": "2026-11-22 16:15"
   },
   {
     "id": "compania_de_minas_buenaventura",
