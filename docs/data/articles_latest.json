@@ -1,5 +1,44 @@
 [
   {
+    "id": 332189,
+    "title_en": "중앙아시아, 영하권 추위 속 카자흐스탄·키르기스스탄 눈과 비",
+    "title_ko": "중앙아시아, 영하권 추위 속 카자흐스탄·키르기스스탄 눈과 비",
+    "summary_ko": "28일(현지시간) 중앙아시아 주요국은 최저기온 영하 7도에서 최고기온 영상 12도 사이의 기온 분포를 보일 것으로 예상된다. 이번 주말 카자흐스탄과 키르기스스탄에는 비 또는 눈 소식이 예보되어 기상 변화가 나타날 것으로 보인다.\n\n수도별 주말 예보를 보면, 카자흐스탄 아스타나는 토요일에 약한 눈소나기가 내릴 것으로 예상되며 최고기온 영하 3도, 최저기온 영하 5도를 기록하고 강수확률은 100%를 보일 것으로 예상된다. 이어 일요일에도 약한 눈소나기가 이어져 최고기온 영하 4도, 최저기온 영하 7도를 나타낼 것으로 보이며 강수확률은 ",
+    "url": "internal://weather_group_중앙아시아_weekend20261128",
+    "source": "NewsFinal",
+    "category": "날씨",
+    "subcategory": "weather_group_중앙아시아_weekend20261128",
+    "region": "central_asia",
+    "country": "중앙아시아",
+    "country_flag": "",
+    "score": 1,
+    "created_at": "2026-11-28 09:25",
+    "countries": [
+      "카자흐스탄",
+      "우즈베키스탄",
+      "키르기스스탄"
+    ],
+    "is_published": true,
+    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261128_pid4292430_kazakhstan.jpg",
+    "view_count": 0,
+    "first_published_at": "2026-11-28T09:25:00",
+    "update_log": [
+      {
+        "timestamp": "2026-11-28 09:25",
+        "note": "최초 게시"
+      }
+    ],
+    "byline": "뉴스파이널 편집국",
+    "is_travel": false,
+    "source_published_at": null,
+    "source_data": null,
+    "image_credit": null,
+    "continuation_of_id": null,
+    "summary_3lines_en": null,
+    "investment_idea_en": null,
+    "noindex": true
+  },
+  {
     "id": 332161,
     "title_en": "[국제금값] 금 온스당 3668달러…금리 전망 속 상승",
     "title_ko": "[국제금값] 금 온스당 3668달러…금리 전망 속 상승",
@@ -147,52 +186,6 @@
     "investment_idea_en": "",
     "noindex": false,
     "updated_at": "2026-11-28 08:48"
-  },
-  {
-    "id": 331521,
-    "title_en": "기니비사우 군부, 2028년까지 대통령·총선 2년 연기 발표",
-    "title_ko": "기니비사우 군부, 2028년까지 대통령·총선 2년 연기 발표",
-    "summary_ko": "기니비사우 군사정권은 26일(현지시간) 당초 예정됐던 대통령 선거와 총선을 2년 연기해 2028년 11월 26일에 실시한다고 공식 발표했다. 과도정부 대통령을 맡고 있는 오르타 인타아(Horta Inta-a) 장군은 이날 발표한 대통령령을 통해 선거 연기 사실을 알렸다.\n\n군부는 이번 결정의 배경으로 선거를 치르기 위한 기술적, 물질적, 재정적 여건이 충분히 갖춰지지 않았다는 점을 들었다. 인타아 장군은 성명을 통해 민주적 참여와 투명성, 선거의 정당성을 보장하기 위해 물리적인 준비 시간이 추가로 필요하다고 강조했다.\n\n이번 조치는",
-    "url": "internal://trend_사헬 쿠데타_2026112709",
-    "source": "NewsFinal",
-    "category": "정치·외교",
-    "subcategory": "trend_사헬 쿠데타",
-    "region": "global",
-    "country": "기니비사우",
-    "country_flag": "",
-    "score": 2,
-    "created_at": "2026-11-27 09:23",
-    "countries": [
-      "기니비사우"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/article_pixabay_4933481.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-27T09:23:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-27 09:23",
-        "note": "최초 게시"
-      },
-      {
-        "timestamp": "2026-11-28 06:28",
-        "note": "기니비사우 군부, 대통령 선거 3년 연기 발표"
-      },
-      {
-        "timestamp": "2026-11-28 08:28",
-        "note": "기니비사우 군부, 대통령 선거 3년 연기 발표"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": "이미지 출처: Pixabay (기사 내용과 직접 관련 없는 예시 이미지)",
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true,
-    "updated_at": "2026-11-28 08:28"
   },
   {
     "id": 331545,
@@ -3337,44 +3330,5 @@
     "summary_3lines_en": "",
     "investment_idea_en": "",
     "noindex": false
-  },
-  {
-    "id": 331524,
-    "title_en": "중앙아시아, 수도권 곳곳 눈·비…영하권 추위 이어져",
-    "title_ko": "중앙아시아, 수도권 곳곳 눈·비…영하권 추위 이어져",
-    "summary_ko": "27일(현지시간) 중앙아시아 주요국 수도권은 최저기온 영하 3도에서 최고기온 11도 사이의 기온 분포를 보일 것으로 예상된다. 지역별로 살펴보면 우즈베키스탄 타슈켄트가 최고기온 11도로 가장 높은 기온을 나타낼 것으로 보이며, 카자흐스탄 아스타나는 최고기온 영하 0도로 가장 선선한 날씨를 기록할 것으로 전망된다. 타슈켄트의 최고기온은 아스타나보다 11도 더 높은 수치를 보이고 있다.\n\n카자흐스탄 아스타나와 우즈베키스탄 타슈켄트, 키르기스스탄 비슈케크 등 3개국 수도에는 강수 현상이 나타날 것으로 예상된다. 아스타나는 약한 눈소나기가",
-    "url": "internal://weather_group_중앙아시아_today20261127",
-    "source": "NewsFinal",
-    "category": "날씨",
-    "subcategory": "weather_group_중앙아시아_today20261127",
-    "region": "central_asia",
-    "country": "중앙아시아",
-    "country_flag": "",
-    "score": 1,
-    "created_at": "2026-11-27 09:25",
-    "countries": [
-      "카자흐스탄",
-      "우즈베키스탄",
-      "키르기스스탄"
-    ],
-    "is_published": true,
-    "image_url": "https://pub-0ef24b5ed85d4cab8a8abfec810cc2af.r2.dev/articles/weather_20261127_pid331116_kazakhstan.jpg",
-    "view_count": 0,
-    "first_published_at": "2026-11-27T09:25:00",
-    "update_log": [
-      {
-        "timestamp": "2026-11-27 09:25",
-        "note": "최초 게시"
-      }
-    ],
-    "byline": "뉴스파이널 편집국",
-    "is_travel": false,
-    "source_published_at": null,
-    "source_data": null,
-    "image_credit": null,
-    "continuation_of_id": null,
-    "summary_3lines_en": null,
-    "investment_idea_en": null,
-    "noindex": true
   }
 ]
